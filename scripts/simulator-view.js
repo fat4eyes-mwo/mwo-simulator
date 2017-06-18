@@ -54,8 +54,6 @@ function setPaperDollStructure(mechId, location, percent) {
   $("#" + paperDollId(mechId) + "> [data-location='" + location + "']").css('background-color', "#" + color.toString(16));
 }
 
-
-
 //Heatbar UI functions
 function addHeatbar(mechId, mechPanel) {
   $("#heatbar-template").
