@@ -1,9 +1,5 @@
 "use strict";
 
-//Add a paper doll with the given mechId to the panel with the id mechPanel
-//uses the template paperDoll-template from the main HTML file
-
-
 // Paper doll UI functions
 //Color gradient for damage percentages. Must be in sorted ascending order
 var damageGradient = [
@@ -31,17 +27,19 @@ function damageColor(percent) {
   return damageGradient[damageIdx].RGB;
 }
 
+
+//Add a paper doll with the given mechId to the element with the id
+//paperDollContainer uses the template paperDoll-template from the main HTML file
 function paperDollId(mechId) {
   return mechId + "-paperDoll";
 }
-
-function addPaperDoll(mechId, mechPanel) {
+function addPaperDoll(mechId, paperDollContainer) {
   $("#paperDoll-template")
     .clone(true)
     .attr("id", paperDollId(mechId))
     .attr("data-mech-id", mechId)
     .removeClass("template")
-    .appendTo(mechPanel);
+    .appendTo(paperDollContainer);
 }
 
 //Percent values from 0 to 1
@@ -55,26 +53,58 @@ function setPaperDollStructure(mechId, location, percent) {
 }
 
 //Heatbar UI functions
-function addHeatbar(mechId, mechPanel) {
+function heatbarId(mechId) {
+  return mechId + "-heatbar";
+}
+function addHeatbar(mechId, heatbarContainer) {
   $("#heatbar-template").
   clone(true)
-  .attr("id", mechId + "-heatbar")
+  .attr("id", heatbarId(mechId))
   .attr("data-mech-id", mechId)
   .removeClass("template")
-  .appendTo(mechPanel);
+  .appendTo(heatbarContainer);
 }
 
 //Sets the heatbar value for a given mech id to a specified percentage. Value of
 //percent is 0 to 1
 function setHeatbarValue(mechId, percent) {
   var invPercent = 1 - percent;
-  $("#" + mechId + "-heatbar > [class=heatbar]").height( (100 * invPercent) + "%");
+  $("#" + heatbarId(mechId) + " > [class=heatbar]").height( (100 * invPercent) + "%");
 }
 
 function onMouseOverPaperDoll() {
   var mechId = $(this).parent().data("mech-id");
   var location = $(this).data('location');
   console.log (mechId + " " + location);
+}
+
+//adds a mech panel
+function mechPanelId(mechId) {
+  return mechId + "-mechPanel";
+}
+function addMechPanel(mechId, mechPanelList) {
+  $("#mechPanel-template")
+    .clone(true)
+    .attr("id", mechPanelId(mechId))
+    .attr("data-mech-id", mechId)
+    .removeClass("template")
+    .appendTo(mechPanelList);
+
+  //a bit messy code to add paperDoll and heatbar. Try to see if this can be
+  //done inside a single search for the children of the mechPanel
+  var paperDollContainerId = mechId + "-paperDollContainer";
+  $("#" + mechPanelId(mechId) + " [class~='paperDollContainer']")
+    .attr("id", paperDollContainerId);
+  addPaperDoll(mechId, "#" + paperDollContainerId);
+
+  var heatbarContainerId = mechId + "-heatbarContainer";
+  $("#" + mechPanelId(mechId) + " [class~='heatbarContainer']")
+    .attr("id", heatbarContainerId);
+  addHeatbar(mechId, "#" + heatbarContainerId);
+
+  var weaponPanelContainerId = mechId + "-weaponPanelContainer";
+  $("#" + mechPanelId(mechId) + " [class~='weaponPanelContainer']")
+    .attr("id", weaponPanelContainerId);
 }
 
 

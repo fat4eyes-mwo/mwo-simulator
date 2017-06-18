@@ -16,9 +16,9 @@
       <div id="controlPanel" class="column column-2">
         control  panel
       </div>
-      <div id="blueMechs" class="column column-5 mechPanel bluePanel">
+      <div id="blueMechs" class="column column-5 mechPanelList bluePanel">
       </div>
-      <div id="redMechs" class="column column-5 mechPanel redPanel">
+      <div id="redMechs" class="column column-5 mechPanelList redPanel">
       </div>
     </div>
     <div class="row">
@@ -42,9 +42,17 @@
     </div>
 
     <!-- Heatbar template -->
-    <div id="heatbar-template" class="template heatbarContainer">
+    <div id="heatbar-template" class="template heatbarFrame">
       <div class="heatbar"/>
     </div>
 
+    <!-- Mechpanel template -->
+    <div id="mechPanel-template" class="template mechPanel">
+      <div class="row">
+        <div class="column column-3 paperDollContainer"></div>
+        <div class="column column-1 heatbarContainer" ></div>
+        <div class="column column-8 weaponPanelContainer"></div>
+      </div>
+    </div>
   </body>
 </html>

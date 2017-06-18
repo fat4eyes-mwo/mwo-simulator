@@ -1,11 +1,28 @@
 /*Main panel styles*/
 body {
   background-color: black;
-  color: white;
+  color: #aaaaaa;
 }
+
+.mechPanelList {
+
+}
+
 .mechPanel {
   border-width: thin;
   border-style: solid;
+}
+
+.mechPanel .paperDollContainer {
+
+}
+
+.mechPanel .heatbarContainer {
+
+}
+
+.mechPanel .weaponPanelContainer {
+
 }
 
 .redPanel {
@@ -101,7 +118,7 @@ body {
 }
 
 /*Heat bar style*/
-.heatbarContainer {
+.heatbarFrame {
   position: relative;
   height: 100px;
   border-style: solid;
@@ -111,6 +128,7 @@ body {
   width: 10px;
 }
 
+/*note: the heatbar is actually the empty top part of the heat guage. */
 .heatbar {
   top: 0%;
   height:50%;
