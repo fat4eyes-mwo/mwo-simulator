@@ -2,6 +2,7 @@
 
 //Test code
 var uiTestInterval = null;
+var testIntervalLength = 100;
 function test() {
   var blueIds = ["blue1", "blue2", "blue3", "blue4"];
   var components = ["head", "right_arm", "right_torso", "centre_torso", "left_arm", "left_torso", "right_leg", "left_leg"];
@@ -22,7 +23,7 @@ function test() {
       uiTestInterval = window.setInterval(() => {
         testUI(blueIds);
         testUI(redIds);
-      }, 100);
+      }, testIntervalLength);
     } else {
       window.clearInterval(uiTestInterval);
       uiTestInterval = null;
