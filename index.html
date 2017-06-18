@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="css/grid.css">
+    <link rel="stylesheet" href="css/mwo-simulator.css">
+    <script src="scripts/lib/jquery-3.2.1.js"></script>
+    <script src="scripts/simulator-view.js"></script>
+    <script src="scripts/simulator-model.js"></script>
+    <script src="scripts/simulator.js"></script>
+  </head>
+  <body>
+    <div class="row">
+      <div id="blueMechs" class="column column-5 mechPanel bluePanel">
+      </div>
+      <div id="redMechs" class="column column-5 mechPanel redPanel">
+      </div>
+      <div id="controlPanel" class="column column-2">
+        center panel
+      </div>
+    </div>
+    <div class="row">
+    </div>
+
+    <!-- Templates  -->
+    <div id="paperDoll-template" class="template paperDoll">
+      <div class="mechH" data-location="head"></div>
+      <div class="mechLA" data-location="left_arm"></div>
+      <div class="mechLT" data-location="left_torso"></div>
+      <div class="mechCT" data-location="centre_torso"></div>
+      <div class="mechRT" data-location="right_torso"></div>
+      <div class="mechRA" data-location="right_arm"></div>
+      <div class="mechLL" data-location="left_leg"></div>
+      <div class="mechRL" data-location="right_leg"></div>
+    </div>
+  </body>
+</html>

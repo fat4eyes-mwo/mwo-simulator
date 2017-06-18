@@ -1,0 +1,100 @@
+/*Main panel styles*/
+.mechPanel {
+  border-width: thin;
+  border-style: solid;
+}
+
+.redPanel {
+  border-color: red;
+}
+
+.bluePanel {
+  border-color: blue;
+}
+
+.template {
+  visibility: hidden;
+}
+
+/*Paper doll style*/
+.paperDoll {
+  position:relative;
+  height: 100px;
+  border-style: solid;
+  border-width: thin;
+  border-color: black;
+}
+
+.mechLA,
+.mechRA,
+.mechLT,
+.mechRT,
+.mechCT,
+.mechLL,
+.mechRL,
+.mechH,
+.mechRearLT,
+.mechRearRT,
+.mechRearCT
+{
+  border-style: solid;
+  border-width: thin;
+  border-radius: 5px;
+  position:absolute;
+}
+
+.mechH {
+  top:0%;
+  left:39%;
+  width: 17%;
+  height:12%;
+}
+
+.mechLA {
+  top: 14%;
+  left:0%;
+  width:13%;
+  height:33%;
+}
+
+.mechLT {
+  top: 14%;
+  left:15%;
+  width:17%;
+  height:25%;
+}
+
+.mechCT {
+  top: 14%;
+  left:34%;
+  width:27%;
+  height:50%;
+}
+
+.mechRT {
+  top: 14%;
+  left:63%;
+  width:17%;
+  height:25%;
+}
+
+.mechRA {
+  top: 14%;
+  left:82%;
+  width:13%;
+  height:33%;
+}
+
+.mechLL {
+  top: 55%;
+  left:12%;
+  width:20%;
+  height:42%;
+}
+
+.mechRL {
+  top: 55%;
+  left:63%;
+  width:20%;
+  height:42%;
+}
