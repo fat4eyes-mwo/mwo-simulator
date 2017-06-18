@@ -6,24 +6,30 @@
     <link rel="stylesheet" href="css/grid.css">
     <link rel="stylesheet" href="css/mwo-simulator.css">
     <script src="scripts/lib/jquery-3.2.1.js"></script>
+    <script src="scripts/util.js"></script>
     <script src="scripts/simulator-view.js"></script>
     <script src="scripts/simulator-model.js"></script>
     <script src="scripts/simulator.js"></script>
   </head>
   <body>
     <div class="row">
+      <div id="controlPanel" class="column column-2">
+        control  panel
+      </div>
       <div id="blueMechs" class="column column-5 mechPanel bluePanel">
       </div>
       <div id="redMechs" class="column column-5 mechPanel redPanel">
-      </div>
-      <div id="controlPanel" class="column column-2">
-        center panel
       </div>
     </div>
     <div class="row">
     </div>
 
     <!-- Templates  -->
+    <!-- Paper doll template -->
+    <!--  Note: the data-location string here is intended to be identical to
+  the component ids in smurfy's api.
+  See https://github.com/smurfy/mwo-api-sample/tree/master/api-sample
+  under mech loadouts-->
     <div id="paperDoll-template" class="template paperDoll">
       <div class="mechH" data-location="head"></div>
       <div class="mechLA" data-location="left_arm"></div>
@@ -34,5 +40,11 @@
       <div class="mechLL" data-location="left_leg"></div>
       <div class="mechRL" data-location="right_leg"></div>
     </div>
+
+    <!-- Heatbar template -->
+    <div id="heatbar-template" class="template heatbarContainer">
+      <div class="heatbar"/>
+    </div>
+
   </body>
 </html>
