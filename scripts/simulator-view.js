@@ -78,7 +78,7 @@ function onMouseOverPaperDoll() {
   console.log (mechId + " " + location);
 }
 
-//adds a mech panel
+//adds a mech panel (which contains a paperDoll, a heatbar and a weaponPanel)
 function mechPanelId(mechId) {
   return mechId + "-mechPanel";
 }
