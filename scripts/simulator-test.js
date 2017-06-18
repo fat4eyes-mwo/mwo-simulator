@@ -1,80 +1,105 @@
 "use strict";
 
+var MechTest = MechTest || (function() {
+
 //Test code
 var uiTestInterval = null;
 var testIntervalLength = 100;
 var mechIdWeaponCount = []; //number of weapons set for a given mechid
 
-function test() {
-  var blueIds = ["blue1", "blue2", "blue3", "blue4", "blue5", "blue6", "blue7", "blue8", "blue9", "blue10", "blue11", "blue12"];
-  var redIds = ["red1", "red2", "red3","red4", "red5", "red6", "red7", "red8", "red9", "red10", "red11", "red12",];
-  var components = ["head", "right_arm", "right_torso", "centre_torso", "left_arm", "left_torso", "right_leg", "left_leg"];
-  var testWeapons = [
-    [
-      {name : "SMALL PULSE LASER", location : "left_arm", ammo : "-1", state : "Active"},
-      {name : "SMALL PULSE LASER", location : "left_arm", ammo : "-1", state : "Active"},
-      {name : "SMALL PULSE LASER", location : "left_arm", ammo : "-1", state : "Active"},
-      {name : "SMALL PULSE LASER", location : "left_arm", ammo : "-1", state : "Active"},
-      {name : "SMALL PULSE LASER", location : "left_arm", ammo : "-1", state : "Active"},
-      {name : "SMALL PULSE LASER", location : "left_arm", ammo : "-1", state : "Active"},
-      {name : "SMALL PULSE LASER", location : "right_arm", ammo : "-1", state : "Active"},
-      {name : "SMALL PULSE LASER", location : "right_arm", ammo : "-1", state : "Active"},
-      {name : "SMALL PULSE LASER", location : "right_arm", ammo : "-1", state : "Active"},
-      {name : "SMALL PULSE LASER", location : "right_arm", ammo : "-1", state : "Active"},
-      {name : "SMALL PULSE LASER", location : "right_arm", ammo : "-1", state : "Active"},
-      {name : "SMALL PULSE LASER", location : "right_arm", ammo : "-1", state : "Active"}
-    ],
-    [ {name : "MEDIUM LASER", location : "centre_torso", ammo : "-1", state: "Active"},
-      {name : "MEDIUM LASER", location : "left_torso", ammo : "-1", state: "Active"},
-      {name : "SRM6", location : "left_arm", ammo : "200"}
-    ],
-    [ {name : "ER LARGE LASER", location : "left_torso", ammo : "-1", state: "Active"},
-      {name : "ER LARGE LASER", location : "right_torso", ammo : "-1", state: "Active"},
-      {name : "AC 10", location : "right_torso", ammo : "80", state: "Active"},
-      {name : "AC 5", location : "left_torso", ammo : "120", state: "Active"},
-    ]
-  ];
+return {
+    test : function () {
+      var numBlues = 4;
+      var numReds = 5;
+      var blueIds = [];
+      var redIds = [];
+      for (var i = 0; i < numBlues; i++) {
+        blueIds.push("blue" + (i+1));
+      }
+      for (var i = 0; i < numReds; i++) {
+        redIds.push("red" + (i+1));
+      }
 
-  $.each(blueIds, (index, mechId) => {
-    var testWeaponList = testWeapons[Math.floor(testWeapons.length * Math.random())];
-    addMechPanel(mechId, testWeaponList, "#blueMechs");
-    mechIdWeaponCount[mechId] = testWeaponList.length;
-  });
-  // testUI(blueIds);
+      var components = ["head", "right_arm", "right_torso", "centre_torso", "left_arm", "left_torso", "right_leg", "left_leg"];
+      var testWeapons = [
+        [ new MechView.WeaponData("SMALL PULSE LASER", "left_arm", -1, "Active"),
+          new MechView.WeaponData("SMALL PULSE LASER", "left_arm", -1, "Active"),
+          new MechView.WeaponData("SMALL PULSE LASER", "left_arm", -1, "Active"),
+          new MechView.WeaponData("SMALL PULSE LASER", "left_arm", -1, "Active"),
+          new MechView.WeaponData("SMALL PULSE LASER", "left_arm", -1, "Active"),
+          new MechView.WeaponData("SMALL PULSE LASER", "left_arm", -1, "Active"),
+          new MechView.WeaponData("SMALL PULSE LASER", "right_arm", -1, "Active"),
+          new MechView.WeaponData("SMALL PULSE LASER", "right_arm", -1, "Active"),
+          new MechView.WeaponData("SMALL PULSE LASER", "right_arm", -1, "Active"),
+          new MechView.WeaponData("SMALL PULSE LASER", "right_arm", -1, "Active"),
+          new MechView.WeaponData("SMALL PULSE LASER", "right_arm", -1, "Active"),
+          new MechView.WeaponData("SMALL PULSE LASER", "right_arm", -1, "Active")
+        ],
+        [ new MechView.WeaponData("MEDIUM LASER", "centre_torso", -1, "Active"),
+          new MechView.WeaponData("MEDIUM LASER", "left_torso", -1, "Active"),
+          new MechView.WeaponData("MEDIUM SRM6", "left_arm", -1, "Active")
+        ],
+        [ new MechView.WeaponData("ER LARGE LASER", "left_torso", -1, "Active"),
+          new MechView.WeaponData("ER LARGE LASER", "right_torso", -1, "Active"),
+          new MechView.WeaponData("AC 10", "right_torso", 80, "Active"),
+          new MechView.WeaponData("AC 5", "left_torso", 120, "Active")
+        ]
+      ];
 
-  $.each(redIds, (index, mechId) => {
-    var testWeaponList = testWeapons[Math.floor(testWeapons.length * Math.random())];
-    addMechPanel(mechId, testWeaponList, "#redMechs");
-    mechIdWeaponCount[mechId] = testWeaponList.length;
-  });
-  // testUI(redIds);
+      MechView.initHandlers();
 
-  $("#testUI").click(() => {
-    if (uiTestInterval == null) {
-      uiTestInterval = window.setInterval(() => {
-        testUI(blueIds);
-        testUI(redIds);
-      }, testIntervalLength);
-    } else {
-      window.clearInterval(uiTestInterval);
-      uiTestInterval = null;
+      $.each(blueIds, (index, mechId) => {
+        var testWeaponList = testWeapons[Math.floor(testWeapons.length * Math.random())];
+        MechView.addMechPanel(mechId, testWeaponList, "#blueMechs");
+        mechIdWeaponCount[mechId] = testWeaponList.length;
+      });
+      // testUI(blueIds);
+
+      $.each(redIds, (index, mechId) => {
+        var testWeaponList = testWeapons[Math.floor(testWeapons.length * Math.random())];
+        MechView.addMechPanel(mechId, testWeaponList, "#redMechs");
+        mechIdWeaponCount[mechId] = testWeaponList.length;
+      });
+      // testUI(redIds);
+
+      //TODO: if performance an issue try to reduce to a single instance handler
+      var Handler = function (context) {
+        this.context = context;
+        return () => {
+          if (uiTestInterval == null) {
+            uiTestInterval = window.setInterval(() => {
+              context.testUI(blueIds);
+              context.testUI(redIds);
+            }, testIntervalLength);
+          } else {
+            window.clearInterval(uiTestInterval);
+            uiTestInterval = null;
+          }
+        };
+      };
+      var handler = new Handler(this);
+      $("#testUI").click(handler);
+    },
+
+    testUI : function (mechIds) {
+      var weaponStates = [MechModel.WeaponState.ACTIVE,
+          MechModel.WeaponState.FIRING,
+          MechModel.WeaponState.DISABLED];
+      $.each(mechIds, (index, mechId) => {
+        for (var property in MechModel.Component) {
+          if (MechModel.Component.hasOwnProperty(property)) {
+            MechView.setPaperDollArmor(mechId, MechModel.Component[property], Math.random());
+            MechView.setPaperDollStructure(mechId, MechModel.Component[property], Math.random());
+          }
+        }
+        MechView.setHeatbarValue(mechId, Math.random());
+        for (var i = 0; i < mechIdWeaponCount[mechId]; i++) {
+          MechView.setWeaponCooldown(mechId, i, Math.random());
+          MechView.setWeaponAmmo(mechId, i, Math.random() > 0.2 ? Math.floor(Math.random() * 100) : -1);
+          MechView.setWeaponState(mechId, i, weaponStates[Math.floor(weaponStates.length * Math.random())]);
+        }
+      });
     }
-  })
-}
+  }//return publics
 
-function testUI(mechIds) {
-  var components = ["head", "right_arm", "right_torso", "centre_torso", "left_arm", "left_torso", "right_leg", "left_leg"];
-  var weaponStates = ["Active", "Firing", "Disabled"];
-  $.each(mechIds, (index, mechId) => {
-    for (var idx in components) {
-      setPaperDollArmor(mechId, components[idx], Math.random());
-      setPaperDollStructure(mechId, components[idx], Math.random());
-    }
-    setHeatbarValue(mechId, Math.random());
-    for (var i = 0; i < mechIdWeaponCount[mechId]; i++) {
-      setWeaponCooldown(mechId, i, Math.random());
-      setWeaponAmmo(mechId, i, Math.random() > 0.2 ? Math.floor(Math.random() * 100) : -1);
-      setWeaponState(mechId, i, weaponStates[Math.floor(weaponStates.length * Math.random())]);
-    }
-  });
-}
+})(); //namespace exec

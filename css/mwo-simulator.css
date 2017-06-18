@@ -177,6 +177,7 @@ body {
 
 .weaponPanelRow.Firing {
   background-color: grey;
+  color : white;
 }
 
 .weaponPanelRow.Disabled {

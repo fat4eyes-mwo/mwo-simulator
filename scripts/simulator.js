@@ -1,8 +1,7 @@
 "use strict";
 
 function main() {
-  initHandlers();
-  test();
+  MechTest.test();
 }
 
 $(document).ready(main);
