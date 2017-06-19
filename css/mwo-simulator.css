@@ -5,6 +5,14 @@ body {
   font-family: sans-serif;
 }
 
+.controlPanel {
+
+}
+
+.debugPanel {
+
+}
+
 .mechPanelList {
 
 }
@@ -186,5 +194,9 @@ body {
 
 /*Status panel styles*/
 .statusPanelContainer {
+
+}
+
+.statusPanel {
 
 }

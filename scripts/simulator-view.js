@@ -85,7 +85,7 @@ var MechView = MechView || (function() {
 
   //Adds a list of weaponRows to the given weaponPanel. Prototype of weaponList is
   //[(name, location, ammo, state)] where state is Active, Firing or Disabled
-  var WeaponData = function (name, location, ammo, state) {
+  var WeaponUIData = function (name, location, ammo, state) {
     this.name = name;
     this.location = location;
     this.ammo = ammo;
@@ -200,7 +200,7 @@ var MechView = MechView || (function() {
     addMechPanel : addMechPanel,
     initPaperDollHandlers: initPaperDollHandlers,
     initHandlers : initHandlers,
-    WeaponData : WeaponData,
+    WeaponUIData : WeaponUIData,
     setWeaponCooldown: setWeaponCooldown,
     setWeaponAmmo : setWeaponAmmo,
     setWeaponState : setWeaponState

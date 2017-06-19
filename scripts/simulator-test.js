@@ -8,7 +8,7 @@ var testIntervalLength = 100;
 var mechIdWeaponCount = []; //number of weapons set for a given mechid
 
 return {
-    test : function () {
+    testUIWidgets : function () {
       //UI tests
       var numBlues = 4;
       var numReds = 5;
@@ -22,27 +22,27 @@ return {
       }
 
       var testWeapons = [
-        [ new MechView.WeaponData("SMALL PULSE LASER", "left_arm", -1, "Active"),
-          new MechView.WeaponData("SMALL PULSE LASER", "left_arm", -1, "Active"),
-          new MechView.WeaponData("SMALL PULSE LASER", "left_arm", -1, "Active"),
-          new MechView.WeaponData("SMALL PULSE LASER", "left_arm", -1, "Active"),
-          new MechView.WeaponData("SMALL PULSE LASER", "left_arm", -1, "Active"),
-          new MechView.WeaponData("SMALL PULSE LASER", "left_arm", -1, "Active"),
-          new MechView.WeaponData("SMALL PULSE LASER", "right_arm", -1, "Active"),
-          new MechView.WeaponData("SMALL PULSE LASER", "right_arm", -1, "Active"),
-          new MechView.WeaponData("SMALL PULSE LASER", "right_arm", -1, "Active"),
-          new MechView.WeaponData("SMALL PULSE LASER", "right_arm", -1, "Active"),
-          new MechView.WeaponData("SMALL PULSE LASER", "right_arm", -1, "Active"),
-          new MechView.WeaponData("SMALL PULSE LASER", "right_arm", -1, "Active")
+        [ new MechView.WeaponUIData("SMALL PULSE LASER", "left_arm", -1, "Active"),
+          new MechView.WeaponUIData("SMALL PULSE LASER", "left_arm", -1, "Active"),
+          new MechView.WeaponUIData("SMALL PULSE LASER", "left_arm", -1, "Active"),
+          new MechView.WeaponUIData("SMALL PULSE LASER", "left_arm", -1, "Active"),
+          new MechView.WeaponUIData("SMALL PULSE LASER", "left_arm", -1, "Active"),
+          new MechView.WeaponUIData("SMALL PULSE LASER", "left_arm", -1, "Active"),
+          new MechView.WeaponUIData("SMALL PULSE LASER", "right_arm", -1, "Active"),
+          new MechView.WeaponUIData("SMALL PULSE LASER", "right_arm", -1, "Active"),
+          new MechView.WeaponUIData("SMALL PULSE LASER", "right_arm", -1, "Active"),
+          new MechView.WeaponUIData("SMALL PULSE LASER", "right_arm", -1, "Active"),
+          new MechView.WeaponUIData("SMALL PULSE LASER", "right_arm", -1, "Active"),
+          new MechView.WeaponUIData("SMALL PULSE LASER", "right_arm", -1, "Active")
         ],
-        [ new MechView.WeaponData("MEDIUM LASER", "centre_torso", -1, "Active"),
-          new MechView.WeaponData("MEDIUM LASER", "left_torso", -1, "Active"),
-          new MechView.WeaponData("MEDIUM SRM6", "left_arm", -1, "Active")
+        [ new MechView.WeaponUIData("MEDIUM LASER", "centre_torso", -1, "Active"),
+          new MechView.WeaponUIData("MEDIUM LASER", "left_torso", -1, "Active"),
+          new MechView.WeaponUIData("MEDIUM SRM6", "left_arm", -1, "Active")
         ],
-        [ new MechView.WeaponData("ER LARGE LASER", "left_torso", -1, "Active"),
-          new MechView.WeaponData("ER LARGE LASER", "right_torso", -1, "Active"),
-          new MechView.WeaponData("AC 10", "right_torso", 80, "Active"),
-          new MechView.WeaponData("AC 5", "left_torso", 120, "Active")
+        [ new MechView.WeaponUIData("ER LARGE LASER", "left_torso", -1, "Active"),
+          new MechView.WeaponUIData("ER LARGE LASER", "right_torso", -1, "Active"),
+          new MechView.WeaponUIData("AC 10", "right_torso", 80, "Active"),
+          new MechView.WeaponUIData("AC 5", "left_torso", 120, "Active")
         ]
       ];
 
@@ -107,6 +107,11 @@ return {
       //   }
       // });
       MechModel.initDummyModelData();
+    },
+
+    testModelOps : function () {
+      MechModel.initDummyModelData();
+      MechModel.addMech("testId", MechModel.Team.BLUE, DummyArcticCheetah);
     }
   }
 

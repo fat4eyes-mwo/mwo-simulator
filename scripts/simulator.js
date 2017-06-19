@@ -1,8 +1,9 @@
 "use strict";
 
 function main() {
-  MechTest.test();
+  MechTest.testUIWidgets();
   MechTest.testModelInit();
+  MechTest.testModelOps();
 }
 
 $(document).ready(main);

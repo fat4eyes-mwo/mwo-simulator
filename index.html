@@ -11,17 +11,21 @@
     <script src="scripts/data/ammo.js"></script>
     <script src="scripts/data/mechdata.js"></script>
     <script src="scripts/data/weapons.js"></script>
+    <script src="scripts/data/loadouts.js"></script>
 
     <script src="scripts/util.js"></script>
     <script src="scripts/simulator-view.js"></script>
     <script src="scripts/simulator-model.js"></script>
+    <script src="scripts/simulator-modelview.js"></script>
     <script src="scripts/simulator-test.js"></script>
     <script src="scripts/simulator.js"></script>
   </head>
   <body>
     <div class="row">
-      <div id="controlPanel" class="column column-2">
-        <button id="testUI">Test UI</button>
+      <div id="controlPanel" class="column column-2 controlPanel">
+        <div id="debugPanel" class="debugPanel">
+          <button id="testUI">Test UI Widgets</button>
+        </div>
       </div>
       <div id="blueMechs" class="column column-5 mechPanelList bluePanel">
       </div>
@@ -69,7 +73,10 @@
         <div class="column column-2 paperDollContainer"></div>
         <div class="column column-1 heatbarContainer" ></div>
         <div class="column column-6 weaponPanelContainer"></div>
-        <div class="column column-3 statusPanelContainer"></div>
+        <div class="column column-3 statusPanelContainer">
+          <div class="statusPanel">
+          </div>
+        </div>
       </div>
     </div>
 
