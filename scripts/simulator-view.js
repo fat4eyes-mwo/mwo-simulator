@@ -187,11 +187,11 @@ var MechView = MechView || (function() {
   }
 
   var initPaperDollHandlers = function () {
-    //attach onmouseover handlers to each of the components
+    //attach onmouseover handler to each of the components
     $("#paperDoll-template > [class^=mech]").mouseover(onMouseOverPaperDoll);
   }
 
-  //public memebers
+  //public members
   return {
     setPaperDollArmor : setPaperDollArmor,
     setPaperDollStructure : setPaperDollStructure,

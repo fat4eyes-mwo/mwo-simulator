@@ -9,6 +9,7 @@ var mechIdWeaponCount = []; //number of weapons set for a given mechid
 
 return {
     test : function () {
+      //UI tests
       var numBlues = 4;
       var numReds = 5;
       var blueIds = [];
@@ -20,7 +21,6 @@ return {
         redIds.push("red" + (i+1));
       }
 
-      var components = ["head", "right_arm", "right_torso", "centre_torso", "left_arm", "left_torso", "right_leg", "left_leg"];
       var testWeapons = [
         [ new MechView.WeaponData("SMALL PULSE LASER", "left_arm", -1, "Active"),
           new MechView.WeaponData("SMALL PULSE LASER", "left_arm", -1, "Active"),
@@ -53,16 +53,13 @@ return {
         MechView.addMechPanel(mechId, testWeaponList, "#blueMechs");
         mechIdWeaponCount[mechId] = testWeaponList.length;
       });
-      // testUI(blueIds);
 
       $.each(redIds, (index, mechId) => {
         var testWeaponList = testWeapons[Math.floor(testWeapons.length * Math.random())];
         MechView.addMechPanel(mechId, testWeaponList, "#redMechs");
         mechIdWeaponCount[mechId] = testWeaponList.length;
       });
-      // testUI(redIds);
 
-      //TODO: if performance an issue try to reduce to a single instance handler
       var Handler = function (context) {
         this.context = context;
         return () => {
@@ -99,7 +96,18 @@ return {
           MechView.setWeaponState(mechId, i, weaponStates[Math.floor(weaponStates.length * Math.random())]);
         }
       });
+    },
+
+    testModelInit : function () {
+      // MechModel.initModelData((success) => {
+      //   if (success) {
+      //     console.log("Successfully loaded model init data");
+      //   } else {
+      //     console.log("Failed to load model init data");
+      //   }
+      // });
+      MechModel.initDummyModelData();
     }
-  }//return publics
+  }
 
 })(); //namespace exec
