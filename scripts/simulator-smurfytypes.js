@@ -75,6 +75,7 @@ var SmurfyTypes = SmurfyTypes || (function () {
     mech_type: null, //light, medium, heavy, assault
     family: null, //short name for chassis
     chassis_translated: null, //long name for chassis
+    translated_name: null,
     translated_short_name: null,
     details: null, //MechDetails
   }
