@@ -24,6 +24,7 @@ var MechModel = MechModel || (function () {
   var MechData = {};
 
   //Get weapon, ammo and mech data from smurfy
+  //TODO: JSONP not parsing the output correctly.
   var WEAPON_DATA_URL = "http://mwo.smurfy-net.de/api/data/weapons.json";
   var AMMO_DATA_URL = "http://mwo.smurfy-net.de/api/data/ammo.json";
   var MECH_DATA_URL = "http://mwo.smurfy-net.de/api/data/mechs.json";
