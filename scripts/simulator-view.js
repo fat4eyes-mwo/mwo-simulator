@@ -4,7 +4,7 @@ var MechView = MechView || (function() {
 
   // Paper doll UI functions
   //Color gradient for damage percentages. Must be in sorted ascending order
-  var damageGradient = [
+  const damageGradient = Object.freeze([
     {value : 0.0, RGB : 0x15130c},
     {value : 0.1, RGB : 0xb32a12},
     {value : 0.2, RGB : 0xb53a13},
@@ -16,7 +16,7 @@ var MechView = MechView || (function() {
     {value : 0.8, RGB : 0xbc851a},
     {value : 0.9, RGB : 0xbb8e1a},
     {value : 1, RGB : 0x403720}
-  ];
+  ]);
 
   //gets the damage color for a given percentage of damage
   var damageColor = function (percent) {
@@ -56,10 +56,11 @@ var MechView = MechView || (function() {
       .css('background-color', "#" + color.toString(16));
   }
   var setMaxArmorAndStructure = function (mechId) {
-    var components = ["head", "right_arm", "right_torso", "centre_torso", "left_arm", "left_torso", "right_leg", "left_leg"];
-    for (var idx in components) {
-      setPaperDollArmor(mechId, components[idx], 1);
-      setPaperDollStructure(mechId, components[idx], 1);
+    for (var property in MechModel.Component) { //TODO: View should not access model
+      if (MechModel.Component.hasOwnProperty(property)) {
+        setPaperDollArmor(mechId, MechModel.Component[property], 1);
+        setPaperDollStructure(mechId, MechModel.Component[property], 1);
+      }
     }
   }
 
@@ -85,11 +86,13 @@ var MechView = MechView || (function() {
 
   //Adds a list of weaponRows to the given weaponPanel. Prototype of weaponList is
   //[(name, location, ammo, state)] where state is Active, Firing or Disabled
-  var WeaponUIData = function (name, location, ammo, state) {
-    this.name = name;
-    this.location = location;
-    this.ammo = ammo;
-    this.state = state;
+  class WeaponUIData {
+    constructor (name, location, ammo, state) {
+      this.name = name;
+      this.location = location;
+      this.ammo = ammo;
+      this.state = state;
+    }
   }
   var weaponRowId = function (mechId, idx) {
     return mechId + "-" + idx + "-weaponrow";
@@ -100,7 +103,7 @@ var MechView = MechView || (function() {
   var weaponAmmoId = function(mechId, idx) {
     return weaponRowId(mechId, idx) + "-weaponAmmo";
   }
-  var weaponLocAbbr = {
+  const weaponLocAbbr = {
     "head" : "H",
     "left_arm" : "LA",
     "left_torso" : "LT",

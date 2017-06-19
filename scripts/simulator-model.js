@@ -2,12 +2,12 @@
 
 var MechModel = MechModel || (function () {
 
-  var Team = {
+  const Team = Object.freeze({
     BLUE : "blue",
     RED : "red"
-  };
+  });
 
-  var Component = {
+  const Component = Object.freeze({
     HEAD : "head",
     RIGHT_ARM :"right_arm",
     RIGHT_TORSO : "right_torso",
@@ -16,13 +16,13 @@ var MechModel = MechModel || (function () {
     LEFT_TORSO : "left_torso",
     RIGHT_LEG : "right_leg",
     LEFT_LEG : "left_leg"
-  };
+  });
 
-  var WeaponState = {
+  const WeaponState = Object.freeze({
     ACTIVE : "Active",
     FIRING : "Firing",
     DISABLED : "Disabled"
-  };
+  });
 
   var SmurfyWeaponData = {};
   var SmurfyAmmoData = {};
