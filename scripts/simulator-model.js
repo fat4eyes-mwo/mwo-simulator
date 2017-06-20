@@ -37,15 +37,21 @@ var MechModel = MechModel || (function () {
   }
 
   class WeaponInfo {
-    constructor(weaponId, location, minRange, optRange, maxRange, baseDmg, heat,
+    constructor(weaponId, name, location,
+      minRange, optRange, maxRange, baseDmg,
+      heat, minHeatPenaltyLevel, heatPenalty, heatPenaltyId,
       cooldown, duration, spinup) {
-        this.weaponId = weaponId;
+        this.weaponId = weaponId; //smurfy weapon id
+        this.name = name;
         this.location = location;
         this.minRange = minRange;
         this.optRange = optRange;
         this.maxRange = maxRange;
         this.baseDmg = baseDmg;
         this.heat = heat;
+        this.minHeatPenaltyLevel = minHeatPenaltyLevel;
+        this.heatPenalty = heatPenalty;
+        this.heatPenaltyId = heatPenaltyId; //weapons with the same heat penalty id caause ghost heat if above the minHeatPenaltyLevel
         this.cooldown = cooldown;
         this.duration = duration;
         this.spinup = spinup;
@@ -211,6 +217,10 @@ var MechModel = MechModel || (function () {
     return SmurfyMechData[smurfyMechId];
   };
 
+  var getSmurfyWeaponData = function(smurfyItemId) {
+    return SmurfyWeaponData[smurfyItemId];
+  }
+
   //base structure value computation for a given tonnage.
   //Reference: http://mwo.gamepedia.com/Internal_Structure
   var baseMechStructure = function(location, tonnage) {
@@ -261,17 +271,50 @@ var MechModel = MechModel || (function () {
     var location = smurfyMechComponent.name;
     var armor = smurfyMechComponent.armor;
     var structure = baseMechStructure(location, tonnage);
-    //TODO: Add quirk values
+    //TODO: Add quirk values to armor and structure
     componentHealth = new ComponentHealth(location, armor, structure, armor, structure);
     return componentHealth;
   }
 
   var weaponInfoListFromSmurfyMechLoadout = function (smurfyMechLoadout) {
-    return [];  //TODO: Implement
+    var weaponInfoList = [];
+    var smurfyMechData = getSmurfyMechData(smurfyMechLoadout.mech_id);
+    //TODO: Implement
+    for (let smurfyMechComponent of smurfyMechLoadout.configuration) {
+      let location = smurfyMechComponent.name;
+      for (let smurfyMechComponentItem of smurfyMechComponent.items) {
+        if (smurfyMechComponentItem.type === "weapon") {
+          let weaponId = smurfyMechComponentItem.id;
+          let smurfyWeaponData = getSmurfyWeaponData(weaponId);
+          let weaponInfo = weaponInfoFromSmurfyWeaponData(weaponId, location, smurfyWeaponData);
+          weaponInfoList.push(weaponInfo);
+        }
+      }
+    }
+    return weaponInfoList;
   }
 
-  var weaponInfoFromSmurfyWeaponData = function (smurfyWeaponData) {
-    return null; //TODO: Implement
+  var weaponInfoFromSmurfyWeaponData = function (weaponId, location, smurfyWeaponData) {
+    let name = smurfyWeaponData.name;
+    let minRange = smurfyWeaponData.min_range;
+    let optRange = smurfyWeaponData.long_range;
+    let maxRange = smurfyWeaponData.max_range;
+    let baseDmg = smurfyWeaponData.calc_stats.baseDmg;
+    let heat = smurfyWeaponData.heat;
+    let minHeatPenaltyLevel = smurfyWeaponData.min_heat_penalty_level;
+    let heatPenalty = smurfyWeaponData.heat_penalty;
+    let heatPenaltyId = smurfyWeaponData.heat_penalty_id;
+    let cooldown = smurfyWeaponData.cooldown;
+    let duration = smurfyWeaponData.duration;
+    let spinup = 0; //TODO: Populate spinup value for Gauss, RACs
+
+    let weaponInfo = new WeaponInfo(
+      weaponId, name, location,
+      minRange, optRange, maxRange, baseDmg,
+      heat, minHeatPenaltyLevel, heatPenalty, heatPenaltyId,
+      cooldown, duration, spinup
+    );
+    return weaponInfo; //TODO: Implement
   }
 
   var heatsinkListFromSmurfyMechLoadout = function(smurfyMechLoadout) {
