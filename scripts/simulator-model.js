@@ -59,10 +59,14 @@ var MechModel = MechModel || (function () {
   }
 
   class Heatsink {
-    constructor(heatsinkId, active, location) {
+    constructor(heatsinkId, name, active, location, cooling, engineCooling, heatbase) {
       this.heatsinkId = heatsinkId;
+      this.name = name;
       this.active = active;
       this.location = location;
+      this.cooling = cooling;
+      this.engineCooling = engineCooling;
+      this.heatbase = heatbase;
     }
   }
 
@@ -143,6 +147,7 @@ var MechModel = MechModel || (function () {
   var SmurfyWeaponData = {};
   var SmurfyAmmoData = {};
   var SmurfyMechData = {};
+  var SmurfyModuleData = {};
   var mechLists = {};
   mechLists[Team.BLUE] = [];
   mechLists[Team.RED] = [];
@@ -211,6 +216,7 @@ var MechModel = MechModel || (function () {
     SmurfyWeaponData = DummyWeaponData;
     SmurfyAmmoData = DummyAmmoData;
     SmurfyMechData = DummyMechData;
+    SmurfyModuleData = DummyModuleData;
   };
 
   var getSmurfyMechData = function(smurfyMechId) {
@@ -219,6 +225,20 @@ var MechModel = MechModel || (function () {
 
   var getSmurfyWeaponData = function(smurfyItemId) {
     return SmurfyWeaponData[smurfyItemId];
+  }
+
+  var getSmurfyModuleData = function(smurfyModuleId) {
+    return SmurfyModuleData[smurfyModuleId];
+  }
+
+  var isHeatsinkModule = function(smurfyModuleId) {
+    let smurfyModuleData = getSmurfyModuleData(smurfyModuleId);
+    return smurfyModuleData && smurfyModuleData.type === "CHeatSinkStats";
+  }
+
+  var isEngineModule = function(smurfyModuleId) {
+    let smurfyModuleData = getSmurfyModuleData(smurfyModuleId);
+    return smurfyModuleData && smurfyModuleData.type === "CEngineStats";
   }
 
   //base structure value computation for a given tonnage.
@@ -314,15 +334,39 @@ var MechModel = MechModel || (function () {
       heat, minHeatPenaltyLevel, heatPenalty, heatPenaltyId,
       cooldown, duration, spinup
     );
-    return weaponInfo; //TODO: Implement
+    return weaponInfo;
   }
 
   var heatsinkListFromSmurfyMechLoadout = function(smurfyMechLoadout) {
-    return []; //TODO: Implement
+    var heatsinkList = [];
+    var smurfyMechData = getSmurfyMechData(smurfyMechLoadout.mech_id);
+    //TODO: Implement
+    for (let smurfyMechComponent of smurfyMechLoadout.configuration) {
+      let location = smurfyMechComponent.name;
+      for (let smurfyMechComponentItem of smurfyMechComponent.items) {
+        let itemId = smurfyMechComponentItem.id;
+        if (isHeatsinkModule(itemId)) {
+          let heatsink = heatsinkFromSmurfyMechComponentItem(location, smurfyMechComponentItem);
+          heatsinkList.push(heatsink);
+        }
+      }
+    }
+    return heatsinkList;
   }
 
-  var heatsinkFromSmurfyMechComponentItem = function (smurfyMechComponentItem) {
-    return null; //TODO: Implement
+  var heatsinkFromSmurfyMechComponentItem = function (location, smurfyMechComponentItem) {
+    var heatsink;
+
+    let heatsinkId = smurfyMechComponentItem.id;
+    let smurfyModuleData = getSmurfyModuleData(heatsinkId);
+    let name = smurfyModuleData.name;
+    let active = true;
+    let cooling = smurfyModuleData.stats.cooling;
+    let engineCooling = smurfyModuleData.stats.engineCooling;
+    let heatbase = smurfyModuleData.stats.heatbase;
+
+    heatsink = new Heatsink(heatsinkId, name, active, location, cooling, engineCooling, heatbase);
+    return heatsink;
   }
 
   var ammoInfoListFromSmurfyMechLoadout = function (smurfyMechLoadout) {

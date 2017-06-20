@@ -111,7 +111,10 @@ return {
 
     testModelOps : function () {
       MechModel.initDummyModelData();
-      MechModel.addMech("testId", MechModel.Team.BLUE, DummyArcticCheetah);
+      MechModel.addMech("testCheetahId", MechModel.Team.BLUE, DummyArcticCheetah);
+      MechModel.addMech("testExecutionerId", MechModel.Team.BLUE, DummyExecutioner);
+      MechModel.addMech("testMaulerId", MechModel.Team.RED, DummyMauler);
+      MechModel.addMech("testFirestarterId", MechModel.Team.RED, DummyFireStarter);
     },
 
     testModelBaseHealth : function() {
