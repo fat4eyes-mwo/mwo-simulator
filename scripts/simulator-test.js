@@ -112,6 +112,18 @@ return {
     testModelOps : function () {
       MechModel.initDummyModelData();
       MechModel.addMech("testId", MechModel.Team.BLUE, DummyArcticCheetah);
+    },
+
+    testModelBaseHealth : function() {
+      for (var tonnage = 20; tonnage <=100; tonnage += 5) {
+        for (var property in MechModel.Component) {
+          if (MechModel.Component.hasOwnProperty(property)) {
+            var structure = MechModel.baseMechStructure(MechModel.Component[property], tonnage);
+            var armor = MechModel.baseMechArmor(MechModel.Component[property], tonnage);
+            console.log ("Tonnage: " + tonnage + " " + MechModel.Component[property] + " structure:" + structure + " armor:" + armor);
+          }
+        }
+      }
     }
   }
 

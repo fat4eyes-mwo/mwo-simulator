@@ -200,6 +200,26 @@ var MechModel = MechModel || (function () {
     return SmurfyMechData[smurfyMechId];
   };
 
+  //base structure value computation for a given tonnage.
+  //Reference: http://mwo.gamepedia.com/Internal_Structure
+  const BASE_STRUCTURE_HEAD_20 = 18;
+  const BASE_STRUCTURE_ARMS_20 = 6;
+  const BASE_STRUCTURE_LEGS_20 = 8;
+  const BASE_STRUCTURE_SIDE_TORSO_20 = 10;
+  const BASE_STRUCTURE_CENTER_TORSO_20 = 12;
+  const BASE_STRUCTURE_INCREMENT = 2; //increment per 5 tons
+  var baseMechStructure = function(location, tonnage) {
+    return _MechBaseStructure[tonnage][location];
+  }
+
+  var baseMechArmor = function(location, tonnage) {
+    if (location === Component.HEAD) {
+      return baseMechStructure(location, tonnage);
+    } else {
+      return baseMechStructure(location, tonnage) * 2;
+    }
+  }
+
   //constructor
   var Mech = function (new_mech_id, smurfyMechLoadout) {
     var smurfy_mech_id = smurfyMechLoadout.mech_id;
@@ -233,7 +253,9 @@ var MechModel = MechModel || (function () {
     initModelData : initModelData,
     initDummyModelData : initDummyModelData,
     dataLoaded : dataLoaded,
-    addMech : addMech
+    addMech : addMech,
+    baseMechStructure : baseMechStructure,
+    baseMechArmor : baseMechArmor
   };
 
 })(); //namespace end
