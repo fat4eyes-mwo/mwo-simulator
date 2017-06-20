@@ -26,12 +26,13 @@ var MechModel = MechModel || (function () {
   });
 
   class MechInfo {
-    constructor(mechId, mechName, mechHealth, weaponInfo, heatSinkInfo, engineInfo) {
+    constructor(mechId, mechName, mechHealth, weaponInfo, heatSinkInfo, ammoInfo, engineInfo) {
       this.mechId = mechId;
       this.mechName = mechName;
       this.mechHealth = mechHealth;
       this.weaponInfo = weaponInfo; //[WeaponInfo...]
       this.heatSinkInfo = heatSinkInfo; //[Heatsink...]
+      this.ammoInfo = ammoInfo; //[AmmoInfo...]
       this.engineInfo = engineInfo;
     }
   }
@@ -128,9 +129,10 @@ var MechModel = MechModel || (function () {
   }
 
   class AmmoInfo {
-    constructor(weaponId, location, ammoCount) {
-      this.weaponId = weaponId;
+    constructor(type, location, weaponIds, ammoCount) {
+      this.type = type;
       this.location = location;
+      this.weaponIds = weaponIds; //[weaponId...]
       this.ammoCount = ammoCount;
     }
   }
@@ -231,6 +233,10 @@ var MechModel = MechModel || (function () {
     return SmurfyModuleData[smurfyModuleId];
   }
 
+  var getSmurfyAmmoData = function(smurfyItemId) {
+    return SmurfyAmmoData[smurfyItemId];
+  }
+
   var isHeatsinkModule = function(smurfyModuleId) {
     let smurfyModuleData = getSmurfyModuleData(smurfyModuleId);
     return smurfyModuleData && smurfyModuleData.type === "CHeatSinkStats";
@@ -263,9 +269,10 @@ var MechModel = MechModel || (function () {
     var mechHealth = mechHealthFromSmurfyMechLoadout(smurfyMechLoadout);
     var weaponInfo = weaponInfoListFromSmurfyMechLoadout(smurfyMechLoadout);
     var heatSinkInfo = heatsinkListFromSmurfyMechLoadout(smurfyMechLoadout);
+    var ammoInfo = ammoInfoListFromSmurfyMechLoadout(smurfyMechLoadout);
     var engineInfo = engineInfoFromSmurfyMechLoadout(smurfyMechLoadout);
 
-    mechInfo = new MechInfo(mechId, mechName, mechHealth, weaponInfo, heatSinkInfo, engineInfo);
+    mechInfo = new MechInfo(mechId, mechName, mechHealth, weaponInfo, heatSinkInfo, ammoInfo, engineInfo);
     return mechInfo;
   }
 
@@ -296,21 +303,36 @@ var MechModel = MechModel || (function () {
     return componentHealth;
   }
 
-  var weaponInfoListFromSmurfyMechLoadout = function (smurfyMechLoadout) {
-    var weaponInfoList = [];
-    var smurfyMechData = getSmurfyMechData(smurfyMechLoadout.mech_id);
-    //TODO: Implement
-    for (let smurfyMechComponent of smurfyMechLoadout.configuration) {
+  //returns a list from a smurfy configuration list using a collectionFunction
+  //collectFunction paramters are (location, smurfyMechComponentItem)
+  //and returns a value if it is to be added to the list, undefined/null if not
+  var collectFromSmurfyConfiguration = function (smurfyMechConfiguration, collectFunction) {
+    var outputList = [];
+    for (let smurfyMechComponent of smurfyMechConfiguration) {
       let location = smurfyMechComponent.name;
       for (let smurfyMechComponentItem of smurfyMechComponent.items) {
-        if (smurfyMechComponentItem.type === "weapon") {
-          let weaponId = smurfyMechComponentItem.id;
-          let smurfyWeaponData = getSmurfyWeaponData(weaponId);
-          let weaponInfo = weaponInfoFromSmurfyWeaponData(weaponId, location, smurfyWeaponData);
-          weaponInfoList.push(weaponInfo);
+        let entry = collectFunction(location, smurfyMechComponentItem)
+        if (entry) {
+          outputList.push(entry);
         }
       }
     }
+    return outputList;
+  }
+
+  var weaponInfoListFromSmurfyMechLoadout = function (smurfyMechLoadout) {
+    var weaponInfoList = [];
+    weaponInfoList = collectFromSmurfyConfiguration(smurfyMechLoadout.configuration,
+      function (location, smurfyMechComponentItem) {
+        if (smurfyMechComponentItem.type ==="weapon") {
+          let weaponId = smurfyMechComponentItem.id;
+          let smurfyWeaponData = getSmurfyWeaponData(weaponId);
+          let weaponInfo = weaponInfoFromSmurfyWeaponData(weaponId, location, smurfyWeaponData);
+          return weaponInfo;
+        } else {
+          return null;
+        }
+    });
     return weaponInfoList;
   }
 
@@ -339,18 +361,16 @@ var MechModel = MechModel || (function () {
 
   var heatsinkListFromSmurfyMechLoadout = function(smurfyMechLoadout) {
     var heatsinkList = [];
-    var smurfyMechData = getSmurfyMechData(smurfyMechLoadout.mech_id);
-    //TODO: Implement
-    for (let smurfyMechComponent of smurfyMechLoadout.configuration) {
-      let location = smurfyMechComponent.name;
-      for (let smurfyMechComponentItem of smurfyMechComponent.items) {
+    heatsinkList = collectFromSmurfyConfiguration(smurfyMechLoadout.configuration,
+      function (location, smurfyMechComponentItem) {
         let itemId = smurfyMechComponentItem.id;
         if (isHeatsinkModule(itemId)) {
           let heatsink = heatsinkFromSmurfyMechComponentItem(location, smurfyMechComponentItem);
-          heatsinkList.push(heatsink);
+          return heatsink;
+        } else {
+          return null;
         }
-      }
-    }
+      });
     return heatsinkList;
   }
 
@@ -370,11 +390,30 @@ var MechModel = MechModel || (function () {
   }
 
   var ammoInfoListFromSmurfyMechLoadout = function (smurfyMechLoadout) {
-    return null; //TODO: Implement
+    var ammoList = [];
+    ammoList = collectFromSmurfyConfiguration(smurfyMechLoadout.configuration,
+      function (location, smurfyMechComponentItem) {
+        if (smurfyMechComponentItem.type === "ammo") {
+          let ammoInfo =ammoInfoFromSmurfyMechComponentItem(location, smurfyMechComponentItem);
+          return ammoInfo;
+        } else {
+          return null;
+        }
+      }
+    );
+    return ammoList;
   }
 
-  var ammoInfoFromSmurfyMechComponentItem = function(smurfyMechComponentItem) {
-    return null; //TODO: Implement
+  var ammoInfoFromSmurfyMechComponentItem = function(location, smurfyMechComponentItem) {
+    var ammoInfo;
+
+    let ammoData = getSmurfyAmmoData(smurfyMechComponentItem.id);
+    let type = ammoData.type;
+    let ammoCount = ammoData.num_shots;
+    let weaponIds = ammoData.weapons;
+    ammoInfo = new AmmoInfo(type, location, weaponIds, ammoCount);
+
+    return ammoInfo;
   }
 
   var engineInfoFromSmurfyMechLoadout = function(smurfyMechLoadout) {

@@ -1,3 +1,4 @@
+//http://mwo.smurfy-net.de/mechlab#i=291&l=0673c22705b1651b68e33300644d53eb895cf864
 var DummyArcticCheetah = {
 	"id": "0673c22705b1651b68e33300644d53eb895cf864",
 	"mech_id": 291,
@@ -173,6 +174,7 @@ var DummyArcticCheetah = {
 	"lsml": "lsml:\/\/rgEjFBYGHBIgCBYGHBQA6zDuUyZk07jMmnZKdVtOrzJEaSqdjp2aZMyb"
 }
 
+//http://mwo.smurfy-net.de/mechlab#i=310&l=4e36e8d64502fc77e9c463aa3002f7d27cfe705f
 var DummyBattleMaster = {
 	"id": "4e36e8d64502fc77e9c463aa3002f7d27cfe705f",
 	"mech_id": 310,
@@ -347,6 +349,7 @@ var DummyBattleMaster = {
 	"lsml": "lsml:\/\/rgE2GEQERBJoBEQERCLne6\/upzrMWzHmOtt77lVVsx5jzHW1Vsg="
 }
 
+//http://mwo.smurfy-net.de/mechlab#i=285&l=85a320fe5a58bc19ea63f3457b4fd33942bc4928
 var DummyExecutioner = {
 	"id": "85a320fe5a58bc19ea63f3457b4fd33942bc4928",
 	"mech_id": 285,
@@ -561,6 +564,7 @@ var DummyExecutioner = {
 	"lsml": "lsml:\/\/rgEdQEgISBJwCEgISB8D6zDkWJiYmJKlU5jirElCL6ccpxW05fiqVKpxunLpUqVZ"
 };
 
+//http://mwo.smurfy-net.de/mechlab#i=138&l=51f1355f16afdc0c7f86b0069e28635744859857
 var DummyFireStarter = {
 	"id": "51f1355f16afdc0c7f86b0069e28635744859857",
 	"mech_id": 138,
@@ -716,6 +720,7 @@ var DummyFireStarter = {
 	"lsml": "lsml:\/\/rgCKGBoGIBImBhoGIAHnf6\/upzrMY2OscmSttY2Pvntt"
 }
 
+//http://mwo.smurfy-net.de/mechlab#i=383&l=e98b6cc50991cca88ca7ab1fce29631d0203d5ca
 var DummyWarHammer = {
 	"id": "e98b6cc50991cca88ca7ab1fce29631d0203d5ca",
 	"mech_id": 383,
@@ -903,6 +908,7 @@ var DummyWarHammer = {
 	"lsml": "lsml:\/\/rgF\/FjgENhJUBDgENizne6\/upzrMWxiq23vsVVsx5jzHW2MVWw=="
 }
 
+//http://mwo.smurfy-net.de/mechlab#i=309&l=3ad2a73e6d8a532941cddcad311085bf92673da3
 var DummyTimberwolf = {
 	"id": "3ad2a73e6d8a532941cddcad311085bf92673da3",
 	"mech_id": 309,
@@ -1107,6 +1113,7 @@ var DummyTimberwolf = {
 	"lsml": "lsml:\/\/rgE1FD4CNBFaAj4CNCoA6zDiUqVKrW8SVKpxSnDbiU4firFWJKpxOtIxMQRfKlSr"
 }
 
+//http://mwo.smurfy-net.de/mechlab#i=332&l=09b8c111f321277b8e7afaa2d233294f0f67c4de
 var DummyCrab = {
 	"id": "09b8c111f321277b8e7afaa2d233294f0f67c4de",
 	"mech_id": 332,
@@ -1253,6 +1260,7 @@ var DummyCrab = {
 	"lsml": "lsml:\/\/rgFMICwEMBA8BCwEMADnf6\/upzrMmPMdaq22Y+YS22w="
 }
 
+//http://mwo.smurfy-net.de/mechlab#i=368&l=fb5d6e0621d91bed6125ccb96b09a0cfd68edc96
 var DummyHunchback2C = {
 	"id": "fb5d6e0621d91bed6125ccb96b09a0cfd68edc96",
 	"mech_id": 368,
@@ -1461,6 +1469,7 @@ var DummyHunchback2C = {
 	"lsml": "lsml:\/\/rgFwICwEMBI8BCwEMBTnj6\/+p7rMlSrg8HAlSpVlURfcHg\/EOVcHg4EqVKsq2Q=="
 }
 
+//http://mwo.smurfy-net.de/mechlab#i=326&l=31148ee451cd55e98509de362bb55191611aed52
 var DummyMauler = {
 	"id": "31148ee451cd55e98509de362bb55191611aed52",
 	"mech_id": 326,

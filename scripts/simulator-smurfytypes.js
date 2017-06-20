@@ -22,7 +22,7 @@ var SmurfyTypes = SmurfyTypes || (function () {
   }
 
   var MechComponentItem = {
-    id: null, //refers to WeaponData.id, ModuleData.id
+    id: null, //refers to WeaponData.id, ModuleData.id, AmmoData.id
     type: null,
     name: null,
   }
@@ -169,6 +169,14 @@ var SmurfyTypes = SmurfyTypes || (function () {
   }
   var EngineStats {
     rating : null;
-    heatsinks : 2;
+    heatsinks : null;
+  }
+
+  var AmmoData {
+    id : null;
+    type : null;
+    name : null;
+    num_shots : null;
+    weapons : null; //weapons that use this ammo
   }
 })();//namespace
