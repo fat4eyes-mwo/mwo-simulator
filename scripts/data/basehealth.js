@@ -28,7 +28,7 @@ var _MechBaseStructure = {
     "right_leg" : 14,
     "right_torso" : 14,
     "centre_torso" : 20,
-    "left_torso" : 114
+    "left_torso" : 14
   },
   "35" : {
     "head" : 18,

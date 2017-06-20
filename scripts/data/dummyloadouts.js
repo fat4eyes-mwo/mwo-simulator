@@ -1460,3 +1460,405 @@ var DummyHunchback2C = {
 	"created_at": "2016-01-04T04:09:43+0000",
 	"lsml": "lsml:\/\/rgFwICwEMBI8BCwEMBTnj6\/+p7rMlSrg8HAlSpVlURfcHg\/EOVcHg4EqVKsq2Q=="
 }
+
+var DummyMauler = {
+	"id": "31148ee451cd55e98509de362bb55191611aed52",
+	"mech_id": 326,
+	"valid": true,
+	"configuration": [{
+		"name": "head",
+		"armor": 18,
+		"actuators": [],
+		"items": [{
+			"id": "2006",
+			"type": "ammo",
+			"name": "AC\/5 AMMO"
+		}]
+	}, {
+		"name": "centre_torso",
+		"armor": 108,
+		"actuators": [],
+		"items": [{
+			"id": "2006",
+			"type": "ammo",
+			"name": "AC\/5 AMMO"
+		}, {
+			"id": "2006",
+			"type": "ammo",
+			"name": "AC\/5 AMMO"
+		}, {
+			"id": "3253",
+			"type": "module",
+			"name": "STD ENGINE 275"
+		}]
+	}, {
+		"name": "right_leg",
+		"armor": 72,
+		"actuators": [],
+		"items": [{
+			"id": "2006",
+			"type": "ammo",
+			"name": "AC\/5 AMMO"
+		}, {
+			"id": "2006",
+			"type": "ammo",
+			"name": "AC\/5 AMMO"
+		}]
+	}, {
+		"name": "left_leg",
+		"armor": 72,
+		"actuators": [],
+		"items": [{
+			"id": "2006",
+			"type": "ammo",
+			"name": "AC\/5 AMMO"
+		}, {
+			"id": "2006",
+			"type": "ammo",
+			"name": "AC\/5 AMMO"
+		}]
+	}, {
+		"name": "left_torso",
+		"armor": 68,
+		"actuators": [],
+		"items": [{
+			"id": "1019",
+			"type": "weapon",
+			"name": "AC\/5"
+		}, {
+			"id": "1019",
+			"type": "weapon",
+			"name": "AC\/5"
+		}, {
+			"id": "1019",
+			"type": "weapon",
+			"name": "AC\/5"
+		}]
+	}, {
+		"name": "right_torso",
+		"armor": 68,
+		"actuators": [],
+		"items": [{
+			"id": "1019",
+			"type": "weapon",
+			"name": "AC\/5"
+		}, {
+			"id": "1019",
+			"type": "weapon",
+			"name": "AC\/5"
+		}, {
+			"id": "2006",
+			"type": "ammo",
+			"name": "AC\/5 AMMO"
+		}, {
+			"id": "2006",
+			"type": "ammo",
+			"name": "AC\/5 AMMO"
+		}, {
+			"id": "2006",
+			"type": "ammo",
+			"name": "AC\/5 AMMO"
+		}, {
+			"id": "9003",
+			"type": "module",
+			"name": "C.A.S.E."
+		}]
+	}, {
+		"name": "right_arm",
+		"armor": 1,
+		"actuators": [],
+		"items": []
+	}, {
+		"name": "left_arm",
+		"armor": 1,
+		"actuators": [],
+		"items": []
+	}, {
+		"name": "left_torso_rear",
+		"armor": 8,
+		"actuators": [],
+		"items": []
+	}, {
+		"name": "centre_torso_rear",
+		"armor": 8,
+		"actuators": [],
+		"items": []
+	}, {
+		"name": "right_torso_rear",
+		"armor": 8,
+		"actuators": [],
+		"items": []
+	}],
+	"upgrades": [{
+		"id": "2810",
+		"type": "Armor",
+		"name": "STANDARD ARMOR"
+	}, {
+		"id": "3101",
+		"type": "Structure",
+		"name": "ENDO-STEEL STRUCTURE"
+	}, {
+		"id": "3002",
+		"type": "HeatSink",
+		"name": "DOUBLE HEAT SINK"
+	}, {
+		"id": "3051",
+		"type": "Artemis",
+		"name": "STANDARD GUIDANCE"
+	}],
+	"stats": {
+		"used_armor": 432,
+		"used_jump_jets": 0,
+		"granted_jump_jets": 0,
+		"firepower": 25,
+		"dps_max": 15.060240963855,
+		"dps_sustained": 6.0240963855422,
+		"cooling_efficiency": 40,
+		"heatsinks": 10,
+		"top_speed": 49.5,
+		"top_speed_tweak": 0,
+		"engine_name": "STD ENGINE 275",
+		"engine_rating": 275,
+		"engine_type": "STD",
+		"armaments": [{
+			"id": "1019",
+			"type": "weapon",
+			"name": "AC\/5",
+			"count": 5
+		}],
+		"ammunition": [{
+			"id": "2006",
+			"type": "ammo",
+			"name": "AC\/5 AMMO",
+			"count": 10
+		}],
+		"equipment": [{
+			"id": "3253",
+			"type": "module",
+			"name": "STD ENGINE 275",
+			"count": 1
+		}, {
+			"id": "9003",
+			"type": "module",
+			"name": "C.A.S.E.",
+			"count": 1
+		}]
+	},
+	"created_at": "2015-09-10T21:15:27+0000",
+	"lsml": "lsml:\/\/rgFGAUQISBJsCEQISAHne6\/upzrMqfT8+n0+TbPp9Z9Z9PsXqfT6fs+n1sg="
+}
+
+var DummyKodiak = {
+	"id": "7aa2092fe4cfbf27ddad5adb52dc9e1dda85839f",
+	"mech_id": 408,
+	"valid": true,
+	"configuration": [{
+		"name": "head",
+		"armor": 18,
+		"actuators": [],
+		"items": [{
+			"id": "2210",
+			"type": "ammo",
+			"name": "C-U-AC\/10 AMMO"
+		}]
+	}, {
+		"name": "centre_torso",
+		"armor": 120,
+		"actuators": [],
+		"items": [{
+			"id": "2210",
+			"type": "ammo",
+			"name": "C-U-AC\/10 AMMO"
+		}, {
+			"id": "2210",
+			"type": "ammo",
+			"name": "C-U-AC\/10 AMMO"
+		}, {
+			"id": "3478",
+			"type": "module",
+			"name": "CLAN XL ENGINE 400"
+		}, {
+			"id": "3004",
+			"type": "module",
+			"name": "CLAN DOUBLE HEAT SINK"
+		}, {
+			"id": "3004",
+			"type": "module",
+			"name": "CLAN DOUBLE HEAT SINK"
+		}, {
+			"id": "3004",
+			"type": "module",
+			"name": "CLAN DOUBLE HEAT SINK"
+		}]
+	}, {
+		"name": "right_leg",
+		"armor": 72,
+		"actuators": [],
+		"items": [{
+			"id": "2209",
+			"type": "ammo",
+			"name": "C-U-AC\/5 AMMO"
+		}, {
+			"id": "2209",
+			"type": "ammo",
+			"name": "C-U-AC\/5 AMMO"
+		}]
+	}, {
+		"name": "left_leg",
+		"armor": 72,
+		"actuators": [],
+		"items": [{
+			"id": "2210",
+			"type": "ammo",
+			"name": "C-U-AC\/10 AMMO"
+		}, {
+			"id": "2210",
+			"type": "ammo",
+			"name": "C-U-AC\/10 AMMO"
+		}]
+	}, {
+		"name": "left_torso",
+		"armor": 80,
+		"actuators": [],
+		"items": [{
+			"id": "1206",
+			"type": "weapon",
+			"name": "C-ULTRA AC\/10"
+		}, {
+			"id": "1205",
+			"type": "weapon",
+			"name": "C-ULTRA AC\/5"
+		}, {
+			"id": "2209",
+			"type": "ammo",
+			"name": "C-U-AC\/5 AMMO"
+		}, {
+			"id": "2209",
+			"type": "ammo",
+			"name": "C-U-AC\/5 AMMO"
+		}, {
+			"id": "2229",
+			"type": "ammo",
+			"name": "C-U-AC\/5 AMMO (1\/2)"
+		}]
+	}, {
+		"name": "right_torso",
+		"armor": 80,
+		"actuators": [],
+		"items": [{
+			"id": "1206",
+			"type": "weapon",
+			"name": "C-ULTRA AC\/10"
+		}, {
+			"id": "1205",
+			"type": "weapon",
+			"name": "C-ULTRA AC\/5"
+		}, {
+			"id": "9015",
+			"type": "module",
+			"name": "TARGETING COMP. MK III"
+		}]
+	}, {
+		"name": "right_arm",
+		"armor": 3,
+		"actuators": [],
+		"items": []
+	}, {
+		"name": "left_arm",
+		"armor": 3,
+		"actuators": [],
+		"items": []
+	}, {
+		"name": "left_torso_rear",
+		"armor": 4,
+		"actuators": [],
+		"items": []
+	}, {
+		"name": "centre_torso_rear",
+		"armor": 4,
+		"actuators": [],
+		"items": []
+	}, {
+		"name": "right_torso_rear",
+		"armor": 4,
+		"actuators": [],
+		"items": []
+	}],
+	"upgrades": [{
+		"id": "2815",
+		"type": "Armor",
+		"name": "CLAN FERRO FIBROUS ARMOR"
+	}, {
+		"id": "3102",
+		"type": "Structure",
+		"name": "CLAN ENDO-STEEL STRUCTURE"
+	}, {
+		"id": "3005",
+		"type": "HeatSink",
+		"name": "CLAN DOUBLE HEAT SINK"
+	}, {
+		"id": "3051",
+		"type": "Artemis",
+		"name": "STANDARD GUIDANCE"
+	}],
+	"stats": {
+		"used_armor": 460,
+		"used_jump_jets": 0,
+		"granted_jump_jets": 0,
+		"firepower": 29.9998,
+		"dps_max": 14.024016385542,
+		"dps_sustained": 7.8534491759036,
+		"cooling_efficiency": 56,
+		"heatsinks": 13,
+		"top_speed": 64.8,
+		"top_speed_tweak": 0,
+		"engine_name": "CLAN XL ENGINE 400",
+		"engine_rating": 400,
+		"engine_type": "XL",
+		"armaments": [{
+			"id": "1206",
+			"type": "weapon",
+			"name": "C-ULTRA AC\/10",
+			"count": 2
+		}, {
+			"id": "1205",
+			"type": "weapon",
+			"name": "C-ULTRA AC\/5",
+			"count": 2
+		}],
+		"ammunition": [{
+			"id": "2210",
+			"type": "ammo",
+			"name": "C-U-AC\/10 AMMO",
+			"count": 5
+		}, {
+			"id": "2209",
+			"type": "ammo",
+			"name": "C-U-AC\/5 AMMO",
+			"count": 4
+		}, {
+			"id": "2229",
+			"type": "ammo",
+			"name": "C-U-AC\/5 AMMO (1\/2)",
+			"count": 1
+		}],
+		"equipment": [{
+			"id": "3478",
+			"type": "module",
+			"name": "CLAN XL ENGINE 400",
+			"count": 1
+		}, {
+			"id": "3004",
+			"type": "module",
+			"name": "CLAN DOUBLE HEAT SINK",
+			"count": 3
+		}, {
+			"id": "9015",
+			"type": "module",
+			"name": "TARGETING COMP. MK III",
+			"count": 1
+		}]
+	},
+	"created_at": "2016-07-27T12:54:26+0000",
+	"lsml": "lsml:\/\/rgGYA1AESBJ4BFAESAPnj6\/+p7rMuecmOAlTtO7vHXeO3jvFyVKlXPOTFO073m7vHbx1sg=="
+}

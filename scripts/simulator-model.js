@@ -26,7 +26,9 @@ var MechModel = MechModel || (function () {
   });
 
   class MechInfo {
-    constructor(mechHealth, weaponInfo, heatSinkInfo, engineInfo) {
+    constructor(mechId, mechName, mechHealth, weaponInfo, heatSinkInfo, engineInfo) {
+      this.mechId = mechId;
+      this.mechName = mechName;
       this.mechHealth = mechHealth;
       this.weaponInfo = weaponInfo; //[WeaponInfo...]
       this.heatSinkInfo = heatSinkInfo; //[Heatsink...]
@@ -67,10 +69,10 @@ var MechModel = MechModel || (function () {
   class ComponentHealth {
     constructor(location, armor, structure, maxArmor, maxStructure) {
       this.location = location;
-      this.armor = armor;
+      this.armor = armor; //current armor. used in state
       this.structure = structure;
-      this.maxArmor = maxArmor;
-      this.maxStructure = maxStructure;
+      this.maxArmor = maxArmor; //maximum armor from loadout
+      this.maxStructure = maxStructure; //maximum structure from loadout
     }
   }
 
@@ -120,6 +122,15 @@ var MechModel = MechModel || (function () {
       this.weaponId = weaponId;
       this.location = location;
       this.ammoCount = ammoCount;
+    }
+  }
+
+  class EngineInfo {
+    constructor(engineId, name, heatsinkId, heatsinkCount) {
+      this.engineId = engineId; //Same as module id in smurfy ModuleData
+      this.name = name; //Readable name, from smurfy ModuleData
+      this.heatsinkId; //id of the heatsink from smurfy ModuleData (i.e. single, double, clan double);
+      this.heatsinkCount;
     }
   }
 
@@ -214,11 +225,81 @@ var MechModel = MechModel || (function () {
     }
   }
 
+  var mechInfoFromSmurfyMechLoadout = function (mechId, smurfyMechLoadout) {
+    var mechInfo;
+
+    var smurfyMechData = getSmurfyMechData(smurfyMechLoadout.mech_id);
+    var mechName = smurfyMechData.name;
+    var mechHealth = mechHealthFromSmurfyMechLoadout(smurfyMechLoadout);
+    var weaponInfo = weaponInfoListFromSmurfyMechLoadout(smurfyMechLoadout);
+    var heatSinkInfo = heatsinkListFromSmurfyMechLoadout(smurfyMechLoadout);
+    var engineInfo = engineInfoFromSmurfyMechLoadout(smurfyMechLoadout);
+
+    mechInfo = new MechInfo(mechId, mechName, mechHealth, weaponInfo, heatSinkInfo, engineInfo);
+    return mechInfo;
+  }
+
+  var mechHealthFromSmurfyMechLoadout = function (smurfyMechLoadout) {
+    var mechHealth;
+
+    var smurfyMechData = getSmurfyMechData(smurfyMechLoadout.mech_id);
+    var tonnage = smurfyMechData.details.tons;
+    var quirks = smurfyMechData.details.quirks;
+    var componentHealthList = [];
+    for (let smurfyMechComponent of smurfyMechLoadout.configuration) {
+      let componentHealth = componentHealthFromSmurfyMechComponent(smurfyMechComponent, quirks, tonnage);
+      componentHealthList.push(componentHealth);
+    }
+    mechHealth = new MechHealth(componentHealthList);
+
+    return mechHealth;
+  }
+
+  var componentHealthFromSmurfyMechComponent = function (smurfyMechComponent, smurfyMechQuirks, tonnage) {
+    var componentHealth; //return value
+
+    var location = smurfyMechComponent.name;
+    var armor = smurfyMechComponent.armor;
+    var structure = baseMechStructure(location, tonnage);
+    //TODO: Add quirk values
+    componentHealth = new ComponentHealth(location, armor, structure, armor, structure);
+    return componentHealth;
+  }
+
+  var weaponInfoListFromSmurfyMechLoadout = function (smurfyMechLoadout) {
+    return [];  //TODO: Implement
+  }
+
+  var weaponInfoFromSmurfyWeaponData = function (smurfyWeaponData) {
+    return null; //TODO: Implement
+  }
+
+  var heatsinkListFromSmurfyMechLoadout = function(smurfyMechLoadout) {
+    return []; //TODO: Implement
+  }
+
+  var heatsinkFromSmurfyMechComponentItem = function (smurfyMechComponentItem) {
+    return null; //TODO: Implement
+  }
+
+  var ammoInfoListFromSmurfyMechLoadout = function (smurfyMechLoadout) {
+    return null; //TODO: Implement
+  }
+
+  var ammoInfoFromSmurfyMechComponentItem = function(smurfyMechComponentItem) {
+    return null; //TODO: Implement
+  }
+
+  var engineInfoFromSmurfyMechLoadout = function(smurfyMechLoadout) {
+    return null; //TODO: Implement
+  }
+
   //constructor
   var Mech = function (new_mech_id, smurfyMechLoadout) {
     var smurfy_mech_id = smurfyMechLoadout.mech_id;
     var smurfyMechData = getSmurfyMechData(smurfy_mech_id);
     var mech_id = new_mech_id;
+    var mechInfo = mechInfoFromSmurfyMechLoadout(new_mech_id, smurfyMechLoadout);
     return {
       getName : function() {
         return smurfyMechData.name;
@@ -228,6 +309,9 @@ var MechModel = MechModel || (function () {
       },
       getMechId : function() {
         return mech_id;
+      },
+      getMechInfo : function() {
+        return mechInfo;
       }
     };
   };
