@@ -146,4 +146,29 @@ var SmurfyTypes = SmurfyTypes || (function () {
     hps: null,
     ehs: null,
   }
+
+  var ModuleData { //Common properties for HeatsinkModuleData, EngineModuleData
+    id : null;
+    type : null;
+    name : null;
+  }
+
+  //ModuleData with type = CHeatSinkStats
+  var HeatsinkModuleData { //extends ModuleData
+    stats : null; //HeatsinkStats
+  }
+  var HeatsinkStats {
+    cooling : null;
+    engineCooling : null;
+    heatbase : null;
+  }
+
+  //ModuleData with type = CEngineStats
+  var EngineModuleData { //extends ModuleData
+    stats : null;
+  }
+  var EngineStats {
+    rating : null;
+    heatsinks : 2;
+  }
 })();//namespace
