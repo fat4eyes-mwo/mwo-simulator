@@ -183,6 +183,10 @@ body {
 
 }
 
+.weaponPanelRow.Cooldown {
+  
+}
+
 .weaponPanelRow.Firing {
   background-color: grey;
   color : white;

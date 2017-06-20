@@ -18,11 +18,110 @@ var MechModel = MechModel || (function () {
     LEFT_LEG : "left_leg"
   });
 
-  const WeaponState = Object.freeze({
+  const WeaponCycle = Object.freeze({
     ACTIVE : "Active",
     FIRING : "Firing",
-    DISABLED : "Disabled"
+    DISABLED : "Disabled",
+    COOLDOWN : "Cooldown"
   });
+
+  class MechInfo {
+    constructor(mechHealth, weaponInfo, heatSinkInfo, engineInfo) {
+      this.mechHealth = mechHealth;
+      this.weaponInfo = weaponInfo; //[WeaponInfo...]
+      this.heatSinkInfo = heatSinkInfo; //[Heatsink...]
+      this.engineInfo = engineInfo;
+    }
+  }
+
+  class WeaponInfo {
+    constructor(weaponId, location, minRange, optRange, maxRange, baseDmg, heat,
+      cooldown, duration, spinup) {
+        this.weaponId = weaponId;
+        this.location = location;
+        this.minRange = minRange;
+        this.optRange = optRange;
+        this.maxRange = maxRange;
+        this.baseDmg = baseDmg;
+        this.heat = heat;
+        this.cooldown = cooldown;
+        this.duration = duration;
+        this.spinup = spinup;
+      }
+  }
+
+  class Heatsink {
+    constructor(heatsinkId, active, location) {
+      this.heatsinkId = heatsinkId;
+      this.active = active;
+      this.location = location;
+    }
+  }
+
+  class MechHealth {
+    constructor(componentHealth) {
+      this.componentHealth = componentHealth; //[ComponentHealth...]
+    }
+  }
+
+  class ComponentHealth {
+    constructor(location, armor, structure, maxArmor, maxStructure) {
+      this.location = location;
+      this.armor = armor;
+      this.structure = structure;
+      this.maxArmor = maxArmor;
+      this.maxStructure = maxStructure;
+    }
+  }
+
+  class MechState {
+    constructor(mechHealth, heatState, weaponState, ammoState) {
+      this.mechHealth = mechHealth;
+      this.heatState = heatState;
+      this.weaponState = weaponState;
+      this.ammoState = ammoState;
+    }
+  }
+
+  class HeatState {
+    constructor(currHeat, currMaxHeat, currHeatDissapation, currHeatsinkInfo) {
+      this.currHeat = currHeat;
+      this.currMaxHeat = currMaxHeat;
+      this.currHeatDissapation = currHeatDissapation;
+      this.currHeatsinkInfo = currHeatsinkInfo;
+    }
+  }
+
+  class WeaponState {
+    constructor(weaponInfo, active, weaponCycle, cooldownLeft) {
+      this.weaponInfo = weaponInfo;
+      this.active = active; //boolean
+      this.weaponCycle = weaponCycle;
+      this.cooldownLeft = cooldownLeft; //cooldown time left in ms
+    }
+  }
+
+  class AmmoState {
+    constructor(ammoCounts, ammoInfo) {
+      this.ammoCounts = ammoCounts; //weaponId->AmmoCount
+      this.ammoInfo = ammoInfo; //[AmmoInfo...]
+    }
+  }
+
+  class AmmoCount {
+    constructor(weaponId, ammoCount) {
+      this.weaponId = weaponId;
+      this.ammoCount = ammoCount; //rounds left
+    }
+  }
+
+  class AmmoInfo {
+    constructor(weaponId, location, ammoCount) {
+      this.weaponId = weaponId;
+      this.location = location;
+      this.ammoCount = ammoCount;
+    }
+  }
 
   var SmurfyWeaponData = {};
   var SmurfyAmmoData = {};
@@ -129,7 +228,7 @@ var MechModel = MechModel || (function () {
   //public members
   return {
     Component: Component,
-    WeaponState: WeaponState,
+    WeaponCycle: WeaponCycle,
     Team : Team,
     initModelData : initModelData,
     initDummyModelData : initDummyModelData,

@@ -79,9 +79,9 @@ return {
     },
 
     testUI : function (mechIds) {
-      var weaponStates = [MechModel.WeaponState.ACTIVE,
-          MechModel.WeaponState.FIRING,
-          MechModel.WeaponState.DISABLED];
+      var weaponStates = [MechModel.WeaponCycle.ACTIVE,
+          MechModel.WeaponCycle.FIRING,
+          MechModel.WeaponCycle.DISABLED];
       $.each(mechIds, (index, mechId) => {
         for (var property in MechModel.Component) {
           if (MechModel.Component.hasOwnProperty(property)) {
