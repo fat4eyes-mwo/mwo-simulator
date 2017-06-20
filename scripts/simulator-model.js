@@ -202,12 +202,6 @@ var MechModel = MechModel || (function () {
 
   //base structure value computation for a given tonnage.
   //Reference: http://mwo.gamepedia.com/Internal_Structure
-  const BASE_STRUCTURE_HEAD_20 = 18;
-  const BASE_STRUCTURE_ARMS_20 = 6;
-  const BASE_STRUCTURE_LEGS_20 = 8;
-  const BASE_STRUCTURE_SIDE_TORSO_20 = 10;
-  const BASE_STRUCTURE_CENTER_TORSO_20 = 12;
-  const BASE_STRUCTURE_INCREMENT = 2; //increment per 5 tons
   var baseMechStructure = function(location, tonnage) {
     return _MechBaseStructure[tonnage][location];
   }
