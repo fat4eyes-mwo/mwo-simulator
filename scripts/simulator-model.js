@@ -35,12 +35,12 @@ var MechModel = MechModel || (function () {
   });
 
   class MechInfo {
-    constructor(mechId, mechName, mechHealth, weaponInfo, heatsinkInfo, ammoInfo, engineInfo) {
+    constructor(mechId, mechName, mechHealth, weaponInfoList, heatsinkInfoList, ammoInfo, engineInfo) {
       this.mechId = mechId;
       this.mechName = mechName;
       this.mechHealth = mechHealth;
-      this.weaponInfo = weaponInfo; //[WeaponInfo...]
-      this.heatsinkInfo = heatsinkInfo; //[Heatsink...]
+      this.weaponInfoList = weaponInfoList; //[WeaponInfo...]
+      this.heatsinkInfoList = heatsinkInfoList; //[Heatsink...]
       this.ammoInfo = ammoInfo; //[AmmoInfo...]
       this.engineInfo = engineInfo;
     }
@@ -100,10 +100,10 @@ var MechModel = MechModel || (function () {
   }
 
   class MechState {
-    constructor(mechHealth, heatState, weaponStateInfo, ammoState) {
+    constructor(mechHealth, heatState, weaponStateList, ammoState) {
       this.mechHealth = mechHealth;
       this.heatState = heatState;
-      this.weaponStateInfo = weaponStateInfo; //[WeaponState...]
+      this.weaponStateList = weaponStateList; //[WeaponState...]
       this.ammoState = ammoState;
     }
   }
@@ -166,9 +166,9 @@ var MechModel = MechModel || (function () {
   var SmurfyAmmoData = {};
   var SmurfyMechData = {};
   var SmurfyModuleData = {};
-  var mechLists = {};
-  mechLists[Team.BLUE] = [];
-  mechLists[Team.RED] = [];
+  var mechTeams = {};
+  mechTeams[Team.BLUE] = [];
+  mechTeams[Team.RED] = [];
 
   //Get weapon, ammo and mech data from smurfy
   //TODO: JSONP not parsing the output correctly.
@@ -330,12 +330,12 @@ var MechModel = MechModel || (function () {
     var smurfyMechData = getSmurfyMechData(smurfyMechLoadout.mech_id);
     var mechName = smurfyMechData.name;
     var mechHealth = mechHealthFromSmurfyMechLoadout(smurfyMechLoadout);
-    var weaponInfo = weaponInfoListFromSmurfyMechLoadout(smurfyMechLoadout);
-    var heatsinkInfo = heatsinkListFromSmurfyMechLoadout(smurfyMechLoadout);
+    var weaponInfoList = weaponInfoListFromSmurfyMechLoadout(smurfyMechLoadout);
+    var heatsinkInfoList = heatsinkListFromSmurfyMechLoadout(smurfyMechLoadout);
     var ammoInfo = ammoInfoListFromSmurfyMechLoadout(smurfyMechLoadout);
     var engineInfo = engineInfoFromSmurfyMechLoadout(smurfyMechLoadout);
 
-    mechInfo = new MechInfo(mechId, mechName, mechHealth, weaponInfo, heatsinkInfo, ammoInfo, engineInfo);
+    mechInfo = new MechInfo(mechId, mechName, mechHealth, weaponInfoList, heatsinkInfoList, ammoInfo, engineInfo);
     return mechInfo;
   }
 
@@ -542,10 +542,10 @@ var MechModel = MechModel || (function () {
 
     var mechHealth = $.extend(true, {}, mechInfo.mechHealth);
     var heatState = initHeatState(mechInfo);
-    var weaponStateInfo = initWeaponStateInfo(mechInfo);
+    var weaponStateList = initWeaponStateList(mechInfo);
     var ammoState = initAmmoState(mechInfo);
 
-    mechState = new MechState(mechHealth, heatState, weaponStateInfo, ammoState);
+    mechState = new MechState(mechHealth, heatState, weaponStateList, ammoState);
     return mechState;
   }
 
@@ -556,7 +556,7 @@ var MechModel = MechModel || (function () {
     let heatDissapation = 0;
 
     //non-fixed heatsinks
-    for (let heatsink of mechInfo.heatsinkInfo) {
+    for (let heatsink of mechInfo.heatsinkInfoList) {
       if (!heatsink.active) continue;
       if (heatsink.location === Component.CENTRE_TORSO) {
       //internal non-fixed
@@ -595,17 +595,17 @@ var MechModel = MechModel || (function () {
     //Copy engine info from mech info
     let engineInfo = $.extend(true, {}, mechInfo.engineInfo);
     //Copy heatsink info from mech info
-    let currHeatsinkInfo = $.extend(true, {}, mechInfo.heatsinkInfo);
+    let currHeatsinkInfo = $.extend(true, {}, mechInfo.heatsinkInfoList);
     let heatState = new HeatState(currHeat, currMaxHeat, currHeatDissapation, currHeatsinkInfo, engineInfo, engineHeatEfficiency)
     return heatState;
   }
 
-  var initWeaponStateInfo = function(mechInfo) {
-    var weaponStateInfo = [];
-    for (let weaponInfo of mechInfo.weaponInfo) {
-      weaponStateInfo.push(initWeaponState(weaponInfo));
+  var initWeaponStateList = function(mechInfo) {
+    var weaponStateList = [];
+    for (let weaponInfo of mechInfo.weaponInfoList) {
+      weaponStateList.push(initWeaponState(weaponInfo));
     }
-    return weaponStateInfo;
+    return weaponStateList;
   }
 
   var initWeaponState = function(weaponInfo) {
@@ -670,9 +670,10 @@ var MechModel = MechModel || (function () {
 
   var addMech = function(mech_id, team, smurfyMechLoadout) {
     var newMech = new Mech(mech_id, smurfyMechLoadout);
-    mechLists[team].push(newMech);
+    mechTeams[team].push(newMech);
     console.log("addMech mech_id: " + mech_id +
       " translated_mech_name: " + newMech.getTranslatedName());
+    return newMech;
   };
 
   //public members
@@ -681,6 +682,8 @@ var MechModel = MechModel || (function () {
     WeaponCycle: WeaponCycle,
     Team : Team,
     Faction : Faction,
+    Mech : Mech,
+    mechTeams : mechTeams,
     initModelData : initModelData,
     initDummyModelData : initDummyModelData,
     dataLoaded : dataLoaded,

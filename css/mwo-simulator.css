@@ -44,7 +44,7 @@ body {
 }
 
 .template {
-  visibility: hidden;
+  display: none;
 }
 
 /*Paper doll style*/

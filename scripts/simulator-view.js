@@ -84,16 +84,6 @@ var MechView = MechView || (function() {
       .height( (100 * invPercent) + "%");
   }
 
-  //Adds a list of weaponRows to the given weaponPanel. Prototype of weaponList is
-  //[(name, location, ammo, state)] where state is Active, Firing or Disabled
-  class WeaponUIData {
-    constructor (name, location, ammo, state) {
-      this.name = name;
-      this.location = location;
-      this.ammo = ammo;
-      this.state = state;
-    }
-  }
   var weaponRowId = function (mechId, idx) {
     return mechId + "-" + idx + "-weaponrow";
   }
@@ -113,9 +103,9 @@ var MechView = MechView || (function() {
     "left_leg" : "LL",
     "right_leg" : "RL"
   }
-  var addWeaponPanel = function (mechId, weaponList, weaponPanel) {
-    for (var idx in weaponList) {
-      var weapon = weaponList[idx];
+  var addWeaponPanel = function (mechId, weaponStateList, ammoState, weaponPanel) {
+    for (var idx in weaponStateList) {
+      var weaponState = weaponStateList[idx];
       $("#weaponRow-template")
         .clone(true)
         .attr("id", weaponRowId(mechId, idx))
@@ -125,16 +115,23 @@ var MechView = MechView || (function() {
         .appendTo(weaponPanel);
       $("#" + weaponRowId(mechId, idx) + " .weaponName")
         .attr("id", weaponRowId(mechId, idx) + "-weaponName")
-        .html(weapon.name);
+        .html(weaponState.weaponInfo.name);
       $("#" + weaponRowId(mechId, idx) + " .weaponLocation")
         .attr("id", weaponRowId(mechId, idx) + "-weaponLocation")
-        .html(weaponLocAbbr[weapon.location]);
+        .html(weaponLocAbbr[weaponState.weaponInfo.location]);
       $("#" + weaponRowId(mechId, idx) + " .weaponCooldownBar")
         .attr("id", weaponCooldownBarId(mechId, idx));
       $("#" + weaponRowId(mechId, idx) + " .weaponAmmo")
-        .attr("id", weaponAmmoId(mechId, idx)); //infinity symbol
-      setWeaponAmmo(mechId, idx, weapon.ammo);
-      setWeaponState(mechId, idx, weapon.state);
+        .attr("id", weaponAmmoId(mechId, idx));
+      let weaponAmmoCount;
+      let ammoCount = ammoState.ammoCounts[weaponState.weaponInfo.weaponId];
+      if (ammoCount) {
+        weaponAmmoCount = ammoCount.ammoCount;
+      }  else {
+        weaponAmmoCount = -1;
+      }
+      setWeaponAmmo(mechId, idx, weaponAmmoCount);
+      setWeaponState(mechId, idx, weaponState.weaponCycle);
     }
   }
   var setWeaponCooldown = function (mechId, weaponIdx, percent) {
@@ -152,13 +149,18 @@ var MechView = MechView || (function() {
   var mechPanelId = function (mechId) {
     return mechId + "-mechPanel";
   }
-  var addMechPanel = function (mechId, weaponList, mechPanelList) {
+  var addMechPanel = function (mech, team) {
+    let mechId = mech.getMechId();
+    let mechState = mech.getMechState();
+    let weaponStateList = mechState.weaponStateList;
+    let ammoState = mechState.ammoState;
+    let mechPanelContainer = "#" + team + "Team";
     $("#mechPanel-template")
       .clone(true)
       .attr("id", mechPanelId(mechId))
       .attr("data-mech-id", mechId)
       .removeClass("template")
-      .appendTo(mechPanelList);
+      .appendTo(mechPanelContainer);
 
     //TODO: messy repetitive code to add paperDoll and heatbar. Try to see if this
     //can be done inside a single search for the children of the mechPanel
@@ -176,7 +178,17 @@ var MechView = MechView || (function() {
     var weaponPanelContainerId = mechId + "-weaponPanelContainer";
     $("#" + mechPanelId(mechId) + " [class~='weaponPanelContainer']")
       .attr("id", weaponPanelContainerId);
-    addWeaponPanel(mechId, weaponList, "#" + weaponPanelContainerId);
+    addWeaponPanel(mechId, weaponStateList, ammoState, "#" + weaponPanelContainerId);
+  }
+
+  var clear = function (team) {
+    let teamId = team + "Team";
+    $("#" + teamId).empty();
+  }
+
+  var clearAll = function () {
+    clear("blue");
+    clear("red");
   }
 
   var initHandlers = function () {
@@ -203,9 +215,10 @@ var MechView = MechView || (function() {
     addMechPanel : addMechPanel,
     initPaperDollHandlers: initPaperDollHandlers,
     initHandlers : initHandlers,
-    WeaponUIData : WeaponUIData,
     setWeaponCooldown: setWeaponCooldown,
     setWeaponAmmo : setWeaponAmmo,
-    setWeaponState : setWeaponState
+    setWeaponState : setWeaponState,
+    clear : clear,
+    clearAll : clearAll
   };
 })();//namespace
