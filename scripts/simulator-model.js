@@ -92,11 +92,28 @@ var MechModel = MechModel || (function () {
       this.internalHeatCapacity = internalHeatCapacity;
       this.externalHeatCapacity = externalHeatCapacity;
     }
+    copy() {
+      return new Heatsink(this.heatsinkId,
+        this.name,
+        this.active,
+        this.location,
+        this.cooling,
+        this.engineCooling,
+        this.internalHeatCapacity,
+        this.externalHeatCapacity);
+    }
   }
 
   class MechHealth {
     constructor(componentHealth) {
       this.componentHealth = componentHealth; //[ComponentHealth...]
+    }
+    copy() {
+      let newComponentHealth = [];
+      for (let componentHealthEntry of this.componentHealth) {
+        newComponentHealth.push(componentHealthEntry.copy());
+      }
+      return new MechHealth(newComponentHealth);
     }
   }
 
@@ -107,6 +124,13 @@ var MechModel = MechModel || (function () {
       this.structure = structure;
       this.maxArmor = maxArmor; //maximum armor from loadout
       this.maxStructure = maxStructure; //maximum structure from loadout
+    }
+    copy() {
+      return new ComponentHealth(this.location,
+        this.armor,
+        this.structure,
+        this.maxArmor,
+        this.maxStructure);
     }
   }
 
@@ -163,6 +187,12 @@ var MechModel = MechModel || (function () {
       this.weaponIds = weaponIds; //[weaponId...]
       this.ammoCount = ammoCount;
     }
+    copy() {
+      return new AmmoInfo(this.type,
+        this.location,
+        this.weaponIds,
+        this.ammoCount);
+    }
   }
 
   class EngineInfo {
@@ -171,6 +201,12 @@ var MechModel = MechModel || (function () {
       this.name = name; //Readable name, from smurfy ModuleData
       this.heatsink = heatsink; //heatsink object that represents the type of heatsinks in the engine
       this.heatsinkCount = heatsinkCount;
+    }
+    copy() {
+      return new EngineInfo(this.engineId,
+        this.name,
+        this.heatsink.copy(),
+        this.heatsinkCount);
     }
   }
 
@@ -554,7 +590,7 @@ var MechModel = MechModel || (function () {
   var initMechState = function (mechInfo) {
     var mechState;
 
-    var mechHealth = $.extend(true, {}, mechInfo.mechHealth);
+    var mechHealth = mechInfo.mechHealth.copy();
     var heatState = initHeatState(mechInfo);
     var weaponStateList = initWeaponStateList(mechInfo);
     var ammoState = initAmmoState(mechInfo);
@@ -607,9 +643,12 @@ var MechModel = MechModel || (function () {
     let currHeatDissapation = heatStats.heatDissapation;
     let currMaxHeat = heatStats.heatCapacity;
     //Copy engine info from mech info
-    let engineInfo = $.extend(true, {}, mechInfo.engineInfo);
+    let engineInfo = mechInfo.engineInfo.copy();
     //Copy heatsink info from mech info
-    let currHeatsinkInfo = $.extend(true, {}, mechInfo.heatsinkInfoList);
+    let currHeatsinkInfo = [];
+    for (let heatsink of mechInfo.heatsinkInfoList) {
+      currHeatsinkInfo.push(heatsink.copy());
+    }
     let heatState = new HeatState(currHeat, currMaxHeat, currHeatDissapation, currHeatsinkInfo, engineInfo, engineHeatEfficiency)
     return heatState;
   }
@@ -634,6 +673,8 @@ var MechModel = MechModel || (function () {
   }
 
   var initAmmoState = function(mechInfo) {
+    //TODO: extend does not deep copy non-plain objects (which includes classes)
+    //Do your own deep copy
     let ammoInfo = $.extend(true, {}, mechInfo.ammoInfo);
     let ammoCounts = {}; //map from weaponId to AmmoCount
     for (let idx in ammoInfo) {
