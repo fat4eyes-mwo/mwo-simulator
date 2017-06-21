@@ -2,15 +2,6 @@
 
 var MechModelView = MechModelView || (function() {
 
-  const UIUpdateType = {
-    FULL : "full",
-    HEALTH : "health",
-    HEAT : "heat",
-    COOLDOWN : "cooldown",
-    WEAPONSTATE : "weaponstate",
-    STATS : "stats"
-  };
-
   var updateFull = function () {
     let mechTeamList = [MechModel.Team.BLUE, MechModel.Team.RED];
     for (let team of mechTeamList) {
@@ -21,8 +12,19 @@ var MechModelView = MechModelView || (function() {
     }
   }
 
+  var updateHeat = function(mech) {
+
+  }
+
+  var updateCooldown = function(mech) {
+
+  }
+
+  var updateWeaponStatus = function(mech) {
+    
+  }
+
   return {
-    UIUpdateType : UIUpdateType,
     updateFull : updateFull
   };
 

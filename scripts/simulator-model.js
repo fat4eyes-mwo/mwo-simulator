@@ -34,6 +34,15 @@ var MechModel = MechModel || (function () {
     CLAN : "Clan"
   });
 
+  const UpdateType = {
+    FULL : "full",
+    HEALTH : "health",
+    HEAT : "heat",
+    COOLDOWN : "cooldown",
+    WEAPONSTATE : "weaponstate",
+    STATS : "stats"
+  };
+
   class MechInfo {
     constructor(mechId, mechName, mechTranslatedName, mechHealth, weaponInfoList, heatsinkInfoList, ammoInfo, engineInfo) {
       this.mechId = mechId;
@@ -107,6 +116,7 @@ var MechModel = MechModel || (function () {
       this.heatState = heatState;
       this.weaponStateList = weaponStateList; //[WeaponState...]
       this.ammoState = ammoState;
+      this.updateTypes = []; //Update types triggered on the current simulation step
     }
   }
 
@@ -668,6 +678,9 @@ var MechModel = MechModel || (function () {
       },
       getMechState : function() {
         return mechState;
+      },
+      resetMechState : function() {
+        mechState = initMechState(mechInfo);
       }
     };
   };
@@ -680,18 +693,32 @@ var MechModel = MechModel || (function () {
     return newMech;
   };
 
+  //Resets the MechStates of all mechs to their fresh value
+  var resetState = function() {
+    let teams = [Team.BLUE, Team.RED];
+    for (let team of teams) {
+      let mechTeam = mechTeams[team];
+      for (let mech of mechTeam) {
+        mech.resetMechState();
+      }
+    }
+  }
+
   //public members
   return {
     Component: Component,
     WeaponCycle: WeaponCycle,
     Team : Team,
     Faction : Faction,
+    UpdateType : UpdateType,
     Mech : Mech,
     mechTeams : mechTeams,
     initModelData : initModelData,
     initDummyModelData : initDummyModelData,
     dataLoaded : dataLoaded,
     addMech : addMech,
+    resetState : resetState,
+    //Note: made public only because of testing. Should not be accessed outside this module
     baseMechStructure : baseMechStructure,
     baseMechArmor : baseMechArmor
   };

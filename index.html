@@ -29,7 +29,9 @@
     <div class="row">
       <div id="controlPanel" class="column column-2 controlPanel">
         <div id="debugPanel" class="debugPanel">
-          <button id="testUI">Test UI Widgets</button>
+          <button id="testUI" class="debugButton">Test UI Widgets</button>
+          <button id="resetState" class = "debugButton">Reset state</button>
+          <button id="testModelView" class ="debugButton">Test View Updates</button>
         </div>
       </div>
       <div id="blueTeam" class="column column-5 mechPanelList bluePanel">
@@ -57,6 +59,53 @@
       <div class="mechRL" data-location="right_leg"></div>
     </div>
 
+
+    <div id="mechHealthNumbers-template" class="template mechHealthNumbers">
+      <div class="row">
+        <div class="column column-2">&nbsp;</div>
+        <div class="mechH column column-1" data-location="head" >
+          <div class="row healthNumberHeader">H</div>
+          <div class="row healthNumber" data-healthtype="armor"></div>
+          <div class="row healthNumber" data-healthtype="structure"></div>
+        </div>
+        <div class="mechLA column column-1" data-location="left_arm">
+          <div class="row healthNumberHeader">LA</div>
+          <div class="row healthNumber" data-healthtype="armor"></div>
+          <div class="row healthNumber" data-healthtype="structure"></div>
+        </div>
+        <div class="mechLT column column-1" data-location="left_torso">
+          <div class="row healthNumberHeader">LT</div>
+          <div class="row healthNumber" data-healthtype="armor"></div>
+          <div class="row healthNumber" data-healthtype="structure"></div>
+        </div>
+        <div class="mechCT column column-1" data-location="centre_torso">
+          <div class="row healthNumberHeader">CT</div>
+          <div class="row healthNumber" data-healthtype="armor"></div>
+          <div class="row healthNumber" data-healthtype="structure"></div>
+        </div>
+        <div class="mechRT column column-1" data-location="right_torso">
+          <div class="row healthNumberHeader">RT</div>
+          <div class="row healthNumber" data-healthtype="armor"></div>
+          <div class="row healthNumber" data-healthtype="structure"></div>
+        </div>
+        <div class="mechRA column column-1" data-location="right_arm">
+          <div class="row healthNumberHeader">RA</div>
+          <div class="row healthNumber" data-healthtype="armor"></div>
+          <div class="row healthNumber" data-healthtype="structure"></div>
+        </div>
+        <div class="mechLL column column-1" data-location="left_leg">
+          <div class="row healthNumberHeader">LL</div>
+          <div class="row healthNumber" data-healthtype="armor"></div>
+          <div class="row healthNumber" data-healthtype="structure"></div>
+        </div>
+        <div class="mechRL column column-1" data-location="right_leg">
+          <div class="row healthNumberHeader">RL</div>
+          <div class="row healthNumber" data-healthtype="armor"></div>
+          <div class="row healthNumber" data-healthtype="structure"></div>
+        </div>
+      </div>
+    </div>
+
     <!-- Heatbar template -->
     <div id="heatbar-template" class="template heatbarFrame">
       <div class="heatbar"></div>
@@ -75,13 +124,22 @@
     <!-- Mechpanel template -->
     <div id="mechPanel-template" class="template mechPanel">
       <div class="row">
-        <div class="column column-2 paperDollContainer"></div>
-        <div class="column column-1 heatbarContainer" ></div>
-        <div class="column column-6 weaponPanelContainer"></div>
         <div class="column column-3 statusPanelContainer">
           <div class="statusPanel">
             <div class="mechName" >
             </div>
+          </div>
+        </div>
+        <div class="column column-9">
+          <div class="row">
+            <div class="column column-2">
+              <div class="row paperDollContainer"></div>
+            </div>
+            <div class="column column-1 heatbarContainer" ></div>
+            <div class="column column-9 weaponPanelContainer"></div>
+          </div>
+          <div class="row">
+            <div class="row mechHealthNumbers"></div>
           </div>
         </div>
       </div>

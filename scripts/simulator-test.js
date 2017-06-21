@@ -38,7 +38,7 @@ return {
         };
       };
       var handler = new Handler(this);
-      $("#testUI").click(handler);
+      $("#testUI").removeClass("debugButton").click(handler);
     },
 
     testUI : function (mechTeam) {
@@ -105,6 +105,27 @@ return {
       MechModel.addMech("testShadowhawkId", MechModel.Team.RED, DummyShadowhawk);
 
       MechModelView.updateFull();
+
+      $("#resetState").removeClass("debugButton").click(() => {
+        MechModel.resetState();
+        MechModelView.updateFull();
+      });
+
+      $("#testModelView").removeClass("debugButton").click(() => {
+        //set mech healths to random numbers
+        let teams = [MechModel.Team.BLUE, MechModel.Team.RED];
+        for (let team of teams) {
+          for (let mech of MechModel.mechTeams[team]) {
+            let mechState = mech.getMechState();
+            for (let mechComponentHealth of mechState.mechHealth.componentHealth) {
+              mechComponentHealth.armor = Math.random() * mechComponentHealth.maxArmor;
+              mechComponentHealth.structure = Math.random() * mechComponentHealth.maxStructure;
+            }
+            MechView.updatePaperDoll(mech);
+            MechView.updateMechHealthNumbers(mech);
+          }
+        }
+      });
     },
 
     testScratch : function() {

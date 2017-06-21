@@ -47,20 +47,52 @@ var MechView = MechView || (function() {
   //Percent values from 0 to 1
   var setPaperDollArmor = function (mechId, location, percent) {
     var color = damageColor(percent);
-    $("#" + paperDollId(mechId) + "> [data-location='" + location + "']")
+    let query = "#" + paperDollId(mechId) + "> [data-location='" + location + "']";
+    $(query)
       .css('border-color', "#" + color.toString(16));
   }
   var setPaperDollStructure = function (mechId, location, percent) {
     var color = damageColor(percent);
-    $("#" + paperDollId(mechId) + "> [data-location='" + location + "']")
+    let query = "#" + paperDollId(mechId) + "> [data-location='" + location + "']";
+    $(query)
       .css('background-color', "#" + color.toString(16));
   }
-  var setMaxArmorAndStructure = function (mechId) {
-    for (var property in MechModel.Component) { //TODO: View should not access model
-      if (MechModel.Component.hasOwnProperty(property)) {
-        setPaperDollArmor(mechId, MechModel.Component[property], 1);
-        setPaperDollStructure(mechId, MechModel.Component[property], 1);
-      }
+
+  var updatePaperDoll = function(mech){
+    let mechId = mech.getMechId();
+    let mechHealth = mech.getMechState().mechHealth;
+    for (let mechComponentHealth of mechHealth.componentHealth) {
+      let location = mechComponentHealth.location;
+      let armorPercent = Number(mechComponentHealth.armor) / Number(mechComponentHealth.maxArmor);
+      let structurePercent = Number(mechComponentHealth.structure) / Number(mechComponentHealth.maxStructure);
+      setPaperDollArmor(mechId, location, armorPercent);
+      setPaperDollStructure(mechId, location, structurePercent);
+    }
+  }
+
+  var mechHealthNumbersId = function (mechId) {
+    return mechId + "-mechHealthNumbers";
+  }
+  var addMechHealthNumbers = function (mech, mechHealthNumbersContainer) {
+    $("#mechHealthNumbers-template").
+      clone(true)
+      .attr("id", mechHealthNumbersId(mech.getMechId()))
+      .attr("data-mech-id", mech.getMechId())
+      .removeClass("template")
+      .appendTo(mechHealthNumbersContainer);
+    updateMechHealthNumbers(mech);
+  }
+
+  var updateMechHealthNumbers = function (mech) {
+    let mechHealthNumbersDivId = "#" + mechHealthNumbersId(mech.getMechId());
+    let mechHealth = mech.getMechState().mechHealth;
+    for (let mechComponentHealth of mechHealth.componentHealth) {
+      $(mechHealthNumbersDivId +
+        " [data-location=" + mechComponentHealth.location + "] " +
+        " [data-healthtype=armor]").html(Math.floor(mechComponentHealth.armor));
+      $(mechHealthNumbersDivId +
+        " [data-location=" + mechComponentHealth.location + "] " +
+        " [data-healthtype=structure]").html(Math.floor(mechComponentHealth.structure));
     }
   }
 
@@ -168,7 +200,12 @@ var MechView = MechView || (function() {
     $("#" + mechPanelId(mechId) + " [class~='paperDollContainer']")
       .attr("id", paperDollContainerId);
     addPaperDoll(mechId, "#" + paperDollContainerId);
-    setMaxArmorAndStructure(mechId);
+    updatePaperDoll(mech);
+
+    var mechHealthNumbersId = mechId + "-mechHealthNumbers";
+    $("#" + mechPanelId(mechId) + " [class~='mechHealthNumbers']")
+      .attr("id", mechHealthNumbersId);
+    addMechHealthNumbers(mech, "#" + mechHealthNumbersId);
 
     var heatbarContainerId = mechId + "-heatbarContainer";
     $("#" + mechPanelId(mechId) + " [class~='heatbarContainer']")
@@ -215,7 +252,6 @@ var MechView = MechView || (function() {
   return {
     setPaperDollArmor : setPaperDollArmor,
     setPaperDollStructure : setPaperDollStructure,
-    setMaxArmorAndStructure : setMaxArmorAndStructure,
     setHeatbarValue : setHeatbarValue,
     addMechPanel : addMechPanel,
     initPaperDollHandlers: initPaperDollHandlers,
@@ -223,6 +259,8 @@ var MechView = MechView || (function() {
     setWeaponCooldown: setWeaponCooldown,
     setWeaponAmmo : setWeaponAmmo,
     setWeaponState : setWeaponState,
+    updatePaperDoll : updatePaperDoll,
+    updateMechHealthNumbers : updateMechHealthNumbers,
     clear : clear,
     clearAll : clearAll
   };

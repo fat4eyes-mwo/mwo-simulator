@@ -3,6 +3,7 @@ body {
   background-color: black;
   color: #aaaaaa;
   font-family: sans-serif;
+  font-size: 14px;
 }
 
 .controlPanel {
@@ -11,6 +12,10 @@ body {
 
 .debugPanel {
 
+}
+
+.debugPanel .debugButton {
+  display : none;
 }
 
 .mechPanelList {
@@ -53,17 +58,17 @@ body {
   height: 100px;
 }
 
-.mechLA,
-.mechRA,
-.mechLT,
-.mechRT,
-.mechCT,
-.mechLL,
-.mechRL,
-.mechH,
-.mechRearLT,
-.mechRearRT,
-.mechRearCT
+.paperDoll .mechLA,
+.paperDoll .mechRA,
+.paperDoll .mechLT,
+.paperDoll .mechRT,
+.paperDoll .mechCT,
+.paperDoll .mechLL,
+.paperDoll .mechRL,
+.paperDoll .mechH,
+.paperDoll .mechRearLT,
+.paperDoll .mechRearRT,
+.paperDoll .mechRearCT
 {
   border-style: solid;
   border-width: medium;
@@ -71,60 +76,72 @@ body {
   position:absolute;
 }
 
-.mechH {
+.paperDoll .mechH {
   top:0%;
   left:39%;
   width: 14%;
   height:9%;
 }
 
-.mechLA {
+.paperDoll .mechLA {
   top: 14%;
   left:0%;
   width:10%;
   height:31%;
 }
 
-.mechLT {
+.paperDoll .mechLT {
   top: 14%;
   left:15%;
   width:14%;
   height:23%;
 }
 
-.mechCT {
+.paperDoll .mechCT {
   top: 14%;
   left:34%;
   width:24%;
   height:48%;
 }
 
-.mechRT {
+.paperDoll .mechRT {
   top: 14%;
   left:63%;
   width:15%;
   height:23%;
 }
 
-.mechRA {
+.paperDoll .mechRA {
   top: 14%;
   left:82%;
   width:10%;
   height:31%;
 }
 
-.mechLL {
+.paperDoll .mechLL {
   top: 55%;
   left:12%;
   width:17%;
-  height:40%;
+  height:35%;
 }
 
-.mechRL {
+.paperDoll .mechRL {
   top: 55%;
   left:63%;
   width:17%;
-  height:40%;
+  height:35%;
+}
+
+.mechHealthNumbers {
+  font-size: 90%;
+}
+
+.mechHealthNumbers .healthNumberHeader {
+  font-weight: bold;
+}
+
+
+.mechHealthNumbers .healthNumber {
 }
 
 /*Heat bar style*/
