@@ -22,27 +22,27 @@ return {
       }
 
       var testWeapons = [
-        [ new MechView.WeaponUIData("SMALL PULSE LASER", "left_arm", -1, "Active"),
-          new MechView.WeaponUIData("SMALL PULSE LASER", "left_arm", -1, "Active"),
-          new MechView.WeaponUIData("SMALL PULSE LASER", "left_arm", -1, "Active"),
-          new MechView.WeaponUIData("SMALL PULSE LASER", "left_arm", -1, "Active"),
-          new MechView.WeaponUIData("SMALL PULSE LASER", "left_arm", -1, "Active"),
-          new MechView.WeaponUIData("SMALL PULSE LASER", "left_arm", -1, "Active"),
-          new MechView.WeaponUIData("SMALL PULSE LASER", "right_arm", -1, "Active"),
-          new MechView.WeaponUIData("SMALL PULSE LASER", "right_arm", -1, "Active"),
-          new MechView.WeaponUIData("SMALL PULSE LASER", "right_arm", -1, "Active"),
-          new MechView.WeaponUIData("SMALL PULSE LASER", "right_arm", -1, "Active"),
-          new MechView.WeaponUIData("SMALL PULSE LASER", "right_arm", -1, "Active"),
-          new MechView.WeaponUIData("SMALL PULSE LASER", "right_arm", -1, "Active")
+        [ new MechView.WeaponUIData("SMALL PULSE LASER", "left_arm", -1, "Ready"),
+          new MechView.WeaponUIData("SMALL PULSE LASER", "left_arm", -1, "Ready"),
+          new MechView.WeaponUIData("SMALL PULSE LASER", "left_arm", -1, "Ready"),
+          new MechView.WeaponUIData("SMALL PULSE LASER", "left_arm", -1, "Ready"),
+          new MechView.WeaponUIData("SMALL PULSE LASER", "left_arm", -1, "Ready"),
+          new MechView.WeaponUIData("SMALL PULSE LASER", "left_arm", -1, "Ready"),
+          new MechView.WeaponUIData("SMALL PULSE LASER", "right_arm", -1, "Ready"),
+          new MechView.WeaponUIData("SMALL PULSE LASER", "right_arm", -1, "Ready"),
+          new MechView.WeaponUIData("SMALL PULSE LASER", "right_arm", -1, "Ready"),
+          new MechView.WeaponUIData("SMALL PULSE LASER", "right_arm", -1, "Ready"),
+          new MechView.WeaponUIData("SMALL PULSE LASER", "right_arm", -1, "Ready"),
+          new MechView.WeaponUIData("SMALL PULSE LASER", "right_arm", -1, "Ready")
         ],
-        [ new MechView.WeaponUIData("MEDIUM LASER", "centre_torso", -1, "Active"),
-          new MechView.WeaponUIData("MEDIUM LASER", "left_torso", -1, "Active"),
-          new MechView.WeaponUIData("MEDIUM SRM6", "left_arm", -1, "Active")
+        [ new MechView.WeaponUIData("MEDIUM LASER", "centre_torso", -1, "Ready"),
+          new MechView.WeaponUIData("MEDIUM LASER", "left_torso", -1, "Ready"),
+          new MechView.WeaponUIData("MEDIUM SRM6", "left_arm", -1, "Ready")
         ],
-        [ new MechView.WeaponUIData("ER LARGE LASER", "left_torso", -1, "Active"),
-          new MechView.WeaponUIData("ER LARGE LASER", "right_torso", -1, "Active"),
-          new MechView.WeaponUIData("AC 10", "right_torso", 80, "Active"),
-          new MechView.WeaponUIData("AC 5", "left_torso", 120, "Active")
+        [ new MechView.WeaponUIData("ER LARGE LASER", "left_torso", -1, "Ready"),
+          new MechView.WeaponUIData("ER LARGE LASER", "right_torso", -1, "Ready"),
+          new MechView.WeaponUIData("AC 10", "right_torso", 80, "Ready"),
+          new MechView.WeaponUIData("AC 5", "left_torso", 120, "Ready")
         ]
       ];
 
@@ -79,7 +79,7 @@ return {
     },
 
     testUI : function (mechIds) {
-      var weaponStates = [MechModel.WeaponCycle.ACTIVE,
+      var weaponStates = [MechModel.WeaponCycle.READY,
           MechModel.WeaponCycle.FIRING,
           MechModel.WeaponCycle.DISABLED];
       $.each(mechIds, (index, mechId) => {
@@ -111,10 +111,11 @@ return {
 
     testModelOps : function () {
       MechModel.initDummyModelData();
-      MechModel.addMech("testCheetahId", MechModel.Team.BLUE, DummyArcticCheetah);
+      // MechModel.addMech("testCheetahId", MechModel.Team.BLUE, DummyArcticCheetah);
       MechModel.addMech("testExecutionerId", MechModel.Team.BLUE, DummyExecutioner);
-      MechModel.addMech("testMaulerId", MechModel.Team.RED, DummyMauler);
-      MechModel.addMech("testFirestarterId", MechModel.Team.RED, DummyFireStarter);
+      // MechModel.addMech("testMaulerId", MechModel.Team.RED, DummyMauler);
+      // MechModel.addMech("testFirestarterId", MechModel.Team.RED, DummyFireStarter);
+      MechModel.addMech("testBattlemasterId", MechModel.Team.RED, DummyBattleMaster);
     },
 
     testModelBaseHealth : function() {

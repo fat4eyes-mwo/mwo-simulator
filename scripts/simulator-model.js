@@ -19,10 +19,16 @@ var MechModel = MechModel || (function () {
   });
 
   const WeaponCycle = Object.freeze({
-    ACTIVE : "Active",
+    READY : "Ready",
     FIRING : "Firing",
     DISABLED : "Disabled",
-    COOLDOWN : "Cooldown"
+    COOLDOWN : "Cooldown",
+    SPOOLING : "Spooling"
+  });
+
+  const Faction = Object.freeze({
+    INNER_SPHERE : "InnerSphere",
+    CLAN : "Clan"
   });
 
   class MechInfo {
@@ -41,7 +47,7 @@ var MechModel = MechModel || (function () {
     constructor(weaponId, name, location,
       minRange, optRange, maxRange, baseDmg,
       heat, minHeatPenaltyLevel, heatPenalty, heatPenaltyId,
-      cooldown, duration, spinup) {
+      cooldown, duration, spinup, speed) {
         this.weaponId = weaponId; //smurfy weapon id
         this.name = name;
         this.location = location;
@@ -56,6 +62,7 @@ var MechModel = MechModel || (function () {
         this.cooldown = cooldown;
         this.duration = duration;
         this.spinup = spinup;
+        this.speed = speed;
       }
   }
 
@@ -138,11 +145,11 @@ var MechModel = MechModel || (function () {
   }
 
   class EngineInfo {
-    constructor(engineId, name, heatsinkId, heatsinkCount) {
+    constructor(engineId, name, heatsink, heatsinkCount) {
       this.engineId = engineId; //Same as module id in smurfy ModuleData
       this.name = name; //Readable name, from smurfy ModuleData
-      this.heatsinkId; //id of the heatsink from smurfy ModuleData (i.e. single, double, clan double);
-      this.heatsinkCount;
+      this.heatsink = heatsink; //heatsink object that represents the type of heatsinks in the engine
+      this.heatsinkCount = heatsinkCount;
     }
   }
 
@@ -213,12 +220,35 @@ var MechModel = MechModel || (function () {
       });
   }
 
+  const ISHeatsinkName = "HeatSink_MkI";
+  const ISDoubleHeatsinkName = "DoubleHeatSink_MkI";
+  const ClanDoubleHeatsinkName = "ClanDoubleHeatSink";
+  var ISSingleHeatsinkId;
+  var ISDoubleHeatsinkId;
+  var ClanDoubleHeatsinkId;
+  const heatsinkType = "CHeatSinkStats";
+  var initHeatsinkIds = function() {
+    for (let moduleId in SmurfyModuleData) {
+      let moduleData = SmurfyModuleData[moduleId];
+      if (moduleData.type === heatsinkType) {
+        if (moduleData.name === ISHeatsinkName) {
+          ISSingleHeatsinkId = moduleId;
+        } else if (moduleData.name === ISDoubleHeatsinkName) {
+          ISDoubleHeatsinkId = moduleId;
+        } else if (moduleData.name === ClanDoubleHeatsinkName) {
+          ClanDoubleHeatsinkId = moduleId;
+        }
+      }
+    }
+  }
+
   //Load dummy data from javascript files in data folder
   var initDummyModelData = function() {
     SmurfyWeaponData = DummyWeaponData;
     SmurfyAmmoData = DummyAmmoData;
     SmurfyMechData = DummyMechData;
     SmurfyModuleData = DummyModuleData;
+    initHeatsinkIds();
   };
 
   var getSmurfyMechData = function(smurfyMechId) {
@@ -349,12 +379,13 @@ var MechModel = MechModel || (function () {
     let cooldown = smurfyWeaponData.cooldown;
     let duration = smurfyWeaponData.duration;
     let spinup = 0; //TODO: Populate spinup value for Gauss, RACs
+    let speed = smurfyWeaponData.speed;
 
     let weaponInfo = new WeaponInfo(
       weaponId, name, location,
       minRange, optRange, maxRange, baseDmg,
       heat, minHeatPenaltyLevel, heatPenalty, heatPenaltyId,
-      cooldown, duration, spinup
+      cooldown, duration, spinup, speed
     );
     return weaponInfo;
   }
@@ -375,17 +406,22 @@ var MechModel = MechModel || (function () {
   }
 
   var heatsinkFromSmurfyMechComponentItem = function (location, smurfyMechComponentItem) {
-    var heatsink;
-
     let heatsinkId = smurfyMechComponentItem.id;
     let smurfyModuleData = getSmurfyModuleData(heatsinkId);
+
+    let heatsink = heatsinkFromModuleData(location, smurfyModuleData);
+    return heatsink;
+  }
+
+  var heatsinkFromModuleData = function (location, smurfyModuleData) {
+    let heatsinkId = smurfyModuleData.id;
     let name = smurfyModuleData.name;
     let active = true;
     let cooling = smurfyModuleData.stats.cooling;
     let engineCooling = smurfyModuleData.stats.engineCooling;
     let heatbase = smurfyModuleData.stats.heatbase;
 
-    heatsink = new Heatsink(heatsinkId, name, active, location, cooling, engineCooling, heatbase);
+    let heatsink = new Heatsink(heatsinkId, name, active, location, cooling, engineCooling, heatbase);
     return heatsink;
   }
 
@@ -416,8 +452,50 @@ var MechModel = MechModel || (function () {
     return ammoInfo;
   }
 
+
+  //Gets the heatsink module id of the heatsinks in the engine.
+  //Uses direct name matching because there doesn't seem to be an id reference
+  //from the DoubleHeatSink upgrade item to the associated heatsink
+  var getEngineHeatsinkId = function(smurfyMechLoadout) {
+    var upgradeToIdMap = {
+      "STANDARD HEAT SINK" : ISSingleHeatsinkId,
+      "DOUBLE HEAT SINK" : ISDoubleHeatsinkId,
+      "CLAN DOUBLE HEAT SINK" : ClanDoubleHeatsinkId
+    };
+    for (let mechUpgrade of smurfyMechLoadout.upgrades) {
+      if (mechUpgrade.type === "HeatSink") {
+        return upgradeToIdMap[mechUpgrade.name];
+      }
+    }
+    return null; //should not happen
+  }
+  var getEngineSmurfyModuleData = function(smurfyMechLoadout) {
+    for (let equipment of smurfyMechLoadout.stats.equipment) {
+      let equipmentModuleData = getSmurfyModuleData(equipment.id);
+      if (equipmentModuleData.type === "CEngineStats") {
+        return equipmentModuleData;
+      }
+    }
+    return null;//should not happen
+  }
+
+  var isClanXLEngine = function(smurfyModuleData) {
+     return smurfyModuleData.name.startsWith("Engine_Clan") &&
+      smurfyModuleData.type === "CEngineStats";
+  }
   var engineInfoFromSmurfyMechLoadout = function(smurfyMechLoadout) {
-    return null; //TODO: Implement
+    let smurfyEngineData = getEngineSmurfyModuleData(smurfyMechLoadout);
+    let engineId = smurfyEngineData.id;
+    let name = smurfyEngineData.name;
+    let engineHeatsinkId = getEngineHeatsinkId(smurfyMechLoadout);
+    //Heatsink number in module data is total max heatsinks (iincluding slots).
+    //Clan XLs have fixed heatsinks so they are included in the engine count, but
+    //IS mechs have a default 10 heatsinks unless the slots are filled. Those heatsinks
+    //are caught in the loadout.configuration pass.
+    let heatsinkCount = isClanXLEngine(smurfyEngineData) ? smurfyEngineData.stats.heatsinks : 10;
+    let heatsink = heatsinkFromModuleData(Component.CENTRE_TORSO, getSmurfyModuleData(engineHeatsinkId));
+    let engineInfo = new EngineInfo(engineId, name, heatsink, heatsinkCount);
+    return engineInfo;
   }
 
   //constructor
@@ -454,6 +532,7 @@ var MechModel = MechModel || (function () {
     Component: Component,
     WeaponCycle: WeaponCycle,
     Team : Team,
+    Faction : Faction,
     initModelData : initModelData,
     initDummyModelData : initDummyModelData,
     dataLoaded : dataLoaded,

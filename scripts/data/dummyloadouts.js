@@ -1871,3 +1871,188 @@ var DummyKodiak = {
 	"created_at": "2016-07-27T12:54:26+0000",
 	"lsml": "lsml:\/\/rgGYA1AESBJ4BFAESAPnj6\/+p7rMuecmOAlTtO7vHXeO3jvFyVKlXPOTFO073m7vHbx1sg=="
 }
+
+//http://mwo.smurfy-net.de/api/data/mechs/9/loadouts/stock.json
+var DummyStockHunchback = {
+	"id": "stock",
+	"mech_id": 9,
+	"valid": true,
+	"configuration": [{
+		"name": "head",
+		"armor": 18,
+		"actuators": [],
+		"items": [{
+			"id": "1003",
+			"type": "weapon",
+			"name": "SMALL LASER"
+		}]
+	}, {
+		"name": "left_torso",
+		"armor": 40,
+		"actuators": [],
+		"items": [{
+			"id": "2007",
+			"type": "ammo",
+			"name": "AC\/10 AMMO"
+		}, {
+			"id": "2007",
+			"type": "ammo",
+			"name": "AC\/10 AMMO"
+		}, {
+			"id": "3000",
+			"type": "module",
+			"name": "STD HEAT SINK"
+		}, {
+			"id": "3000",
+			"type": "module",
+			"name": "STD HEAT SINK"
+		}, {
+			"id": "3000",
+			"type": "module",
+			"name": "STD HEAT SINK"
+		}, {
+			"id": "3000",
+			"type": "module",
+			"name": "STD HEAT SINK"
+		}, {
+			"id": "3000",
+			"type": "module",
+			"name": "STD HEAT SINK"
+		}]
+	}, {
+		"name": "centre_torso",
+		"armor": 52,
+		"actuators": [],
+		"items": [{
+			"id": "3238",
+			"type": "module",
+			"name": "STD ENGINE 200"
+		}]
+	}, {
+		"name": "right_torso",
+		"armor": 40,
+		"actuators": [],
+		"items": [{
+			"id": "1020",
+			"type": "weapon",
+			"name": "AC\/10"
+		}, {
+			"id": "1001",
+			"type": "weapon",
+			"name": "MEDIUM LASER"
+		}, {
+			"id": "1001",
+			"type": "weapon",
+			"name": "MEDIUM LASER"
+		}]
+	}, {
+		"name": "left_leg",
+		"armor": 40,
+		"actuators": [],
+		"items": []
+	}, {
+		"name": "right_leg",
+		"armor": 40,
+		"actuators": [],
+		"items": []
+	}, {
+		"name": "right_arm",
+		"armor": 32,
+		"actuators": [],
+		"items": [{
+			"id": "1001",
+			"type": "weapon",
+			"name": "MEDIUM LASER"
+		}]
+	}, {
+		"name": "left_arm",
+		"armor": 32,
+		"actuators": [],
+		"items": [{
+			"id": "1001",
+			"type": "weapon",
+			"name": "MEDIUM LASER"
+		}]
+	}, {
+		"name": "left_torso_rear",
+		"armor": 8,
+		"actuators": [],
+		"items": []
+	}, {
+		"name": "centre_torso_rear",
+		"armor": 10,
+		"actuators": [],
+		"items": []
+	}, {
+		"name": "right_torso_rear",
+		"armor": 8,
+		"actuators": [],
+		"items": []
+	}],
+	"upgrades": [{
+		"id": "2810",
+		"type": "Armor",
+		"name": "STANDARD ARMOR"
+	}, {
+		"id": "3100",
+		"type": "Structure",
+		"name": "STANDARD STRUCTURE"
+	}, {
+		"id": "3003",
+		"type": "HeatSink",
+		"name": "STANDARD HEAT SINK"
+	}, {
+		"id": "3051",
+		"type": "Artemis",
+		"name": "STANDARD GUIDANCE"
+	}],
+	"stats": {
+		"used_armor": 320,
+		"used_jump_jets": 0,
+		"granted_jump_jets": 0,
+		"firepower": 33,
+		"dps_max": 10.128205128205,
+		"dps_sustained": 2.5320512820513,
+		"cooling_efficiency": 25,
+		"heatsinks": 13,
+		"top_speed": 64.8,
+		"top_speed_tweak": 0,
+		"engine_name": "STD ENGINE 200",
+		"engine_rating": 200,
+		"engine_type": "STD",
+		"armaments": [{
+			"id": "1003",
+			"type": "weapon",
+			"name": "SMALL LASER",
+			"count": 1
+		}, {
+			"id": "1020",
+			"type": "weapon",
+			"name": "AC\/10",
+			"count": 1
+		}, {
+			"id": "1001",
+			"type": "weapon",
+			"name": "MEDIUM LASER",
+			"count": 4
+		}],
+		"ammunition": [{
+			"id": "2007",
+			"type": "ammo",
+			"name": "AC\/10 AMMO",
+			"count": 2
+		}],
+		"equipment": [{
+			"id": "3000",
+			"type": "module",
+			"name": "STD HEAT SINK",
+			"count": 5
+		}, {
+			"id": "3238",
+			"type": "module",
+			"name": "STD ENGINE 200",
+			"count": 1
+		}]
+	},
+	"created_at": "2017-05-16T19:49:36+0000"
+}

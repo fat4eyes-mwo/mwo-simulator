@@ -179,12 +179,12 @@ body {
 
 }
 
-.weaponPanelRow.Active {
+.weaponPanelRow.Ready {
 
 }
 
 .weaponPanelRow.Cooldown {
-  
+
 }
 
 .weaponPanelRow.Firing {
@@ -193,7 +193,8 @@ body {
 }
 
 .weaponPanelRow.Disabled {
-  opacity: 0.5
+  opacity: 0.5;
+  color : red;
 }
 
 /*Status panel styles*/
