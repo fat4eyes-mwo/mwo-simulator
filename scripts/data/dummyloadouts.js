@@ -2056,3 +2056,417 @@ var DummyStockHunchback = {
 	},
 	"created_at": "2017-05-16T19:49:36+0000"
 }
+
+//http://mwo.smurfy-net.de/mechlab#i=154&l=fbdff04a6abf82aeb905e07d85a4f899bf9ece49
+var DummyShadowhawk = {
+	"id": "fbdff04a6abf82aeb905e07d85a4f899bf9ece49",
+	"mech_id": 154,
+	"valid": true,
+	"configuration": [{
+		"name": "head",
+		"armor": 18,
+		"actuators": [],
+		"items": [{
+			"id": "2031",
+			"type": "ammo",
+			"name": "SRM AMMO + ARTEMIS IV"
+		}]
+	}, {
+		"name": "centre_torso",
+		"armor": 66,
+		"actuators": [],
+		"items": [{
+			"id": "2031",
+			"type": "ammo",
+			"name": "SRM AMMO + ARTEMIS IV"
+		}, {
+			"id": "1503",
+			"type": "module",
+			"name": "JUMP JETS - CLASS IV"
+		}, {
+			"id": "3358",
+			"type": "module",
+			"name": "XL ENGINE 300"
+		}, {
+			"id": "3001",
+			"type": "module",
+			"name": "DOUBLE HEAT SINK"
+		}, {
+			"id": "3001",
+			"type": "module",
+			"name": "DOUBLE HEAT SINK"
+		}]
+	}, {
+		"name": "right_leg",
+		"armor": 52,
+		"actuators": [],
+		"items": [{
+			"id": "2031",
+			"type": "ammo",
+			"name": "SRM AMMO + ARTEMIS IV"
+		}, {
+			"id": "1503",
+			"type": "module",
+			"name": "JUMP JETS - CLASS IV"
+		}]
+	}, {
+		"name": "left_leg",
+		"armor": 52,
+		"actuators": [],
+		"items": [{
+			"id": "2031",
+			"type": "ammo",
+			"name": "SRM AMMO + ARTEMIS IV"
+		}]
+	}, {
+		"name": "left_torso",
+		"armor": 46,
+		"actuators": [],
+		"items": [{
+			"id": "1011",
+			"type": "weapon",
+			"name": "MED PULSE LASER"
+		}, {
+			"id": "1011",
+			"type": "weapon",
+			"name": "MED PULSE LASER"
+		}, {
+			"id": "1011",
+			"type": "weapon",
+			"name": "MED PULSE LASER"
+		}, {
+			"id": "3001",
+			"type": "module",
+			"name": "DOUBLE HEAT SINK"
+		}, {
+			"id": "3001",
+			"type": "module",
+			"name": "DOUBLE HEAT SINK"
+		}]
+	}, {
+		"name": "right_torso",
+		"armor": 46,
+		"actuators": [],
+		"items": [{
+			"id": "1040",
+			"type": "weapon",
+			"name": "SRM 6 + ARTEMIS"
+		}, {
+			"id": "1040",
+			"type": "weapon",
+			"name": "SRM 6 + ARTEMIS"
+		}, {
+			"id": "1040",
+			"type": "weapon",
+			"name": "SRM 6 + ARTEMIS"
+		}]
+	}, {
+		"name": "right_arm",
+		"armor": 3,
+		"actuators": [],
+		"items": []
+	}, {
+		"name": "left_arm",
+		"armor": 3,
+		"actuators": [],
+		"items": []
+	}, {
+		"name": "left_torso_rear",
+		"armor": 6,
+		"actuators": [],
+		"items": []
+	}, {
+		"name": "centre_torso_rear",
+		"armor": 6,
+		"actuators": [],
+		"items": []
+	}, {
+		"name": "right_torso_rear",
+		"armor": 6,
+		"actuators": [],
+		"items": []
+	}],
+	"upgrades": [{
+		"id": "2810",
+		"type": "Armor",
+		"name": "STANDARD ARMOR"
+	}, {
+		"id": "3101",
+		"type": "Structure",
+		"name": "ENDO-STEEL STRUCTURE"
+	}, {
+		"id": "3002",
+		"type": "HeatSink",
+		"name": "DOUBLE HEAT SINK"
+	}, {
+		"id": "3050",
+		"type": "Artemis",
+		"name": "ARTEMIS"
+	}],
+	"stats": {
+		"used_armor": 304,
+		"used_jump_jets": 2,
+		"granted_jump_jets": 0,
+		"firepower": 56.7,
+		"dps_max": 14.675,
+		"dps_sustained": 5.72325,
+		"cooling_efficiency": 39,
+		"heatsinks": 14,
+		"top_speed": 88.363636363636,
+		"top_speed_tweak": 0,
+		"engine_name": "XL ENGINE 300",
+		"engine_rating": 300,
+		"engine_type": "XL",
+		"armaments": [{
+			"id": "1011",
+			"type": "weapon",
+			"name": "MED PULSE LASER",
+			"count": 3
+		}, {
+			"id": "1040",
+			"type": "weapon",
+			"name": "SRM 6 + ARTEMIS",
+			"count": 3
+		}],
+		"ammunition": [{
+			"id": "2031",
+			"type": "ammo",
+			"name": "SRM AMMO + ARTEMIS IV",
+			"count": 4
+		}],
+		"equipment": [{
+			"id": "1503",
+			"type": "module",
+			"name": "JUMP JETS - CLASS IV",
+			"count": 2
+		}, {
+			"id": "3358",
+			"type": "module",
+			"name": "XL ENGINE 300",
+			"count": 1
+		}, {
+			"id": "3001",
+			"type": "module",
+			"name": "DOUBLE HEAT SINK",
+			"count": 4
+		}]
+	},
+	"created_at": "2016-05-14T07:49:59+0000",
+	"lsml": "lsml:\/\/rgCaAy4GNBJCBi4GNAPne6\/upzrLuZbmW5lty9gXL25ewMWKtY2NjVbl7bI="
+}
+
+DummyStormcrow = {
+	"id": "1d9c0251e4085929bc6bace60fa09815a382ff36",
+	"mech_id": 183,
+	"valid": true,
+	"configuration": [{
+		"name": "head",
+		"armor": 18,
+		"actuators": [],
+		"omni_pod": 30120,
+		"items": [{
+			"id": "1212",
+			"type": "weapon",
+			"name": "C-ER MED LASER"
+		}]
+	}, {
+		"name": "left_torso",
+		"armor": 44,
+		"actuators": [],
+		"omni_pod": 30138,
+		"items": [{
+			"id": "1231",
+			"type": "weapon",
+			"name": "C-SRM 6 + ARTEMIS"
+		}, {
+			"id": "1231",
+			"type": "weapon",
+			"name": "C-SRM 6 + ARTEMIS"
+		}, {
+			"id": "2217",
+			"type": "ammo",
+			"name": "C-SRM AMMO + ART. IV"
+		}, {
+			"id": "2217",
+			"type": "ammo",
+			"name": "C-SRM AMMO + ART. IV"
+		}]
+	}, {
+		"name": "right_torso",
+		"armor": 44,
+		"actuators": [],
+		"omni_pod": 30140,
+		"items": [{
+			"id": "1231",
+			"type": "weapon",
+			"name": "C-SRM 6 + ARTEMIS"
+		}, {
+			"id": "2217",
+			"type": "ammo",
+			"name": "C-SRM AMMO + ART. IV"
+		}, {
+			"id": "2217",
+			"type": "ammo",
+			"name": "C-SRM AMMO + ART. IV"
+		}, {
+			"id": "3004",
+			"type": "module",
+			"name": "CLAN DOUBLE HEAT SINK"
+		}]
+	}, {
+		"name": "right_arm",
+		"armor": 32,
+		"actuators": [{
+			"id": 1910,
+			"enabled": true
+		}, {
+			"id": 1911,
+			"enabled": true
+		}],
+		"omni_pod": 30141,
+		"items": [{
+			"id": "1231",
+			"type": "weapon",
+			"name": "C-SRM 6 + ARTEMIS"
+		}, {
+			"id": "2217",
+			"type": "ammo",
+			"name": "C-SRM AMMO + ART. IV"
+		}, {
+			"id": "3004",
+			"type": "module",
+			"name": "CLAN DOUBLE HEAT SINK"
+		}]
+	}, {
+		"name": "left_arm",
+		"armor": 34,
+		"actuators": [{
+			"id": 1910,
+			"enabled": true
+		}, {
+			"id": 1911,
+			"enabled": true
+		}],
+		"omni_pod": 30137,
+		"items": [{
+			"id": "1231",
+			"type": "weapon",
+			"name": "C-SRM 6 + ARTEMIS"
+		}, {
+			"id": "2217",
+			"type": "ammo",
+			"name": "C-SRM AMMO + ART. IV"
+		}, {
+			"id": "2237",
+			"type": "ammo",
+			"name": "C-SRM AMMO+ART. IV (1\/2)"
+		}, {
+			"id": "3004",
+			"type": "module",
+			"name": "CLAN DOUBLE HEAT SINK"
+		}]
+	}, {
+		"name": "centre_torso",
+		"armor": 64,
+		"actuators": [],
+		"omni_pod": 0,
+		"items": []
+	}, {
+		"name": "right_leg",
+		"armor": 52,
+		"actuators": [],
+		"omni_pod": 30127,
+		"items": []
+	}, {
+		"name": "left_leg",
+		"armor": 52,
+		"actuators": [],
+		"omni_pod": 30126,
+		"items": []
+	}, {
+		"name": "left_torso_rear",
+		"armor": 8,
+		"actuators": [],
+		"omni_pod": 0,
+		"items": []
+	}, {
+		"name": "centre_torso_rear",
+		"armor": 8,
+		"actuators": [],
+		"omni_pod": 0,
+		"items": []
+	}, {
+		"name": "right_torso_rear",
+		"armor": 8,
+		"actuators": [],
+		"omni_pod": 0,
+		"items": []
+	}],
+	"upgrades": [{
+		"id": "2815",
+		"type": "Armor",
+		"name": "CLAN FERRO FIBROUS ARMOR"
+	}, {
+		"id": "3102",
+		"type": "Structure",
+		"name": "CLAN ENDO-STEEL STRUCTURE"
+	}, {
+		"id": "3005",
+		"type": "HeatSink",
+		"name": "CLAN DOUBLE HEAT SINK"
+	}, {
+		"id": "3050",
+		"type": "Artemis",
+		"name": "ARTEMIS"
+	}],
+	"stats": {
+		"used_armor": 364,
+		"used_jump_jets": 0,
+		"granted_jump_jets": 0,
+		"firepower": 67,
+		"dps_max": 16.686746987952,
+		"dps_sustained": 6.3409638554217,
+		"cooling_efficiency": 38,
+		"heatsinks": 13,
+		"top_speed": 97.2,
+		"top_speed_tweak": 0,
+		"engine_name": "CLAN XL ENGINE 330",
+		"engine_rating": 330,
+		"engine_type": "XL",
+		"armaments": [{
+			"id": "1212",
+			"type": "weapon",
+			"name": "C-ER MED LASER",
+			"count": 1
+		}, {
+			"id": "1231",
+			"type": "weapon",
+			"name": "C-SRM 6 + ARTEMIS",
+			"count": 5
+		}],
+		"ammunition": [{
+			"id": "2217",
+			"type": "ammo",
+			"name": "C-SRM AMMO + ART. IV",
+			"count": 6
+		}, {
+			"id": "2237",
+			"type": "ammo",
+			"name": "C-SRM AMMO+ART. IV (1\/2)",
+			"count": 1
+		}],
+		"equipment": [{
+			"id": "3004",
+			"type": "module",
+			"name": "CLAN DOUBLE HEAT SINK",
+			"count": 3
+		}, {
+			"id": "3464",
+			"type": "module",
+			"name": "CLAN XL ENGINE 330",
+			"count": 1
+		}]
+	},
+	"created_at": "2015-05-28T00:50:40+0000",
+	"lsml": "lsml:\/\/rgC3ICwINBJACCwINCIP6y3qZ7G8jKr089jeR3kZVeNXf4lr0c9jPY3kd5GvFr0M9jeR3opV"
+}

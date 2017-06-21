@@ -13,9 +13,11 @@ return {
 
       MechModel.addMech("testCheetahId", MechModel.Team.BLUE, DummyArcticCheetah);
       MechModel.addMech("testExecutionerId", MechModel.Team.BLUE, DummyExecutioner);
+      MechModel.addMech("testStormcrowId", MechModel.Team.BLUE, DummyStormcrow);
       MechModel.addMech("testMaulerId", MechModel.Team.RED, DummyMauler);
       MechModel.addMech("testFirestarterId", MechModel.Team.RED, DummyFireStarter);
       MechModel.addMech("testBattlemasterId", MechModel.Team.RED, DummyBattleMaster);
+      MechModel.addMech("testShadowhawkId", MechModel.Team.RED, DummyShadowhawk);
 
       MechModelView.updateFull();
 
@@ -96,9 +98,11 @@ return {
 
       MechModel.addMech("testCheetahId", MechModel.Team.BLUE, DummyArcticCheetah);
       MechModel.addMech("testExecutionerId", MechModel.Team.BLUE, DummyExecutioner);
+      MechModel.addMech("testStormcrowId", MechModel.Team.BLUE, DummyStormcrow);
       MechModel.addMech("testMaulerId", MechModel.Team.RED, DummyMauler);
       MechModel.addMech("testFirestarterId", MechModel.Team.RED, DummyFireStarter);
       MechModel.addMech("testBattlemasterId", MechModel.Team.RED, DummyBattleMaster);
+      MechModel.addMech("testShadowhawkId", MechModel.Team.RED, DummyShadowhawk);
 
       MechModelView.updateFull();
     },
