@@ -112,8 +112,8 @@ return {
     testModelOps : function () {
       MechModel.initDummyModelData();
       // MechModel.addMech("testCheetahId", MechModel.Team.BLUE, DummyArcticCheetah);
-      MechModel.addMech("testExecutionerId", MechModel.Team.BLUE, DummyExecutioner);
-      // MechModel.addMech("testMaulerId", MechModel.Team.RED, DummyMauler);
+      // MechModel.addMech("testExecutionerId", MechModel.Team.BLUE, DummyExecutioner);
+      MechModel.addMech("testMaulerId", MechModel.Team.RED, DummyMauler);
       // MechModel.addMech("testFirestarterId", MechModel.Team.RED, DummyFireStarter);
       MechModel.addMech("testBattlemasterId", MechModel.Team.RED, DummyBattleMaster);
     },
@@ -128,7 +128,10 @@ return {
           }
         }
       }
+    },
+
+    testScratch : function() {
     }
-  }
+  } //return publics
 
 })(); //namespace exec
