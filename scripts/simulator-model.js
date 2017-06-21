@@ -15,7 +15,10 @@ var MechModel = MechModel || (function () {
     LEFT_ARM : "left_arm",
     LEFT_TORSO : "left_torso",
     RIGHT_LEG : "right_leg",
-    LEFT_LEG : "left_leg"
+    LEFT_LEG : "left_leg",
+    LEFT_TORSO_REAR : "left_torso_rear",
+    CENTRE_TORSO_REAR : "centre_torso_rear",
+    RIGHT_TORSO_REAR : "right_torso_rear"
   });
 
   const WeaponCycle = Object.freeze({
@@ -67,14 +70,15 @@ var MechModel = MechModel || (function () {
   }
 
   class Heatsink {
-    constructor(heatsinkId, name, active, location, cooling, engineCooling, heatbase) {
+    constructor(heatsinkId, name, active, location, cooling, engineCooling, internalHeatCapacity, externalHeatCapacity) {
       this.heatsinkId = heatsinkId;
       this.name = name;
       this.active = active;
       this.location = location;
       this.cooling = cooling;
       this.engineCooling = engineCooling;
-      this.heatbase = heatbase;
+      this.internalHeatCapacity = internalHeatCapacity;
+      this.externalHeatCapacity = externalHeatCapacity;
     }
   }
 
@@ -104,20 +108,24 @@ var MechModel = MechModel || (function () {
   }
 
   class HeatState {
-    constructor(currHeat, currMaxHeat, currHeatDissapation, currHeatsinkInfo) {
+    constructor(currHeat, currMaxHeat, currHeatDissapation, currHeatsinkInfo, engineInfo, engineHeatEfficiency) {
       this.currHeat = currHeat;
-      this.currMaxHeat = currMaxHeat;
-      this.currHeatDissapation = currHeatDissapation;
+      this.currMaxHeat = currMaxHeat; //computed value, must be consistent with heatsinkInfo + engine
+      this.currHeatDissapation = currHeatDissapation; //computed value, must be consistent with heatsinkInfo + engine
       this.currHeatsinkInfo = currHeatsinkInfo;
+      this.engineInfo = engineInfo;
+      this.engineHeatEfficiency = engineHeatEfficiency; //0 to 1
     }
   }
 
   class WeaponState {
-    constructor(weaponInfo, active, weaponCycle, cooldownLeft) {
+    constructor(weaponInfo, active, weaponCycle, cooldownLeft, spoolupLeft, durationLeft) {
       this.weaponInfo = weaponInfo;
       this.active = active; //boolean
       this.weaponCycle = weaponCycle;
       this.cooldownLeft = cooldownLeft; //cooldown time left in ms
+      this.spoolupLeft = spoolupLeft;
+      this.durationLeft = durationLeft;
     }
   }
 
@@ -242,6 +250,18 @@ var MechModel = MechModel || (function () {
     }
   }
 
+  //add additional data to heatsink moduledata
+  //Addditional data can be found in data/addedheatsinkdata.js
+  var initAddedHeatsinkData = function() {
+    for (let idx in SmurfyModuleData) {
+      let moduleData = SmurfyModuleData[idx];
+      if (moduleData.type === "CHeatSinkStats") {
+        let addedData = _AddedHeatsinkData[moduleData.name];
+        $.extend(moduleData.stats, addedData);
+      }
+    }
+  }
+
   //Load dummy data from javascript files in data folder
   var initDummyModelData = function() {
     SmurfyWeaponData = DummyWeaponData;
@@ -249,6 +269,7 @@ var MechModel = MechModel || (function () {
     SmurfyMechData = DummyMechData;
     SmurfyModuleData = DummyModuleData;
     initHeatsinkIds();
+    initAddedHeatsinkData();
   };
 
   var getSmurfyMechData = function(smurfyMechId) {
@@ -419,9 +440,12 @@ var MechModel = MechModel || (function () {
     let active = true;
     let cooling = smurfyModuleData.stats.cooling;
     let engineCooling = smurfyModuleData.stats.engineCooling;
-    let heatbase = smurfyModuleData.stats.heatbase;
+    let internalHeatCapacity = smurfyModuleData.stats.internal_heat_capacity;
+    let externalHeatCapacity = smurfyModuleData.stats.external_heat_capacity;
 
-    let heatsink = new Heatsink(heatsinkId, name, active, location, cooling, engineCooling, heatbase);
+    let heatsink = new Heatsink(heatsinkId, name, active, location,
+        cooling, engineCooling,
+        internalHeatCapacity, externalHeatCapacity);
     return heatsink;
   }
 
@@ -455,7 +479,7 @@ var MechModel = MechModel || (function () {
 
   //Gets the heatsink module id of the heatsinks in the engine.
   //Uses direct name matching because there doesn't seem to be an id reference
-  //from the DoubleHeatSink upgrade item to the associated heatsink
+  //from the heatsink upgrade items to the associated heatsink
   var getEngineHeatsinkId = function(smurfyMechLoadout) {
     var upgradeToIdMap = {
       "STANDARD HEAT SINK" : ISSingleHeatsinkId,
@@ -496,6 +520,19 @@ var MechModel = MechModel || (function () {
     let heatsink = heatsinkFromModuleData(Component.CENTRE_TORSO, getSmurfyModuleData(engineHeatsinkId));
     let engineInfo = new EngineInfo(engineId, name, heatsink, heatsinkCount);
     return engineInfo;
+  }
+
+  //state initialization methods
+  var initMechState = function (mechInfo) {
+    var mechState;
+
+    var initMechHealth = $.extend(true, {}, mechInfo.mechHealth);
+
+    return mechState;
+  }
+
+  var initWeaponState = function(mechInfo) {
+    let currHeat = 0;
   }
 
   //constructor

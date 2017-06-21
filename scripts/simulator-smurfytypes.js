@@ -161,6 +161,8 @@ var SmurfyTypes = SmurfyTypes || (function () {
     cooling : null;
     engineCooling : null;
     heatbase : null;
+    internal_heat_capacity : null; //added from addedheatsinkdata.js
+    external_heat_capacity : null; //added from addedheatsinkdata.js
   }
 
   //ModuleData with type = CEngineStats
