@@ -673,9 +673,10 @@ var MechModel = MechModel || (function () {
   }
 
   var initAmmoState = function(mechInfo) {
-    //TODO: extend does not deep copy non-plain objects (which includes classes)
-    //Do your own deep copy
-    let ammoInfo = $.extend(true, {}, mechInfo.ammoInfo);
+    let ammoInfo = [];
+    for (let ammoInfoEntry of mechInfo.ammoInfo) {
+      ammoInfo.push(ammoInfoEntry.copy());
+    }
     let ammoCounts = {}; //map from weaponId to AmmoCount
     for (let idx in ammoInfo) {
       let ammoInfoEntry = ammoInfo[idx];
