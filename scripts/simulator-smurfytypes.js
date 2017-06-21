@@ -137,6 +137,7 @@ var SmurfyTypes = SmurfyTypes || (function () {
     min_heat_penalty_level: null,
     heat_penalty: null,
     heat_penalty_id: null,
+    ammo_per_shot : null //added from addedweapondata.js
   }
 
   var WeaponCalcStats = {

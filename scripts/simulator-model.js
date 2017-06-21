@@ -50,7 +50,7 @@ var MechModel = MechModel || (function () {
     constructor(weaponId, name, location,
       minRange, optRange, maxRange, baseDmg,
       heat, minHeatPenaltyLevel, heatPenalty, heatPenaltyId,
-      cooldown, duration, spinup, speed) {
+      cooldown, duration, spinup, speed, ammoPerShot) {
         this.weaponId = weaponId; //smurfy weapon id
         this.name = name;
         this.location = location;
@@ -66,6 +66,7 @@ var MechModel = MechModel || (function () {
         this.duration = duration;
         this.spinup = spinup;
         this.speed = speed;
+        this.ammoPerShot = ammoPerShot;
       }
   }
 
@@ -262,6 +263,16 @@ var MechModel = MechModel || (function () {
     }
   }
 
+  //adds fields to smurfy weapon data
+  //additional data can be found in data/addedweapondata.js
+  var initAddedWeaponData = function() {
+    for (let idx in SmurfyWeaponData) {
+      let weaponData = SmurfyWeaponData[idx];
+      let addedData = _AddedWeaponData[weaponData.name];
+      $.extend(weaponData, addedData);
+    }
+  }
+
   //Load dummy data from javascript files in data folder
   var initDummyModelData = function() {
     SmurfyWeaponData = DummyWeaponData;
@@ -270,6 +281,7 @@ var MechModel = MechModel || (function () {
     SmurfyModuleData = DummyModuleData;
     initHeatsinkIds();
     initAddedHeatsinkData();
+    initAddedWeaponData();
   };
 
   var getSmurfyMechData = function(smurfyMechId) {
@@ -401,12 +413,14 @@ var MechModel = MechModel || (function () {
     let duration = smurfyWeaponData.duration;
     let spinup = 0; //TODO: Populate spinup value for Gauss, RACs
     let speed = smurfyWeaponData.speed;
+    let ammoPerShot = smurfyWeaponData.ammo_per_shot ?
+          smurfyWeaponData.ammo_per_shot : 0; //TODO: Add ammo per shot info all ammo consuming weapons
 
     let weaponInfo = new WeaponInfo(
       weaponId, name, location,
       minRange, optRange, maxRange, baseDmg,
       heat, minHeatPenaltyLevel, heatPenalty, heatPenaltyId,
-      cooldown, duration, spinup, speed
+      cooldown, duration, spinup, speed, ammoPerShot
     );
     return weaponInfo;
   }
@@ -606,7 +620,26 @@ var MechModel = MechModel || (function () {
   }
 
   var initAmmoState = function(mechInfo) {
-    return null; //TODO: implement
+    let ammoInfo = $.extend(true, {}, mechInfo.ammoInfo);
+    let ammoCounts = {}; //map from weaponId to AmmoCount
+    for (let idx in ammoInfo) {
+      let ammoInfoEntry = ammoInfo[idx];
+      let firstWeaponId = ammoInfoEntry.weaponIds[0];
+      //Create an ammocount for the weapon if it is not yet in the map, else
+      //increment the ammocount
+      if (!ammoCounts[firstWeaponId]) {
+        let newAmmoCount = new AmmoCount(ammoInfoEntry.weaponIds, Number(ammoInfoEntry.ammoCount));
+        ammoCounts[firstWeaponId] = newAmmoCount;
+        //Map all the weapons that can use the ammo to the ammo count
+        for (let weaponId of ammoInfoEntry.weaponIds) {
+          ammoCounts[weaponId] = newAmmoCount;
+        }
+      } else {
+        ammoCounts[firstWeaponId].ammoCount += Number(ammoInfoEntry.ammoCount);
+      }
+    }
+    let ammoState = new AmmoState(ammoCounts, ammoInfo);
+    return ammoState;
   }
 
   //constructor
