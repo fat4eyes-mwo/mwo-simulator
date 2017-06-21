@@ -115,7 +115,7 @@ var MechView = MechView || (function() {
         .appendTo(weaponPanel);
       $("#" + weaponRowId(mechId, idx) + " .weaponName")
         .attr("id", weaponRowId(mechId, idx) + "-weaponName")
-        .html(weaponState.weaponInfo.name);
+        .html(weaponState.weaponInfo.translatedName);
       $("#" + weaponRowId(mechId, idx) + " .weaponLocation")
         .attr("id", weaponRowId(mechId, idx) + "-weaponLocation")
         .html(weaponLocAbbr[weaponState.weaponInfo.location]);
@@ -179,6 +179,11 @@ var MechView = MechView || (function() {
     $("#" + mechPanelId(mechId) + " [class~='weaponPanelContainer']")
       .attr("id", weaponPanelContainerId);
     addWeaponPanel(mechId, weaponStateList, ammoState, "#" + weaponPanelContainerId);
+
+    var mechNamePanelId = mechId + "-mechName";
+    $("#" + mechPanelId(mechId) + " [class~='statusPanel'] [class~='mechName']")
+      .attr("id", mechNamePanelId)
+      .html(mech.getMechInfo().mechTranslatedName);
   }
 
   var clear = function (team) {

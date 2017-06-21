@@ -35,9 +35,10 @@ var MechModel = MechModel || (function () {
   });
 
   class MechInfo {
-    constructor(mechId, mechName, mechHealth, weaponInfoList, heatsinkInfoList, ammoInfo, engineInfo) {
+    constructor(mechId, mechName, mechTranslatedName, mechHealth, weaponInfoList, heatsinkInfoList, ammoInfo, engineInfo) {
       this.mechId = mechId;
       this.mechName = mechName;
+      this.mechTranslatedName = mechTranslatedName;
       this.mechHealth = mechHealth;
       this.weaponInfoList = weaponInfoList; //[WeaponInfo...]
       this.heatsinkInfoList = heatsinkInfoList; //[Heatsink...]
@@ -47,12 +48,13 @@ var MechModel = MechModel || (function () {
   }
 
   class WeaponInfo {
-    constructor(weaponId, name, location,
+    constructor(weaponId, name, translatedName, location,
       minRange, optRange, maxRange, baseDmg,
       heat, minHeatPenaltyLevel, heatPenalty, heatPenaltyId,
       cooldown, duration, spinup, speed, ammoPerShot) {
         this.weaponId = weaponId; //smurfy weapon id
         this.name = name;
+        this.translatedName = translatedName;
         this.location = location;
         this.minRange = minRange;
         this.optRange = optRange;
@@ -329,13 +331,14 @@ var MechModel = MechModel || (function () {
 
     var smurfyMechData = getSmurfyMechData(smurfyMechLoadout.mech_id);
     var mechName = smurfyMechData.name;
+    var mechTranslatedName = smurfyMechData.translated_name;
     var mechHealth = mechHealthFromSmurfyMechLoadout(smurfyMechLoadout);
     var weaponInfoList = weaponInfoListFromSmurfyMechLoadout(smurfyMechLoadout);
     var heatsinkInfoList = heatsinkListFromSmurfyMechLoadout(smurfyMechLoadout);
     var ammoInfo = ammoInfoListFromSmurfyMechLoadout(smurfyMechLoadout);
     var engineInfo = engineInfoFromSmurfyMechLoadout(smurfyMechLoadout);
 
-    mechInfo = new MechInfo(mechId, mechName, mechHealth, weaponInfoList, heatsinkInfoList, ammoInfo, engineInfo);
+    mechInfo = new MechInfo(mechId, mechName, mechTranslatedName, mechHealth, weaponInfoList, heatsinkInfoList, ammoInfo, engineInfo);
     return mechInfo;
   }
 
@@ -401,6 +404,7 @@ var MechModel = MechModel || (function () {
 
   var weaponInfoFromSmurfyWeaponData = function (weaponId, location, smurfyWeaponData) {
     let name = smurfyWeaponData.name;
+    let translatedName = smurfyWeaponData.translated_name;
     let minRange = smurfyWeaponData.min_range;
     let optRange = smurfyWeaponData.long_range;
     let maxRange = smurfyWeaponData.max_range;
@@ -417,7 +421,7 @@ var MechModel = MechModel || (function () {
           smurfyWeaponData.ammo_per_shot : 0; //TODO: Add ammo per shot info all ammo consuming weapons
 
     let weaponInfo = new WeaponInfo(
-      weaponId, name, location,
+      weaponId, name, translatedName, location,
       minRange, optRange, maxRange, baseDmg,
       heat, minHeatPenaltyLevel, heatPenalty, heatPenaltyId,
       cooldown, duration, spinup, speed, ammoPerShot
