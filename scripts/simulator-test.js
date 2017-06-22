@@ -121,8 +121,10 @@ return {
               mechComponentHealth.armor = Math.random() * mechComponentHealth.maxArmor;
               mechComponentHealth.structure = Math.random() * mechComponentHealth.maxStructure;
             }
-            MechView.updatePaperDoll(mech);
-            MechView.updateMechHealthNumbers(mech);
+            MechModelView.updateHealth(mech);
+
+            mechState.heatState.currHeat = Math.random() * mechState.heatState.currMaxHeat;
+            MechModelView.updateHeat(mech);
           }
         }
       });

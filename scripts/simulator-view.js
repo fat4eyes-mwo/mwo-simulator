@@ -116,6 +116,21 @@ var MechView = MechView || (function() {
       .height( (100 * invPercent) + "%");
   }
 
+  var setHeatNumber = function (mechId, heatNumber) {
+
+  }
+
+  var updateHeat = function(mech) {
+    let heatState = mech.getMechState().heatState;
+    let heatPercent = Number(heatState.currHeat) / Number(heatState.currMaxHeat);
+    setHeatbarValue(mech.getMechId(), heatPercent);
+
+    var heatNumberId = mech.getMechId() + "-heatbarNumber";
+    let heatText = parseFloat(heatPercent * 100).toFixed(0) + "%" +
+                    "(" + parseFloat(heatState.currHeat).toFixed(1) + ")";
+    $("#" + heatNumberId).html(heatText);
+  }
+
   var weaponRowId = function (mechId, idx) {
     return mechId + "-" + idx + "-weaponrow";
   }
@@ -212,6 +227,12 @@ var MechView = MechView || (function() {
       .attr("id", heatbarContainerId);
     addHeatbar(mechId, "#" + heatbarContainerId);
 
+    var heatNumberId = mechId + "-heatbarNumber";
+    $("#" + mechPanelId(mechId) + " [class~='heatNumber']")
+      .attr("id", heatNumberId);
+
+    updateHeat(mech);
+
     var weaponPanelContainerId = mechId + "-weaponPanelContainer";
     $("#" + mechPanelId(mechId) + " [class~='weaponPanelContainer']")
       .attr("id", weaponPanelContainerId);
@@ -261,6 +282,7 @@ var MechView = MechView || (function() {
     setWeaponState : setWeaponState,
     updatePaperDoll : updatePaperDoll,
     updateMechHealthNumbers : updateMechHealthNumbers,
+    updateHeat: updateHeat,
     clear : clear,
     clearAll : clearAll
   };

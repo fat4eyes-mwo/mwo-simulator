@@ -13,7 +13,7 @@ var MechModelView = MechModelView || (function() {
   }
 
   var updateHeat = function(mech) {
-
+    MechView.updateHeat(mech);
   }
 
   var updateCooldown = function(mech) {
@@ -21,11 +21,18 @@ var MechModelView = MechModelView || (function() {
   }
 
   var updateWeaponStatus = function(mech) {
-    
+
+  }
+
+  var updateHealth = function(mech) {
+    MechView.updatePaperDoll(mech);
+    MechView.updateMechHealthNumbers(mech);
   }
 
   return {
-    updateFull : updateFull
+    updateFull : updateFull,
+    updateHealth : updateHealth,
+    updateHeat : updateHeat
   };
 
 })();

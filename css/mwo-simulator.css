@@ -33,7 +33,18 @@ body {
 }
 
 .mechPanel .heatbarContainer {
+  width: 100%;
+}
 
+.mechPanel .heatbarContainer .heatbarFrame {
+  margin: auto;
+}
+.mechPanel .heatbarContainer .heatbarFrame .heatbar {
+}
+
+.mechPanel .heatNumber {
+  font-size: 80%;
+  text-align: center;
 }
 
 .mechPanel .weaponPanelContainer {
