@@ -117,6 +117,7 @@ return {
         for (let team of teams) {
           for (let mech of MechModel.mechTeams[team]) {
             let mechState = mech.getMechState();
+            //random component health
             for (let mechComponentHealth of mechState.mechHealth.componentHealth) {
               mechComponentHealth.armor = Math.random() * mechComponentHealth.maxArmor;
               mechComponentHealth.structure = Math.random() * mechComponentHealth.maxStructure;
@@ -125,6 +126,34 @@ return {
 
             mechState.heatState.currHeat = Math.random() * mechState.heatState.currMaxHeat;
             MechModelView.updateHeat(mech);
+
+            //random weapon state
+            for (let weaponIndex in mechState.weaponStateList) {
+              let weaponState = mechState.weaponStateList[weaponIndex];
+              let WEAPON_CYCLES = [];
+              for (let weaponCycle in MechModel.WeaponCycle) {
+                if (MechModel.WeaponCycle.hasOwnProperty(weaponCycle)) {
+                  WEAPON_CYCLES.push(MechModel.WeaponCycle[weaponCycle]);
+                }
+              }
+
+              weaponState.weaponCycle = WEAPON_CYCLES[Math.floor(Math.random() * WEAPON_CYCLES.length)];
+              let weaponInfo = weaponState.weaponInfo;
+              weaponState.spoolupLeft = Math.random() * Number(weaponInfo.spinup);
+              weaponState.cooldownLeft = Math.random() * Number(weaponInfo.cooldown);
+
+            }
+
+            //random weapon ammoState
+            let ammoCounts = mechState.ammoState.ammoCounts;
+            for (let weaponId in ammoCounts) {
+              if (ammoCounts.hasOwnProperty(weaponId)) {
+                let ammoCount = ammoCounts[weaponId];
+                ammoCount.ammoCount = Math.floor(Math.random() * ammoCount.maxAmmoCount);
+              }
+            }
+            MechModelView.updateCooldown(mech);
+            MechModelView.updateWeaponStatus(mech);
           }
         }
       });

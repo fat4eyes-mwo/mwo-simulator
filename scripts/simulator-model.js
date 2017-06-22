@@ -177,6 +177,7 @@ var MechModel = MechModel || (function () {
     constructor(weaponIds, ammoCount) {
       this.weaponIds = weaponIds; //[weaponId...]
       this.ammoCount = ammoCount; //rounds left
+      this.maxAmmoCount = 0; //Set during initialization
     }
   }
 
@@ -689,9 +690,11 @@ var MechModel = MechModel || (function () {
         //Map all the weapons that can use the ammo to the ammo count
         for (let weaponId of ammoInfoEntry.weaponIds) {
           ammoCounts[weaponId] = newAmmoCount;
+          ammoCounts[weaponId].maxAmmoCount = ammoCounts[weaponId].ammoCount;
         }
       } else {
         ammoCounts[firstWeaponId].ammoCount += Number(ammoInfoEntry.ammoCount);
+        ammoCounts[firstWeaponId].maxAmmoCount = ammoCounts[firstWeaponId].ammoCount;
       }
     }
     let ammoState = new AmmoState(ammoCounts, ammoInfo);

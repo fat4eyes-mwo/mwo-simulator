@@ -188,7 +188,14 @@ var MechView = MechView || (function() {
     $("#" + weaponAmmoId(mechId, weaponIdx)).html(ammo != -1 ? ammo : "&#x221e;");
   }
   var setWeaponState = function (mechId, weaponIdx, state) {
-    $("#" + weaponRowId(mechId, weaponIdx)).removeClass("Active Firing Disabled");
+    //Note: the remove class string must include all the MechModel.WeaponCycle strings
+    let removeClassString = "";
+    for (let weaponCycle in MechModel.WeaponCycle) {
+      if (MechModel.WeaponCycle.hasOwnProperty(weaponCycle)) {
+        removeClassString += MechModel.WeaponCycle[weaponCycle] + " ";
+      }
+    }
+    $("#" + weaponRowId(mechId, weaponIdx)).removeClass(removeClassString);
     $("#" + weaponRowId(mechId, weaponIdx)).addClass(state);
   }
 
