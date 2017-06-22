@@ -462,12 +462,13 @@ var MechModel = MechModel || (function () {
     let minHeatPenaltyLevel = smurfyWeaponData.min_heat_penalty_level;
     let heatPenalty = smurfyWeaponData.heat_penalty;
     let heatPenaltyId = smurfyWeaponData.heat_penalty_id;
-    let cooldown = smurfyWeaponData.cooldown;
-    let duration = smurfyWeaponData.duration;
-    let spinup = 0; //TODO: Populate spinup value for Gauss, RACs
+    //Our cooldown/duration/spinup values are in milliseconds, smurfy is in seconds
+    let cooldown = Number(smurfyWeaponData.cooldown) * 1000;
+    let duration = Number(smurfyWeaponData.duration) * 1000;
+    let spinup = 0 * 1000; //TODO: Populate spinup value for Gauss, RACs
     let speed = smurfyWeaponData.speed;
     let ammoPerShot = smurfyWeaponData.ammo_per_shot ?
-          smurfyWeaponData.ammo_per_shot : 0; //TODO: Add ammo per shot info all ammo consuming weapons
+          smurfyWeaponData.ammo_per_shot : 0;
 
     let weaponInfo = new WeaponInfo(
       weaponId, name, translatedName, location,

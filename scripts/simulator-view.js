@@ -176,6 +176,7 @@ var MechView = MechView || (function() {
       }
       setWeaponAmmo(mechId, idx, weaponAmmoCount);
       setWeaponState(mechId, idx, weaponState.weaponCycle);
+      setWeaponCooldown(mechId, idx, 0);
     }
   }
   var setWeaponCooldown = function (mechId, weaponIdx, percent) {
