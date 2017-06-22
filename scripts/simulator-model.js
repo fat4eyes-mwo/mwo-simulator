@@ -142,7 +142,7 @@ var MechModel = MechModel || (function () {
       this.heatState = heatState;
       this.weaponStateList = weaponStateList; //[WeaponState...]
       this.ammoState = ammoState;
-      this.updateTypes = []; //Update types triggered on the current simulation step
+      this.updateTypes = {}; //Update types triggered on the current simulation step
     }
   }
 

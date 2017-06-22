@@ -66,12 +66,29 @@ var MechModelView = MechModelView || (function() {
     MechView.updateSimTime(simTime);
   }
 
+  var updateMech = function(mech) {
+    let mechState = mech.getMechState();
+    let updateFunctionMap = {};
+    updateFunctionMap[MechModel.UpdateType.HEALTH] = updateHealth;
+    updateFunctionMap[MechModel.UpdateType.HEAT] = updateHeat;
+    updateFunctionMap[MechModel.UpdateType.COOLDOWN] = updateCooldown;
+    updateFunctionMap[MechModel.UpdateType.WEAPONSTATE] = updateWeaponStatus;
+    //updateFunctionMap[MechModel.UpdateType.STATS] = TODO;
+
+    for (let updateType in mechState.updateTypes) {
+      if (mechState.updateTypes[updateType]) {
+        updateFunctionMap[updateType](mech);
+      }
+    }
+  }
+
   return {
     updateFull : updateFull,
     updateHealth : updateHealth,
     updateHeat : updateHeat,
     updateCooldown : updateCooldown,
     updateWeaponStatus : updateWeaponStatus,
+    updateMech: updateMech,
     updateSimTime: updateSimTime,
   };
 
