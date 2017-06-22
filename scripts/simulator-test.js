@@ -1,5 +1,6 @@
 "use strict";
 
+//Test code.
 var MechTest = MechTest || (function() {
 
 //Test code
@@ -159,8 +160,40 @@ return {
       });
     },
 
+    testSimulation : function() {
+      MechModel.initDummyModelData();
+
+      MechModel.addMech("testCheetahId", MechModel.Team.BLUE, DummyArcticCheetah);
+      MechModel.addMech("testExecutionerId", MechModel.Team.BLUE, DummyExecutioner);
+      MechModel.addMech("testStormcrowId", MechModel.Team.BLUE, DummyStormcrow);
+      MechModel.addMech("testMaulerId", MechModel.Team.RED, DummyMauler);
+      MechModel.addMech("testFirestarterId", MechModel.Team.RED, DummyFireStarter);
+      MechModel.addMech("testBattlemasterId", MechModel.Team.RED, DummyBattleMaster);
+      MechModel.addMech("testShadowhawkId", MechModel.Team.RED, DummyShadowhawk);
+
+      MechModelView.updateFull();
+
+      $("#resetState").removeClass("debugButton").click(() => {
+        MechModel.resetState();
+        MechModelView.updateFull();
+      });
+
+      $("#runSimulationButton").removeClass("debugButton").click(() => {
+        MechSimulatorLogic.runSimulation();
+      });
+
+      $("#pauseSimulationButton").removeClass("debugButton").click(() => {
+        MechSimulatorLogic.pauseSimulation();
+      });
+
+      $("#resetSimulationButton").removeClass("debugButton").click(() => {
+        MechSimulatorLogic.resetSimulation();
+      });
+
+    },
+
     testScratch : function() {
-    }
+    },
   } //return publics
 
 })(); //namespace exec

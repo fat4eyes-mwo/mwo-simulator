@@ -5,7 +5,8 @@ function main() {
   // MechTest.testModelInit();
   // MechTest.testModelOps();
   //MechTest.testModelBaseHealth();
-  MechTest.testModelView();
+  //MechTest.testModelView();
+  MechTest.testSimulation();
 }
 
 $(document).ready(main);

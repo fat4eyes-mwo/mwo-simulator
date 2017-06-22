@@ -22,16 +22,23 @@
     <script src="scripts/simulator-view.js"></script>
     <script src="scripts/simulator-model.js"></script>
     <script src="scripts/simulator-modelview.js"></script>
+    <script src="scripts/simulator-logic.js"></script>
     <script src="scripts/simulator-test.js"></script>
     <script src="scripts/simulator.js"></script>
   </head>
   <body>
     <div class="row">
       <div id="controlPanel" class="column column-2 controlPanel">
-        <div id="debugPanel" class="debugPanel">
+        <div id="debugPanel" class="row debugPanel">
           <button id="testUI" class="debugButton">Test UI Widgets</button>
           <button id="resetState" class = "debugButton">Reset state</button>
           <button id="testModelView" class ="debugButton">Test View Updates</button>
+          <button id="runSimulationButton" class ="debugButton">Run simulation</button>
+          <button id="pauseSimulationButton" class ="debugButton">Pause simulation</button>
+          <button id="resetSimulationButton" class ="debugButton">Reset simulation</button>
+        </div>
+        <div class="row">
+          <div id="simTime" class="simTime"></div>
         </div>
       </div>
       <div id="blueTeam" class="column column-5 mechPanelList bluePanel">

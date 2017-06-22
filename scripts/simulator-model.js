@@ -1,5 +1,7 @@
 "use strict";
 
+//Classes that represent the states of the mechs in the simulation,
+//and methos to populate them from smurfy data
 var MechModel = MechModel || (function () {
 
   const Team = Object.freeze({

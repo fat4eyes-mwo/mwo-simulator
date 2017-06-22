@@ -1,5 +1,6 @@
 "use strict";
 
+//Methods that update the MechView from the MechModel, and vice versa
 var MechModelView = MechModelView || (function() {
 
   var updateFull = function () {
@@ -61,12 +62,17 @@ var MechModelView = MechModelView || (function() {
     MechView.updateMechHealthNumbers(mech);
   }
 
+  var updateSimTime = function(simTime) {
+    MechView.updateSimTime(simTime);
+  }
+
   return {
     updateFull : updateFull,
     updateHealth : updateHealth,
     updateHeat : updateHeat,
     updateCooldown : updateCooldown,
-    updateWeaponStatus : updateWeaponStatus
+    updateWeaponStatus : updateWeaponStatus,
+    updateSimTime: updateSimTime,
   };
 
 })();

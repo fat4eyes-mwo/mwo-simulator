@@ -1,5 +1,6 @@
 "use strict";
 
+//UI methods
 var MechView = MechView || (function() {
 
   // Paper doll UI functions
@@ -114,10 +115,6 @@ var MechView = MechView || (function() {
     var invPercent = 1 - percent;
     $("#" + heatbarId(mechId) + " > [class=heatbar]")
       .height( (100 * invPercent) + "%");
-  }
-
-  var setHeatNumber = function (mechId, heatNumber) {
-
   }
 
   var updateHeat = function(mech) {
@@ -261,6 +258,10 @@ var MechView = MechView || (function() {
     clear("red");
   }
 
+  var updateSimTime = function(simTime) {
+    $("#simTime").html("Sim time: " + simTime);
+  }
+
   var initHandlers = function () {
     initPaperDollHandlers();
   }
@@ -290,6 +291,7 @@ var MechView = MechView || (function() {
     updatePaperDoll : updatePaperDoll,
     updateMechHealthNumbers : updateMechHealthNumbers,
     updateHeat: updateHeat,
+    updateSimTime : updateSimTime,
     clear : clear,
     clearAll : clearAll
   };
