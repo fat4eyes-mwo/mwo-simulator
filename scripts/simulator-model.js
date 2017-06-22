@@ -92,7 +92,7 @@ var MechModel = MechModel || (function () {
       this.internalHeatCapacity = internalHeatCapacity;
       this.externalHeatCapacity = externalHeatCapacity;
     }
-    copy() {
+    clone() {
       return new Heatsink(this.heatsinkId,
         this.name,
         this.active,
@@ -108,10 +108,10 @@ var MechModel = MechModel || (function () {
     constructor(componentHealth) {
       this.componentHealth = componentHealth; //[ComponentHealth...]
     }
-    copy() {
+    clone() {
       let newComponentHealth = [];
       for (let componentHealthEntry of this.componentHealth) {
-        newComponentHealth.push(componentHealthEntry.copy());
+        newComponentHealth.push(componentHealthEntry.clone());
       }
       return new MechHealth(newComponentHealth);
     }
@@ -125,7 +125,7 @@ var MechModel = MechModel || (function () {
       this.maxArmor = maxArmor; //maximum armor from loadout
       this.maxStructure = maxStructure; //maximum structure from loadout
     }
-    copy() {
+    clone() {
       return new ComponentHealth(this.location,
         this.armor,
         this.structure,
@@ -188,7 +188,7 @@ var MechModel = MechModel || (function () {
       this.weaponIds = weaponIds; //[weaponId...]
       this.ammoCount = ammoCount;
     }
-    copy() {
+    clone() {
       return new AmmoInfo(this.type,
         this.location,
         this.weaponIds,
@@ -203,10 +203,10 @@ var MechModel = MechModel || (function () {
       this.heatsink = heatsink; //heatsink object that represents the type of heatsinks in the engine
       this.heatsinkCount = heatsinkCount;
     }
-    copy() {
+    clone() {
       return new EngineInfo(this.engineId,
         this.name,
-        this.heatsink.copy(),
+        this.heatsink.clone(),
         this.heatsinkCount);
     }
   }
@@ -591,7 +591,7 @@ var MechModel = MechModel || (function () {
   var initMechState = function (mechInfo) {
     var mechState;
 
-    var mechHealth = mechInfo.mechHealth.copy();
+    var mechHealth = mechInfo.mechHealth.clone();
     var heatState = initHeatState(mechInfo);
     var weaponStateList = initWeaponStateList(mechInfo);
     var ammoState = initAmmoState(mechInfo);
@@ -644,11 +644,11 @@ var MechModel = MechModel || (function () {
     let currHeatDissapation = heatStats.heatDissapation;
     let currMaxHeat = heatStats.heatCapacity;
     //Copy engine info from mech info
-    let engineInfo = mechInfo.engineInfo.copy();
+    let engineInfo = mechInfo.engineInfo.clone();
     //Copy heatsink info from mech info
     let currHeatsinkInfo = [];
     for (let heatsink of mechInfo.heatsinkInfoList) {
-      currHeatsinkInfo.push(heatsink.copy());
+      currHeatsinkInfo.push(heatsink.clone());
     }
     let heatState = new HeatState(currHeat, currMaxHeat, currHeatDissapation, currHeatsinkInfo, engineInfo, engineHeatEfficiency)
     return heatState;
@@ -676,7 +676,7 @@ var MechModel = MechModel || (function () {
   var initAmmoState = function(mechInfo) {
     let ammoInfo = [];
     for (let ammoInfoEntry of mechInfo.ammoInfo) {
-      ammoInfo.push(ammoInfoEntry.copy());
+      ammoInfo.push(ammoInfoEntry.clone());
     }
     let ammoCounts = {}; //map from weaponId to AmmoCount
     for (let idx in ammoInfo) {
