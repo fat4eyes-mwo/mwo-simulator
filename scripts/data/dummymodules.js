@@ -4884,4 +4884,4 @@ var DummyModuleData = {
 		"translated_desc": "An Unmanned Aerial Vehicle used for reconnaissance with a 240m radius and lasts for 60 seconds.  Consumed on use.",
 		"pilot_module": true
 	}
-}
+};

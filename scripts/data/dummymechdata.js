@@ -2208,31 +2208,31 @@ var DummyMechData = {
 			}, {
 				"name": "internalresist_ct_additive",
 				"translated_name": "BASE STRUCTURE (CT)",
-				"value": 32
+				"value": 16
 			}, {
 				"name": "internalresist_lt_additive",
 				"translated_name": "BASE STRUCTURE (LT)",
-				"value": 24
+				"value": 12
 			}, {
 				"name": "internalresist_rt_additive",
 				"translated_name": "BASE STRUCTURE (RT)",
-				"value": 24
+				"value": 12
 			}, {
 				"name": "internalresist_la_additive",
 				"translated_name": "BASE STRUCTURE (LA)",
-				"value": 16
+				"value": 8
 			}, {
 				"name": "internalresist_ra_additive",
 				"translated_name": "BASE STRUCTURE (RA)",
-				"value": 16
+				"value": 8
 			}, {
 				"name": "internalresist_ll_additive",
 				"translated_name": "BASE STRUCTURE (LL)",
-				"value": 24
+				"value": 12
 			}, {
 				"name": "internalresist_rl_additive",
 				"translated_name": "BASE STRUCTURE (RL)",
-				"value": 24
+				"value": 12
 			}]
 		}
 	},
@@ -2559,7 +2559,7 @@ var DummyMechData = {
 			"quirks": [{
 				"name": "isgaussrifle_cooldown_multiplier",
 				"translated_name": "GAUSS RIFLE COOLDOWN",
-				"value": -0.05
+				"value": -0.1
 			}, {
 				"name": "ballistic_cooldown_multiplier",
 				"translated_name": "BALLISTIC COOLDOWN",
@@ -2604,10 +2604,6 @@ var DummyMechData = {
 				"name": "armorresist_rl_additive",
 				"translated_name": "BASE ARMOR (RL)",
 				"value": 21
-			}, {
-				"name": "isgaussrifle_cooldown_multiplier",
-				"translated_name": "GAUSS RIFLE COOLDOWN",
-				"value": -0.05
 			}, {
 				"name": "critchance_receiving_multiplier",
 				"translated_name": "CRIT HIT CHANCE (RECEIVING)",
@@ -9542,7 +9538,7 @@ var DummyMechData = {
 				"mc": 2980,
 				"cb": 7440407
 			},
-			"max_armor": 496,
+			"max_armor": 494,
 			"quirks": [{
 				"name": "ballistic_velocity_multiplier",
 				"translated_name": "BALLISTIC VELOCITY",
@@ -13904,6 +13900,34 @@ var DummyMechData = {
 				"name": "isflamer_range_multiplier",
 				"translated_name": "FLAMER RANGE",
 				"value": 0.15
+			}, {
+				"name": "internalresist_ct_additive",
+				"translated_name": "BASE STRUCTURE (CT)",
+				"value": 11
+			}, {
+				"name": "internalresist_lt_additive",
+				"translated_name": "BASE STRUCTURE (LT)",
+				"value": 8
+			}, {
+				"name": "internalresist_rt_additive",
+				"translated_name": "BASE STRUCTURE (RT)",
+				"value": 8
+			}, {
+				"name": "internalresist_la_additive",
+				"translated_name": "BASE STRUCTURE (LA)",
+				"value": 12
+			}, {
+				"name": "internalresist_ra_additive",
+				"translated_name": "BASE STRUCTURE (RA)",
+				"value": 12
+			}, {
+				"name": "internalresist_ll_additive",
+				"translated_name": "BASE STRUCTURE (LL)",
+				"value": 16
+			}, {
+				"name": "internalresist_rl_additive",
+				"translated_name": "BASE STRUCTURE (RL)",
+				"value": 16
 			}]
 		}
 	},
@@ -13985,6 +14009,34 @@ var DummyMechData = {
 				"name": "isflamer_range_multiplier",
 				"translated_name": "FLAMER RANGE",
 				"value": 0.15
+			}, {
+				"name": "internalresist_ct_additive",
+				"translated_name": "BASE STRUCTURE (CT)",
+				"value": 11
+			}, {
+				"name": "internalresist_lt_additive",
+				"translated_name": "BASE STRUCTURE (LT)",
+				"value": 8
+			}, {
+				"name": "internalresist_rt_additive",
+				"translated_name": "BASE STRUCTURE (RT)",
+				"value": 8
+			}, {
+				"name": "internalresist_la_additive",
+				"translated_name": "BASE STRUCTURE (LA)",
+				"value": 12
+			}, {
+				"name": "internalresist_ra_additive",
+				"translated_name": "BASE STRUCTURE (RA)",
+				"value": 12
+			}, {
+				"name": "internalresist_ll_additive",
+				"translated_name": "BASE STRUCTURE (LL)",
+				"value": 16
+			}, {
+				"name": "internalresist_rl_additive",
+				"translated_name": "BASE STRUCTURE (RL)",
+				"value": 16
 			}]
 		}
 	},
@@ -14066,6 +14118,34 @@ var DummyMechData = {
 				"name": "isflamer_range_multiplier",
 				"translated_name": "FLAMER RANGE",
 				"value": 0.15
+			}, {
+				"name": "internalresist_ct_additive",
+				"translated_name": "BASE STRUCTURE (CT)",
+				"value": 11
+			}, {
+				"name": "internalresist_lt_additive",
+				"translated_name": "BASE STRUCTURE (LT)",
+				"value": 8
+			}, {
+				"name": "internalresist_rt_additive",
+				"translated_name": "BASE STRUCTURE (RT)",
+				"value": 8
+			}, {
+				"name": "internalresist_la_additive",
+				"translated_name": "BASE STRUCTURE (LA)",
+				"value": 12
+			}, {
+				"name": "internalresist_ra_additive",
+				"translated_name": "BASE STRUCTURE (RA)",
+				"value": 12
+			}, {
+				"name": "internalresist_ll_additive",
+				"translated_name": "BASE STRUCTURE (LL)",
+				"value": 16
+			}, {
+				"name": "internalresist_rl_additive",
+				"translated_name": "BASE STRUCTURE (RL)",
+				"value": 16
 			}]
 		}
 	},
@@ -14147,6 +14227,34 @@ var DummyMechData = {
 				"name": "isflamer_range_multiplier",
 				"translated_name": "FLAMER RANGE",
 				"value": 0.15
+			}, {
+				"name": "internalresist_ct_additive",
+				"translated_name": "BASE STRUCTURE (CT)",
+				"value": 11
+			}, {
+				"name": "internalresist_lt_additive",
+				"translated_name": "BASE STRUCTURE (LT)",
+				"value": 8
+			}, {
+				"name": "internalresist_rt_additive",
+				"translated_name": "BASE STRUCTURE (RT)",
+				"value": 8
+			}, {
+				"name": "internalresist_la_additive",
+				"translated_name": "BASE STRUCTURE (LA)",
+				"value": 12
+			}, {
+				"name": "internalresist_ra_additive",
+				"translated_name": "BASE STRUCTURE (RA)",
+				"value": 12
+			}, {
+				"name": "internalresist_ll_additive",
+				"translated_name": "BASE STRUCTURE (LL)",
+				"value": 16
+			}, {
+				"name": "internalresist_rl_additive",
+				"translated_name": "BASE STRUCTURE (RL)",
+				"value": 16
 			}]
 		}
 	},
@@ -14228,6 +14336,34 @@ var DummyMechData = {
 				"name": "isflamer_range_multiplier",
 				"translated_name": "FLAMER RANGE",
 				"value": 0.15
+			}, {
+				"name": "internalresist_ct_additive",
+				"translated_name": "BASE STRUCTURE (CT)",
+				"value": 11
+			}, {
+				"name": "internalresist_lt_additive",
+				"translated_name": "BASE STRUCTURE (LT)",
+				"value": 8
+			}, {
+				"name": "internalresist_rt_additive",
+				"translated_name": "BASE STRUCTURE (RT)",
+				"value": 8
+			}, {
+				"name": "internalresist_la_additive",
+				"translated_name": "BASE STRUCTURE (LA)",
+				"value": 12
+			}, {
+				"name": "internalresist_ra_additive",
+				"translated_name": "BASE STRUCTURE (RA)",
+				"value": 12
+			}, {
+				"name": "internalresist_ll_additive",
+				"translated_name": "BASE STRUCTURE (LL)",
+				"value": 16
+			}, {
+				"name": "internalresist_rl_additive",
+				"translated_name": "BASE STRUCTURE (RL)",
+				"value": 16
 			}]
 		}
 	},
@@ -15999,32 +16135,32 @@ var DummyMechData = {
 				"translated_name": "MISSILE COOLDOWN",
 				"value": -0.2
 			}, {
-				"name": "armorresist_ct_additive",
-				"translated_name": "BASE ARMOR (CT)",
+				"name": "internalresist_ct_additive",
+				"translated_name": "BASE STRUCTURE (CT)",
 				"value": 20
 			}, {
-				"name": "armorresist_lt_additive",
-				"translated_name": "BASE ARMOR (LT)",
+				"name": "internalresist_lt_additive",
+				"translated_name": "BASE STRUCTURE (LT)",
 				"value": 14
 			}, {
-				"name": "armorresist_rt_additive",
-				"translated_name": "BASE ARMOR (RT)",
+				"name": "internalresist_rt_additive",
+				"translated_name": "BASE STRUCTURE (RT)",
 				"value": 14
 			}, {
-				"name": "armorresist_la_additive",
-				"translated_name": "BASE ARMOR (LA)",
+				"name": "internalresist_la_additive",
+				"translated_name": "BASE STRUCTURE (LA)",
 				"value": 15
 			}, {
-				"name": "armorresist_ra_additive",
-				"translated_name": "BASE ARMOR (RA)",
+				"name": "internalresist_ra_additive",
+				"translated_name": "BASE STRUCTURE (RA)",
 				"value": 15
 			}, {
-				"name": "armorresist_ll_additive",
-				"translated_name": "BASE ARMOR (LL)",
+				"name": "internalresist_ll_additive",
+				"translated_name": "BASE STRUCTURE (LL)",
 				"value": 14
 			}, {
-				"name": "armorresist_rl_additive",
-				"translated_name": "BASE ARMOR (RL)",
+				"name": "internalresist_rl_additive",
+				"translated_name": "BASE STRUCTURE (RL)",
 				"value": 14
 			}]
 		}
@@ -16212,6 +16348,34 @@ var DummyMechData = {
 				"name": "isflamer_range_multiplier",
 				"translated_name": "FLAMER RANGE",
 				"value": 0.15
+			}, {
+				"name": "internalresist_ct_additive",
+				"translated_name": "BASE STRUCTURE (CT)",
+				"value": 11
+			}, {
+				"name": "internalresist_lt_additive",
+				"translated_name": "BASE STRUCTURE (LT)",
+				"value": 8
+			}, {
+				"name": "internalresist_rt_additive",
+				"translated_name": "BASE STRUCTURE (RT)",
+				"value": 8
+			}, {
+				"name": "internalresist_la_additive",
+				"translated_name": "BASE STRUCTURE (LA)",
+				"value": 12
+			}, {
+				"name": "internalresist_ra_additive",
+				"translated_name": "BASE STRUCTURE (RA)",
+				"value": 12
+			}, {
+				"name": "internalresist_ll_additive",
+				"translated_name": "BASE STRUCTURE (LL)",
+				"value": 16
+			}, {
+				"name": "internalresist_rl_additive",
+				"translated_name": "BASE STRUCTURE (RL)",
+				"value": 16
 			}]
 		}
 	},
@@ -20871,8 +21035,8 @@ var DummyMechData = {
 				"MovementArchetype": "Large",
 				"MinClimbAngle": "20",
 				"MaxMovementSpeed": "16.2",
-				"TorsoTurnSpeedYaw": "54",
-				"TorsoTurnSpeedPitch": "33.75",
+				"TorsoTurnSpeedYaw": "63",
+				"TorsoTurnSpeedPitch": "39.38",
 				"ArmTurnSpeedYaw": "135",
 				"ArmTurnSpeedPitch": "135",
 				"TurnLerpLowRate": "0.75",
@@ -20917,21 +21081,37 @@ var DummyMechData = {
 				"translated_name": "BALLISTIC COOLDOWN",
 				"value": -0.05
 			}, {
-				"name": "ballistic_velocity_multiplier",
-				"translated_name": "BALLISTIC VELOCITY",
-				"value": 0.1
-			}, {
 				"name": "energy_cooldown_multiplier",
 				"translated_name": "ENERGY COOLDOWN",
 				"value": -0.1
 			}, {
 				"name": "armorresist_la_additive",
 				"translated_name": "BASE ARMOR (LA)",
-				"value": 17
+				"value": 10
 			}, {
 				"name": "armorresist_ra_additive",
 				"translated_name": "BASE ARMOR (RA)",
+				"value": 10
+			}, {
+				"name": "armorresist_ct_additive",
+				"translated_name": "BASE ARMOR (CT)",
+				"value": 25
+			}, {
+				"name": "armorresist_lt_additive",
+				"translated_name": "BASE ARMOR (LT)",
 				"value": 17
+			}, {
+				"name": "armorresist_rt_additive",
+				"translated_name": "BASE ARMOR (RT)",
+				"value": 17
+			}, {
+				"name": "missile_cooldown_multiplier",
+				"translated_name": "MISSILE COOLDOWN",
+				"value": -0.1
+			}, {
+				"name": "lrm_spread_multiplier",
+				"translated_name": "LRM 5\/10\/15\/20 SPREAD",
+				"value": -0.05
 			}]
 		}
 	},
@@ -20969,8 +21149,8 @@ var DummyMechData = {
 				"MovementArchetype": "Large",
 				"MinClimbAngle": "20",
 				"MaxMovementSpeed": "16.2",
-				"TorsoTurnSpeedYaw": "54",
-				"TorsoTurnSpeedPitch": "33.75",
+				"TorsoTurnSpeedYaw": "63",
+				"TorsoTurnSpeedPitch": "39.38",
 				"ArmTurnSpeedYaw": "135",
 				"ArmTurnSpeedPitch": "135",
 				"TurnLerpLowRate": "0.75",
@@ -21007,25 +21187,37 @@ var DummyMechData = {
 			},
 			"max_armor": 614,
 			"quirks": [{
-				"name": "energy_cooldown_multiplier",
-				"translated_name": "ENERGY COOLDOWN",
-				"value": -0.05
-			}, {
 				"name": "laser_duration_multiplier",
 				"translated_name": "LASER DURATION",
-				"value": -0.1
-			}, {
-				"name": "missile_cooldown_multiplier",
-				"translated_name": "MISSILE COOLDOWN",
-				"value": -0.15
+				"value": -0.05
 			}, {
 				"name": "armorresist_la_additive",
 				"translated_name": "BASE ARMOR (LA)",
-				"value": 17
+				"value": 10
 			}, {
 				"name": "armorresist_ra_additive",
 				"translated_name": "BASE ARMOR (RA)",
+				"value": 10
+			}, {
+				"name": "armorresist_ct_additive",
+				"translated_name": "BASE ARMOR (CT)",
+				"value": 25
+			}, {
+				"name": "armorresist_rt_additive",
+				"translated_name": "BASE ARMOR (RT)",
 				"value": 17
+			}, {
+				"name": "armorresist_lt_additive",
+				"translated_name": "BASE ARMOR (LT)",
+				"value": 17
+			}, {
+				"name": "ballistic_cooldown_multiplier",
+				"translated_name": "BALLISTIC COOLDOWN",
+				"value": -0.15
+			}, {
+				"name": "ballistic_velocity_multiplier",
+				"translated_name": "BALLISTIC VELOCITY",
+				"value": 0.1
 			}]
 		}
 	},
@@ -21063,8 +21255,8 @@ var DummyMechData = {
 				"MovementArchetype": "Large",
 				"MinClimbAngle": "20",
 				"MaxMovementSpeed": "16.2",
-				"TorsoTurnSpeedYaw": "54",
-				"TorsoTurnSpeedPitch": "33.75",
+				"TorsoTurnSpeedYaw": "63",
+				"TorsoTurnSpeedPitch": "39.38",
 				"ArmTurnSpeedYaw": "135",
 				"ArmTurnSpeedPitch": "135",
 				"TurnLerpLowRate": "0.75",
@@ -21103,30 +21295,46 @@ var DummyMechData = {
 			"quirks": [{
 				"name": "ballistic_velocity_multiplier",
 				"translated_name": "BALLISTIC VELOCITY",
-				"value": 0.1
+				"value": 0.05
 			}, {
 				"name": "ballistic_cooldown_multiplier",
 				"translated_name": "BALLISTIC COOLDOWN",
+				"value": -0.1
+			}, {
+				"name": "isautocannon20_cooldown_multiplier",
+				"translated_name": "AC\/20 COOLDOWN",
 				"value": -0.05
 			}, {
 				"name": "energy_cooldown_multiplier",
 				"translated_name": "ENERGY COOLDOWN",
 				"value": -0.05
 			}, {
-				"name": "energy_range_multiplier",
-				"translated_name": "ENERGY RANGE",
-				"value": 0.1
-			}, {
 				"name": "missile_cooldown_multiplier",
 				"translated_name": "MISSILE COOLDOWN",
 				"value": -0.05
 			}, {
+				"name": "lrm_spread_multiplier",
+				"translated_name": "LRM 5\/10\/15\/20 SPREAD",
+				"value": -0.05
+			}, {
 				"name": "armorresist_la_additive",
 				"translated_name": "BASE ARMOR (LA)",
-				"value": 17
+				"value": 10
 			}, {
 				"name": "armorresist_ra_additive",
 				"translated_name": "BASE ARMOR (RA)",
+				"value": 10
+			}, {
+				"name": "armorresist_ct_additive",
+				"translated_name": "BASE ARMOR (CT)",
+				"value": 25
+			}, {
+				"name": "armorresist_lt_additive",
+				"translated_name": "BASE ARMOR (LT)",
+				"value": 17
+			}, {
+				"name": "armorresist_rt_additive",
+				"translated_name": "BASE ARMOR (RT)",
 				"value": 17
 			}]
 		}
@@ -21453,13 +21661,13 @@ var DummyMechData = {
 				"translated_name": "MISSILE VELOCITY",
 				"value": 0.1
 			}, {
-				"name": "internalresist_ll_additive",
-				"translated_name": "BASE STRUCTURE (LL)",
-				"value": 10
+				"name": "armorresist_ll_additive",
+				"translated_name": "BASE ARMOR (LL)",
+				"value": 12
 			}, {
-				"name": "internalresist_rl_additive",
-				"translated_name": "BASE STRUCTURE (RL)",
-				"value": 10
+				"name": "armorresist_rl_additive",
+				"translated_name": "BASE ARMOR (RL)",
+				"value": 12
 			}, {
 				"name": "armorresist_ra_additive",
 				"translated_name": "BASE ARMOR (RA)",
@@ -21583,13 +21791,13 @@ var DummyMechData = {
 				"translated_name": "BASE ARMOR (RA)",
 				"value": 20
 			}, {
-				"name": "internalresist_ll_additive",
-				"translated_name": "BASE STRUCTURE (LL)",
-				"value": 10
+				"name": "armorresist_ll_additive",
+				"translated_name": "BASE ARMOR (LL)",
+				"value": 12
 			}, {
-				"name": "internalresist_rl_additive",
-				"translated_name": "BASE STRUCTURE (RL)",
-				"value": 10
+				"name": "armorresist_rl_additive",
+				"translated_name": "BASE ARMOR (RL)",
+				"value": 12
 			}, {
 				"name": "armorresist_ct_additive",
 				"translated_name": "BASE ARMOR (CT)",
@@ -21705,13 +21913,13 @@ var DummyMechData = {
 				"translated_name": "BASE ARMOR (RA)",
 				"value": 20
 			}, {
-				"name": "internalresist_ll_additive",
-				"translated_name": "BASE STRUCTURE (LL)",
-				"value": 10
+				"name": "armorresist_ll_additive",
+				"translated_name": "BASE ARMOR (LL)",
+				"value": 12
 			}, {
-				"name": "internalresist_rl_additive",
-				"translated_name": "BASE STRUCTURE (RL)",
-				"value": 10
+				"name": "armorresist_rl_additive",
+				"translated_name": "BASE ARMOR (RL)",
+				"value": 12
 			}, {
 				"name": "armorresist_ct_additive",
 				"translated_name": "BASE ARMOR (CT)",
@@ -21760,19 +21968,19 @@ var DummyMechData = {
 			"tuning_config": {
 				"MovementArchetype": "Medium",
 				"MaxMovementSpeed": "16.2",
-				"TorsoTurnSpeedYaw": "99",
-				"TorsoTurnSpeedPitch": "61.88",
-				"ArmTurnSpeedYaw": "247.5",
-				"ArmTurnSpeedPitch": "247.5",
-				"TurnLerpLowRate": "1.38",
-				"TurnLerpMidRate": "0.96",
-				"TurnLerpHighRate": "0.73",
-				"AccelLerpLowRate": "129.01",
-				"AccelLerpMidRate": "29.26",
-				"AccelLerpHighRate": "17.2",
-				"DecelLerpLowRate": "120.16",
-				"DecelLerpMidRate": "1850",
-				"DecelLerpHighRate": "1850",
+				"TorsoTurnSpeedYaw": "108",
+				"TorsoTurnSpeedPitch": "67.5",
+				"ArmTurnSpeedYaw": "270",
+				"ArmTurnSpeedPitch": "270",
+				"TurnLerpLowRate": "1.5",
+				"TurnLerpMidRate": "1.05",
+				"TurnLerpHighRate": "0.8",
+				"AccelLerpLowRate": "149.36",
+				"AccelLerpMidRate": "33.87",
+				"AccelLerpHighRate": "19.91",
+				"DecelLerpLowRate": "131.08",
+				"DecelLerpMidRate": "2000",
+				"DecelLerpHighRate": "2000",
 				"ReverseSpeedMultiplier": "0.666",
 				"MaxTorsoAngleYaw": "125",
 				"MaxTorsoAnglePitch": "20",
@@ -21812,7 +22020,7 @@ var DummyMechData = {
 			}, {
 				"name": "laser_duration_multiplier",
 				"translated_name": "LASER DURATION",
-				"value": -0.05
+				"value": -0.1
 			}, {
 				"name": "internalresist_la_additive",
 				"translated_name": "BASE STRUCTURE (LA)",
@@ -21865,19 +22073,19 @@ var DummyMechData = {
 			"tuning_config": {
 				"MovementArchetype": "Medium",
 				"MaxMovementSpeed": "16.2",
-				"TorsoTurnSpeedYaw": "99",
-				"TorsoTurnSpeedPitch": "61.88",
-				"ArmTurnSpeedYaw": "247.5",
-				"ArmTurnSpeedPitch": "247.5",
-				"TurnLerpLowRate": "1.38",
-				"TurnLerpMidRate": "0.96",
-				"TurnLerpHighRate": "0.73",
-				"AccelLerpLowRate": "129.01",
-				"AccelLerpMidRate": "29.26",
-				"AccelLerpHighRate": "17.2",
-				"DecelLerpLowRate": "120.16",
-				"DecelLerpMidRate": "1850",
-				"DecelLerpHighRate": "1850",
+				"TorsoTurnSpeedYaw": "108",
+				"TorsoTurnSpeedPitch": "67.5",
+				"ArmTurnSpeedYaw": "270",
+				"ArmTurnSpeedPitch": "270",
+				"TurnLerpLowRate": "1.5",
+				"TurnLerpMidRate": "1.05",
+				"TurnLerpHighRate": "0.8",
+				"AccelLerpLowRate": "149.36",
+				"AccelLerpMidRate": "33.87",
+				"AccelLerpHighRate": "19.91",
+				"DecelLerpLowRate": "131.08",
+				"DecelLerpMidRate": "2000",
+				"DecelLerpHighRate": "2000",
 				"ReverseSpeedMultiplier": "0.666",
 				"MaxTorsoAngleYaw": "125",
 				"MaxTorsoAnglePitch": "20",
@@ -21909,19 +22117,15 @@ var DummyMechData = {
 			}, {
 				"name": "islargelaser_range_multiplier",
 				"translated_name": "LARGE LASER RANGE",
-				"value": 0.1
+				"value": 0.05
 			}, {
 				"name": "energy_range_multiplier",
 				"translated_name": "ENERGY RANGE",
-				"value": 0.1
+				"value": 0.05
 			}, {
 				"name": "energy_cooldown_multiplier",
 				"translated_name": "ENERGY COOLDOWN",
 				"value": -0.1
-			}, {
-				"name": "laser_duration_multiplier",
-				"translated_name": "LASER DURATION",
-				"value": -0.05
 			}, {
 				"name": "internalresist_la_additive",
 				"translated_name": "BASE STRUCTURE (LA)",
@@ -22039,6 +22243,10 @@ var DummyMechData = {
 				"name": "armorresist_ra_additive",
 				"translated_name": "BASE ARMOR (RA)",
 				"value": 16
+			}, {
+				"name": "energy_cooldown_multiplier",
+				"translated_name": "ENERGY COOLDOWN",
+				"value": -0.1
 			}]
 		}
 	},
@@ -22207,6 +22415,10 @@ var DummyMechData = {
 				"translated_name": "ER LARGE LASER COOLDOWN",
 				"value": -0.05
 			}, {
+				"name": "missile_cooldown_multiplier",
+				"translated_name": "MISSILE COOLDOWN",
+				"value": -0.1
+			}, {
 				"name": "energy_cooldown_multiplier",
 				"translated_name": "ENERGY COOLDOWN",
 				"value": -0.1
@@ -22215,9 +22427,17 @@ var DummyMechData = {
 				"translated_name": "Energy Heat",
 				"value": -0.1
 			}, {
-				"name": "internalresist_ct_additive",
-				"translated_name": "BASE STRUCTURE (CT)",
-				"value": 11
+				"name": "armorresist_ct_additive",
+				"translated_name": "BASE ARMOR (CT)",
+				"value": 15
+			}, {
+				"name": "armorresist_lt_additive",
+				"translated_name": "BASE ARMOR (LT)",
+				"value": 10
+			}, {
+				"name": "armorresist_rt_additive",
+				"translated_name": "BASE ARMOR (RT)",
+				"value": 10
 			}, {
 				"name": "armorresist_ll_additive",
 				"translated_name": "BASE ARMOR (LL)",
@@ -22311,6 +22531,10 @@ var DummyMechData = {
 			"quirks": [{
 				"name": "energy_heat_multiplier",
 				"translated_name": "Energy Heat",
+				"value": -0.1
+			}, {
+				"name": "missile_cooldown_multiplier",
+				"translated_name": "MISSILE COOLDOWN",
 				"value": -0.1
 			}, {
 				"name": "internalresist_ct_additive",
@@ -22410,6 +22634,10 @@ var DummyMechData = {
 				"name": "energy_heat_multiplier",
 				"translated_name": "Energy Heat",
 				"value": -0.05
+			}, {
+				"name": "ppc_velocity_multiplier",
+				"translated_name": "PPC VELOCITY",
+				"value": 0.1
 			}, {
 				"name": "armorresist_la_additive",
 				"translated_name": "BASE ARMOR (LA)",
@@ -22544,6 +22772,10 @@ var DummyMechData = {
 				"name": "internalresist_rl_additive",
 				"translated_name": "BASE STRUCTURE (RL)",
 				"value": 17
+			}, {
+				"name": "missile_spread_multiplier",
+				"translated_name": "MISSILE SPREAD",
+				"value": -0.1
 			}]
 		}
 	},
@@ -22748,6 +22980,14 @@ var DummyMechData = {
 				"name": "missile_cooldown_multiplier",
 				"translated_name": "MISSILE COOLDOWN",
 				"value": -0.15
+			}, {
+				"name": "missile_spread_multiplier",
+				"translated_name": "MISSILE SPREAD",
+				"value": -0.05
+			}, {
+				"name": "missile_velocity_multiplier",
+				"translated_name": "MISSILE VELOCITY",
+				"value": 0.1
 			}, {
 				"name": "internalresist_ct_additive",
 				"translated_name": "BASE STRUCTURE (CT)",
@@ -23967,31 +24207,31 @@ var DummyMechData = {
 			}, {
 				"name": "armorresist_ct_additive",
 				"translated_name": "BASE ARMOR (CT)",
-				"value": 10
+				"value": 20
 			}, {
 				"name": "armorresist_lt_additive",
 				"translated_name": "BASE ARMOR (LT)",
-				"value": 7
+				"value": 14
 			}, {
 				"name": "armorresist_rt_additive",
 				"translated_name": "BASE ARMOR (RT)",
-				"value": 7
+				"value": 14
 			}, {
 				"name": "armorresist_la_additive",
 				"translated_name": "BASE ARMOR (LA)",
-				"value": 5
+				"value": 10
 			}, {
 				"name": "armorresist_ra_additive",
 				"translated_name": "BASE ARMOR (RA)",
-				"value": 5
+				"value": 14
 			}, {
 				"name": "armorresist_ll_additive",
 				"translated_name": "BASE ARMOR (LL)",
-				"value": 7
+				"value": 14
 			}, {
 				"name": "armorresist_rl_additive",
 				"translated_name": "BASE ARMOR (RL)",
-				"value": 7
+				"value": 14
 			}]
 		}
 	},
@@ -24104,7 +24344,7 @@ var DummyMechData = {
 			}, {
 				"name": "armorresist_ra_additive",
 				"translated_name": "BASE ARMOR (RA)",
-				"value": 10
+				"value": 14
 			}, {
 				"name": "armorresist_ll_additive",
 				"translated_name": "BASE ARMOR (LL)",
@@ -24213,31 +24453,31 @@ var DummyMechData = {
 			}, {
 				"name": "armorresist_ct_additive",
 				"translated_name": "BASE ARMOR (CT)",
-				"value": 10
+				"value": 20
 			}, {
 				"name": "armorresist_lt_additive",
 				"translated_name": "BASE ARMOR (LT)",
-				"value": 7
+				"value": 14
 			}, {
 				"name": "armorresist_rt_additive",
 				"translated_name": "BASE ARMOR (RT)",
-				"value": 7
+				"value": 14
 			}, {
 				"name": "armorresist_la_additive",
 				"translated_name": "BASE ARMOR (LA)",
-				"value": 5
+				"value": 10
 			}, {
 				"name": "armorresist_ra_additive",
 				"translated_name": "BASE ARMOR (RA)",
-				"value": 5
+				"value": 14
 			}, {
 				"name": "armorresist_ll_additive",
 				"translated_name": "BASE ARMOR (LL)",
-				"value": 7
+				"value": 14
 			}, {
 				"name": "armorresist_rl_additive",
 				"translated_name": "BASE ARMOR (RL)",
-				"value": 7
+				"value": 14
 			}]
 		}
 	},
@@ -26596,31 +26836,31 @@ var DummyMechData = {
 			"quirks": [{
 				"name": "internalresist_ct_additive",
 				"translated_name": "BASE STRUCTURE (CT)",
-				"value": 29
+				"value": 18
 			}, {
 				"name": "internalresist_rt_additive",
 				"translated_name": "BASE STRUCTURE (RT)",
-				"value": 18
+				"value": 12
 			}, {
 				"name": "internalresist_lt_additive",
 				"translated_name": "BASE STRUCTURE (LT)",
-				"value": 18
+				"value": 12
 			}, {
 				"name": "internalresist_ra_additive",
 				"translated_name": "BASE STRUCTURE (RA)",
-				"value": 15
+				"value": 14
 			}, {
 				"name": "internalresist_la_additive",
 				"translated_name": "BASE STRUCTURE (LA)",
-				"value": 15
+				"value": 14
 			}, {
 				"name": "internalresist_rl_additive",
 				"translated_name": "BASE STRUCTURE (RL)",
-				"value": 18
+				"value": 12
 			}, {
 				"name": "internalresist_ll_additive",
 				"translated_name": "BASE STRUCTURE (LL)",
-				"value": 18
+				"value": 12
 			}]
 		}
 	},
@@ -26855,11 +27095,11 @@ var DummyMechData = {
 			}, {
 				"name": "armorresist_rl_additive",
 				"translated_name": "BASE ARMOR (RL)",
-				"value": 10
+				"value": 12
 			}, {
 				"name": "armorresist_ll_additive",
 				"translated_name": "BASE ARMOR (LL)",
-				"value": 10
+				"value": 12
 			}]
 		}
 	},
@@ -27046,31 +27286,15 @@ var DummyMechData = {
 			"quirks": [{
 				"name": "internalresist_ct_additive",
 				"translated_name": "BASE STRUCTURE (CT)",
-				"value": 20
-			}, {
-				"name": "internalresist_rt_additive",
-				"translated_name": "BASE STRUCTURE (RT)",
-				"value": 14
-			}, {
-				"name": "internalresist_lt_additive",
-				"translated_name": "BASE STRUCTURE (LT)",
-				"value": 14
-			}, {
-				"name": "internalresist_ra_additive",
-				"translated_name": "BASE STRUCTURE (RA)",
-				"value": 10
-			}, {
-				"name": "internalresist_la_additive",
-				"translated_name": "BASE STRUCTURE (LA)",
-				"value": 10
+				"value": 11
 			}, {
 				"name": "internalresist_rl_additive",
 				"translated_name": "BASE STRUCTURE (RL)",
-				"value": 14
+				"value": 15
 			}, {
 				"name": "internalresist_ll_additive",
 				"translated_name": "BASE STRUCTURE (LL)",
-				"value": 14
+				"value": 15
 			}, {
 				"name": "energy_range_multiplier",
 				"translated_name": "ENERGY RANGE",
@@ -27184,7 +27408,7 @@ var DummyMechData = {
 			}, {
 				"name": "ballistic_cooldown_multiplier",
 				"translated_name": "BALLISTIC COOLDOWN",
-				"value": -0.05
+				"value": -0.15
 			}, {
 				"name": "isultraautocannon5_jamchance_multiplier",
 				"translated_name": "UAC\/5 JAM CHANCE",
@@ -27193,6 +27417,10 @@ var DummyMechData = {
 				"name": "energy_range_multiplier",
 				"translated_name": "ENERGY RANGE",
 				"value": 0.05
+			}, {
+				"name": "lrm_velocity_multiplier",
+				"translated_name": "LRM 5\/10\/15\/20 VELOCITY",
+				"value": 0.1
 			}]
 		}
 	},
@@ -27330,19 +27558,19 @@ var DummyMechData = {
 			"tuning_config": {
 				"MovementArchetype": "Medium",
 				"MaxMovementSpeed": "16.2",
-				"TorsoTurnSpeedYaw": "99",
-				"TorsoTurnSpeedPitch": "61.88",
-				"ArmTurnSpeedYaw": "247.5",
-				"ArmTurnSpeedPitch": "247.5",
-				"TurnLerpLowRate": "1.38",
-				"TurnLerpMidRate": "0.96",
-				"TurnLerpHighRate": "0.73",
-				"AccelLerpLowRate": "129.01",
-				"AccelLerpMidRate": "29.26",
-				"AccelLerpHighRate": "17.2",
-				"DecelLerpLowRate": "120.16",
-				"DecelLerpMidRate": "1850",
-				"DecelLerpHighRate": "1850",
+				"TorsoTurnSpeedYaw": "108",
+				"TorsoTurnSpeedPitch": "67.5",
+				"ArmTurnSpeedYaw": "270",
+				"ArmTurnSpeedPitch": "270",
+				"TurnLerpLowRate": "1.5",
+				"TurnLerpMidRate": "1.05",
+				"TurnLerpHighRate": "0.8",
+				"AccelLerpLowRate": "149.36",
+				"AccelLerpMidRate": "33.87",
+				"AccelLerpHighRate": "19.91",
+				"DecelLerpLowRate": "131.08",
+				"DecelLerpMidRate": "2000",
+				"DecelLerpHighRate": "2000",
 				"ReverseSpeedMultiplier": "0.666",
 				"MaxTorsoAngleYaw": "125",
 				"MaxTorsoAnglePitch": "20",
@@ -27374,19 +27602,15 @@ var DummyMechData = {
 			}, {
 				"name": "islargelaser_range_multiplier",
 				"translated_name": "LARGE LASER RANGE",
-				"value": 0.1
+				"value": 0.05
 			}, {
 				"name": "energy_range_multiplier",
 				"translated_name": "ENERGY RANGE",
-				"value": 0.1
+				"value": 0.05
 			}, {
 				"name": "energy_cooldown_multiplier",
 				"translated_name": "ENERGY COOLDOWN",
 				"value": -0.1
-			}, {
-				"name": "laser_duration_multiplier",
-				"translated_name": "LASER DURATION",
-				"value": -0.05
 			}, {
 				"name": "internalresist_la_additive",
 				"translated_name": "BASE STRUCTURE (LA)",
@@ -27516,19 +27740,19 @@ var DummyMechData = {
 				"MovementArchetype": "Huge",
 				"MinClimbAngle": "25",
 				"MaxMovementSpeed": "16.2",
-				"TorsoTurnSpeedYaw": "90",
-				"TorsoTurnSpeedPitch": "56.25",
-				"ArmTurnSpeedYaw": "225",
-				"ArmTurnSpeedPitch": "225",
-				"TurnLerpLowRate": "1.25",
-				"TurnLerpMidRate": "0.88",
-				"TurnLerpHighRate": "0.67",
-				"AccelLerpLowRate": "108.67",
-				"AccelLerpMidRate": "24.64",
-				"AccelLerpHighRate": "14.49",
-				"DecelLerpLowRate": "109.24",
-				"DecelLerpMidRate": "1700",
-				"DecelLerpHighRate": "1700",
+				"TorsoTurnSpeedYaw": "94.5",
+				"TorsoTurnSpeedPitch": "59.06",
+				"ArmTurnSpeedYaw": "236.25",
+				"ArmTurnSpeedPitch": "236.25",
+				"TurnLerpLowRate": "1.31",
+				"TurnLerpMidRate": "0.92",
+				"TurnLerpHighRate": "0.7",
+				"AccelLerpLowRate": "118.84",
+				"AccelLerpMidRate": "26.95",
+				"AccelLerpHighRate": "15.85",
+				"DecelLerpLowRate": "114.7",
+				"DecelLerpMidRate": "1775",
+				"DecelLerpHighRate": "1775",
 				"ReverseSpeedMultiplier": "0.666",
 				"MaxTorsoAngleYaw": "110",
 				"MaxTorsoAnglePitch": "20",
@@ -27554,17 +27778,9 @@ var DummyMechData = {
 			},
 			"max_armor": 462,
 			"quirks": [{
-				"name": "energy_cooldown_multiplier",
-				"translated_name": "ENERGY COOLDOWN",
-				"value": -0.05
-			}, {
-				"name": "energy_range_multiplier",
-				"translated_name": "ENERGY RANGE",
-				"value": 0.05
-			}, {
-				"name": "energy_heat_multiplier",
-				"translated_name": "Energy Heat",
-				"value": -0.05
+				"name": "sensorrange_additive",
+				"translated_name": "SENSOR RANGE",
+				"value": 80
 			}, {
 				"name": "internalresist_ct_additive",
 				"translated_name": "BASE STRUCTURE (CT)",
@@ -27668,6 +27884,10 @@ var DummyMechData = {
 			},
 			"max_armor": 462,
 			"quirks": [{
+				"name": "sensorrange_additive",
+				"translated_name": "SENSOR RANGE",
+				"value": 80
+			}, {
 				"name": "energy_heat_multiplier",
 				"translated_name": "Energy Heat",
 				"value": -0.1
@@ -27780,42 +28000,38 @@ var DummyMechData = {
 			}, {
 				"name": "energy_cooldown_multiplier",
 				"translated_name": "ENERGY COOLDOWN",
-				"value": -0.1
-			}, {
-				"name": "energy_heat_multiplier",
-				"translated_name": "Energy Heat",
 				"value": -0.05
 			}, {
 				"name": "isppc_velocity_multiplier",
 				"translated_name": "IS PPC VELOCITY",
 				"value": 0.1
 			}, {
-				"name": "internalresist_ct_additive",
-				"translated_name": "BASE STRUCTURE (CT)",
+				"name": "armorresist_ct_additive",
+				"translated_name": "BASE ARMOR (CT)",
 				"value": 17
 			}, {
-				"name": "internalresist_lt_additive",
-				"translated_name": "BASE STRUCTURE (LT)",
+				"name": "armorresist_lt_additive",
+				"translated_name": "BASE ARMOR (LT)",
 				"value": 12
 			}, {
-				"name": "internalresist_rt_additive",
-				"translated_name": "BASE STRUCTURE (RT)",
+				"name": "armorresist_rt_additive",
+				"translated_name": "BASE ARMOR (RT)",
 				"value": 12
 			}, {
-				"name": "internalresist_la_additive",
-				"translated_name": "BASE STRUCTURE (LA)",
+				"name": "armorresist_ll_additive",
+				"translated_name": "BASE ARMOR (LL)",
 				"value": 9
 			}, {
-				"name": "internalresist_ra_additive",
-				"translated_name": "BASE STRUCTURE (RA)",
+				"name": "armorresist_rl_additive",
+				"translated_name": "BASE ARMOR (RL)",
 				"value": 9
 			}, {
-				"name": "internalresist_ll_additive",
-				"translated_name": "BASE STRUCTURE (LL)",
+				"name": "armorresist_la_additive",
+				"translated_name": "BASE ARMOR (LA)",
 				"value": 12
 			}, {
-				"name": "internalresist_rl_additive",
-				"translated_name": "BASE STRUCTURE (RL)",
+				"name": "armorresist_ra_additive",
+				"translated_name": "BASE ARMOR (RA)",
 				"value": 12
 			}]
 		}
@@ -27892,37 +28108,37 @@ var DummyMechData = {
 			},
 			"max_armor": 462,
 			"quirks": [{
-				"name": "energy_range_multiplier",
-				"translated_name": "ENERGY RANGE",
-				"value": 0.15
+				"name": "laser_duration_multiplier",
+				"translated_name": "LASER DURATION",
+				"value": -0.05
 			}, {
-				"name": "internalresist_ct_additive",
-				"translated_name": "BASE STRUCTURE (CT)",
+				"name": "armorresist_ct_additive",
+				"translated_name": "BASE ARMOR (CT)",
 				"value": 17
 			}, {
-				"name": "internalresist_lt_additive",
-				"translated_name": "BASE STRUCTURE (LT)",
+				"name": "armorresist_lt_additive",
+				"translated_name": "BASE ARMOR (LT)",
 				"value": 12
 			}, {
-				"name": "internalresist_rt_additive",
-				"translated_name": "BASE STRUCTURE (RT)",
+				"name": "armorresist_rt_additive",
+				"translated_name": "BASE ARMOR (RT)",
 				"value": 12
 			}, {
-				"name": "internalresist_la_additive",
-				"translated_name": "BASE STRUCTURE (LA)",
+				"name": "armorresist_ll_additive",
+				"translated_name": "BASE ARMOR (LL)",
+				"value": 12
+			}, {
+				"name": "armorresist_rl_additive",
+				"translated_name": "BASE ARMOR (RL)",
+				"value": 12
+			}, {
+				"name": "armorresist_la_additive",
+				"translated_name": "BASE ARMOR (LA)",
 				"value": 9
 			}, {
-				"name": "internalresist_ra_additive",
-				"translated_name": "BASE STRUCTURE (RA)",
+				"name": "armorresist_ra_additive",
+				"translated_name": "BASE ARMOR (RA)",
 				"value": 9
-			}, {
-				"name": "internalresist_ll_additive",
-				"translated_name": "BASE STRUCTURE (LL)",
-				"value": 12
-			}, {
-				"name": "internalresist_rl_additive",
-				"translated_name": "BASE STRUCTURE (RL)",
-				"value": 12
 			}]
 		}
 	},
@@ -28005,25 +28221,25 @@ var DummyMechData = {
 				"translated_name": "BASE STRUCTURE (RT)",
 				"value": 10
 			}, {
-				"name": "islrm15_cooldown_multiplier",
-				"translated_name": "LRM 15 COOLDOWN",
+				"name": "lrm_cooldown_multiplier",
+				"translated_name": "LRM 5\/10\/15\/20 COOLDOWN",
 				"value": -0.1
 			}, {
 				"name": "missile_heat_multiplier",
 				"translated_name": "MISSILE HEAT GENERATION",
-				"value": -0.15
+				"value": -0.1
 			}, {
 				"name": "ballistic_cooldown_multiplier",
 				"translated_name": "BALLISTIC COOLDOWN",
 				"value": -0.05
 			}, {
-				"name": "iserlargelaser_cooldown_multiplier",
-				"translated_name": "ER LARGE LASER COOLDOWN",
+				"name": "energy_cooldown_multiplier",
+				"translated_name": "ENERGY COOLDOWN",
 				"value": -0.1
 			}, {
 				"name": "energy_range_multiplier",
 				"translated_name": "ENERGY RANGE",
-				"value": 0.15
+				"value": 0.1
 			}]
 		}
 	},
@@ -28108,11 +28324,7 @@ var DummyMechData = {
 			}, {
 				"name": "ballistic_range_multiplier",
 				"translated_name": "BALLISTIC RANGE",
-				"value": 0.1
-			}, {
-				"name": "ballistic_heat_multiplier",
-				"translated_name": "Ballistics Heat",
-				"value": -0.05
+				"value": 0.05
 			}, {
 				"name": "missile_cooldown_multiplier",
 				"translated_name": "MISSILE COOLDOWN",
@@ -28122,8 +28334,16 @@ var DummyMechData = {
 				"translated_name": "MISSILE VELOCITY",
 				"value": 0.1
 			}, {
+				"name": "missile_spread_multiplier",
+				"translated_name": "MISSILE SPREAD",
+				"value": -0.05
+			}, {
 				"name": "energy_cooldown_multiplier",
 				"translated_name": "ENERGY COOLDOWN",
+				"value": -0.15
+			}, {
+				"name": "laser_duration_multiplier",
+				"translated_name": "LASER DURATION",
 				"value": -0.1
 			}]
 		}
@@ -28217,7 +28437,7 @@ var DummyMechData = {
 			}, {
 				"name": "isppc_velocity_multiplier",
 				"translated_name": "IS PPC VELOCITY",
-				"value": 0.1
+				"value": 0.3
 			}, {
 				"name": "isppc_heat_multiplier",
 				"translated_name": "PPC HEAT GENERATION",
@@ -28226,6 +28446,18 @@ var DummyMechData = {
 				"name": "energy_heat_multiplier",
 				"translated_name": "Energy Heat",
 				"value": -0.05
+			}, {
+				"name": "missile_cooldown_multiplier",
+				"translated_name": "MISSILE COOLDOWN",
+				"value": -0.1
+			}, {
+				"name": "missile_velocity_multiplier",
+				"translated_name": "MISSILE VELOCITY",
+				"value": 0.1
+			}, {
+				"name": "missile_spread_multiplier",
+				"translated_name": "MISSILE SPREAD",
+				"value": -0.1
 			}, {
 				"name": "ballistic_cooldown_multiplier",
 				"translated_name": "BALLISTIC COOLDOWN",
@@ -28312,9 +28544,13 @@ var DummyMechData = {
 				"translated_name": "LASER HEAT GENERATION",
 				"value": -0.1
 			}, {
+				"name": "ballistic_cooldown_multiplier",
+				"translated_name": "BALLISTIC COOLDOWN",
+				"value": -0.1
+			}, {
 				"name": "ultraautocannon_jamchance_multiplier",
 				"translated_name": "UAC JAM CHANCE",
-				"value": -0.1
+				"value": -0.2
 			}, {
 				"name": "internalresist_lt_additive",
 				"translated_name": "BASE STRUCTURE (LT)",
@@ -28327,6 +28563,14 @@ var DummyMechData = {
 				"name": "missile_velocity_multiplier",
 				"translated_name": "MISSILE VELOCITY",
 				"value": 0.1
+			}, {
+				"name": "missile_cooldown_multiplier",
+				"translated_name": "MISSILE COOLDOWN",
+				"value": -0.1
+			}, {
+				"name": "missile_spread_multiplier",
+				"translated_name": "MISSILE SPREAD",
+				"value": -0.05
 			}]
 		}
 	},
@@ -29428,6 +29672,10 @@ var DummyMechData = {
 			},
 			"max_armor": 494,
 			"quirks": [{
+				"name": "ballistic_cooldown_multiplier",
+				"translated_name": "BALLISTIC COOLDOWN",
+				"value": -0.1
+			}, {
 				"name": "ballistic_velocity_multiplier",
 				"translated_name": "BALLISTIC VELOCITY",
 				"value": 0.05
@@ -29435,6 +29683,10 @@ var DummyMechData = {
 				"name": "energy_heat_multiplier",
 				"translated_name": "Energy Heat",
 				"value": -0.05
+			}, {
+				"name": "energy_cooldown_multiplier",
+				"translated_name": "ENERGY COOLDOWN",
+				"value": -0.1
 			}, {
 				"name": "laser_duration_multiplier",
 				"translated_name": "LASER DURATION",
@@ -30092,8 +30344,8 @@ var DummyMechData = {
 				"MovementArchetype": "Large",
 				"MinClimbAngle": "20",
 				"MaxMovementSpeed": "16.2",
-				"TorsoTurnSpeedYaw": "54",
-				"TorsoTurnSpeedPitch": "33.75",
+				"TorsoTurnSpeedYaw": "63",
+				"TorsoTurnSpeedPitch": "39.38",
 				"ArmTurnSpeedYaw": "135",
 				"ArmTurnSpeedPitch": "135",
 				"TurnLerpLowRate": "0.75",
@@ -30130,32 +30382,48 @@ var DummyMechData = {
 			},
 			"max_armor": 614,
 			"quirks": [{
-				"name": "ballistic_cooldown_multiplier",
-				"translated_name": "BALLISTIC COOLDOWN",
-				"value": -0.05
-			}, {
 				"name": "ballistic_velocity_multiplier",
 				"translated_name": "BALLISTIC VELOCITY",
-				"value": 0.1
+				"value": 0.05
+			}, {
+				"name": "ballistic_cooldown_multiplier",
+				"translated_name": "BALLISTIC COOLDOWN",
+				"value": -0.1
+			}, {
+				"name": "isautocannon20_cooldown_multiplier",
+				"translated_name": "AC\/20 COOLDOWN",
+				"value": -0.05
 			}, {
 				"name": "energy_cooldown_multiplier",
 				"translated_name": "ENERGY COOLDOWN",
 				"value": -0.05
 			}, {
-				"name": "energy_range_multiplier",
-				"translated_name": "ENERGY RANGE",
-				"value": 0.1
-			}, {
 				"name": "missile_cooldown_multiplier",
 				"translated_name": "MISSILE COOLDOWN",
 				"value": -0.05
 			}, {
+				"name": "lrm_spread_multiplier",
+				"translated_name": "LRM 5\/10\/15\/20 SPREAD",
+				"value": -0.05
+			}, {
 				"name": "armorresist_la_additive",
 				"translated_name": "BASE ARMOR (LA)",
-				"value": 17
+				"value": 10
 			}, {
 				"name": "armorresist_ra_additive",
 				"translated_name": "BASE ARMOR (RA)",
+				"value": 10
+			}, {
+				"name": "armorresist_ct_additive",
+				"translated_name": "BASE ARMOR (CT)",
+				"value": 25
+			}, {
+				"name": "armorresist_lt_additive",
+				"translated_name": "BASE ARMOR (LT)",
+				"value": 17
+			}, {
+				"name": "armorresist_rt_additive",
+				"translated_name": "BASE ARMOR (RT)",
 				"value": 17
 			}]
 		}
@@ -33537,31 +33805,31 @@ var DummyMechData = {
 			"quirks": [{
 				"name": "internalresist_ct_additive",
 				"translated_name": "BASE STRUCTURE (CT)",
-				"value": 29
+				"value": 18
 			}, {
 				"name": "internalresist_rt_additive",
 				"translated_name": "BASE STRUCTURE (RT)",
-				"value": 18
+				"value": 12
 			}, {
 				"name": "internalresist_lt_additive",
 				"translated_name": "BASE STRUCTURE (LT)",
-				"value": 18
+				"value": 12
 			}, {
 				"name": "internalresist_ra_additive",
 				"translated_name": "BASE STRUCTURE (RA)",
-				"value": 15
+				"value": 14
 			}, {
 				"name": "internalresist_la_additive",
 				"translated_name": "BASE STRUCTURE (LA)",
-				"value": 15
+				"value": 14
 			}, {
 				"name": "internalresist_rl_additive",
 				"translated_name": "BASE STRUCTURE (RL)",
-				"value": 18
+				"value": 12
 			}, {
 				"name": "internalresist_ll_additive",
 				"translated_name": "BASE STRUCTURE (LL)",
-				"value": 18
+				"value": 12
 			}]
 		}
 	},
@@ -35941,6 +36209,10 @@ var DummyMechData = {
 			},
 			"max_armor": 494,
 			"quirks": [{
+				"name": "ballistic_cooldown_multiplier",
+				"translated_name": "BALLISTIC COOLDOWN",
+				"value": -0.1
+			}, {
 				"name": "ballistic_velocity_multiplier",
 				"translated_name": "BALLISTIC VELOCITY",
 				"value": 0.05
@@ -35948,6 +36220,10 @@ var DummyMechData = {
 				"name": "energy_heat_multiplier",
 				"translated_name": "Energy Heat",
 				"value": -0.05
+			}, {
+				"name": "energy_cooldown_multiplier",
+				"translated_name": "ENERGY COOLDOWN",
+				"value": -0.1
 			}, {
 				"name": "laser_duration_multiplier",
 				"translated_name": "LASER DURATION",
@@ -36871,22 +37147,22 @@ var DummyMechData = {
 			"tuning_config": {
 				"MovementArchetype": "Huge",
 				"MaxMovementSpeed": "16.2",
-				"TorsoTurnSpeedYaw": "67.5",
-				"TorsoTurnSpeedPitch": "42.19",
-				"ArmTurnSpeedYaw": "168.75",
-				"ArmTurnSpeedPitch": "168.75",
-				"TurnLerpLowRate": "0.94",
-				"TurnLerpMidRate": "0.66",
-				"TurnLerpHighRate": "0.5",
-				"AccelLerpLowRate": "57.81",
-				"AccelLerpMidRate": "13.11",
-				"AccelLerpHighRate": "7.71",
-				"DecelLerpLowRate": "81.93",
-				"DecelLerpMidRate": "1325",
-				"DecelLerpHighRate": "1325",
+				"TorsoTurnSpeedYaw": "63",
+				"TorsoTurnSpeedPitch": "39.38",
+				"ArmTurnSpeedYaw": "157.5",
+				"ArmTurnSpeedPitch": "157.5",
+				"TurnLerpLowRate": "0.88",
+				"TurnLerpMidRate": "0.61",
+				"TurnLerpHighRate": "0.47",
+				"AccelLerpLowRate": "47.64",
+				"AccelLerpMidRate": "10.8",
+				"AccelLerpHighRate": "6.35",
+				"DecelLerpLowRate": "76.46",
+				"DecelLerpMidRate": "1250",
+				"DecelLerpHighRate": "1250",
 				"ReverseSpeedMultiplier": "0.666",
-				"MaxTorsoAngleYaw": "100",
-				"MaxTorsoAnglePitch": "20",
+				"MaxTorsoAngleYaw": "70",
+				"MaxTorsoAnglePitch": "15",
 				"MaxArmRotationYaw": "20",
 				"MaxArmRotationPitch": "30",
 				"TurnLerpLowSpeed": "0",
@@ -36949,22 +37225,22 @@ var DummyMechData = {
 			"tuning_config": {
 				"MovementArchetype": "Huge",
 				"MaxMovementSpeed": "16.2",
-				"TorsoTurnSpeedYaw": "67.5",
-				"TorsoTurnSpeedPitch": "42.19",
-				"ArmTurnSpeedYaw": "168.75",
-				"ArmTurnSpeedPitch": "168.75",
-				"TurnLerpLowRate": "0.94",
-				"TurnLerpMidRate": "0.66",
-				"TurnLerpHighRate": "0.5",
-				"AccelLerpLowRate": "57.81",
-				"AccelLerpMidRate": "13.11",
-				"AccelLerpHighRate": "7.71",
-				"DecelLerpLowRate": "81.93",
-				"DecelLerpMidRate": "1325",
-				"DecelLerpHighRate": "1325",
+				"TorsoTurnSpeedYaw": "63",
+				"TorsoTurnSpeedPitch": "39.38",
+				"ArmTurnSpeedYaw": "157.5",
+				"ArmTurnSpeedPitch": "157.5",
+				"TurnLerpLowRate": "0.88",
+				"TurnLerpMidRate": "0.61",
+				"TurnLerpHighRate": "0.47",
+				"AccelLerpLowRate": "47.64",
+				"AccelLerpMidRate": "10.8",
+				"AccelLerpHighRate": "6.35",
+				"DecelLerpLowRate": "76.46",
+				"DecelLerpMidRate": "1250",
+				"DecelLerpHighRate": "1250",
 				"ReverseSpeedMultiplier": "0.666",
-				"MaxTorsoAngleYaw": "100",
-				"MaxTorsoAnglePitch": "20",
+				"MaxTorsoAngleYaw": "70",
+				"MaxTorsoAnglePitch": "15",
 				"MaxArmRotationYaw": "20",
 				"MaxArmRotationPitch": "30",
 				"TurnLerpLowSpeed": "0",
@@ -37027,22 +37303,22 @@ var DummyMechData = {
 			"tuning_config": {
 				"MovementArchetype": "Huge",
 				"MaxMovementSpeed": "16.2",
-				"TorsoTurnSpeedYaw": "67.5",
-				"TorsoTurnSpeedPitch": "42.19",
-				"ArmTurnSpeedYaw": "168.75",
-				"ArmTurnSpeedPitch": "168.75",
-				"TurnLerpLowRate": "0.94",
-				"TurnLerpMidRate": "0.66",
-				"TurnLerpHighRate": "0.5",
-				"AccelLerpLowRate": "57.81",
-				"AccelLerpMidRate": "13.11",
-				"AccelLerpHighRate": "7.71",
-				"DecelLerpLowRate": "81.93",
-				"DecelLerpMidRate": "1325",
-				"DecelLerpHighRate": "1325",
+				"TorsoTurnSpeedYaw": "63",
+				"TorsoTurnSpeedPitch": "39.38",
+				"ArmTurnSpeedYaw": "157.5",
+				"ArmTurnSpeedPitch": "157.5",
+				"TurnLerpLowRate": "0.88",
+				"TurnLerpMidRate": "0.61",
+				"TurnLerpHighRate": "0.47",
+				"AccelLerpLowRate": "47.64",
+				"AccelLerpMidRate": "10.8",
+				"AccelLerpHighRate": "6.35",
+				"DecelLerpLowRate": "76.46",
+				"DecelLerpMidRate": "1250",
+				"DecelLerpHighRate": "1250",
 				"ReverseSpeedMultiplier": "0.666",
-				"MaxTorsoAngleYaw": "100",
-				"MaxTorsoAnglePitch": "20",
+				"MaxTorsoAngleYaw": "70",
+				"MaxTorsoAnglePitch": "15",
 				"MaxArmRotationYaw": "20",
 				"MaxArmRotationPitch": "30",
 				"TurnLerpLowSpeed": "0",
@@ -37105,22 +37381,22 @@ var DummyMechData = {
 			"tuning_config": {
 				"MovementArchetype": "Huge",
 				"MaxMovementSpeed": "16.2",
-				"TorsoTurnSpeedYaw": "67.5",
-				"TorsoTurnSpeedPitch": "42.19",
-				"ArmTurnSpeedYaw": "168.75",
-				"ArmTurnSpeedPitch": "168.75",
-				"TurnLerpLowRate": "0.94",
-				"TurnLerpMidRate": "0.66",
-				"TurnLerpHighRate": "0.5",
-				"AccelLerpLowRate": "57.81",
-				"AccelLerpMidRate": "13.11",
-				"AccelLerpHighRate": "7.71",
-				"DecelLerpLowRate": "81.93",
-				"DecelLerpMidRate": "1325",
-				"DecelLerpHighRate": "1325",
+				"TorsoTurnSpeedYaw": "63",
+				"TorsoTurnSpeedPitch": "39.38",
+				"ArmTurnSpeedYaw": "157.5",
+				"ArmTurnSpeedPitch": "157.5",
+				"TurnLerpLowRate": "0.88",
+				"TurnLerpMidRate": "0.61",
+				"TurnLerpHighRate": "0.47",
+				"AccelLerpLowRate": "47.64",
+				"AccelLerpMidRate": "10.8",
+				"AccelLerpHighRate": "6.35",
+				"DecelLerpLowRate": "76.46",
+				"DecelLerpMidRate": "1250",
+				"DecelLerpHighRate": "1250",
 				"ReverseSpeedMultiplier": "0.666",
-				"MaxTorsoAngleYaw": "100",
-				"MaxTorsoAnglePitch": "20",
+				"MaxTorsoAngleYaw": "70",
+				"MaxTorsoAnglePitch": "15",
 				"MaxArmRotationYaw": "20",
 				"MaxArmRotationPitch": "30",
 				"TurnLerpLowSpeed": "0",
@@ -37183,22 +37459,22 @@ var DummyMechData = {
 			"tuning_config": {
 				"MovementArchetype": "Huge",
 				"MaxMovementSpeed": "16.2",
-				"TorsoTurnSpeedYaw": "67.5",
-				"TorsoTurnSpeedPitch": "42.19",
-				"ArmTurnSpeedYaw": "168.75",
-				"ArmTurnSpeedPitch": "168.75",
-				"TurnLerpLowRate": "0.94",
-				"TurnLerpMidRate": "0.66",
-				"TurnLerpHighRate": "0.5",
-				"AccelLerpLowRate": "57.81",
-				"AccelLerpMidRate": "13.11",
-				"AccelLerpHighRate": "7.71",
-				"DecelLerpLowRate": "81.93",
-				"DecelLerpMidRate": "1325",
-				"DecelLerpHighRate": "1325",
+				"TorsoTurnSpeedYaw": "63",
+				"TorsoTurnSpeedPitch": "39.38",
+				"ArmTurnSpeedYaw": "157.5",
+				"ArmTurnSpeedPitch": "157.5",
+				"TurnLerpLowRate": "0.88",
+				"TurnLerpMidRate": "0.61",
+				"TurnLerpHighRate": "0.47",
+				"AccelLerpLowRate": "47.64",
+				"AccelLerpMidRate": "10.8",
+				"AccelLerpHighRate": "6.35",
+				"DecelLerpLowRate": "76.46",
+				"DecelLerpMidRate": "1250",
+				"DecelLerpHighRate": "1250",
 				"ReverseSpeedMultiplier": "0.666",
-				"MaxTorsoAngleYaw": "100",
-				"MaxTorsoAnglePitch": "20",
+				"MaxTorsoAngleYaw": "65",
+				"MaxTorsoAnglePitch": "15",
 				"MaxArmRotationYaw": "20",
 				"MaxArmRotationPitch": "30",
 				"TurnLerpLowSpeed": "0",
@@ -37261,22 +37537,22 @@ var DummyMechData = {
 			"tuning_config": {
 				"MovementArchetype": "Huge",
 				"MaxMovementSpeed": "16.2",
-				"TorsoTurnSpeedYaw": "67.5",
-				"TorsoTurnSpeedPitch": "42.19",
-				"ArmTurnSpeedYaw": "168.75",
-				"ArmTurnSpeedPitch": "168.75",
-				"TurnLerpLowRate": "0.94",
-				"TurnLerpMidRate": "0.66",
-				"TurnLerpHighRate": "0.5",
-				"AccelLerpLowRate": "57.81",
-				"AccelLerpMidRate": "13.11",
-				"AccelLerpHighRate": "7.71",
-				"DecelLerpLowRate": "81.93",
-				"DecelLerpMidRate": "1325",
-				"DecelLerpHighRate": "1325",
+				"TorsoTurnSpeedYaw": "63",
+				"TorsoTurnSpeedPitch": "39.38",
+				"ArmTurnSpeedYaw": "157.5",
+				"ArmTurnSpeedPitch": "157.5",
+				"TurnLerpLowRate": "0.88",
+				"TurnLerpMidRate": "0.61",
+				"TurnLerpHighRate": "0.47",
+				"AccelLerpLowRate": "47.64",
+				"AccelLerpMidRate": "10.8",
+				"AccelLerpHighRate": "6.35",
+				"DecelLerpLowRate": "76.46",
+				"DecelLerpMidRate": "1250",
+				"DecelLerpHighRate": "1250",
 				"ReverseSpeedMultiplier": "0.666",
-				"MaxTorsoAngleYaw": "100",
-				"MaxTorsoAnglePitch": "20",
+				"MaxTorsoAngleYaw": "70",
+				"MaxTorsoAnglePitch": "15",
 				"MaxArmRotationYaw": "20",
 				"MaxArmRotationPitch": "30",
 				"TurnLerpLowSpeed": "0",
@@ -37394,13 +37670,13 @@ var DummyMechData = {
 				"translated_name": "MISSILE VELOCITY",
 				"value": 0.1
 			}, {
-				"name": "internalresist_ll_additive",
-				"translated_name": "BASE STRUCTURE (LL)",
-				"value": 10
+				"name": "armorresist_ll_additive",
+				"translated_name": "BASE ARMOR (LL)",
+				"value": 12
 			}, {
-				"name": "internalresist_rl_additive",
-				"translated_name": "BASE STRUCTURE (RL)",
-				"value": 10
+				"name": "armorresist_rl_additive",
+				"translated_name": "BASE ARMOR (RL)",
+				"value": 12
 			}, {
 				"name": "armorresist_ra_additive",
 				"translated_name": "BASE ARMOR (RA)",
@@ -37607,6 +37883,10 @@ var DummyMechData = {
 			"quirks": [{
 				"name": "energy_heat_multiplier",
 				"translated_name": "Energy Heat",
+				"value": -0.1
+			}, {
+				"name": "missile_cooldown_multiplier",
+				"translated_name": "MISSILE COOLDOWN",
 				"value": -0.1
 			}, {
 				"name": "internalresist_ct_additive",
@@ -40165,19 +40445,19 @@ var DummyMechData = {
 			"tuning_config": {
 				"MovementArchetype": "Large",
 				"MaxMovementSpeed": "16.2",
-				"TorsoTurnSpeedYaw": "67.5",
-				"TorsoTurnSpeedPitch": "42.19",
-				"ArmTurnSpeedYaw": "168.75",
-				"ArmTurnSpeedPitch": "168.75",
-				"TurnLerpLowRate": "0.94",
-				"TurnLerpMidRate": "0.66",
-				"TurnLerpHighRate": "0.5",
-				"AccelLerpLowRate": "57.81",
-				"AccelLerpMidRate": "13.11",
-				"AccelLerpHighRate": "7.71",
-				"DecelLerpLowRate": "81.93",
-				"DecelLerpMidRate": "1325",
-				"DecelLerpHighRate": "1325",
+				"TorsoTurnSpeedYaw": "63",
+				"TorsoTurnSpeedPitch": "39.38",
+				"ArmTurnSpeedYaw": "157.5",
+				"ArmTurnSpeedPitch": "157.5",
+				"TurnLerpLowRate": "0.88",
+				"TurnLerpMidRate": "0.61",
+				"TurnLerpHighRate": "0.47",
+				"AccelLerpLowRate": "47.64",
+				"AccelLerpMidRate": "10.8",
+				"AccelLerpHighRate": "6.35",
+				"DecelLerpLowRate": "76.46",
+				"DecelLerpMidRate": "1250",
+				"DecelLerpHighRate": "1250",
 				"ReverseSpeedMultiplier": "0.666",
 				"MaxTorsoAngleYaw": "70",
 				"MaxTorsoAnglePitch": "20",
@@ -40311,19 +40591,19 @@ var DummyMechData = {
 			"tuning_config": {
 				"MovementArchetype": "Large",
 				"MaxMovementSpeed": "16.2",
-				"TorsoTurnSpeedYaw": "67.5",
-				"TorsoTurnSpeedPitch": "42.19",
-				"ArmTurnSpeedYaw": "168.75",
-				"ArmTurnSpeedPitch": "168.75",
-				"TurnLerpLowRate": "0.94",
-				"TurnLerpMidRate": "0.66",
-				"TurnLerpHighRate": "0.5",
-				"AccelLerpLowRate": "57.81",
-				"AccelLerpMidRate": "13.11",
-				"AccelLerpHighRate": "7.71",
-				"DecelLerpLowRate": "81.93",
-				"DecelLerpMidRate": "1325",
-				"DecelLerpHighRate": "1325",
+				"TorsoTurnSpeedYaw": "63",
+				"TorsoTurnSpeedPitch": "39.38",
+				"ArmTurnSpeedYaw": "157.5",
+				"ArmTurnSpeedPitch": "157.5",
+				"TurnLerpLowRate": "0.88",
+				"TurnLerpMidRate": "0.61",
+				"TurnLerpHighRate": "0.47",
+				"AccelLerpLowRate": "47.64",
+				"AccelLerpMidRate": "10.8",
+				"AccelLerpHighRate": "6.35",
+				"DecelLerpLowRate": "76.46",
+				"DecelLerpMidRate": "1250",
+				"DecelLerpHighRate": "1250",
 				"ReverseSpeedMultiplier": "0.666",
 				"MaxTorsoAngleYaw": "70",
 				"MaxTorsoAnglePitch": "20",
@@ -40384,19 +40664,19 @@ var DummyMechData = {
 			"tuning_config": {
 				"MovementArchetype": "Large",
 				"MaxMovementSpeed": "16.2",
-				"TorsoTurnSpeedYaw": "67.5",
-				"TorsoTurnSpeedPitch": "42.19",
-				"ArmTurnSpeedYaw": "168.75",
-				"ArmTurnSpeedPitch": "168.75",
-				"TurnLerpLowRate": "0.94",
-				"TurnLerpMidRate": "0.66",
-				"TurnLerpHighRate": "0.5",
-				"AccelLerpLowRate": "57.81",
-				"AccelLerpMidRate": "13.11",
-				"AccelLerpHighRate": "7.71",
-				"DecelLerpLowRate": "81.93",
-				"DecelLerpMidRate": "1325",
-				"DecelLerpHighRate": "1325",
+				"TorsoTurnSpeedYaw": "63",
+				"TorsoTurnSpeedPitch": "39.38",
+				"ArmTurnSpeedYaw": "157.5",
+				"ArmTurnSpeedPitch": "157.5",
+				"TurnLerpLowRate": "0.88",
+				"TurnLerpMidRate": "0.61",
+				"TurnLerpHighRate": "0.47",
+				"AccelLerpLowRate": "47.64",
+				"AccelLerpMidRate": "10.8",
+				"AccelLerpHighRate": "6.35",
+				"DecelLerpLowRate": "76.46",
+				"DecelLerpMidRate": "1250",
+				"DecelLerpHighRate": "1250",
 				"ReverseSpeedMultiplier": "0.666",
 				"MaxTorsoAngleYaw": "70",
 				"MaxTorsoAnglePitch": "20",
@@ -40413,7 +40693,7 @@ var DummyMechData = {
 				"AccelLerpHighSpeed": "1.0",
 				"MaxFreeLookYaw": "60",
 				"MaxFreeLookPitch": "40",
-				"JumpJetSpread": "4"
+				"JumpJetSpread": "0"
 			},
 			"price": {
 				"id": 496,
@@ -40457,19 +40737,19 @@ var DummyMechData = {
 			"tuning_config": {
 				"MovementArchetype": "Large",
 				"MaxMovementSpeed": "16.2",
-				"TorsoTurnSpeedYaw": "67.5",
-				"TorsoTurnSpeedPitch": "42.19",
-				"ArmTurnSpeedYaw": "168.75",
-				"ArmTurnSpeedPitch": "168.75",
-				"TurnLerpLowRate": "0.94",
-				"TurnLerpMidRate": "0.66",
-				"TurnLerpHighRate": "0.5",
-				"AccelLerpLowRate": "57.81",
-				"AccelLerpMidRate": "13.11",
-				"AccelLerpHighRate": "7.71",
-				"DecelLerpLowRate": "81.93",
-				"DecelLerpMidRate": "1325",
-				"DecelLerpHighRate": "1325",
+				"TorsoTurnSpeedYaw": "63",
+				"TorsoTurnSpeedPitch": "39.38",
+				"ArmTurnSpeedYaw": "157.5",
+				"ArmTurnSpeedPitch": "157.5",
+				"TurnLerpLowRate": "0.88",
+				"TurnLerpMidRate": "0.61",
+				"TurnLerpHighRate": "0.47",
+				"AccelLerpLowRate": "47.64",
+				"AccelLerpMidRate": "10.8",
+				"AccelLerpHighRate": "6.35",
+				"DecelLerpLowRate": "76.46",
+				"DecelLerpMidRate": "1250",
+				"DecelLerpHighRate": "1250",
 				"ReverseSpeedMultiplier": "0.666",
 				"MaxTorsoAngleYaw": "70",
 				"MaxTorsoAnglePitch": "20",
@@ -40486,7 +40766,7 @@ var DummyMechData = {
 				"AccelLerpHighSpeed": "1.0",
 				"MaxFreeLookYaw": "60",
 				"MaxFreeLookPitch": "40",
-				"JumpJetSpread": "4"
+				"JumpJetSpread": "0"
 			},
 			"price": {
 				"id": 497,
@@ -40530,19 +40810,19 @@ var DummyMechData = {
 			"tuning_config": {
 				"MovementArchetype": "Large",
 				"MaxMovementSpeed": "16.2",
-				"TorsoTurnSpeedYaw": "67.5",
-				"TorsoTurnSpeedPitch": "42.19",
-				"ArmTurnSpeedYaw": "168.75",
-				"ArmTurnSpeedPitch": "168.75",
-				"TurnLerpLowRate": "0.94",
-				"TurnLerpMidRate": "0.66",
-				"TurnLerpHighRate": "0.5",
-				"AccelLerpLowRate": "57.81",
-				"AccelLerpMidRate": "13.11",
-				"AccelLerpHighRate": "7.71",
-				"DecelLerpLowRate": "81.93",
-				"DecelLerpMidRate": "1325",
-				"DecelLerpHighRate": "1325",
+				"TorsoTurnSpeedYaw": "63",
+				"TorsoTurnSpeedPitch": "39.38",
+				"ArmTurnSpeedYaw": "157.5",
+				"ArmTurnSpeedPitch": "157.5",
+				"TurnLerpLowRate": "0.88",
+				"TurnLerpMidRate": "0.61",
+				"TurnLerpHighRate": "0.47",
+				"AccelLerpLowRate": "47.64",
+				"AccelLerpMidRate": "10.8",
+				"AccelLerpHighRate": "6.35",
+				"DecelLerpLowRate": "76.46",
+				"DecelLerpMidRate": "1250",
+				"DecelLerpHighRate": "1250",
 				"ReverseSpeedMultiplier": "0.666",
 				"MaxTorsoAngleYaw": "70",
 				"MaxTorsoAnglePitch": "20",
@@ -40603,19 +40883,19 @@ var DummyMechData = {
 			"tuning_config": {
 				"MovementArchetype": "Large",
 				"MaxMovementSpeed": "16.2",
-				"TorsoTurnSpeedYaw": "67.5",
-				"TorsoTurnSpeedPitch": "42.19",
-				"ArmTurnSpeedYaw": "168.75",
-				"ArmTurnSpeedPitch": "168.75",
-				"TurnLerpLowRate": "0.94",
-				"TurnLerpMidRate": "0.66",
-				"TurnLerpHighRate": "0.5",
-				"AccelLerpLowRate": "57.81",
-				"AccelLerpMidRate": "13.11",
-				"AccelLerpHighRate": "7.71",
-				"DecelLerpLowRate": "81.93",
-				"DecelLerpMidRate": "1325",
-				"DecelLerpHighRate": "1325",
+				"TorsoTurnSpeedYaw": "63",
+				"TorsoTurnSpeedPitch": "39.38",
+				"ArmTurnSpeedYaw": "157.5",
+				"ArmTurnSpeedPitch": "157.5",
+				"TurnLerpLowRate": "0.88",
+				"TurnLerpMidRate": "0.61",
+				"TurnLerpHighRate": "0.47",
+				"AccelLerpLowRate": "47.64",
+				"AccelLerpMidRate": "10.8",
+				"AccelLerpHighRate": "6.35",
+				"DecelLerpLowRate": "76.46",
+				"DecelLerpMidRate": "1250",
+				"DecelLerpHighRate": "1250",
 				"ReverseSpeedMultiplier": "0.666",
 				"MaxTorsoAngleYaw": "70",
 				"MaxTorsoAnglePitch": "20",
@@ -41896,7 +42176,7 @@ var DummyMechData = {
 			}, {
 				"name": "isstreaksrm_cooldown_multiplier",
 				"translated_name": "S-SRM 2 COOLDOWN",
-				"value": 0.1
+				"value": -0.1
 			}, {
 				"name": "missile_velocity_multiplier",
 				"translated_name": "MISSILE VELOCITY",
@@ -41904,7 +42184,7 @@ var DummyMechData = {
 			}, {
 				"name": "energy_cooldown_multiplier",
 				"translated_name": "ENERGY COOLDOWN",
-				"value": 0.1
+				"value": -0.1
 			}, {
 				"name": "energy_range_multiplier",
 				"translated_name": "ENERGY RANGE",
@@ -42340,7 +42620,7 @@ var DummyMechData = {
 			"masc": false,
 			"tech_slots": "1",
 			"weapon_mod_slots": "2",
-			"consumable_slots": "2",
+			"consumable_slots": "1",
 			"engine_range": {
 				"min": 100,
 				"max": 365
@@ -42449,7 +42729,7 @@ var DummyMechData = {
 			"masc": false,
 			"tech_slots": "1",
 			"weapon_mod_slots": "2",
-			"consumable_slots": "2",
+			"consumable_slots": "1",
 			"engine_range": {
 				"min": 100,
 				"max": 365
@@ -42558,7 +42838,7 @@ var DummyMechData = {
 			"masc": false,
 			"tech_slots": "1",
 			"weapon_mod_slots": "2",
-			"consumable_slots": "2",
+			"consumable_slots": "1",
 			"engine_range": {
 				"min": 100,
 				"max": 380
@@ -42663,7 +42943,7 @@ var DummyMechData = {
 			"masc": false,
 			"tech_slots": "1",
 			"weapon_mod_slots": "2",
-			"consumable_slots": "2",
+			"consumable_slots": "1",
 			"engine_range": {
 				"min": 100,
 				"max": 365
@@ -42772,7 +43052,7 @@ var DummyMechData = {
 			"masc": false,
 			"tech_slots": "1",
 			"weapon_mod_slots": "2",
-			"consumable_slots": "2",
+			"consumable_slots": "1",
 			"engine_range": {
 				"min": 100,
 				"max": 365
@@ -42869,7 +43149,7 @@ var DummyMechData = {
 		"translated_name": "DARKDEATH",
 		"translated_short_name": "ASN-DD",
 		"details": {
-			"type": "",
+			"type": "Hero",
 			"tons": "40",
 			"top_speed": 147.825,
 			"jump_jets": 7,
@@ -42877,7 +43157,7 @@ var DummyMechData = {
 			"masc": false,
 			"tech_slots": "1",
 			"weapon_mod_slots": "2",
-			"consumable_slots": "2",
+			"consumable_slots": "1",
 			"engine_range": {
 				"min": 100,
 				"max": 365
@@ -43377,11 +43657,7 @@ var DummyMechData = {
 			}, {
 				"name": "ballistic_range_multiplier",
 				"translated_name": "BALLISTIC RANGE",
-				"value": 0.1
-			}, {
-				"name": "ballistic_heat_multiplier",
-				"translated_name": "Ballistics Heat",
-				"value": -0.05
+				"value": 0.05
 			}, {
 				"name": "missile_cooldown_multiplier",
 				"translated_name": "MISSILE COOLDOWN",
@@ -43391,8 +43667,16 @@ var DummyMechData = {
 				"translated_name": "MISSILE VELOCITY",
 				"value": 0.1
 			}, {
+				"name": "missile_spread_multiplier",
+				"translated_name": "MISSILE SPREAD",
+				"value": -0.05
+			}, {
 				"name": "energy_cooldown_multiplier",
 				"translated_name": "ENERGY COOLDOWN",
+				"value": -0.15
+			}, {
+				"name": "laser_duration_multiplier",
+				"translated_name": "LASER DURATION",
 				"value": -0.1
 			}]
 		}
@@ -43716,7 +44000,7 @@ var DummyMechData = {
 			"masc": false,
 			"tech_slots": "1",
 			"weapon_mod_slots": "2",
-			"consumable_slots": "2",
+			"consumable_slots": "1",
 			"engine_range": {
 				"min": 130,
 				"max": 315
@@ -43853,7 +44137,7 @@ var DummyMechData = {
 			"masc": false,
 			"tech_slots": "1",
 			"weapon_mod_slots": "2",
-			"consumable_slots": "2",
+			"consumable_slots": "1",
 			"engine_range": {
 				"min": 130,
 				"max": 315
@@ -43994,7 +44278,7 @@ var DummyMechData = {
 			"masc": false,
 			"tech_slots": "1",
 			"weapon_mod_slots": "2",
-			"consumable_slots": "2",
+			"consumable_slots": "1",
 			"engine_range": {
 				"min": 130,
 				"max": 315
@@ -44127,7 +44411,7 @@ var DummyMechData = {
 			"masc": false,
 			"tech_slots": "1",
 			"weapon_mod_slots": "2",
-			"consumable_slots": "2",
+			"consumable_slots": "1",
 			"engine_range": {
 				"min": 130,
 				"max": 315
@@ -44264,7 +44548,7 @@ var DummyMechData = {
 			"masc": false,
 			"tech_slots": "1",
 			"weapon_mod_slots": "2",
-			"consumable_slots": "2",
+			"consumable_slots": "1",
 			"engine_range": {
 				"min": 130,
 				"max": 315
@@ -44393,7 +44677,7 @@ var DummyMechData = {
 			"masc": false,
 			"tech_slots": "1",
 			"weapon_mod_slots": "2",
-			"consumable_slots": "2",
+			"consumable_slots": "1",
 			"engine_range": {
 				"min": 130,
 				"max": 315
@@ -44534,7 +44818,7 @@ var DummyMechData = {
 			"masc": false,
 			"tech_slots": "1",
 			"weapon_mod_slots": "2",
-			"consumable_slots": "2",
+			"consumable_slots": "1",
 			"engine_range": {
 				"min": 100,
 				"max": 285
@@ -44635,7 +44919,7 @@ var DummyMechData = {
 			"masc": false,
 			"tech_slots": "1",
 			"weapon_mod_slots": "2",
-			"consumable_slots": "2",
+			"consumable_slots": "1",
 			"engine_range": {
 				"min": 100,
 				"max": 285
@@ -44732,7 +45016,7 @@ var DummyMechData = {
 			"masc": false,
 			"tech_slots": "1",
 			"weapon_mod_slots": "2",
-			"consumable_slots": "2",
+			"consumable_slots": "1",
 			"engine_range": {
 				"min": 100,
 				"max": 255
@@ -44817,7 +45101,7 @@ var DummyMechData = {
 			"masc": false,
 			"tech_slots": "1",
 			"weapon_mod_slots": "2",
-			"consumable_slots": "2",
+			"consumable_slots": "1",
 			"engine_range": {
 				"min": 100,
 				"max": 255
@@ -44910,7 +45194,7 @@ var DummyMechData = {
 			"masc": false,
 			"tech_slots": "1",
 			"weapon_mod_slots": "2",
-			"consumable_slots": "2",
+			"consumable_slots": "1",
 			"engine_range": {
 				"min": 100,
 				"max": 255
@@ -45011,7 +45295,7 @@ var DummyMechData = {
 			"masc": false,
 			"tech_slots": "1",
 			"weapon_mod_slots": "2",
-			"consumable_slots": "2",
+			"consumable_slots": "1",
 			"engine_range": {
 				"min": 100,
 				"max": 255
@@ -45094,6 +45378,1074 @@ var DummyMechData = {
 			}]
 		}
 	},
+	"548": {
+		"id": "548",
+		"name": "um-k9",
+		"faction": "InnerSphere",
+		"mech_type": "light",
+		"family": "urbanmech",
+		"chassis_translated": "URBANMECH",
+		"translated_name": "K-9",
+		"translated_short_name": "UM-K9",
+		"details": {
+			"type": "Hero",
+			"tons": "30",
+			"top_speed": 97.2,
+			"jump_jets": 4,
+			"ecm": false,
+			"masc": false,
+			"tech_slots": "1",
+			"weapon_mod_slots": "2",
+			"consumable_slots": "1",
+			"engine_range": {
+				"min": 60,
+				"max": 180
+			},
+			"hardpoints": {
+				"ams": 1,
+				"beam": 5,
+				"ballistic": 1,
+				"missle": 0,
+				"ecm": 0
+			},
+			"tuning_config": {
+				"MovementArchetype": "Tiny",
+				"MaxMovementSpeed": "16.2",
+				"TorsoTurnSpeedYaw": "139.5",
+				"TorsoTurnSpeedPitch": "87.19",
+				"ArmTurnSpeedYaw": "348.75",
+				"ArmTurnSpeedPitch": "348.75",
+				"TurnLerpLowRate": "1.94",
+				"TurnLerpMidRate": "1.36",
+				"TurnLerpHighRate": "1.03",
+				"AccelLerpLowRate": "220.56",
+				"AccelLerpMidRate": "50.01",
+				"AccelLerpHighRate": "29.41",
+				"DecelLerpLowRate": "169.31",
+				"DecelLerpMidRate": "2525",
+				"DecelLerpHighRate": "2525",
+				"ReverseSpeedMultiplier": "0.666",
+				"MaxTorsoAngleYaw": "360",
+				"MaxTorsoAnglePitch": "25",
+				"MaxArmRotationYaw": "0",
+				"MaxArmRotationPitch": "30",
+				"TurnLerpLowSpeed": "0",
+				"TurnLerpMidSpeed": "0.666",
+				"TurnLerpHighSpeed": "1.0",
+				"DecelLerpLowSpeed": "0",
+				"DecelLerpMidSpeed": "0.666",
+				"DecelLerpHighSpeed": "1.0",
+				"AccelLerpLowSpeed": "0",
+				"AccelLerpMidSpeed": "0.666",
+				"AccelLerpHighSpeed": "1.0",
+				"MaxFreeLookYaw": "60",
+				"MaxFreeLookPitch": "40",
+				"JumpJetSpread": "1.25"
+			},
+			"price": {
+				"id": 548,
+				"mc": -1,
+				"cb": -1
+			},
+			"max_armor": 210,
+			"quirks": [{
+				"name": "heatloss_multiplier",
+				"translated_name": "RATE OF HEAT LOSS",
+				"value": 0.18
+			}, {
+				"name": "ballistic_cooldown_multiplier",
+				"translated_name": "BALLISTIC COOLDOWN",
+				"value": -0.15
+			}, {
+				"name": "ballistic_range_multiplier",
+				"translated_name": "BALLISTIC RANGE",
+				"value": 0.2
+			}, {
+				"name": "ballistic_velocity_multiplier",
+				"translated_name": "BALLISTIC VELOCITY",
+				"value": 0.1
+			}, {
+				"name": "armorresist_ct_additive",
+				"translated_name": "BASE ARMOR (CT)",
+				"value": 20
+			}, {
+				"name": "armorresist_lt_additive",
+				"translated_name": "BASE ARMOR (LT)",
+				"value": 14
+			}, {
+				"name": "armorresist_rt_additive",
+				"translated_name": "BASE ARMOR (RT)",
+				"value": 14
+			}, {
+				"name": "armorresist_la_additive",
+				"translated_name": "BASE ARMOR (LA)",
+				"value": 10
+			}, {
+				"name": "armorresist_ra_additive",
+				"translated_name": "BASE ARMOR (RA)",
+				"value": 14
+			}, {
+				"name": "armorresist_ll_additive",
+				"translated_name": "BASE ARMOR (LL)",
+				"value": 14
+			}, {
+				"name": "armorresist_rl_additive",
+				"translated_name": "BASE ARMOR (RL)",
+				"value": 14
+			}]
+		}
+	},
+	"549": {
+		"id": "549",
+		"name": "wlf-gr",
+		"faction": "InnerSphere",
+		"mech_type": "light",
+		"family": "wolfhound",
+		"chassis_translated": "WOLFHOUND",
+		"translated_name": "GRINNER",
+		"translated_short_name": "WLF-GR",
+		"details": {
+			"type": "Hero",
+			"tons": "35",
+			"top_speed": 136.54285714286,
+			"jump_jets": 0,
+			"ecm": true,
+			"masc": false,
+			"tech_slots": "1",
+			"weapon_mod_slots": "2",
+			"consumable_slots": "1",
+			"engine_range": {
+				"min": 100,
+				"max": 295
+			},
+			"hardpoints": {
+				"ams": 1,
+				"beam": 5,
+				"ballistic": 0,
+				"missle": 0,
+				"ecm": 1
+			},
+			"tuning_config": {
+				"MovementArchetype": "Medium",
+				"MinClimbAngle": "35",
+				"MaxMovementSpeed": "16.2",
+				"TorsoTurnSpeedYaw": "148.5",
+				"TorsoTurnSpeedPitch": "92.81",
+				"ArmTurnSpeedYaw": "371.25",
+				"ArmTurnSpeedPitch": "371.25",
+				"TurnLerpLowRate": "2.06",
+				"TurnLerpMidRate": "1.44",
+				"TurnLerpHighRate": "1.1",
+				"AccelLerpLowRate": "240.9",
+				"AccelLerpMidRate": "54.63",
+				"AccelLerpHighRate": "32.12",
+				"DecelLerpLowRate": "180.24",
+				"DecelLerpMidRate": "2675",
+				"DecelLerpHighRate": "2675",
+				"ReverseSpeedMultiplier": "0.666",
+				"MaxTorsoAngleYaw": "110",
+				"MaxTorsoAnglePitch": "25",
+				"MaxArmRotationYaw": "40",
+				"MaxArmRotationPitch": "25",
+				"TurnLerpLowSpeed": "0",
+				"TurnLerpMidSpeed": "0.666",
+				"TurnLerpHighSpeed": "1.0",
+				"DecelLerpLowSpeed": "0",
+				"DecelLerpMidSpeed": "0.666",
+				"DecelLerpHighSpeed": "1.0",
+				"AccelLerpLowSpeed": "0",
+				"AccelLerpMidSpeed": "0.666",
+				"AccelLerpHighSpeed": "1.0",
+				"MaxFreeLookYaw": "60",
+				"MaxFreeLookPitch": "40",
+				"JumpJetSpread": "0"
+			},
+			"price": {
+				"id": 549,
+				"mc": -1,
+				"cb": -1
+			},
+			"max_armor": 238,
+			"quirks": [{
+				"name": "armorresist_ct_additive",
+				"translated_name": "BASE ARMOR (CT)",
+				"value": 11
+			}, {
+				"name": "armorresist_lt_additive",
+				"translated_name": "BASE ARMOR (LT)",
+				"value": 11
+			}, {
+				"name": "armorresist_rt_additive",
+				"translated_name": "BASE ARMOR (RT)",
+				"value": 11
+			}, {
+				"name": "armorresist_ll_additive",
+				"translated_name": "BASE ARMOR (LL)",
+				"value": 8
+			}, {
+				"name": "armorresist_rl_additive",
+				"translated_name": "BASE ARMOR (RL)",
+				"value": 8
+			}]
+		}
+	},
+	"550": {
+		"id": "550",
+		"name": "pnt-kk",
+		"faction": "InnerSphere",
+		"mech_type": "light",
+		"family": "panther",
+		"chassis_translated": "PANTHER",
+		"translated_name": "KATANA KAT",
+		"translated_short_name": "PNT-KK",
+		"details": {
+			"type": "Hero",
+			"tons": "35",
+			"top_speed": 115.71428571429,
+			"jump_jets": 8,
+			"ecm": false,
+			"masc": false,
+			"tech_slots": "1",
+			"weapon_mod_slots": "2",
+			"consumable_slots": "1",
+			"engine_range": {
+				"min": 100,
+				"max": 250
+			},
+			"hardpoints": {
+				"ams": 1,
+				"beam": 4,
+				"ballistic": 0,
+				"missle": 1,
+				"ecm": 0
+			},
+			"tuning_config": {
+				"MovementArchetype": "Medium",
+				"MinClimbAngle": "35",
+				"MaxMovementSpeed": "16.2",
+				"TorsoTurnSpeedYaw": "126",
+				"TorsoTurnSpeedPitch": "78.75",
+				"ArmTurnSpeedYaw": "315",
+				"ArmTurnSpeedPitch": "315",
+				"TurnLerpLowRate": "1.75",
+				"TurnLerpMidRate": "1.23",
+				"TurnLerpHighRate": ".93",
+				"AccelLerpLowRate": "190.4",
+				"AccelLerpMidRate": "43.09",
+				"AccelLerpHighRate": "25.34",
+				"DecelLerpLowRate": "152.93",
+				"DecelLerpMidRate": "2300",
+				"DecelLerpHighRate": "2300",
+				"ReverseSpeedMultiplier": "0.666",
+				"MaxTorsoAngleYaw": "110",
+				"MaxTorsoAnglePitch": "20",
+				"MaxArmRotationYaw": "40",
+				"MaxArmRotationPitch": "30",
+				"TurnLerpLowSpeed": "0",
+				"TurnLerpMidSpeed": "0.666",
+				"TurnLerpHighSpeed": "1.0",
+				"DecelLerpLowSpeed": "0",
+				"DecelLerpMidSpeed": "0.666",
+				"DecelLerpHighSpeed": "1.0",
+				"AccelLerpLowSpeed": "0",
+				"AccelLerpMidSpeed": "0.666",
+				"AccelLerpHighSpeed": "1.0",
+				"MaxFreeLookYaw": "60",
+				"MaxFreeLookPitch": "40",
+				"JumpJetSpread": "1.25"
+			},
+			"price": {
+				"id": 550,
+				"mc": -1,
+				"cb": -1
+			},
+			"max_armor": 238,
+			"quirks": [{
+				"name": "energy_heat_multiplier",
+				"translated_name": "Energy Heat",
+				"value": -0.15
+			}, {
+				"name": "energy_cooldown_multiplier",
+				"translated_name": "ENERGY COOLDOWN",
+				"value": -0.1
+			}, {
+				"name": "missile_cooldown_multiplier",
+				"translated_name": "MISSILE COOLDOWN",
+				"value": -0.15
+			}, {
+				"name": "armorresist_ra_additive",
+				"translated_name": "BASE ARMOR (RA)",
+				"value": 15
+			}, {
+				"name": "armorresist_la_additive",
+				"translated_name": "BASE ARMOR (LA)",
+				"value": 15
+			}, {
+				"name": "isppc_velocity_multiplier",
+				"translated_name": "IS PPC VELOCITY",
+				"value": 0.4
+			}, {
+				"name": "armorresist_ct_additive",
+				"translated_name": "BASE ARMOR (CT)",
+				"value": 12
+			}, {
+				"name": "armorresist_lt_additive",
+				"translated_name": "BASE ARMOR (LT)",
+				"value": 12
+			}, {
+				"name": "armorresist_rt_additive",
+				"translated_name": "BASE ARMOR (RT)",
+				"value": 12
+			}, {
+				"name": "armorresist_ll_additive",
+				"translated_name": "BASE ARMOR (LL)",
+				"value": 12
+			}, {
+				"name": "armorresist_rl_additive",
+				"translated_name": "BASE ARMOR (RL)",
+				"value": 12
+			}]
+		}
+	},
+	"551": {
+		"id": "551",
+		"name": "crb-fl",
+		"faction": "InnerSphere",
+		"mech_type": "medium",
+		"family": "crab",
+		"chassis_translated": "CRAB",
+		"translated_name": "FLORENTINE",
+		"translated_short_name": "CRB-FL",
+		"details": {
+			"type": "Hero",
+			"tons": "50",
+			"top_speed": 105.3,
+			"jump_jets": 0,
+			"ecm": false,
+			"masc": false,
+			"tech_slots": "1",
+			"weapon_mod_slots": "2",
+			"consumable_slots": "1",
+			"engine_range": {
+				"min": 100,
+				"max": 325
+			},
+			"hardpoints": {
+				"ams": 1,
+				"beam": 2,
+				"ballistic": 2,
+				"missle": 2,
+				"ecm": 0
+			},
+			"tuning_config": {
+				"MovementArchetype": "Small",
+				"MaxMovementSpeed": "16.2",
+				"TorsoTurnSpeedYaw": "99",
+				"TorsoTurnSpeedPitch": "61.8",
+				"ArmTurnSpeedYaw": "247.5",
+				"ArmTurnSpeedPitch": "247.5",
+				"TurnLerpLowRate": "1.38",
+				"TurnLerpMidRate": ".96",
+				"TurnLerpHighRate": ".73",
+				"AccelLerpLowRate": "129.01",
+				"AccelLerpMidRate": "29.26",
+				"AccelLerpHighRate": "17.2",
+				"DecelLerpLowRate": "120.16",
+				"DecelLerpMidRate": "1850",
+				"DecelLerpHighRate": "1850",
+				"ReverseSpeedMultiplier": "0.666",
+				"MaxTorsoAngleYaw": "115",
+				"MaxTorsoAnglePitch": "25",
+				"MaxArmRotationYaw": "35",
+				"MaxArmRotationPitch": "30",
+				"TurnLerpLowSpeed": "0",
+				"TurnLerpMidSpeed": "0.666",
+				"TurnLerpHighSpeed": "1.0",
+				"DecelLerpLowSpeed": "0",
+				"DecelLerpMidSpeed": "0.666",
+				"DecelLerpHighSpeed": "1.0",
+				"AccelLerpLowSpeed": "0",
+				"AccelLerpMidSpeed": "0.666",
+				"AccelLerpHighSpeed": "1.0",
+				"MaxFreeLookYaw": "60",
+				"MaxFreeLookPitch": "40",
+				"JumpJetSpread": "0"
+			},
+			"price": {
+				"id": 551,
+				"mc": -1,
+				"cb": -1
+			},
+			"max_armor": 338,
+			"quirks": [{
+				"name": "internalresist_ct_additive",
+				"translated_name": "BASE STRUCTURE (CT)",
+				"value": 8
+			}, {
+				"name": "internalresist_lt_additive",
+				"translated_name": "BASE STRUCTURE (LT)",
+				"value": 6
+			}, {
+				"name": "internalresist_rt_additive",
+				"translated_name": "BASE STRUCTURE (RT)",
+				"value": 6
+			}, {
+				"name": "internalresist_la_additive",
+				"translated_name": "BASE STRUCTURE (LA)",
+				"value": 4
+			}, {
+				"name": "internalresist_ra_additive",
+				"translated_name": "BASE STRUCTURE (RA)",
+				"value": 4
+			}, {
+				"name": "internalresist_ll_additive",
+				"translated_name": "BASE STRUCTURE (LL)",
+				"value": 12
+			}, {
+				"name": "internalresist_rl_additive",
+				"translated_name": "BASE STRUCTURE (RL)",
+				"value": 12
+			}, {
+				"name": "ballistic_cooldown_multiplier",
+				"translated_name": "BALLISTIC COOLDOWN",
+				"value": -0.1
+			}]
+		}
+	},
+	"552": {
+		"id": "552",
+		"name": "enf-gh",
+		"faction": "InnerSphere",
+		"mech_type": "medium",
+		"family": "enforcer",
+		"chassis_translated": "ENFORCER",
+		"translated_name": "GHILLIE",
+		"translated_short_name": "ENF-GH",
+		"details": {
+			"type": "Hero",
+			"tons": "50",
+			"top_speed": 97.2,
+			"jump_jets": 5,
+			"ecm": true,
+			"masc": false,
+			"tech_slots": "1",
+			"weapon_mod_slots": "2",
+			"consumable_slots": "1",
+			"engine_range": {
+				"min": 100,
+				"max": 300
+			},
+			"hardpoints": {
+				"ams": 1,
+				"beam": 4,
+				"ballistic": 1,
+				"missle": 0,
+				"ecm": 1
+			},
+			"tuning_config": {
+				"MovementArchetype": "Medium",
+				"MaxMovementSpeed": "16.2",
+				"TorsoTurnSpeedYaw": "108",
+				"TorsoTurnSpeedPitch": "67.5",
+				"ArmTurnSpeedYaw": "270",
+				"ArmTurnSpeedPitch": "270",
+				"TurnLerpLowRate": "1.5",
+				"TurnLerpMidRate": "1.05",
+				"TurnLerpHighRate": ".8",
+				"AccelLerpLowRate": "149.36",
+				"AccelLerpMidRate": "33.87",
+				"AccelLerpHighRate": "19.91",
+				"DecelLerpLowRate": "131.08",
+				"DecelLerpMidRate": "2000",
+				"DecelLerpHighRate": "2000",
+				"ReverseSpeedMultiplier": "0.666",
+				"MaxTorsoAngleYaw": "125",
+				"MaxTorsoAnglePitch": "20",
+				"MaxArmRotationYaw": "35",
+				"MaxArmRotationPitch": "30",
+				"TurnLerpLowSpeed": "0",
+				"TurnLerpMidSpeed": "0.666",
+				"TurnLerpHighSpeed": "1.0",
+				"DecelLerpLowSpeed": "0",
+				"DecelLerpMidSpeed": "0.666",
+				"DecelLerpHighSpeed": "1.0",
+				"AccelLerpLowSpeed": "0",
+				"AccelLerpMidSpeed": "0.666",
+				"AccelLerpHighSpeed": "1.0",
+				"MaxFreeLookYaw": "60",
+				"MaxFreeLookPitch": "40",
+				"JumpJetSpread": "1.9375"
+			},
+			"price": {
+				"id": 552,
+				"mc": -1,
+				"cb": -1
+			},
+			"max_armor": 338,
+			"quirks": [{
+				"name": "ballistic_cooldown_multiplier",
+				"translated_name": "BALLISTIC COOLDOWN",
+				"value": -0.15
+			}, {
+				"name": "internalresist_la_additive",
+				"translated_name": "BASE STRUCTURE (LA)",
+				"value": 8
+			}, {
+				"name": "internalresist_ra_additive",
+				"translated_name": "BASE STRUCTURE (RA)",
+				"value": 8
+			}, {
+				"name": "internalresist_ll_additive",
+				"translated_name": "BASE STRUCTURE (LL)",
+				"value": 12
+			}, {
+				"name": "internalresist_rl_additive",
+				"translated_name": "BASE STRUCTURE (RL)",
+				"value": 12
+			}]
+		}
+	},
+	"553": {
+		"id": "553",
+		"name": "ghr-mj",
+		"faction": "InnerSphere",
+		"mech_type": "heavy",
+		"family": "grasshopper",
+		"chassis_translated": "GRASSHOPPER",
+		"translated_name": "MJ\u00d6LNIR",
+		"translated_short_name": "GHR-MJ",
+		"details": {
+			"type": "Hero",
+			"tons": "70",
+			"top_speed": 78.685714285714,
+			"jump_jets": 4,
+			"ecm": false,
+			"masc": false,
+			"tech_slots": "1",
+			"weapon_mod_slots": "2",
+			"consumable_slots": "1",
+			"engine_range": {
+				"min": 140,
+				"max": 340
+			},
+			"hardpoints": {
+				"ams": 1,
+				"beam": 7,
+				"ballistic": 1,
+				"missle": 0,
+				"ecm": 0
+			},
+			"tuning_config": {
+				"MovementArchetype": "Huge",
+				"MinClimbAngle": "25",
+				"MaxMovementSpeed": "16.2",
+				"TorsoTurnSpeedYaw": "99",
+				"TorsoTurnSpeedPitch": "61.88",
+				"ArmTurnSpeedYaw": "247.5",
+				"ArmTurnSpeedPitch": "247.5",
+				"TurnLerpLowRate": "1.38",
+				"TurnLerpMidRate": ".96",
+				"TurnLerpHighRate": ".73",
+				"AccelLerpLowRate": "129.01",
+				"AccelLerpMidRate": "29.26",
+				"AccelLerpHighRate": "17.2",
+				"DecelLerpLowRate": "120.16",
+				"DecelLerpMidRate": "1850",
+				"DecelLerpHighRate": "1850",
+				"ReverseSpeedMultiplier": "0.666",
+				"MaxTorsoAngleYaw": "120",
+				"MaxTorsoAnglePitch": "20",
+				"MaxArmRotationYaw": "30",
+				"MaxArmRotationPitch": "30",
+				"TurnLerpLowSpeed": "0",
+				"TurnLerpMidSpeed": "0.666",
+				"TurnLerpHighSpeed": "1.0",
+				"DecelLerpLowSpeed": "0",
+				"DecelLerpMidSpeed": "0.666",
+				"DecelLerpHighSpeed": "1.0",
+				"AccelLerpLowSpeed": "0",
+				"AccelLerpMidSpeed": "0.666",
+				"AccelLerpHighSpeed": "1.0",
+				"MaxFreeLookYaw": "60",
+				"MaxFreeLookPitch": "40",
+				"JumpJetSpread": "2.625"
+			},
+			"price": {
+				"id": 553,
+				"mc": -1,
+				"cb": -1
+			},
+			"max_armor": 434,
+			"quirks": [{
+				"name": "ballistic_cooldown_multiplier",
+				"translated_name": "BALLISTIC COOLDOWN",
+				"value": -0.1
+			}, {
+				"name": "armorresist_ct_additive",
+				"translated_name": "BASE ARMOR (CT)",
+				"value": 15
+			}, {
+				"name": "armorresist_lt_additive",
+				"translated_name": "BASE ARMOR (LT)",
+				"value": 10
+			}, {
+				"name": "armorresist_rt_additive",
+				"translated_name": "BASE ARMOR (RT)",
+				"value": 10
+			}, {
+				"name": "armorresist_la_additive",
+				"translated_name": "BASE ARMOR (LA)",
+				"value": 11
+			}, {
+				"name": "armorresist_ra_additive",
+				"translated_name": "BASE ARMOR (RA)",
+				"value": 11
+			}, {
+				"name": "armorresist_ll_additive",
+				"translated_name": "BASE ARMOR (LL)",
+				"value": 15
+			}, {
+				"name": "armorresist_rl_additive",
+				"translated_name": "BASE ARMOR (RL)",
+				"value": 15
+			}]
+		}
+	},
+	"554": {
+		"id": "554",
+		"name": "bl-p-knt",
+		"faction": "InnerSphere",
+		"mech_type": "heavy",
+		"family": "blackknight",
+		"chassis_translated": "BLACK KNIGHT",
+		"translated_name": "PARTISAN",
+		"translated_short_name": "BL-P-KNT",
+		"details": {
+			"type": "",
+			"tons": "75",
+			"top_speed": 77.76,
+			"jump_jets": 0,
+			"ecm": false,
+			"masc": false,
+			"tech_slots": "1",
+			"weapon_mod_slots": "2",
+			"consumable_slots": "1",
+			"engine_range": {
+				"min": 150,
+				"max": 360
+			},
+			"hardpoints": {
+				"ams": 1,
+				"beam": 6,
+				"ballistic": 1,
+				"missle": 1,
+				"ecm": 0
+			},
+			"tuning_config": {
+				"MovementArchetype": "Huge",
+				"MinClimbAngle": "25",
+				"MaxMovementSpeed": "16.2",
+				"TorsoTurnSpeedYaw": "76.5",
+				"TorsoTurnSpeedPitch": "47.81",
+				"ArmTurnSpeedYaw": "191.25",
+				"ArmTurnSpeedPitch": "191.25",
+				"TurnLerpLowRate": "1.06",
+				"TurnLerpMidRate": ".74",
+				"TurnLerpHighRate": ".57",
+				"AccelLerpLowRate": "78.16",
+				"AccelLerpMidRate": "17.72",
+				"AccelLerpHighRate": "10.42",
+				"DecelLerpLowRate": "92.82",
+				"DecelLerpMidRate": "1475",
+				"DecelLerpHighRate": "1475",
+				"ReverseSpeedMultiplier": "0.666",
+				"MaxTorsoAngleYaw": "110",
+				"MaxTorsoAnglePitch": "20",
+				"MaxArmRotationYaw": "20",
+				"MaxArmRotationPitch": "25",
+				"TurnLerpLowSpeed": "0",
+				"TurnLerpMidSpeed": "0.666",
+				"TurnLerpHighSpeed": "1.0",
+				"DecelLerpLowSpeed": "0",
+				"DecelLerpMidSpeed": "0.666",
+				"DecelLerpHighSpeed": "1.0",
+				"AccelLerpLowSpeed": "0",
+				"AccelLerpMidSpeed": "0.666",
+				"AccelLerpHighSpeed": "1.0",
+				"MaxFreeLookYaw": "60",
+				"MaxFreeLookPitch": "40",
+				"JumpJetSpread": "0"
+			},
+			"price": {
+				"id": 554,
+				"mc": -1,
+				"cb": -1
+			},
+			"max_armor": 462,
+			"quirks": [{
+				"name": "ballistic_cooldown_multiplier",
+				"translated_name": "BALLISTIC COOLDOWN",
+				"value": -0.15
+			}, {
+				"name": "missile_cooldown_multiplier",
+				"translated_name": "MISSILE COOLDOWN",
+				"value": -0.15
+			}, {
+				"name": "armorresist_ct_additive",
+				"translated_name": "BASE ARMOR (CT)",
+				"value": 17
+			}, {
+				"name": "armorresist_lt_additive",
+				"translated_name": "BASE ARMOR (LT)",
+				"value": 12
+			}, {
+				"name": "armorresist_rt_additive",
+				"translated_name": "BASE ARMOR (RT)",
+				"value": 12
+			}, {
+				"name": "armorresist_la_additive",
+				"translated_name": "BASE ARMOR (LA)",
+				"value": 9
+			}, {
+				"name": "armorresist_ra_additive",
+				"translated_name": "BASE ARMOR (RA)",
+				"value": 9
+			}, {
+				"name": "armorresist_ll_additive",
+				"translated_name": "BASE ARMOR (LL)",
+				"value": 12
+			}, {
+				"name": "armorresist_rl_additive",
+				"translated_name": "BASE ARMOR (RL)",
+				"value": 12
+			}]
+		}
+	},
+	"555": {
+		"id": "555",
+		"name": "zeu-sk",
+		"faction": "InnerSphere",
+		"mech_type": "assault",
+		"family": "zeus",
+		"chassis_translated": "ZEUS",
+		"translated_name": "SKOKOMISH",
+		"translated_short_name": "ZEU-SK",
+		"details": {
+			"type": "Hero",
+			"tons": "80",
+			"top_speed": 81,
+			"jump_jets": 0,
+			"ecm": false,
+			"masc": false,
+			"tech_slots": "1",
+			"weapon_mod_slots": "2",
+			"consumable_slots": "1",
+			"engine_range": {
+				"min": 160,
+				"max": 400
+			},
+			"hardpoints": {
+				"ams": 1,
+				"beam": 2,
+				"ballistic": 1,
+				"missle": 4,
+				"ecm": 0
+			},
+			"tuning_config": {
+				"MovementArchetype": "Huge",
+				"MinClimbAngle": "25",
+				"MaxMovementSpeed": "16.2",
+				"TorsoTurnSpeedYaw": "94.5",
+				"TorsoTurnSpeedPitch": "59.06",
+				"ArmTurnSpeedYaw": "236.25",
+				"ArmTurnSpeedPitch": "236.25",
+				"TurnLerpLowRate": "1.31",
+				"TurnLerpMidRate": ".92",
+				"TurnLerpHighRate": ".7",
+				"AccelLerpLowRate": "118.84",
+				"AccelLerpMidRate": "26.95",
+				"AccelLerpHighRate": "15.85",
+				"DecelLerpLowRate": "114.7",
+				"DecelLerpMidRate": "1775",
+				"DecelLerpHighRate": "1775",
+				"ReverseSpeedMultiplier": "0.666",
+				"MaxTorsoAngleYaw": "90",
+				"MaxTorsoAnglePitch": "20",
+				"MaxArmRotationYaw": "20",
+				"MaxArmRotationPitch": "30",
+				"TurnLerpLowSpeed": "0",
+				"TurnLerpMidSpeed": "0.666",
+				"TurnLerpHighSpeed": "1.0",
+				"DecelLerpLowSpeed": "0",
+				"DecelLerpMidSpeed": "0.666",
+				"DecelLerpHighSpeed": "1.0",
+				"AccelLerpLowSpeed": "0",
+				"AccelLerpMidSpeed": "0.666",
+				"AccelLerpHighSpeed": "1.0",
+				"MaxFreeLookYaw": "60",
+				"MaxFreeLookPitch": "40",
+				"JumpJetSpread": "0"
+			},
+			"price": {
+				"id": 555,
+				"mc": -1,
+				"cb": -1
+			},
+			"max_armor": 494,
+			"quirks": [{
+				"name": "internalresist_ct_additive",
+				"translated_name": "BASE STRUCTURE (CT)",
+				"value": 15
+			}, {
+				"name": "internalresist_rt_additive",
+				"translated_name": "BASE STRUCTURE (RT)",
+				"value": 17
+			}, {
+				"name": "internalresist_lt_additive",
+				"translated_name": "BASE STRUCTURE (LT)",
+				"value": 17
+			}, {
+				"name": "internalresist_rl_additive",
+				"translated_name": "BASE STRUCTURE (RL)",
+				"value": 17
+			}, {
+				"name": "internalresist_ll_additive",
+				"translated_name": "BASE STRUCTURE (LL)",
+				"value": 17
+			}, {
+				"name": "ballistic_cooldown_multiplier",
+				"translated_name": "BALLISTIC COOLDOWN",
+				"value": -0.15
+			}, {
+				"name": "ballistic_velocity_multiplier",
+				"translated_name": "BALLISTIC VELOCITY",
+				"value": 0.1
+			}, {
+				"name": "nonpulselaser_duration_multiplier",
+				"translated_name": "STD and ER Laser Duration",
+				"value": -0.1
+			}, {
+				"name": "energy_cooldown_multiplier",
+				"translated_name": "ENERGY COOLDOWN",
+				"value": -0.15
+			}, {
+				"name": "energy_heat_multiplier",
+				"translated_name": "Energy Heat",
+				"value": -0.05
+			}]
+		}
+	},
+	"556": {
+		"id": "556",
+		"name": "mal-ko",
+		"faction": "InnerSphere",
+		"mech_type": "assault",
+		"family": "mauler",
+		"chassis_translated": "MAULER",
+		"translated_name": "KNOCKOUT",
+		"translated_short_name": "MAL-KO",
+		"details": {
+			"type": "Hero",
+			"tons": "90",
+			"top_speed": 58.5,
+			"jump_jets": 0,
+			"ecm": false,
+			"masc": false,
+			"tech_slots": "1",
+			"weapon_mod_slots": "2",
+			"consumable_slots": "1",
+			"engine_range": {
+				"min": 180,
+				"max": 325
+			},
+			"hardpoints": {
+				"ams": 1,
+				"beam": 4,
+				"ballistic": 2,
+				"missle": 4,
+				"ecm": 0
+			},
+			"tuning_config": {
+				"MovementArchetype": "Huge",
+				"MaxMovementSpeed": "16.2",
+				"TorsoTurnSpeedYaw": "63",
+				"TorsoTurnSpeedPitch": "39.38",
+				"ArmTurnSpeedYaw": "157.5",
+				"ArmTurnSpeedPitch": "157.5",
+				"TurnLerpLowRate": ".88",
+				"TurnLerpMidRate": ".61",
+				"TurnLerpHighRate": ".47",
+				"AccelLerpLowRate": "47.64",
+				"AccelLerpMidRate": "10.8",
+				"AccelLerpHighRate": "6.35",
+				"DecelLerpLowRate": "76.46",
+				"DecelLerpMidRate": "1250",
+				"DecelLerpHighRate": "1250",
+				"ReverseSpeedMultiplier": "0.666",
+				"MaxTorsoAngleYaw": "70",
+				"MaxTorsoAnglePitch": "20",
+				"MaxArmRotationYaw": "25",
+				"MaxArmRotationPitch": "35",
+				"TurnLerpLowSpeed": "0",
+				"TurnLerpMidSpeed": "0.666",
+				"TurnLerpHighSpeed": "1.0",
+				"DecelLerpLowSpeed": "0",
+				"DecelLerpMidSpeed": "0.666",
+				"DecelLerpHighSpeed": "1.0",
+				"AccelLerpLowSpeed": "0",
+				"AccelLerpMidSpeed": "0.666",
+				"AccelLerpHighSpeed": "1.0",
+				"MaxFreeLookYaw": "60",
+				"MaxFreeLookPitch": "40",
+				"JumpJetSpread": "0"
+			},
+			"price": {
+				"id": 556,
+				"mc": -1,
+				"cb": -1
+			},
+			"max_armor": 558,
+			"quirks": [{
+				"name": "internalresist_lt_additive",
+				"translated_name": "BASE STRUCTURE (LT)",
+				"value": 10
+			}, {
+				"name": "internalresist_rt_additive",
+				"translated_name": "BASE STRUCTURE (RT)",
+				"value": 10
+			}, {
+				"name": "ballistic_cooldown_multiplier",
+				"translated_name": "BALLISTIC COOLDOWN",
+				"value": -0.1
+			}, {
+				"name": "islbxautocannon_spread_multiplier",
+				"translated_name": "LB-X SPREAD",
+				"value": -0.05
+			}, {
+				"name": "islrm_velocity_multiplier",
+				"translated_name": "IS LRM Velocity",
+				"value": 0.1
+			}, {
+				"name": "islrm_cooldown_multiplier",
+				"translated_name": "IS LRM Cooldown",
+				"value": -0.1
+			}, {
+				"name": "missile_spread_multiplier",
+				"translated_name": "MISSILE SPREAD",
+				"value": -0.05
+			}]
+		}
+	},
+	"557": {
+		"id": "557",
+		"name": "kgc-kj",
+		"faction": "InnerSphere",
+		"mech_type": "assault",
+		"family": "kingcrab",
+		"chassis_translated": "KING CRAB",
+		"translated_name": "KAIJU",
+		"translated_short_name": "KGC-KJ",
+		"details": {
+			"type": "Hero",
+			"tons": "100",
+			"top_speed": 58.32,
+			"jump_jets": 0,
+			"ecm": false,
+			"masc": false,
+			"tech_slots": "1",
+			"weapon_mod_slots": "2",
+			"consumable_slots": "1",
+			"engine_range": {
+				"min": 200,
+				"max": 360
+			},
+			"hardpoints": {
+				"ams": 1,
+				"beam": 6,
+				"ballistic": 2,
+				"missle": 2,
+				"ecm": 0
+			},
+			"tuning_config": {
+				"MovementArchetype": "Large",
+				"MinClimbAngle": "20",
+				"MaxMovementSpeed": "16.2",
+				"TorsoTurnSpeedYaw": "54",
+				"TorsoTurnSpeedPitch": "33.75",
+				"ArmTurnSpeedYaw": "135",
+				"ArmTurnSpeedPitch": "135",
+				"TurnLerpLowRate": ".75",
+				"TurnLerpMidRate": ".53",
+				"TurnLerpHighRate": ".4",
+				"AccelLerpLowRate": "27.3",
+				"AccelLerpMidRate": "6.19",
+				"AccelLerpHighRate": "3.64",
+				"DecelLerpLowRate": "65.54",
+				"DecelLerpMidRate": "1100",
+				"DecelLerpHighRate": "1100",
+				"ReverseSpeedMultiplier": "0.666",
+				"MaxTorsoAngleYaw": "100",
+				"MaxTorsoAnglePitch": "25",
+				"MaxArmRotationYaw": "0",
+				"MaxArmRotationPitch": "30",
+				"TurnLerpLowSpeed": "0",
+				"TurnLerpMidSpeed": "0.666",
+				"TurnLerpHighSpeed": "1.0",
+				"DecelLerpLowSpeed": "0",
+				"DecelLerpMidSpeed": "0.666",
+				"DecelLerpHighSpeed": "1.0",
+				"AccelLerpLowSpeed": "0",
+				"AccelLerpMidSpeed": "0.666",
+				"AccelLerpHighSpeed": "1.0",
+				"MaxFreeLookYaw": "60",
+				"MaxFreeLookPitch": "40",
+				"JumpJetSpread": "0"
+			},
+			"price": {
+				"id": 557,
+				"mc": -1,
+				"cb": -1
+			},
+			"max_armor": 614,
+			"quirks": [{
+				"name": "energy_cooldown_multiplier",
+				"translated_name": "ENERGY COOLDOWN",
+				"value": -0.05
+			}, {
+				"name": "armorresist_lt_additive",
+				"translated_name": "BASE ARMOR (LT)",
+				"value": 17
+			}, {
+				"name": "armorresist_rt_additive",
+				"translated_name": "BASE ARMOR (RT)",
+				"value": 17
+			}, {
+				"name": "isppc_velocity_multiplier",
+				"translated_name": "IS PPC VELOCITY",
+				"value": 0.3
+			}, {
+				"name": "missile_cooldown_multiplier",
+				"translated_name": "MISSILE COOLDOWN",
+				"value": -0.1
+			}, {
+				"name": "islrm_spread_multiplier",
+				"translated_name": "IS LRM Spread",
+				"value": -0.05
+			}, {
+				"name": "armorresist_ct_additive",
+				"translated_name": "BASE ARMOR (CT)",
+				"value": 25
+			}, {
+				"name": "armorresist_la_additive",
+				"translated_name": "BASE ARMOR (LA)",
+				"value": 10
+			}, {
+				"name": "armorresist_ra_additive",
+				"translated_name": "BASE ARMOR (RA)",
+				"value": 10
+			}]
+		}
+	},
 	"990": {
 		"id": "990",
 		"name": "as7-d-dc-escort",
@@ -45126,20 +46478,20 @@ var DummyMechData = {
 			},
 			"tuning_config": {
 				"MovementArchetype": "Huge",
-				"MaxMovementSpeed": "16.2",
+				"MaxMovementSpeed": "20.0",
 				"TorsoTurnSpeedYaw": "54",
 				"TorsoTurnSpeedPitch": "33.75",
 				"ArmTurnSpeedYaw": "135",
 				"ArmTurnSpeedPitch": "135",
 				"TurnLerpLowRate": "0.75",
-				"TurnLerpMidRate": "0.525",
-				"TurnLerpHighRate": "0.39999",
-				"AccelLerpLowRate": "0.5625",
-				"AccelLerpMidRate": "0.1275",
-				"AccelLerpHighRate": "0.075",
-				"DecelLerpLowRate": "0.45",
-				"DecelLerpMidRate": "22.5",
-				"DecelLerpHighRate": "22.5",
+				"TurnLerpMidRate": "0.53",
+				"TurnLerpHighRate": "0.4",
+				"AccelLerpLowRate": "27.3",
+				"AccelLerpMidRate": "6.19",
+				"AccelLerpHighRate": "3.64",
+				"DecelLerpLowRate": "65.54",
+				"DecelLerpMidRate": "1100",
+				"DecelLerpHighRate": "1100",
 				"ReverseSpeedMultiplier": "0.666",
 				"MaxTorsoAngleYaw": "80",
 				"MaxTorsoAnglePitch": "16",
