@@ -162,6 +162,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   //Ghost heat reference: http://mwomercs.com/forums/topic/127904-heat-scale-the-maths/
   var computeHeat = function (weaponStateList) {
     let totalHeat = 0;
+    let ghostHeatGroups = {}; // weaponInfo.heatPenaltyId -> [weaponInfo]
     for (weaponState of weaponStateList) {
       //if not able to fire weapon, proceed to next in list
       if (!weaponState.active || !weaponState.weaponCycle === MechModel.WeaponCycle.READY) {
@@ -169,10 +170,53 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
       }
       let weaponInfo = weaponState.weaponInfo;
       totalHeat += Number(weaponInfo.heat);
-
-      //TODO: add ghost heat
+      //Collect weapons in the same ghost heat group
+      if (!ghostHeatGroups[weaponInfo.heatPenaltyId]) {
+        ghostHeatGroups[weaponInfo.heatPenaltyId] = [];
+      }
+      ghostHeatGroups[weaponInfo.heatPenaltyId].push(weaponInfo);
     }
-    return totalHeat;
+    //Calculate ghost heat
+    let ghostHeat = 0;
+    for (let heatPenaltyId in ghostHeatGroups) {
+      let ghostHeatForGroup = calculateGhostHeat(ghostHeatGroups[heatPenaltyId]);
+      ghostHeat += Number(ghostHeatForGroup);
+    }
+
+    return totalHeat + ghostHeat;
+  }
+
+  //TODO: Verify correctness of ghost heat method. This seems to be consistent with
+  //the original heatscale post (http://mwomercs.com/forums/topic/127904-heat-scale-the-maths/)
+  //but is not consistent with smurfy's table (http://mwo.smurfy-net.de/equipment#weapon_heatscale)
+  var calculateGhostHeat = function (weaponInfoList) {
+    const HEATMULTIPLIER = [0, 0, 0.08, 0.18, 0.30, 0.45, 0.60, 0.80, 1.10, 1.50, 2.00, 3.00, 5.00];
+    let minHeatPenaltyLevel = null; //lowest free alpha count in the group
+    //sort weaponInfoList in decreasing order of heat
+    var compareHeat = function(weaponInfo1, weaponInfo2) {
+      return Number(weaponInfo2.heat) - Number(weaponInfo1.heat);
+    }
+    weaponInfoList.sort(compareHeat);
+    for (let weaponInfo of weaponInfoList) {
+      if (weaponInfo.minHeatPenaltyLevel > minHeatPenaltyLevel) {
+        if (weaponInfo.minHeatPenaltyLevel <=0) continue; //if no heat penalty, move to next
+        if (minHeatPenaltyLevel == null || weaponInfo.minHeatPenaltyLevel < minHeatPenaltyLevel) {
+          minHeatPenaltyLevel = weaponInfo.minHeatPenaltyLevel;
+        }
+      }
+    }
+    let numWeaponsFired = weaponInfoList.length;
+    let excessWeaponCount = minHeatPenaltyLevel != null ? numWeaponsFired - minHeatPenaltyLevel + 1 : 0;
+    if (excessWeaponCount > 0) {
+      let ghostHeat = 0;
+      for (let i = 0; i < excessWeaponCount; i++) {
+        let weaponInfo = weaponInfoList[i];
+        ghostHeat += HEATMULTIPLIER[numWeaponsFired] * weaponInfo.heatPenalty * weaponInfo.heat;
+      }
+      return ghostHeat;
+    } else {
+      return 0;
+    }
   }
 
   //Computes the cooldown for a weapon on a mech, taking modifiers into account
