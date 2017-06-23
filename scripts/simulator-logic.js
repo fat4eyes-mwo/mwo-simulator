@@ -12,6 +12,9 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   // simulation faster, but not too small as to lock the browser
   const uiUpdateInterval = 50;
 
+  //Interval when ghost heat applies for weapons. 500ms
+  const ghostHeatInterval = 500;
+
   //Parameters of the simulation. Includes range, fire patterns,
   //accuracy patterns, targetting patterns
   class SimulatorParameters {
@@ -162,7 +165,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     //the ghost heat interval, not fired at the exact same time. You need to keep a
     //list of weapons fired within the past 0.5 seconds (length of ghost heat interval)
     //when computing for ghost heat.
-    let totalHeat = computeHeat(weaponsFired);
+    let totalHeat = computeHeat(mech, weaponsFired);
     mechState.heatState.currHeat += Number(totalHeat);
     mechState.updateTypes[MechModel.UpdateType.HEAT] = true;
   }
@@ -238,68 +241,62 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
 
   //Compute the heat caused by firing a set of weapons
   //Ghost heat reference: http://mwomercs.com/forums/topic/127904-heat-scale-the-maths/
-  var computeHeat = function (weaponStateList) {
+  var computeHeat = function (mech, weaponsFired) {
     let totalHeat = 0;
-    let ghostHeatGroups = {}; // weaponInfo.heatPenaltyId -> [weaponInfo]
-    for (weaponState of weaponStateList) {
-      //if not able to fire weapon, proceed to next in list
-      if (!weaponState.active
-          || !weaponState.weaponCycle === MechModel.WeaponCycle.READY) {
-        continue;
-      }
-      let weaponInfo = weaponState.weaponInfo;
-      totalHeat += Number(weaponInfo.heat);
-      //Collect weapons in the same ghost heat group
-      if (!ghostHeatGroups[weaponInfo.heatPenaltyId]) {
-        ghostHeatGroups[weaponInfo.heatPenaltyId] = [];
-      }
-      ghostHeatGroups[weaponInfo.heatPenaltyId].push(weaponInfo);
+
+    //sort weaponInfoList in increasing order of heat for ghost heat processing
+    var compareHeat = function(weaponInfo1, weaponInfo2) {
+      return Number(weaponInfo1.heat) - Number(weaponInfo2.heat);
     }
-    //Calculate ghost heat
-    let ghostHeat = 0;
-    for (let heatPenaltyId in ghostHeatGroups) {
-      let ghostHeatForGroup = calculateGhostHeat(ghostHeatGroups[heatPenaltyId]);
-      ghostHeat += Number(ghostHeatForGroup);
+    weaponsFired.sort(compareHeat);
+
+    for (weaponState of weaponsFired) {
+      let weaponInfo = weaponState.weaponInfo;
+      totalHeat += Number(weaponInfo.heat); // base heat
+      let ghostHeat = calculateGhostHeat(mech, weaponState);
+      totalHeat += ghostHeat;
     }
 
-    return totalHeat + ghostHeat;
+    return totalHeat;
   }
 
-  //TODO: Verify correctness of ghost heat method. This seems to be consistent with
-  //the original heatscale post (http://mwomercs.com/forums/topic/127904-heat-scale-the-maths/)
-  //but is not consistent with smurfy's table (http://mwo.smurfy-net.de/equipment#weapon_heatscale)
-  var calculateGhostHeat = function (weaponInfoList) {
+  class GhostHeatEntry {
+    constructor(timeFired, weaponState) {
+      this.timeFired = timeFired;
+      this.weaponState = weaponState;
+    }
+  }
+  var calculateGhostHeat = function (mech, weaponState) {
     const HEATMULTIPLIER = [0, 0, 0.08, 0.18, 0.30, 0.45, 0.60, 0.80, 1.10, 1.50, 2.00, 3.00, 5.00];
-    let minHeatPenaltyLevel = null; //lowest free alpha count in the group
-    //sort weaponInfoList in decreasing order of heat
-    var compareHeat = function(weaponInfo1, weaponInfo2) {
-      return Number(weaponInfo2.heat) - Number(weaponInfo1.heat);
+    let weaponInfo = weaponState.weaponInfo;
+
+    let mechState = mech.getMechState();
+
+    //Get the list of ghost heat weapons of the same heatPenaltyId fired from the mech
+    if (!mechState.ghostHeatMap) {
+      mechState.ghostHeatMap = {};
     }
-    weaponInfoList.sort(compareHeat);
-    for (let weaponInfo of weaponInfoList) {
-      if (weaponInfo.minHeatPenaltyLevel > minHeatPenaltyLevel) {
-        //if no heat penalty, move to next
-        if (weaponInfo.minHeatPenaltyLevel <=0) continue;
-        if (minHeatPenaltyLevel == null
-            || weaponInfo.minHeatPenaltyLevel < minHeatPenaltyLevel) {
-          minHeatPenaltyLevel = weaponInfo.minHeatPenaltyLevel;
-        }
-      }
+    let ghostHeatWeapons = mechState.ghostHeatMap[weaponInfo.heatPenaltyId];
+    if (!ghostHeatWeapons) {
+      ghostHeatWeapons = new Deque();
+      mechState.ghostHeatMap[weaponInfo.heatPenaltyId] = ghostHeatWeapons;
     }
-    let numWeaponsFired = weaponInfoList.length;
-    let excessWeaponCount = minHeatPenaltyLevel != null ?
-            numWeaponsFired - minHeatPenaltyLevel + 1 : 0;
-    if (excessWeaponCount > 0) {
-      let ghostHeat = 0;
-      for (let i = 0; i < excessWeaponCount; i++) {
-        let weaponInfo = weaponInfoList[i];
-        ghostHeat += HEATMULTIPLIER[numWeaponsFired] *
-                        weaponInfo.heatPenalty * weaponInfo.heat;
-      }
-      return ghostHeat;
-    } else {
-      return 0;
+    //Go through the list of ghost heat weapons and remove those that have been
+    //fired outside the ghost heat interval
+    while (!(ghostHeatWeapons.isEmpty()) && (simTime - ghostHeatWeapons.peekFirst().timeFired > ghostHeatInterval)) {
+      ghostHeatWeapons.removeFirst()
     }
+
+    let ghostHeatEntry = new GhostHeatEntry(simTime, weaponState);
+    ghostHeatWeapons.addLast(ghostHeatEntry);
+
+    //calcluate ghost heat
+    let ghostHeat = 0;
+    if (ghostHeatWeapons.length() >= weaponInfo.minHeatPenaltyLevel) {
+      ghostHeat = HEATMULTIPLIER[ghostHeatWeapons.length()] * Number(weaponInfo.heatPenalty) * Number(weaponInfo.heat);
+    }
+
+    return ghostHeat;
   }
 
   return {

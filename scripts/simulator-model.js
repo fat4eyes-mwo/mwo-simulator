@@ -154,6 +154,7 @@ var MechModel = MechModel || (function () {
       this.weaponStateList = weaponStateList; //[WeaponState...]
       this.ammoState = ammoState;
       this.updateTypes = {}; //Update types triggered on the current simulation step
+      this.ghostHeatMap = {}; //weaponId -> [GhostHeatEntry]. Used in ghost heat computations.
     }
   }
 

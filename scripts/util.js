@@ -28,6 +28,8 @@ function binarySearchClosest(array, key, keyCompare) {
   }
 }
 
+//Double ended queue
+//Note: can potentially break if the indices get too high due to floating point rounding
 class Deque {
   constructor() {
     this.queue = {};
@@ -49,6 +51,16 @@ class Deque {
     this.queue[this.endIdx] = obj;
   }
 
+  peekFirst() {
+    if (this.isEmpty()) throw "Deque is empty";
+    return this.queue[this.startIdx];
+  }
+
+  peekLast() {
+    if (this.isEmpty()) throw "Deque is empty";
+    return this.queue[this.endIdx];
+  }
+
   removeFirst() {
     if (this.isEmpty()) throw "Deque is empty";
     let ret = this.queue[this.startIdx];
@@ -63,6 +75,10 @@ class Deque {
     this.queue[this.endIdx] = undefined;
     this.endIdx--;
     return ret;
+  }
+
+  length() {
+    return this.endIdx - this.startIdx + 1;
   }
 
   iterator() {

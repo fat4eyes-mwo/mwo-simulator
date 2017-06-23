@@ -82,13 +82,13 @@ return {
       console.log(dq.toString());
       let ret;
       ret = dq.removeFirst();
-      console.log("ret: " + ret + " deque: " + dq.toString());
+      console.log("ret: " + ret + " deque: " + dq.toString() + " length:" + dq.length());
       ret = dq.removeFirst();
-      console.log("ret: " + ret + " deque: " + dq.toString());
+      console.log("ret: " + ret + " deque: " + dq.toString() + " length:" + dq.length());
       ret = dq.removeFirst();
-      console.log("ret: " + ret + " deque: " + dq.toString());
+      console.log("ret: " + ret + " deque: " + dq.toString() + " length:" + dq.length());
       ret = dq.removeFirst();
-      console.log("ret: " + ret + " deque: " + dq.toString());
+      console.log("ret: " + ret + " deque: " + dq.toString() + " length:" + dq.length());
       //dq.removeFirst(); //exception
 
       dq.addFirst(1);
@@ -96,13 +96,13 @@ return {
       dq.addFirst(2);
       dq.addLast(20);
       ret = dq.removeLast();
-      console.log("ret: " + ret + " deque: " + dq.toString());
+      console.log("ret: " + ret + " deque: " + dq.toString() + " length:" + dq.length());
       ret = dq.removeLast();
-      console.log("ret: " + ret + " deque: " + dq.toString());
+      console.log("ret: " + ret + " deque: " + dq.toString() + " length:" + dq.length());
       ret = dq.removeLast();
-      console.log("ret: " + ret + " deque: " + dq.toString());
+      console.log("ret: " + ret + " deque: " + dq.toString() + " length:" + dq.length());
       ret = dq.removeLast();
-      console.log("ret: " + ret + " deque: " + dq.toString());
+      console.log("ret: " + ret + " deque: " + dq.toString() + " length:" + dq.length());
       //dq.removeLast(); //exception
 
       dq.addFirst(1);
@@ -206,13 +206,13 @@ return {
     testSimulation : function() {
       MechModel.initDummyModelData();
 
-      MechModel.addMech("testCheetahId", MechModel.Team.BLUE, DummyArcticCheetah);
-      MechModel.addMech("testExecutionerId", MechModel.Team.BLUE, DummyExecutioner);
+      // MechModel.addMech("testCheetahId", MechModel.Team.BLUE, DummyArcticCheetah);
+      // MechModel.addMech("testExecutionerId", MechModel.Team.BLUE, DummyExecutioner);
       MechModel.addMech("testStormcrowId", MechModel.Team.BLUE, DummyStormcrowLowAmmo);
-      MechModel.addMech("testMaulerId", MechModel.Team.RED, DummyMauler);
-      MechModel.addMech("testFirestarterId", MechModel.Team.RED, DummyFireStarter);
+      // MechModel.addMech("testMaulerId", MechModel.Team.RED, DummyMauler);
+      // MechModel.addMech("testFirestarterId", MechModel.Team.RED, DummyFireStarter);
       MechModel.addMech("testBattlemasterId", MechModel.Team.RED, DummyBattleMaster);
-      MechModel.addMech("testShadowhawkId", MechModel.Team.RED, DummyShadowhawk);
+      // MechModel.addMech("testShadowhawkId", MechModel.Team.RED, DummyShadowhawk);
 
       MechModelView.updateFull();
       let simulatorParameters = new MechSimulatorLogic.SimulatorParameters(
