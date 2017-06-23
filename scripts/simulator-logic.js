@@ -95,7 +95,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
         //TODO: add WeaponFire to queue
       }
 
-
+      mechState.updateTypes[MechModel.UpdateType.COOLDOWN] = true;
       mechState.updateTypes[MechModel.UpdateType.WEAPONSTATE] = true;
     }
 
