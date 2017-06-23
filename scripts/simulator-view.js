@@ -263,6 +263,10 @@ var MechView = MechView || (function() {
     $("#simTime").html("Sim time: " + simTime);
   }
 
+  var setDebugText = function(debugText) {
+    $("#debugText").html(debugText);
+  }
+
   var initHandlers = function () {
     initPaperDollHandlers();
   }
@@ -270,7 +274,7 @@ var MechView = MechView || (function() {
   var onMouseOverPaperDoll = function () {
     var mechId = $(this).parent().data("mech-id");
     var location = $(this).data('location');
-    console.log (mechId + " " + location);
+    //TODO: Implement onmouseover
   }
 
   var initPaperDollHandlers = function () {

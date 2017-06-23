@@ -46,14 +46,15 @@ var MechModel = MechModel || (function () {
   };
 
   class MechInfo {
-    constructor(mechId, mechName, mechTranslatedName, mechHealth, weaponInfoList, heatsinkInfoList, ammoInfo, engineInfo) {
+    constructor(mechId, mechName, mechTranslatedName, mechHealth,
+      weaponInfoList, heatsinkInfoList, ammoBoxList, engineInfo) {
       this.mechId = mechId;
       this.mechName = mechName;
       this.mechTranslatedName = mechTranslatedName;
       this.mechHealth = mechHealth;
       this.weaponInfoList = weaponInfoList; //[WeaponInfo...]
       this.heatsinkInfoList = heatsinkInfoList; //[Heatsink...]
-      this.ammoInfo = ammoInfo; //[AmmoInfo...]
+      this.ammoBoxList = ammoBoxList; //[AmmoBox...]
       this.engineInfo = engineInfo;
     }
   }
@@ -81,6 +82,13 @@ var MechModel = MechModel || (function () {
         this.speed = speed;
         this.ammoPerShot = ammoPerShot;
       }
+      hasDuration() {
+        return Number(this.duration) > 0;
+      }
+      hasTravelTime() {
+        return Number(this.speed) > 0;
+      }
+
   }
 
   class Heatsink {
@@ -198,32 +206,81 @@ var MechModel = MechModel || (function () {
   }
 
   class AmmoState {
-    constructor(ammoCounts, ammoInfo) {
-      this.ammoCounts = ammoCounts; //weaponId->AmmoCount
-      this.ammoInfo = ammoInfo; //[AmmoInfo...]
+    constructor(sourceAmmoBoxList) {
+      this.ammoCounts = {}; //weaponId->AmmoCount
+      this.ammoBoxList = [];
+
+      for (let ammoBox of sourceAmmoBoxList) {
+        this.ammoBoxList.push(ammoBox.clone());
+      }
+
+      //sort ammoBoxList in ammo consumption order so the
+      //reference: https://mwomercs.com/forums/topic/65553-guide-ammo-depleting-priorities-or-in-what-order-is-your-ammo-being-used/
+      let ammoLocationOrderIndex = function(location) {
+        const locationOrder =
+          [Component.HEAD, Component.CENTRE_TORSO, Component.RIGHT_TORSO, Component.LEFT_TORSO,
+            Component.LEFT_ARM, Component.RIGHT_ARM, Component.LEFT_LEG, Component.RIGHT_LEG];
+        let idx = 0;
+        for (idx = 0; idx < locationOrder.length; idx++) {
+          if (location === locationOrder[idx]) {
+            return idx;
+          }
+        }
+      }
+      this.ammoBoxList.sort((x, y) => {
+        return ammoLocationOrderIndex(x.location) - ammoLocationOrderIndex(y.location);
+      });
+
+      for (let idx in this.ammoBoxList) {
+        let ammoBox = this.ammoBoxList[idx];
+        let firstWeaponId = ammoBox.weaponIds[0];
+        //Create an ammocount for the weapon if it is not yet in the map
+        if (!this.ammoCounts[firstWeaponId]) {
+          let newAmmoCount = new AmmoCount();
+          this.ammoCounts[firstWeaponId] = newAmmoCount;
+          //Map all the weapons that can use the ammo to the ammo count
+          for (let weaponId of ammoBox.weaponIds) {
+            this.ammoCounts[weaponId] = newAmmoCount;
+            this.ammoCounts[weaponId].maxAmmoCount = this.ammoCounts[weaponId].ammoCount;
+          }
+        }
+        //Add the ammoBox to the ammoCount for the weapon
+        this.ammoCounts[firstWeaponId].addAmmoBox(ammoBox);
+      }
     }
   }
 
   class AmmoCount {
-    constructor(weaponIds, ammoCount) {
-      this.weaponIds = weaponIds; //[weaponId...]
-      this.ammoCount = ammoCount; //rounds left
-      this.maxAmmoCount = 0; //Set during initialization
+    constructor() {
+      this.weaponIds = [];
+      this.ammoCount = 0;
+      this.ammoConsumptionList = [];
+      this.maxAmmoCount = 0;
+    }
+
+    addAmmoBox(ammoBox) {
+      this.weaponIds = ammoBox.weaponIds;
+      this.ammoCount += Number(ammoBox.ammoCount);
+      this.maxAmmoCount += Number(ammoBox.ammoCount);
+      this.ammoConsumptionList.push(ammoBox);
     }
   }
 
-  class AmmoInfo {
-    constructor(type, location, weaponIds, ammoCount) {
+  //Represents an ammo box on the mech.
+  class AmmoBox {
+    constructor(type, location, weaponIds, ammoCount, intact) {
       this.type = type;
       this.location = location;
       this.weaponIds = weaponIds; //[weaponId...]
       this.ammoCount = ammoCount;
+      this.intact = intact;
     }
     clone() {
-      return new AmmoInfo(this.type,
+      return new AmmoBox(this.type,
         this.location,
         this.weaponIds,
-        this.ammoCount);
+        this.ammoCount,
+        this.intact);
     }
   }
 
@@ -239,6 +296,22 @@ var MechModel = MechModel || (function () {
         this.name,
         this.heatsink.clone(),
         this.heatsinkCount);
+    }
+  }
+
+  //represents damage done to a mech
+  //A map from MechModel.Components -> ComponentDamage
+  class MechDamage {
+    constructor() {
+      this.componentDamage = {}; //Component->ComponentDamage
+    }
+  }
+
+  class ComponentDamage {
+    constructor(location, armor, structure) {
+      this.location = location;
+      this.armor = armor;
+      this.structure = structure;
     }
   }
 
@@ -413,10 +486,10 @@ var MechModel = MechModel || (function () {
     var mechHealth = mechHealthFromSmurfyMechLoadout(smurfyMechLoadout);
     var weaponInfoList = weaponInfoListFromSmurfyMechLoadout(smurfyMechLoadout);
     var heatsinkInfoList = heatsinkListFromSmurfyMechLoadout(smurfyMechLoadout);
-    var ammoInfo = ammoInfoListFromSmurfyMechLoadout(smurfyMechLoadout);
+    var ammoBoxList = ammoBoxListFromSmurfyMechLoadout(smurfyMechLoadout);
     var engineInfo = engineInfoFromSmurfyMechLoadout(smurfyMechLoadout);
 
-    mechInfo = new MechInfo(mechId, mechName, mechTranslatedName, mechHealth, weaponInfoList, heatsinkInfoList, ammoInfo, engineInfo);
+    mechInfo = new MechInfo(mechId, mechName, mechTranslatedName, mechHealth, weaponInfoList, heatsinkInfoList, ammoBoxList, engineInfo);
     return mechInfo;
   }
 
@@ -546,13 +619,13 @@ var MechModel = MechModel || (function () {
     return heatsink;
   }
 
-  var ammoInfoListFromSmurfyMechLoadout = function (smurfyMechLoadout) {
+  var ammoBoxListFromSmurfyMechLoadout = function (smurfyMechLoadout) {
     var ammoList = [];
     ammoList = collectFromSmurfyConfiguration(smurfyMechLoadout.configuration,
       function (location, smurfyMechComponentItem) {
         if (smurfyMechComponentItem.type === "ammo") {
-          let ammoInfo =ammoInfoFromSmurfyMechComponentItem(location, smurfyMechComponentItem);
-          return ammoInfo;
+          let ammoBox =ammoBoxFromSmurfyMechComponentItem(location, smurfyMechComponentItem);
+          return ammoBox;
         } else {
           return null;
         }
@@ -561,16 +634,16 @@ var MechModel = MechModel || (function () {
     return ammoList;
   }
 
-  var ammoInfoFromSmurfyMechComponentItem = function(location, smurfyMechComponentItem) {
-    var ammoInfo;
+  var ammoBoxFromSmurfyMechComponentItem = function(location, smurfyMechComponentItem) {
+    var ammoBox;
 
     let ammoData = getSmurfyAmmoData(smurfyMechComponentItem.id);
     let type = ammoData.type;
     let ammoCount = ammoData.num_shots;
     let weaponIds = ammoData.weapons;
-    ammoInfo = new AmmoInfo(type, location, weaponIds, ammoCount);
+    ammoBox = new AmmoBox(type, location, weaponIds, ammoCount, true);
 
-    return ammoInfo;
+    return ammoBox;
   }
 
 
@@ -706,30 +779,7 @@ var MechModel = MechModel || (function () {
   }
 
   var initAmmoState = function(mechInfo) {
-    let ammoInfo = [];
-    for (let ammoInfoEntry of mechInfo.ammoInfo) {
-      ammoInfo.push(ammoInfoEntry.clone());
-    }
-    let ammoCounts = {}; //map from weaponId to AmmoCount
-    for (let idx in ammoInfo) {
-      let ammoInfoEntry = ammoInfo[idx];
-      let firstWeaponId = ammoInfoEntry.weaponIds[0];
-      //Create an ammocount for the weapon if it is not yet in the map, else
-      //increment the ammocount
-      if (!ammoCounts[firstWeaponId]) {
-        let newAmmoCount = new AmmoCount(ammoInfoEntry.weaponIds, Number(ammoInfoEntry.ammoCount));
-        ammoCounts[firstWeaponId] = newAmmoCount;
-        //Map all the weapons that can use the ammo to the ammo count
-        for (let weaponId of ammoInfoEntry.weaponIds) {
-          ammoCounts[weaponId] = newAmmoCount;
-          ammoCounts[weaponId].maxAmmoCount = ammoCounts[weaponId].ammoCount;
-        }
-      } else {
-        ammoCounts[firstWeaponId].ammoCount += Number(ammoInfoEntry.ammoCount);
-        ammoCounts[firstWeaponId].maxAmmoCount = ammoCounts[firstWeaponId].ammoCount;
-      }
-    }
-    let ammoState = new AmmoState(ammoCounts, ammoInfo);
+    let ammoState = new AmmoState(mechInfo.ammoBoxList);
     return ammoState;
   }
 

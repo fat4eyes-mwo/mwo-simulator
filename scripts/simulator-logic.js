@@ -1,15 +1,49 @@
 
 var MechSimulatorLogic = MechSimulatorLogic || (function () {
 
+  //Parameters of the simulation. Includes range, fire patterns, accuracy patterns, targetting patterns
+  class SimulatorParameters {
+    constructor(range, firePattern, accuracyPattern, targettingPattern) {
+      this.range = range;
+      this.firePattern = firePattern;
+      this.accuracyPattern = accuracyPattern;
+      this.targettingPattern = targettingPattern;
+    }
+  }
+
+  class WeaponFire {
+    constructor(sourceMech, targetMech, weaponState, accuracyPattern, range) {
+      this.sourceMech = sourceMech;
+      this.targetMech = targetMech;
+      this.weaponState = weaponState;
+      this.accuracyPattern = accuracyPattern;
+      this.range = range;
+      this.damageDone = new MechModel.MechDamage();
+      let weaponInfo = weaponState.weaponInfo;
+
+      this.totalDuration = weaponInfo.hasDuration() ? Number(weaponInfo.duration) : 0;
+      this.totalTravel = weaponInfo.hasTravelTime() ? Number(range) / Number(weaponInfo.speed) * 1000 : 0; //travel time in milliseconds
+
+      this.durationLeft = this.totalDuration;
+      this.totalTravel = this.totalTravel;
+    }
+  }
+
   var simulationInterval = null;
   var simRunning = false;
   var simTime = 0;
+  var simulatorParameters;
+  var weaponFireQueue = new Deque();
 
   const stepDuration = 50; //simulation tick length in ms
 
   //interval between UI updates. Set smaller than step duration to run the
   // simulation faster, but not too small as to lock the browser
   const uiUpdateInterval = 50;
+
+  var setSimulatorParameters = function(parameters) {
+    simulatorParameters = parameters;
+  }
 
   var runSimulation = function() {
     if (!simulationInterval) {
@@ -57,11 +91,13 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
 
         processCooldowns(mech);
 
-        //Debug code
-        let weaponsToFire = MechFirePattern.alphaAtZeroHeat(mech);
+        let weaponsToFire = simulatorParameters.firePattern(mech);
         if (weaponsToFire) {
           fireWeapons(mech, weaponsToFire);
         }
+
+        //TODO: process WeaponFireQueue
+
         MechModelView.updateMech(mech);
       }
     }
@@ -221,6 +257,8 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   }
 
   return {
+    SimulatorParameters : SimulatorParameters,
+    setSimulatorParameters : setSimulatorParameters,
     runSimulation : runSimulation,
     pauseSimulation : pauseSimulation,
     resetSimulation : resetSimulation,

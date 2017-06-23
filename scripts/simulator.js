@@ -7,6 +7,7 @@ function main() {
   //MechTest.testModelBaseHealth();
   //MechTest.testModelView();
   MechTest.testSimulation();
+  // MechTest.testDeque();
 }
 
 $(document).ready(main);
