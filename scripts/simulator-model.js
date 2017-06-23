@@ -214,7 +214,8 @@ var MechModel = MechModel || (function () {
         this.ammoBoxList.push(ammoBox.clone());
       }
 
-      //sort ammoBoxList in ammo consumption order so the
+      //sort ammoBoxList in ammo consumption order so the lists in the ammoCounts
+      //are also sorted in consumption order
       //reference: https://mwomercs.com/forums/topic/65553-guide-ammo-depleting-priorities-or-in-what-order-is-your-ammo-being-used/
       let ammoLocationOrderIndex = function(location) {
         const locationOrder =
@@ -228,7 +229,8 @@ var MechModel = MechModel || (function () {
         }
       }
       this.ammoBoxList.sort((x, y) => {
-        return ammoLocationOrderIndex(x.location) - ammoLocationOrderIndex(y.location);
+        return ammoLocationOrderIndex(x.location) -
+                  ammoLocationOrderIndex(y.location);
       });
 
       for (let idx in this.ammoBoxList) {
@@ -241,7 +243,6 @@ var MechModel = MechModel || (function () {
           //Map all the weapons that can use the ammo to the ammo count
           for (let weaponId of ammoBox.weaponIds) {
             this.ammoCounts[weaponId] = newAmmoCount;
-            this.ammoCounts[weaponId].maxAmmoCount = this.ammoCounts[weaponId].ammoCount;
           }
         }
         //Add the ammoBox to the ammoCount for the weapon

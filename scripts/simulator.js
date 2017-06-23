@@ -1,13 +1,13 @@
 "use strict";
 
 function main() {
+  // MechTest.testDeque();
   // MechTest.testUIWidgets();
   // MechTest.testModelInit();
   // MechTest.testModelOps();
   //MechTest.testModelBaseHealth();
-  //MechTest.testModelView();
+  // MechTest.testModelView();
   MechTest.testSimulation();
-  // MechTest.testDeque();
 }
 
 $(document).ready(main);
