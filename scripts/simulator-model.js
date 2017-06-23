@@ -88,6 +88,9 @@ var MechModel = MechModel || (function () {
       hasTravelTime() {
         return Number(this.speed) > 0;
       }
+      requiresAmmo() {
+        return this.ammoPerShot > 0;
+      }
 
   }
 
@@ -249,21 +252,71 @@ var MechModel = MechModel || (function () {
         this.ammoCounts[firstWeaponId].addAmmoBox(ammoBox);
       }
     }
+
+    //returns the amount of ammo available for a given weapon id.
+    ammoCountForWeapon(weaponId) {
+      let ammoCount = this.ammoCounts[weaponId];
+      if (ammoCount) {
+        return ammoCount.ammoCount;
+      } else {
+        return 0;
+      }
+    }
+
+    //tries to consume a given amount of ammo for a weaponInfo
+    //returns the amount of ammo actually consumed
+    consumeAmmo(weaponId, amount) {
+      let ammoCount = this.ammoCounts[weaponId];
+      if (ammoCount) {
+        return ammoCount.consumeAmmo(amount);
+      } else {
+        return 0;
+      }
+    }
   }
 
+  //The amount of ammo for a given set of weapons
   class AmmoCount {
     constructor() {
       this.weaponIds = [];
-      this.ammoCount = 0;
-      this.ammoConsumptionList = [];
+      this.ammoCount = 0; //Total ammo count of all the boxes in the ammoBoxList
+      this.ammoBoxList = []; //[AmmoBox...]
       this.maxAmmoCount = 0;
+      this.currAmmoBoxIdx = 0;
     }
 
     addAmmoBox(ammoBox) {
       this.weaponIds = ammoBox.weaponIds;
       this.ammoCount += Number(ammoBox.ammoCount);
       this.maxAmmoCount += Number(ammoBox.ammoCount);
-      this.ammoConsumptionList.push(ammoBox);
+      this.ammoBoxList.push(ammoBox);
+    }
+
+    //tries to consume a given amount of ammo. returns the actual amount of ammo
+    //consumed
+    consumeAmmo(amount) {
+      let amountConsumed = 0;
+      while (amount > 0 && this.currAmmoBoxIdx < this.ammoBoxList.length) {
+        let currAmmoBox = this.ammoBoxList[this.currAmmoBoxIdx];
+        if (currAmmoBox.intact) {
+          //If box contains enough ammo
+          if (currAmmoBox.ammoCount >= amount) {
+            amountConsumed += Number(amount);
+            currAmmoBox.ammoCount -= Number(amount);
+            amount = 0;
+            break;
+          } else {
+          //if box does not contain enough ammo, consume what remains
+          //and proceed to the next box
+            amountConsumed += currAmmoBox.ammoCount;
+            amount -= currAmmoBox.ammoCount;
+            currAmmoBox.ammoCount = 0;
+          }
+        }
+        this.currAmmoBoxIdx++;
+      }
+      this.ammoCount -= amountConsumed; //update the total ammo count
+      return amountConsumed;
     }
   }
 

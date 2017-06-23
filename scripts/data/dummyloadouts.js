@@ -2255,6 +2255,7 @@ var DummyShadowhawk = {
 	"lsml": "lsml:\/\/rgCaAy4GNBJCBi4GNAPne6\/upzrLuZbmW5lty9gXL25ewMWKtY2NjVbl7bI="
 }
 
+//http://mwo.smurfy-net.de/mechlab#i=183&l=1d9c0251e4085929bc6bace60fa09815a382ff36
 DummyStormcrow = {
 	"id": "1d9c0251e4085929bc6bace60fa09815a382ff36",
 	"mech_id": 183,
@@ -2469,4 +2470,192 @@ DummyStormcrow = {
 	},
 	"created_at": "2015-05-28T00:50:40+0000",
 	"lsml": "lsml:\/\/rgC3ICwINBJACCwINCIP6y3qZ7G8jKr089jeR3kZVeNXf4lr0c9jPY3kd5GvFr0M9jeR3opV"
-}
+};
+
+//http://mwo.smurfy-net.de/mechlab#i=183&l=18e9d47cc01bbd2b698b2b8bb3257b240be36386
+DummyStormcrowLowAmmo = {
+	"id": "18e9d47cc01bbd2b698b2b8bb3257b240be36386",
+	"mech_id": 183,
+	"valid": true,
+	"configuration": [{
+		"name": "head",
+		"armor": 18,
+		"actuators": [],
+		"omni_pod": 30120,
+		"items": [{
+			"id": "1212",
+			"type": "weapon",
+			"name": "C-ER MED LASER"
+		}]
+	}, {
+		"name": "left_torso",
+		"armor": 44,
+		"actuators": [],
+		"omni_pod": 30138,
+		"items": [{
+			"id": "1231",
+			"type": "weapon",
+			"name": "C-SRM 6 + ARTEMIS"
+		}, {
+			"id": "1231",
+			"type": "weapon",
+			"name": "C-SRM 6 + ARTEMIS"
+		}, {
+			"id": "2217",
+			"type": "ammo",
+			"name": "C-SRM AMMO + ART. IV"
+		}]
+	}, {
+		"name": "right_torso",
+		"armor": 44,
+		"actuators": [],
+		"omni_pod": 30140,
+		"items": [{
+			"id": "1231",
+			"type": "weapon",
+			"name": "C-SRM 6 + ARTEMIS"
+		}, {
+			"id": "3004",
+			"type": "module",
+			"name": "CLAN DOUBLE HEAT SINK"
+		}]
+	}, {
+		"name": "right_arm",
+		"armor": 32,
+		"actuators": [{
+			"id": 1910,
+			"enabled": true
+		}, {
+			"id": 1911,
+			"enabled": true
+		}],
+		"omni_pod": 30141,
+		"items": [{
+			"id": "1231",
+			"type": "weapon",
+			"name": "C-SRM 6 + ARTEMIS"
+		}, {
+			"id": "3004",
+			"type": "module",
+			"name": "CLAN DOUBLE HEAT SINK"
+		}]
+	}, {
+		"name": "left_arm",
+		"armor": 34,
+		"actuators": [{
+			"id": 1910,
+			"enabled": true
+		}, {
+			"id": 1911,
+			"enabled": true
+		}],
+		"omni_pod": 30137,
+		"items": [{
+			"id": "1231",
+			"type": "weapon",
+			"name": "C-SRM 6 + ARTEMIS"
+		}, {
+			"id": "3004",
+			"type": "module",
+			"name": "CLAN DOUBLE HEAT SINK"
+		}]
+	}, {
+		"name": "centre_torso",
+		"armor": 64,
+		"actuators": [],
+		"omni_pod": 0,
+		"items": []
+	}, {
+		"name": "right_leg",
+		"armor": 52,
+		"actuators": [],
+		"omni_pod": 30127,
+		"items": []
+	}, {
+		"name": "left_leg",
+		"armor": 52,
+		"actuators": [],
+		"omni_pod": 30126,
+		"items": []
+	}, {
+		"name": "left_torso_rear",
+		"armor": 8,
+		"actuators": [],
+		"omni_pod": 0,
+		"items": []
+	}, {
+		"name": "centre_torso_rear",
+		"armor": 8,
+		"actuators": [],
+		"omni_pod": 0,
+		"items": []
+	}, {
+		"name": "right_torso_rear",
+		"armor": 8,
+		"actuators": [],
+		"omni_pod": 0,
+		"items": []
+	}],
+	"upgrades": [{
+		"id": "2815",
+		"type": "Armor",
+		"name": "CLAN FERRO FIBROUS ARMOR"
+	}, {
+		"id": "3102",
+		"type": "Structure",
+		"name": "CLAN ENDO-STEEL STRUCTURE"
+	}, {
+		"id": "3005",
+		"type": "HeatSink",
+		"name": "CLAN DOUBLE HEAT SINK"
+	}, {
+		"id": "3050",
+		"type": "Artemis",
+		"name": "ARTEMIS"
+	}],
+	"stats": {
+		"used_armor": 364,
+		"used_jump_jets": 0,
+		"granted_jump_jets": 0,
+		"firepower": 67,
+		"dps_max": 16.473684210526,
+		"dps_sustained": 6.4247368421053,
+		"cooling_efficiency": 39,
+		"heatsinks": 13,
+		"top_speed": 97.2,
+		"top_speed_tweak": 0,
+		"engine_name": "CLAN XL ENGINE 330",
+		"engine_rating": 330,
+		"engine_type": "XL",
+		"armaments": [{
+			"id": "1212",
+			"type": "weapon",
+			"name": "C-ER MED LASER",
+			"count": 1
+		}, {
+			"id": "1231",
+			"type": "weapon",
+			"name": "C-SRM 6 + ARTEMIS",
+			"count": 5
+		}],
+		"ammunition": [{
+			"id": "2217",
+			"type": "ammo",
+			"name": "C-SRM AMMO + ART. IV",
+			"count": 1
+		}],
+		"equipment": [{
+			"id": "3004",
+			"type": "module",
+			"name": "CLAN DOUBLE HEAT SINK",
+			"count": 3
+		}, {
+			"id": "3464",
+			"type": "module",
+			"name": "CLAN XL ENGINE 330",
+			"count": 1
+		}]
+	},
+	"created_at": "2017-06-23T09:29:42+0000",
+	"lsml": "lsml:\/\/rgC3ICwINBJACCwINCIP6y3qZ7EqvTz2JVeNXf4lr0c9jPY3ka8WvQz2JVk="
+};

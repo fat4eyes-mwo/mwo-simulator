@@ -42,7 +42,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
 
   //interval between UI updates. Set smaller than step duration to run the
   // simulation faster, but not too small as to lock the browser
-  const uiUpdateInterval = 50;
+  const uiUpdateInterval = 20;
 
   var setSimulatorParameters = function(parameters) {
     simulatorParameters = parameters;
@@ -115,24 +115,42 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   var fireWeapons = function(mech, weaponStateList) {
     let mechState = mech.getMechState();
 
+    let weaponsFired = []; //list of weapons that were actually fired.
     for (let weaponState of weaponStateList) {
+      let weaponInfo = weaponState.weaponInfo;
+
       //if not ready to fire, proceed to next weapon
       if (!weaponState.active
-          || !weaponState.weaponCycle === MechModel.WeaponCycle.READY) {
+          || !(weaponState.weaponCycle === MechModel.WeaponCycle.READY)) {
         continue;
       }
-      let weaponInfo = weaponState.weaponInfo;
+      //if no ammo, proceed to next weapon
+      if (weaponInfo.requiresAmmo() &&
+        mechState.ammoState.ammoCountForWeapon(weaponInfo.weaponId) <= 0) {
+        continue;
+      }
+
       if (weaponInfo.spinup > 0) {
         //if weapon has spoolup, set state to SPOOLING and set value of spoolupLeft
         weaponState.gotoState(MechModel.WeaponCycle.SPOOLING, mech);
+        //TODO: not correct, but is the best place for gauss heat until the
+        //correct computation of ghost heat using a time interval is implemented
+        weaponsFired.push(weaponState);
         //Note: Do NOT add WeaponFire to queue, it will be handled by processCooldowns
       } else if (weaponInfo.duration > 0) {
         //if weapon has duration, set state to FIRING
         weaponState.gotoState(MechModel.WeaponCycle.FIRING, mech);
+        weaponsFired.push(weaponState);
         //TODO: add WeaponFire to queue
       } else {
         //if weapon has no duration, set state to COOLDOWN
         weaponState.gotoState(MechModel.WeaponCycle.COOLDOWN, mech);
+        weaponsFired.push(weaponState);
+        let ammoConsumed = 0;
+        if (weaponInfo.requiresAmmo()) {
+          ammoConsumed = mechState.ammoState.consumeAmmo(weaponInfo.weaponId,
+                                                        weaponInfo.ammoPerShot);
+        }
         //TODO: add WeaponFire to queue
       }
 
@@ -141,7 +159,11 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     }
 
     //update mech heat
-    let totalHeat = computeHeat(weaponStateList);
+    //TODO Heat computation is wrong. It's the number of weapons fired within
+    //the ghost heat interval, not fired at the exact same time. You need to keep a
+    //list of weapons fired within the past 0.5 seconds (length of ghost heat interval)
+    //when computing for ghost heat.
+    let totalHeat = computeHeat(weaponsFired);
     mechState.heatState.currHeat += Number(totalHeat);
     mechState.updateTypes[MechModel.UpdateType.HEAT] = true;
   }
@@ -179,6 +201,12 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
           //if the spooling ended in the middle of the tick, subtract the
           //extra time from the cooldown
           weaponState.cooldownLeft += newSpoolLeft;
+          //Consume ammo
+          let ammoConsumed = 0;
+          if (weaponInfo.requiresAmmo()) {
+            ammoConsumed = mechState.ammoState.consumeAmmo(weaponInfo.weaponId,
+                                                          weaponInfo.ammoPerShot);
+          }
           mechState.updateTypes[MechModel.UpdateType.WEAPONSTATE] = true;
           //TODO: Add WeaponFire to queue
         }
