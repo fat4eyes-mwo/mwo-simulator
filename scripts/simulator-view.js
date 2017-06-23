@@ -59,18 +59,6 @@ var MechView = MechView || (function() {
       .css('background-color', "#" + color.toString(16));
   }
 
-  var updatePaperDoll = function(mech){
-    let mechId = mech.getMechId();
-    let mechHealth = mech.getMechState().mechHealth;
-    for (let mechComponentHealth of mechHealth.componentHealth) {
-      let location = mechComponentHealth.location;
-      let armorPercent = Number(mechComponentHealth.armor) / Number(mechComponentHealth.maxArmor);
-      let structurePercent = Number(mechComponentHealth.structure) / Number(mechComponentHealth.maxStructure);
-      setPaperDollArmor(mechId, location, armorPercent);
-      setPaperDollStructure(mechId, location, structurePercent);
-    }
-  }
-
   var mechHealthNumbersId = function (mechId) {
     return mechId + "-mechHealthNumbers";
   }
@@ -81,20 +69,16 @@ var MechView = MechView || (function() {
       .attr("data-mech-id", mech.getMechId())
       .removeClass("template")
       .appendTo(mechHealthNumbersContainer);
-    updateMechHealthNumbers(mech);
   }
 
-  var updateMechHealthNumbers = function (mech) {
-    let mechHealthNumbersDivId = "#" + mechHealthNumbersId(mech.getMechId());
-    let mechHealth = mech.getMechState().mechHealth;
-    for (let mechComponentHealth of mechHealth.componentHealth) {
-      $(mechHealthNumbersDivId +
-        " [data-location=" + mechComponentHealth.location + "] " +
-        " [data-healthtype=armor]").html(Math.floor(mechComponentHealth.armor));
-      $(mechHealthNumbersDivId +
-        " [data-location=" + mechComponentHealth.location + "] " +
-        " [data-healthtype=structure]").html(Math.floor(mechComponentHealth.structure));
-    }
+  var updateMechHealthNumbers = function(mechId, location, armor, structure) {
+    let mechHealthNumbersDivId = "#" + mechHealthNumbersId(mechId);
+    $(mechHealthNumbersDivId +
+      " [data-location=" + location + "] " +
+      " [data-healthtype=armor]").html(Math.floor(armor));
+    $(mechHealthNumbersDivId +
+      " [data-location=" + location + "] " +
+      " [data-healthtype=structure]").html(Math.floor(structure));
   }
 
   //Heatbar UI functions
@@ -117,14 +101,13 @@ var MechView = MechView || (function() {
       .height( (100 * invPercent) + "%");
   }
 
-  var updateHeat = function(mech) {
-    let heatState = mech.getMechState().heatState;
-    let heatPercent = Number(heatState.currHeat) / Number(heatState.currMaxHeat);
-    setHeatbarValue(mech.getMechId(), heatPercent);
+  var updateHeat = function(mechId, currHeat, currMaxHeat) {
+    let heatPercent = Number(currHeat) / Number(currMaxHeat);
+    setHeatbarValue(mechId, heatPercent);
 
-    var heatNumberId = mech.getMechId() + "-heatbarNumber";
+    var heatNumberId = mechId + "-heatbarNumber";
     let heatText = parseFloat(heatPercent * 100).toFixed(0) + "%" +
-                    "(" + parseFloat(heatState.currHeat).toFixed(1) + ")";
+                    "(" + parseFloat(currHeat).toFixed(1) + ")";
     $("#" + heatNumberId).html(heatText);
   }
 
@@ -220,7 +203,6 @@ var MechView = MechView || (function() {
     $("#" + mechPanelId(mechId) + " [class~='paperDollContainer']")
       .attr("id", paperDollContainerId);
     addPaperDoll(mechId, "#" + paperDollContainerId);
-    updatePaperDoll(mech);
 
     var mechHealthNumbersId = mechId + "-mechHealthNumbers";
     $("#" + mechPanelId(mechId) + " [class~='mechHealthNumbers']")
@@ -235,8 +217,6 @@ var MechView = MechView || (function() {
     var heatNumberId = mechId + "-heatbarNumber";
     $("#" + mechPanelId(mechId) + " [class~='heatNumber']")
       .attr("id", heatNumberId);
-
-    updateHeat(mech);
 
     var weaponPanelContainerId = mechId + "-weaponPanelContainer";
     $("#" + mechPanelId(mechId) + " [class~='weaponPanelContainer']")
@@ -293,7 +273,6 @@ var MechView = MechView || (function() {
     setWeaponCooldown: setWeaponCooldown,
     setWeaponAmmo : setWeaponAmmo,
     setWeaponState : setWeaponState,
-    updatePaperDoll : updatePaperDoll,
     updateMechHealthNumbers : updateMechHealthNumbers,
     updateHeat: updateHeat,
     updateSimTime : updateSimTime,

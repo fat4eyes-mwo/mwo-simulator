@@ -1,5 +1,16 @@
 
 var MechSimulatorLogic = MechSimulatorLogic || (function () {
+  var simulationInterval = null;
+  var simRunning = false;
+  var simTime = 0;
+  var simulatorParameters;
+  var weaponFireQueue = new Deque();
+
+  const stepDuration = 50; //simulation tick length in ms
+
+  //interval between UI updates. Set smaller than step duration to run the
+  // simulation faster, but not too small as to lock the browser
+  const uiUpdateInterval = 50;
 
   //Parameters of the simulation. Includes range, fire patterns,
   //accuracy patterns, targetting patterns
@@ -31,18 +42,6 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
       this.totalTravel = this.totalTravel;
     }
   }
-
-  var simulationInterval = null;
-  var simRunning = false;
-  var simTime = 0;
-  var simulatorParameters;
-  var weaponFireQueue = new Deque();
-
-  const stepDuration = 50; //simulation tick length in ms
-
-  //interval between UI updates. Set smaller than step duration to run the
-  // simulation faster, but not too small as to lock the browser
-  const uiUpdateInterval = 20;
 
   var setSimulatorParameters = function(parameters) {
     simulatorParameters = parameters;

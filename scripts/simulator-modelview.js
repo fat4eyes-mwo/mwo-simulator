@@ -9,13 +9,16 @@ var MechModelView = MechModelView || (function() {
       MechView.clear(team);
       for (let mech of MechModel.mechTeams[team]) {
         MechView.addMechPanel(mech, team);
+        updateAll(mech);
       }
     }
   }
 
   //TODO: Move heat logic from view to here?
   var updateHeat = function(mech) {
-    MechView.updateHeat(mech);
+    let heatState = mech.getMechState().heatState;
+
+    MechView.updateHeat(mech.getMechId(), heatState.currHeat, heatState.currMaxHeat);
   }
 
   var updateCooldown = function(mech) {
@@ -56,10 +59,32 @@ var MechModelView = MechModelView || (function() {
     }
   }
 
+  var updatePaperDoll = function(mech){
+    let mechId = mech.getMechId();
+    let mechHealth = mech.getMechState().mechHealth;
+    for (let mechComponentHealth of mechHealth.componentHealth) {
+      let location = mechComponentHealth.location;
+      let armorPercent = Number(mechComponentHealth.armor) / Number(mechComponentHealth.maxArmor);
+      let structurePercent = Number(mechComponentHealth.structure) / Number(mechComponentHealth.maxStructure);
+      MechView.setPaperDollArmor(mechId, location, armorPercent);
+      MechView.setPaperDollStructure(mechId, location, structurePercent);
+    }
+  }
+
+  var updateMechHealthNumbers = function (mech) {
+    let mechHealth = mech.getMechState().mechHealth;
+    for (let mechComponentHealth of mechHealth.componentHealth) {
+      MechView.updateMechHealthNumbers(mech.getMechId(),
+                        mechComponentHealth.location,
+                        mechComponentHealth.armor,
+                        mechComponentHealth.structure);
+    }
+  }
+
   //TODO: Move health logic from view to here?
   var updateHealth = function(mech) {
-    MechView.updatePaperDoll(mech);
-    MechView.updateMechHealthNumbers(mech);
+    updatePaperDoll(mech);
+    updateMechHealthNumbers(mech);
   }
 
   var updateSimTime = function(simTime) {
@@ -69,6 +94,7 @@ var MechModelView = MechModelView || (function() {
   var updateMech = function(mech) {
     let mechState = mech.getMechState();
     let updateFunctionMap = {};
+    updateFunctionMap[MechModel.UpdateType.FULL] = updateAll;
     updateFunctionMap[MechModel.UpdateType.HEALTH] = updateHealth;
     updateFunctionMap[MechModel.UpdateType.HEAT] = updateHeat;
     updateFunctionMap[MechModel.UpdateType.COOLDOWN] = updateCooldown;
@@ -80,6 +106,15 @@ var MechModelView = MechModelView || (function() {
         updateFunctionMap[updateType](mech);
       }
     }
+    mechState.updateTypes = [];
+  }
+
+  var updateAll = function(mech) {
+    updateHealth(mech);
+    updateHeat(mech);
+    updateCooldown(mech);
+    updateWeaponStatus(mech);
+    //TODO updateStats(mech);
   }
 
   return {
