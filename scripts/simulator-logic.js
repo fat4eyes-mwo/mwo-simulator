@@ -1,7 +1,8 @@
 
 var MechSimulatorLogic = MechSimulatorLogic || (function () {
 
-  //Parameters of the simulation. Includes range, fire patterns, accuracy patterns, targetting patterns
+  //Parameters of the simulation. Includes range, fire patterns,
+  //accuracy patterns, targetting patterns
   class SimulatorParameters {
     constructor(range, firePattern, accuracyPattern, targettingPattern) {
       this.range = range;
@@ -21,8 +22,10 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
       this.damageDone = new MechModel.MechDamage();
       let weaponInfo = weaponState.weaponInfo;
 
-      this.totalDuration = weaponInfo.hasDuration() ? Number(weaponInfo.duration) : 0;
-      this.totalTravel = weaponInfo.hasTravelTime() ? Number(range) / Number(weaponInfo.speed) * 1000 : 0; //travel time in milliseconds
+      this.totalDuration = weaponInfo.hasDuration() ?
+          Number(weaponInfo.duration) : 0;
+      this.totalTravel = weaponInfo.hasTravelTime() ?
+          Number(range) / Number(weaponInfo.speed) * 1000 : 0; //travel time in milliseconds
 
       this.durationLeft = this.totalDuration;
       this.totalTravel = this.totalTravel;
@@ -106,14 +109,16 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     MechModelView.updateSimTime(simTime);
   }
 
-  //Give a mech and a list of weaponStates (which must be contained in mech.mechState.weaponStateList)
+  //Give a mech and a list of weaponStates
+  //(which must be contained in mech.mechState.weaponStateList)
   //fire the weapons (i.e. update mech heat and weapon states)
   var fireWeapons = function(mech, weaponStateList) {
     let mechState = mech.getMechState();
 
     for (let weaponState of weaponStateList) {
       //if not ready to fire, proceed to next weapon
-      if (!weaponState.active || !weaponState.weaponCycle === MechModel.WeaponCycle.READY) {
+      if (!weaponState.active
+          || !weaponState.weaponCycle === MechModel.WeaponCycle.READY) {
         continue;
       }
       let weaponInfo = weaponState.weaponInfo;
@@ -144,7 +149,8 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   var dissapateHeat = function(mech) {
     let mechState = mech.getMechState();
     let heatState = mechState.heatState;
-    //heat dissapated per step. Divide currHeatDissapation by 1000 because it is in heat per second
+    //heat dissapated per step. Divide currHeatDissapation by 1000
+    //because it is in heat per second
     let stepHeatDissapation = stepDuration * heatState.currHeatDissapation / 1000;
     let prevHeat = heatState.currHeat;
     heatState.currHeat = Math.max(0, heatState.currHeat - Number(stepHeatDissapation));
@@ -161,13 +167,18 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
         continue;
       }
 
-      //if weapon is spooling, reduce spoolleft. if spoolLeft <=0, change state to COOLDOWN (assumes all spoolup weapons have no duration, otherwise next state would be FIRING)
+      //if weapon is spooling, reduce spoolleft.
+      //if spoolLeft <=0, change state to COOLDOWN
+      //(assumes all spoolup weapons have no duration,
+      //otherwise next state would be FIRING)
       if (weaponState.weaponCycle === MechModel.WeaponCycle.SPOOLING) {
         let newSpoolLeft = Number(weaponState.spoolLeft) - stepDuration;
         weaponState.spoolLeft = Math.max(newSpoolLeft, 0);
         if (weaponState.spoolLeft <= 0) {
           weaponState.gotoState(MechModel.WeaponCycle.COOLDOWN, mech);
-          weaponState.cooldownLeft += newSpoolLeft; //if the spooling ended in the middle of the tick, subtract the extra time from the cooldown
+          //if the spooling ended in the middle of the tick, subtract the
+          //extra time from the cooldown
+          weaponState.cooldownLeft += newSpoolLeft;
           mechState.updateTypes[MechModel.UpdateType.WEAPONSTATE] = true;
           //TODO: Add WeaponFire to queue
         }
@@ -178,12 +189,15 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
         weaponState.durationLeft = Math.max(newDurationLeft, 0);
         if (weaponState.durationLeft <= 0) {
           weaponState.gotoState(MechModel.WeaponCycle.COOLDOWN, mech);
-          weaponState.cooldownLeft +=  newDurationLeft; //if duration ended in the middle of the tick, subtract the extra time from the cooldown
+          //if duration ended in the middle of the tick, subtract the
+          //extra time from the cooldown
+          weaponState.cooldownLeft +=  newDurationLeft;
           mechState.updateTypes[MechModel.UpdateType.WEAPONSTATE] = true;
         }
         mechState.updateTypes[MechModel.UpdateType.COOLDOWN] = true;
       } else if (weaponState.weaponCycle === MechModel.WeaponCycle.COOLDOWN) {
-      //if weapon is on cooldown, reduce cooldownLeft. if cooldownLeft <=0, change state to ready
+      //if weapon is on cooldown, reduce cooldownLeft.
+      //if cooldownLeft <=0, change state to ready
         let newCooldownLeft = Number(weaponState.cooldownLeft) - stepDuration;
         weaponState.cooldownLeft = Math.max(newCooldownLeft, 0);
         if (weaponState.cooldownLeft <= 0) {
@@ -202,7 +216,8 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     let ghostHeatGroups = {}; // weaponInfo.heatPenaltyId -> [weaponInfo]
     for (weaponState of weaponStateList) {
       //if not able to fire weapon, proceed to next in list
-      if (!weaponState.active || !weaponState.weaponCycle === MechModel.WeaponCycle.READY) {
+      if (!weaponState.active
+          || !weaponState.weaponCycle === MechModel.WeaponCycle.READY) {
         continue;
       }
       let weaponInfo = weaponState.weaponInfo;
@@ -236,19 +251,23 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     weaponInfoList.sort(compareHeat);
     for (let weaponInfo of weaponInfoList) {
       if (weaponInfo.minHeatPenaltyLevel > minHeatPenaltyLevel) {
-        if (weaponInfo.minHeatPenaltyLevel <=0) continue; //if no heat penalty, move to next
-        if (minHeatPenaltyLevel == null || weaponInfo.minHeatPenaltyLevel < minHeatPenaltyLevel) {
+        //if no heat penalty, move to next
+        if (weaponInfo.minHeatPenaltyLevel <=0) continue;
+        if (minHeatPenaltyLevel == null
+            || weaponInfo.minHeatPenaltyLevel < minHeatPenaltyLevel) {
           minHeatPenaltyLevel = weaponInfo.minHeatPenaltyLevel;
         }
       }
     }
     let numWeaponsFired = weaponInfoList.length;
-    let excessWeaponCount = minHeatPenaltyLevel != null ? numWeaponsFired - minHeatPenaltyLevel + 1 : 0;
+    let excessWeaponCount = minHeatPenaltyLevel != null ?
+            numWeaponsFired - minHeatPenaltyLevel + 1 : 0;
     if (excessWeaponCount > 0) {
       let ghostHeat = 0;
       for (let i = 0; i < excessWeaponCount; i++) {
         let weaponInfo = weaponInfoList[i];
-        ghostHeat += HEATMULTIPLIER[numWeaponsFired] * weaponInfo.heatPenalty * weaponInfo.heat;
+        ghostHeat += HEATMULTIPLIER[numWeaponsFired] *
+                        weaponInfo.heatPenalty * weaponInfo.heat;
       }
       return ghostHeat;
     } else {

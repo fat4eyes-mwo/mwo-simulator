@@ -73,6 +73,49 @@ return {
       MechModel.initDummyModelData();
     },
 
+    testDeque : function() {
+      let dq = new Deque();
+      dq.addFirst(1);
+      dq.addLast(10);
+      dq.addFirst(2);
+      dq.addLast(20);
+      console.log(dq.toString());
+      let ret;
+      ret = dq.removeFirst();
+      console.log("ret: " + ret + " deque: " + dq.toString());
+      ret = dq.removeFirst();
+      console.log("ret: " + ret + " deque: " + dq.toString());
+      ret = dq.removeFirst();
+      console.log("ret: " + ret + " deque: " + dq.toString());
+      ret = dq.removeFirst();
+      console.log("ret: " + ret + " deque: " + dq.toString());
+      //dq.removeFirst(); //exception
+
+      dq.addFirst(1);
+      dq.addLast(10);
+      dq.addFirst(2);
+      dq.addLast(20);
+      ret = dq.removeLast();
+      console.log("ret: " + ret + " deque: " + dq.toString());
+      ret = dq.removeLast();
+      console.log("ret: " + ret + " deque: " + dq.toString());
+      ret = dq.removeLast();
+      console.log("ret: " + ret + " deque: " + dq.toString());
+      ret = dq.removeLast();
+      console.log("ret: " + ret + " deque: " + dq.toString());
+      //dq.removeLast(); //exception
+
+      dq.addFirst(1);
+      dq.addLast(10);
+      dq.addFirst(2);
+      dq.addLast(20);
+      let iterator = dq.iterator();
+      while (iterator.hasNext()) {
+        console.log(iterator.next());
+      }
+      console.log("deque: " + dq.toString());
+    },
+
     testModelOps : function () {
       MechModel.initDummyModelData();
       // MechModel.addMech("testCheetahId", MechModel.Team.BLUE, DummyArcticCheetah);
@@ -163,13 +206,13 @@ return {
     testSimulation : function() {
       MechModel.initDummyModelData();
 
-      // MechModel.addMech("testCheetahId", MechModel.Team.BLUE, DummyArcticCheetah);
-      // MechModel.addMech("testExecutionerId", MechModel.Team.BLUE, DummyExecutioner);
+      MechModel.addMech("testCheetahId", MechModel.Team.BLUE, DummyArcticCheetah);
+      MechModel.addMech("testExecutionerId", MechModel.Team.BLUE, DummyExecutioner);
       MechModel.addMech("testStormcrowId", MechModel.Team.BLUE, DummyStormcrow);
       MechModel.addMech("testMaulerId", MechModel.Team.RED, DummyMauler);
-      // MechModel.addMech("testFirestarterId", MechModel.Team.RED, DummyFireStarter);
-      // MechModel.addMech("testBattlemasterId", MechModel.Team.RED, DummyBattleMaster);
-      // MechModel.addMech("testShadowhawkId", MechModel.Team.RED, DummyShadowhawk);
+      MechModel.addMech("testFirestarterId", MechModel.Team.RED, DummyFireStarter);
+      MechModel.addMech("testBattlemasterId", MechModel.Team.RED, DummyBattleMaster);
+      MechModel.addMech("testShadowhawkId", MechModel.Team.RED, DummyShadowhawk);
 
       MechModelView.updateFull();
       let simulatorParameters = new MechSimulatorLogic.SimulatorParameters(
@@ -200,49 +243,6 @@ return {
       $("#stepSimulationButton").removeClass("debugButton").click(() => {
         MechSimulatorLogic.stepSimulation();
       });
-    },
-
-    testDeque : function() {
-      let dq = new Deque();
-      dq.addFirst(1);
-      dq.addLast(10);
-      dq.addFirst(2);
-      dq.addLast(20);
-      console.log(dq.toString());
-      let ret;
-      ret = dq.removeFirst();
-      console.log("ret: " + ret + " deque: " + dq.toString());
-      ret = dq.removeFirst();
-      console.log("ret: " + ret + " deque: " + dq.toString());
-      ret = dq.removeFirst();
-      console.log("ret: " + ret + " deque: " + dq.toString());
-      ret = dq.removeFirst();
-      console.log("ret: " + ret + " deque: " + dq.toString());
-      //dq.removeFirst(); //exception
-
-      dq.addFirst(1);
-      dq.addLast(10);
-      dq.addFirst(2);
-      dq.addLast(20);
-      ret = dq.removeLast();
-      console.log("ret: " + ret + " deque: " + dq.toString());
-      ret = dq.removeLast();
-      console.log("ret: " + ret + " deque: " + dq.toString());
-      ret = dq.removeLast();
-      console.log("ret: " + ret + " deque: " + dq.toString());
-      ret = dq.removeLast();
-      console.log("ret: " + ret + " deque: " + dq.toString());
-      //dq.removeLast(); //exception
-
-      dq.addFirst(1);
-      dq.addLast(10);
-      dq.addFirst(2);
-      dq.addLast(20);
-      let iterator = dq.iterator();
-      while (iterator.hasNext()) {
-        console.log(iterator.next());
-      }
-      console.log("deque: " + dq.toString());
     },
 
     testScratch : function() {
