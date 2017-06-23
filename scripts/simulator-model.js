@@ -184,12 +184,12 @@ var MechModel = MechModel || (function () {
         this.cooldownLeft = Number(this.weaponInfo.cooldown);
       }
     }
-    //Computes the cooldown for a weapon on a mech, taking modifiers into account
+    //Computes the cooldown for this weapon on a mech, taking modifiers into account
     computeWeaponCooldown(mech) {
       return Number(this.weaponInfo.cooldown);
     }
 
-    //Computes weapon duration on a mech, taking modifiers into account
+    //Computes this weapon's duration on a mech, taking modifiers into account
     computeWeaponDuration(mech) {
       return Number(this.weaponInfo.duration);
     }
