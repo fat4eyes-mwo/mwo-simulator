@@ -71,7 +71,6 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     let mechState = mech.getMechState();
 
     for (let weaponState of weaponStateList) {
-      //TODO change weapon states, cooldowns, spoolups
       //if not ready to fire, proceed to next weapon
       if (!weaponState.active || !weaponState.weaponCycle === MechModel.WeaponCycle.READY) {
         continue;
@@ -79,18 +78,15 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
       let weaponInfo = weaponState.weaponInfo;
       if (weaponInfo.spinup > 0) {
         //if weapon has spoolup, set state to SPOOLING and set value of spoolupLeft
-        weaponState.weaponCycle = MechModel.WeaponCycle.SPOOLING;
-        weaponState.spoolupLeft = Number(weaponInfo.spinup);
+        weaponState.gotoState(MechModel.WeaponCycle.SPOOLING, mech);
         //Note: Do NOT add WeaponFire to queue, it will be handled by processCooldowns
       } else if (weaponInfo.duration > 0) {
         //if weapon has duration, set state to FIRING
-        weaponState.weaponCycle = MechModel.WeaponCycle.FIRING;
-        weaponState.durationLeft = computeWeaponDuration(mech, weaponInfo);
+        weaponState.gotoState(MechModel.WeaponCycle.FIRING, mech);
         //TODO: add WeaponFire to queue
       } else {
         //if weapon has no duration, set state to COOLDOWN
-        weaponState.weaponCycle = MechModel.WeaponCycle.COOLDOWN;
-        weaponState.cooldownLeft = computeWeaponCooldown(mech, weaponInfo);
+        weaponState.gotoState(MechModel.WeaponCycle.COOLDOWN, mech);
         //TODO: add WeaponFire to queue
       }
 
@@ -129,8 +125,8 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
         let newSpoolLeft = Number(weaponState.spoolLeft) - stepDuration;
         weaponState.spoolLeft = Math.max(newSpoolLeft, 0);
         if (weaponState.spoolLeft <= 0) {
-          weaponState.weaponCycle = MechModel.WeaponCycle.COOLDOWN;
-          weaponState.cooldownLeft = computeWeaponCooldown(mech, weaponInfo) + newSpoolLeft; //if the spooling ended in the middle of the tick, subtract the extra time from the cooldown
+          weaponState.gotoState(MechModel.WeaponCycle.COOLDOWN, mech);
+          weaponState.cooldownLeft += newSpoolLeft; //if the spooling ended in the middle of the tick, subtract the extra time from the cooldown
           mechState.updateTypes[MechModel.UpdateType.WEAPONSTATE] = true;
           //TODO: Add WeaponFire to queue
         }
@@ -140,8 +136,8 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
         let newDurationLeft = Number(weaponState.durationLeft) - stepDuration;
         weaponState.durationLeft = Math.max(newDurationLeft, 0);
         if (weaponState.durationLeft <= 0) {
-          weaponState.weaponCycle = MechModel.WeaponCycle.COOLDOWN;
-          weaponState.cooldownLeft = computeWeaponCooldown(mech, weaponInfo) + newDurationLeft; //if duration ended in the middle of the tick, subtract the extra time from the cooldown
+          weaponState.gotoState(MechModel.WeaponCycle.COOLDOWN, mech);
+          weaponState.cooldownLeft +=  newDurationLeft; //if duration ended in the middle of the tick, subtract the extra time from the cooldown
           mechState.updateTypes[MechModel.UpdateType.WEAPONSTATE] = true;
         }
         mechState.updateTypes[MechModel.UpdateType.COOLDOWN] = true;
@@ -150,7 +146,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
         let newCooldownLeft = Number(weaponState.cooldownLeft) - stepDuration;
         weaponState.cooldownLeft = Math.max(newCooldownLeft, 0);
         if (weaponState.cooldownLeft <= 0) {
-          weaponState.weaponCycle = MechModel.WeaponCycle.READY;
+          weaponState.gotoState(MechModel.WeaponCycle.READY, mech);
           mechState.updateTypes[MechModel.UpdateType.WEAPONSTATE] = true;
         }
         mechState.updateTypes[MechModel.UpdateType.COOLDOWN] = true;
@@ -217,16 +213,6 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     } else {
       return 0;
     }
-  }
-
-  //Computes the cooldown for a weapon on a mech, taking modifiers into account
-  var computeWeaponCooldown = function (mech, weaponInfo) {
-    return Number(weaponInfo.cooldown);
-  }
-
-  //Computes weapon duration on a mech, taking modifiers into account
-  var computeWeaponDuration = function (mech, weaponInfo) {
-    return Number(weaponInfo.duration);
   }
 
   return {

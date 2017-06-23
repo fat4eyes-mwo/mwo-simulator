@@ -166,6 +166,34 @@ var MechModel = MechModel || (function () {
       this.spoolupLeft = spoolupLeft;
       this.durationLeft = durationLeft;
     }
+    gotoState(weaponCycle, mech) {
+      this.weaponCycle = weaponCycle;
+      this.cooldownLeft = 0;
+      this.spoolupLeft = 0;
+      this.durationLeft = 0;
+      if (weaponCycle === WeaponCycle.READY) {
+        //do nothing
+      } else if (weaponCycle === WeaponCycle.FIRING) {
+        this.durationLeft = this.computeWeaponDuration(this.weaponInfo.duration);
+      } else if (weaponCycle === WeaponCycle.COOLDOWN) {
+        this.cooldownLeft = this.computeWeaponCooldown(this.weaponInfo.cooldown);
+      } else if (weaponCycle === WeaponCycle.SPOOLING) {
+        this.spoolupLeft = Number(this.weaponInfo.spinup);
+      } else if (weaponCycle === WeaponCycle.DISABLED) {
+        //set cooldown to max so it displays properly in the view
+        this.cooldownLeft = Number(this.weaponInfo.cooldown);
+      }
+    }
+    //Computes the cooldown for a weapon on a mech, taking modifiers into account
+    computeWeaponCooldown(mech) {
+      return Number(this.weaponInfo.cooldown);
+    }
+
+    //Computes weapon duration on a mech, taking modifiers into account
+    computeWeaponDuration(mech) {
+      return Number(this.weaponInfo.duration);
+    }
+
   }
 
   class AmmoState {
