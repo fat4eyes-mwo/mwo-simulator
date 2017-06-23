@@ -182,6 +182,7 @@ var MechModel = MechModel || (function () {
       } else if (weaponCycle === WeaponCycle.DISABLED) {
         //set cooldown to max so it displays properly in the view
         this.cooldownLeft = Number(this.weaponInfo.cooldown);
+        this.active = false;
       }
     }
     //Computes the cooldown for this weapon on a mech, taking modifiers into account
@@ -250,7 +251,7 @@ var MechModel = MechModel || (function () {
   mechTeams[Team.RED] = [];
 
   //Get weapon, ammo and mech data from smurfy
-  //TODO: JSONP not parsing the output correctly.
+  //TODO: JSONP not working because smurfy's server doesn't support it. Work around it using a local proxy.
   var WEAPON_DATA_URL = "http://mwo.smurfy-net.de/api/data/weapons.json";
   var AMMO_DATA_URL = "http://mwo.smurfy-net.de/api/data/ammo.json";
   var LOADOUT_DATA_URL = "http:/mwo.smurfy-net.de/api/data/mechs/{ID}/loadouts/{LOADOUTID}.json";

@@ -31,6 +31,11 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     simRunning = false;
   }
 
+  var stepSimulation = function() {
+    pauseSimulation();
+    step();
+  }
+
   var resetSimulation = function() {
     simRunning = false;
     if (simulationInterval) {
@@ -219,6 +224,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     runSimulation : runSimulation,
     pauseSimulation : pauseSimulation,
     resetSimulation : resetSimulation,
+    stepSimulation : stepSimulation,
     step: step,
     computeHeat: computeHeat,
   }

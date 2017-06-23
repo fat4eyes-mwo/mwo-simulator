@@ -190,6 +190,9 @@ return {
         MechSimulatorLogic.resetSimulation();
       });
 
+      $("#stepSimulationButton").removeClass("debugButton").click(() => {
+        MechSimulatorLogic.stepSimulation();
+      });
     },
 
     testScratch : function() {
