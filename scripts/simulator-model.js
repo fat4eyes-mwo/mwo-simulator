@@ -156,6 +156,10 @@ var MechModel = MechModel || (function () {
       this.updateTypes = {}; //Update types triggered on the current simulation step
       this.ghostHeatMap = {}; //weaponId -> [GhostHeatEntry]. Used in ghost heat computations.
     }
+    isAlive() {
+      //TODO:Implement leg check and taking engine types into account
+      this.mechHealth.componentHealth[Component.CENTRE_TORSO] > 0;
+    }
   }
 
   class HeatState {
@@ -893,6 +897,7 @@ var MechModel = MechModel || (function () {
     Team : Team,
     Faction : Faction,
     UpdateType : UpdateType,
+    MechDamage : MechDamage,
     Mech : Mech,
     mechTeams : mechTeams,
     initModelData : initModelData,

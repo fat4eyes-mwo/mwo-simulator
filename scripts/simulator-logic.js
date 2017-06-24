@@ -27,11 +27,12 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   }
 
   class WeaponFire {
-    constructor(sourceMech, targetMech, weaponState, accuracyPattern, range) {
+    constructor(sourceMech, targetMech, weaponState, damagePattern, range) {
       this.sourceMech = sourceMech;
       this.targetMech = targetMech;
       this.weaponState = weaponState;
-      this.accuracyPattern = accuracyPattern;
+      //Function that defines how damage is spread
+      this.damagePattern = damagePattern; //function(WeaponDamage) -> WeaponDamage
       this.range = range;
       this.damageDone = new MechModel.MechDamage();
       let weaponInfo = weaponState.weaponInfo;
@@ -43,6 +44,13 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
 
       this.durationLeft = this.totalDuration;
       this.totalTravel = this.totalTravel;
+    }
+  }
+
+  //Damage dealt by a weapon.
+  class WeaponDamage {
+    constructor(damageMap) {
+      this.damageMap = damageMap; //MechModel.Component -> Number
     }
   }
 
@@ -135,9 +143,6 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
       if (weaponInfo.spinup > 0) {
         //if weapon has spoolup, set state to SPOOLING and set value of spoolupLeft
         weaponState.gotoState(MechModel.WeaponCycle.SPOOLING, mech);
-        //TODO: not correct, but is the best place for gauss heat until the
-        //correct computation of ghost heat using a time interval is implemented
-        weaponsFired.push(weaponState);
         //Note: Do NOT add WeaponFire to queue, it will be handled by processCooldowns
       } else if (weaponInfo.duration > 0) {
         //if weapon has duration, set state to FIRING
@@ -161,13 +166,11 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     }
 
     //update mech heat
-    //TODO Heat computation is wrong. It's the number of weapons fired within
-    //the ghost heat interval, not fired at the exact same time. You need to keep a
-    //list of weapons fired within the past 0.5 seconds (length of ghost heat interval)
-    //when computing for ghost heat.
     let totalHeat = computeHeat(mech, weaponsFired);
-    mechState.heatState.currHeat += Number(totalHeat);
-    mechState.updateTypes[MechModel.UpdateType.HEAT] = true;
+    if (totalHeat > 0) {
+      mechState.heatState.currHeat += Number(totalHeat);
+      mechState.updateTypes[MechModel.UpdateType.HEAT] = true;
+    }
   }
 
   var dissapateHeat = function(mech) {
@@ -185,6 +188,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
 
   var processCooldowns = function(mech) {
     let mechState = mech.getMechState();
+    let weaponsFired = [];
     for (let weaponState of mechState.weaponStateList) {
       let weaponInfo = weaponState.weaponInfo;
       if (!weaponState.active) { //if weapon disabled, proceed to next
@@ -209,6 +213,8 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
             ammoConsumed = mechState.ammoState.consumeAmmo(weaponInfo.weaponId,
                                                           weaponInfo.ammoPerShot);
           }
+          //collect list of weapons fired, for use in heat computation
+          weaponsFired.push(weaponState);
           mechState.updateTypes[MechModel.UpdateType.WEAPONSTATE] = true;
           //TODO: Add WeaponFire to queue
         }
@@ -237,6 +243,11 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
         mechState.updateTypes[MechModel.UpdateType.COOLDOWN] = true;
       }
     }
+    let totalHeat = computeHeat(mech, weaponsFired);
+    if (totalHeat > 0) {
+      mechState.heatState.currHeat += Number(totalHeat);
+      mechState.updateTypes[MechModel.UpdateType.HEAT] = true;
+    }
   }
 
   //Compute the heat caused by firing a set of weapons
@@ -253,7 +264,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     for (weaponState of weaponsFired) {
       let weaponInfo = weaponState.weaponInfo;
       totalHeat += Number(weaponInfo.heat); // base heat
-      let ghostHeat = calculateGhostHeat(mech, weaponState);
+      let ghostHeat = computeGhostHeat(mech, weaponState);
       totalHeat += ghostHeat;
     }
 
@@ -266,7 +277,10 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
       this.weaponState = weaponState;
     }
   }
-  var calculateGhostHeat = function (mech, weaponState) {
+  //Calculates the ghost heat incurred by a weapon
+  //Note that this method has a side effect: it removes stale GhostHeatEntries
+  //and adds a new GhostHeatEntry for the weapon
+  var computeGhostHeat = function (mech, weaponState) {
     const HEATMULTIPLIER = [0, 0, 0.08, 0.18, 0.30, 0.45, 0.60, 0.80, 1.10, 1.50, 2.00, 3.00, 5.00];
     let weaponInfo = weaponState.weaponInfo;
 

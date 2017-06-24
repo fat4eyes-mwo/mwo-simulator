@@ -149,10 +149,13 @@ body {
 
 .mechHealthNumbers .healthNumberHeader {
   font-weight: bold;
+  text-align: center;
+  border-bottom: solid thin white;
 }
 
 
 .mechHealthNumbers .healthNumber {
+  text-align: center;
 }
 
 /*Heat bar style*/
@@ -177,6 +180,7 @@ body {
 
 /*Weapon panel styles*/
 .weaponPanelRow {
+  position: relative;
 }
 
 .weaponName {
@@ -187,17 +191,17 @@ body {
 }
 
 .weaponCooldownFrame {
+  margin-top: 5px;
   width: 50px;
   height: 5px;
   background-color: white;
-  vertical-align: middle;
   position: relative;
 }
 
 .weaponCooldownBar {
   background-color: red;
   height:100%;
-  width: 50%;
+  width: 0%;
   position:absolute;
   top: 0%;
   left: 0%;
