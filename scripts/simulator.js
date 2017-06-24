@@ -8,6 +8,7 @@ function main() {
   //MechTest.testModelBaseHealth();
   // MechTest.testModelView();
   MechTest.testSimulation();
+  // MechTest.testDamageAtRange();
 }
 
 $(document).ready(main);

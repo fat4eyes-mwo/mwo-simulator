@@ -25,11 +25,12 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   }
 
   class WeaponFire {
-    constructor(sourceMech, targetMech, weaponState, weaponDamage, range) {
+    constructor(sourceMech, targetMech, weaponState, range) {
       this.sourceMech = sourceMech;
       this.targetMech = targetMech;
       this.weaponState = weaponState;
       this.weaponDamage = null;
+      this.tickWeaponDamage = null; //WeaponDamage done per tick for duration weapons
       this.range = MechSimulatorLogic.simulatorParameters.range;
       this.damageDone = new MechModel.MechDamage();
       let weaponInfo = weaponState.weaponInfo;
@@ -41,7 +42,10 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
 
       this.durationLeft = this.totalDuration;
       this.totalTravel = this.totalTravel;
+      this.weaponDamageLeft = null; //Remaining damage to deal for duration weapons
     }
+
+
 
     toString() {
       return "WeaponFire durationLeft: " + Number(this.durationLeft) +

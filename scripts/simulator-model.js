@@ -61,7 +61,7 @@ var MechModel = MechModel || (function () {
 
   class WeaponInfo {
     constructor(weaponId, name, translatedName, location,
-      minRange, optRange, maxRange, baseDmg,
+      minRange, optRange, maxRange, baseDmg, damageMultiplier,
       heat, minHeatPenaltyLevel, heatPenalty, heatPenaltyId,
       cooldown, duration, spinup, speed, ammoPerShot) {
         this.weaponId = weaponId; //smurfy weapon id
@@ -72,14 +72,15 @@ var MechModel = MechModel || (function () {
         this.optRange = optRange;
         this.maxRange = maxRange;
         this.baseDmg = baseDmg;
+        this.damageMultiplier = damageMultiplier;
         this.heat = heat;
         this.minHeatPenaltyLevel = minHeatPenaltyLevel;
         this.heatPenalty = heatPenalty;
         this.heatPenaltyId = heatPenaltyId; //weapons with the same heat penalty id caause ghost heat if above the minHeatPenaltyLevel
-        this.cooldown = cooldown;
-        this.duration = duration;
-        this.spinup = spinup;
-        this.speed = speed;
+        this.cooldown = cooldown; //cooldown in milliseconds
+        this.duration = duration; //duration in milliseconds
+        this.spinup = spinup; //spinup in milliseconds
+        this.speed = speed; //speed in m/s
         this.ammoPerShot = ammoPerShot;
       }
       hasDuration() {
@@ -90,6 +91,24 @@ var MechModel = MechModel || (function () {
       }
       requiresAmmo() {
         return this.ammoPerShot > 0;
+      }
+      damageAtRange(range) {
+        let totalDamage = Number(this.baseDmg) * Number(this.damageMultiplier);
+        if (Number(range) < Number(this.minRange)
+            || Number(range) > Number(this.maxRange)) {
+          return 0;
+        }
+        if (Number(this.minRange) <= Number(range) && Number(range) < Number(this.optRange)) {
+          return Number(totalDamage);
+        }
+        if (Number(range) >= Number(this.optRange) && (Number(range) <= Number(this.maxRange))) {
+          let optMaxDiff = Number(this.maxRange) - Number(this.optRange);
+          let rangeOptDiff = Number(range) - Number(this.optRange);
+          if (optMaxDiff === 0) {
+            return Number(totalDamage);
+          }
+          return Number(totalDamage) * (1 - (rangeOptDiff / optMaxDiff));
+        }
       }
 
   }
@@ -388,7 +407,6 @@ var MechModel = MechModel || (function () {
     }
   }
 
-
   var SmurfyWeaponData = {};
   var SmurfyAmmoData = {};
   var SmurfyMechData = {};
@@ -634,6 +652,7 @@ var MechModel = MechModel || (function () {
     let optRange = smurfyWeaponData.long_range;
     let maxRange = smurfyWeaponData.max_range;
     let baseDmg = smurfyWeaponData.calc_stats.baseDmg;
+    let damageMultiplier = smurfyWeaponData.calc_stats.damageMultiplier;
     let heat = smurfyWeaponData.heat;
     let minHeatPenaltyLevel = smurfyWeaponData.min_heat_penalty_level;
     let heatPenalty = smurfyWeaponData.heat_penalty;
@@ -648,7 +667,7 @@ var MechModel = MechModel || (function () {
 
     let weaponInfo = new WeaponInfo(
       weaponId, name, translatedName, location,
-      minRange, optRange, maxRange, baseDmg,
+      minRange, optRange, maxRange, baseDmg, damageMultiplier,
       heat, minHeatPenaltyLevel, heatPenalty, heatPenaltyId,
       cooldown, duration, spinup, speed, ammoPerShot
     );
@@ -918,6 +937,7 @@ var MechModel = MechModel || (function () {
     MechDamage : MechDamage,
     WeaponDamage : WeaponDamage,
     Mech : Mech,
+    WeaponInfo : WeaponInfo,
     mechTeams : mechTeams,
     initModelData : initModelData,
     initDummyModelData : initDummyModelData,
