@@ -1,3 +1,4 @@
+"use strict";
 
 var MechSimulatorLogic = MechSimulatorLogic || (function () {
   var simulationInterval = null;
@@ -28,9 +29,8 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
       this.sourceMech = sourceMech;
       this.targetMech = targetMech;
       this.weaponState = weaponState;
-      //Function that defines how damage is spread
-      this.weaponDamage = weaponDamage;
-      this.range = range;
+      this.weaponDamage = null;
+      this.range = MechSimulatorLogic.simulatorParameters.range;
       this.damageDone = new MechModel.MechDamage();
       let weaponInfo = weaponState.weaponInfo;
 
@@ -50,20 +50,6 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
           " target: " + this.targetMech.getMechInfo().mechTranslatedName +
           " weapon: " + this.weaponState.weaponInfo.name +
           " weaponDamage: " + weaponDamage.toString();
-    }
-  }
-
-  //Damage dealt by a weapon.
-  class WeaponDamage {
-    constructor(damageMap) {
-      this.damageMap = damageMap; //MechModel.Component -> Number
-    }
-    toString() {
-      let ret = "";
-      for (let component in damageMap) {
-        ret = ret + " " + component + "=" + this.damageMap[component];
-      }
-      return ret;
     }
   }
 
@@ -285,7 +271,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     }
     weaponsFired.sort(compareHeat);
 
-    for (weaponState of weaponsFired) {
+    for (let weaponState of weaponsFired) {
       let weaponInfo = weaponState.weaponInfo;
       totalHeat += Number(weaponInfo.heat); // base heat
       let ghostHeat = computeGhostHeat(mech, weaponState);

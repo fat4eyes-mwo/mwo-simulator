@@ -374,6 +374,21 @@ var MechModel = MechModel || (function () {
     }
   }
 
+  //Damage dealt by a weapon.
+  class WeaponDamage {
+    constructor(damageMap) {
+      this.damageMap = damageMap; //MechModel.Component -> Number
+    }
+    toString() {
+      let ret = "";
+      for (let component in damageMap) {
+        ret = ret + " " + component + "=" + this.damageMap[component];
+      }
+      return ret;
+    }
+  }
+
+
   var SmurfyWeaponData = {};
   var SmurfyAmmoData = {};
   var SmurfyMechData = {};
@@ -901,6 +916,7 @@ var MechModel = MechModel || (function () {
     Faction : Faction,
     UpdateType : UpdateType,
     MechDamage : MechDamage,
+    WeaponDamage : WeaponDamage,
     Mech : Mech,
     mechTeams : mechTeams,
     initModelData : initModelData,
