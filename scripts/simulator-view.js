@@ -276,6 +276,7 @@ var MechView = MechView || (function() {
     updateMechHealthNumbers : updateMechHealthNumbers,
     updateHeat: updateHeat,
     updateSimTime : updateSimTime,
+    setDebugText : setDebugText,
     clear : clear,
     clearAll : clearAll
   };

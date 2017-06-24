@@ -27,12 +27,12 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   }
 
   class WeaponFire {
-    constructor(sourceMech, targetMech, weaponState, damagePattern, range) {
+    constructor(sourceMech, targetMech, weaponState, weaponDamage, range) {
       this.sourceMech = sourceMech;
       this.targetMech = targetMech;
       this.weaponState = weaponState;
       //Function that defines how damage is spread
-      this.damagePattern = damagePattern; //function(WeaponDamage) -> WeaponDamage
+      this.weaponDamage = weaponDamage;
       this.range = range;
       this.damageDone = new MechModel.MechDamage();
       let weaponInfo = weaponState.weaponInfo;
@@ -45,12 +45,28 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
       this.durationLeft = this.totalDuration;
       this.totalTravel = this.totalTravel;
     }
+
+    toString() {
+      return "WeaponFire durationLeft: " + Number(this.durationLeft) +
+          " travelLeft: " + Number(this.travelLeft) +
+          " source: " + this.sourceMech.getMechInfo().mechTranslatedName +
+          " target: " + this.targetMech.getMechInfo().mechTranslatedName +
+          " weapon: " + this.weaponState.weaponInfo.name +
+          " weaponDamage: " + weaponDamage.toString();
+    }
   }
 
   //Damage dealt by a weapon.
   class WeaponDamage {
     constructor(damageMap) {
       this.damageMap = damageMap; //MechModel.Component -> Number
+    }
+    toString() {
+      let ret = "";
+      for (let component in damageMap) {
+        ret = ret + " " + component + "=" + this.damageMap[component];
+      }
+      return ret;
     }
   }
 
@@ -117,6 +133,9 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
 
     simTime += stepDuration;
     MechModelView.updateSimTime(simTime);
+
+    //Debug
+    MechModelView.updateDebugText("Debug text : " + simTime);
   }
 
   //Give a mech and a list of weaponStates

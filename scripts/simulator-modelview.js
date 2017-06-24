@@ -117,6 +117,10 @@ var MechModelView = MechModelView || (function() {
     //TODO updateStats(mech);
   }
 
+  var updateDebugText = function (text) {
+    MechView.setDebugText(text);
+  }
+
   return {
     updateFull : updateFull,
     updateHealth : updateHealth,
@@ -125,6 +129,7 @@ var MechModelView = MechModelView || (function() {
     updateWeaponStatus : updateWeaponStatus,
     updateMech: updateMech,
     updateSimTime: updateSimTime,
+    updateDebugText: updateDebugText,
   };
 
 })();

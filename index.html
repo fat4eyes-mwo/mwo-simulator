@@ -32,6 +32,9 @@
   <body>
     <div class="row">
       <div id="controlPanel" class="column column-2 controlPanel">
+        <div class="row">
+          <div id="simTime" class="simTime"></div>
+        </div>
         <div id="debugPanel" class="row debugPanel">
           <button id="testUI" class="debugButton">Test UI Widgets</button>
           <button id="resetState" class = "debugButton">Reset state</button>
@@ -40,10 +43,7 @@
           <button id="pauseSimulationButton" class ="debugButton">Pause simulation</button>
           <button id="stepSimulationButton" class ="debugButton">Step simulation</button>
           <button id="resetSimulationButton" class ="debugButton">Reset simulation</button>
-          <div id = "debugText" class="row"></div>
-        </div>
-        <div class="row">
-          <div id="simTime" class="simTime"></div>
+          <div id = "debugText" class="debugText" class="row"></div>
         </div>
       </div>
       <div id="blueTeam" class="column column-5 mechPanelList bluePanel">
