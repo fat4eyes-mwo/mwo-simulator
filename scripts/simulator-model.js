@@ -158,7 +158,7 @@ var MechModel = MechModel || (function () {
     }
     isAlive() {
       //TODO:Implement leg check and taking engine types into account
-      this.mechHealth.componentHealth[Component.CENTRE_TORSO] > 0;
+      this.mechHealth.componentHealth[Component.CENTRE_TORSO].structure > 0;
     }
   }
 
