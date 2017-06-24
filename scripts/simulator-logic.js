@@ -25,13 +25,14 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   }
 
   class WeaponFire {
-    constructor(sourceMech, targetMech, weaponState, range) {
+    constructor(sourceMech, targetMech, weaponState, range, createTime) {
       this.sourceMech = sourceMech;
       this.targetMech = targetMech;
       this.weaponState = weaponState;
-      this.weaponDamage = null;
+      this.weaponDamage = null; //full weapon damage
       this.tickWeaponDamage = null; //WeaponDamage done per tick for duration weapons
-      this.range = MechSimulatorLogic.simulatorParameters.range;
+      this.range = range;
+      this.createTime = createTime;
       this.damageDone = new MechModel.MechDamage();
       let weaponInfo = weaponState.weaponInfo;
 
@@ -41,19 +42,46 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
           Number(range) / Number(weaponInfo.speed) * 1000 : 0; //travel time in milliseconds
 
       this.durationLeft = this.totalDuration;
-      this.totalTravel = this.totalTravel;
+      this.travelLeft = this.totalTravel;
       this.weaponDamageLeft = null; //Remaining damage to deal for duration weapons
+
+      this.initComputedValues(range);
     }
 
+    initComputedValues(range) {
+      let targetComponent = this.sourceMech.componentTargetPattern(this.targetMech);
+      //baseWeaponDamage applies all damage to the target component
+      let baseWeaponDamageMap = {};
+      baseWeaponDamageMap[targetComponent] = this.weaponState.weaponInfo.damageAtRange(range);
+      let baseWeaponDamage = new MechModel.WeaponDamage(baseWeaponDamageMap);
+      //transform the baseWeaponDamage using the mech's accuracy pattern
+      let transformedWeaponDamage = this.sourceMech.accuracyPattern(baseWeaponDamage);
+      //TODO: apply weapon specific weapon patterns
+      this.weaponDamage = transformedWeaponDamage;
 
+      this.weaponDamageLeft = this.weaponDamage.clone();
+      if (this.totalDuration >0) {
+        let tickDamageMap = {};
+        for (let component in this.weaponDamage.damageMap) {
+          tickDamageMap[component] = Number(this.weaponDamage.getDamage(component)) / Number(this.totalDuration) * Number(stepDuration);
+        }
+        this.tickWeaponDamage = new MechModel.WeaponDamage(tickDamageMap);
+      } else {
+        this.tickWeaponDamage = this.weaponDamage.clone();
+      }
+    }
 
     toString() {
-      return "WeaponFire durationLeft: " + Number(this.durationLeft) +
-          " travelLeft: " + Number(this.travelLeft) +
+      let weaponInfo = this.weaponState.weaponInfo;
+      return "WeaponFire" +
+          " createTime: " + this.createTime +
+          (weaponInfo.hasDuration() ? " durationLeft : " + this.durationLeft : "") +
+          (weaponInfo.hasTravelTime() ? " travelLeft: " + this.travelLeft : "") +
           " source: " + this.sourceMech.getMechInfo().mechTranslatedName +
           " target: " + this.targetMech.getMechInfo().mechTranslatedName +
           " weapon: " + this.weaponState.weaponInfo.name +
-          " weaponDamage: " + weaponDamage.toString();
+          " weaponDamage: " + this.weaponDamage.toString() +
+          " tickWeaponDamage: " + this.tickWeaponDamage.toString();
     }
   }
 
@@ -66,6 +94,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
       mech.firePattern = MechFirePattern.alphaAtZeroHeat;
       mech.componentTargetPattern = MechTargetComponent.aimForCenterTorso;
       mech.mechTargetPattern = MechTargetMech.targetMechsInOrder;
+      mech.accuracyPattern = MechAccuracyPattern.fullAccuracyPattern;
     }
   }
 
@@ -107,6 +136,10 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   //Simulation step function. Called every tick
   var step = function() {
     let teams = [MechModel.Team.BLUE, MechModel.Team.RED];
+
+    //TODO: process WeaponFireQueue
+    processWeaponFires();
+
     for (let team of teams) {
       for (let mech of MechModel.mechTeams[team]) {
         let mechState = mech.getMechState();
@@ -117,11 +150,13 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
 
         let weaponsToFire = mech.firePattern(mech);
         if (weaponsToFire) {
-          fireWeapons(mech, weaponsToFire);
+          let targetMech = mech.mechTargetPattern(mech, MechModel.mechTeams[enemyTeam(team)]);
+          if (targetMech) {
+            fireWeapons(mech, weaponsToFire, targetMech);
+          } else {
+            console.log("No target mech for " + mech.getMechId());
+          }
         }
-
-        //TODO: process WeaponFireQueue
-
         MechModelView.updateMech(mech);
       }
     }
@@ -129,14 +164,23 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     simTime += stepDuration;
     MechModelView.updateSimTime(simTime);
 
-    //Debug
-    MechModelView.updateDebugText("Debug text : " + simTime);
+    //debug
+    updateUIWeaponFires();
+  }
+
+  var enemyTeam = function(myTeam) {
+    if (myTeam === MechModel.Team.BLUE) {
+      return MechModel.Team.RED;
+    } else if (myTeam === MechModel.Team.RED) {
+      return MechModel.Team.BLUE;
+    }
+    throw "Unable to find enemy team";
   }
 
   //Give a mech and a list of weaponStates
   //(which must be contained in mech.mechState.weaponStateList)
   //fire the weapons (i.e. update mech heat and weapon states)
-  var fireWeapons = function(mech, weaponStateList) {
+  var fireWeapons = function(mech, weaponStateList, targetMech) {
     let mechState = mech.getMechState();
 
     let weaponsFired = []; //list of weapons that were actually fired.
@@ -163,6 +207,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
         weaponState.gotoState(MechModel.WeaponCycle.FIRING, mech);
         weaponsFired.push(weaponState);
         //TODO: add WeaponFire to queue
+        queueWeaponFire(mech, targetMech, weaponState);
       } else {
         //if weapon has no duration, set state to COOLDOWN
         weaponState.gotoState(MechModel.WeaponCycle.COOLDOWN, mech);
@@ -173,6 +218,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
                                                         weaponInfo.ammoPerShot);
         }
         //TODO: add WeaponFire to queue
+        queueWeaponFire(mech, targetMech, weaponState);
       }
 
       mechState.updateTypes[MechModel.UpdateType.COOLDOWN] = true;
@@ -185,6 +231,22 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
       mechState.heatState.currHeat += Number(totalHeat);
       mechState.updateTypes[MechModel.UpdateType.HEAT] = true;
     }
+  }
+
+  var queueWeaponFire = function(sourceMech, targetMech, weaponState) {
+    let range = simulatorParameters.range;
+    let weaponFire = new WeaponFire(sourceMech, targetMech, weaponState, range, simTime);
+    weaponFireQueue.addLast(weaponFire);
+  }
+
+  var updateUIWeaponFires = function() {
+    let debugText = "";
+    let iterator = weaponFireQueue.iterator();
+    for (let weaponFire; iterator.hasNext();) {
+      weaponFire = iterator.next();
+      debugText += weaponFire.toString() + "<br/><br/>";
+    }
+    MechModelView.updateDebugText(debugText);
   }
 
   var dissapateHeat = function(mech) {
@@ -200,7 +262,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     }
   }
 
-  var processCooldowns = function(mech) {
+  var processCooldowns = function(mech, targetMech) {
     let mechState = mech.getMechState();
     let weaponsFired = [];
     for (let weaponState of mechState.weaponStateList) {
@@ -231,6 +293,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
           weaponsFired.push(weaponState);
           mechState.updateTypes[MechModel.UpdateType.WEAPONSTATE] = true;
           //TODO: Add WeaponFire to queue
+          queueWeaponFire(mech, targetMech, weaponState);
         }
         mechState.updateTypes[MechModel.UpdateType.COOLDOWN] = true;
       } else if (weaponState.weaponCycle === MechModel.WeaponCycle.FIRING) {
@@ -261,6 +324,42 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     if (totalHeat > 0) {
       mechState.heatState.currHeat += Number(totalHeat);
       mechState.updateTypes[MechModel.UpdateType.HEAT] = true;
+    }
+  }
+
+  var processWeaponFires = function() {
+    //TODO: implement
+    //reduce durationLeft/travelLeft, deal damage as necessary
+    if (weaponFireQueue.isEmpty()) {
+      return;
+    }
+    //Go through each entry in the current queue. Need to keep the start length
+    //because the operations below dequeue the first element and requeue it
+    //to the end of the queue if it still has duration/travelTime left
+    let startQueueLength = weaponFireQueue.length();
+    for (let count = 0; count < startQueueLength; count++) {
+      let weaponFire = weaponFireQueue.removeFirst();
+      let weaponInfo = weaponFire.weaponState.weaponInfo;
+      if (weaponInfo.hasDuration()) {
+        weaponFire.durationLeft = Number(weaponFire.durationLeft) - stepDuration;
+        if (weaponFire.durationLeft <=0) {
+          //TODO: Process last tick damage
+        } else {
+          //TODO: Process tick damage
+          //requeue with reduced durationLeft
+          weaponFireQueue.addLast(weaponFire);
+        }
+      } else if (weaponInfo.hasTravelTime()) {
+        weaponFire.travelLeft = Number(weaponFire.travelLeft) - stepDuration;
+        if (weaponFire.travelLeft <= 0) {
+          //TODO process damage
+        } else {
+          weaponFireQueue.addLast(weaponFire);
+        }
+      } else {
+        //should not happen
+        throw "Unexpected WeaponFire type";
+      }
     }
   }
 

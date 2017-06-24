@@ -6,7 +6,7 @@ var MechTargetMech = MechTargetMech || (function () {
   //function(MechModel.Mech, [MechModel.Mech])-> MechModel.Mech
   var targetMechsInOrder = function (mech, enemyMechList) {
     for (let enemyMech of enemyMechList) {
-      if (enemyMech.mechState.isAlive()) {
+      if (enemyMech.getMechState().isAlive()) {
         return enemyMech;
       }
     }

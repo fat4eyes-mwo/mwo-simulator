@@ -138,7 +138,15 @@ var MechModel = MechModel || (function () {
 
   class MechHealth {
     constructor(componentHealth) {
+      //TODO: try to get rid of this componentHealth list
       this.componentHealth = componentHealth; //[ComponentHealth...]
+      this.componentHealthMap = {};
+      for (let component of componentHealth) {
+        this.componentHealthMap[component.location] = component;
+      }
+    }
+    getComponentHealth(location) {
+      return this.componentHealthMap[location];
     }
     clone() {
       let newComponentHealth = [];
@@ -177,7 +185,7 @@ var MechModel = MechModel || (function () {
     }
     isAlive() {
       //TODO:Implement leg check and taking engine types into account
-      this.mechHealth.componentHealth[Component.CENTRE_TORSO].structure > 0;
+      return this.mechHealth.getComponentHealth(Component.CENTRE_TORSO).structure > 0;
     }
   }
 
@@ -398,12 +406,22 @@ var MechModel = MechModel || (function () {
     constructor(damageMap) {
       this.damageMap = damageMap; //MechModel.Component -> Number
     }
+    getDamage(component) {
+      return this.damageMap[component];
+    }
     toString() {
       let ret = "";
-      for (let component in damageMap) {
+      for (let component in this.damageMap) {
         ret = ret + " " + component + "=" + this.damageMap[component];
       }
       return ret;
+    }
+    clone() {
+      var newDamageMap = {};
+      for (let component in this.damageMap) {
+        newDamageMap[component] = this.damageMap[component];
+      }
+      return new WeaponDamage(newDamageMap);
     }
   }
 
@@ -877,16 +895,18 @@ var MechModel = MechModel || (function () {
   }
 
   //constructor
-  var Mech = function (new_mech_id, smurfyMechLoadout) {
+  var Mech = function (new_mech_id, team, smurfyMechLoadout) {
     var smurfy_mech_id = smurfyMechLoadout.mech_id;
     var smurfyMechData = getSmurfyMechData(smurfy_mech_id);
     var mech_id = new_mech_id;
     var mechInfo = mechInfoFromSmurfyMechLoadout(new_mech_id, smurfyMechLoadout);
     var mechState = initMechState(mechInfo);
+    var mechTeam = team;
     return {
       firePattern : null, //Set after initialization
       componentTargetPattern : null, //Set after initialization
       mechTargetPattern : null, //set after initialization
+      accuracyPattern : null, //set after initialization
       getName : function() {
         return smurfyMechData.name;
       },
@@ -904,12 +924,15 @@ var MechModel = MechModel || (function () {
       },
       resetMechState : function() {
         mechState = initMechState(mechInfo);
+      },
+      getMechTeam : function() {
+        return mechTeam;
       }
     };
   };
 
   var addMech = function(mech_id, team, smurfyMechLoadout) {
-    var newMech = new Mech(mech_id, smurfyMechLoadout);
+    var newMech = new Mech(mech_id, team, smurfyMechLoadout);
     mechTeams[team].push(newMech);
     console.log("addMech mech_id: " + mech_id +
       " translated_mech_name: " + newMech.getTranslatedName());
