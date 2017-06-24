@@ -18,11 +18,8 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   //Parameters of the simulation. Includes range, fire patterns,
   //accuracy patterns, targetting patterns
   class SimulatorParameters {
-    constructor(range, firePattern, accuracyPattern, targettingPattern) {
+    constructor(range) {
       this.range = range;
-      this.firePattern = firePattern;
-      this.accuracyPattern = accuracyPattern;
-      this.targettingPattern = targettingPattern;
     }
   }
 
@@ -74,6 +71,14 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     simulatorParameters = parameters;
   }
 
+  var initMechPatterns = function(mechTeam) {
+    for (let mech of mechTeam) {
+      mech.firePattern = MechFirePattern.alphaAtZeroHeat;
+      mech.componentTargetPattern = MechTargetComponent.aimForCenterTorso;
+      mech.mechTargetPattern = MechTargetMech.targetMechsInOrder;
+    }
+  }
+
   var runSimulation = function() {
     if (!simulationInterval) {
       var IntervalHandler = function(context) {
@@ -120,7 +125,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
 
         processCooldowns(mech);
 
-        let weaponsToFire = simulatorParameters.firePattern(mech);
+        let weaponsToFire = mech.firePattern(mech);
         if (weaponsToFire) {
           fireWeapons(mech, weaponsToFire);
         }
@@ -335,6 +340,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   return {
     SimulatorParameters : SimulatorParameters,
     setSimulatorParameters : setSimulatorParameters,
+    initMechPatterns: initMechPatterns,
     runSimulation : runSimulation,
     pauseSimulation : pauseSimulation,
     resetSimulation : resetSimulation,

@@ -222,6 +222,8 @@ return {
                                   null //targettingPattern
                                 );
       MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
+      MechSimulatorLogic.initMechPatterns(MechModel.mechTeams[MechModel.Team.BLUE]);
+      MechSimulatorLogic.initMechPatterns(MechModel.mechTeams[MechModel.Team.RED]);
 
       $("#resetState").removeClass("debugButton").click(() => {
         MechModel.resetState();

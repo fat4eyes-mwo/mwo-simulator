@@ -850,6 +850,9 @@ var MechModel = MechModel || (function () {
     var mechInfo = mechInfoFromSmurfyMechLoadout(new_mech_id, smurfyMechLoadout);
     var mechState = initMechState(mechInfo);
     return {
+      firePattern : null, //Set after initialization
+      componentTargetPattern : null, //Set after initialization
+      mechTargetPattern : null, //set after initialization
       getName : function() {
         return smurfyMechData.name;
       },
