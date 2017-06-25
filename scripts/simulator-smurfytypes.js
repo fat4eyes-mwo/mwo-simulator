@@ -5,36 +5,36 @@
 var SmurfyTypes = SmurfyTypes || (function () {
 
   //Loadout types
-  var MechLoadout = {
+  var SmurfyMechLoadout = {
     id: null, //loadout id used in smurfy get param
-    mech_id: null, //used to refer to MechData.id
-    configuration: null, //[MechComponent...]
-    upgrades: null, //[MechUpgrade]
-    stats: null, //MechStats
+    mech_id: null, //used to refer to SmurfyMechData.id
+    configuration: null, //[SmurfyMechComponent...]
+    upgrades: null, //[SmurfyMechUpgrade]
+    stats: null, //SmurfyMechStats
   }
 
   //a mech component (e.g. center torso)
-  var MechComponent = {
-    name: null, //values are from MechModel.Component
+  var SmurfyMechComponent = {
+    name: null, //values are from SmurfyMechModel.Component
     armor: null,
-    actuators: null, //[MechComponentItem...]
-    items: null, //[MechComponentItem...]
+    actuators: null, //[SmurfyMechComponentItem...]
+    items: null, //[SmurfyMechComponentItem...]
   }
 
-  var MechComponentItem = {
+  var SmurfyMechComponentItem = {
     id: null, //refers to WeaponData.id, ModuleData.id, AmmoData.id
     type: null,
     name: null,
   }
 
   //Endo/Ferro/DoubleHeatsinks/Artemis
-  var MechUpgrade = {
+  var SmurfyMechUpgrade = {
     id: null, //no reference
     type: null,
     name: null,
   }
 
-  var MechStats = {
+  var SmurfyMechStats = {
     used_armor: null,
     used_jump_jets: null,
     granted_jump_jets: null,
@@ -48,27 +48,27 @@ var SmurfyTypes = SmurfyTypes || (function () {
     engine_name: null,
     engine_rating: null,
     engine_type: null,
-    armaments: null, //[MechArmamentEntry...]
+    armaments: null, //[SmurfyMechArmamentEntry...]
     ammunition: null,
-    equipment: null, //[MechEquipmentEntry...]
+    equipment: null, //[SmurfyMechEquipmentEntry...]
   }
 
-  var MechArmamentEntry = {
+  var SmurfyMechArmamentEntry = {
     id: null, //Refers to WeaponData.id
     type: null,
     name: null,
     count: null,
   }
 
-  var MechEquipmentEntry = {
+  var SmurfyMechEquipmentEntry = {
     id: null, //Refers to ModuleData.id
     type: null,
     name: null,
     count: null,
   }
 
-  //MechData classes
-  var MechData = {
+  //SmurfyMechData classes
+  var SmurfyMechData = {
     id: null,
     name: null,
     faction: null,
@@ -77,10 +77,10 @@ var SmurfyTypes = SmurfyTypes || (function () {
     chassis_translated: null, //long name for chassis
     translated_name: null,
     translated_short_name: null,
-    details: null, //MechDetails
+    details: null, //SmurfyMechDetails
   }
 
-  var MechDetails = {
+  var SmurfyMechDetails = {
     type: null,
     tons: null,
     top_speed: null,
@@ -91,14 +91,14 @@ var SmurfyTypes = SmurfyTypes || (function () {
     weapon_mod_slots: null,
     consumable_slots: null,
     engine_range: null, //{min, max}
-    hardpoints: null, //MechHardpoints
-    tuning_config: null, //MechTuningConfig. Note: just mobility stats, ignored for now
+    hardpoints: null, //SmurfyMechHardpoints
+    tuning_config: null, //SmurfyMechTuningConfig. Note: just mobility stats, ignored for now
     price: null, //{id, mc, cb}
     max_armor: null,
-    quirks: null, //[MechQuirk...]
+    quirks: null, //[SmurfyMechQuirk...]
   }
 
-  var MechHardpoints = { //hardpoint counts
+  var SmurfyMechHardpoints = { //hardpoint counts
     ams: null,
     beam: null,
     ballistic: null,
@@ -106,14 +106,14 @@ var SmurfyTypes = SmurfyTypes || (function () {
     ecm: null,
   }
 
-  var MechQuirk = {
+  var SmurfyQuirk = {
     name: null,
     translated_name: null,
     value: null,
   }
 
-  //WeaponData Classes
-  var WeaponData = {
+  //SmurfyWeaponData Classes
+  var SmurfyWeaponData = {
     id: null,
     type: null, //BALLISTIC, BEAM
     tons: null,
@@ -140,7 +140,7 @@ var SmurfyTypes = SmurfyTypes || (function () {
     ammo_per_shot : null //added from addedweapondata.js
   }
 
-  var WeaponCalcStats = {
+  var SmurfyWeaponCalcStats = {
     damageMultiplier: null,
     baseDmg: null,
     dps: null,
@@ -148,17 +148,17 @@ var SmurfyTypes = SmurfyTypes || (function () {
     ehs: null,
   }
 
-  var ModuleData { //Common properties for HeatsinkModuleData, EngineModuleData
+  var SmurfyModuleData { //Common properties for SmurfyHeatsinkModuleData, SmurfyEngineModuleData
     id : null;
     type : null;
     name : null;
   }
 
   //ModuleData with type = CHeatSinkStats
-  var HeatsinkModuleData { //extends ModuleData
+  var SmurfyHeatsinkModuleData { //extends SmurfyModuleData
     stats : null; //HeatsinkStats
   }
-  var HeatsinkStats {
+  var SmurfyHeatsinkStats {
     cooling : null;
     engineCooling : null;
     heatbase : null;
@@ -167,15 +167,15 @@ var SmurfyTypes = SmurfyTypes || (function () {
   }
 
   //ModuleData with type = CEngineStats
-  var EngineModuleData { //extends ModuleData
+  var SmurfyEngineModuleData { //extends SmurfyModuleData
     stats : null;
   }
-  var EngineStats {
+  var SmurfyEngineStats {
     rating : null;
     heatsinks : null;
   }
 
-  var AmmoData {
+  var SmurfyAmmoData {
     id : null;
     type : null;
     name : null;
