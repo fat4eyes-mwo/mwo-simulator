@@ -53,7 +53,7 @@ var MechModel = MechModel || (function () {
 
   class MechInfo {
     constructor(mechId, mechName, mechTranslatedName, mechHealth,
-      weaponInfoList, heatsinkInfoList, ammoBoxList, engineInfo) {
+      weaponInfoList, heatsinkInfoList, ammoBoxList, engineInfo, tons) {
       this.mechId = mechId;
       this.mechName = mechName;
       this.mechTranslatedName = mechTranslatedName;
@@ -62,6 +62,7 @@ var MechModel = MechModel || (function () {
       this.heatsinkInfoList = heatsinkInfoList; //[Heatsink...]
       this.ammoBoxList = ammoBoxList; //[AmmoBox...]
       this.engineInfo = engineInfo;
+      this.tons = tons;
     }
   }
 
@@ -741,8 +742,10 @@ var MechModel = MechModel || (function () {
     var heatsinkInfoList = heatsinkListFromSmurfyMechLoadout(smurfyMechLoadout);
     var ammoBoxList = ammoBoxListFromSmurfyMechLoadout(smurfyMechLoadout);
     var engineInfo = engineInfoFromSmurfyMechLoadout(smurfyMechLoadout);
+    var tons = smurfyMechData.details.tons;
 
-    mechInfo = new MechInfo(mechId, mechName, mechTranslatedName, mechHealth, weaponInfoList, heatsinkInfoList, ammoBoxList, engineInfo);
+    mechInfo = new MechInfo(mechId, mechName, mechTranslatedName, mechHealth,
+          weaponInfoList, heatsinkInfoList, ammoBoxList, engineInfo, tons);
     return mechInfo;
   }
 
