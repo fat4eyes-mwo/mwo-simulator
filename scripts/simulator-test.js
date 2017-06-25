@@ -257,19 +257,20 @@ return {
     },
 
     testSimulation : function() {
+      const range = 100;
       MechModel.initDummyModelData();
 
       MechModel.addMech("testExecutionerId", MechModel.Team.BLUE, DummyExecutioner);
       MechModel.addMech("testStormcrowId", MechModel.Team.BLUE, DummyStormcrowLowAmmo);
       MechModel.addMech("testCheetahId", MechModel.Team.BLUE, DummyArcticCheetah);
-      MechModel.addMech("testMaulerId", MechModel.Team.RED, DummyMauler);
+      // MechModel.addMech("testMaulerId", MechModel.Team.RED, DummyMauler);
+      MechModel.addMech("testBattlemasterId", MechModel.Team.RED, DummyBattleMaster);
       MechModel.addMech("testShadowhawkId", MechModel.Team.RED, DummyShadowhawk);
       MechModel.addMech("testFirestarterId", MechModel.Team.RED, DummyFireStarter);
-      // MechModel.addMech("testBattlemasterId", MechModel.Team.RED, DummyBattleMaster);
 
       MechModelView.updateFull();
       let simulatorParameters = new MechSimulatorLogic.SimulatorParameters(
-                                  200//range
+                                  range//range
                                 );
       MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
       MechSimulatorLogic.initMechPatterns(MechModel.mechTeams[MechModel.Team.BLUE]);

@@ -90,7 +90,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
 
   var initMechPatterns = function(mechTeam) {
     for (let mech of mechTeam) {
-      mech.firePattern = MechFirePattern.alphaAtZeroHeat;
+      mech.firePattern = MechFirePattern.maxFireNoGhostHeat;
       mech.componentTargetPattern = MechTargetComponent.aimForCenterTorso;
       mech.mechTargetPattern = MechTargetMech.targetMechsInOrder;
       mech.accuracyPattern = MechAccuracyPattern.fullAccuracyPattern;
@@ -148,7 +148,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
 
           processCooldowns(mech);
 
-          let weaponsToFire = mech.firePattern(mech);
+          let weaponsToFire = mech.firePattern(mech, simulatorParameters.range);
           if (weaponsToFire) {
             let targetMech = mech.mechTargetPattern(mech, MechModel.mechTeams[enemyTeam(team)]);
             if (targetMech) {
@@ -452,6 +452,36 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     return ghostHeat;
   }
 
+  var copyGhostHeatMap = function(ghostHeatMap) {
+    if (!ghostHeatMap) {
+      return ghostHeatMap;
+    }
+    let ret = {};
+    for (let key in ghostHeatMap) {
+      ret[key] = Array.from(ghostHeatMap[key]);
+    }
+    return ret;
+  }
+
+  //Computes total heat for the set of weapons fired, but restores the
+  //ghost heat map to its previous state afterwards
+  var predictHeat = function (mech, weaponsFired) {
+    let mechState = mech.getMechState();
+    let prevGhostHeatMap = mechState.ghostHeatMap;
+    mechState.ghostHeatMap = copyGhostHeatMap(prevGhostHeatMap);
+    let ret = computeHeat(mech, weaponsFired);
+    mechState.ghostHeatMap = prevGhostHeatMap;
+    return ret;
+  }
+
+  var predictBaseHeat = function (mech, weaponsFired) {
+    let ret = 0;
+    for (let weaponState of weaponsFired) {
+      ret = ret + Number(weaponState.weaponInfo.heat);
+    }
+    return ret;
+  }
+
   return {
     SimulatorParameters : SimulatorParameters,
     setSimulatorParameters : setSimulatorParameters,
@@ -460,8 +490,9 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     pauseSimulation : pauseSimulation,
     resetSimulation : resetSimulation,
     stepSimulation : stepSimulation,
-    step: step,
-    computeHeat: computeHeat,
+    step : step,
+    predictHeat : predictHeat,
+    predictBaseHeat : predictBaseHeat,
   }
 
 })(); //end namespace

@@ -302,6 +302,9 @@ var MechModel = MechModel || (function () {
         this.active = false;
       }
     }
+    isReady() {
+      return this.weaponCycle === WeaponCycle.READY;
+    }
     //Computes the cooldown for this weapon on a mech, taking modifiers into account
     computeWeaponCooldown(mech) {
       return Number(this.weaponInfo.cooldown);
