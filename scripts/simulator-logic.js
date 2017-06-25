@@ -5,7 +5,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   var simRunning = false;
   var simTime = 0;
   var simulatorParameters;
-  var weaponFireQueue = new Deque();
+  var weaponFireQueue = [];
 
   const stepDuration = 50; //simulation tick length in ms
 
@@ -91,7 +91,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   var initMechPatterns = function(mechTeam) {
     for (let mech of mechTeam) {
       mech.firePattern = MechFirePattern.alphaAtZeroHeat;
-      mech.componentTargetPattern = MechTargetComponent.aimForXLSideTorso;
+      mech.componentTargetPattern = MechTargetComponent.aimForCenterTorso;
       mech.mechTargetPattern = MechTargetMech.targetMechsInOrder;
       mech.accuracyPattern = MechAccuracyPattern.fullAccuracyPattern;
     }
@@ -128,7 +128,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
       window.clearInterval(simulationInterval);
       simulationInterval = null;
     }
-    weaponFireQueue.clear();
+    weaponFireQueue = [];
     simTime = 0;
     MechModelView.updateSimTime(simTime);
   }
@@ -248,14 +248,12 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   var queueWeaponFire = function(sourceMech, targetMech, weaponState) {
     let range = simulatorParameters.range;
     let weaponFire = new WeaponFire(sourceMech, targetMech, weaponState, range, simTime);
-    weaponFireQueue.addLast(weaponFire);
+    weaponFireQueue.push(weaponFire);
   }
 
   var updateUIWeaponFires = function() {
     let debugText = "";
-    let iterator = weaponFireQueue.iterator();
-    for (let weaponFire; iterator.hasNext();) {
-      weaponFire = iterator.next();
+    for (let weaponFire of weaponFireQueue) {
       debugText += weaponFire.toString() + "<br/><br/>";
     }
     MechModelView.updateDebugText(debugText);
@@ -342,15 +340,15 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   var processWeaponFires = function() {
     //TODO: implement
     //reduce durationLeft/travelLeft, deal damage as necessary
-    if (weaponFireQueue.isEmpty()) {
+    if (weaponFireQueue.length == 0) {
       return;
     }
     //Go through each entry in the current queue. Need to keep the start length
     //because the operations below dequeue the first element and requeue it
     //to the end of the queue if it still has duration/travelTime left
-    let startQueueLength = weaponFireQueue.length();
+    let startQueueLength = weaponFireQueue.length;
     for (let count = 0; count < startQueueLength; count++) {
-      let weaponFire = weaponFireQueue.removeFirst();
+      let weaponFire = weaponFireQueue.shift();
       let weaponInfo = weaponFire.weaponState.weaponInfo;
       let targetMech = weaponFire.targetMech;
       let targetMechState = weaponFire.targetMech.getMechState();
@@ -370,7 +368,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
           tickDamageDone = targetMechState.takeDamage(weaponFire.tickWeaponDamage);
           weaponFire.damageDone.add(tickDamageDone)
           //requeue with reduced durationLeft
-          weaponFireQueue.addLast(weaponFire);
+          weaponFireQueue.push(weaponFire);
         }
         targetMech.getMechState().updateTypes[MechModel.UpdateType.HEALTH] = true;
       } else if (weaponInfo.hasTravelTime()) {
@@ -381,7 +379,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
           //TODO: add weaponFire.damageDone to mechStats
           targetMech.getMechState().updateTypes[MechModel.UpdateType.HEALTH] = true;
         } else {
-          weaponFireQueue.addLast(weaponFire);
+          weaponFireQueue.push(weaponFire);
         }
       } else {
         //should not happen
@@ -432,23 +430,23 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     }
     let ghostHeatWeapons = mechState.ghostHeatMap[weaponInfo.heatPenaltyId];
     if (!ghostHeatWeapons) {
-      ghostHeatWeapons = new Deque();
+      ghostHeatWeapons = [];
       mechState.ghostHeatMap[weaponInfo.heatPenaltyId] = ghostHeatWeapons;
     }
     //Go through the list of ghost heat weapons and remove those that have been
     //fired outside the ghost heat interval
-    while (!(ghostHeatWeapons.isEmpty())
-      && (simTime - ghostHeatWeapons.peekFirst().timeFired > ghostHeatInterval)) {
-      ghostHeatWeapons.removeFirst()
+    while (ghostHeatWeapons.length > 0
+      && (simTime - ghostHeatWeapons[0].timeFired > ghostHeatInterval)) {
+      ghostHeatWeapons.shift();
     }
 
     let ghostHeatEntry = new GhostHeatEntry(simTime, weaponState);
-    ghostHeatWeapons.addLast(ghostHeatEntry);
+    ghostHeatWeapons.push(ghostHeatEntry);
 
     //calcluate ghost heat
     let ghostHeat = 0;
-    if (ghostHeatWeapons.length() >= weaponInfo.minHeatPenaltyLevel) {
-      ghostHeat = HEATMULTIPLIER[ghostHeatWeapons.length()] * Number(weaponInfo.heatPenalty) * Number(weaponInfo.heat);
+    if (ghostHeatWeapons.length >= weaponInfo.minHeatPenaltyLevel) {
+      ghostHeat = HEATMULTIPLIER[ghostHeatWeapons.length] * Number(weaponInfo.heatPenalty) * Number(weaponInfo.heat);
     }
 
     return ghostHeat;

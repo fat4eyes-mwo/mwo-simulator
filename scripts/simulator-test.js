@@ -74,7 +74,7 @@ return {
     },
 
     testDeque : function() {
-      let dq = new Deque();
+      let dq = new DequeXX();
       dq.addFirst(1);
       dq.addLast(10);
       dq.addFirst(2);

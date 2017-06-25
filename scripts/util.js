@@ -30,7 +30,8 @@ function binarySearchClosest(array, key, keyCompare) {
 
 //Double ended queue
 //Note: can potentially break if the indices get too high due to floating point rounding
-class Deque {
+//TODO: Use array shift/unshift, push/pop instead
+class DequeXX {
   constructor() {
     this.queue = {};
     this.startIdx = 0;
