@@ -14,7 +14,6 @@ var MechModelView = MechModelView || (function() {
     }
   }
 
-  //TODO: Move heat logic from view to here?
   var updateHeat = function(mech) {
     let heatState = mech.getMechState().heatState;
 
