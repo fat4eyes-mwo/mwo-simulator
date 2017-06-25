@@ -137,7 +137,6 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   var step = function() {
     let teams = [MechModel.Team.BLUE, MechModel.Team.RED];
 
-    //TODO: process WeaponFireQueue
     processWeaponFires();
 
     for (let team of teams) {
@@ -218,7 +217,6 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
         //if weapon has duration, set state to FIRING
         weaponState.gotoState(MechModel.WeaponCycle.FIRING, mech);
         weaponsFired.push(weaponState);
-        //TODO: add WeaponFire to queue
         queueWeaponFire(mech, targetMech, weaponState);
       } else {
         //if weapon has no duration, set state to COOLDOWN
@@ -229,7 +227,6 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
           ammoConsumed = mechState.ammoState.consumeAmmo(weaponInfo.weaponId,
                                                         weaponInfo.ammoPerShot);
         }
-        //TODO: add WeaponFire to queue
         queueWeaponFire(mech, targetMech, weaponState);
       }
 
@@ -302,7 +299,6 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
           //collect list of weapons fired, for use in heat computation
           weaponsFired.push(weaponState);
           mechState.updateTypes[MechModel.UpdateType.WEAPONSTATE] = true;
-          //TODO: Add WeaponFire to queue
           queueWeaponFire(mech, targetMech, weaponState);
         }
         mechState.updateTypes[MechModel.UpdateType.COOLDOWN] = true;
@@ -338,7 +334,6 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   }
 
   var processWeaponFires = function() {
-    //TODO: implement
     //reduce durationLeft/travelLeft, deal damage as necessary
     if (weaponFireQueue.length == 0) {
       return;
@@ -356,7 +351,6 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
         weaponFire.durationLeft = Number(weaponFire.durationLeft) - stepDuration;
         let tickDamageDone;
         if (weaponFire.durationLeft <=0) {
-          //TODO: Process last tick damage
           let lastTickDamage = weaponFire.tickWeaponDamage.clone();
           let damageFraction = (stepDuration + weaponFire.durationLeft) / stepDuration;
           lastTickDamage.multiply(damageFraction);
@@ -364,7 +358,6 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
           weaponFire.damageDone.add(tickDamageDone);
           //TODO: Add weaponFire.damageDone to mech stats
         } else {
-          //TODO: Process tick damage
           tickDamageDone = targetMechState.takeDamage(weaponFire.tickWeaponDamage);
           weaponFire.damageDone.add(tickDamageDone)
           //requeue with reduced durationLeft
