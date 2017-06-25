@@ -6,17 +6,17 @@ var MechView = MechView || (function() {
   // Paper doll UI functions
   //Color gradient for damage percentages. Must be in sorted ascending order
   const damageGradient = Object.freeze([
-    {value : 0.0, RGB : 0x15130c},
-    {value : 0.1, RGB : 0xb32a12},
-    {value : 0.2, RGB : 0xb53a13},
-    {value : 0.3, RGB : 0xb84b16},
-    {value : 0.4, RGB : 0xba5c17},
-    {value : 0.5, RGB : 0xbd6d1a},
-    {value : 0.6, RGB : 0xbc761a},
-    {value : 0.7, RGB : 0xbc7e1a},
-    {value : 0.8, RGB : 0xbc851a},
-    {value : 0.9, RGB : 0xbb8e1a},
-    {value : 1, RGB : 0x403720}
+    {value : 0.0, RGB : {r: 28, g:22, b:6}},
+    {value : 0.1, RGB : {r: 255, g:46, b:16}},
+    {value : 0.2, RGB : {r: 255, g:73, b:20}},
+    {value : 0.3, RGB : {r: 255, g:97, b:12}},
+    {value : 0.4, RGB : {r: 255, g:164, b:22}},
+    {value : 0.5, RGB : {r:255, g:176, b:18}},
+    {value : 0.6, RGB : {r:255, g:198, b:24}},
+    {value : 0.7, RGB : {r:255, g:211, b:23}},
+    {value : 0.8, RGB : {r:255, g:224, b:28}},
+    {value : 0.9, RGB : {r:255, g:235, b:24}},
+    {value : 1, RGB : {r:101, g:79, b:38}}
   ]);
 
   //gets the damage color for a given percentage of damage
@@ -28,7 +28,18 @@ var MechView = MechView || (function() {
     if (damageIdx == -1) {
       damageIdx = 0;
     }
-    return damageGradient[damageIdx].RGB;
+    let nextIdx = damageIdx + 1;
+    nextIdx = (nextIdx < damageGradient.length) ? nextIdx : damageIdx;
+    let rgb = damageGradient[damageIdx].RGB;
+    let nextRgb = damageGradient[nextIdx].RGB;
+    let percentDiff = (damageIdx != nextIdx) ?
+        (percent - damageGradient[damageIdx].value) /
+            (damageGradient[nextIdx].value - damageGradient[damageIdx].value)
+        : 1;
+    let red = Math.round(Number(rgb.r) + (Number(nextRgb.r) - Number(rgb.r)) * percentDiff);
+    let green = Math.round(Number(rgb.g) + (Number(nextRgb.g) - Number(rgb.g)) * percentDiff);
+    let blue = Math.round(Number(rgb.b) + (Number(nextRgb.b) - Number(rgb.b)) * percentDiff);
+    return "rgb(" + red + ","  + green + "," + blue + ")";
   }
 
   //Add a paper doll with the given mechId to the element with the id
@@ -50,13 +61,13 @@ var MechView = MechView || (function() {
     var color = damageColor(percent);
     let query = "#" + paperDollId(mechId) + "> [data-location='" + location + "']";
     $(query)
-      .css('border-color', "#" + color.toString(16));
+      .css('border-color', color);
   }
   var setPaperDollStructure = function (mechId, location, percent) {
     var color = damageColor(percent);
     let query = "#" + paperDollId(mechId) + "> [data-location='" + location + "']";
     $(query)
-      .css('background-color', "#" + color.toString(16));
+      .css('background-color', color);
   }
 
   var mechHealthNumbersId = function (mechId) {
