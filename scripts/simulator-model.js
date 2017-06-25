@@ -45,6 +45,12 @@ var MechModel = MechModel || (function () {
     STATS : "stats"
   };
 
+  const EngineType = {
+    STD : "std",
+    XL : "xl",
+    CLAN_XL : "clan_xl",
+  };
+
   class MechInfo {
     constructor(mechId, mechName, mechTranslatedName, mechHealth,
       weaponInfoList, heatsinkInfoList, ammoBoxList, engineInfo) {
@@ -217,8 +223,15 @@ var MechModel = MechModel || (function () {
       this.ghostHeatMap = {}; //weaponId -> [GhostHeatEntry]. Used in ghost heat computations.
     }
     isAlive() {
-      //TODO:Implement leg check and taking engine types into account
-      return this.mechHealth.isIntact(Component.CENTRE_TORSO);
+      let mechHealth = this.mechHealth;
+      let engineInfo = this.mechInfo.engineInfo;
+      return mechHealth.isIntact(Component.CENTRE_TORSO) &&
+        (mechHealth.isIntact(Component.LEFT_LEG)
+            || mechHealth.isIntact(Component.RIGHT_LEG)) &&
+        //xl engine implies both torsos still intact
+        (!(engineInfo.getEngineType() === EngineType.XL) ||
+            (mechHealth.isIntact(Component.LEFT_TORSO)
+            && mechHealth.isIntact(Component.RIGHT_TORSO)));
     }
     //Takes damage to components specified in weaponDamage.
     //Returns a MechDamage object that describes how much damage the mech took
@@ -443,6 +456,18 @@ var MechModel = MechModel || (function () {
         this.name,
         this.heatsink.clone(),
         this.heatsinkCount);
+    }
+    getEngineType() {
+      let engineType;
+      if (this.name.startsWith("Engine_Std")) {
+        return EngineType.STD;
+      } else if (this.name.startsWith("Engine_XL")) {
+        return EngineType.XL;
+      } else if (this.name.startsWith("Engine_Clan_XL")) {
+        return EngineType.CLAN_XL;
+      } else {
+        throw "Unknown engine type. Name: " + name;
+      }
     }
   }
 
@@ -1083,6 +1108,7 @@ var MechModel = MechModel || (function () {
     Team : Team,
     Faction : Faction,
     UpdateType : UpdateType,
+    EngineType : EngineType,
     MechDamage : MechDamage,
     WeaponDamage : WeaponDamage,
     Mech : Mech,

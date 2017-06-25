@@ -48,7 +48,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     }
 
     initComputedValues(range) {
-      let targetComponent = this.sourceMech.componentTargetPattern(this.targetMech);
+      let targetComponent = this.sourceMech.componentTargetPattern(this.sourceMech, this.targetMech);
       //baseWeaponDamage applies all damage to the target component
       let baseWeaponDamageMap = {};
       baseWeaponDamageMap[targetComponent] = this.weaponState.weaponInfo.damageAtRange(range);
@@ -91,7 +91,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   var initMechPatterns = function(mechTeam) {
     for (let mech of mechTeam) {
       mech.firePattern = MechFirePattern.alphaAtZeroHeat;
-      mech.componentTargetPattern = MechTargetComponent.aimForCenterTorso;
+      mech.componentTargetPattern = MechTargetComponent.aimForXLSideTorso;
       mech.mechTargetPattern = MechTargetMech.targetMechsInOrder;
       mech.accuracyPattern = MechAccuracyPattern.fullAccuracyPattern;
     }
