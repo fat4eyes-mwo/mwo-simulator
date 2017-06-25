@@ -21,10 +21,10 @@ var MechFirePattern = MechFirePattern || (function () {
     let weaponsToFire = [];
     for (let weaponState of sortedByDmgPerHeat) {
       if (!weaponState.isReady()) continue;
-      weaponsToFire.push(weaponState);
       //fit as many ready weapons as possible into the available heat
-      if (MechSimulatorLogic.predictHeat(mech, weaponsToFire)
-            + mechState.heatState.currHeat > mechState.heatState.currMaxHeat) {
+      //starting with those with the best damage:heat ratio
+      weaponsToFire.push(weaponState);
+      if (willOverheat(mech, weaponsToFire)) {
         weaponsToFire.pop();
         break;
       }
