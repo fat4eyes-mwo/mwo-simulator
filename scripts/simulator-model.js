@@ -477,6 +477,13 @@ var MechModel = MechModel || (function () {
       }
       return ret;
     }
+    toString() {
+      let ret = "";
+      for (let location in this.componentDamage) {
+        ret = ret + " " + this.componentDamage[location].toString();
+      }
+      return ret;
+    }
   }
 
   class ComponentDamage {
@@ -498,6 +505,9 @@ var MechModel = MechModel || (function () {
     }
     totalDamage() {
       return Number(this.armor) + Number(this.structure);
+    }
+    toString() {
+      return "location: " + this.location + " armordmg: " + this.armor + "structdmg: " + this.structure;
     }
   }
 
@@ -1056,6 +1066,16 @@ var MechModel = MechModel || (function () {
     }
   }
 
+  var isTeamAlive = function(team) {
+    let mechTeam = mechTeams[team];
+    for (let mech of mechTeam) {
+      if (mech.getMechState().isAlive()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   //public members
   return {
     Component: Component,
@@ -1073,6 +1093,7 @@ var MechModel = MechModel || (function () {
     dataLoaded : dataLoaded,
     addMech : addMech,
     resetState : resetState,
+    isTeamAlive : isTeamAlive,
     //Note: made public only because of testing. Should not be accessed outside this module
     baseMechStructure : baseMechStructure,
     baseMechArmor : baseMechArmor

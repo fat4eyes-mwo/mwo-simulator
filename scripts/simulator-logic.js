@@ -165,8 +165,19 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     simTime += stepDuration;
     MechModelView.updateSimTime(simTime);
 
+
     //debug
     updateUIWeaponFires();
+
+    if (!MechModel.isTeamAlive(MechModel.Team.BLUE)) {
+      MechModelView.updateDebugText("RED TEAM WINS!");
+      pauseSimulation();
+    }
+    if (!MechModel.isTeamAlive(MechModel.Team.RED)) {
+      MechModelView.updateDebugText("BLUE TEAM WINS!");
+      pauseSimulation();
+    }
+
   }
 
   var enemyTeam = function(myTeam) {
