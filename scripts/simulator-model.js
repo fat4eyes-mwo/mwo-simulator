@@ -148,6 +148,12 @@ var MechModel = MechModel || (function () {
     getComponentHealth(location) {
       return this.componentHealthMap[location];
     }
+    isIntact(location) {
+      return this.getComponentHealth(location).isIntact();
+    }
+    takeDamage(location, numDamage) {
+      return this.componentHealthMap[location].takeDamage(numDamage);
+    }
     clone() {
       let newComponentHealth = [];
       for (let componentHealthEntry of this.componentHealth) {
@@ -165,6 +171,32 @@ var MechModel = MechModel || (function () {
       this.maxArmor = maxArmor; //maximum armor from loadout
       this.maxStructure = maxStructure; //maximum structure from loadout
     }
+    isIntact() {
+      return this.structure > 0;
+    }
+    //returns a ComponentDamage with actual damage dealt
+    takeDamage(numDamage) {
+      let ret = new ComponentDamage(this.location, 0, 0);
+      if (numDamage <= this.armor) {
+        this.armor = Number(this.armor) - numDamage;
+        ret.addArmorDamage(numDamage);
+        numDamage = 0;
+      } else if (numDamage > this.armor) {
+        numDamage = Number(numDamage) - Number(this.armor);
+        ret.addArmorDamage(this.armor);
+        this.armor = 0;
+      }
+      if (numDamage <= this.structure) {
+        ret.addStructureDamage(numDamage);
+        this.structure = Number(this.structure) - numDamage;
+        numDamage = 0;
+      } else {
+        ret.addStructureDamage(this.structure);
+        numDamage = Number(numDamage) - Number(this.structure);
+        this.structure = 0;
+      }
+      return ret;
+    }
     clone() {
       return new ComponentHealth(this.location,
         this.armor,
@@ -175,7 +207,8 @@ var MechModel = MechModel || (function () {
   }
 
   class MechState {
-    constructor(mechHealth, heatState, weaponStateList, ammoState) {
+    constructor(mechInfo, mechHealth, heatState, weaponStateList, ammoState) {
+      this.mechInfo = mechInfo;
       this.mechHealth = mechHealth;
       this.heatState = heatState;
       this.weaponStateList = weaponStateList; //[WeaponState...]
@@ -185,7 +218,35 @@ var MechModel = MechModel || (function () {
     }
     isAlive() {
       //TODO:Implement leg check and taking engine types into account
-      return this.mechHealth.getComponentHealth(Component.CENTRE_TORSO).structure > 0;
+      return this.mechHealth.isIntact(Component.CENTRE_TORSO);
+    }
+    //Takes damage to components specified in weaponDamage.
+    //Returns a MechDamage object that describes how much damage the mech took
+    //MechDamage includes
+    takeDamage(weaponDamage) {
+      let totalDamage = new MechDamage();
+      for (let location in weaponDamage.damageMap) {
+        let numDamage = weaponDamage.getDamage(location);
+        //apply damage to location
+        let componentDamage = this.mechHealth.takeDamage(location, numDamage);
+        totalDamage.addComponentDamage(componentDamage);
+        //destroy components if necessary
+        if (!this.mechHealth.isIntact(location)) {
+          let destroyComponentDamage = this.destroyComponent(location);
+          totalDamage.add(destroyComponentDamage);
+        }
+        //TODO: apply transfer damage to adjacent components
+      }
+      return totalDamage;
+    }
+
+    //Disables all weapons, heatsinks and ammoboxes in a component.
+    //Also destroys adjacent arm components if the component is a torso
+    //Returns a MechDamage that contains any extra damage caused by
+    //the component destruction
+    destroyComponent(location) {
+      //TODO: Implement
+      return new MechDamage();
     }
   }
 
@@ -391,6 +452,31 @@ var MechModel = MechModel || (function () {
     constructor() {
       this.componentDamage = {}; //Component->ComponentDamage
     }
+    add(mechDamage) {
+      for (let location in mechDamage.componentDamage) {
+        if (!this.componentDamage[location]) {
+          this.componentDamage[location] = new ComponentDamage(location, 0, 0);
+        }
+        this.componentDamage[location].add(mechDamage.componentDamage[location]);
+      }
+    }
+    addComponentDamage(componentDamage) {
+      let location = componentDamage.location;
+      if (!this.componentDamage[location]) {
+        this.componentDamage[location] = new ComponentDamage(location, 0, 0);
+      }
+      this.componentDamage[location].add(componentDamage);
+    }
+    getComponentDamage(location) {
+      return this.componentDamage[location];
+    }
+    totalDamage() {
+      let ret = 0;
+      for (let component in this.componentDamage) {
+        ret = Number(ret) + componentDamage[component].totalDamage();
+      }
+      return ret;
+    }
   }
 
   class ComponentDamage {
@@ -398,6 +484,20 @@ var MechModel = MechModel || (function () {
       this.location = location;
       this.armor = armor;
       this.structure = structure;
+    }
+    add(componentDamage) {
+      this.armor += Number(componentDamage.armor);
+      this.structure += Number(componentDamage.structure);
+      return this;
+    }
+    addArmorDamage(damage) {
+      this.armor += Number(damage);
+    }
+    addStructureDamage(damage) {
+      this.structure += Number(damage);
+    }
+    totalDamage() {
+      return Number(this.armor) + Number(this.structure);
     }
   }
 
@@ -408,6 +508,11 @@ var MechModel = MechModel || (function () {
     }
     getDamage(component) {
       return this.damageMap[component];
+    }
+    multiply(multiplier) {
+      for (var location in this.damageMap) {
+        this.damageMap[location] = Number(this.damageMap) * Number(multiplier);
+      }
     }
     toString() {
       let ret = "";
@@ -812,7 +917,8 @@ var MechModel = MechModel || (function () {
     var weaponStateList = initWeaponStateList(mechInfo);
     var ammoState = initAmmoState(mechInfo);
 
-    mechState = new MechState(mechHealth, heatState, weaponStateList, ammoState);
+    mechState = new MechState(mechInfo, mechHealth, heatState,
+                              weaponStateList, ammoState);
     return mechState;
   }
 

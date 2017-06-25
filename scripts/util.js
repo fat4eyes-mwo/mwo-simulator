@@ -100,6 +100,12 @@ class Deque {
     })();
   }
 
+  clear() {
+    this.startIdx = 0;
+    this.endIdx = -1;
+    this.queue = {};
+  }
+
   toString() {
     let ret = "";
     for (let i = this.startIdx; i <= this.endIdx; i++) {
