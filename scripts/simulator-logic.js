@@ -348,23 +348,27 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
       let targetMech = weaponFire.targetMech;
       let targetMechState = weaponFire.targetMech.getMechState();
       if (weaponInfo.hasDuration()) {
-        //TODO: if weapon was disabled, dequeue without dealing damage
         weaponFire.durationLeft = Number(weaponFire.durationLeft) - stepDuration;
-        let tickDamageDone;
-        if (weaponFire.durationLeft <=0) {
-          let lastTickDamage = weaponFire.tickWeaponDamage.clone();
-          let damageFraction = (stepDuration + weaponFire.durationLeft) / stepDuration;
-          lastTickDamage.multiply(damageFraction);
-          tickDamageDone = targetMechState.takeDamage(weaponFire.tickWeaponDamage);
-          weaponFire.damageDone.add(tickDamageDone);
-          //TODO: Add weaponFire.damageDone to mech stats
+        if (weaponFire.weaponState.active) {
+          let tickDamageDone;
+          if (weaponFire.durationLeft <=0) {
+            let lastTickDamage = weaponFire.tickWeaponDamage.clone();
+            let damageFraction = (stepDuration + weaponFire.durationLeft) / stepDuration;
+            lastTickDamage.multiply(damageFraction);
+            tickDamageDone = targetMechState.takeDamage(lastTickDamage);
+            weaponFire.damageDone.add(tickDamageDone);
+            //TODO: Add weaponFire.damageDone to mech stats
+          } else {
+            tickDamageDone = targetMechState.takeDamage(weaponFire.tickWeaponDamage);
+            weaponFire.damageDone.add(tickDamageDone)
+            //requeue with reduced durationLeft
+            weaponFireQueue.push(weaponFire);
+          }
+          targetMech.getMechState().updateTypes[MechModel.UpdateType.HEALTH] = true;
         } else {
-          tickDamageDone = targetMechState.takeDamage(weaponFire.tickWeaponDamage);
-          weaponFire.damageDone.add(tickDamageDone)
-          //requeue with reduced durationLeft
-          weaponFireQueue.push(weaponFire);
+          //Weapon disabled before end of burn
+          //TODO: add weaponFire.damageDon to mech stats
         }
-        targetMech.getMechState().updateTypes[MechModel.UpdateType.HEALTH] = true;
       } else if (weaponInfo.hasTravelTime()) {
         weaponFire.travelLeft = Number(weaponFire.travelLeft) - stepDuration;
         if (weaponFire.travelLeft <= 0) {

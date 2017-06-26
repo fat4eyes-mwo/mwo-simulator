@@ -306,7 +306,6 @@ var MechModel = MechModel || (function () {
     //includeArmor is true if the remaining armor shoud be added to the component
     //destruction damage (i.e. when destroying arms after a torso destruction)
     destroyComponent(location, includeArmor) {
-      //TODO: Implement
       let destructionDamage = new MechDamage();
       let componentHealth = this.mechHealth.getComponentHealth(location);
 
@@ -328,7 +327,10 @@ var MechModel = MechModel || (function () {
       this.disableHeatsinks(location);
 
       //disable ammoboxes in the component
-      //if clan xl side torso, reduce engine efficiency
+      let disabledAmmo = this.ammoState.disableAmmoBoxes(location);
+      if (disabledAmmo.length > 0) {
+        this.updateTypes[UpdateType.WEAPONSTATE] = true;
+      }
 
       return destructionDamage;
     }
@@ -493,6 +495,23 @@ var MechModel = MechModel || (function () {
       } else {
         return 0;
       }
+    }
+
+    //Disables ammo boxes and reduces the corresponding AmmoCount
+    //Returns the set of disabled ammo boxes
+    disableAmmoBoxes(location) {
+      let ret = [];
+      for (let ammoBox of this.ammoBoxList) {
+        if (ammoBox.location === location) {
+          ammoBox.intact = false;
+          let firstWeaponId = ammoBox.weaponIds[0];
+          let ammoCount = this.ammoCounts[firstWeaponId];
+          ammoCount.ammoCount = Number(ammoCount.ammoCount) - Number(ammoBox.ammoCount);
+          ammoBox.ammoCount = 0;
+          ret.push(ammoBox);
+        }
+      }
+      return ret;
     }
   }
 
@@ -661,7 +680,8 @@ var MechModel = MechModel || (function () {
     }
     multiply(multiplier) {
       for (var location in this.damageMap) {
-        this.damageMap[location] = Number(this.damageMap) * Number(multiplier);
+        this.damageMap[location] =
+            Number(this.damageMap[location]) * Number(multiplier);
       }
     }
     toString() {
