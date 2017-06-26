@@ -2659,3 +2659,192 @@ DummyStormcrowLowAmmo = {
 	"created_at": "2017-06-23T09:29:42+0000",
 	"lsml": "lsml:\/\/rgC3ICwINBJACCwINCIP6y3qZ7EqvTz2JVeNXf4lr0c9jPY3ka8WvQz2JVk="
 };
+
+//http://mwo.smurfy-net.de/api/data/mechs/277/loadouts/stock.json
+var DummyUrbanmech = {
+	"id": "stock",
+	"mech_id": 277,
+	"valid": true,
+	"configuration": [{
+		"name": "head",
+		"armor": 12,
+		"actuators": [],
+		"items": [{
+			"id": "3000",
+			"type": "module",
+			"name": "STD HEAT SINK"
+		}]
+	}, {
+		"name": "left_torso",
+		"armor": 12,
+		"actuators": [],
+		"items": [{
+			"id": "3000",
+			"type": "module",
+			"name": "STD HEAT SINK"
+		}, {
+			"id": "3000",
+			"type": "module",
+			"name": "STD HEAT SINK"
+		}]
+	}, {
+		"name": "centre_torso",
+		"armor": 16,
+		"actuators": [],
+		"items": [{
+			"id": "3210",
+			"type": "module",
+			"name": "STD ENGINE 60"
+		}, {
+			"id": "1504",
+			"type": "module",
+			"name": "JUMP JETS - CLASS V"
+		}, {
+			"id": "1504",
+			"type": "module",
+			"name": "JUMP JETS - CLASS V"
+		}]
+	}, {
+		"name": "right_torso",
+		"armor": 12,
+		"actuators": [],
+		"items": [{
+			"id": "3000",
+			"type": "module",
+			"name": "STD HEAT SINK"
+		}, {
+			"id": "3000",
+			"type": "module",
+			"name": "STD HEAT SINK"
+		}, {
+			"id": "2000",
+			"type": "ammo",
+			"name": "AC\/20 AMMO"
+		}]
+	}, {
+		"name": "left_leg",
+		"armor": 16,
+		"actuators": [],
+		"items": [{
+			"id": "3000",
+			"type": "module",
+			"name": "STD HEAT SINK"
+		}, {
+			"id": "3000",
+			"type": "module",
+			"name": "STD HEAT SINK"
+		}]
+	}, {
+		"name": "right_leg",
+		"armor": 16,
+		"actuators": [],
+		"items": [{
+			"id": "3000",
+			"type": "module",
+			"name": "STD HEAT SINK"
+		}, {
+			"id": "3000",
+			"type": "module",
+			"name": "STD HEAT SINK"
+		}]
+	}, {
+		"name": "right_arm",
+		"armor": 12,
+		"actuators": [],
+		"items": [{
+			"id": "1000",
+			"type": "weapon",
+			"name": "AC\/20"
+		}]
+	}, {
+		"name": "left_arm",
+		"armor": 12,
+		"actuators": [],
+		"items": [{
+			"id": "1003",
+			"type": "weapon",
+			"name": "SMALL LASER"
+		}]
+	}, {
+		"name": "left_torso_rear",
+		"armor": 6,
+		"actuators": [],
+		"items": []
+	}, {
+		"name": "centre_torso_rear",
+		"armor": 8,
+		"actuators": [],
+		"items": []
+	}, {
+		"name": "right_torso_rear",
+		"armor": 6,
+		"actuators": [],
+		"items": []
+	}],
+	"upgrades": [{
+		"id": "2810",
+		"type": "Armor",
+		"name": "STANDARD ARMOR"
+	}, {
+		"id": "3100",
+		"type": "Structure",
+		"name": "STANDARD STRUCTURE"
+	}, {
+		"id": "3003",
+		"type": "HeatSink",
+		"name": "STANDARD HEAT SINK"
+	}, {
+		"id": "3051",
+		"type": "Artemis",
+		"name": "STANDARD GUIDANCE"
+	}],
+	"stats": {
+		"used_armor": 128,
+		"used_jump_jets": 2,
+		"granted_jump_jets": 0,
+		"firepower": 23,
+		"dps_max": 6,
+		"dps_sustained": 3.78,
+		"cooling_efficiency": 63,
+		"heatsinks": 11,
+		"top_speed": 32.4,
+		"top_speed_tweak": 0,
+		"engine_name": "STD ENGINE 60",
+		"engine_rating": 60,
+		"engine_type": "STD",
+		"armaments": [{
+			"id": "1000",
+			"type": "weapon",
+			"name": "AC\/20",
+			"count": 1
+		}, {
+			"id": "1003",
+			"type": "weapon",
+			"name": "SMALL LASER",
+			"count": 1
+		}],
+		"ammunition": [{
+			"id": "2000",
+			"type": "ammo",
+			"name": "AC\/20 AMMO",
+			"count": 1
+		}],
+		"equipment": [{
+			"id": "3000",
+			"type": "module",
+			"name": "STD HEAT SINK",
+			"count": 9
+		}, {
+			"id": "3210",
+			"type": "module",
+			"name": "STD ENGINE 60",
+			"count": 1
+		}, {
+			"id": "1504",
+			"type": "module",
+			"name": "JUMP JETS - CLASS V",
+			"count": 2
+		}]
+	},
+	"created_at": "2017-06-23T13:39:10+0000"
+};
