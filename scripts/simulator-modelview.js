@@ -76,7 +76,9 @@ var MechModelView = MechModelView || (function() {
       MechView.updateMechHealthNumbers(mech.getMechId(),
                         mechComponentHealth.location,
                         mechComponentHealth.armor,
-                        mechComponentHealth.structure);
+                        mechComponentHealth.structure,
+                        mechComponentHealth.maxArmor,
+                        mechComponentHealth.maxStructure);
     }
   }
 

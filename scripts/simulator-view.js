@@ -18,6 +18,20 @@ var MechView = MechView || (function() {
     {value : 0.9, RGB : {r:255, g:235, b:24}},
     {value : 1, RGB : {r:101, g:79, b:38}}
   ]);
+  //Colors for health numbers
+  const healthDamageGradient = Object.freeze([
+    {value : 0.0, RGB : {r: 255, g:0, b:0}},
+    {value : 0.5, RGB : {r: 255, g:255, b:0}},
+    {value : 1, RGB : {r:0, g:255, b:0}}
+  ]);
+  //Colors for individual component health numbers
+  const componentHealthDamageGradient = Object.freeze([
+    {value : 0.0, RGB : {r: 255, g:0, b:0}},
+    {value : 0.5, RGB : {r:255, g:255, b:0}},
+    {value : 0.9, RGB : {r:0, g:255, b:0}},
+    {value : 1, RGB : {r:170, g:170, b:170}}
+  ]);
+
 
   //gets the damage color for a given percentage of damage
   var damageColor = function (percent, damageGradient) {
@@ -82,44 +96,64 @@ var MechView = MechView || (function() {
       .appendTo(mechHealthNumbersContainer);
   }
 
-  var updateMechHealthNumbers = function(mechId, location, armor, structure) {
+  var updateMechHealthNumbers = function(mechId, location, armor, structure,
+                                          maxArmor, maxStructure) {
     let mechHealthNumbersDivId = "#" + mechHealthNumbersId(mechId);
+    let armorPercent = Number(armor) / Number(maxArmor);
+    let structurePercent = Number(structure) / Number(maxStructure);
+    let armorColor = damageColor(armorPercent, componentHealthDamageGradient);
+    let structureColor = damageColor(structurePercent, componentHealthDamageGradient);
     $(mechHealthNumbersDivId +
       " [data-location=" + location + "] " +
-      " [data-healthtype=armor]").html(Math.round(armor));
+      " [data-healthtype=armor]")
+        .css("color", armorColor)
+        .html(Math.round(armor));
     $(mechHealthNumbersDivId +
       " [data-location=" + location + "] " +
-      " [data-healthtype=structure]").html(Math.round(structure));
+      " [data-healthtype=structure]")
+      .css("color", structureColor)
+      .html(Math.round(structure));
   }
 
   //Heatbar UI functions
   var heatbarId = function (mechId) {
     return mechId + "-heatbar";
   }
+  var heatbarValueId = function (mechId) {
+    return mechId + "-heatbarValue";
+  }
   var addHeatbar = function (mechId, heatbarContainer) {
-    $("#heatbar-template").
-    clone(true)
+    $("#heatbar-template").clone(true)
     .attr("id", heatbarId(mechId))
     .attr("data-mech-id", mechId)
     .removeClass("template")
     .appendTo(heatbarContainer);
+    $("#" + heatbarId(mechId) + " > [class=heatbar]")
+      .attr("id", heatbarValueId(mechId))
+      .attr("data-mech-id", mechId);
   }
   //Sets the heatbar value for a given mech id to a specified percentage. Value of
   //percent is 0 to 1
   var setHeatbarValue = function (mechId, percent) {
     var invPercent = 1 - percent;
-    $("#" + heatbarId(mechId) + " > [class=heatbar]")
-      .height( (100 * invPercent) + "%");
+    // $("#" + heatbarId(mechId) + " > [class=heatbar]")
+    //   .height( (100 * invPercent) + "%");
+
+    let heatbarValueDiv = document.getElementById(heatbarValueId(mechId));
+    heatbarValueDiv.style.height = (100 * invPercent) + "%";
   }
 
   var updateHeat = function(mechId, currHeat, currMaxHeat) {
     let heatPercent = Number(currHeat) / Number(currMaxHeat);
     setHeatbarValue(mechId, heatPercent);
 
-    var heatNumberId = mechId + "-heatbarNumber";
+    var heatNumberId = heatNumberPanelId(mechId);
     let heatText = parseFloat(heatPercent * 100).toFixed(0) + "%" +
                     "(" + parseFloat(currHeat).toFixed(1) + ")";
-    $("#" + heatNumberId).html(heatText);
+    let heatNumberDiv = document.getElementById(heatNumberId);
+
+    // $("#" + heatNumberId).html(heatText);
+    heatNumberDiv.innerHTML = heatText;
   }
 
   var weaponRowId = function (mechId, idx) {
@@ -205,6 +239,9 @@ var MechView = MechView || (function() {
   var mechNamePanelId = function(mechId) {
     return mechId + "-mechName";
   }
+  var heatNumberPanelId = function(mechId) {
+    return mechId + "-heatbarNumber";
+  }
   var addMechPanel = function (mech, team) {
     let mechId = mech.getMechId();
     let mechState = mech.getMechState();
@@ -235,7 +272,7 @@ var MechView = MechView || (function() {
       .attr("id", heatbarContainerId);
     addHeatbar(mechId, "#" + heatbarContainerId);
 
-    var heatNumberId = mechId + "-heatbarNumber";
+    var heatNumberId = heatNumberPanelId(mechId);
     $("#" + mechPanelId(mechId) + " [class~='heatNumber']")
       .attr("id", heatNumberId);
 
@@ -255,11 +292,6 @@ var MechView = MechView || (function() {
       .html("");
   }
 
-  //Colors for summary health
-  const healthDamageGradient = Object.freeze([
-    {value : 0.0, RGB : {r: 255, g:0, b:0}},
-    {value : 1, RGB : {r:0, g:255, b:0}}
-  ]);
   var updateMechStatusPanel = function(mechId, mechName,
                 mechIsAlive, mechCurrTotalHealth, mechCurrMaxHealth) {
     let mechNameId = mechNamePanelId(mechId);
