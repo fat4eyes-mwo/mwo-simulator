@@ -3,7 +3,8 @@
 //Methods that update the MechView from the MechModel, and vice versa
 var MechModelView = MechModelView || (function() {
 
-  var updateFull = function () {
+  //clears the view and recreates all UI elements
+  var refreshView = function () {
     let mechTeamList = [MechModel.Team.BLUE, MechModel.Team.RED];
     for (let team of mechTeamList) {
       MechView.clear(team);
@@ -141,7 +142,7 @@ var MechModelView = MechModelView || (function() {
   }
 
   return {
-    updateFull : updateFull,
+    refreshView : refreshView,
     updateHealth : updateHealth,
     updateHeat : updateHeat,
     updateCooldown : updateCooldown,

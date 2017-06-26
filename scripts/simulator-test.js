@@ -20,7 +20,7 @@ return {
       MechModel.addMech("testBattlemasterId", MechModel.Team.RED, DummyBattleMaster);
       MechModel.addMech("testShadowhawkId", MechModel.Team.RED, DummyShadowhawk);
 
-      MechModelView.updateFull();
+      MechModelView.refreshView();
 
       MechView.initHandlers();
 
@@ -148,11 +148,11 @@ return {
       MechModel.addMech("testBattlemasterId", MechModel.Team.RED, DummyBattleMaster);
       MechModel.addMech("testShadowhawkId", MechModel.Team.RED, DummyShadowhawk);
 
-      MechModelView.updateFull();
+      MechModelView.refreshView();
 
       $("#resetState").removeClass("debugButton").click(() => {
         MechModel.resetState();
-        MechModelView.updateFull();
+        MechModelView.refreshView();
       });
 
       $("#testModelView").removeClass("debugButton").click(() => {
@@ -275,7 +275,7 @@ return {
       MechModel.addMech("testCatapultId", MechModel.Team.RED, DummyCatapult);
       // MechModel.addMech("testUrbanmechId1", MechModel.Team.RED, DummyUrbanmech);
 
-      MechModelView.updateFull();
+      MechModelView.refreshView();
       let simulatorParameters = new MechSimulatorLogic.SimulatorParameters(
                                   range//range
                                 );
@@ -285,7 +285,7 @@ return {
 
       $("#resetState").removeClass("debugButton").click(() => {
         MechModel.resetState();
-        MechModelView.updateFull();
+        MechModelView.refreshView();
       });
 
       $("#runSimulationButton").removeClass("debugButton").click(() => {
