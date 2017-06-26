@@ -2848,3 +2848,431 @@ var DummyUrbanmech = {
 	},
 	"created_at": "2017-06-23T13:39:10+0000"
 };
+
+//http://mwo.smurfy-net.de/mechlab#i=12&l=ccd22130859be43016c116144508ff0eafd02703
+DummyCatapult = {
+	"id": "ccd22130859be43016c116144508ff0eafd02703",
+	"mech_id": 12,
+	"valid": true,
+	"configuration": [{
+		"name": "centre_torso",
+		"armor": 64,
+		"actuators": [],
+		"items": [{
+			"id": "3358",
+			"type": "module",
+			"name": "XL ENGINE 300"
+		}, {
+			"id": "3001",
+			"type": "module",
+			"name": "DOUBLE HEAT SINK"
+		}, {
+			"id": "3001",
+			"type": "module",
+			"name": "DOUBLE HEAT SINK"
+		}, {
+			"id": "1001",
+			"type": "weapon",
+			"name": "MEDIUM LASER"
+		}, {
+			"id": "1001",
+			"type": "weapon",
+			"name": "MEDIUM LASER"
+		}]
+	}, {
+		"name": "left_torso",
+		"armor": 42,
+		"actuators": [],
+		"items": [{
+			"id": "1001",
+			"type": "weapon",
+			"name": "MEDIUM LASER"
+		}, {
+			"id": "9003",
+			"type": "module",
+			"name": "C.A.S.E."
+		}, {
+			"id": "2027",
+			"type": "ammo",
+			"name": "LRM AMMO"
+		}, {
+			"id": "2027",
+			"type": "ammo",
+			"name": "LRM AMMO"
+		}, {
+			"id": "2027",
+			"type": "ammo",
+			"name": "LRM AMMO"
+		}, {
+			"id": "2027",
+			"type": "ammo",
+			"name": "LRM AMMO"
+		}, {
+			"id": "2027",
+			"type": "ammo",
+			"name": "LRM AMMO"
+		}, {
+			"id": "2027",
+			"type": "ammo",
+			"name": "LRM AMMO"
+		}, {
+			"id": "2027",
+			"type": "ammo",
+			"name": "LRM AMMO"
+		}]
+	}, {
+		"name": "right_torso",
+		"armor": 42,
+		"actuators": [],
+		"items": [{
+			"id": "1001",
+			"type": "weapon",
+			"name": "MEDIUM LASER"
+		}]
+	}, {
+		"name": "right_arm",
+		"armor": 40,
+		"actuators": [],
+		"items": [{
+			"id": "1002",
+			"type": "weapon",
+			"name": "LRM 20"
+		}]
+	}, {
+		"name": "left_arm",
+		"armor": 40,
+		"actuators": [],
+		"items": [{
+			"id": "1002",
+			"type": "weapon",
+			"name": "LRM 20"
+		}]
+	}, {
+		"name": "head",
+		"armor": 18,
+		"actuators": [],
+		"items": []
+	}, {
+		"name": "right_leg",
+		"armor": 49,
+		"actuators": [],
+		"items": []
+	}, {
+		"name": "left_leg",
+		"armor": 49,
+		"actuators": [],
+		"items": []
+	}, {
+		"name": "left_torso_rear",
+		"armor": 18,
+		"actuators": [],
+		"items": []
+	}, {
+		"name": "centre_torso_rear",
+		"armor": 20,
+		"actuators": [],
+		"items": []
+	}, {
+		"name": "right_torso_rear",
+		"armor": 18,
+		"actuators": [],
+		"items": []
+	}],
+	"upgrades": [{
+		"id": "2810",
+		"type": "Armor",
+		"name": "STANDARD ARMOR"
+	}, {
+		"id": "3101",
+		"type": "Structure",
+		"name": "ENDO-STEEL STRUCTURE"
+	}, {
+		"id": "3002",
+		"type": "HeatSink",
+		"name": "DOUBLE HEAT SINK"
+	}, {
+		"id": "3051",
+		"type": "Artemis",
+		"name": "STANDARD GUIDANCE"
+	}],
+	"stats": {
+		"used_armor": 400,
+		"used_jump_jets": 0,
+		"granted_jump_jets": 0,
+		"firepower": 60,
+		"dps_max": 14.4305307096,
+		"dps_sustained": 5.1949910554562,
+		"cooling_efficiency": 36,
+		"heatsinks": 12,
+		"top_speed": 74.769230769231,
+		"top_speed_tweak": 0,
+		"engine_name": "XL ENGINE 300",
+		"engine_rating": 300,
+		"engine_type": "XL",
+		"armaments": [{
+			"id": "1001",
+			"type": "weapon",
+			"name": "MEDIUM LASER",
+			"count": 4
+		}, {
+			"id": "1002",
+			"type": "weapon",
+			"name": "LRM 20",
+			"count": 2
+		}],
+		"ammunition": [{
+			"id": "2027",
+			"type": "ammo",
+			"name": "LRM AMMO",
+			"count": 7
+		}],
+		"equipment": [{
+			"id": "3358",
+			"type": "module",
+			"name": "XL ENGINE 300",
+			"count": 1
+		}, {
+			"id": "3001",
+			"type": "module",
+			"name": "DOUBLE HEAT SINK",
+			"count": 2
+		}, {
+			"id": "9003",
+			"type": "module",
+			"name": "C.A.S.E.",
+			"count": 1
+		}]
+	},
+	"created_at": "2015-05-01T14:11:06+0000",
+	"lsml": "lsml:\/\/rgAMKCoSMRJAFCoSMSjne6\/upzrMS1jbcWKsY2Kbjx48ePHjtS1k"
+};
+
+DummyMadDog = {
+	"id": "e0dfb8f23aa9e091fedb52686d365d5a335a93e8",
+	"mech_id": 214,
+	"valid": true,
+	"configuration": [{
+		"name": "centre_torso",
+		"armor": 64,
+		"actuators": [],
+		"omni_pod": 0,
+		"items": [{
+			"id": "9020",
+			"type": "module",
+			"name": "CLAN ACTIVE PROBE"
+		}]
+	}, {
+		"name": "right_leg",
+		"armor": 56,
+		"actuators": [],
+		"omni_pod": 30217,
+		"items": [{
+			"id": "2215",
+			"type": "ammo",
+			"name": "C-LRM AMMO + ART. IV"
+		}, {
+			"id": "2215",
+			"type": "ammo",
+			"name": "C-LRM AMMO + ART. IV"
+		}]
+	}, {
+		"name": "left_leg",
+		"armor": 56,
+		"actuators": [],
+		"omni_pod": 30216,
+		"items": [{
+			"id": "2215",
+			"type": "ammo",
+			"name": "C-LRM AMMO + ART. IV"
+		}, {
+			"id": "2215",
+			"type": "ammo",
+			"name": "C-LRM AMMO + ART. IV"
+		}]
+	}, {
+		"name": "left_torso",
+		"armor": 42,
+		"actuators": [],
+		"omni_pod": 30212,
+		"items": [{
+			"id": "1223",
+			"type": "weapon",
+			"name": "C-LRM 10 + ARTEMIS"
+		}, {
+			"id": "2215",
+			"type": "ammo",
+			"name": "C-LRM AMMO + ART. IV"
+		}, {
+			"id": "2215",
+			"type": "ammo",
+			"name": "C-LRM AMMO + ART. IV"
+		}, {
+			"id": "2215",
+			"type": "ammo",
+			"name": "C-LRM AMMO + ART. IV"
+		}, {
+			"id": "2215",
+			"type": "ammo",
+			"name": "C-LRM AMMO + ART. IV"
+		}, {
+			"id": "2235",
+			"type": "ammo",
+			"name": "C-LRM AMMO+ART. IV (1\/2)"
+		}]
+	}, {
+		"name": "right_torso",
+		"armor": 42,
+		"actuators": [],
+		"omni_pod": 30214,
+		"items": [{
+			"id": "1223",
+			"type": "weapon",
+			"name": "C-LRM 10 + ARTEMIS"
+		}, {
+			"id": "1223",
+			"type": "weapon",
+			"name": "C-LRM 10 + ARTEMIS"
+		}, {
+			"id": "3004",
+			"type": "module",
+			"name": "CLAN DOUBLE HEAT SINK"
+		}, {
+			"id": "3004",
+			"type": "module",
+			"name": "CLAN DOUBLE HEAT SINK"
+		}]
+	}, {
+		"name": "right_arm",
+		"armor": 40,
+		"actuators": [{
+			"id": 1910,
+			"enabled": false
+		}],
+		"omni_pod": 30207,
+		"items": [{
+			"id": "1212",
+			"type": "weapon",
+			"name": "C-ER MED LASER"
+		}, {
+			"id": "3004",
+			"type": "module",
+			"name": "CLAN DOUBLE HEAT SINK"
+		}]
+	}, {
+		"name": "left_arm",
+		"armor": 40,
+		"actuators": [{
+			"id": 1910,
+			"enabled": false
+		}, {
+			"id": 1911,
+			"enabled": false
+		}],
+		"omni_pod": 30211,
+		"items": [{
+			"id": "1212",
+			"type": "weapon",
+			"name": "C-ER MED LASER"
+		}, {
+			"id": "1212",
+			"type": "weapon",
+			"name": "C-ER MED LASER"
+		}]
+	}, {
+		"name": "head",
+		"armor": 18,
+		"actuators": [],
+		"omni_pod": 30210,
+		"items": []
+	}, {
+		"name": "left_torso_rear",
+		"armor": 14,
+		"actuators": [],
+		"omni_pod": 0,
+		"items": []
+	}, {
+		"name": "centre_torso_rear",
+		"armor": 16,
+		"actuators": [],
+		"omni_pod": 0,
+		"items": []
+	}, {
+		"name": "right_torso_rear",
+		"armor": 14,
+		"actuators": [],
+		"omni_pod": 0,
+		"items": []
+	}],
+	"upgrades": [{
+		"id": "2815",
+		"type": "Armor",
+		"name": "CLAN FERRO FIBROUS ARMOR"
+	}, {
+		"id": "3103",
+		"type": "Structure",
+		"name": "CLAN STANDARD STRUCTURE"
+	}, {
+		"id": "3005",
+		"type": "HeatSink",
+		"name": "CLAN DOUBLE HEAT SINK"
+	}, {
+		"id": "3050",
+		"type": "Artemis",
+		"name": "ARTEMIS"
+	}],
+	"stats": {
+		"used_armor": 402,
+		"used_jump_jets": 0,
+		"granted_jump_jets": 0,
+		"firepower": 51,
+		"dps_max": 11.921052631579,
+		"dps_sustained": 4.7684210526316,
+		"cooling_efficiency": 40,
+		"heatsinks": 15,
+		"top_speed": 81,
+		"top_speed_tweak": 0,
+		"engine_name": "CLAN XL ENGINE 300",
+		"engine_rating": 300,
+		"engine_type": "XL",
+		"armaments": [{
+			"id": "1223",
+			"type": "weapon",
+			"name": "C-LRM 10 + ARTEMIS",
+			"count": 3
+		}, {
+			"id": "1212",
+			"type": "weapon",
+			"name": "C-ER MED LASER",
+			"count": 3
+		}],
+		"ammunition": [{
+			"id": "2215",
+			"type": "ammo",
+			"name": "C-LRM AMMO + ART. IV",
+			"count": 8
+		}, {
+			"id": "2235",
+			"type": "ammo",
+			"name": "C-LRM AMMO+ART. IV (1\/2)",
+			"count": 1
+		}],
+		"equipment": [{
+			"id": "9020",
+			"type": "module",
+			"name": "CLAN ACTIVE PROBE",
+			"count": 1
+		}, {
+			"id": "3004",
+			"type": "module",
+			"name": "CLAN DOUBLE HEAT SINK",
+			"count": 5
+		}, {
+			"id": "3458",
+			"type": "module",
+			"name": "CLAN XL ENGINE 300",
+			"count": 1
+		}]
+	},
+	"created_at": "2015-03-27T16:13:19+0000",
+	"lsml": "lsml:\/\/rgDWKCoOOBJAECoOOCgA6yzCmJKphvPTz05UqmHt5DeQpheiM6YZz095DeQ3kN5Degph3eQ3kKYYxMSy"
+};

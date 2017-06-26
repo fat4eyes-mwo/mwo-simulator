@@ -91,8 +91,8 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   var initMechPatterns = function(mechTeam) {
     for (let mech of mechTeam) {
       mech.firePattern = MechFirePattern.maximumDmgPerHeat;
-      mech.componentTargetPattern = MechTargetComponent.aimForCenterTorso;
-      mech.mechTargetPattern = MechTargetMech.targetMechsInOrder;
+      mech.componentTargetPattern = MechTargetComponent.randomAim;
+      mech.mechTargetPattern = MechTargetMech.targetRandomMech;
       mech.accuracyPattern = MechAccuracyPattern.fullAccuracyPattern;
     }
   }
@@ -358,9 +358,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
             tickDamageDone = targetMechState.takeDamage(lastTickDamage);
             weaponFire.damageDone.add(tickDamageDone);
             //TODO: Add weaponFire.damageDone to mech stats
-            console.log(weaponInfo.name + " completed. Total damage: "
-                      + weaponFire.damageDone.totalDamage() +
-                      "(" + weaponFire.damageDone.toString() + ")");
+            logDamage(weaponFire);
           } else {
             tickDamageDone = targetMechState.takeDamage(weaponFire.tickWeaponDamage);
             weaponFire.damageDone.add(tickDamageDone)
@@ -371,9 +369,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
         } else {
           //Weapon disabled before end of burn
           //TODO: add weaponFire.damageDone to mech stats
-          console.log(weaponInfo.name + " completed. Total damage: "
-                    + weaponFire.damageDone.totalDamage() +
-                    "(" + weaponFire.damageDone.toString() + ")");
+          logDamage(weaponFire);
         }
       } else if (weaponInfo.hasTravelTime()) {
         weaponFire.travelLeft = Number(weaponFire.travelLeft) - stepDuration;
@@ -382,9 +378,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
           weaponFire.damageDone.add(damageDone);
           targetMech.getMechState().updateTypes[MechModel.UpdateType.HEALTH] = true;
           //TODO: add weaponFire.damageDone to mechStats
-          console.log(weaponInfo.name + " completed. Total damage: "
-                    + weaponFire.damageDone.totalDamage() +
-                    "(" + weaponFire.damageDone.toString() + ")");
+          logDamage(weaponFire);
         } else {
           weaponFireQueue.push(weaponFire);
         }
@@ -393,6 +387,15 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
         throw "Unexpected WeaponFire type";
       }
     }
+  }
+
+  var logDamage = function(weaponFire) {
+    let weaponInfo = weaponFire.weaponState.weaponInfo;
+    console.log(weaponInfo.name + " completed. Total damage: "
+              + weaponFire.damageDone.totalDamage() +
+              "(" + weaponFire.damageDone.toString() + ")" +
+              " src: " + weaponFire.sourceMech.getName() +
+              " dest: " + weaponFire.targetMech.getName());
   }
 
   //Compute the heat caused by firing a set of weapons
