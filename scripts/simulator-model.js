@@ -51,6 +51,8 @@ var MechModel = MechModel || (function () {
     CLAN_XL : "clan_xl",
   };
 
+
+
   class MechInfo {
     constructor(mechId, mechName, mechTranslatedName, mechHealth,
       weaponInfoList, heatsinkInfoList, ammoBoxList, engineInfo, tons) {
@@ -289,8 +291,10 @@ var MechModel = MechModel || (function () {
             destroyComponentDamage = this.destroyComponent(Component.RIGHT_ARM, true);
             totalDamage.add(destroyComponentDamage);
           }
+          //update engine stat changes due to component destruction
+          //i.e. reduce clan engine efficiency
+          this.updateEngineHeatStats(location);
         }
-
       }
       return totalDamage;
     }
@@ -321,6 +325,8 @@ var MechModel = MechModel || (function () {
       //disable weapons in the component
       this.disableWeapons(location);
       //disable heatsinks in the component
+      this.disableHeatsinks(location);
+
       //disable ammoboxes in the component
       //if clan xl side torso, reduce engine efficiency
 
@@ -333,6 +339,35 @@ var MechModel = MechModel || (function () {
         if (weaponInfo.location === location) {
           weaponState.gotoState(WeaponCycle.DISABLED);
           this.updateTypes[UpdateType.WEAPONSTATE] = true;
+        }
+      }
+    }
+
+    disableHeatsinks(location) {
+      for (let heatsink of this.heatState.currHeatsinkList) {
+        if (heatsink.location === location) {
+          heatsink.active = false;
+          this.updateTypes[UpdateType.HEAT] = true;
+        }
+      }
+    }
+
+    updateEngineHeatStats(location) {
+      //reduce engine heat efficiency if clan xl engine
+      let engineInfo = this.heatState.engineInfo;
+      let heatState = this.heatState;
+      if (engineInfo.getEngineType() === EngineType.CLAN_XL) {
+        if (location === Component.LEFT_TORSO ||
+            location === Component.RIGHT_TORSO) {
+          heatState.engineHeatEfficiency = Number(_MechGlobalGameInfo.clan_reduced_xl_heat_efficiency);
+          //recompute heat stats
+          let heatStats = calculateHeatStats(
+                heatState.currHeatsinkList,
+                heatState.engineInfo,
+                heatState.engineHeatEfficiency);
+          heatState.currHeatDissapation = heatStats.heatDissapation;
+          heatState.currMaxHeat = heatStats.heatCapacity;
+          this.updateTypes[UpdateType.HEAT];
         }
       }
     }
@@ -1042,13 +1077,13 @@ var MechModel = MechModel || (function () {
   }
 
   //Calculates the total heat capacity and heat dissapation from a mechInfo
-  var calculateHeatStats = function (mechInfo, engineHeatEfficiency) {
+  var calculateHeatStats = function (heatsinkInfoList, engineInfo, engineHeatEfficiency) {
     const BASE_HEAT_CAPACITY = 30;
     let heatCapacity = BASE_HEAT_CAPACITY;
     let heatDissapation = 0;
 
     //non-fixed heatsinks
-    for (let heatsink of mechInfo.heatsinkInfoList) {
+    for (let heatsink of heatsinkInfoList) {
       if (!heatsink.active) continue;
       if (heatsink.location === Component.CENTRE_TORSO) {
       //internal non-fixed
@@ -1062,11 +1097,11 @@ var MechModel = MechModel || (function () {
     }
 
     //engine heatsinks
-    let engineHeatsink = mechInfo.engineInfo.heatsink;
-    heatCapacity += Number(mechInfo.engineInfo.heatsinkCount) *
+    let engineHeatsink = engineInfo.heatsink;
+    heatCapacity += Number(engineInfo.heatsinkCount) *
                     Number(engineHeatsink.internalHeatCapacity) *
                     Number(engineHeatEfficiency);
-    heatDissapation += Number(mechInfo.engineInfo.heatsinkCount) *
+    heatDissapation += Number(engineInfo.heatsinkCount) *
                       Number(engineHeatsink.engineCooling) *
                       Number(engineHeatEfficiency);
 
@@ -1081,7 +1116,10 @@ var MechModel = MechModel || (function () {
   var initHeatState = function(mechInfo) {
     let currHeat = 0;
     let engineHeatEfficiency = 1;
-    let heatStats = calculateHeatStats(mechInfo, engineHeatEfficiency);
+    let heatStats = calculateHeatStats(
+            mechInfo.heatsinkInfoList,
+            mechInfo.engineInfo,
+            engineHeatEfficiency);
     let currHeatDissapation = heatStats.heatDissapation;
     let currMaxHeat = heatStats.heatCapacity;
     //Copy engine info from mech info
