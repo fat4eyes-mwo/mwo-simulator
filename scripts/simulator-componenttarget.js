@@ -26,9 +26,25 @@ var MechTargetComponent = MechTargetComponent || (function () {
     }
   }
 
+  var randomAim = function(sourceMech, targetMech) {
+    let Component = MechModel.Component;
+    let componentList = [
+      Component.RIGHT_ARM,
+      Component.RIGHT_TORSO,
+      Component.CENTRE_TORSO,
+      Component.LEFT_ARM,
+      Component.LEFT_TORSO,
+      Component.RIGHT_LEG,
+      Component.LEFT_LEG,
+    ];
+    return componentList[Math.floor(Math.random() * componentList.length)];
+
+  }
+
   return {
     aimForCenterTorso : aimForCenterTorso,
     aimForXLSideTorso : aimForXLSideTorso,
     aimForLegs : aimForLegs,
+    randomAim : randomAim,
   }
 })();

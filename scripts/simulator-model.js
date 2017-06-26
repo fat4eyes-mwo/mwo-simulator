@@ -161,6 +161,20 @@ var MechModel = MechModel || (function () {
     takeDamage(location, numDamage) {
       return this.componentHealthMap[location].takeDamage(numDamage);
     }
+    totalCurrHealth() {
+      let ret = 0;
+      for (let componentHealthEntry of this.componentHealth) {
+        ret = Number(ret) + componentHealthEntry.totalCurrHealth();
+      }
+      return ret;
+    }
+    totalMaxHealth() {
+      let ret = 0;
+      for (let componentHealthEntry of this.componentHealth) {
+        ret = Number(ret) + componentHealthEntry.totalMaxHealth();
+      }
+      return ret;
+    }
     clone() {
       let newComponentHealth = [];
       for (let componentHealthEntry of this.componentHealth) {
@@ -204,6 +218,14 @@ var MechModel = MechModel || (function () {
       }
       return ret;
     }
+    totalCurrHealth() {
+      return Number(this.armor) +
+          ((this.structure) ? Number(this.structure) : 0); //special case for undefined structure in rear components
+    }
+    totalMaxHealth() {
+      return Number(this.maxArmor) +
+        ((this.maxStructure) ? Number(this.maxStructure) : 0); //special case for undefined structure in rear components
+    }
     clone() {
       return new ComponentHealth(this.location,
         this.armor,
@@ -226,7 +248,8 @@ var MechModel = MechModel || (function () {
     isAlive() {
       let mechHealth = this.mechHealth;
       let engineInfo = this.mechInfo.engineInfo;
-      return mechHealth.isIntact(Component.CENTRE_TORSO) &&
+      return mechHealth.isIntact(Component.HEAD) &&
+        mechHealth.isIntact(Component.CENTRE_TORSO) &&
         (mechHealth.isIntact(Component.LEFT_LEG)
             || mechHealth.isIntact(Component.RIGHT_LEG)) &&
         //xl engine implies both torsos still intact

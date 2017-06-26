@@ -5,7 +5,7 @@ var MechView = MechView || (function() {
 
   // Paper doll UI functions
   //Color gradient for damage percentages. Must be in sorted ascending order
-  const damageGradient = Object.freeze([
+  const paperDollDamageGradient = Object.freeze([
     {value : 0.0, RGB : {r: 28, g:22, b:6}},
     {value : 0.1, RGB : {r: 255, g:46, b:16}},
     {value : 0.2, RGB : {r: 255, g:73, b:20}},
@@ -20,7 +20,7 @@ var MechView = MechView || (function() {
   ]);
 
   //gets the damage color for a given percentage of damage
-  var damageColor = function (percent) {
+  var damageColor = function (percent, damageGradient) {
     var damageIdx = binarySearchClosest(
             damageGradient, percent, (key, colorValue) => {
       return key - colorValue.value;
@@ -58,13 +58,13 @@ var MechView = MechView || (function() {
 
   //Percent values from 0 to 1
   var setPaperDollArmor = function (mechId, location, percent) {
-    var color = damageColor(percent);
+    var color = damageColor(percent, paperDollDamageGradient);
     let query = "#" + paperDollId(mechId) + "> [data-location='" + location + "']";
     $(query)
       .css('border-color', color);
   }
   var setPaperDollStructure = function (mechId, location, percent) {
-    var color = damageColor(percent);
+    var color = damageColor(percent, paperDollDamageGradient);
     let query = "#" + paperDollId(mechId) + "> [data-location='" + location + "']";
     $(query)
       .css('background-color', color);
@@ -174,7 +174,11 @@ var MechView = MechView || (function() {
     }
   }
   var setWeaponCooldown = function (mechId, weaponIdx, percent) {
-    $("#" + weaponCooldownBarId(mechId, weaponIdx)).width(100*percent + "%");
+    //TODO, NOTE: jQuery on weapon cooldowns takes way too much compute time. Use
+    //plain javascript for this and other often updated elements
+    //$("#" + weaponCooldownBarId(mechId, weaponIdx)).width(100*percent + "%");
+    let cooldownDiv = document.getElementById(weaponCooldownBarId(mechId, weaponIdx));
+    cooldownDiv.style.width = (100*percent) + "%";
   }
   var setWeaponAmmo = function (mechId, weaponIdx, ammo) {
     $("#" + weaponAmmoId(mechId, weaponIdx)).html(ammo != -1 ? ammo : "&#x221e;");
@@ -194,6 +198,12 @@ var MechView = MechView || (function() {
   //adds a mech panel (which contains a paperDoll, a heatbar and a weaponPanel)
   var mechPanelId = function (mechId) {
     return mechId + "-mechPanel";
+  }
+  var mechSummaryHealthPanelId = function(mechId) {
+    return mechId + "-mechSummaryHealth";
+  }
+  var mechNamePanelId = function(mechId) {
+    return mechId + "-mechName";
   }
   var addMechPanel = function (mech, team) {
     let mechId = mech.getMechId();
@@ -234,10 +244,44 @@ var MechView = MechView || (function() {
       .attr("id", weaponPanelContainerId);
     addWeaponPanel(mechId, weaponStateList, ammoState, "#" + weaponPanelContainerId);
 
-    var mechNamePanelId = mechId + "-mechName";
+    let mechNameId =  mechNamePanelId(mechId);
     $("#" + mechPanelId(mechId) + " [class~='statusPanel'] [class~='mechName']")
-      .attr("id", mechNamePanelId)
+      .attr("id", mechNameId)
       .html(mech.getMechInfo().mechTranslatedName);
+
+    let mechSummaryHealthId = mechSummaryHealthPanelId(mechId);
+    $("#" + mechPanelId(mechId) + " [class~='statusPanel'] [class~='mechSummaryHealthText']")
+      .attr("id", mechSummaryHealthId)
+      .html("");
+  }
+
+  //Colors for summary health
+  const healthDamageGradient = Object.freeze([
+    {value : 0.0, RGB : {r: 255, g:0, b:0}},
+    {value : 1, RGB : {r:0, g:255, b:0}}
+  ]);
+  var updateMechStatusPanel = function(mechId, mechName,
+                mechIsAlive, mechCurrTotalHealth, mechCurrMaxHealth) {
+    let mechNameId = mechNamePanelId(mechId);
+    let mechSummaryHealthId = mechSummaryHealthPanelId(mechId);
+
+    //set mech name
+    $("#" + mechNameId).html(mechName);
+
+    //set mech summary health
+    let mechSummaryHealthText = "";
+    let percentHealth = 0;
+    if (mechCurrTotalHealth > 0 && mechIsAlive) {
+      percentHealth = Number(mechCurrTotalHealth) / Number(mechCurrMaxHealth);
+      mechSummaryHealthText = ((percentHealth * 100).toFixed(0)) + "%";
+    } else {
+      percentHealth = 0;
+      mechSummaryHealthText = "KIA";
+    }
+    $("#" + mechSummaryHealthId)
+        .css("color", damageColor(percentHealth, healthDamageGradient))
+        .html(mechSummaryHealthText);
+
   }
 
   var clear = function (team) {
@@ -285,6 +329,7 @@ var MechView = MechView || (function() {
     setWeaponAmmo : setWeaponAmmo,
     setWeaponState : setWeaponState,
     updateMechHealthNumbers : updateMechHealthNumbers,
+    updateMechStatusPanel : updateMechStatusPanel,
     updateHeat: updateHeat,
     updateSimTime : updateSimTime,
     setDebugText : setDebugText,

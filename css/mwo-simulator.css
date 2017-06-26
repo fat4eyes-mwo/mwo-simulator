@@ -249,4 +249,13 @@ body {
 
 .statusPanel .mechName {
   font-weight: bold;
+  font-size: 1.2em;
+}
+
+.statusPanel .mechSummaryHealthLabel {
+  font-weight: bold;
+}
+
+.statusPanel .mechSummaryHealthText {
+
 }

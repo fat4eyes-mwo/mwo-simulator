@@ -80,10 +80,22 @@ var MechModelView = MechModelView || (function() {
     }
   }
 
+  var updateMechStatus = function (mech) {
+    let mechName = mech.getTranslatedName();
+    let mechHealth = mech.getMechState().mechHealth;
+    let currTotalHealth = mechHealth.totalCurrHealth();
+    let currMaxHealth = mechHealth.totalMaxHealth();
+    let isAlive = mech.getMechState().isAlive();
+
+    MechView.updateMechStatusPanel(mech.getMechId(), mechName, isAlive,
+                          currTotalHealth, currMaxHealth);
+  }
+
   //TODO: Move health logic from view to here?
   var updateHealth = function(mech) {
     updatePaperDoll(mech);
     updateMechHealthNumbers(mech);
+    updateMechStatus(mech);
   }
 
   var updateSimTime = function(simTime) {
