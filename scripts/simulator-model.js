@@ -143,6 +143,9 @@ var MechModel = MechModel || (function () {
     }
   }
 
+  //Reference for damage mechanics:
+  //http://mwomercs.com/forums/topic/176345-understanding-damage/
+  //TODO: Find a non-random way to simulate critical hits
   class MechHealth {
     constructor(componentHealth) {
       //TODO: try to get rid of this componentHealth list
@@ -196,6 +199,7 @@ var MechModel = MechModel || (function () {
       return this.structure > 0;
     }
     //returns a ComponentDamage with actual damage dealt
+    //NOTE: Does not take rear components into account
     takeDamage(numDamage) {
       let ret = new ComponentDamage(this.location, 0, 0);
       if (numDamage <= this.armor) {
@@ -255,7 +259,11 @@ var MechModel = MechModel || (function () {
         //xl engine implies both torsos still intact
         (!(engineInfo.getEngineType() === EngineType.XL) ||
             (mechHealth.isIntact(Component.LEFT_TORSO)
-            && mechHealth.isIntact(Component.RIGHT_TORSO)));
+            && mechHealth.isIntact(Component.RIGHT_TORSO))) &&
+        //clan xl engine implies at least one side torso is intact
+        (!(engineInfo.getEngineType() === EngineType.CLAN_XL) ||
+            (mechHealth.isIntact(Component.LEFT_TORSO)
+            || mechHealth.isIntact(Component.RIGHT_TORSO)));
     }
     //Takes damage to components specified in weaponDamage.
     //Returns a MechDamage object that describes how much damage the mech took
@@ -267,12 +275,22 @@ var MechModel = MechModel || (function () {
         //apply damage to location
         let componentDamage = this.mechHealth.takeDamage(location, numDamage);
         totalDamage.addComponentDamage(componentDamage);
+        //TODO: apply transfer damage to adjacent components
+
         //destroy components if necessary
         if (!this.mechHealth.isIntact(location)) {
-          let destroyComponentDamage = this.destroyComponent(location);
+          let destroyComponentDamage = this.destroyComponent(location, false);
           totalDamage.add(destroyComponentDamage);
+          //destroy connected arms if torsos are destroyed
+          if (location === Component.LEFT_TORSO) {
+            destroyComponentDamage = this.destroyComponent(Component.LEFT_ARM, true);
+            totalDamage.add(destroyComponentDamage);
+          } else if (location === Component.RIGHT_TORSO) {
+            destroyComponentDamage = this.destroyComponent(Component.RIGHT_ARM, true);
+            totalDamage.add(destroyComponentDamage);
+          }
         }
-        //TODO: apply transfer damage to adjacent components
+
       }
       return totalDamage;
     }
@@ -281,18 +299,53 @@ var MechModel = MechModel || (function () {
     //Also destroys adjacent arm components if the component is a torso
     //Returns a MechDamage that contains any extra damage caused by
     //the component destruction
-    destroyComponent(location) {
+    //includeArmor is true if the remaining armor shoud be added to the component
+    //destruction damage (i.e. when destroying arms after a torso destruction)
+    destroyComponent(location, includeArmor) {
       //TODO: Implement
-      return new MechDamage();
+      let destructionDamage = new MechDamage();
+      let componentHealth = this.mechHealth.getComponentHealth(location);
+
+      //add remaining structure to destruction damage.
+      let structureDamage = componentHealth.structure;
+      let armorDamage = includeArmor ? componentHealth.armor : 0;
+      destructionDamage.addComponentDamage(
+          new ComponentDamage(location, armorDamage, structureDamage));
+
+      //reduce the component health values
+      componentHealth.structure = 0;
+      if (includeArmor) {
+          componentHealth.armor = 0;
+      }
+
+      //disable weapons in the component
+      this.disableWeapons(location);
+      //disable heatsinks in the component
+      //disable ammoboxes in the component
+      //if clan xl side torso, reduce engine efficiency
+
+      return destructionDamage;
     }
+
+    disableWeapons(location) {
+      for (let weaponState of this.weaponStateList) {
+        let weaponInfo = weaponState.weaponInfo;
+        if (weaponInfo.location === location) {
+          weaponState.gotoState(WeaponCycle.DISABLED);
+          this.updateTypes[UpdateType.WEAPONSTATE] = true;
+        }
+      }
+    }
+
+
   }
 
   class HeatState {
-    constructor(currHeat, currMaxHeat, currHeatDissapation, currHeatsinkInfo, engineInfo, engineHeatEfficiency) {
+    constructor(currHeat, currMaxHeat, currHeatDissapation, currHeatsinkList, engineInfo, engineHeatEfficiency) {
       this.currHeat = currHeat;
       this.currMaxHeat = currMaxHeat; //computed value, must be consistent with heatsinkInfo + engine
       this.currHeatDissapation = currHeatDissapation; //computed value, must be consistent with heatsinkInfo + engine
-      this.currHeatsinkInfo = currHeatsinkInfo; //[Heatsink...]
+      this.currHeatsinkList = currHeatsinkList; //[Heatsink...]
       this.engineInfo = engineInfo;
       this.engineHeatEfficiency = engineHeatEfficiency; //0 to 1
     }
@@ -307,7 +360,7 @@ var MechModel = MechModel || (function () {
       this.spoolupLeft = spoolupLeft;
       this.durationLeft = durationLeft;
     }
-    gotoState(weaponCycle, mech) {
+    gotoState(weaponCycle) {
       this.weaponCycle = weaponCycle;
       this.cooldownLeft = 0;
       this.spoolupLeft = 0;
@@ -754,6 +807,8 @@ var MechModel = MechModel || (function () {
     }
   }
 
+  //Object creation methods.
+  //TODO: see if it's better to put these in the object constructors instead
   var mechInfoFromSmurfyMechLoadout = function (mechId, smurfyMechLoadout) {
     var mechInfo;
 
@@ -1032,11 +1087,12 @@ var MechModel = MechModel || (function () {
     //Copy engine info from mech info
     let engineInfo = mechInfo.engineInfo.clone();
     //Copy heatsink info from mech info
-    let currHeatsinkInfo = [];
+    let currHeatsinkList = [];
     for (let heatsink of mechInfo.heatsinkInfoList) {
-      currHeatsinkInfo.push(heatsink.clone());
+      currHeatsinkList.push(heatsink.clone());
     }
-    let heatState = new HeatState(currHeat, currMaxHeat, currHeatDissapation, currHeatsinkInfo, engineInfo, engineHeatEfficiency)
+    let heatState = new HeatState(currHeat, currMaxHeat, currHeatDissapation,
+                            currHeatsinkList, engineInfo, engineHeatEfficiency)
     return heatState;
   }
 

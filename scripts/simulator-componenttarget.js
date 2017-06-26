@@ -26,6 +26,18 @@ var MechTargetComponent = MechTargetComponent || (function () {
     }
   }
 
+  var aimSideTorsoThenCenterTorso = function(sourceMech, targetMech) {
+    let targetMechHealth = targetMech.getMechState().mechHealth;
+    let Component = MechModel.Component;
+    if (targetMechHealth.isIntact(Component.RIGHT_TORSO)) {
+      return Component.RIGHT_TORSO;
+    } else if (targetMechHealth.isIntact(Component.LEFT_TORSO)) {
+      return Component.LEFT_TORSO
+    } else {
+      return Component.CENTRE_TORSO;
+    }
+  }
+
   var randomAim = function(sourceMech, targetMech) {
     let Component = MechModel.Component;
     let componentList = [
@@ -45,6 +57,7 @@ var MechTargetComponent = MechTargetComponent || (function () {
     aimForCenterTorso : aimForCenterTorso,
     aimForXLSideTorso : aimForXLSideTorso,
     aimForLegs : aimForLegs,
+    aimSideTorsoThenCenterTorso: aimSideTorsoThenCenterTorso,
     randomAim : randomAim,
   }
 })();

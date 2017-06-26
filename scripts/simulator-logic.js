@@ -91,7 +91,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   var initMechPatterns = function(mechTeam) {
     for (let mech of mechTeam) {
       mech.firePattern = MechFirePattern.maxFireNoGhostHeat;
-      mech.componentTargetPattern = MechTargetComponent.aimForCenterTorso;
+      mech.componentTargetPattern = MechTargetComponent.aimSideTorsoThenCenterTorso;
       mech.mechTargetPattern = MechTargetMech.targetMechsInOrder;
       mech.accuracyPattern = MechAccuracyPattern.fullAccuracyPattern;
     }
@@ -211,16 +211,16 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
 
       if (weaponInfo.spinup > 0) {
         //if weapon has spoolup, set state to SPOOLING and set value of spoolupLeft
-        weaponState.gotoState(MechModel.WeaponCycle.SPOOLING, mech);
+        weaponState.gotoState(MechModel.WeaponCycle.SPOOLING);
         //Note: Do NOT add WeaponFire to queue, it will be handled by processCooldowns
       } else if (weaponInfo.duration > 0) {
         //if weapon has duration, set state to FIRING
-        weaponState.gotoState(MechModel.WeaponCycle.FIRING, mech);
+        weaponState.gotoState(MechModel.WeaponCycle.FIRING);
         weaponsFired.push(weaponState);
         queueWeaponFire(mech, targetMech, weaponState);
       } else {
         //if weapon has no duration, set state to COOLDOWN
-        weaponState.gotoState(MechModel.WeaponCycle.COOLDOWN, mech);
+        weaponState.gotoState(MechModel.WeaponCycle.COOLDOWN,);
         weaponsFired.push(weaponState);
         let ammoConsumed = 0;
         if (weaponInfo.requiresAmmo()) {
@@ -286,7 +286,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
         let newSpoolLeft = Number(weaponState.spoolLeft) - stepDuration;
         weaponState.spoolLeft = Math.max(newSpoolLeft, 0);
         if (weaponState.spoolLeft <= 0) {
-          weaponState.gotoState(MechModel.WeaponCycle.COOLDOWN, mech);
+          weaponState.gotoState(MechModel.WeaponCycle.COOLDOWN);
           //if the spooling ended in the middle of the tick, subtract the
           //extra time from the cooldown
           weaponState.cooldownLeft += newSpoolLeft;
@@ -307,7 +307,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
         let newDurationLeft = Number(weaponState.durationLeft) - stepDuration;
         weaponState.durationLeft = Math.max(newDurationLeft, 0);
         if (weaponState.durationLeft <= 0) {
-          weaponState.gotoState(MechModel.WeaponCycle.COOLDOWN, mech);
+          weaponState.gotoState(MechModel.WeaponCycle.COOLDOWN);
           //if duration ended in the middle of the tick, subtract the
           //extra time from the cooldown
           weaponState.cooldownLeft +=  newDurationLeft;
@@ -320,7 +320,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
         let newCooldownLeft = Number(weaponState.cooldownLeft) - stepDuration;
         weaponState.cooldownLeft = Math.max(newCooldownLeft, 0);
         if (weaponState.cooldownLeft <= 0) {
-          weaponState.gotoState(MechModel.WeaponCycle.READY, mech);
+          weaponState.gotoState(MechModel.WeaponCycle.READY);
           mechState.updateTypes[MechModel.UpdateType.WEAPONSTATE] = true;
         }
         mechState.updateTypes[MechModel.UpdateType.COOLDOWN] = true;
@@ -348,6 +348,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
       let targetMech = weaponFire.targetMech;
       let targetMechState = weaponFire.targetMech.getMechState();
       if (weaponInfo.hasDuration()) {
+        //TODO: if weapon was disabled, dequeue without dealing damage
         weaponFire.durationLeft = Number(weaponFire.durationLeft) - stepDuration;
         let tickDamageDone;
         if (weaponFire.durationLeft <=0) {
