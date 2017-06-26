@@ -13,18 +13,21 @@ var MechFirePattern = MechFirePattern || (function () {
     }
   }
 
-  var maximumFireRate = function (mech, range) {
+  //Will always try to fire the weapons with the highest damage to heat ratio
+  //If not possible will wait until enough heat is available
+  //Avoids ghost heat
+  var maximumDmgPerHeat = function (mech, range) {
     let mechState = mech.getMechState();
     let sortedByDmgPerHeat = Array.from(mechState.weaponStateList);
-    //sort weaponsToFire by damage/heat at the given range
+    //sort weaponsToFire by damage/heat at the given range in decreasing order
     sortedByDmgPerHeat.sort(damagePerHeatComparator(range));
     let weaponsToFire = [];
     for (let weaponState of sortedByDmgPerHeat) {
-      if (!weaponState.isReady()) continue;
+      if (!weaponState.isReady() || !willDoDamage(weaponState, range)) continue;
       //fit as many ready weapons as possible into the available heat
       //starting with those with the best damage:heat ratio
       weaponsToFire.push(weaponState);
-      if (willOverheat(mech, weaponsToFire)) {
+      if (willGhostHeat(mech, weaponsToFire) || willOverheat(mech, weaponsToFire)) {
         weaponsToFire.pop();
         break;
       }
@@ -32,6 +35,7 @@ var MechFirePattern = MechFirePattern || (function () {
     return weaponsToFire;
   }
 
+  //Always alpha, as long as it does not cause an overheat
   var alphaNoOverheat = function (mech, range) {
     let mechState = mech.getMechState();
     let weaponsToFire = [];
@@ -40,7 +44,6 @@ var MechFirePattern = MechFirePattern || (function () {
       if (!weaponState.isReady()) return weaponsToFire;
     }
     weaponsToFire = Array.from(mechState.weaponStateList);
-    let predictedHeat = MechSimulatorLogic.predictHeat(mech, weaponsToFire);
     if (!willOverheat(mech, weaponsToFire)) {
       return weaponsToFire;
     } else {
@@ -52,11 +55,9 @@ var MechFirePattern = MechFirePattern || (function () {
     let mechState = mech.getMechState();
     let weaponsToFire = [];
     for (let weaponState of mechState.weaponStateList) {
-      if (!weaponState.isReady()) continue;
+      if (!weaponState.isReady() || !willDoDamage(weaponState, range)) continue;
       weaponsToFire.push(weaponState);
-      let predictedHeat = MechSimulatorLogic.predictHeat(mech, weaponsToFire);
-      let baseHeat = MechSimulatorLogic.predictBaseHeat(mech, weaponsToFire);
-      if (predictedHeat > baseHeat || willOverheat(mech, weaponsToFire)) {
+      if (willGhostHeat(mech, weaponsToFire) || willOverheat(mech, weaponsToFire)) {
         weaponsToFire.pop();
         continue;
       }
@@ -86,7 +87,7 @@ var MechFirePattern = MechFirePattern || (function () {
       let dmgPerHeatB = weaponInfoB.heat > 0 ?
               weaponInfoB.damageAtRange(range) / weaponInfoB.heat :
               Number.MAX_VALUE;
-      return dmgPerHeatA - dmgPerHeatB;
+      return dmgPerHeatB - dmgPerHeatA;
     };
   }
 
@@ -96,10 +97,20 @@ var MechFirePattern = MechFirePattern || (function () {
     return heatState.currHeat + predictedHeat > heatState.currMaxHeat;
   }
 
+  var willGhostHeat = function(mech, weaponsToFire) {
+    let predictedHeat = MechSimulatorLogic.predictHeat(mech, weaponsToFire);
+    let baseHeat = MechSimulatorLogic.predictBaseHeat(mech, weaponsToFire);
+    return predictedHeat > baseHeat;
+  }
+
+  var willDoDamage = function(weaponState, range) {
+    return weaponState.weaponInfo.damageAtRange(range) > 0;
+  }
+
   return {
     alphaAtZeroHeat : alphaAtZeroHeat,
     alphaNoOverheat : alphaNoOverheat,
-    maximumFireRate : maximumFireRate,
+    maximumDmgPerHeat : maximumDmgPerHeat,
     fireWhenReady : fireWhenReady,
     maxFireNoGhostHeat : maxFireNoGhostHeat,
   };

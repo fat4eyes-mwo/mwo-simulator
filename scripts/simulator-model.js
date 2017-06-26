@@ -632,7 +632,7 @@ var MechModel = MechModel || (function () {
     totalDamage() {
       let ret = 0;
       for (let component in this.componentDamage) {
-        ret = Number(ret) + componentDamage[component].totalDamage();
+        ret = Number(ret) + this.componentDamage[component].totalDamage();
       }
       return ret;
     }
@@ -666,7 +666,7 @@ var MechModel = MechModel || (function () {
       return Number(this.armor) + Number(this.structure);
     }
     toString() {
-      return "location: " + this.location + " armordmg: " + this.armor + "structdmg: " + this.structure;
+      return "location: " + this.location + " armordmg: " + this.armor + " structdmg: " + this.structure;
     }
   }
 

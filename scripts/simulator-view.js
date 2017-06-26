@@ -86,10 +86,10 @@ var MechView = MechView || (function() {
     let mechHealthNumbersDivId = "#" + mechHealthNumbersId(mechId);
     $(mechHealthNumbersDivId +
       " [data-location=" + location + "] " +
-      " [data-healthtype=armor]").html(Math.floor(armor));
+      " [data-healthtype=armor]").html(Math.round(armor));
     $(mechHealthNumbersDivId +
       " [data-location=" + location + "] " +
-      " [data-healthtype=structure]").html(Math.floor(structure));
+      " [data-healthtype=structure]").html(Math.round(structure));
   }
 
   //Heatbar UI functions

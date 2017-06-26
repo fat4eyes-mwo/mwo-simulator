@@ -90,8 +90,8 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
 
   var initMechPatterns = function(mechTeam) {
     for (let mech of mechTeam) {
-      mech.firePattern = MechFirePattern.maxFireNoGhostHeat;
-      mech.componentTargetPattern = MechTargetComponent.aimSideTorsoThenCenterTorso;
+      mech.firePattern = MechFirePattern.maximumDmgPerHeat;
+      mech.componentTargetPattern = MechTargetComponent.aimForCenterTorso;
       mech.mechTargetPattern = MechTargetMech.targetMechsInOrder;
       mech.accuracyPattern = MechAccuracyPattern.fullAccuracyPattern;
     }
@@ -358,6 +358,9 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
             tickDamageDone = targetMechState.takeDamage(lastTickDamage);
             weaponFire.damageDone.add(tickDamageDone);
             //TODO: Add weaponFire.damageDone to mech stats
+            console.log(weaponInfo.name + " completed. Total damage: "
+                      + weaponFire.damageDone.totalDamage() +
+                      "(" + weaponFire.damageDone.toString() + ")");
           } else {
             tickDamageDone = targetMechState.takeDamage(weaponFire.tickWeaponDamage);
             weaponFire.damageDone.add(tickDamageDone)
@@ -367,15 +370,21 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
           targetMech.getMechState().updateTypes[MechModel.UpdateType.HEALTH] = true;
         } else {
           //Weapon disabled before end of burn
-          //TODO: add weaponFire.damageDon to mech stats
+          //TODO: add weaponFire.damageDone to mech stats
+          console.log(weaponInfo.name + " completed. Total damage: "
+                    + weaponFire.damageDone.totalDamage() +
+                    "(" + weaponFire.damageDone.toString() + ")");
         }
       } else if (weaponInfo.hasTravelTime()) {
         weaponFire.travelLeft = Number(weaponFire.travelLeft) - stepDuration;
         if (weaponFire.travelLeft <= 0) {
           let damageDone = targetMechState.takeDamage(weaponFire.weaponDamage);
           weaponFire.damageDone.add(damageDone);
-          //TODO: add weaponFire.damageDone to mechStats
           targetMech.getMechState().updateTypes[MechModel.UpdateType.HEALTH] = true;
+          //TODO: add weaponFire.damageDone to mechStats
+          console.log(weaponInfo.name + " completed. Total damage: "
+                    + weaponFire.damageDone.totalDamage() +
+                    "(" + weaponFire.damageDone.toString() + ")");
         } else {
           weaponFireQueue.push(weaponFire);
         }
