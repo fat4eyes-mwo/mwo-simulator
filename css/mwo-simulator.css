@@ -259,3 +259,11 @@ body {
 .statusPanel .mechSummaryHealthText {
 
 }
+
+.statusPanel .mechTargetLabel {
+  font-weight: bold;
+}
+
+.statusPanel .mechTargetText {
+
+}

@@ -242,6 +242,9 @@ var MechView = MechView || (function() {
   var heatNumberPanelId = function(mechId) {
     return mechId + "-heatbarNumber";
   }
+  var mechTargetPanelId = function(mechId) {
+    return mechId + "-mechTarget";
+  }
   var addMechPanel = function (mech, team) {
     let mechId = mech.getMechId();
     let mechState = mech.getMechState();
@@ -290,15 +293,21 @@ var MechView = MechView || (function() {
     $("#" + mechPanelId(mechId) + " [class~='statusPanel'] [class~='mechSummaryHealthText']")
       .attr("id", mechSummaryHealthId)
       .html("");
+
+    let mechTargetId = mechTargetPanelId(mechId);
+    $("#" + mechPanelId(mechId) + " [class~='statusPanel'] [class~='mechTargetText']")
+      .attr("id", mechTargetId)
+      .html("");
   }
 
   var updateMechStatusPanel = function(mechId, mechName,
-                mechIsAlive, mechCurrTotalHealth, mechCurrMaxHealth) {
+                mechIsAlive, mechCurrTotalHealth, mechCurrMaxHealth, targetMechName) {
     let mechNameId = mechNamePanelId(mechId);
     let mechSummaryHealthId = mechSummaryHealthPanelId(mechId);
 
     //set mech name
-    $("#" + mechNameId).html(mechName);
+    let mechNameDiv = document.getElementById(mechNameId);
+    mechNameDiv.innerHTML = mechName;
 
     //set mech summary health
     let mechSummaryHealthText = "";
@@ -310,10 +319,15 @@ var MechView = MechView || (function() {
       percentHealth = 0;
       mechSummaryHealthText = "KIA";
     }
-    $("#" + mechSummaryHealthId)
-        .css("color", damageColor(percentHealth, healthDamageGradient))
-        .html(mechSummaryHealthText);
+    let mechSummaryHealthDiv = document.getElementById(mechSummaryHealthId);
+    mechSummaryHealthDiv.style.color =
+                  damageColor(percentHealth, healthDamageGradient);
+    mechSummaryHealthDiv.innerHTML = mechSummaryHealthText;
 
+    //update mech target
+    let mechTargetId = mechTargetPanelId(mechId);
+    let mechTargetDiv = document.getElementById(mechTargetId);
+    mechTargetDiv.innerHTML = targetMechName;
   }
 
   var clear = function (team) {

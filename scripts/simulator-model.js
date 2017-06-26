@@ -1186,6 +1186,7 @@ var MechModel = MechModel || (function () {
     var mechInfo = mechInfoFromSmurfyMechLoadout(new_mech_id, smurfyMechLoadout);
     var mechState = initMechState(mechInfo);
     var mechTeam = team;
+    var targetMech; //set by simulation
     return {
       firePattern : null, //Set after initialization
       componentTargetPattern : null, //Set after initialization
@@ -1211,6 +1212,12 @@ var MechModel = MechModel || (function () {
       },
       getMechTeam : function() {
         return mechTeam;
+      },
+      setTargetMech : function(newTarget) {
+        targetMech = newTarget;
+      },
+      getTargetMech : function() {
+        return targetMech;
       }
     };
   };

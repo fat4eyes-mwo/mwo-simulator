@@ -88,9 +88,11 @@ var MechModelView = MechModelView || (function() {
     let currTotalHealth = mechHealth.totalCurrHealth();
     let currMaxHealth = mechHealth.totalMaxHealth();
     let isAlive = mech.getMechState().isAlive();
+    let targetMechName = mech.getTargetMech() ?
+                mech.getTargetMech().getTranslatedName() : "";
 
     MechView.updateMechStatusPanel(mech.getMechId(), mechName, isAlive,
-                          currTotalHealth, currMaxHealth);
+                          currTotalHealth, currMaxHealth, targetMechName);
   }
 
   //TODO: Move health logic from view to here?
@@ -112,7 +114,7 @@ var MechModelView = MechModelView || (function() {
     updateFunctionMap[MechModel.UpdateType.HEAT] = updateHeat;
     updateFunctionMap[MechModel.UpdateType.COOLDOWN] = updateCooldown;
     updateFunctionMap[MechModel.UpdateType.WEAPONSTATE] = updateWeaponStatus;
-    //updateFunctionMap[MechModel.UpdateType.STATS] = TODO;
+    updateFunctionMap[MechModel.UpdateType.STATS] = updateStats;
 
     for (let updateType in mechState.updateTypes) {
       if (mechState.updateTypes[updateType]) {
@@ -122,12 +124,16 @@ var MechModelView = MechModelView || (function() {
     mechState.updateTypes = [];
   }
 
+  var updateStats = function(mech) {
+    updateMechStatus(mech);
+  }
+
   var updateAll = function(mech) {
     updateHealth(mech);
     updateHeat(mech);
     updateCooldown(mech);
     updateWeaponStatus(mech);
-    //TODO updateStats(mech);
+    updateStats(mech);
   }
 
   var updateDebugText = function (text) {

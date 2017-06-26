@@ -150,6 +150,10 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
           let weaponsToFire = mech.firePattern(mech, simulatorParameters.range);
           if (weaponsToFire) {
             let targetMech = mech.mechTargetPattern(mech, MechModel.mechTeams[enemyTeam(team)]);
+            if (targetMech !== mech.getTargetMech) {
+              mech.setTargetMech(targetMech);
+              mechState.updateTypes[MechModel.UpdateType.STATS] = true;
+            }
             if (targetMech) {
               fireWeapons(mech, weaponsToFire, targetMech);
             } else {
@@ -164,8 +168,6 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     simTime += stepDuration;
     MechModelView.updateSimTime(simTime);
 
-
-    //debug
     updateUIWeaponFires();
 
     if (!MechModel.isTeamAlive(MechModel.Team.BLUE)) {
@@ -249,11 +251,11 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   }
 
   var updateUIWeaponFires = function() {
-    let debugText = "";
-    for (let weaponFire of weaponFireQueue) {
-      debugText += weaponFire.toString() + "<br/><br/>";
-    }
-    MechModelView.updateDebugText(debugText);
+    // let debugText = "";
+    // for (let weaponFire of weaponFireQueue) {
+    //   debugText += weaponFire.toString() + "<br/><br/>";
+    // }
+    // MechModelView.updateDebugText(debugText);
   }
 
   var dissapateHeat = function(mech) {
