@@ -87,32 +87,71 @@ var MechView = MechView || (function() {
   var mechHealthNumbersId = function (mechId) {
     return mechId + "-mechHealthNumbers";
   }
+  var mechHealthNumbersArmorId = function(mechId, location) {
+    return mechId + "-mechHealthNumbers-" + location + "-armor";
+  }
+  var mechHealthNumbersStructureId = function(mechId, location) {
+    return mechId + "-mechHealthNumbers-" + location + "-structure";
+  }
   var addMechHealthNumbers = function (mech, mechHealthNumbersContainer) {
+    let mechId = mech.getMechId();
+    let mechHealthNumbersDivId = mechHealthNumbersId(mechId);
     $("#mechHealthNumbers-template").
       clone(true)
-      .attr("id", mechHealthNumbersId(mech.getMechId()))
-      .attr("data-mech-id", mech.getMechId())
+      .attr("id", mechHealthNumbersDivId)
+      .attr("data-mech-id", mechId)
       .removeClass("template")
       .appendTo(mechHealthNumbersContainer);
+
+    for (let locationIdx in MechModel.Component) {
+      if (MechModel.Component.hasOwnProperty(locationIdx)) {
+        let location = MechModel.Component[locationIdx];
+        $("#" + mechHealthNumbersDivId +
+          " [data-location=" + location + "] " +
+          " [data-healthtype=armor]")
+            .attr("id", mechHealthNumbersArmorId(mechId, location));
+        $("#" + mechHealthNumbersDivId +
+          " [data-location=" + location + "] " +
+          " [data-healthtype=structure]")
+          .attr("id", mechHealthNumbersStructureId(mechId, location));
+      }
+    }
   }
 
   var updateMechHealthNumbers = function(mechId, location, armor, structure,
                                           maxArmor, maxStructure) {
-    let mechHealthNumbersDivId = "#" + mechHealthNumbersId(mechId);
+    let mechHealthNumbersDivId = mechHealthNumbersId(mechId);
     let armorPercent = Number(armor) / Number(maxArmor);
     let structurePercent = Number(structure) / Number(maxStructure);
     let armorColor = damageColor(armorPercent, componentHealthDamageGradient);
     let structureColor = damageColor(structurePercent, componentHealthDamageGradient);
-    $(mechHealthNumbersDivId +
-      " [data-location=" + location + "] " +
-      " [data-healthtype=armor]")
-        .css("color", armorColor)
-        .html(Math.round(armor));
-    $(mechHealthNumbersDivId +
-      " [data-location=" + location + "] " +
-      " [data-healthtype=structure]")
-      .css("color", structureColor)
-      .html(Math.round(structure));
+
+    let armorLocationDivId = mechHealthNumbersArmorId(mechId, location);
+    let structureLocationDivId = mechHealthNumbersStructureId(mechId, location);
+
+    let armorLocationDiv = document.getElementById(armorLocationDivId);
+    if (armorLocationDiv) {
+      armorLocationDiv.innerHTML = Math.round(armor);
+      armorLocationDiv.style.color = armorColor;
+    }
+
+    let structureLocationDiv = document.getElementById(structureLocationDivId);
+    if (structureLocationDiv) {
+      structureLocationDiv.innerHTML = Math.round(structure)
+      structureLocationDiv.style.color = structureColor;
+    }
+
+    //Jquery calls are too expensive in frequent UI updates.
+    // $("#" + mechHealthNumbersDivId +
+    //   " [data-location=" + location + "] " +
+    //   " [data-healthtype=armor]")
+    //     .css("color", armorColor)
+    //     .html(Math.round(armor));
+    // $("#" + mechHealthNumbersDivId +
+    //   " [data-location=" + location + "] " +
+    //   " [data-healthtype=structure]")
+    //   .css("color", structureColor)
+    //   .html(Math.round(structure));
   }
 
   //Heatbar UI functions
