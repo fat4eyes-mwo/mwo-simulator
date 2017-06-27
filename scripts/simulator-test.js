@@ -63,14 +63,14 @@ return {
     },
 
     testModelInit : function () {
-      // MechModel.initModelData((success) => {
-      //   if (success) {
-      //     console.log("Successfully loaded model init data");
-      //   } else {
-      //     console.log("Failed to load model init data");
-      //   }
-      // });
-      MechModel.initDummyModelData();
+      MechModel.initModelData((success) => {
+        if (success) {
+          console.log("Successfully loaded model init data");
+        } else {
+          console.log("Failed to load model init data");
+        }
+      });
+      // MechModel.initDummyModelData();
     },
 
     testDeque : function() {
@@ -268,7 +268,12 @@ return {
         }
       }
       let numQuirks = 0;
+      let sortedQuirkNames = [];
       for (let quirkName in quirkMap) {
+        sortedQuirkNames.push(quirkName);
+      }
+      sortedQuirkNames.sort();
+      for (let quirkName of sortedQuirkNames) {
         console.log(quirkName);
         numQuirks++;
       }
@@ -276,10 +281,25 @@ return {
     },
 
     testSimulation : function() {
-      const range = 200;
+      //Use DummyData
+      //TODO: use dummy mech data while implementing lazy loading of mechinfo from smurfy.
       MechModel.initDummyModelData();
+      // this.generateTestUI( );
 
-      MechModel.addMech("testKodiakId", MechModel.Team.BLUE, DummyKodiak);
+      //Load data from smurfy
+      MechModel.initModelData((success) => {
+        if (success) {
+          console.log("Successfully loaded model init data");
+          MechTest.generateTestUI();
+        } else {
+          console.log("Failed to load model init data");
+        }
+      });
+    },
+
+    generateTestUI : function() {
+      const range = 200;
+      MechModel.addMech("testKodiakId1", MechModel.Team.BLUE, DummyKodiak);
       MechModel.addMech("testExecutionerId", MechModel.Team.BLUE, DummyExecutioner);
       MechModel.addMech("testTimberwolfId", MechModel.Team.BLUE, DummyTimberwolf);
       MechModel.addMech("testStormcrowId", MechModel.Team.BLUE, DummyStormcrow);

@@ -1,9 +1,12 @@
 /*Main panel styles*/
 body {
-  background-color: black;
+  background-color: rgb(32, 32, 32);
   color: rgb(170, 170, 170);
   font-family: sans-serif;
   font-size: 14px;
+}
+
+div {
 }
 
 .controlPanel {
@@ -172,9 +175,6 @@ body {
 .heatbarFrame {
   position: relative;
   height: 100px;
-  border-style: solid;
-  border-color: black;
-  border-width: thin;
   background-color: red;
   width: 10px;
 }

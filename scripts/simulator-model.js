@@ -709,33 +709,36 @@ var MechModel = MechModel || (function () {
   mechTeams[Team.RED] = [];
 
   //Get weapon, ammo and mech data from smurfy
-  //TODO: JSONP not working because smurfy's server doesn't support it. Work around it using a local proxy.
-  var WEAPON_DATA_URL = "http://mwo.smurfy-net.de/api/data/weapons.json";
-  var AMMO_DATA_URL = "http://mwo.smurfy-net.de/api/data/ammo.json";
-  var LOADOUT_DATA_URL = "http:/mwo.smurfy-net.de/api/data/mechs/{ID}/loadouts/{LOADOUTID}.json";
+  const SMURFY_PROXY_URL = "./php/smurfyproxy.php?path=";
+  const WEAPON_DATA_PATH = "data/weapons.json";
+  const AMMO_DATA_PATH = 'data/ammo.json';
+  const MODULE_DATA_PATH = 'data/modules.json';
   var dataLoaded = (function() {
     return {
       weaponsLoaded : false, //true when the request in successfully completed
       ammoLoaded : false,
       weaponsDone : false, //true when the request is finished (success or fail)
       ammoDone : false,
+      modulesLoaded : false,
+      modulesDone : false,
       isLoaded : function () {
-        return this.weaponsLoaded && this.ammoLoaded;
+        return this.weaponsLoaded && this.ammoLoaded && this.modulesLoaded;
       },
       isDone : function () {
-        return this.weaponsDone && this.ammoDone;
+        return this.weaponsDone && this.ammoDone && this.modulesDone;
       }
     };
   })();
   var initModelData = function (callback) {
     //Get weapon data
     $.ajax({
-      url : WEAPON_DATA_URL,
+      url : SMURFY_PROXY_URL + WEAPON_DATA_PATH,
       type : 'GET',
-      dataType : 'JSONP'
+      dataType : 'JSON'
       })
       .done(function (data) {
-        console.log("Success " +data);
+        console.log("Success");
+        SmurfyWeaponData = data;
         MechModel.dataLoaded.weaponsLoaded = true;
       })
       .fail(function (data) {
@@ -744,16 +747,20 @@ var MechModel = MechModel || (function () {
       .always(function (data) {
         MechModel.dataLoaded.weaponsDone = true;
         if (MechModel.dataLoaded.isDone()) {
+          if (MechModel.dataLoaded.isLoaded()) {
+            MechModel.initAddedData();
+          }
           callback(MechModel.dataLoaded.isLoaded());
         }
       });
     $.ajax({
-      url : AMMO_DATA_URL,
+      url : SMURFY_PROXY_URL + AMMO_DATA_PATH,
       type : 'GET',
-      dataType : 'JSONP'
+      dataType : 'JSON'
       })
       .done(function (data) {
-        console.log("Success " +data);
+        console.log("Success");
+        SmurfyAmmoData = data;
         MechModel.dataLoaded.ammoLoaded = true;
       })
       .fail(function (data) {
@@ -762,9 +769,40 @@ var MechModel = MechModel || (function () {
       .always(function (data) {
         MechModel.dataLoaded.ammoDone = true;
         if (MechModel.dataLoaded.isDone()) {
+          if (MechModel.dataLoaded.isLoaded()) {
+            MechModel.initAddedData();
+          }
           callback(MechModel.dataLoaded.isLoaded());
         }
       });
+    $.ajax({
+      url : SMURFY_PROXY_URL + MODULE_DATA_PATH,
+      type : 'GET',
+      dataType : 'JSON'
+      })
+      .done(function (data) {
+        console.log("Success ");
+        SmurfyModuleData = data;
+        MechModel.dataLoaded.modulesLoaded = true;
+      })
+      .fail(function (data) {
+        console.log("Request failed: " + data);
+      })
+      .always(function (data) {
+        MechModel.dataLoaded.modulesDone = true;
+        if (MechModel.dataLoaded.isDone()) {
+          if (MechModel.dataLoaded.isLoaded()) {
+            MechModel.initAddedData();
+          }
+          callback(MechModel.dataLoaded.isLoaded());
+        }
+      });
+  }
+
+  var initAddedData = function() {
+    initHeatsinkIds();
+    initAddedHeatsinkData();
+    initAddedWeaponData();
   }
 
   const ISHeatsinkName = "HeatSink_MkI";
@@ -817,9 +855,7 @@ var MechModel = MechModel || (function () {
     SmurfyAmmoData = DummyAmmoData;
     SmurfyMechData = DummyMechData;
     SmurfyModuleData = DummyModuleData;
-    initHeatsinkIds();
-    initAddedHeatsinkData();
-    initAddedWeaponData();
+    initAddedData();
   };
 
   var getSmurfyMechData = function(smurfyMechId) {
@@ -1181,6 +1217,7 @@ var MechModel = MechModel || (function () {
   //constructor
   var Mech = function (new_mech_id, team, smurfyMechLoadout) {
     var smurfy_mech_id = smurfyMechLoadout.mech_id;
+    //TODO: Load mech data from smurfy instead of a global variable
     var smurfyMechData = getSmurfyMechData(smurfy_mech_id);
     var mech_id = new_mech_id;
     var mechInfo = mechInfoFromSmurfyMechLoadout(new_mech_id, smurfyMechLoadout);
@@ -1266,6 +1303,7 @@ var MechModel = MechModel || (function () {
     mechTeams : mechTeams,
     initModelData : initModelData,
     initDummyModelData : initDummyModelData,
+    initAddedData : initAddedData,
     dataLoaded : dataLoaded,
     addMech : addMech,
     resetState : resetState,
