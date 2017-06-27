@@ -49,7 +49,13 @@ var MechTargetComponent = MechTargetComponent || (function () {
       Component.RIGHT_LEG,
       Component.LEFT_LEG,
     ];
-    return componentList[Math.floor(Math.random() * componentList.length)];
+    let intactComponentList = [];
+    for (let component of componentList) {
+      if (targetMech.getMechState().mechHealth.isIntact(component)) {
+        intactComponentList.push(component);
+      }
+    }
+    return intactComponentList[Math.floor(Math.random() * intactComponentList.length)];
 
   }
 

@@ -24,6 +24,10 @@ body {
   overflow: auto;
 }
 
+.teamStats {
+
+}
+
 .mechPanelList {
 
 }
@@ -262,8 +266,9 @@ body {
 
 .statusPanel .mechTargetLabel {
   font-weight: bold;
+  font-size: 0.9em;
 }
 
 .statusPanel .mechTargetText {
-
+  font-size: 0.9em;
 }
