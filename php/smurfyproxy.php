@@ -10,6 +10,10 @@
 
   $pathParam = isset($_GET[$options['pathParam']]) ? $_GET[$options['pathParam']] : '';
 
+  //gzip response
+  //reference: https://stackoverflow.com/questions/19043284/how-to-get-send-gzip-content-as-php-response
+  ob_start("ob_gzhandler");
+
   if ($pathParam != '') {
     $url = $options['host'] . $pathParam;
     $response = curl_helper($url);
@@ -19,12 +23,15 @@
     echo "{'error' : 'no path parameter provided'}";
   }
 
+  ob_end_flush(); //gzip response
+
   function curl_helper($url) {
     $curl = curl_init();
 
     $headers = array('Content-Type: application/json');
 
     curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($ch,CURLOPT_ENCODING , ""); //accept all encodings
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
 
     $response = curl_exec($curl);
@@ -33,5 +40,4 @@
 
     return $response;
   }
-
  ?>

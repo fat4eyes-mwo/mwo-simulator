@@ -713,6 +713,7 @@ var MechModel = MechModel || (function () {
   const WEAPON_DATA_PATH = "data/weapons.json";
   const AMMO_DATA_PATH = 'data/ammo.json';
   const MODULE_DATA_PATH = 'data/modules.json';
+  const MECH_DATA_PATH = 'data/mechs.json';
   var dataLoaded = (function() {
     return {
       weaponsLoaded : false, //true when the request in successfully completed
@@ -721,11 +722,15 @@ var MechModel = MechModel || (function () {
       ammoDone : false,
       modulesLoaded : false,
       modulesDone : false,
+      mechsLoaded : false,
+      mechsDone : false,
       isLoaded : function () {
-        return this.weaponsLoaded && this.ammoLoaded && this.modulesLoaded;
+        return this.weaponsLoaded && this.ammoLoaded
+            && this.modulesLoaded && this.mechsLoaded;
       },
       isDone : function () {
-        return this.weaponsDone && this.ammoDone && this.modulesDone;
+        return this.weaponsDone && this.ammoDone
+            && this.modulesDone && this.mechsDone;
       }
     };
   })();
@@ -790,6 +795,28 @@ var MechModel = MechModel || (function () {
       })
       .always(function (data) {
         MechModel.dataLoaded.modulesDone = true;
+        if (MechModel.dataLoaded.isDone()) {
+          if (MechModel.dataLoaded.isLoaded()) {
+            MechModel.initAddedData();
+          }
+          callback(MechModel.dataLoaded.isLoaded());
+        }
+      });
+    $.ajax({
+      url : SMURFY_PROXY_URL + MECH_DATA_PATH,
+      type : 'GET',
+      dataType : 'JSON'
+      })
+      .done(function (data) {
+        console.log("Success ");
+        SmurfyMechData = data;
+        MechModel.dataLoaded.mechsLoaded = true;
+      })
+      .fail(function (data) {
+        console.log("Request failed: " + data);
+      })
+      .always(function (data) {
+        MechModel.dataLoaded.mechsDone = true;
         if (MechModel.dataLoaded.isDone()) {
           if (MechModel.dataLoaded.isLoaded()) {
             MechModel.initAddedData();
@@ -1217,7 +1244,7 @@ var MechModel = MechModel || (function () {
   //constructor
   var Mech = function (new_mech_id, team, smurfyMechLoadout) {
     var smurfy_mech_id = smurfyMechLoadout.mech_id;
-    //TODO: Load mech data from smurfy instead of a global variable
+    //TODO: Load mech data from smurfy instead of a global variable (full mech data file is way to big at 1Mb)
     var smurfyMechData = getSmurfyMechData(smurfy_mech_id);
     var mech_id = new_mech_id;
     var mechInfo = mechInfoFromSmurfyMechLoadout(new_mech_id, smurfyMechLoadout);

@@ -91,8 +91,8 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   var initMechPatterns = function(mechTeam) {
     for (let mech of mechTeam) {
       mech.firePattern = MechFirePattern.maximumDmgPerHeat;
-      mech.componentTargetPattern = MechTargetComponent.randomAim;
-      mech.mechTargetPattern = MechTargetMech.targetRandomMech;
+      mech.componentTargetPattern = MechTargetComponent.aimForXLSideTorso;
+      mech.mechTargetPattern = MechTargetMech.targetMechsInOrder;
       mech.accuracyPattern = MechAccuracyPattern.fullAccuracyPattern;
     }
   }

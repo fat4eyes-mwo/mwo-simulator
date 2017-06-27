@@ -284,17 +284,17 @@ return {
       //Use DummyData
       //TODO: use dummy mech data while implementing lazy loading of mechinfo from smurfy.
       MechModel.initDummyModelData();
-      // this.generateTestUI( );
+      this.generateTestUI( );
 
       //Load data from smurfy
-      MechModel.initModelData((success) => {
-        if (success) {
-          console.log("Successfully loaded model init data");
-          MechTest.generateTestUI();
-        } else {
-          console.log("Failed to load model init data");
-        }
-      });
+      // MechModel.initModelData((success) => {
+      //   if (success) {
+      //     console.log("Successfully loaded model init data");
+      //     MechTest.generateTestUI();
+      //   } else {
+      //     console.log("Failed to load model init data");
+      //   }
+      // });
     },
 
     generateTestUI : function() {
