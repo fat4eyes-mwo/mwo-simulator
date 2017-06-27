@@ -256,6 +256,25 @@ return {
       console.log("range: " + range + " damage: " + damage);
     },
 
+    testListQuirks : function() {
+      let quirkMap = {};
+      for (let mechIdx in DummyMechData) {
+        let smurfyMech = DummyMechData[mechIdx];
+        let quirks = smurfyMech.details.quirks;
+        if (quirks) {
+          for (let quirkEntry of quirks) {
+            quirkMap[quirkEntry.name] = true;
+          }
+        }
+      }
+      let numQuirks = 0;
+      for (let quirkName in quirkMap) {
+        console.log(quirkName);
+        numQuirks++;
+      }
+      console.log("numQuirks : " + numQuirks);
+    },
+
     testSimulation : function() {
       const range = 200;
       MechModel.initDummyModelData();

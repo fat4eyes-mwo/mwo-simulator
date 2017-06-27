@@ -9,6 +9,7 @@ function main() {
   // MechTest.testModelView();
   MechTest.testSimulation();
   // MechTest.testDamageAtRange();
+  // MechTest.testListQuirks();
 }
 
 $(document).ready(main);
