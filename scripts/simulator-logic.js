@@ -17,7 +17,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   const ghostHeatInterval = 500;
 
   //Parameters of the simulation. Includes range, fire patterns,
-  //accuracy patterns, targetting patterns
+  //accuracy patterns, targeting patterns
   class SimulatorParameters {
     constructor(range) {
       this.range = range;
@@ -91,7 +91,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   var initMechPatterns = function(mechTeam) {
     for (let mech of mechTeam) {
       mech.firePattern = MechFirePattern.maximumDmgPerHeat;
-      mech.componentTargetPattern = MechTargetComponent.aimForXLSideTorso;
+      mech.componentTargetPattern = MechTargetComponent.randomAim;
       mech.mechTargetPattern = MechTargetMech.targetMechsInOrder;
       mech.accuracyPattern = MechAccuracyPattern.fullAccuracyPattern;
     }
@@ -163,6 +163,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
         }
         MechModelView.updateMech(mech);
       }
+      MechModelView.updateTeamStats(team);
     }
 
     simTime += stepDuration;
@@ -413,7 +414,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
 
     for (let weaponState of weaponsFired) {
       let weaponInfo = weaponState.weaponInfo;
-      totalHeat += Number(weaponInfo.heat); // base heat
+      totalHeat += Number(weaponState.computeHeat(mech)); // base heat
       let ghostHeat = computeGhostHeat(mech, weaponState);
       totalHeat += ghostHeat;
     }
@@ -489,7 +490,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   var predictBaseHeat = function (mech, weaponsFired) {
     let ret = 0;
     for (let weaponState of weaponsFired) {
-      ret = ret + Number(weaponState.weaponInfo.heat);
+      ret = ret + Number(weaponState.computeHeat(mech));
     }
     return ret;
   }

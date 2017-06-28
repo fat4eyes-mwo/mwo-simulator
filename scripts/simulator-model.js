@@ -420,13 +420,21 @@ var MechModel = MechModel || (function () {
       return this.weaponCycle === WeaponCycle.READY;
     }
     //Computes the cooldown for this weapon on a mech, taking modifiers into account
+    //TODO: process effect of mech quirks
     computeWeaponCooldown(mech) {
       return Number(this.weaponInfo.cooldown);
     }
 
     //Computes this weapon's duration on a mech, taking modifiers into account
+    //TODO: process effect of mech quirks
     computeWeaponDuration(mech) {
       return Number(this.weaponInfo.duration);
+    }
+
+    //Computes this weapon's heat on a given mech, taking modifiers into account
+    //TODO: process effect of mech quirks
+    computeHeat(mech) {
+      return Number(this.weaponInfo.heat);
     }
 
   }

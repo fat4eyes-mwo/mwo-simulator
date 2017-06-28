@@ -167,7 +167,7 @@ var MechView = MechView || (function() {
     .attr("data-mech-id", mechId)
     .removeClass("template")
     .appendTo(heatbarContainer);
-    $("#" + heatbarId(mechId) + " > [class=heatbar]")
+    $("#" + heatbarId(mechId) + " > [class~=heatbar]")
       .attr("id", heatbarValueId(mechId))
       .attr("data-mech-id", mechId);
   }
@@ -369,9 +369,49 @@ var MechView = MechView || (function() {
     mechTargetDiv.innerHTML = targetMechName;
   }
 
+  var teamStatsContainerId = function(team) {
+    return team + "TeamStatsContainer";
+  }
+  var teamStatsId = function(team) {
+    return team + "-teamStatsPanel";
+  }
+  var addMechButtonId = function(team) {
+    return team + "-addMechButton";
+  }
+  var teamDisplayName = function(team) {
+    let displayNameMap = {"blue" : "Blue team", "red" : "Red team"};
+    return displayNameMap[team];
+  }
+  var addTeamStatsPanel = function(team) {
+    let teamStatsContainerPanelId = teamStatsContainerId(team);
+    $("#teamStats-template")
+      .clone(true)
+      .attr("id", teamStatsId(team))
+      .attr("data-team-id", team)
+      .removeClass("template")
+      .addClass(team)
+      .appendTo("#" + teamStatsContainerPanelId);
+    //Change team name
+    $("#" + teamStatsContainerPanelId + " [class~=teamName]")
+            .html(teamDisplayName(team));
+
+    //Add mech button
+    //TODO: add click handler to add mech button
+    let addMechButtonPanelId = addMechButtonId(team);
+    $("#" + teamStatsContainerPanelId + " [class~=addMechButton]")
+        .attr("id", addMechButtonPanelId)
+        .attr("data-team-id", team);
+  }
+
+  var updateTeamStats = function(team) {
+
+  }
+
   var clear = function (team) {
-    let teamId = team + "Team";
-    $("#" + teamId).empty();
+    let teamMechPanelId = team + "Team";
+    let teamStatsContainerPanelId = teamStatsContainerId(team);
+    $("#" + teamMechPanelId).empty();
+    $("#" + teamStatsContainerPanelId).empty();
   }
 
   var clearAll = function () {
@@ -408,6 +448,7 @@ var MechView = MechView || (function() {
     setPaperDollStructure : setPaperDollStructure,
     setHeatbarValue : setHeatbarValue,
     addMechPanel : addMechPanel,
+    addTeamStatsPanel : addTeamStatsPanel,
     initPaperDollHandlers: initPaperDollHandlers,
     initHandlers : initHandlers,
     setWeaponCooldown: setWeaponCooldown,
@@ -416,6 +457,7 @@ var MechView = MechView || (function() {
     updateMechHealthNumbers : updateMechHealthNumbers,
     updateMechStatusPanel : updateMechStatusPanel,
     updateHeat: updateHeat,
+    updateTeamStats : updateTeamStats,
     updateSimTime : updateSimTime,
     setDebugText : setDebugText,
     clear : clear,

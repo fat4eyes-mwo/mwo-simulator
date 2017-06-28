@@ -8,6 +8,7 @@ var MechModelView = MechModelView || (function() {
     let mechTeamList = [MechModel.Team.BLUE, MechModel.Team.RED];
     for (let team of mechTeamList) {
       MechView.clear(team);
+      MechView.addTeamStatsPanel(team);
       for (let mech of MechModel.mechTeams[team]) {
         MechView.addMechPanel(mech, team);
         updateAll(mech);
@@ -137,6 +138,10 @@ var MechModelView = MechModelView || (function() {
     updateStats(mech);
   }
 
+  var updateTeamStats = function(team) {
+    MechView.updateTeamStats(team);
+  }
+
   var updateDebugText = function (text) {
     MechView.setDebugText(text);
   }
@@ -150,6 +155,7 @@ var MechModelView = MechModelView || (function() {
     updateMech: updateMech,
     updateSimTime: updateSimTime,
     updateDebugText: updateDebugText,
+    updateTeamStats: updateTeamStats,
   };
 
 })();
