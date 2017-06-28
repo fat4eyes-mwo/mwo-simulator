@@ -101,7 +101,7 @@ _AddedWeaponData = {
     ammo_per_shot : 4
   },
   "ClanGaussRifle" : {
-    ammo_per_shot : 4
+    ammo_per_shot : 1
   },
   "ClanMachineGun" : {
     ammo_per_shot : 1
