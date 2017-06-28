@@ -188,7 +188,7 @@ var MechView = MechView || (function() {
 
     var heatNumberId = heatNumberPanelId(mechId);
     let heatText = parseFloat(heatPercent * 100).toFixed(0) + "%" +
-                    "(" + parseFloat(currHeat).toFixed(1) + ")";
+                    " (" + parseFloat(currHeat).toFixed(1) + ")";
     let heatNumberDiv = document.getElementById(heatNumberId);
 
     // $("#" + heatNumberId).html(heatText);
@@ -420,7 +420,7 @@ var MechView = MechView || (function() {
   }
 
   var updateSimTime = function(simTime) {
-    $("#simTime").html("Sim time: " + simTime);
+    $("#simTime").html("Sim time: " + simTime + "ms");
   }
 
   var setDebugText = function(debugText) {
