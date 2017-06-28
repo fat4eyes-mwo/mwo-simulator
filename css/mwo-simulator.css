@@ -5,11 +5,16 @@
 body {
   background-color: rgb(32, 32, 32);
   color: rgb(170, 170, 170);
-  font-family: Orbitron;
+  font-family: 'Maven Pro';
+  /*font-family: Orbitron;*/
   font-size: 14px;
 }
 
 div {
+}
+
+.stylishText {
+  font-family: Orbitron;
 }
 
 .controlPanel {
@@ -299,22 +304,27 @@ div {
   color: rgb(200,50,50);
 }
 
-.teamStats .addMechButton {
+.button {
   font-size: 1em;
   font-weight: bold;
+  font-family: 'Maven Pro';
   text-align: center;
-  max-width: 7em;
   padding: 5px;
   border: solid thin black;
   border-radius: 5px;
   background-color: gold;
   color: rgb(30,30,30);
   cursor: pointer;
-  float: right;
-  transition: background-color 0.5s ease;
 }
 
-.teamStats .addMechButton:hover {
+.button:hover {
   font-weight: bold;
   background-color: rgb(255,245,30);
+}
+
+.teamStats .addMechButton {
+  font-size: 1em;
+  max-width: 7em;
+  float: right;
+  transition: background-color 0.5s ease;
 }
