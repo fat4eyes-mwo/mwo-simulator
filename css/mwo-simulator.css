@@ -317,7 +317,12 @@ div {
 
 .button:hover {
   font-weight: bold;
-  background-color: rgb(255,245,30);
+  background-color: rgb(255,255,30);
+}
+
+.button.disabled {
+  opacity: 0.4;
+  cursor: none;
 }
 
 .teamStats .addMechButton {
@@ -362,8 +367,21 @@ div {
   float:none;
 }
 
+@keyframes buttonglow {
+  0% {background-color: gold;}
+  50% {background-color: rgb(255,255,30);}
+  100% {background-color: gold;}
+}
+
 #addMechDialog-load {
   float:right;
+}
+
+#addMechDialog-load.loading {
+  cursor:none;
+  animation-duration: 1s;
+  animation-name: buttonglow;
+  animation-iteration-count: infinite;
 }
 
 #addMechDialog-ok, #addMechDialog-cancel {

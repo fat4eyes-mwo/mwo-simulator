@@ -55,7 +55,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
       let baseWeaponDamage = new MechModel.WeaponDamage(baseWeaponDamageMap);
       //TODO: apply weapon specific weapon patterns
       //transform the baseWeaponDamage using the mech's accuracy pattern
-      let transformedWeaponDamage = this.sourceMech.accuracyPattern(baseWeaponDamage);
+      let transformedWeaponDamage = this.sourceMech.accuracyPattern(baseWeaponDamage, range);
       this.weaponDamage = transformedWeaponDamage;
 
       if (this.totalDuration >0) {
@@ -91,8 +91,8 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   var initMechPatterns = function(mechTeam) {
     for (let mech of mechTeam) {
       mech.firePattern = MechFirePattern.maximumDmgPerHeat;
-      mech.componentTargetPattern = MechTargetComponent.aimForXLSideTorso;
-      mech.mechTargetPattern = MechTargetMech.targetMechsInOrder;
+      mech.componentTargetPattern = MechTargetComponent.randomAim;
+      mech.mechTargetPattern = MechTargetMech.targetRandomMech;
       mech.accuracyPattern = MechAccuracyPattern.fullAccuracyPattern;
     }
   }

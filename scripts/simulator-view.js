@@ -32,6 +32,47 @@ var MechView = MechView || (function() {
     {value : 1, RGB : {r:170, g:170, b:170}}
   ]);
 
+  class MechButton {
+    constructor(id, clickHandler) {
+      this.id = id;
+      this.clickHandler = (function(context) {
+          var clickContext = context;
+          return function(event) {
+            if (clickContext.enabled) {
+              clickHandler.call(event.currentTarget);
+            }
+          }
+      })(this);
+      this.enabled = true;
+      $("#" + this.id).click(this.clickHandler);
+    }
+
+    setHtml(html) {
+      $("#" + this.id).html(html);
+    }
+
+    addClass(className) {
+      $("#" + this.id).addClass(className)
+    }
+
+    removeClass(className) {
+      $("#" + this.id).removeClass(className);
+    }
+
+    disable() {
+      if (this.enabled) {
+        $("#" + this.id).addClass("disabled");
+        this.enabled = false;
+      }
+    }
+
+    enable() {
+      if (!this.enabled) {
+        $("#" + this.id).removeClass("disabled");
+        this.enabled = true;
+      }
+    }
+  }
 
   //gets the damage color for a given percentage of damage
   var damageColor = function (percent, damageGradient) {
@@ -382,6 +423,7 @@ var MechView = MechView || (function() {
     let displayNameMap = {"blue" : "Blue team", "red" : "Red team"};
     return displayNameMap[team];
   }
+  var addMechButtonMap = {};
   var addTeamStatsPanel = function(team) {
     let teamStatsContainerPanelId = teamStatsContainerId(team);
     $("#teamStats-template")
@@ -403,8 +445,8 @@ var MechView = MechView || (function() {
     }
     $("#" + teamStatsContainerPanelId + " [class~=addMechButton]")
         .attr("id", addMechButtonPanelId)
-        .attr("data-team", team)
-        .click(addMechButtonHandler);
+        .attr("data-team", team);
+    addMechButtonMap[team] = new MechButton(addMechButtonPanelId, addMechButtonHandler);
   }
   var AddMechButtonHandler = function(clickContext) {
     var context = clickContext;
@@ -421,6 +463,9 @@ var MechView = MechView || (function() {
 
   const MODAL_SCREEN_ID = "mechModalScreen";
   const MODAL_DIALOG_ID = "mechModalDialog";
+  var addMechOKButton;
+  var addMechCancelButton;
+  var addMechLoadButton;
   var showAddMechDialog = function(team) {
     $("#" + MODAL_DIALOG_ID).empty();
     $("#addMechDialog-template")
@@ -435,12 +480,19 @@ var MechView = MechView || (function() {
     if (!addMechDialog_Cancel_Handler) {
       addMechDialog_Cancel_Handler = new AddMechDialog_Cancel(this);
     }
-    $("#addMechDialog-ok")
-      .attr("data-team", team)
-      .click(addMechDialog_OK_Handler);
-    $("#addMechDialog-cancel")
-      .attr("data-team", team)
-      .click(addMechDialog_Cancel_Handler);
+    if (!addMechDialog_Load_Handler) {
+      addMechDialog_Load_Handler =new AddMechDialog_Load(this);
+    }
+    $("#addMechDialog-ok").attr("data-team", team);
+    addMechOKButton =
+        new MechButton("addMechDialog-ok", addMechDialog_OK_Handler);
+    $("#addMechDialog-cancel").attr("data-team", team);
+    addMechCancelButton =
+        new MechButton("addMechDialog-cancel", addMechDialog_Cancel_Handler);
+    $("#addMechDialog-load").attr("data-team", team);
+    addMechLoadButton =
+        new MechButton("addMechDialog-load", addMechDialog_Load_Handler);
+    addMechOKButton.disable();
 
     $("#" + MODAL_SCREEN_ID).css("display", "block");
   }
@@ -458,7 +510,7 @@ var MechView = MechView || (function() {
       clickContext.hideAddMechDialog(team);
     }
   };
-  var addMechDialog_OK_Handler; //set on dialog creation
+  var addMechDialog_OK_Handler; //set on dialog creation, singleton
 
   var AddMechDialog_Cancel = function(context) {
     var clickContext = context;
@@ -467,7 +519,17 @@ var MechView = MechView || (function() {
       clickContext.hideAddMechDialog(team);
     }
   };
-  var addMechDialog_Cancel_Handler; //set of dialog creation
+  var addMechDialog_Cancel_Handler; //set on dialog creation, singleton
+
+  var AddMechDialog_Load = function(context) {
+    var clickContext = context;
+    return function() {
+      let team = $(this).data('team');
+      let url = $("#addMechDialog-text").val()
+      console.log("Load. team: " + team + " URL: " + url);
+    }
+  }
+  var addMechDialog_Load_Handler; //set on dialog creation, singleton
 
   var clear = function (team) {
     let teamMechPanelId = team + "Team";
