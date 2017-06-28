@@ -1,8 +1,11 @@
+/*@import url('https://fonts.googleapis.com/css?family=Catamaran');*/
+@import url('https://fonts.googleapis.com/css?family=Orbitron');
+@import url('https://fonts.googleapis.com/css?family=Maven Pro');
 /*Main panel styles*/
 body {
   background-color: rgb(32, 32, 32);
   color: rgb(170, 170, 170);
-  font-family: sans-serif;
+  font-family: Orbitron;
   font-size: 14px;
 }
 
@@ -61,7 +64,10 @@ div {
 }
 
 .mechPanel .weaponPanelContainer {
-
+  font-family: Maven Pro;
+  font-size: 0.9em;
+  overflow-y: auto;
+  max-height: 300px;
 }
 
 .redPanel {
@@ -157,6 +163,7 @@ div {
 }
 
 .mechHealthNumbers {
+  padding-top: 5px;
   font-size: 90%;
 }
 
@@ -191,6 +198,8 @@ div {
 /*Weapon panel styles*/
 .weaponPanelRow {
   position: relative;
+  font-size: 0.9em;
+  padding-bottom: 2px;
 }
 
 .weaponName {
@@ -261,7 +270,7 @@ div {
 }
 
 .statusPanel .mechSummaryHealthText {
-
+  font-weight: bold;
 }
 
 .statusPanel .mechTargetLabel {
@@ -278,7 +287,7 @@ div {
 }
 
 .teamStats .teamName {
-  font-size: 1.5em;
+  font-size: 1.7em;
   font-weight: bold;
 }
 
@@ -290,7 +299,7 @@ div {
 }
 
 .teamStats .addMechButton {
-  font-size: 0.9em;
+  font-size: 1em;
   font-weight: bold;
   text-align: center;
   max-width: 7em;
