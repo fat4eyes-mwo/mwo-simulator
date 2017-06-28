@@ -387,7 +387,7 @@ var MechView = MechView || (function() {
     $("#teamStats-template")
       .clone(true)
       .attr("id", teamStatsId(team))
-      .attr("data-team-id", team)
+      .attr("data-team", team)
       .removeClass("template")
       .addClass(team)
       .appendTo("#" + teamStatsContainerPanelId);
@@ -398,14 +398,76 @@ var MechView = MechView || (function() {
     //Add mech button
     //TODO: add click handler to add mech button
     let addMechButtonPanelId = addMechButtonId(team);
+    if (!addMechButtonHandler) {
+      addMechButtonHandler = new AddMechButtonHandler(this);
+    }
     $("#" + teamStatsContainerPanelId + " [class~=addMechButton]")
         .attr("id", addMechButtonPanelId)
-        .attr("data-team-id", team);
+        .attr("data-team", team)
+        .click(addMechButtonHandler);
   }
+  var AddMechButtonHandler = function(clickContext) {
+    var context = clickContext;
+    return function() {
+      let team = $(this).data('team');
+      context.showAddMechDialog(team);
+    }
+  }
+  var addMechButtonHandler;//set on click handler assignment
 
   var updateTeamStats = function(team) {
-
+    //TODO: Implement
   }
+
+  const MODAL_SCREEN_ID = "mechModalScreen";
+  const MODAL_DIALOG_ID = "mechModalDialog";
+  var showAddMechDialog = function(team) {
+    $("#" + MODAL_DIALOG_ID).empty();
+    $("#addMechDialog-template")
+      .clone(true)
+      .attr("id", "addMechDialogContainer")
+      .removeClass("template")
+      .appendTo("#" + MODAL_DIALOG_ID);
+
+    if (!addMechDialog_OK_Handler) {
+      addMechDialog_OK_Handler = new AddMechDialog_OK(this);
+    }
+    if (!addMechDialog_Cancel_Handler) {
+      addMechDialog_Cancel_Handler = new AddMechDialog_Cancel(this);
+    }
+    $("#addMechDialog-ok")
+      .attr("data-team", team)
+      .click(addMechDialog_OK_Handler);
+    $("#addMechDialog-cancel")
+      .attr("data-team", team)
+      .click(addMechDialog_Cancel_Handler);
+
+    $("#" + MODAL_SCREEN_ID).css("display", "block");
+  }
+
+  var hideAddMechDialog = function(team) {
+    $("#" + MODAL_SCREEN_ID).css("display", "none");
+  }
+
+  var AddMechDialog_OK = function(context) {
+    var clickContext = context;
+    return function() {
+      let team = $(this).data('team');
+      let url = $("#addMechDialog-text").val()
+      console.log("Ok. team: " + team + " URL: " + url);
+      clickContext.hideAddMechDialog(team);
+    }
+  };
+  var addMechDialog_OK_Handler; //set on dialog creation
+
+  var AddMechDialog_Cancel = function(context) {
+    var clickContext = context;
+    return function() {
+      let team = $(this).data('team');
+      clickContext.hideAddMechDialog(team);
+    }
+  };
+  var addMechDialog_Cancel_Handler; //set of dialog creation
 
   var clear = function (team) {
     let teamMechPanelId = team + "Team";
@@ -461,6 +523,8 @@ var MechView = MechView || (function() {
     updateSimTime : updateSimTime,
     setDebugText : setDebugText,
     clear : clear,
-    clearAll : clearAll
+    clearAll : clearAll,
+    showAddMechDialog: showAddMechDialog,
+    hideAddMechDialog: hideAddMechDialog,
   };
 })();//namespace

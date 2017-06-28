@@ -5,7 +5,7 @@
 body {
   background-color: rgb(32, 32, 32);
   color: rgb(170, 170, 170);
-  font-family: 'Maven Pro';
+  font-family: sans-serif;
   /*font-family: Orbitron;*/
   font-size: 14px;
 }
@@ -69,7 +69,6 @@ div {
 }
 
 .mechPanel .weaponPanelContainer {
-  font-family: Maven Pro;
   font-size: 0.9em;
   overflow-y: auto;
   max-height: 300px;
@@ -305,9 +304,8 @@ div {
 }
 
 .button {
-  font-size: 1em;
+  font-size: 0.9em;
   font-weight: bold;
-  font-family: 'Maven Pro';
   text-align: center;
   padding: 5px;
   border: solid thin black;
@@ -327,4 +325,47 @@ div {
   max-width: 7em;
   float: right;
   transition: background-color 0.5s ease;
+}
+
+.modalScreen {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.modalScreen .modalDialog {
+  background-color: rgb(32, 32, 32);
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 40%; /* Could be more or less, depending on screen size */
+}
+
+.wideInputText {
+}
+
+
+.addMechDialogContainer {
+
+}
+
+#addMechDialog-text {
+  border-radius: 3px;
+  border: solid thin gold;
+  float:none;
+}
+
+#addMechDialog-load {
+  float:right;
+}
+
+#addMechDialog-ok, #addMechDialog-cancel {
+  float: right;
 }

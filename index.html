@@ -66,6 +66,10 @@
     </div>
     <div class="row">
     </div>
+    <div id="mechModalScreen" class="modalScreen">
+      <div id="mechModalDialog" class="modalDialog">
+      </div>
+    </div>
 
     <!-- Templates  -->
     <!-- Paper doll template -->
@@ -188,6 +192,21 @@
       <div class="row">
         <div class="teamName column stylishText">Team name</div>
         <div class="addMechButton button column">Add mech</div>
+      </div>
+    </div>
+
+    <!-- Add mech dialog template -->
+    <div id="addMechDialog-template" class="template addMechDialog">
+      <div class="row">
+        <h3>Import loadout from smurfy</h3>
+      </div>
+      <div class="row">
+        <input id="addMechDialog-text" class="column column-10" type="url" placeholder="Enter Smurfy URL here"></input>
+        <div id="addMechDialog-load" class="button column column-2">Load</div>
+      </div>
+      <div class="row">
+        <div id="addMechDialog-cancel" class="button">Cancel</div>
+        <div id="addMechDialog-ok" class="button">OK</div>
       </div>
     </div>
 
