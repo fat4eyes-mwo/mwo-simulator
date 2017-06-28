@@ -31,7 +31,7 @@
     $headers = array('Content-Type: application/json');
 
     curl_setopt($curl, CURLOPT_URL, $url);
-    curl_setopt($ch,CURLOPT_ENCODING , ""); //accept all encodings
+    curl_setopt($curl,CURLOPT_ENCODING , ""); //accept all encodings
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
 
     $response = curl_exec($curl);

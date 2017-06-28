@@ -507,6 +507,13 @@ var MechView = MechView || (function() {
       let team = $(this).data('team');
       let url = $("#addMechDialog-text").val()
       console.log("Ok. team: " + team + " URL: " + url);
+      let smurfyMechLoadout = MechView.loadedSmurfyLoadout;
+      let smurfyMechData = MechModel.getSmurfyMechData(smurfyMechLoadout.mech_id);
+      let mechTranslatedName = smurfyMechData.translated_name;
+      let mechName = smurfyMechData.name;
+      let newMechId = MechModel.generateMechId(team, MechView.loadedSmurfyLoadout);
+      MechModel.addMech(newMechId, team, smurfyMechLoadout);
+      MechModelView.refreshView(); //TODO: Too heavyweight to redo all panels, just add one mechpanel instead
       clickContext.hideAddMechDialog(team);
     }
   };
@@ -521,12 +528,76 @@ var MechView = MechView || (function() {
   };
   var addMechDialog_Cancel_Handler; //set on dialog creation, singleton
 
+  const SMURFY_PROXY_URL = "./php/smurfyproxy.php?path=";
   var AddMechDialog_Load = function(context) {
     var clickContext = context;
+    //returns {"i"=<id>, "l"=<loadout>}
+    var parseSmurfyURL = function(url) {
+      //MOTHERFUCKING REGEXES! UNREADABLE PIECE OF SHIT! WHOEVER THOUGHT THAT REGEXES SHOULD BE LANGUAGE PRIMITIVES SHOULD BE SHOT!
+      let urlMatcher = /https?:\/\/mwo\.smurfy-net\.de\/mechlab#i=([0-9]+)&l=([a-z0-9]+)/;
+      let results = urlMatcher.exec(url);
+      if (results) {
+        let id = results[1];
+        let loadout = results[2];
+        if (id && loadout) {
+          return {"id" : id, "loadout" : loadout};
+        } else {
+          return null;
+        }
+      } else {
+        return null;
+      }
+    }
     return function() {
       let team = $(this).data('team');
-      let url = $("#addMechDialog-text").val()
+      let url = $("#addMechDialog-text").val();
       console.log("Load. team: " + team + " URL: " + url);
+      let params = parseSmurfyURL(url);
+      if (params) {
+        $("#addMechDialog-result")
+            .removeClass("error")
+            .html("Loading id : " + params.id + " loadout : " + params.loadout);
+        addMechLoadButton.disable();
+        addMechLoadButton.addClass("loading");
+        addMechLoadButton.setHtml("Loading...");
+        var smurfyLoadoutURL = SMURFY_PROXY_URL + "data/mechs/" + params.id
+            + "/loadouts/" + params.loadout + ".json";
+        $.ajax({
+            url : smurfyLoadoutURL,
+            type : 'GET',
+            dataType : 'JSON'
+        })
+        .done(function(data) {
+          MechView.loadedSmurfyLoadout = data;
+          let smurfyMechData = MechModel.getSmurfyMechData(MechView.loadedSmurfyLoadout.mech_id);
+          let mechTranslatedName = smurfyMechData.translated_name;
+          let mechName = smurfyMechData.name;
+          //TODO: put fancy summary of loaded mech in result pane
+          $("#addMechDialog-result")
+              .removeClass("error")
+              .html("Loaded " + mechTranslatedName);
+          addMechOKButton.enable();
+        })
+        .fail(function(data) {
+          $("#addMechDialog-result")
+              .addClass("error")
+              .html("Failed to load " + smurfyLoadoutURL);
+        })
+        .done(function(data){
+          addMechLoadButton.enable();
+          addMechLoadButton.removeClass("loading");
+          addMechLoadButton.setHtml("Load");
+        });
+
+      } else {
+        $("#addMechDialog-result")
+            .addClass("error")
+            .html("Invalid smurfy URL. Expected format is 'http://mwo.smurfy-net.de/mechlab#i=mechid&l=loadoutid'");
+        addMechLoadButton.enable();
+        addMechLoadButton.removeClass("loading");
+        addMechLoadButton.setHtml("Load");
+        console.log("Invalid smurfy url");
+      }
     }
   }
   var addMechDialog_Load_Handler; //set on dialog creation, singleton
@@ -588,5 +659,6 @@ var MechView = MechView || (function() {
     clearAll : clearAll,
     showAddMechDialog: showAddMechDialog,
     hideAddMechDialog: hideAddMechDialog,
+    loadedSmurfyLoadout: null,
   };
 })();//namespace

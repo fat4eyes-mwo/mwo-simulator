@@ -1299,8 +1299,41 @@ var MechModel = MechModel || (function () {
     mechTeams[team].push(newMech);
     console.log("addMech mech_id: " + mech_id +
       " translated_mech_name: " + newMech.getTranslatedName());
+    initMechPatterns(newMech);
     return newMech;
   };
+
+  //Debug, set default mech patterns
+  var initMechTeamPatterns = function(mechTeam) {
+    for (let mech of mechTeam) {
+      initMechPatterns(mech);
+    }
+  }
+  var initMechPatterns = function(mech) {
+    mech.firePattern = MechFirePattern.maximumDmgPerHeat;
+    mech.componentTargetPattern = MechTargetComponent.randomAim;
+    mech.mechTargetPattern = MechTargetMech.targetRandomMech;
+    mech.accuracyPattern = MechAccuracyPattern.fullAccuracyPattern;
+  }
+
+
+  var mechIdMap = {};
+  var generateMechId = function(team, smurfyMechLoadout) {
+    let smurfyMechData =
+      MechModel.getSmurfyMechData(MechView.loadedSmurfyLoadout.mech_id);
+    let mechName = smurfyMechData.name;
+    let rand = function() {
+      return Math.floor(Math.random() * 0x10000).toString(16);
+    }
+    let newMechId = team + "-" + mechName + "-" +
+        rand() + "-" + rand() + "-" + rand() + "-" + rand();
+    while (mechIdMap[newMechId]) {
+      newMechId = newMechId = team + "-" + mechName +
+          rand() + "-" + rand() + "-" + rand() + "-" + rand();
+      mechIdMap[newMechId] = true;
+    }
+    return newMechId;
+  }
 
   //Resets the MechStates of all mechs to their fresh value
   var resetState = function() {
@@ -1323,6 +1356,7 @@ var MechModel = MechModel || (function () {
     return false;
   }
 
+
   //public members
   return {
     Component: Component,
@@ -1341,11 +1375,17 @@ var MechModel = MechModel || (function () {
     initAddedData : initAddedData,
     dataLoaded : dataLoaded,
     addMech : addMech,
+    generateMechId : generateMechId,
+    initMechPatterns: initMechPatterns,
+    initMechTeamPatterns : initMechTeamPatterns,
     resetState : resetState,
     isTeamAlive : isTeamAlive,
     //Note: made public only because of testing. Should not be accessed outside this module
     baseMechStructure : baseMechStructure,
-    baseMechArmor : baseMechArmor
+    baseMechArmor : baseMechArmor,
+
+    //smurfy data helper functions. Used by view
+    getSmurfyMechData : getSmurfyMechData,
   };
 
 })(); //namespace end

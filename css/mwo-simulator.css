@@ -373,6 +373,10 @@ div {
   100% {background-color: gold;}
 }
 
+@keyframes errorblink {
+  50% {background-color: rgb(255, 0, 0); color: white;}
+}
+
 #addMechDialog-load {
   float:right;
 }
@@ -382,8 +386,19 @@ div {
   animation-duration: 1s;
   animation-name: buttonglow;
   animation-iteration-count: infinite;
+  opacity: 1;
 }
 
 #addMechDialog-ok, #addMechDialog-cancel {
   float: right;
+}
+
+#addMechDialog-result {
+
+}
+
+#addMechDialog-result.error {
+  animation-duration: 0.5s;
+  animation-name: errorblink;
+  animation-iteration-count: 1;
 }

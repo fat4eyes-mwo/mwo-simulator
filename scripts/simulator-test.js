@@ -300,17 +300,17 @@ return {
       const range = 200;
       MechModel.addMech("testKodiakId1", MechModel.Team.BLUE, DummyKodiak);
       MechModel.addMech("testExecutionerId", MechModel.Team.BLUE, DummyExecutioner);
-      MechModel.addMech("testTimberwolfId", MechModel.Team.BLUE, DummyTimberwolf);
-      MechModel.addMech("testStormcrowId", MechModel.Team.BLUE, DummyStormcrow);
-      MechModel.addMech("testCheetahId", MechModel.Team.BLUE, DummyArcticCheetah);
-      MechModel.addMech("testMadDogId", MechModel.Team.BLUE, DummyMadDog);
+      // MechModel.addMech("testTimberwolfId", MechModel.Team.BLUE, DummyTimberwolf);
+      // MechModel.addMech("testStormcrowId", MechModel.Team.BLUE, DummyStormcrow);
+      // MechModel.addMech("testCheetahId", MechModel.Team.BLUE, DummyArcticCheetah);
+      // MechModel.addMech("testMadDogId", MechModel.Team.BLUE, DummyMadDog);
 
       MechModel.addMech("testMaulerId", MechModel.Team.RED, DummyMauler);
       MechModel.addMech("testBattlemasterId", MechModel.Team.RED, DummyBattleMaster);
-      MechModel.addMech("testWarhammerId", MechModel.Team.RED, DummyWarHammer);
-      MechModel.addMech("testShadowhawkId", MechModel.Team.RED, DummyShadowhawk);
-      MechModel.addMech("testFirestarterId", MechModel.Team.RED, DummyFireStarter);
-      MechModel.addMech("testCatapultId", MechModel.Team.RED, DummyCatapult);
+      // MechModel.addMech("testWarhammerId", MechModel.Team.RED, DummyWarHammer);
+      // MechModel.addMech("testShadowhawkId", MechModel.Team.RED, DummyShadowhawk);
+      // MechModel.addMech("testFirestarterId", MechModel.Team.RED, DummyFireStarter);
+      // MechModel.addMech("testCatapultId", MechModel.Team.RED, DummyCatapult);
       // MechModel.addMech("testUrbanmechId1", MechModel.Team.RED, DummyUrbanmech);
 
       MechModelView.refreshView();
@@ -318,8 +318,8 @@ return {
                                   range//range
                                 );
       MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
-      MechSimulatorLogic.initMechPatterns(MechModel.mechTeams[MechModel.Team.BLUE]);
-      MechSimulatorLogic.initMechPatterns(MechModel.mechTeams[MechModel.Team.RED]);
+      MechModel.initMechTeamPatterns(MechModel.mechTeams[MechModel.Team.BLUE]);
+      MechModel.initMechTeamPatterns(MechModel.mechTeams[MechModel.Team.RED]);
 
       $("#resetState").removeClass("debugButton").click(() => {
         MechModel.resetState();

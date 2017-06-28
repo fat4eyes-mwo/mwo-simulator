@@ -88,15 +88,6 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     simulatorParameters = parameters;
   }
 
-  var initMechPatterns = function(mechTeam) {
-    for (let mech of mechTeam) {
-      mech.firePattern = MechFirePattern.maximumDmgPerHeat;
-      mech.componentTargetPattern = MechTargetComponent.randomAim;
-      mech.mechTargetPattern = MechTargetMech.targetRandomMech;
-      mech.accuracyPattern = MechAccuracyPattern.fullAccuracyPattern;
-    }
-  }
-
   var runSimulation = function() {
     if (!simulationInterval) {
       var IntervalHandler = function(context) {
@@ -498,7 +489,6 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   return {
     SimulatorParameters : SimulatorParameters,
     setSimulatorParameters : setSimulatorParameters,
-    initMechPatterns: initMechPatterns,
     runSimulation : runSimulation,
     pauseSimulation : pauseSimulation,
     resetSimulation : resetSimulation,
