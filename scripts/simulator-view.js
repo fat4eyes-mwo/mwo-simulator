@@ -22,7 +22,8 @@ var MechView = MechView || (function() {
   const healthDamageGradient = Object.freeze([
     {value : 0.0, RGB : {r: 230, g:20, b:20}},
     {value : 0.5, RGB : {r: 230, g:230, b:20}},
-    {value : 1, RGB : {r:20, g:230, b:20}}
+    {value : 0.9, RGB : {r:20, g:230, b:20}},
+    {value : 1, RGB : {r:170, g:170, b:170}}
   ]);
   //Colors for individual component health numbers
   const componentHealthDamageGradient = Object.freeze([
@@ -108,7 +109,7 @@ var MechView = MechView || (function() {
       .attr("id", paperDollId(mechId))
       .attr("data-mech-id", mechId)
       .removeClass("template")
-      .appendTo(paperDollContainer);
+      .appendTo("#" + paperDollContainer);
   }
 
   //Percent values from 0 to 1
@@ -343,7 +344,7 @@ var MechView = MechView || (function() {
     var paperDollContainerId = mechId + "-paperDollContainer";
     $("#" + mechPanelId(mechId) + " [class~='paperDollContainer']")
       .attr("id", paperDollContainerId);
-    addPaperDoll(mechId, "#" + paperDollContainerId);
+    addPaperDoll(mechId, paperDollContainerId);
 
     var mechHealthNumbersId = mechId + "-mechHealthNumbers";
     $("#" + mechPanelId(mechId) + " [class~='mechHealthNumbers']")
@@ -502,6 +503,7 @@ var MechView = MechView || (function() {
 
   var hideAddMechDialog = function(team) {
     $("#" + MODAL_SCREEN_ID).css("display", "none");
+    $("#" + MODAL_DIALOG_ID).empty();
   }
 
   var AddMechDialog_OK = function(context) {
@@ -617,6 +619,50 @@ var MechView = MechView || (function() {
     $("#paperDoll-template > [class^=mech]").mouseover(onMouseOverPaperDoll);
   }
 
+  const LOADING_SCREEN_MECH_ID = "fakeLoadingScreenMechId";
+  var loadingScreenAnimateInterval;
+  const LOADING_SCREEN_ANIMATE_INTERVAL = 100; //ms
+  var showLoadingScreen = function() {
+    $("#" + MODAL_DIALOG_ID).empty();
+    $("#loadingScreen-template")
+      .clone(true)
+      .attr("id", "loadingScreenContainer")
+      .removeClass("template")
+      .appendTo("#" + MODAL_DIALOG_ID);
+
+    addPaperDoll(LOADING_SCREEN_MECH_ID, "loadingScreenPaperDollContainer");
+    for (let componentIdx in MechModel.Component) {
+      if (MechModel.Component.hasOwnProperty(componentIdx)) {
+        let component = MechModel.Component[componentIdx];
+        MechView.setPaperDollArmor(LOADING_SCREEN_MECH_ID, component, 1);
+        MechView.setPaperDollStructure(LOADING_SCREEN_MECH_ID, component, 1);
+      }
+    }
+    if (loadingScreenAnimateInterval) {
+      window.clearInterval(loadingScreenAnimateInterval);
+    }
+    loadingScreenAnimateInterval = window.setInterval(
+      function () {
+        for (let componentIdx in MechModel.Component) {
+          if (MechModel.Component.hasOwnProperty(componentIdx)) {
+            let component = MechModel.Component[componentIdx];
+            MechView.setPaperDollArmor(LOADING_SCREEN_MECH_ID, component, Math.random());
+            MechView.setPaperDollStructure(LOADING_SCREEN_MECH_ID, component, Math.random());
+          }
+        }
+      }
+      , LOADING_SCREEN_ANIMATE_INTERVAL);
+
+    //TODO add paper doll and paperdoll animation interval
+    $("#" + MODAL_SCREEN_ID).css("display", "block");
+  }
+
+  var hideLoadingScreen = function() {
+    $("#" + MODAL_SCREEN_ID).css("display", "none");
+    $("#" + MODAL_DIALOG_ID).empty();
+    window.clearInterval(loadingScreenAnimateInterval);
+  }
+
   //public members
   return {
     setPaperDollArmor : setPaperDollArmor,
@@ -640,5 +686,7 @@ var MechView = MechView || (function() {
     showAddMechDialog: showAddMechDialog,
     hideAddMechDialog: hideAddMechDialog,
     loadedSmurfyLoadout: null,
+    showLoadingScreen : showLoadingScreen,
+    hideLoadingScreen : hideLoadingScreen,
   };
 })();//namespace

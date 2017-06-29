@@ -24,6 +24,12 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     }
   }
 
+  //Represents damage currently being done by a weapon. This gets put in the
+  //  weaponFireQueue every time a weapon is fired and its values
+  //  (durationLeft or travelLeft as the case may be) are updated every step
+  //  by processWeaponFires().
+  //When the damage is completed, it is taken off the queue and its total
+  //  damage done is added to the sourceMech's stats
   class WeaponFire {
     constructor(sourceMech, targetMech, weaponState, range, createTime) {
       this.sourceMech = sourceMech;

@@ -310,6 +310,7 @@ return {
       // this.generateTestUI( );
 
       //Load data from smurfy
+      MechView.showLoadingScreen();
       MechModel.initModelData((success) => {
         if (success) {
           console.log("Successfully loaded model init data");
@@ -321,6 +322,8 @@ return {
     },
 
     generateTestUI : function() {
+      MechView.hideLoadingScreen();
+
       const range = 200;
       // MechModel.addMech("testKodiakId1", MechModel.Team.BLUE, DummyKodiak);
       // MechModel.addMech("testExecutionerId", MechModel.Team.BLUE, DummyExecutioner);

@@ -1297,7 +1297,7 @@ var MechModel = MechModel || (function () {
   }
   var initMechPatterns = function(mech) {
     mech.firePattern = MechFirePattern.maximumDmgPerHeat;
-    mech.componentTargetPattern = MechTargetComponent.aimForCenterTorso;
+    mech.componentTargetPattern = MechTargetComponent.randomAim;
     mech.mechTargetPattern = MechTargetMech.targetMechsInOrder;
     mech.accuracyPattern = MechAccuracyPattern.accuracySpreadToAdjacent(0.7, 0.2);
   }

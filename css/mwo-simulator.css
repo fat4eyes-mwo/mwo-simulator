@@ -44,9 +44,9 @@ div {
 }
 
 .mechPanel {
-  border-width: thin;
-  border-style: solid;
+  border-top: thin solid;
   padding: 5px;
+  padding-top: 5px;
 }
 
 .mechPanel .paperDollContainer {
@@ -269,6 +269,7 @@ div {
 .statusPanel .mechName {
   font-weight: bold;
   font-size: 1.2em;
+  color: gold;
 }
 
 .statusPanel .mechSummaryHealthLabel {
@@ -374,6 +375,12 @@ div {
   100% {background-color: gold;}
 }
 
+@keyframes textglow {
+  0% {color: gold;}
+  50% {color: rgb(255,255,30);}
+  100% {color: gold;}
+}
+
 @keyframes errorblink {
   50% {background-color: rgb(255, 0, 0); color: white;}
 }
@@ -402,4 +409,21 @@ div {
   animation-duration: 0.5s;
   animation-name: errorblink;
   animation-iteration-count: 1;
+}
+
+.loadingScreen {
+}
+
+#loadingScreenPaperDollContainer {
+  width: 100px;
+  height: 100px;
+  margin: 0% auto;
+}
+
+.loadingScreenText {
+  text-align: center;
+  font-size: 2em;
+  animation-duration: 0.5s;
+  animation-name: textglow;
+  animation-iteration-count: infinite;
 }
