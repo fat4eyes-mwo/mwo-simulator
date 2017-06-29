@@ -282,22 +282,22 @@ return {
 
     testSimulation : function() {
       //Use DummyData
-      MechModel.initDummyModelData();
-      this.generateTestUI( );
+      // MechModel.initDummyModelData();
+      // this.generateTestUI( );
 
       //Load data from smurfy
-      // MechModel.initModelData((success) => {
-      //   if (success) {
-      //     console.log("Successfully loaded model init data");
-      //     MechTest.generateTestUI();
-      //   } else {
-      //     console.log("Failed to load model init data");
-      //   }
-      // });
+      MechModel.initModelData((success) => {
+        if (success) {
+          console.log("Successfully loaded model init data");
+          MechTest.generateTestUI();
+        } else {
+          console.log("Failed to load model init data");
+        }
+      });
     },
 
     generateTestUI : function() {
-      const range = 200;
+      const range = 120;
       MechModel.addMech("testKodiakId1", MechModel.Team.BLUE, DummyKodiak);
       MechModel.addMech("testExecutionerId", MechModel.Team.BLUE, DummyExecutioner);
       // MechModel.addMech("testTimberwolfId", MechModel.Team.BLUE, DummyTimberwolf);

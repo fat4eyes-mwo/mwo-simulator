@@ -1311,8 +1311,8 @@ var MechModel = MechModel || (function () {
   }
   var initMechPatterns = function(mech) {
     mech.firePattern = MechFirePattern.maximumDmgPerHeat;
-    mech.componentTargetPattern = MechTargetComponent.randomAim;
-    mech.mechTargetPattern = MechTargetMech.targetRandomMech;
+    mech.componentTargetPattern = MechTargetComponent.aimForCenterTorso;
+    mech.mechTargetPattern = MechTargetMech.targetMechsInOrder;
     mech.accuracyPattern = MechAccuracyPattern.fullAccuracyPattern;
   }
 
@@ -1356,6 +1356,47 @@ var MechModel = MechModel || (function () {
     return false;
   }
 
+  //returns {"i"=<id>, "l"=<loadout>}
+  var parseSmurfyURL = function(url) {
+    let urlMatcher = /https?:\/\/mwo\.smurfy-net\.de\/mechlab#i=([0-9]+)&l=([a-z0-9]+)/;
+    let results = urlMatcher.exec(url);
+    if (results) {
+      let id = results[1];
+      let loadout = results[2];
+      if (id && loadout) {
+        return {"id" : id, "loadout" : loadout};
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  }
+
+  var loadSmurfyMechLoadout = function(url, doneCallback, failCallback, alwaysCallback) {
+
+    let params = parseSmurfyURL(url);
+    if (!params) {
+      return null;
+    }
+    var smurfyLoadoutURL = SMURFY_PROXY_URL + "data/mechs/" + params.id
+        + "/loadouts/" + params.loadout + ".json";
+    $.ajax({
+        url : smurfyLoadoutURL,
+        type : 'GET',
+        dataType : 'JSON'
+    })
+    .done(function(data) {
+      doneCallback(data);
+    })
+    .fail(function(data) {
+      failCallback(data);
+    })
+    .always(function(data) {
+      alwaysCallback(data);
+    });
+    return true;
+  }
 
   //public members
   return {
@@ -1386,6 +1427,7 @@ var MechModel = MechModel || (function () {
 
     //smurfy data helper functions. Used by view
     getSmurfyMechData : getSmurfyMechData,
+    loadSmurfyMechLoadout : loadSmurfyMechLoadout,
   };
 
 })(); //namespace end
