@@ -56,7 +56,7 @@ var MechModel = MechModel || (function () {
   class MechInfo {
     constructor(mechId, mechName, mechTranslatedName, mechHealth,
       weaponInfoList, heatsinkInfoList, ammoBoxList, engineInfo, tons) {
-      this.mechId = mechId;
+      this.mechId = mechId; //Smurfy mech id
       this.mechName = mechName;
       this.mechTranslatedName = mechTranslatedName;
       this.mechHealth = mechHealth;
@@ -250,12 +250,13 @@ var MechModel = MechModel || (function () {
   }
 
   class MechState {
-    constructor(mechInfo, mechHealth, heatState, weaponStateList, ammoState) {
+    constructor(mechInfo) {
       this.mechInfo = mechInfo;
-      this.mechHealth = mechHealth;
-      this.heatState = heatState;
-      this.weaponStateList = weaponStateList; //[WeaponState...]
-      this.ammoState = ammoState;
+      this.mechHealth = mechInfo.mechHealth.clone();
+      this.heatState = new HeatState(mechInfo);
+      this.weaponStateList = initWeaponStateList(mechInfo);
+      this.ammoState = new AmmoState(mechInfo);
+
       this.updateTypes = {}; //Update types triggered on the current simulation step
       this.ghostHeatMap = {}; //weaponId -> [GhostHeatEntry]. Used in ghost heat computations.
     }
@@ -386,25 +387,36 @@ var MechModel = MechModel || (function () {
   }
 
   class HeatState {
-    constructor(currHeat, currMaxHeat, currHeatDissapation, currHeatsinkList, engineInfo, engineHeatEfficiency) {
-      this.currHeat = currHeat;
-      this.currMaxHeat = currMaxHeat; //computed value, must be consistent with heatsinkInfo + engine
-      this.currHeatDissapation = currHeatDissapation; //computed value, must be consistent with heatsinkInfo + engine
-      this.currHeatsinkList = currHeatsinkList; //[Heatsink...]
-      this.engineInfo = engineInfo;
-      this.engineHeatEfficiency = engineHeatEfficiency; //0 to 1
+    constructor(mechInfo) {
+      this.currHeat = 0;
+      this.engineHeatEfficiency = 1;
+      let heatStats = calculateHeatStats(
+              mechInfo.heatsinkInfoList,
+              mechInfo.engineInfo,
+              this.engineHeatEfficiency);
+      this.currHeatDissapation = heatStats.heatDissapation;
+      this.currMaxHeat = heatStats.heatCapacity;
+      //Copy engine info from mech info
+      this.engineInfo = mechInfo.engineInfo.clone();
+      //Copy heatsink info from mech info
+      this.currHeatsinkList = [];
+      for (let heatsink of mechInfo.heatsinkInfoList) {
+        this.currHeatsinkList.push(heatsink.clone());
+      }
     }
   }
 
   class WeaponState {
-    constructor(weaponInfo, active, weaponCycle, cooldownLeft, spoolupLeft, durationLeft) {
+    constructor(weaponInfo, mechInfo) {
+      this.mechInfo = mechInfo; //store mechInfo for quirk modifiers
       this.weaponInfo = weaponInfo;
-      this.active = active; //boolean
-      this.weaponCycle = weaponCycle;
-      this.cooldownLeft = cooldownLeft; //cooldown time left in ms
-      this.spoolupLeft = spoolupLeft;
-      this.durationLeft = durationLeft;
+      this.active = true;
+      this.weaponCycle = WeaponCycle.READY;
+      this.cooldownLeft = 0;
+      this.spoolupLeft = 0;
+      this.durationLeft = 0;
     }
+
     gotoState(weaponCycle) {
       this.weaponCycle = weaponCycle;
       this.cooldownLeft = 0;
@@ -413,14 +425,14 @@ var MechModel = MechModel || (function () {
       if (weaponCycle === WeaponCycle.READY) {
         //do nothing
       } else if (weaponCycle === WeaponCycle.FIRING) {
-        this.durationLeft = this.computeWeaponDuration(this.weaponInfo.duration);
+        this.durationLeft = this.computeWeaponDuration();
       } else if (weaponCycle === WeaponCycle.COOLDOWN) {
-        this.cooldownLeft = this.computeWeaponCooldown(this.weaponInfo.cooldown);
+        this.cooldownLeft = this.computeWeaponCooldown();
       } else if (weaponCycle === WeaponCycle.SPOOLING) {
         this.spoolupLeft = Number(this.weaponInfo.spinup);
       } else if (weaponCycle === WeaponCycle.DISABLED) {
         //set cooldown to max so it displays properly in the view
-        this.cooldownLeft = Number(this.weaponInfo.cooldown);
+        this.cooldownLeft = this.computeWeaponCooldown();
         this.active = false;
       }
     }
@@ -429,26 +441,27 @@ var MechModel = MechModel || (function () {
     }
     //Computes the cooldown for this weapon on a mech, taking modifiers into account
     //TODO: process effect of mech quirks
-    computeWeaponCooldown(mech) {
+    computeWeaponCooldown(mechState) {
       return Number(this.weaponInfo.cooldown);
     }
 
     //Computes this weapon's duration on a mech, taking modifiers into account
     //TODO: process effect of mech quirks
-    computeWeaponDuration(mech) {
+    computeWeaponDuration(mechState) {
       return Number(this.weaponInfo.duration);
     }
 
     //Computes this weapon's heat on a given mech, taking modifiers into account
     //TODO: process effect of mech quirks
-    computeHeat(mech) {
+    computeHeat(mechState) {
       return Number(this.weaponInfo.heat);
     }
 
   }
 
   class AmmoState {
-    constructor(sourceAmmoBoxList) {
+    constructor(mechInfo) {
+      let sourceAmmoBoxList = mechInfo.ammoBoxList;
       this.ammoCounts = {}; //weaponId->AmmoCount
       this.ammoBoxList = [];
 
@@ -1177,20 +1190,6 @@ var MechModel = MechModel || (function () {
     return engineInfo;
   }
 
-  //state initialization methods
-  var initMechState = function (mechInfo) {
-    var mechState;
-
-    var mechHealth = mechInfo.mechHealth.clone();
-    var heatState = initHeatState(mechInfo);
-    var weaponStateList = initWeaponStateList(mechInfo);
-    var ammoState = initAmmoState(mechInfo);
-
-    mechState = new MechState(mechInfo, mechHealth, heatState,
-                              weaponStateList, ammoState);
-    return mechState;
-  }
-
   //Calculates the total heat capacity and heat dissapation from a mechInfo
   var calculateHeatStats = function (heatsinkInfoList, engineInfo, engineHeatEfficiency) {
     const BASE_HEAT_CAPACITY = 30;
@@ -1228,49 +1227,12 @@ var MechModel = MechModel || (function () {
     };
   }
 
-  var initHeatState = function(mechInfo) {
-    let currHeat = 0;
-    let engineHeatEfficiency = 1;
-    let heatStats = calculateHeatStats(
-            mechInfo.heatsinkInfoList,
-            mechInfo.engineInfo,
-            engineHeatEfficiency);
-    let currHeatDissapation = heatStats.heatDissapation;
-    let currMaxHeat = heatStats.heatCapacity;
-    //Copy engine info from mech info
-    let engineInfo = mechInfo.engineInfo.clone();
-    //Copy heatsink info from mech info
-    let currHeatsinkList = [];
-    for (let heatsink of mechInfo.heatsinkInfoList) {
-      currHeatsinkList.push(heatsink.clone());
-    }
-    let heatState = new HeatState(currHeat, currMaxHeat, currHeatDissapation,
-                            currHeatsinkList, engineInfo, engineHeatEfficiency)
-    return heatState;
-  }
-
   var initWeaponStateList = function(mechInfo) {
     var weaponStateList = [];
     for (let weaponInfo of mechInfo.weaponInfoList) {
-      weaponStateList.push(initWeaponState(weaponInfo));
+      weaponStateList.push(new WeaponState(weaponInfo, mechInfo));
     }
     return weaponStateList;
-  }
-
-  var initWeaponState = function(weaponInfo) {
-    let active = true;
-    let weaponCycle = WeaponCycle.READY;
-    let cooldownLeft = 0;
-    let spoolupLeft = 0;
-    let durationLeft = 0;
-    let weaponState = new WeaponState(weaponInfo, active, weaponCycle,
-                              cooldownLeft, spoolupLeft, durationLeft);
-    return weaponState;
-  }
-
-  var initAmmoState = function(mechInfo) {
-    let ammoState = new AmmoState(mechInfo.ammoBoxList);
-    return ammoState;
   }
 
   //constructor
@@ -1280,7 +1242,7 @@ var MechModel = MechModel || (function () {
     var smurfyMechData = getSmurfyMechData(smurfy_mech_id);
     var mech_id = new_mech_id;
     var mechInfo = mechInfoFromSmurfyMechLoadout(new_mech_id, smurfyMechLoadout);
-    var mechState = initMechState(mechInfo);
+    var mechState = new MechState(mechInfo);
     var mechTeam = team;
     var targetMech; //set by simulation
     return {
@@ -1304,7 +1266,7 @@ var MechModel = MechModel || (function () {
         return mechState;
       },
       resetMechState : function() {
-        mechState = initMechState(mechInfo);
+        mechState = new MechState(mechInfo);
       },
       getMechTeam : function() {
         return mechTeam;
@@ -1337,7 +1299,7 @@ var MechModel = MechModel || (function () {
     mech.firePattern = MechFirePattern.maximumDmgPerHeat;
     mech.componentTargetPattern = MechTargetComponent.aimForCenterTorso;
     mech.mechTargetPattern = MechTargetMech.targetMechsInOrder;
-    mech.accuracyPattern = MechAccuracyPattern.accuracySpreadToAdjacent(0.5, 0.5);
+    mech.accuracyPattern = MechAccuracyPattern.accuracySpreadToAdjacent(0.7, 0.2);
   }
 
 

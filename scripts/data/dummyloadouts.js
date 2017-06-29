@@ -4,7 +4,10 @@
 //http://mwo.smurfy-net.de/mechlab#i=159&l=e76be9e56be74db966da2f59cd0f8bb619c6e2bd
 //Meta battlemaster
 //http://mwo.smurfy-net.de/mechlab#i=310&l=cc4b2d60a893c1a2c74ada89daf32ed316eda14c
-
+//Stock ac20 urbie
+//http://mwo.smurfy-net.de/mechlab#i=277&l=stock
+//dakka dire wolf
+//http://mwo.smurfy-net.de/mechlab#i=171&l=64ede53a6ef7aca5d9964fa50ce75e464ea481ed
 
 
 
