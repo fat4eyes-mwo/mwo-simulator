@@ -376,7 +376,7 @@ var MechModel = MechModel || (function () {
                 heatState.currHeatsinkList,
                 heatState.engineInfo,
                 heatState.engineHeatEfficiency);
-          heatState.currHeatDissapation = heatStats.heatDissapation;
+          heatState.currHeatDissipation = heatStats.heatDissipation;
           heatState.currMaxHeat = heatStats.heatCapacity;
           this.updateTypes[UpdateType.HEAT];
         }
@@ -394,7 +394,7 @@ var MechModel = MechModel || (function () {
               mechInfo.heatsinkInfoList,
               mechInfo.engineInfo,
               this.engineHeatEfficiency);
-      this.currHeatDissapation = heatStats.heatDissapation;
+      this.currHeatDissipation = heatStats.heatDissipation;
       this.currMaxHeat = heatStats.heatCapacity;
       //Copy engine info from mech info
       this.engineInfo = mechInfo.engineInfo.clone();
@@ -1190,11 +1190,11 @@ var MechModel = MechModel || (function () {
     return engineInfo;
   }
 
-  //Calculates the total heat capacity and heat dissapation from a mechInfo
+  //Calculates the total heat capacity and heat dissipation from a mechInfo
   var calculateHeatStats = function (heatsinkInfoList, engineInfo, engineHeatEfficiency) {
     const BASE_HEAT_CAPACITY = 30;
     let heatCapacity = BASE_HEAT_CAPACITY;
-    let heatDissapation = 0;
+    let heatDissipation = 0;
 
     //non-fixed heatsinks
     for (let heatsink of heatsinkInfoList) {
@@ -1202,20 +1202,20 @@ var MechModel = MechModel || (function () {
       if (heatsink.location === Component.CENTRE_TORSO) {
       //internal non-fixed
         heatCapacity += Number(heatsink.internalHeatCapacity);
-        heatDissapation += Number(heatsink.engineCooling);
+        heatDissipation += Number(heatsink.engineCooling);
       } else {
       //external non-fixed
         heatCapacity += Number(heatsink.externalHeatCapacity);
-        heatDissapation += Number(heatsink.cooling)
+        heatDissipation += Number(heatsink.cooling)
       }
     }
 
     //engine heatsinks
     let engineHeatsink = engineInfo.heatsink;
     heatCapacity += Number(engineInfo.heatsinkCount) *
-                    Number(engineHeatsink.internalHeatCapacity) *
-                    Number(engineHeatEfficiency);
-    heatDissapation += Number(engineInfo.heatsinkCount) *
+                    Number(engineHeatsink.internalHeatCapacity);
+    //Only dissipation is affected by engine efficiency
+    heatDissipation += Number(engineInfo.heatsinkCount) *
                       Number(engineHeatsink.engineCooling) *
                       Number(engineHeatEfficiency);
 
@@ -1223,7 +1223,7 @@ var MechModel = MechModel || (function () {
 
     return {
       "heatCapacity" : heatCapacity,
-      "heatDissapation" : heatDissapation
+      "heatDissipation" : heatDissipation
     };
   }
 

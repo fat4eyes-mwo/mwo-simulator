@@ -621,7 +621,7 @@ var MechView = MechView || (function() {
 
   const LOADING_SCREEN_MECH_ID = "fakeLoadingScreenMechId";
   var loadingScreenAnimateInterval;
-  const LOADING_SCREEN_ANIMATE_INTERVAL = 100; //ms
+  const LOADING_SCREEN_ANIMATE_INTERVAL = 200; //ms
   var showLoadingScreen = function() {
     $("#" + MODAL_DIALOG_ID).empty();
     $("#loadingScreen-template")

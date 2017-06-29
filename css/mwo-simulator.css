@@ -423,7 +423,7 @@ div {
 .loadingScreenText {
   text-align: center;
   font-size: 2em;
-  animation-duration: 0.5s;
+  animation-duration: 1s;
   animation-name: textglow;
   animation-iteration-count: infinite;
 }

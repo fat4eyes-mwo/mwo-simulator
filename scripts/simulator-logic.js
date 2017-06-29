@@ -147,7 +147,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
       for (let mech of MechModel.mechTeams[team]) {
         let mechState = mech.getMechState();
         if (mechState.isAlive()) {
-          dissapateHeat(mech);
+          dissipateHeat(mech);
 
           processCooldowns(mech);
 
@@ -263,14 +263,14 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     // MechModelView.updateDebugText(debugText);
   }
 
-  var dissapateHeat = function(mech) {
+  var dissipateHeat = function(mech) {
     let mechState = mech.getMechState();
     let heatState = mechState.heatState;
-    //heat dissapated per step. Divide currHeatDissapation by 1000
+    //heat dissipated per step. Divide currHeatDissipation by 1000
     //because it is in heat per second
-    let stepHeatDissapation = stepDuration * heatState.currHeatDissapation / 1000;
+    let stepHeatDissipation = stepDuration * heatState.currHeatDissipation / 1000;
     let prevHeat = heatState.currHeat;
-    heatState.currHeat = Math.max(0, heatState.currHeat - Number(stepHeatDissapation));
+    heatState.currHeat = Math.max(0, heatState.currHeat - Number(stepHeatDissipation));
     if (heatState.currHeat != prevHeat) {
       mechState.updateTypes[MechModel.UpdateType.HEAT] = true;
     }
