@@ -909,6 +909,21 @@ var MechModel = MechModel || (function () {
     return SmurfyWeaponData[smurfyItemId];
   }
 
+  var smurfyWeaponNameMap = {};
+  var getSmurfyWeaponDataByName = function(smurfyName) {
+    if (smurfyWeaponNameMap[smurfyName]) {
+      return smurfyWeaponNameMap[smurfyName];
+    }
+    for (let id in SmurfyWeaponData) {
+      let smurfyWeapon = SmurfyWeaponData[id];
+      if (smurfyName === smurfyWeapon.name) {
+        smurfyWeaponNameMap[smurfyName] = smurfyWeapon;
+        return smurfyWeaponNameMap[smurfyName];
+      }
+    }
+    return null;
+  }
+
   var getSmurfyModuleData = function(smurfyModuleId) {
     return SmurfyModuleData[smurfyModuleId];
   }
@@ -1383,7 +1398,6 @@ var MechModel = MechModel || (function () {
   }
 
   var loadSmurfyMechLoadout = function(url, doneCallback, failCallback, alwaysCallback) {
-
     let params = parseSmurfyURL(url);
     if (!params) {
       return null;
@@ -1406,6 +1420,30 @@ var MechModel = MechModel || (function () {
     });
     return true;
   }
+
+  //returns a list of adjacent components
+  //MechModel.Component -> [MechModel.Component...]
+  var getAdjacentComponents = function(component) {
+    if (component === Component.HEAD) {
+      return [];
+    } else if (component === Component.CENTRE_TORSO) {
+      return [Component.LEFT_TORSO, Component.RIGHT_TORSO];
+    } else if (component === Component.LEFT_TORSO) {
+      return [Component.CENTRE_TORSO, Component.LEFT_ARM];
+    } else if (component === Component.RIGHT_TORSO) {
+      return [Component.CENTRE_TORSO, Component.RIGHT_ARM];
+    } else if (component === Component.RIGHT_ARM) {
+      return [Component.RIGHT_TORSO];
+    } else if (component === Component.LEFT_ARM) {
+      return [Component.LEFT_TORSO];
+    } else if (component === Component.LEFT_LEG) {
+      return [Component.LEFT_TORSO];
+    } else if (component === Component.RIGHT_LEG) {
+      return [Component.RIGHT_TORSO];
+    }
+    return [];
+  }
+
 
   //public members
   return {
@@ -1430,6 +1468,7 @@ var MechModel = MechModel || (function () {
     initMechTeamPatterns : initMechTeamPatterns,
     resetState : resetState,
     isTeamAlive : isTeamAlive,
+    getAdjacentComponents : getAdjacentComponents,
     //Note: made public only because of testing. Should not be accessed outside this module
     baseMechStructure : baseMechStructure,
     baseMechArmor : baseMechArmor,
@@ -1437,6 +1476,7 @@ var MechModel = MechModel || (function () {
     //smurfy data helper functions. Used by view
     getSmurfyMechData : getSmurfyMechData,
     getSmurfyWeaponData : getSmurfyWeaponData,
+    getSmurfyWeaponDataByName : getSmurfyWeaponDataByName,
     getSmurfyModuleData : getSmurfyModuleData,
     getSmurfyAmmoData : getSmurfyAmmoData,
     loadSmurfyMechLoadout : loadSmurfyMechLoadout,

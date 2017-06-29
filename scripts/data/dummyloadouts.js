@@ -1,3 +1,14 @@
+//Gauss PPC summoner
+//http://mwo.smurfy-net.de/mechlab#i=189&l=8d4bb3e475863c7fe5c173c7cc62b9fc86177bda
+//Machine Gun Arrow
+//http://mwo.smurfy-net.de/mechlab#i=159&l=e76be9e56be74db966da2f59cd0f8bb619c6e2bd
+//Meta battlemaster
+//http://mwo.smurfy-net.de/mechlab#i=310&l=cc4b2d60a893c1a2c74ada89daf32ed316eda14c
+
+
+
+
+
 //http://mwo.smurfy-net.de/mechlab#i=291&l=0673c22705b1651b68e33300644d53eb895cf864
 var DummyArcticCheetah = {
 	"id": "0673c22705b1651b68e33300644d53eb895cf864",
