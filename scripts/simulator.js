@@ -7,9 +7,10 @@ function main() {
   // MechTest.testModelOps();
   //MechTest.testModelBaseHealth();
   // MechTest.testModelView();
-  MechTest.testSimulation();
   // MechTest.testDamageAtRange();
   // MechTest.testListQuirks();
+  // MechTest.testSpreadAdjacentDamage();
+  MechTest.testSimulation();
 }
 
 $(document).ready(main);

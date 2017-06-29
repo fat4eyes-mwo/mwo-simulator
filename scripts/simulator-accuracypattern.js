@@ -9,6 +9,41 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
     return weaponDamage;
   }
 
+  //Spreads the damage to adjacent components, with the given percentages
+  //percentOnTarget, percentOnAdjacent between 0 and 1, and their total must be less than one
+  //Any left over is considered a miss
+  var accuracySpreadToAdjacent = function(percentOnTarget, percentOnAdjacent) {
+    return function(weaponDamage, range) {
+      let transformedDamage = new MechModel.WeaponDamage({});
+
+      for (let component in weaponDamage.damageMap) {
+        let newComponentDamage =
+            Number(weaponDamage.damageMap[component]) *
+            Number(percentOnTarget);
+        let totalAdjacentDamage =
+            Number(weaponDamage.damageMap[component]) *
+            Number(percentOnAdjacent);
+
+        transformedDamage.damageMap[component] =
+          transformedDamage.damageMap[component] ?
+            transformedDamage.damageMap[component] + newComponentDamage
+            : newComponentDamage;
+        //Assumes there are always 2 adjacent components. If the getAdjacentComponents
+        //method only returns one, then half of the totalAdjacentDamage is lost
+        //e.g. if the component is an arm, it applies half of the percentOnAdjacent * damge to the connected torso,
+        //while the other half misses
+        let perAdjacentComponentDamage = totalAdjacentDamage / 2;
+        let adjacentComponents = MechModel.getAdjacentComponents(component);
+        for (let adjacentComponent of adjacentComponents) {
+          transformedDamage.damageMap[adjacentComponent] =
+            transformedDamage.damageMap[adjacentComponent] ?
+              transformedDamage.damageMap[adjacentComponent] + perAdjacentComponentDamage
+              : perAdjacentComponentDamage;
+        }
+      }
+      return transformedDamage;
+    }
+  }
 
   //Weapon specific accuracy patterns
   var getWeaponAccuracyPattern = function(weaponInfo) {
@@ -45,6 +80,7 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
 
   return {
     fullAccuracyPattern : fullAccuracyPattern,
+    accuracySpreadToAdjacent : accuracySpreadToAdjacent,
     getWeaponAccuracyPattern : getWeaponAccuracyPattern,
     cERPPCPattern : cERPPCPattern,
   }

@@ -256,6 +256,30 @@ return {
       console.log("range: " + range + " damage: " + damage);
     },
 
+    testSpreadAdjacentDamage : function() {
+      var printTestDamageTransform = function (testDamage) {
+        let weaponDamage = new MechModel.WeaponDamage(testDamage);
+        let accuracyPattern = MechAccuracyPattern.accuracySpreadToAdjacent(0.5, 0.5);
+        let transformedDamage = accuracyPattern(weaponDamage, 200);
+        console.log("original damage: " + weaponDamage.toString());
+        console.log("transformedDamage: " + transformedDamage.toString());
+      }
+      let testDamage =
+        {"centre_torso": 10,
+          "right_torso": 2.5,
+          "left_torso": 2.5};
+      printTestDamageTransform(testDamage);
+
+      testDamage = {"head" : 10};
+      printTestDamageTransform(testDamage);
+
+      testDamage = {"left_torso" : 10, "centre_torso" : 2.5, "left_arm" : 2.5};
+      printTestDamageTransform(testDamage);
+
+      testDamage = {"left_arm" : 10, "left_torso" : 2.5};
+      printTestDamageTransform(testDamage);
+    },
+
     testListQuirks : function() {
       let quirkMap = {};
       for (let mechIdx in DummyMechData) {
