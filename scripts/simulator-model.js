@@ -72,7 +72,7 @@ var MechModel = MechModel || (function () {
     constructor(weaponId, name, translatedName, location,
       minRange, optRange, maxRange, baseDmg, damageMultiplier,
       heat, minHeatPenaltyLevel, heatPenalty, heatPenaltyId,
-      cooldown, duration, spinup, speed, ammoPerShot) {
+      cooldown, duration, spinup, speed, ammoPerShot, dps) {
         this.weaponId = weaponId; //smurfy weapon id
         this.name = name;
         this.translatedName = translatedName;
@@ -91,6 +91,7 @@ var MechModel = MechModel || (function () {
         this.spinup = spinup; //spinup in milliseconds
         this.speed = speed; //speed in m/s
         this.ammoPerShot = ammoPerShot;
+        this.dps = dps;
       }
       hasDuration() {
         return Number(this.duration) > 0;
@@ -101,8 +102,15 @@ var MechModel = MechModel || (function () {
       requiresAmmo() {
         return this.ammoPerShot > 0;
       }
-      damageAtRange(range) {
+      //range in meters, stepDuration in ms
+      damageAtRange(range, stepDuration) {
         let totalDamage = Number(this.baseDmg) * Number(this.damageMultiplier);
+        //special case for continuous fire weapons (duration < 0)
+        //use smurfy calculated dps multiplied by the stepDuration so the
+        //damage per tick * number of ticks a second equals the calculated dps
+        if (this.duration < 0) {
+          totalDamage = this.dps * stepDuration / 1000;
+        }
         if (Number(range) < Number(this.minRange)
             || Number(range) > Number(this.maxRange)) {
           return 0;
@@ -1032,12 +1040,13 @@ var MechModel = MechModel || (function () {
     let speed = smurfyWeaponData.speed;
     let ammoPerShot = smurfyWeaponData.ammo_per_shot ?
           smurfyWeaponData.ammo_per_shot : 0;
+    let dps = smurfyWeaponData.calc_stats.dps;
 
     let weaponInfo = new WeaponInfo(
       weaponId, name, translatedName, location,
       minRange, optRange, maxRange, baseDmg, damageMultiplier,
       heat, minHeatPenaltyLevel, heatPenalty, heatPenaltyId,
-      cooldown, duration, spinup, speed, ammoPerShot
+      cooldown, duration, spinup, speed, ammoPerShot, dps
     );
     return weaponInfo;
   }

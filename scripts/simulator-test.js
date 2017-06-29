@@ -210,49 +210,49 @@ return {
           " optRange: " + weaponInfoTest.optRange +
           " maxRange: " + weaponInfoTest.maxRange +
           " baseDmg: " + weaponInfoTest.baseDmg);
-
+      const stepDuration = 50;
       let damage;
       let range;
       range = 0;
-      damage = weaponInfoTest.damageAtRange(range);
+      damage = weaponInfoTest.damageAtRange(range, stepDuration);
       console.log("range: " + range + " damage: " + damage);
       range = 90;
-      damage = weaponInfoTest.damageAtRange(range);
+      damage = weaponInfoTest.damageAtRange(range, stepDuration);
       console.log("range: " + range + " damage: " + damage);
       range = 180;
-      damage = weaponInfoTest.damageAtRange(range);
+      damage = weaponInfoTest.damageAtRange(range, stepDuration);
       console.log("range: " + range + " damage: " + damage);
       range = 540;
-      damage = weaponInfoTest.damageAtRange(range);
+      damage = weaponInfoTest.damageAtRange(range, stepDuration);
       console.log("range: " + range + " damage: " + damage);
       range = 810;
-      damage = weaponInfoTest.damageAtRange(range);
+      damage = weaponInfoTest.damageAtRange(range, stepDuration);
       console.log("range: " + range + " damage: " + damage);
       range = 1080;
-      damage = weaponInfoTest.damageAtRange(range);
+      damage = weaponInfoTest.damageAtRange(range, stepDuration);
       console.log("range: " + range + " damage: " + damage);
       range = 2000;
-      damage = weaponInfoTest.damageAtRange(range);
+      damage = weaponInfoTest.damageAtRange(range, stepDuration);
       console.log("range: " + range + " damage: " + damage);
 
       weaponInfoTest = new MechModel.WeaponInfo("301", "TestSRM6", "Test SRM6", null, 0, 270, 270, 2.15, 6)
       range = 0;
-      damage = weaponInfoTest.damageAtRange(range);
+      damage = weaponInfoTest.damageAtRange(range, stepDuration);
       console.log("range: " + range + " damage: " + damage);
       range = 90;
-      damage = weaponInfoTest.damageAtRange(range);
+      damage = weaponInfoTest.damageAtRange(range, stepDuration);
       console.log("range: " + range + " damage: " + damage);
       range = 180;
-      damage = weaponInfoTest.damageAtRange(range);
+      damage = weaponInfoTest.damageAtRange(range, stepDuration);
       console.log("range: " + range + " damage: " + damage);
       range = 270;
-      damage = weaponInfoTest.damageAtRange(range);
+      damage = weaponInfoTest.damageAtRange(range, stepDuration);
       console.log("range: " + range + " damage: " + damage);
       range = 300;
-      damage = weaponInfoTest.damageAtRange(range);
+      damage = weaponInfoTest.damageAtRange(range, stepDuration);
       console.log("range: " + range + " damage: " + damage);
       range = 2000;
-      damage = weaponInfoTest.damageAtRange(range);
+      damage = weaponInfoTest.damageAtRange(range, stepDuration);
       console.log("range: " + range + " damage: " + damage);
     },
 

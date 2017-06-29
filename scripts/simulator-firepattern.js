@@ -81,11 +81,13 @@ var MechFirePattern = MechFirePattern || (function () {
     return (weaponA, weaponB) => {
       let weaponInfoA = weaponA.weaponInfo;
       let dmgPerHeatA = weaponInfoA.heat > 0 ?
-              weaponInfoA.damageAtRange(range) / weaponInfoA.heat :
+              weaponInfoA.damageAtRange(range, MechSimulatorLogic.stepDuration)
+                / weaponInfoA.heat :
               Number.MAX_VALUE;
       let weaponInfoB = weaponB.weaponInfo;
       let dmgPerHeatB = weaponInfoB.heat > 0 ?
-              weaponInfoB.damageAtRange(range) / weaponInfoB.heat :
+              weaponInfoB.damageAtRange(range, MechSimulatorLogic.stepDuration)
+                / weaponInfoB.heat :
               Number.MAX_VALUE;
       return dmgPerHeatB - dmgPerHeatA;
     };
@@ -104,7 +106,8 @@ var MechFirePattern = MechFirePattern || (function () {
   }
 
   var willDoDamage = function(weaponState, range) {
-    return weaponState.weaponInfo.damageAtRange(range) > 0;
+    return weaponState.weaponInfo.damageAtRange(range,
+                                        MechSimulatorLogic.stepDuration) > 0;
   }
 
   return {

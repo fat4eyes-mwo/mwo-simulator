@@ -51,7 +51,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
       let targetComponent = this.sourceMech.componentTargetPattern(this.sourceMech, this.targetMech);
       //baseWeaponDamage applies all damage to the target component
       let baseWeaponDamageMap = {};
-      baseWeaponDamageMap[targetComponent] = this.weaponState.weaponInfo.damageAtRange(range);
+      baseWeaponDamageMap[targetComponent] = this.weaponState.weaponInfo.damageAtRange(range, stepDuration);
       let baseWeaponDamage = new MechModel.WeaponDamage(baseWeaponDamageMap);
       //TODO: apply weapon specific weapon patterns
       //transform the baseWeaponDamage using the mech's accuracy pattern
@@ -496,6 +496,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     step : step,
     predictHeat : predictHeat,
     predictBaseHeat : predictBaseHeat,
+    stepDuration : stepDuration,
   }
 
 })(); //end namespace
