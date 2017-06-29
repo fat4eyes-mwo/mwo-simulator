@@ -297,7 +297,7 @@ return {
     },
 
     generateTestUI : function() {
-      const range = 120;
+      const range = 200;
       MechModel.addMech("testKodiakId1", MechModel.Team.BLUE, DummyKodiak);
       MechModel.addMech("testExecutionerId", MechModel.Team.BLUE, DummyExecutioner);
       // MechModel.addMech("testTimberwolfId", MechModel.Team.BLUE, DummyTimberwolf);

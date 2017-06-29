@@ -1436,6 +1436,9 @@ var MechModel = MechModel || (function () {
 
     //smurfy data helper functions. Used by view
     getSmurfyMechData : getSmurfyMechData,
+    getSmurfyWeaponData : getSmurfyWeaponData,
+    getSmurfyModuleData : getSmurfyModuleData,
+    getSmurfyAmmoData : getSmurfyAmmoData,
     loadSmurfyMechLoadout : loadSmurfyMechLoadout,
   };
 
