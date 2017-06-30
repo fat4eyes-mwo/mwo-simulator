@@ -54,9 +54,12 @@ var MechModel = MechModel || (function () {
 
 
   class MechInfo {
-    constructor(mechId, mechName, mechTranslatedName, mechHealth,
-      weaponInfoList, heatsinkInfoList, ammoBoxList, engineInfo, tons) {
-      this.mechId = mechId; //Smurfy mech id
+    constructor(mechId, smurfyMechId, smurfyLoadoutId, mechName,
+        mechTranslatedName, mechHealth, weaponInfoList, heatsinkInfoList,
+        ammoBoxList, engineInfo, tons) {
+      this.mechId = mechId; //Our mech id (not smurfy's)
+      this.smurfyMechId = smurfyMechId;
+      this.smurfyLoadoutId = smurfyLoadoutId;
       this.mechName = mechName;
       this.mechTranslatedName = mechTranslatedName;
       this.mechHealth = mechHealth;
@@ -974,6 +977,8 @@ var MechModel = MechModel || (function () {
   var mechInfoFromSmurfyMechLoadout = function (mechId, smurfyMechLoadout) {
     var mechInfo;
 
+    var smurfyMechId = smurfyMechLoadout.mech_id;
+    var smurfyLoadoutId = smurfyMechLoadout.id;
     var smurfyMechData = getSmurfyMechData(smurfyMechLoadout.mech_id);
     var mechName = smurfyMechData.name;
     var mechTranslatedName = smurfyMechData.translated_name;
@@ -984,7 +989,8 @@ var MechModel = MechModel || (function () {
     var engineInfo = engineInfoFromSmurfyMechLoadout(smurfyMechLoadout);
     var tons = smurfyMechData.details.tons;
 
-    mechInfo = new MechInfo(mechId, mechName, mechTranslatedName, mechHealth,
+    mechInfo = new MechInfo(mechId, smurfyMechId, smurfyLoadoutId,
+          mechName, mechTranslatedName, mechHealth,
           weaponInfoList, heatsinkInfoList, ammoBoxList, engineInfo, tons);
     return mechInfo;
   }
@@ -1297,9 +1303,9 @@ var MechModel = MechModel || (function () {
   }
   var initMechPatterns = function(mech) {
     mech.firePattern = MechFirePattern.maximumDmgPerHeat;
-    mech.componentTargetPattern = MechTargetComponent.randomAim;
+    mech.componentTargetPattern = MechTargetComponent.aimForCenterTorso;
     mech.mechTargetPattern = MechTargetMech.targetMechsInOrder;
-    mech.accuracyPattern = MechAccuracyPattern.accuracySpreadToAdjacent(0.7, 0.2);
+    mech.accuracyPattern = MechAccuracyPattern.accuracySpreadToAdjacent(0.7, 0.3);
   }
 
 

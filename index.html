@@ -46,6 +46,7 @@
           <button id="pauseSimulationButton" class ="debugButton">Pause simulation</button>
           <button id="stepSimulationButton" class ="debugButton">Step simulation</button>
           <button id="resetSimulationButton" class ="debugButton">Reset simulation</button>
+          <button id="refreshUIButton" class="debugButton">Refresh UI</button>
           <div id = "debugText" class="debugText" class="row"></div>
         </div>
       </div>
@@ -151,11 +152,15 @@
 
     <!-- Mechpanel template -->
     <div id="mechPanel-template" class="template mechPanel">
+      <div class="row titlePanelContainer">
+        <div class="titlePanel">
+          <div class="mechName column stylishText"></div>
+          <div class="deleteMechButton column">&times;</div>
+        </div>
+      </div>
       <div class="row">
         <div class="column column-3 statusPanelContainer">
           <div class="statusPanel">
-            <div class="mechName row stylishText" >
-            </div>
             <div class="row">
               <div class="mechSummaryHealthLabel column column-4">Health</div>
               <div class="mechSummaryHealthText column"></div>

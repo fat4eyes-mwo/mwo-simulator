@@ -368,6 +368,10 @@ return {
       $("#stepSimulationButton").removeClass("debugButton").click(() => {
         MechSimulatorLogic.stepSimulation();
       });
+
+      $("#refreshUIButton").removeClass("debugButton").click(() => {
+        MechModelView.refreshView();
+      })
     },
 
     testScratch : function() {

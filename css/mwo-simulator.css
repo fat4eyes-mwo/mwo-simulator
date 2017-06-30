@@ -255,7 +255,7 @@ div {
 }
 
 .weaponPanelRow.Firing {
-  background-color: grey;
+  background-color: gray;
   color : white;
 }
 
@@ -277,10 +277,36 @@ div {
 
 }
 
-.statusPanel .mechName {
+.titlePanel {
+  background-color: rgb(50, 50, 50);
+}
+
+.titlePanel .mechName a {
   font-weight: bold;
   font-size: 1.2em;
   color: gold;
+  text-decoration: none;
+}
+
+.titlePanel .mechName a:hover {
+  text-decoration: underline;
+}
+
+.titlePanel .deleteMechButton {
+  float: right;
+  background-color: maroon;
+  border: thin solid white;
+  border-radius: 5px;
+  font-size: 1.2em;
+  padding-left: 2px;
+  padding-right: 2px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+}
+
+.titlePanel .deleteMechButton:hover {
+  background-color: red;
 }
 
 .statusPanel .mechSummaryHealthLabel {
@@ -335,7 +361,7 @@ div {
 
 .button.disabled {
   opacity: 0.4;
-  cursor: none;
+  cursor: not-allowed;
 }
 
 .teamStats .addMechButton {
@@ -380,6 +406,8 @@ div {
 #addMechDialog-text {
   border-radius: 3px;
   border: solid thin gold;
+  padding: 3px;
+  margin-top: 2px;
   float:none;
 }
 

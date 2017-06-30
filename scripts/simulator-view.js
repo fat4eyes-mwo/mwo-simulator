@@ -320,6 +320,9 @@ var MechView = MechView || (function() {
   var mechNamePanelId = function(mechId) {
     return mechId + "-mechName";
   }
+  var mechDeleteButtonId = function(mechId) {
+    return mechId + "-deleteButton";
+  }
   var heatNumberPanelId = function(mechId) {
     return mechId + "-heatbarNumber";
   }
@@ -366,9 +369,13 @@ var MechView = MechView || (function() {
     addWeaponPanel(mechId, weaponStateList, ammoState, "#" + weaponPanelContainerId);
 
     let mechNameId =  mechNamePanelId(mechId);
-    $("#" + mechPanelId(mechId) + " [class~='statusPanel'] [class~='mechName']")
+    $("#" + mechPanelId(mechId) + " [class~='titlePanel'] [class~='mechName']")
       .attr("id", mechNameId)
-      .html(mech.getMechInfo().mechTranslatedName);
+      .html("");
+
+    let mechDeleteButtonDivId = mechDeleteButtonId(mechId);
+    $("#" + mechPanelId(mechId) + " [class~='titlePanel'] [class~='deleteMechButton']")
+      .attr("id", mechDeleteButtonDivId);
 
     let mechSummaryHealthId = mechSummaryHealthPanelId(mechId);
     $("#" + mechPanelId(mechId) + " [class~='statusPanel'] [class~='mechSummaryHealthText']")
@@ -381,14 +388,23 @@ var MechView = MechView || (function() {
       .html("");
   }
 
-  var updateMechStatusPanel = function(mechId, mechName,
-                mechIsAlive, mechCurrTotalHealth, mechCurrMaxHealth, targetMechName) {
+  const SMURFY_BASE_URL= "http://mwo.smurfy-net.de/mechlab#";
+  var updateMechTitlePanel = function(mechId, mechName, smurfyMechId, smurfyLayoutId) {
     let mechNameId = mechNamePanelId(mechId);
-    let mechSummaryHealthId = mechSummaryHealthPanelId(mechId);
-
-    //set mech name
+    //Create smurfy link then set the mech name
+    let smurfyLink = SMURFY_BASE_URL + "i=" + smurfyMechId + "&l=" + smurfyLayoutId;
     let mechNameDiv = document.getElementById(mechNameId);
-    mechNameDiv.innerHTML = mechName;
+
+    mechNameDiv.innerHTML = $("<a></a>")
+                                  .attr("href", smurfyLink)
+                                  .attr("target", "_blank")
+                                  .html(mechName)
+                                  .prop("outerHTML");
+  }
+
+  var updateMechStatusPanel = function(mechId, mechIsAlive,
+        mechCurrTotalHealth, mechCurrMaxHealth, targetMechName) {
+    let mechSummaryHealthId = mechSummaryHealthPanelId(mechId);
 
     //set mech summary health
     let mechSummaryHealthText = "";
@@ -677,6 +693,7 @@ var MechView = MechView || (function() {
     setWeaponState : setWeaponState,
     updateMechHealthNumbers : updateMechHealthNumbers,
     updateMechStatusPanel : updateMechStatusPanel,
+    updateMechTitlePanel : updateMechTitlePanel,
     updateHeat: updateHeat,
     updateTeamStats : updateTeamStats,
     updateSimTime : updateSimTime,

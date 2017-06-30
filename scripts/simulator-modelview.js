@@ -93,8 +93,15 @@ var MechModelView = MechModelView || (function() {
     let targetMechName = mech.getTargetMech() ?
                 mech.getTargetMech().getTranslatedName() : "";
 
-    MechView.updateMechStatusPanel(mech.getMechId(), mechName, isAlive,
+    MechView.updateMechStatusPanel(mech.getMechId(), isAlive,
                           currTotalHealth, currMaxHealth, targetMechName);
+  }
+
+  var updateMechTitle = function (mech) {
+    let mechName = mech.getTranslatedName();
+    let mechInfo = mech.getMechState().mechInfo;
+    MechView.updateMechTitlePanel(mech.getMechId(), mechName,
+            mechInfo.smurfyMechId, mechInfo.smurfyLoadoutId);
   }
 
   //TODO: Move health logic from view to here?
@@ -131,6 +138,7 @@ var MechModelView = MechModelView || (function() {
   }
 
   var updateAll = function(mech) {
+    updateMechTitle(mech);
     updateHealth(mech);
     updateHeat(mech);
     updateCooldown(mech);
