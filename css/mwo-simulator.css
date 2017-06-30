@@ -90,6 +90,17 @@ div {
 .paperDoll {
   position:relative;
   height: 100px;
+  margin: 0% auto;
+}
+
+/*Special case for narrow screens (mobile)*/
+@media only screen and (max-width: 550px) {
+  .paperDoll {
+    position:relative;
+    height: 100px;
+    width: 80px;
+    margin: 0% auto;
+  }
 }
 
 .paperDoll .mechLA,
@@ -353,6 +364,9 @@ div {
   padding: 20px;
   border: 1px solid #888;
   width: 40%; /* Could be more or less, depending on screen size */
+  border-top-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  border-color: rgb(170, 170, 170);
 }
 
 .wideInputText {
@@ -376,9 +390,9 @@ div {
 }
 
 @keyframes textglow {
-  0% {color: gold;}
-  50% {color: rgb(255,255,30);}
-  100% {color: gold;}
+  0% {color: goldenrod;}
+  50% {color: yellow;}
+  100% {color: goldenrod;}
 }
 
 @keyframes errorblink {
@@ -415,7 +429,7 @@ div {
 }
 
 #loadingScreenPaperDollContainer {
-  width: 100px;
+  width: 80px;
   height: 100px;
   margin: 0% auto;
 }
@@ -426,4 +440,5 @@ div {
   animation-duration: 1s;
   animation-name: textglow;
   animation-iteration-count: infinite;
+  color:goldenrod;
 }

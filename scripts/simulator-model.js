@@ -1359,7 +1359,7 @@ var MechModel = MechModel || (function () {
     }
   }
 
-  var loadSmurfyMechLoadout = function(url, doneCallback, failCallback, alwaysCallback) {
+  var loadSmurfyMechLoadoutFromURL = function(url, doneCallback, failCallback, alwaysCallback) {
     let params = parseSmurfyURL(url);
     if (!params) {
       return null;
@@ -1441,7 +1441,7 @@ var MechModel = MechModel || (function () {
     getSmurfyWeaponDataByName : getSmurfyWeaponDataByName,
     getSmurfyModuleData : getSmurfyModuleData,
     getSmurfyAmmoData : getSmurfyAmmoData,
-    loadSmurfyMechLoadout : loadSmurfyMechLoadout,
+    loadSmurfyMechLoadoutFromURL : loadSmurfyMechLoadoutFromURL,
   };
 
 })(); //namespace end

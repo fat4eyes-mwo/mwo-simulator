@@ -563,7 +563,7 @@ var MechView = MechView || (function() {
         addMechLoadButton.removeClass("loading");
         addMechLoadButton.setHtml("Load");
       };
-      let status = MechModel.loadSmurfyMechLoadout(url, doneCallback, failCallback, alwaysCallback);
+      let status = MechModel.loadSmurfyMechLoadoutFromURL(url, doneCallback, failCallback, alwaysCallback);
       if (status) {
         $("#addMechDialog-result")
               .removeClass("error")
