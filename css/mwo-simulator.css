@@ -17,6 +17,27 @@ div {
   font-family: Orbitron;
 }
 
+.branding {
+  position: relative;
+}
+
+.brandingTitle {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: gold;
+}
+
+.branding .tm {
+  position: relative;
+  top: -5px;
+  left: -3px;
+}
+
+.byline {
+  font-size: 0.8em;
+  color: rgb(170, 170, 170);
+}
+
 .controlPanel {
 
 }
@@ -244,7 +265,7 @@ div {
 }
 
 .weaponAmmo {
-
+  text-align: center;
 }
 
 .weaponPanelRow.Ready {
@@ -277,8 +298,11 @@ div {
 
 }
 
+.titlePanelContainer {
+  margin-bottom: 3px;
+}
+
 .titlePanel {
-  background-color: rgb(50, 50, 50);
 }
 
 .titlePanel .mechName a {
