@@ -89,11 +89,19 @@ div {
 }
 
 .mechPanel .paperDollContainer {
+  width: 65%;
+  display:inline-block;
+  vertical-align: top;
+}
 
+.mechPanel .heatBarAndNumber {
+  display:inline-block;;
+  width: 20%;
 }
 
 .mechPanel .heatbarContainer {
-  width: 100%;
+  width: 10px;
+  margin: auto;
 }
 
 .mechPanel .heatbarContainer .heatbarFrame {
@@ -137,8 +145,12 @@ div {
   .paperDoll {
     position:relative;
     height: 100px;
-    width: 80px;
-    margin: 0% auto;
+    width: 50%;
+    margin: auto;
+  }
+
+  .mechPanel .heatBarAndNumber {
+    float: right;
   }
 }
 
