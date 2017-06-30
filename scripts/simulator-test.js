@@ -341,12 +341,11 @@ return {
       // MechModel.addMech("testCatapultId", MechModel.Team.RED, DummyCatapult);
       // MechModel.addMech("testUrbanmechId1", MechModel.Team.RED, DummyUrbanmech);
 
-      MechModelView.refreshView();
       let simulatorParameters = new MechSimulatorLogic.SimulatorParameters(
                                   range//range
                                 );
       MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
-      MechView.updateControlPanel(simulatorParameters);
+      MechModelView.refreshView();
       MechModel.initMechTeamPatterns(MechModel.mechTeams[MechModel.Team.BLUE]);
       MechModel.initMechTeamPatterns(MechModel.mechTeams[MechModel.Team.RED]);
 

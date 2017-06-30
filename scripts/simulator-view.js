@@ -642,8 +642,10 @@ var MechView = MechView || (function() {
   }
 
   var updateControlPanel = function(simulatorParameters) {
-    let range = simulatorParameters.range;
-    $("#rangeInput").val(range);
+    if (simulatorParameters) {
+      let range = simulatorParameters.range;
+      $("#rangeInput").val(range);
+    }
   }
 
   var setDebugText = function(debugText) {

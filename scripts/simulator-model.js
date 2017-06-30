@@ -1377,13 +1377,20 @@ var MechModel = MechModel || (function () {
     }
   }
 
-  var loadSmurfyMechLoadoutFromURL = function(url, doneCallback, failCallback, alwaysCallback) {
+  var loadSmurfyMechLoadoutFromURL = function(url, doneCallback,
+                                        failCallback, alwaysCallback) {
     let params = parseSmurfyURL(url);
     if (!params) {
       return null;
     }
-    var smurfyLoadoutURL = SMURFY_PROXY_URL + "data/mechs/" + params.id
-        + "/loadouts/" + params.loadout + ".json";
+    return loadSmurfyMechLoadoutFromID(params.id, params.loadout,
+                    doneCallback, failCallback, alwaysCallback)
+  }
+
+  var loadSmurfyMechLoadoutFromID = function(smurfyId, smurfyLoadoutId,
+                                  doneCallback, failCallback, alwaysCallback) {
+    var smurfyLoadoutURL = SMURFY_PROXY_URL + "data/mechs/" + smurfyId
+        + "/loadouts/" + smurfyLoadoutId + ".json";
     $.ajax({
         url : smurfyLoadoutURL,
         type : 'GET',

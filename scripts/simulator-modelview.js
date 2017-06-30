@@ -14,6 +14,8 @@ var MechModelView = MechModelView || (function() {
         updateAll(mech);
       }
     }
+    let simulatorParameters = MechSimulatorLogic.getSimulatorParameters();
+    MechView.updateControlPanel(simulatorParameters);
   }
 
   var updateHeat = function(mech) {
