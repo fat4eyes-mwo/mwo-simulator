@@ -572,7 +572,7 @@ var MechView = MechView || (function() {
       let failCallback = function(data) {
         $("#addMechDialog-result")
             .addClass("error")
-            .html("Failed to load " + smurfyLoadoutURL);
+            .html("Failed to load " + url);
       };
       let alwaysCallback = function(data) {
         addMechLoadButton.enable();
