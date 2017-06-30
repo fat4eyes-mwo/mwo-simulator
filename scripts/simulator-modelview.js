@@ -154,6 +154,14 @@ var MechModelView = MechModelView || (function() {
     MechView.setDebugText(text);
   }
 
+  var getSimulatorParameters = function() {
+    return MechSimulatorLogic.getSimulatorParameters();
+  }
+
+  var setSimulatorParameters = function(simulatorParameters) {
+    MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
+  }
+
   return {
     refreshView : refreshView,
     updateHealth : updateHealth,
@@ -164,6 +172,8 @@ var MechModelView = MechModelView || (function() {
     updateSimTime: updateSimTime,
     updateDebugText: updateDebugText,
     updateTeamStats: updateTeamStats,
+    getSimulatorParameters: getSimulatorParameters,
+    setSimulatorParameters: setSimulatorParameters
   };
 
 })();

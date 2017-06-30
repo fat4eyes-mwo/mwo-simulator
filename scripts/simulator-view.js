@@ -670,7 +670,7 @@ var MechView = MechView || (function() {
         let range = Number($("#rangeInput").val());
         //set the range using the converted number value so user is sure it was parsed properly
         $("#rangeInput").val(range);
-        let simulatorParameters = MechSimulatorLogic.getSimulatorParameters();
+        let simulatorParameters = MechModelView.getSimulatorParameters();
         simulatorParameters.range = range;
         $(this)
           .attr("data-button-mode", "not-editing")
