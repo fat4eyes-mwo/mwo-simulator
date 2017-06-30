@@ -641,12 +641,44 @@ var MechView = MechView || (function() {
     $("#simTime").html("Sim time: " + simTime + "ms");
   }
 
+  var updateControlPanel = function(simulatorParameters) {
+    let range = simulatorParameters.range;
+    $("#rangeInput").val(range);
+  }
+
   var setDebugText = function(debugText) {
     $("#debugText").html(debugText);
   }
 
   var initHandlers = function () {
     initPaperDollHandlers();
+  }
+
+  var initView = function() {
+    let rangeButton = new MechButton("setRangeButton", function() {
+      let buttonMode = $(this).attr("data-button-mode");
+      if (buttonMode === "not-editing") {
+        $("#rangeInput")
+            .removeClass("disabled")
+            .removeAttr("disabled")
+            .focus();
+        $(this)
+          .attr("data-button-mode", "editing")
+          .html("Set Range");
+      } else if (buttonMode === "editing"){
+        $("#rangeInput").addClass("disabled").attr("disabled", "true");
+        let range = Number($("#rangeInput").val());
+        //set the range using the converted number value so user is sure it was parsed properly
+        $("#rangeInput").val(range);
+        let simulatorParameters = MechSimulatorLogic.getSimulatorParameters();
+        simulatorParameters.range = range;
+        $(this)
+          .attr("data-button-mode", "not-editing")
+          .html("Change");
+      } else {
+        throw "Invalid button state";
+      }
+    });
   }
 
   var onMouseOverPaperDoll = function () {
@@ -713,6 +745,7 @@ var MechView = MechView || (function() {
     addTeamStatsPanel : addTeamStatsPanel,
     initPaperDollHandlers: initPaperDollHandlers,
     initHandlers : initHandlers,
+    initView : initView,
     setWeaponCooldown: setWeaponCooldown,
     setWeaponAmmo : setWeaponAmmo,
     setWeaponState : setWeaponState,
@@ -722,6 +755,7 @@ var MechView = MechView || (function() {
     updateHeat: updateHeat,
     updateTeamStats : updateTeamStats,
     updateSimTime : updateSimTime,
+    updateControlPanel: updateControlPanel,
     setDebugText : setDebugText,
     clear : clear,
     clearAll : clearAll,

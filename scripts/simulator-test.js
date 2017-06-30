@@ -310,6 +310,7 @@ return {
       // this.generateTestUI( );
 
       //Load data from smurfy
+      MechView.initView();
       MechView.showLoadingScreen();
       MechModel.initModelData((success) => {
         if (success) {
@@ -345,6 +346,7 @@ return {
                                   range//range
                                 );
       MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
+      MechView.updateControlPanel(simulatorParameters);
       MechModel.initMechTeamPatterns(MechModel.mechTeams[MechModel.Team.BLUE]);
       MechModel.initMechTeamPatterns(MechModel.mechTeams[MechModel.Team.RED]);
 

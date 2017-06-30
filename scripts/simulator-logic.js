@@ -16,8 +16,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   //Interval when ghost heat applies for weapons. 500ms
   const ghostHeatInterval = 500;
 
-  //Parameters of the simulation. Includes range, fire patterns,
-  //accuracy patterns, targeting patterns
+  //Parameters of the simulation. Includes range
   class SimulatorParameters {
     constructor(range) {
       this.range = range;
@@ -99,6 +98,10 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
 
   var setSimulatorParameters = function(parameters) {
     simulatorParameters = parameters;
+  }
+
+  var getSimulatorParameters = function() {
+    return simulatorParameters;
   }
 
   var runSimulation = function() {
@@ -502,6 +505,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   return {
     SimulatorParameters : SimulatorParameters,
     setSimulatorParameters : setSimulatorParameters,
+    getSimulatorParameters : getSimulatorParameters,
     runSimulation : runSimulation,
     pauseSimulation : pauseSimulation,
     resetSimulation : resetSimulation,

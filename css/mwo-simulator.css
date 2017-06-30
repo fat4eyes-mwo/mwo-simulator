@@ -42,6 +42,24 @@ div {
 
 }
 
+.controlPanel .rangeLabel {
+  padding: 5px;
+  font-weight: bold;
+}
+
+.controlPanel .rangeInput {
+  margin-top: 2px;
+  padding: 2px;
+  width: 50px;
+  text-align: right;
+}
+
+.controlPanel .rangeInput.disabled {
+  background-color: rgb(32,32,32);
+  border: none;
+  color: rgb(170, 170, 170);
+}
+
 .debugPanel {
 
 }
@@ -296,6 +314,10 @@ div {
 
 .statusPanel {
 
+}
+
+.statusPanel .row {
+  margin-bottom: 2px;
 }
 
 .titlePanelContainer {
