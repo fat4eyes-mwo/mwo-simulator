@@ -373,9 +373,17 @@ var MechView = MechView || (function() {
       .attr("id", mechNameId)
       .html("");
 
+    //delete button
+    if (!deleteMechButton_Handler) {
+      deleteMechButton_Handler = new DeleteMechButton_Handler(this);
+    }
     let mechDeleteButtonDivId = mechDeleteButtonId(mechId);
     $("#" + mechPanelId(mechId) + " [class~='titlePanel'] [class~='deleteMechButton']")
-      .attr("id", mechDeleteButtonDivId);
+      .attr("id", mechDeleteButtonDivId)
+      .attr("data-mech-id", mechId)
+      .attr("data-team", team)
+      .click(deleteMechButton_Handler);
+
 
     let mechSummaryHealthId = mechSummaryHealthPanelId(mechId);
     $("#" + mechPanelId(mechId) + " [class~='statusPanel'] [class~='mechSummaryHealthText']")
@@ -600,6 +608,23 @@ var MechView = MechView || (function() {
   }
   var addMechDialog_Load_Handler; //set on dialog creation, singleton
 
+  var DeleteMechButton_Handler = function(context) {
+    var clickContext = context;
+
+    return function() {
+      let mechId = $(this).data("mech-id");
+      let team = $(this).data("team");
+      console.log("Deleting " + mechId + " of team " + team);
+      let result = MechModel.deleteMech(mechId, team);
+      if (!result) {
+        throw "Error deleting " + mechId;
+      }
+      let mechPanelDivId = clickContext.mechPanelId(mechId);
+      $("#" + mechPanelDivId).remove();
+    };
+  }
+  var deleteMechButton_Handler; //singleton
+
   var clear = function (team) {
     let teamMechPanelId = team + "Team";
     let teamStatsContainerPanelId = teamStatsContainerId(team);
@@ -702,8 +727,11 @@ var MechView = MechView || (function() {
     clearAll : clearAll,
     showAddMechDialog: showAddMechDialog,
     hideAddMechDialog: hideAddMechDialog,
-    loadedSmurfyLoadout: null,
     showLoadingScreen : showLoadingScreen,
     hideLoadingScreen : hideLoadingScreen,
+
+    //functions that should be private but I need to acceess (usually in handlers)
+    loadedSmurfyLoadout: null,
+    mechPanelId : mechPanelId,
   };
 })();//namespace

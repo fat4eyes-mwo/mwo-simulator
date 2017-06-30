@@ -774,12 +774,12 @@ var MechModel = MechModel || (function () {
       dataType : 'JSON'
       })
       .done(function (data) {
-        console.log("Success");
+        console.log("Successfully loaded smurfy weapon data");
         SmurfyWeaponData = data;
         MechModel.dataLoaded.weaponsLoaded = true;
       })
       .fail(function (data) {
-        console.log("Request failed: " + data);
+        console.log("Smurfy weapon data request failed: " + data);
       })
       .always(function (data) {
         MechModel.dataLoaded.weaponsDone = true;
@@ -796,12 +796,12 @@ var MechModel = MechModel || (function () {
       dataType : 'JSON'
       })
       .done(function (data) {
-        console.log("Success");
+        console.log("Successfully loaded smurfy ammo data");
         SmurfyAmmoData = data;
         MechModel.dataLoaded.ammoLoaded = true;
       })
       .fail(function (data) {
-        console.log("Request failed: " + data);
+        console.log("Smurfy ammo data request failed: " + data);
       })
       .always(function (data) {
         MechModel.dataLoaded.ammoDone = true;
@@ -818,12 +818,12 @@ var MechModel = MechModel || (function () {
       dataType : 'JSON'
       })
       .done(function (data) {
-        console.log("Success ");
+        console.log("Successfully loaded smurfy module data");
         SmurfyModuleData = data;
         MechModel.dataLoaded.modulesLoaded = true;
       })
       .fail(function (data) {
-        console.log("Request failed: " + data);
+        console.log("Smurfy module data request failed: " + data);
       })
       .always(function (data) {
         MechModel.dataLoaded.modulesDone = true;
@@ -840,12 +840,12 @@ var MechModel = MechModel || (function () {
       dataType : 'JSON'
       })
       .done(function (data) {
-        console.log("Success ");
+        console.log("Successfully loaded smurfy mech data");
         SmurfyMechData = data;
         MechModel.dataLoaded.mechsLoaded = true;
       })
       .fail(function (data) {
-        console.log("Request failed: " + data);
+        console.log("Smurfy mech data request failed: " + data);
       })
       .always(function (data) {
         MechModel.dataLoaded.mechsDone = true;
@@ -1289,11 +1289,23 @@ var MechModel = MechModel || (function () {
   var addMech = function(mech_id, team, smurfyMechLoadout) {
     var newMech = new Mech(mech_id, team, smurfyMechLoadout);
     mechTeams[team].push(newMech);
-    console.log("addMech mech_id: " + mech_id +
+    console.log("Added mech mech_id: " + mech_id +
       " translated_mech_name: " + newMech.getTranslatedName());
     initMechPatterns(newMech);
     return newMech;
   };
+
+  var deleteMech = function(mech_id, team) {
+    let mechList = mechTeams[team];
+    for (let mechIdx in mechList) {
+      let mech = mechList[mechIdx];
+      if (mech.getMechId() === mech_id) {
+        mechList.splice(mechIdx, 1);
+        return true;
+      }
+    }
+    return false;
+  }
 
   //Debug, set default mech patterns
   var initMechTeamPatterns = function(mechTeam) {
@@ -1431,6 +1443,7 @@ var MechModel = MechModel || (function () {
     initAddedData : initAddedData,
     dataLoaded : dataLoaded,
     addMech : addMech,
+    deleteMech : deleteMech,
     generateMechId : generateMechId,
     initMechPatterns: initMechPatterns,
     initMechTeamPatterns : initMechTeamPatterns,
