@@ -281,7 +281,8 @@ var MechModel = MechModel || (function () {
     }
     //Takes damage to components specified in weaponDamage.
     //Returns a MechDamage object that describes how much damage the mech took
-    //MechDamage includes
+    //MechDamage includes damage from destroyed components
+    //reference: http://mwomercs.com/forums/topic/176345-understanding-damage/
     takeDamage(weaponDamage) {
       let totalDamage = new MechDamage();
       for (let location in weaponDamage.damageMap) {
@@ -289,7 +290,8 @@ var MechModel = MechModel || (function () {
         //apply damage to location
         let componentDamage = this.mechHealth.takeDamage(location, numDamage);
         totalDamage.addComponentDamage(componentDamage);
-        //TODO: apply transfer damage to adjacent components
+        //TODO: apply transfer damage to adjacent component
+
 
         //destroy components if necessary
         if (!this.mechHealth.isIntact(location)) {

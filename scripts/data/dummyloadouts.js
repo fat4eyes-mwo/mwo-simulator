@@ -8,7 +8,10 @@
 //http://mwo.smurfy-net.de/mechlab#i=277&l=stock
 //dakka dire wolf
 //http://mwo.smurfy-net.de/mechlab#i=171&l=64ede53a6ef7aca5d9964fa50ce75e464ea481ed
-
+//lpl crab
+//http://mwo.smurfy-net.de/mechlab#i=332&l=f16ab12733e2fae783d6acadb3ed2e82dda6c8ac
+//mpl nova
+//http://mwo.smurfy-net.de/mechlab#i=307&l=a3c570295da663cc10f1d2b1eca41d6e3b4fc47b
 
 
 

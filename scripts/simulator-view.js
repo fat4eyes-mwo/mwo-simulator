@@ -174,12 +174,14 @@ var MechView = MechView || (function() {
     let armorLocationDiv = document.getElementById(armorLocationDivId);
     if (armorLocationDiv) {
       armorLocationDiv.innerHTML = Math.round(armor);
+      armorLocationDiv.setAttribute("title", (Number(armor)).toFixed(2));
       armorLocationDiv.style.color = armorColor;
     }
 
     let structureLocationDiv = document.getElementById(structureLocationDivId);
     if (structureLocationDiv) {
       structureLocationDiv.innerHTML = Math.round(structure)
+      structureLocationDiv.setAttribute("title", (Number(structure)).toFixed(2));
       structureLocationDiv.style.color = structureColor;
     }
 
