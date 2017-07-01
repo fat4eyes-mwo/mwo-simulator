@@ -372,6 +372,7 @@ div {
 }
 
 .statusPanel .mechSummaryHealthText {
+  margin-left: 10%;
   font-weight: bold;
 }
 
@@ -382,6 +383,7 @@ div {
 
 .statusPanel .mechTargetText {
   font-size: 0.9em;
+  margin-left: 10%;
 }
 
 .teamStats {

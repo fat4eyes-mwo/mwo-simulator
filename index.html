@@ -49,7 +49,7 @@
             Range:
           </div>
           <div class="column">
-            <input id="rangeInput" class="rangeInput disabled" disabled></input> m
+            <input id="rangeInput" type="number" class="rangeInput disabled" disabled></input> m
           </div>
           <div class="column">
             <div id="setRangeButton" class="button" data-button-mode="not-editing">Change</div>
@@ -179,12 +179,12 @@
         <div class="column column-3 statusPanelContainer">
           <div class="statusPanel">
             <div class="row">
-              <div class="mechSummaryHealthLabel column column-4">Health</div>
-              <div class="mechSummaryHealthText column"></div>
+              <div class="mechSummaryHealthLabel">Health</div>
+              <div class="mechSummaryHealthText"></div>
             </div>
             <div class="row">
-              <div class="mechTargetLabel column column-4">Target</div>
-              <div class="mechTargetText column"></div>
+              <div class="mechTargetLabel">Target</div>
+              <div class="mechTargetText"></div>
             </div>
 
           </div>
@@ -221,7 +221,7 @@
         <h3>Import loadout from smurfy</h3>
       </div>
       <div class="row">
-        <input id="addMechDialog-text" class="column column-10" type="url" placeholder="Enter Smurfy URL here"></input>
+        <input id="addMechDialog-text" type="url" class="column column-10" type="url" placeholder="Enter Smurfy URL here"></input>
         <div id="addMechDialog-load" class="button column column-2">Load</div>
       </div>
       <div id="addMechDialog-result" class="row">
