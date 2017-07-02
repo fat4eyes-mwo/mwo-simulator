@@ -522,6 +522,13 @@ div {
   100% {color: goldenrod;}
 }
 
+@keyframes progressbarglow {
+  0% {background-color: goldenrod;}
+  50% {background-color: yellow;}
+  100% {background-color: goldenrod;}
+}
+
+
 @keyframes errorblink {
   50% {background-color: rgb(255, 0, 0); color: white;}
 }
@@ -568,4 +575,14 @@ div {
   animation-name: textglow;
   animation-iteration-count: infinite;
   color:goldenrod;
+}
+
+.loadingScreenProgress {
+  margin : 5px auto;
+  animation-duration: 1s;
+  animation-name: progressbarglow;
+  animation-iteration-count: infinite;
+  background-color: gold;
+  width: 0%;
+  height: 3px;
 }

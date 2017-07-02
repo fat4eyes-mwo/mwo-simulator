@@ -142,6 +142,8 @@ var MechViewRouter = MechViewRouter || (function() {
     var loadMechsFromSmurfy = function(newAppState, stateHash,
                                 successCallback, failCallback, alwaysCallback) {
       let teamList = [MechModel.Team.BLUE, MechModel.Team.RED];
+      let totalMechsToLoad; //total number of mechs to load
+      let currMechsLoaded; //current number of mechs loaded
       if (!newAppState.teams) {
         //if no teams, immediately call the success callback
         successCallback(true);
@@ -157,6 +159,8 @@ var MechViewRouter = MechViewRouter || (function() {
       let combinedTeamList = newAppState.teams[MechModel.Team.BLUE].concat(
           newAppState.teams[MechModel.Team.RED]
       );
+      totalMechsToLoad = combinedTeamList.length;
+      currMechsLoaded = 0;
       let smurfyLoadTrigger = new Trigger(combinedTeamList);
       for (let team of teamList) {
         for (let mechIdx in newAppState.teams[team]) {
@@ -169,6 +173,8 @@ var MechViewRouter = MechViewRouter || (function() {
                   let mech_id = MechModel.generateMechId(team, smurfyLoadout);
                   MechModel.addMechAtIndex(mech_id, team, smurfyLoadout, mechIdx);
                   smurfyLoadTrigger.setSuccess(mechEntry);
+                  currMechsLoaded++;
+                  MechView.updateLoadingScreenProgress(currMechsLoaded / totalMechsToLoad);
               },
               function(data) {
                 //fail

@@ -792,7 +792,7 @@ var MechView = MechView || (function() {
       }
       , LOADING_SCREEN_ANIMATE_INTERVAL);
 
-    //TODO add paper doll and paperdoll animation interval
+    updateLoadingScreenProgress(0);
     $("#" + MODAL_SCREEN_ID).css("display", "block");
   }
 
@@ -800,6 +800,12 @@ var MechView = MechView || (function() {
     $("#" + MODAL_SCREEN_ID).css("display", "none");
     $("#" + MODAL_DIALOG_ID).empty();
     window.clearInterval(loadingScreenAnimateInterval);
+  }
+
+  var updateLoadingScreenProgress = function(percent) {
+    let progressBar = document.getElementById("loadingScreenProgress");
+    let textPercent = Math.floor(Number(percent) * 100) + "%";
+    progressBar.style.width = textPercent;
   }
 
   //public members
@@ -828,6 +834,7 @@ var MechView = MechView || (function() {
     showAddMechDialog: showAddMechDialog,
     hideAddMechDialog: hideAddMechDialog,
     showLoadingScreen : showLoadingScreen,
+    updateLoadingScreenProgress: updateLoadingScreenProgress,
     hideLoadingScreen : hideLoadingScreen,
 
     //functions that should be private but I need to acceess (usually in handlers)
