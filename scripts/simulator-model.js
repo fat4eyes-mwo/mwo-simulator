@@ -748,26 +748,7 @@ var MechModel = MechModel || (function () {
   const AMMO_DATA_PATH = 'data/ammo.json';
   const MODULE_DATA_PATH = 'data/modules.json';
   const MECH_DATA_PATH = 'data/mechs.json';
-  var dataLoaded = (function() {
-    return {
-      weaponsLoaded : false, //true when the request in successfully completed
-      ammoLoaded : false,
-      weaponsDone : false, //true when the request is finished (success or fail)
-      ammoDone : false,
-      modulesLoaded : false,
-      modulesDone : false,
-      mechsLoaded : false,
-      mechsDone : false,
-      isLoaded : function () {
-        return this.weaponsLoaded && this.ammoLoaded
-            && this.modulesLoaded && this.mechsLoaded;
-      },
-      isDone : function () {
-        return this.weaponsDone && this.ammoDone
-            && this.modulesDone && this.mechsDone;
-      }
-    };
-  })();
+  var initDataTrigger = new Trigger(["weapons", "ammo", "modules", "mechs"]);
   var initModelData = function (callback) {
     //Get weapon data
     $.ajax({
@@ -778,18 +759,19 @@ var MechModel = MechModel || (function () {
       .done(function (data) {
         console.log("Successfully loaded smurfy weapon data");
         SmurfyWeaponData = data;
-        MechModel.dataLoaded.weaponsLoaded = true;
+        initDataTrigger.setSuccess("weapons");
       })
       .fail(function (data) {
         console.log("Smurfy weapon data request failed: " + data);
+        initDataTrigger.setFail("weapons");
       })
       .always(function (data) {
-        MechModel.dataLoaded.weaponsDone = true;
-        if (MechModel.dataLoaded.isDone()) {
-          if (MechModel.dataLoaded.isLoaded()) {
+        initDataTrigger.setDone("weapons");
+        if (initDataTrigger.isDone()) {
+          if (initDataTrigger.isSuccessful()) {
             MechModel.initAddedData();
           }
-          callback(MechModel.dataLoaded.isLoaded());
+          callback(initDataTrigger.isSuccessful());
         }
       });
     $.ajax({
@@ -800,18 +782,19 @@ var MechModel = MechModel || (function () {
       .done(function (data) {
         console.log("Successfully loaded smurfy ammo data");
         SmurfyAmmoData = data;
-        MechModel.dataLoaded.ammoLoaded = true;
+        initDataTrigger.setSuccess("ammo");
       })
       .fail(function (data) {
         console.log("Smurfy ammo data request failed: " + data);
+        initDataTrigger.setFail("ammo");
       })
       .always(function (data) {
-        MechModel.dataLoaded.ammoDone = true;
-        if (MechModel.dataLoaded.isDone()) {
-          if (MechModel.dataLoaded.isLoaded()) {
+        initDataTrigger.setDone("ammo");
+        if (initDataTrigger.isDone()) {
+          if (initDataTrigger.isSuccessful()) {
             MechModel.initAddedData();
           }
-          callback(MechModel.dataLoaded.isLoaded());
+          callback(initDataTrigger.isSuccessful());
         }
       });
     $.ajax({
@@ -822,18 +805,18 @@ var MechModel = MechModel || (function () {
       .done(function (data) {
         console.log("Successfully loaded smurfy module data");
         SmurfyModuleData = data;
-        MechModel.dataLoaded.modulesLoaded = true;
+        initDataTrigger.setSuccess("modules");
       })
       .fail(function (data) {
         console.log("Smurfy module data request failed: " + data);
       })
       .always(function (data) {
-        MechModel.dataLoaded.modulesDone = true;
-        if (MechModel.dataLoaded.isDone()) {
-          if (MechModel.dataLoaded.isLoaded()) {
+        initDataTrigger.setDone("modules");
+        if (initDataTrigger.isDone()) {
+          if (initDataTrigger.isSuccessful()) {
             MechModel.initAddedData();
           }
-          callback(MechModel.dataLoaded.isLoaded());
+          callback(initDataTrigger.isSuccessful());
         }
       });
     $.ajax({
@@ -844,18 +827,18 @@ var MechModel = MechModel || (function () {
       .done(function (data) {
         console.log("Successfully loaded smurfy mech data");
         SmurfyMechData = data;
-        MechModel.dataLoaded.mechsLoaded = true;
+        initDataTrigger.setSuccess("mechs");
       })
       .fail(function (data) {
         console.log("Smurfy mech data request failed: " + data);
       })
       .always(function (data) {
-        MechModel.dataLoaded.mechsDone = true;
-        if (MechModel.dataLoaded.isDone()) {
-          if (MechModel.dataLoaded.isLoaded()) {
+        initDataTrigger.setDone("mechs");
+        if (initDataTrigger.isDone()) {
+          if (initDataTrigger.isSuccessful()) {
             MechModel.initAddedData();
           }
-          callback(MechModel.dataLoaded.isLoaded());
+          callback(initDataTrigger.isSuccessful());
         }
       });
   }
@@ -1300,8 +1283,9 @@ var MechModel = MechModel || (function () {
   var addMechAtIndex = function(mech_id, team, smurfyMechLoadout, index) {
     var newMech = new Mech(mech_id, team, smurfyMechLoadout);
     mechTeams[team][index] = newMech;
-    console.log("Added mech mech_id: " + mech_id +
-      " translated_mech_name: " + newMech.getTranslatedName() + " at index " + index);
+    console.log("Added mech mech_id: " + mech_id
+      + " translated_mech_name: " + newMech.getTranslatedName()
+      + " at index " + index);
     initMechPatterns(newMech);
     return newMech;
   }
@@ -1459,7 +1443,6 @@ var MechModel = MechModel || (function () {
     initModelData : initModelData,
     initDummyModelData : initDummyModelData,
     initAddedData : initAddedData,
-    dataLoaded : dataLoaded,
     addMech : addMech,
     deleteMech : deleteMech,
     generateMechId : generateMechId,

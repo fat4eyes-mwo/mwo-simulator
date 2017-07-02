@@ -73,49 +73,6 @@ return {
       // MechModel.initDummyModelData();
     },
 
-    testDeque : function() {
-      let dq = new DequeXX();
-      dq.addFirst(1);
-      dq.addLast(10);
-      dq.addFirst(2);
-      dq.addLast(20);
-      console.log(dq.toString());
-      let ret;
-      ret = dq.removeFirst();
-      console.log("ret: " + ret + " deque: " + dq.toString() + " length:" + dq.length());
-      ret = dq.removeFirst();
-      console.log("ret: " + ret + " deque: " + dq.toString() + " length:" + dq.length());
-      ret = dq.removeFirst();
-      console.log("ret: " + ret + " deque: " + dq.toString() + " length:" + dq.length());
-      ret = dq.removeFirst();
-      console.log("ret: " + ret + " deque: " + dq.toString() + " length:" + dq.length());
-      //dq.removeFirst(); //exception
-
-      dq.addFirst(1);
-      dq.addLast(10);
-      dq.addFirst(2);
-      dq.addLast(20);
-      ret = dq.removeLast();
-      console.log("ret: " + ret + " deque: " + dq.toString() + " length:" + dq.length());
-      ret = dq.removeLast();
-      console.log("ret: " + ret + " deque: " + dq.toString() + " length:" + dq.length());
-      ret = dq.removeLast();
-      console.log("ret: " + ret + " deque: " + dq.toString() + " length:" + dq.length());
-      ret = dq.removeLast();
-      console.log("ret: " + ret + " deque: " + dq.toString() + " length:" + dq.length());
-      //dq.removeLast(); //exception
-
-      dq.addFirst(1);
-      dq.addLast(10);
-      dq.addFirst(2);
-      dq.addLast(20);
-      let iterator = dq.iterator();
-      while (iterator.hasNext()) {
-        console.log(iterator.next());
-      }
-      console.log("deque: " + dq.toString());
-    },
-
     testModelOps : function () {
       MechModel.initDummyModelData();
       // MechModel.addMech("testCheetahId", MechModel.Team.BLUE, DummyArcticCheetah);

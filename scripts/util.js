@@ -27,3 +27,64 @@ function binarySearchClosest(array, key, keyCompare) {
     return mid;
   }
 }
+
+const TriggerState = {
+  PENDING : "pending",
+  DONE : "done"
+}
+const TriggerResult = {
+  FAIL : "fail",
+  SUCCESS : "success"
+}
+class TriggerEntry {
+  constructor(state, result) {
+    this.state = state;
+    this.result = result;
+  }
+}
+class Trigger {
+  constructor(events) {
+    this.eventMap = new Map();
+    for (let eventIdx in events) {
+      this.eventMap.set(events[eventIdx], new TriggerEntry(TriggerState.PENDING, null));
+    }
+  }
+  setDone(event) {
+    let entry = this.eventMap.get(event);
+    if (!entry) {
+      throw "Event not found in event map";
+    }
+    entry.state = TriggerState.DONE;
+  }
+  setFail(event) {
+    let entry = this.eventMap.get(event);
+    if (!event) {
+      throw "Event not found in event map";
+    }
+    entry.result = TriggerResult.FAIL;
+  }
+  setSuccess(event) {
+    let entry = this.eventMap.get(event);
+    if (!event) {
+      throw "Event not found in event map";
+    }
+    entry.result = TriggerResult.SUCCESS;
+  }
+
+  isDone() {
+    for (let entry of this.eventMap.values()) {
+      if (entry.state !== TriggerState.DONE) {
+        return false;
+      }
+    }
+    return true;
+  }
+  isSuccessful() {
+    for (let entry of this.eventMap.values()) {
+      if (entry.result !== TriggerResult.SUCCESS) {
+        return false;
+      }
+    }
+    return true;
+  }
+}
