@@ -558,6 +558,7 @@ var MechView = MechView || (function() {
       let mechName = smurfyMechData.name;
       let newMechId = MechModel.generateMechId(team, MechView.loadedSmurfyLoadout);
       MechModel.addMech(newMechId, team, smurfyMechLoadout);
+      MechViewRouter.modifyAppState();
       MechModelView.refreshView(); //TODO: Too heavyweight to redo all panels, just add one mechpanel instead
       clickContext.hideAddMechDialog(team);
     }
@@ -635,6 +636,7 @@ var MechView = MechView || (function() {
       if (!result) {
         throw "Error deleting " + mechId;
       }
+      MechViewRouter.modifyAppState();
       let mechPanelDivId = clickContext.mechPanelId(mechId);
       $("#" + mechPanelDivId).remove();
     };
@@ -690,6 +692,11 @@ var MechView = MechView || (function() {
         $("#rangeInput").val(range);
         let simulatorParameters = MechModelView.getSimulatorParameters();
         simulatorParameters.range = range;
+        //not strictly necessary, but it makes it explicit that we're changing
+        //the simulator parameters. Handy when searching for code that changes
+        //app state
+        MechViewRouter.modifyAppState();
+        MechModelView.setSimulatorParameters(simulatorParameters);
         $(this)
           .attr("data-button-mode", "not-editing")
           .html("Change");

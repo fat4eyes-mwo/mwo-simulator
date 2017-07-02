@@ -9,8 +9,8 @@ function main() {
   // MechTest.testDamageAtRange();
   // MechTest.testListQuirks();
   // MechTest.testSpreadAdjacentDamage();
-  //MechTest.testSimulation();
-  MechTest.testPersistence();
+  MechTest.testSimulation();
+  // MechTest.testPersistence();
 }
 
 $(document).ready(main);

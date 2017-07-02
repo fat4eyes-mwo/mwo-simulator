@@ -741,6 +741,7 @@ var MechModel = MechModel || (function () {
   var mechTeams = {};
   mechTeams[Team.BLUE] = [];
   mechTeams[Team.RED] = [];
+  var mechIdMap = {};
 
   //Get weapon, ammo and mech data from smurfy
   const SMURFY_PROXY_URL = "./php/smurfyproxy.php?path=";
@@ -1267,7 +1268,6 @@ var MechModel = MechModel || (function () {
   }
 
 
-  var mechIdMap = {};
   var generateMechId = function(team, smurfyMechLoadout) {
     let smurfyMechData =
       MechModel.getSmurfyMechData(smurfyMechLoadout.mech_id);
@@ -1377,6 +1377,10 @@ var MechModel = MechModel || (function () {
     return [];
   }
 
+  var clearModel = function() {
+    mechTeams[Team.BLUE] = [];
+    mechTeams[Team.RED] = [];
+  }
 
   //public members
   return {
@@ -1397,6 +1401,7 @@ var MechModel = MechModel || (function () {
     addMech : addMech,
     addMechAtIndex : addMechAtIndex,
     deleteMech : deleteMech,
+    clearModel : clearModel,
     generateMechId : generateMechId,
     initMechPatterns: initMechPatterns,
     initMechTeamPatterns : initMechTeamPatterns,

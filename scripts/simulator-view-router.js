@@ -96,8 +96,8 @@ var MechViewRouter = MechViewRouter || (function() {
   }
 
   var loadAppState = function(stateHash, successCallback, failCallback, alwaysCallback) {
-    //TODO: Implement
-    //ajax get simulator-persistence
+    MechModel.clearModel();
+    //ajax get request to simulator-persistence
     $.ajax({
       url: PERSISTENCE_URL + "?" + HASH_STATE_FIELD + "=" + stateHash,
       type : 'GET',
@@ -106,9 +106,19 @@ var MechViewRouter = MechViewRouter || (function() {
     .done(function(data) {
       let newAppState = new AppState(data);
       //TODO: set current app state
-      MechSimulatorLogic.setSimulatorParameters(newAppState.range);
+      let simulatorParameters = MechSimulatorLogic.getSimulatorParameters();
+      if (!simulatorParameters) {
+        simulatorParameters = new MechSimulatorLogic.SimulatorParameters();
+      }
+      simulatorParameters.range = newAppState.range;
+      MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
       //TODO: Load mechs from smurfy and add them to model
       let teamList = [MechModel.Team.BLUE, MechModel.Team.RED];
+      for (let team of teamList) {
+        if (!newAppState.teams[team]) {
+          newAppState.teams[team] = [];
+        }
+      }
       let combinedTeamList = newAppState.teams[MechModel.Team.BLUE].concat(
           newAppState.teams[MechModel.Team.RED]
       );
@@ -134,6 +144,7 @@ var MechViewRouter = MechViewRouter || (function() {
                 smurfyLoadTrigger.setDone(mechEntry);
                 if (smurfyLoadTrigger.isDone()) {
                   if (smurfyLoadTrigger.isSuccessful()) {
+                    isAppStateModified = false;
                     successCallback(true);
                   } else {
                     failCallback(false);
@@ -160,6 +171,7 @@ var MechViewRouter = MechViewRouter || (function() {
     }
   }
 
+  //Called to let the router know that the app state has changed
   var modifyAppState = function() {
     isAppStateModified = true;
     location.hash=HASH_MODIFIED_STATE;
@@ -168,5 +180,6 @@ var MechViewRouter = MechViewRouter || (function() {
   return {
     saveAppState : saveAppState,
     loadAppState : loadAppState,
+    modifyAppState: modifyAppState,
   };
 })();
