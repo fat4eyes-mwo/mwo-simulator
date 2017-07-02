@@ -51,7 +51,14 @@ var MechModel = MechModel || (function () {
     CLAN_XL : "clan_xl",
   };
 
-
+  var SmurfyWeaponData = {};
+  var SmurfyAmmoData = {};
+  var SmurfyModuleData = {};
+  var SmurfyMechData = {};
+  var mechTeams = {};
+  mechTeams[Team.BLUE] = [];
+  mechTeams[Team.RED] = [];
+  var mechIdMap = {};
 
   class MechInfo {
     constructor(mechId, smurfyMechId, smurfyLoadoutId, mechName,
@@ -734,15 +741,6 @@ var MechModel = MechModel || (function () {
     }
   }
 
-  var SmurfyWeaponData = {};
-  var SmurfyAmmoData = {};
-  var SmurfyModuleData = {};
-  var SmurfyMechData = {};
-  var mechTeams = {};
-  mechTeams[Team.BLUE] = [];
-  mechTeams[Team.RED] = [];
-  var mechIdMap = {};
-
   //Get weapon, ammo and mech data from smurfy
   const SMURFY_PROXY_URL = "./php/smurfyproxy.php?path=";
   const WEAPON_DATA_PATH = "data/weapons.json";
@@ -1261,10 +1259,11 @@ var MechModel = MechModel || (function () {
     }
   }
   var initMechPatterns = function(mech) {
-    mech.firePattern = MechFirePattern.maximumDmgPerHeat;
-    mech.componentTargetPattern = MechTargetComponent.randomAim;
-    mech.mechTargetPattern = MechTargetMech.targetRandomMech;
-    mech.accuracyPattern = MechAccuracyPattern.accuracySpreadToAdjacent(1.0, 0.0);
+    //TODO: these are default values. Put these in config consts
+    mech.firePattern = MechFirePattern.getDefault();
+    mech.componentTargetPattern = MechTargetComponent.getDefault();
+    mech.mechTargetPattern = MechTargetMech.getDefault();
+    mech.accuracyPattern = MechAccuracyPattern.getDefault();
   }
 
 

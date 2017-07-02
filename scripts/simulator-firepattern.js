@@ -110,11 +110,16 @@ var MechFirePattern = MechFirePattern || (function () {
                                         MechSimulatorLogic.stepDuration) > 0;
   }
 
+  var getDefault = function() {
+    return MechFirePattern.maximumDmgPerHeat;
+  }
+
   return {
     alphaAtZeroHeat : alphaAtZeroHeat,
     alphaNoOverheat : alphaNoOverheat,
     maximumDmgPerHeat : maximumDmgPerHeat,
     fireWhenReady : fireWhenReady,
     maxFireNoGhostHeat : maxFireNoGhostHeat,
+    getDefault : getDefault,
   };
 })();

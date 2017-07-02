@@ -313,7 +313,7 @@ var MechView = MechView || (function() {
   }
 
   //adds a mech panel (which contains a paperDoll, a heatbar and a weaponPanel)
-  var mechPanelId = function (mechId) {
+  function mechPanelId(mechId) {
     return mechId + "-mechPanel";
   }
   var mechSummaryHealthPanelId = function(mechId) {
@@ -637,7 +637,7 @@ var MechView = MechView || (function() {
         throw "Error deleting " + mechId;
       }
       MechViewRouter.modifyAppState();
-      let mechPanelDivId = clickContext.mechPanelId(mechId);
+      let mechPanelDivId = mechPanelId(mechId);
       $("#" + mechPanelDivId).remove();
     };
   }
@@ -675,6 +675,13 @@ var MechView = MechView || (function() {
   }
 
   var initView = function() {
+    initRangeInput();
+    initSpeedControl();
+    initStateControl();
+    initMiscControl();
+  }
+
+  var initRangeInput = function() {
     let rangeButton = new MechButton("setRangeButton", function() {
       let buttonMode = $(this).attr("data-button-mode");
       if (buttonMode === "not-editing") {
@@ -703,6 +710,46 @@ var MechView = MechView || (function() {
       } else {
         throw "Invalid button state";
       }
+    });
+  }
+
+  var initSpeedControl = function() {
+    $("#startSimulationDivButton").click(() => {
+      MechSimulatorLogic.runSimulation();
+    });
+
+    $("#pauseSimulationDivButton").click(() => {
+      MechSimulatorLogic.pauseSimulation();
+    });
+
+    $("#stepSimulationDivButton").click(() => {
+      MechSimulatorLogic.stepSimulation();
+    });
+
+    //TODO: 2x, 4x, 8x speed buttons
+  }
+
+  var initStateControl = function() {
+    $("#resetSimulationDivButton").click(() => {
+      MechModel.resetState();
+      MechSimulatorLogic.resetSimulation();
+      MechModelView.refreshView();
+    });
+  }
+
+  var initMiscControl = function() {
+    $("#permalinkButton").click(() => {
+      MechViewRouter.saveAppState(
+        function(data) {
+          //TODO: Show dialog containing the current URL
+          console.log("Success on save app state. Data: " + data);
+        },
+        function(data) {
+          console.log("Fail on save app state. Data: " + data);
+        },
+        function(data) {
+          console.log("Done save app state. Data: " + data);
+        });
     });
   }
 
@@ -791,6 +838,5 @@ var MechView = MechView || (function() {
 
     //functions that should be private but I need to acceess (usually in handlers)
     loadedSmurfyLoadout: null,
-    mechPanelId : mechPanelId,
   };
 })();//namespace

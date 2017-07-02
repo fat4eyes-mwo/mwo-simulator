@@ -114,6 +114,12 @@ var MechViewRouter = MechViewRouter || (function() {
       MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
       //TODO: Load mechs from smurfy and add them to model
       let teamList = [MechModel.Team.BLUE, MechModel.Team.RED];
+      if (!newAppState.teams) {
+        //if no teams, immediately call the success callback
+        successCallback(true);
+        alwaysCallback(true);
+        return;
+      }
       for (let team of teamList) {
         if (!newAppState.teams[team]) {
           newAppState.teams[team] = [];

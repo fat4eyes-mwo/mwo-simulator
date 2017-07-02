@@ -78,11 +78,16 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
     return transformedDamage;
   }
 
+  var getDefault = function() {
+    return MechAccuracyPattern.accuracySpreadToAdjacent(1.0, 0.0);
+  }
+
   return {
     fullAccuracyPattern : fullAccuracyPattern,
     accuracySpreadToAdjacent : accuracySpreadToAdjacent,
     getWeaponAccuracyPattern : getWeaponAccuracyPattern,
     cERPPCPattern : cERPPCPattern,
+    getDefault : getDefault,
   }
 
 })();

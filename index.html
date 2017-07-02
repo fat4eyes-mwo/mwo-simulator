@@ -42,19 +42,60 @@
           <span class="brandingTitle stylishText">Simulator</span><br/> <span class="byline">by fat4eyes</span>
         </div>
         <div class="row">
-          <div id="simTime" class="simTime"></div>
-        </div>
-        <div class="row">
-          <div class="rangeLabel column">
+          <div class="rangeLabel column column-3">
             Range:
           </div>
-          <div class="column">
-            <input id="rangeInput" type="number" class="rangeInput disabled" disabled></input> m
+          <div class="column column-5">
+            <div class="rangeInputContainer">
+              <input id="rangeInput" type="number" class="rangeInput disabled" disabled></input> m
+            </div>
           </div>
-          <div class="column">
+          <div class="column column-4">
             <div id="setRangeButton" class="button" data-button-mode="not-editing">Change</div>
           </div>
         </div>
+        <div class="row">
+          <div id="simTime" class="simTime">&nbsp;</div>
+        </div>
+        <div id="speedControl" class ="speedControl">
+          <div class="row">
+            <div id="startSimulationDivButton" class="startSimulationDivButton button column column-8" title="Start">
+              Run &#9658;
+            </div>
+            <div id="pauseSimulationDivButton" class="pauseSimulationDivButton button column column-2" title="Pause">
+              &#9208;
+            </div>
+            <div id="stepSimulationDivButton" class="stepSimulationDivButton button column column-2" title="Step once">
+              &#9199;
+            </div>
+          </div>
+          <div class="row">
+            <div id="speed2xbutton" class="speed2xbutton button column column-4" title="2x speed">
+              2x
+            </div>
+            <div id="speed4xbutton" class="speed4xbutton button column column-4" title="4x speed">
+              4x
+            </div>
+            <div id="speed8xbutton" class="speed8xbutton button column column-4" title="8x speed">
+              8x
+            </div>
+          </div>
+        </div>
+        <div id="stateControl" class="stateControl">
+          <div class="row">
+            <div id="resetSimulationDivButton" class="resetSimulationDivButton button column column-6" title="Reset">
+              Reset simulation
+            </div>
+          </div>
+        </div>
+        <div id="miscControl" class="miscControl">
+          <div class="row">
+            <div id="permalinkButton" class="permalinkButton button column column-6" title="Reset">
+              Permalink
+            </div>
+          </div>
+        </div>
+
         <div id="debugPanel" class="row debugPanel">
           <button id="testUI" class="debugButton">Test UI Widgets</button>
           <button id="resetState" class = "debugButton">Reset state</button>

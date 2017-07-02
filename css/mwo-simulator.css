@@ -1,6 +1,4 @@
-/*@import url('https://fonts.googleapis.com/css?family=Catamaran');*/
 @import url('https://fonts.googleapis.com/css?family=Orbitron');
-@import url('https://fonts.googleapis.com/css?family=Maven Pro');
 /*Main panel styles*/
 body {
   background-color: rgb(32, 32, 32);
@@ -15,6 +13,7 @@ div {
 
 .stylishText {
   font-family: Orbitron;
+  /*font-family: sans-serif;;*/
 }
 
 .branding {
@@ -47,6 +46,10 @@ div {
   font-weight: bold;
 }
 
+.controlPanel .rangeInputContainer{
+  float:right;
+}
+
 .controlPanel .rangeInput {
   margin-top: 2px;
   padding: 2px;
@@ -58,6 +61,31 @@ div {
   background-color: rgb(32,32,32);
   border: none;
   color: rgb(170, 170, 170);
+  font-weight: bold;
+}
+
+.controlPanel .simTime {
+  font-weight: bold;
+  margin-left: 4px;
+}
+
+.controlPanel .speedControl {
+  margin-top:15px;
+}
+
+.controlPanel .speedControl .startSimulationDivButton,
+.controlPanel .speedControl .pauseSimulationDivButton,
+.controlPanel .speedControl .stepSimulationDivButton
+{
+}
+
+
+.controlPanel .stateControl {
+  margin-top: 15px;
+}
+
+.controlPanel .miscControl {
+  margin-top: 15px;
 }
 
 .debugPanel {
@@ -421,6 +449,7 @@ div {
   background-color: gold;
   color: rgb(30,30,30);
   cursor: pointer;
+  user-select: none;
 }
 
 .button:hover {

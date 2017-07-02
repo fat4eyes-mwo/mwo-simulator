@@ -30,9 +30,14 @@ var MechTargetMech = MechTargetMech || (function () {
     return currTargetMap[mechId];
   }
 
+  var getDefault = function() {
+    return targetMechsInOrder;
+  }
+
   return {
     targetMechsInOrder : targetMechsInOrder,
     targetRandomMech : targetRandomMech,
+    getDefault : getDefault,
   }
 
 })();
