@@ -426,16 +426,16 @@ var MechView = MechView || (function() {
 
     //set mech summary health
     let mechSummaryHealthText = "";
-    let percentHealth = 0;
+    let percentHealth = Number(mechCurrTotalHealth) / Number(mechCurrMaxHealth);
     if (mechCurrTotalHealth > 0 && mechIsAlive) {
-      percentHealth = Number(mechCurrTotalHealth) / Number(mechCurrMaxHealth);
       mechSummaryHealthText = ((percentHealth * 100).toFixed(0)) + "%";
       if (mechHealthAndWeaponsDiv.classList.contains("kia")) {
         mechHealthAndWeaponsDiv.classList.remove("kia");
       }
     } else {
+      mechSummaryHealthText =
+        "KIA" + "(" + ((percentHealth * 100).toFixed(0)) + "%" + ")";
       percentHealth = 0;
-      mechSummaryHealthText = "KIA";
       if (!mechHealthAndWeaponsDiv.classList.contains("kia"))  {
         mechHealthAndWeaponsDiv.classList.add("kia");
       }
