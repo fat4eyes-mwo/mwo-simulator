@@ -315,6 +315,8 @@ return {
       var statehash;
       MechModel.initDummyModelData();
       MechTest.initTestModelState();
+      MechView.initView();
+      MechView.showLoadingScreen();
       MechViewRouter.saveAppState(
         function(data) {
           console.log("Success on save app state. Data: " + data);
@@ -334,6 +336,8 @@ return {
         MechViewRouter.loadAppState(statehash,
           function(data) {
             console.log("Success on load app state. Data: " + data);
+            MechView.hideLoadingScreen();
+            MechModelView.refreshView();
           },
           function(data) {
             console.log("Fail on load app state. Data: " + data);

@@ -1181,7 +1181,6 @@ var MechModel = MechModel || (function () {
   //constructor
   var Mech = function (new_mech_id, team, smurfyMechLoadout) {
     var smurfy_mech_id = smurfyMechLoadout.mech_id;
-    //TODO: Load mech data from smurfy instead of a global variable (full mech data file is way to big at 1Mb)
     var smurfyMechData = getSmurfyMechData(smurfy_mech_id);
     var mech_id = new_mech_id;
     var mechInfo = mechInfoFromSmurfyMechLoadout(new_mech_id, smurfyMechLoadout);
@@ -1261,7 +1260,7 @@ var MechModel = MechModel || (function () {
     }
   }
   var initMechPatterns = function(mech) {
-    mech.firePattern = MechFirePattern.alphaNoOverheat;
+    mech.firePattern = MechFirePattern.maximumDmgPerHeat;
     mech.componentTargetPattern = MechTargetComponent.randomAim;
     mech.mechTargetPattern = MechTargetMech.targetRandomMech;
     mech.accuracyPattern = MechAccuracyPattern.accuracySpreadToAdjacent(1.0, 0.0);
@@ -1271,7 +1270,7 @@ var MechModel = MechModel || (function () {
   var mechIdMap = {};
   var generateMechId = function(team, smurfyMechLoadout) {
     let smurfyMechData =
-      MechModel.getSmurfyMechData(MechView.loadedSmurfyLoadout.mech_id);
+      MechModel.getSmurfyMechData(smurfyMechLoadout.mech_id);
     let mechName = smurfyMechData.name;
     let rand = function() {
       return Math.floor(Math.random() * 0x10000).toString(16);
@@ -1396,6 +1395,7 @@ var MechModel = MechModel || (function () {
     initDummyModelData : initDummyModelData,
     initAddedData : initAddedData,
     addMech : addMech,
+    addMechAtIndex : addMechAtIndex,
     deleteMech : deleteMech,
     generateMechId : generateMechId,
     initMechPatterns: initMechPatterns,
@@ -1414,6 +1414,7 @@ var MechModel = MechModel || (function () {
     getSmurfyModuleData : getSmurfyModuleData,
     getSmurfyAmmoData : getSmurfyAmmoData,
     loadSmurfyMechLoadoutFromURL : loadSmurfyMechLoadoutFromURL,
+    loadSmurfyMechLoadoutFromID : loadSmurfyMechLoadoutFromID,
   };
 
 })(); //namespace end
