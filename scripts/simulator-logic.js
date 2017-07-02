@@ -483,6 +483,10 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     return ret;
   }
 
+  var getSimTime = function() {
+    return simTime;
+  }
+
   //Computes total heat for the set of weapons fired, but restores the
   //ghost heat map to its previous state afterwards
   var predictHeat = function (mech, weaponsFired) {
@@ -511,6 +515,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     resetSimulation : resetSimulation,
     stepSimulation : stepSimulation,
     step : step,
+    getSimTime : getSimTime,
     predictHeat : predictHeat,
     predictBaseHeat : predictBaseHeat,
     stepDuration : stepDuration,

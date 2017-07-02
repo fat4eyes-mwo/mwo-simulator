@@ -325,29 +325,8 @@ return {
     generateTestUI : function() {
       MechView.hideLoadingScreen();
 
-      const DEFAULT_RANGE = 200;
-      // MechModel.addMech("testKodiakId1", MechModel.Team.BLUE, DummyKodiak);
-      // MechModel.addMech("testExecutionerId", MechModel.Team.BLUE, DummyExecutioner);
-      MechModel.addMech("testTimberwolfId", MechModel.Team.BLUE, DummyTimberwolf);
-      // MechModel.addMech("testStormcrowId", MechModel.Team.BLUE, DummyStormcrow);
-      // MechModel.addMech("testCheetahId", MechModel.Team.BLUE, DummyArcticCheetah);
-      // MechModel.addMech("testMadDogId", MechModel.Team.BLUE, DummyMadDog);
-
-      // MechModel.addMech("testMaulerId", MechModel.Team.RED, DummyMauler);
-      // MechModel.addMech("testBattlemasterId", MechModel.Team.RED, DummyBattleMaster);
-      MechModel.addMech("testWarhammerId", MechModel.Team.RED, DummyWarHammer);
-      // MechModel.addMech("testShadowhawkId", MechModel.Team.RED, DummyShadowhawk);
-      // MechModel.addMech("testFirestarterId", MechModel.Team.RED, DummyFireStarter);
-      // MechModel.addMech("testCatapultId", MechModel.Team.RED, DummyCatapult);
-      // MechModel.addMech("testUrbanmechId1", MechModel.Team.RED, DummyUrbanmech);
-
-      let simulatorParameters = new MechSimulatorLogic.SimulatorParameters(
-                                  DEFAULT_RANGE//range
-                                );
-      MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
+      MechTest.initTestModelState();
       MechModelView.refreshView();
-      MechModel.initMechTeamPatterns(MechModel.mechTeams[MechModel.Team.BLUE]);
-      MechModel.initMechTeamPatterns(MechModel.mechTeams[MechModel.Team.RED]);
 
       $("#resetState").removeClass("debugButton").click(() => {
         MechModel.resetState();
@@ -375,8 +354,68 @@ return {
       })
     },
 
+    testPersistence : function() {
+      var statehash;
+      MechModel.initDummyModelData();
+      MechTest.initTestModelState();
+      MechViewRouter.saveAppState(
+        function(data) {
+          console.log("Success on save app state. Data: " + data);
+          console.log("statehash: " + data.statehash);
+          statehash = data.statehash;
+          testGetAppState(statehash);
+        },
+        function(data) {
+          console.log("Fail on save app state. Data: " + data);
+        },
+        function(data) {
+          console.log("Done save app state. Data: " + data);
+        }
+      );
+
+      var testGetAppState = function(statehash) {
+        MechViewRouter.loadAppState(statehash,
+          function(data) {
+            console.log("Success on load app state. Data: " + data);
+          },
+          function(data) {
+            console.log("Fail on load app state. Data: " + data);
+          },
+          function(data) {
+            console.log("Done on load app state. Data: " + data);
+          }
+        );
+      }
+    },
+
+    initTestModelState : function() {
+      const DEFAULT_RANGE = 200;
+
+      MechModel.addMech("testKodiakId1", MechModel.Team.BLUE, DummyKodiak);
+      MechModel.addMech("testExecutionerId", MechModel.Team.BLUE, DummyExecutioner);
+      MechModel.addMech("testTimberwolfId", MechModel.Team.BLUE, DummyTimberwolf);
+      MechModel.addMech("testStormcrowId", MechModel.Team.BLUE, DummyStormcrow);
+      MechModel.addMech("testCheetahId", MechModel.Team.BLUE, DummyArcticCheetah);
+      MechModel.addMech("testMadDogId", MechModel.Team.BLUE, DummyMadDog);
+
+      MechModel.addMech("testMaulerId", MechModel.Team.RED, DummyMauler);
+      MechModel.addMech("testBattlemasterId", MechModel.Team.RED, DummyBattleMaster);
+      MechModel.addMech("testWarhammerId", MechModel.Team.RED, DummyWarHammer);
+      MechModel.addMech("testShadowhawkId", MechModel.Team.RED, DummyShadowhawk);
+      MechModel.addMech("testFirestarterId", MechModel.Team.RED, DummyFireStarter);
+      MechModel.addMech("testCatapultId", MechModel.Team.RED, DummyCatapult);
+      MechModel.addMech("testUrbanmechId1", MechModel.Team.RED, DummyUrbanmech);
+
+      let simulatorParameters = new MechSimulatorLogic.SimulatorParameters(
+                                  DEFAULT_RANGE//range
+                                );
+      MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
+      MechModel.initMechTeamPatterns(MechModel.mechTeams[MechModel.Team.BLUE]);
+      MechModel.initMechTeamPatterns(MechModel.mechTeams[MechModel.Team.RED]);
+    },
+
     testScratch : function() {
     },
-  } //return publics
+  } //end return publics
 
-})(); //namespace exec
+})(); //end namespace exec

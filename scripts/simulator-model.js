@@ -1297,6 +1297,15 @@ var MechModel = MechModel || (function () {
     return newMech;
   };
 
+  var addMechAtIndex = function(mech_id, team, smurfyMechLoadout, index) {
+    var newMech = new Mech(mech_id, team, smurfyMechLoadout);
+    mechTeams[team][index] = newMech;
+    console.log("Added mech mech_id: " + mech_id +
+      " translated_mech_name: " + newMech.getTranslatedName() + " at index " + index);
+    initMechPatterns(newMech);
+    return newMech;
+  }
+
   var deleteMech = function(mech_id, team) {
     let mechList = mechTeams[team];
     for (let mechIdx in mechList) {
@@ -1316,8 +1325,8 @@ var MechModel = MechModel || (function () {
     }
   }
   var initMechPatterns = function(mech) {
-    mech.firePattern = MechFirePattern.maximumDmgPerHeat;
-    mech.componentTargetPattern = MechTargetComponent.randomAim;
+    mech.firePattern = MechFirePattern.alphaNoOverheat;
+    mech.componentTargetPattern = MechTargetComponent.aimForCenterTorso;
     mech.mechTargetPattern = MechTargetMech.targetRandomMech;
     mech.accuracyPattern = MechAccuracyPattern.accuracySpreadToAdjacent(1.0, 0.0);
   }
