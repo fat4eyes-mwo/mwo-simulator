@@ -736,8 +736,8 @@ var MechModel = MechModel || (function () {
 
   var SmurfyWeaponData = {};
   var SmurfyAmmoData = {};
-  var SmurfyMechData = {};
   var SmurfyModuleData = {};
+  var SmurfyMechData = {};
   var mechTeams = {};
   mechTeams[Team.BLUE] = [];
   mechTeams[Team.RED] = [];
@@ -748,99 +748,51 @@ var MechModel = MechModel || (function () {
   const AMMO_DATA_PATH = 'data/ammo.json';
   const MODULE_DATA_PATH = 'data/modules.json';
   const MECH_DATA_PATH = 'data/mechs.json';
-  var initDataTrigger = new Trigger(["weapons", "ammo", "modules", "mechs"]);
+  var initDataTrigger;
+  var dataPaths = [WEAPON_DATA_PATH , AMMO_DATA_PATH, MODULE_DATA_PATH, MECH_DATA_PATH];
+  var dataPathAssigns = {};
   var initModelData = function (callback) {
-    //Get weapon data
-    $.ajax({
-      url : SMURFY_PROXY_URL + WEAPON_DATA_PATH,
-      type : 'GET',
-      dataType : 'JSON'
-      })
-      .done(function (data) {
-        console.log("Successfully loaded smurfy weapon data");
-        SmurfyWeaponData = data;
-        initDataTrigger.setSuccess("weapons");
-      })
-      .fail(function (data) {
-        console.log("Smurfy weapon data request failed: " + data);
-        initDataTrigger.setFail("weapons");
-      })
-      .always(function (data) {
-        initDataTrigger.setDone("weapons");
-        if (initDataTrigger.isDone()) {
-          if (initDataTrigger.isSuccessful()) {
-            MechModel.initAddedData();
+    //assigns to the correct variable
+    //TODO: Just turn all the smurfy data into a map to avoid this
+    dataPathAssigns[WEAPON_DATA_PATH] = function(data) {
+      SmurfyWeaponData = data;
+    };
+    dataPathAssigns[AMMO_DATA_PATH] = function(data) {
+      SmurfyAmmoData = data;
+    };
+    dataPathAssigns[MODULE_DATA_PATH] = function(data) {
+      SmurfyModuleData = data;
+    };
+    dataPathAssigns[MECH_DATA_PATH] = function(data) {
+      SmurfyMechData = data;
+    };
+    initDataTrigger = new Trigger(dataPaths);
+
+    for (let path of dataPaths) {
+      $.ajax({
+        url : SMURFY_PROXY_URL + path,
+        type : 'GET',
+        dataType : 'JSON'
+        })
+        .done(function (data) {
+          console.log("Successfully loaded " + path);
+          dataPathAssigns[path](data);
+          initDataTrigger.setSuccess(path);
+        })
+        .fail(function (data) {
+          console.log("Smurfy " + path + " request failed: " + data);
+          initDataTrigger.setFail(path);
+        })
+        .always(function (data) {
+          initDataTrigger.setDone(path);
+          if (initDataTrigger.isDone()) {
+            if (initDataTrigger.isSuccessful()) {
+              MechModel.initAddedData();
+            }
+            callback(initDataTrigger.isSuccessful());
           }
-          callback(initDataTrigger.isSuccessful());
-        }
-      });
-    $.ajax({
-      url : SMURFY_PROXY_URL + AMMO_DATA_PATH,
-      type : 'GET',
-      dataType : 'JSON'
-      })
-      .done(function (data) {
-        console.log("Successfully loaded smurfy ammo data");
-        SmurfyAmmoData = data;
-        initDataTrigger.setSuccess("ammo");
-      })
-      .fail(function (data) {
-        console.log("Smurfy ammo data request failed: " + data);
-        initDataTrigger.setFail("ammo");
-      })
-      .always(function (data) {
-        initDataTrigger.setDone("ammo");
-        if (initDataTrigger.isDone()) {
-          if (initDataTrigger.isSuccessful()) {
-            MechModel.initAddedData();
-          }
-          callback(initDataTrigger.isSuccessful());
-        }
-      });
-    $.ajax({
-      url : SMURFY_PROXY_URL + MODULE_DATA_PATH,
-      type : 'GET',
-      dataType : 'JSON'
-      })
-      .done(function (data) {
-        console.log("Successfully loaded smurfy module data");
-        SmurfyModuleData = data;
-        initDataTrigger.setSuccess("modules");
-      })
-      .fail(function (data) {
-        console.log("Smurfy module data request failed: " + data);
-      })
-      .always(function (data) {
-        initDataTrigger.setDone("modules");
-        if (initDataTrigger.isDone()) {
-          if (initDataTrigger.isSuccessful()) {
-            MechModel.initAddedData();
-          }
-          callback(initDataTrigger.isSuccessful());
-        }
-      });
-    $.ajax({
-      url : SMURFY_PROXY_URL + MECH_DATA_PATH,
-      type : 'GET',
-      dataType : 'JSON'
-      })
-      .done(function (data) {
-        console.log("Successfully loaded smurfy mech data");
-        SmurfyMechData = data;
-        initDataTrigger.setSuccess("mechs");
-      })
-      .fail(function (data) {
-        console.log("Smurfy mech data request failed: " + data);
-      })
-      .always(function (data) {
-        initDataTrigger.setDone("mechs");
-        if (initDataTrigger.isDone()) {
-          if (initDataTrigger.isSuccessful()) {
-            MechModel.initAddedData();
-          }
-          callback(initDataTrigger.isSuccessful());
-        }
-      });
+        });
+    }
   }
 
   var initAddedData = function() {
