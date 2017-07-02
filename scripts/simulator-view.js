@@ -331,6 +331,9 @@ var MechView = MechView || (function() {
   var mechTargetPanelId = function(mechId) {
     return mechId + "-mechTarget";
   }
+  var mechHealthAndWeaponsId = function(mechId) {
+    return mechId + "-mechHealthAndWeapons";
+  }
   var addMechPanel = function (mech, team) {
     let mechId = mech.getMechId();
     let mechState = mech.getMechState();
@@ -344,8 +347,10 @@ var MechView = MechView || (function() {
       .removeClass("template")
       .appendTo(mechPanelContainer);
 
-    //TODO: messy repetitive code to add paperDoll and heatbar. Try to see if this
-    //can be done inside a single search for the children of the mechPanel
+    var mechHealthAndWeaponsDivId = mechHealthAndWeaponsId(mechId);
+    $("#" + mechPanelId(mechId) + " [class~=mechHealthAndWeapons]")
+      .attr("id", mechHealthAndWeaponsDivId);
+
     var paperDollContainerId = mechId + "-paperDollContainer";
     $("#" + mechPanelId(mechId) + " [class~='paperDollContainer']")
       .attr("id", paperDollContainerId);
@@ -415,6 +420,9 @@ var MechView = MechView || (function() {
   var updateMechStatusPanel = function(mechId, mechIsAlive,
         mechCurrTotalHealth, mechCurrMaxHealth, targetMechName) {
     let mechSummaryHealthId = mechSummaryHealthPanelId(mechId);
+    let mechHealthAndWeaponsDivId = mechHealthAndWeaponsId(mechId);
+    let mechHealthAndWeaponsDiv =
+          document.getElementById(mechHealthAndWeaponsDivId);
 
     //set mech summary health
     let mechSummaryHealthText = "";
@@ -422,9 +430,15 @@ var MechView = MechView || (function() {
     if (mechCurrTotalHealth > 0 && mechIsAlive) {
       percentHealth = Number(mechCurrTotalHealth) / Number(mechCurrMaxHealth);
       mechSummaryHealthText = ((percentHealth * 100).toFixed(0)) + "%";
+      if (mechHealthAndWeaponsDiv.classList.contains("kia")) {
+        mechHealthAndWeaponsDiv.classList.remove("kia");
+      }
     } else {
       percentHealth = 0;
       mechSummaryHealthText = "KIA";
+      if (!mechHealthAndWeaponsDiv.classList.contains("kia"))  {
+        mechHealthAndWeaponsDiv.classList.add("kia");
+      }
     }
     let mechSummaryHealthDiv = document.getElementById(mechSummaryHealthId);
     mechSummaryHealthDiv.style.color =

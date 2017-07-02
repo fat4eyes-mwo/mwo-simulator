@@ -88,6 +88,15 @@ div {
   padding-top: 5px;
 }
 
+.mechPanel .mechHealthAndWeapons {
+
+}
+
+.mechPanel .mechHealthAndWeapons.kia {
+  opacity: 0.4;
+}
+
+
 .mechPanel .paperDollContainer {
   width: 65%;
   display:inline-block;

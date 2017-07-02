@@ -1262,7 +1262,7 @@ var MechModel = MechModel || (function () {
   }
   var initMechPatterns = function(mech) {
     mech.firePattern = MechFirePattern.alphaNoOverheat;
-    mech.componentTargetPattern = MechTargetComponent.aimForCenterTorso;
+    mech.componentTargetPattern = MechTargetComponent.randomAim;
     mech.mechTargetPattern = MechTargetMech.targetRandomMech;
     mech.accuracyPattern = MechAccuracyPattern.accuracySpreadToAdjacent(1.0, 0.0);
   }
