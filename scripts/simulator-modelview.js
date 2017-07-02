@@ -56,7 +56,12 @@ var MechModelView = MechModelView || (function() {
       if (ammoCount) {
         weaponAmmoCount = ammoCount.ammoCount;
       }  else {
-        weaponAmmoCount = -1;
+        if (weaponState.weaponInfo.requiresAmmo()) {
+          //weapon requires ammo, but there are no ammo boxes in the loadout
+          weaponAmmoCount = 0;
+        } else {
+          weaponAmmoCount = -1;
+        }
       }
       MechView.setWeaponAmmo(mech.getMechId(), weaponIndex, weaponAmmoCount);
     }

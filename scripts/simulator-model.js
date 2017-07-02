@@ -1006,7 +1006,8 @@ var MechModel = MechModel || (function () {
     //Our cooldown/duration/spinup values are in milliseconds, smurfy is in seconds
     let cooldown = Number(smurfyWeaponData.cooldown) * 1000;
     let duration = Number(smurfyWeaponData.duration) * 1000;
-    let spinup = 0 * 1000; //TODO: Populate spinup value for Gauss, RACs
+    //Spinup data from data/addedweapondata.js
+    let spinup = (smurfyWeaponData.spinup ? Number(smurfyWeaponData.spinup) : 0) * 1000;
     let speed = smurfyWeaponData.speed;
     let ammoPerShot = smurfyWeaponData.ammo_per_shot ?
           smurfyWeaponData.ammo_per_shot : 0;

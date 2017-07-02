@@ -23,7 +23,8 @@ _AddedWeaponData = {
     ammo_per_shot : 1
   },
   "GaussRifle" : {
-    ammo_per_shot : 1
+    ammo_per_shot : 1,
+    spinup : 0.75
   },
   "LBXAutoCannon10" : {
     ammo_per_shot : 1
@@ -101,7 +102,8 @@ _AddedWeaponData = {
     ammo_per_shot : 4
   },
   "ClanGaussRifle" : {
-    ammo_per_shot : 1
+    ammo_per_shot : 1,
+    spinup : 0.75
   },
   "ClanMachineGun" : {
     ammo_per_shot : 1

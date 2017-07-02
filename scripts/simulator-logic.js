@@ -152,12 +152,12 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
         if (mechState.isAlive()) {
           dissipateHeat(mech);
 
-          processCooldowns(mech);
+          processCooldowns(mech, mech.getTargetMech());
 
           let weaponsToFire = mech.firePattern(mech, simulatorParameters.range);
           if (weaponsToFire) {
             let targetMech = mech.mechTargetPattern(mech, MechModel.mechTeams[enemyTeam(team)]);
-            if (targetMech !== mech.getTargetMech) {
+            if (targetMech !== mech.getTargetMech()) {
               mech.setTargetMech(targetMech);
               mechState.updateTypes[MechModel.UpdateType.STATS] = true;
             }
@@ -293,9 +293,9 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
       //(assumes all spoolup weapons have no duration,
       //otherwise next state would be FIRING)
       if (weaponState.weaponCycle === MechModel.WeaponCycle.SPOOLING) {
-        let newSpoolLeft = Number(weaponState.spoolLeft) - stepDuration;
-        weaponState.spoolLeft = Math.max(newSpoolLeft, 0);
-        if (weaponState.spoolLeft <= 0) {
+        let newSpoolLeft = Number(weaponState.spoolupLeft) - stepDuration;
+        weaponState.spoolupLeft = Math.max(newSpoolLeft, 0);
+        if (weaponState.spoolupLeft <= 0) {
           weaponState.gotoState(MechModel.WeaponCycle.COOLDOWN);
           //if the spooling ended in the middle of the tick, subtract the
           //extra time from the cooldown

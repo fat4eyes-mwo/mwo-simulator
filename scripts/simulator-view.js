@@ -278,14 +278,8 @@ var MechView = MechView || (function() {
         .attr("id", weaponCooldownBarId(mechId, idx));
       $("#" + weaponRowId(mechId, idx) + " .weaponAmmo")
         .attr("id", weaponAmmoId(mechId, idx));
-      let weaponAmmoCount;
-      let ammoCount = ammoState.ammoCounts[weaponState.weaponInfo.weaponId];
-      if (ammoCount) {
-        weaponAmmoCount = ammoCount.ammoCount;
-      }  else {
-        weaponAmmoCount = -1;
-      }
-      setWeaponAmmo(mechId, idx, weaponAmmoCount);
+
+      setWeaponAmmo(mechId, idx, 0);
       setWeaponState(mechId, idx, weaponState.weaponCycle);
       setWeaponCooldown(mechId, idx, 0);
     }
