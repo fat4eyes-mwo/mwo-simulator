@@ -15,6 +15,7 @@ var MechSimulator = MechSimulator || (function() {
     MechModel.initModelData((success) => {
       if (success) {
         console.log("Successfully loaded model init data");
+        MechViewRouter.initViewRouter();
         initMechs();
       } else {
         console.log("Failed to load model init data");
@@ -24,29 +25,17 @@ var MechSimulator = MechSimulator || (function() {
   }
 
   function initMechs() {
-    let fragmentHash = location.hash;
-    let regex = /#s=([^&]*)/;
-    let results = regex.exec(fragmentHash);
-    let hashState;
-    if (!results) {
-      hashState = "default";
-      location.hash="s=default";
-    } else {
-      hashState = results[1];
-    }
-    MechViewRouter.loadAppState(hashState,
+    MechViewRouter.loadStateFromLocationHash(
       function(data) {
-        console.log("Loaded application state from hash: " + hashState);
         initUI();
       },
       function(data) {
-        console.log("Fail on load app state. Hash: " + hashState);
         //TODO: Show error screen
       },
       function(data) {
-        console.log("Done on load app state. hash: " + hashState);
         MechView.hideLoadingScreen();
-      });
+      }
+    );
   }
 
   function initUI() {

@@ -1,3 +1,7 @@
+//5 dire vs 20 urbies
+//http://localhost:8181/#s=a14468793b3ddb40bb7ec6f197b8d93d5785ff23f648caf2e9b26c342624a7c8
+
+
 //Gauss PPC summoner
 //http://mwo.smurfy-net.de/mechlab#i=189&l=8d4bb3e475863c7fe5c173c7cc62b9fc86177bda
 //Machine Gun Arrow
