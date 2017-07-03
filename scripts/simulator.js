@@ -9,12 +9,15 @@ var MechSimulator = MechSimulator || (function() {
     MechView.showLoadingScreen();
 
     let simulatorParameters = new MechSimulatorLogic.SimulatorParameters(
-                                DEFAULT_RANGE//range
+                                DEFAULT_RANGE, //range
+                                1 //speed factor
                               );
     MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
     MechModel.initModelData((success) => {
       if (success) {
         console.log("Successfully loaded model init data");
+        //router should not be initialized before the smurfy data is
+        //loaded since the
         MechViewRouter.initViewRouter();
         initMechs();
       } else {
@@ -31,6 +34,7 @@ var MechSimulator = MechSimulator || (function() {
       },
       function(data) {
         //TODO: Show error screen
+        console.log("Error loading mech data: " + data);
       },
       function(data) {
         MechView.hideLoadingScreen();

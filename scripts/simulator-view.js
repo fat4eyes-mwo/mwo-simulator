@@ -285,7 +285,7 @@ var MechView = MechView || (function() {
     }
   }
   var setWeaponCooldown = function (mechId, weaponIdx, percent) {
-    //TODO, NOTE: jQuery on weapon cooldowns takes way too much compute time. Use
+    //NOTE: jQuery on weapon cooldowns takes way too much compute time. Use
     //plain javascript for this and other often updated elements
     //$("#" + weaponCooldownBarId(mechId, weaponIdx)).width(100*percent + "%");
     let cooldownDiv = document.getElementById(weaponCooldownBarId(mechId, weaponIdx));
@@ -473,7 +473,6 @@ var MechView = MechView || (function() {
             .html(teamDisplayName(team));
 
     //Add mech button
-    //TODO: add click handler to add mech button
     let addMechButtonPanelId = addMechButtonId(team);
     if (!addMechButtonHandler) {
       addMechButtonHandler = new AddMechButtonHandler(this);
@@ -650,7 +649,7 @@ var MechView = MechView || (function() {
   }
 
   var updateSimTime = function(simTime) {
-    $("#simTime").html("Sim time: " + simTime + "ms");
+    $("#simTime").html(simTime + "ms");
   }
 
   var updateControlPanel = function(simulatorParameters) {
@@ -720,7 +719,27 @@ var MechView = MechView || (function() {
       MechSimulatorLogic.stepSimulation();
     });
 
-    //TODO: 2x, 4x, 8x speed buttons
+    var setSimulatorSpeedfactor = function(speedFactor) {
+      let simulatorParams = MechSimulatorLogic.getSimulatorParameters();
+      simulatorParams.setSpeedFactor(speedFactor);
+      MechSimulatorLogic.setSimulatorParameters(simulatorParams);
+    }
+    $("#speed1xbutton").click(() => {
+      setSimulatorSpeedfactor(1);
+      $("#simSpeed").html("1x");
+    });
+    $("#speed2xbutton").click(() => {
+      setSimulatorSpeedfactor(2);
+      $("#simSpeed").html("2x");
+    });
+    $("#speed4xbutton").click(() => {
+      setSimulatorSpeedfactor(4);
+      $("#simSpeed").html("4x");
+    });
+    $("#speed8xbutton").click(() => {
+      setSimulatorSpeedfactor(8);
+      $("#simSpeed").html("8x");
+    });
   }
 
   var initStateControl = function() {

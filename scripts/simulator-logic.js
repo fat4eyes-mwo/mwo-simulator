@@ -11,15 +11,19 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
 
   //interval between UI updates. Set smaller than step duration to run the
   // simulation faster, but not too small as to lock the browser
-  const uiUpdateInterval = 50;
+  const DEFAULT_UI_UPDATE_INTERVAL = 50;
 
   //Interval when ghost heat applies for weapons. 500ms
   const ghostHeatInterval = 500;
 
   //Parameters of the simulation. Includes range
   class SimulatorParameters {
-    constructor(range) {
+    constructor(range, speedFactor = 1) {
       this.range = range;
+      this.uiUpdateInterval = Math.floor(DEFAULT_UI_UPDATE_INTERVAL / Number(speedFactor));
+    }
+    setSpeedFactor(speedFactor) {
+      this.uiUpdateInterval = Math.floor(DEFAULT_UI_UPDATE_INTERVAL / Number(speedFactor));
     }
   }
 
@@ -58,7 +62,6 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
       let baseWeaponDamageMap = {};
       baseWeaponDamageMap[targetComponent] = this.weaponState.weaponInfo.damageAtRange(range, stepDuration);
       let baseWeaponDamage = new MechModel.WeaponDamage(baseWeaponDamageMap);
-      //TODO: apply weapon specific weapon patterns
       let weaponInfo = this.weaponState.weaponInfo;
       let weaponAccuracyPattern =
           MechAccuracyPattern.getWeaponAccuracyPattern(weaponInfo);
@@ -98,24 +101,34 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
 
   var setSimulatorParameters = function(parameters) {
     simulatorParameters = parameters;
+    //refresh simulationInterval if it is already present
+    if (simulationInterval) {
+      window.clearInterval(simulationInterval);
+      createSimulationInterval.call(this);
+    }
   }
 
   var getSimulatorParameters = function() {
     return simulatorParameters;
   }
 
+  var createSimulationInterval = function() {
+    var IntervalHandler = function(context) {
+      this.context = context;
+      return () => {
+        if (simRunning) {
+          this.context.step();
+        }
+      }
+    };
+    let intervalHandler = new IntervalHandler(this);
+    simulationInterval = window.setInterval(intervalHandler,
+                                        simulatorParameters.uiUpdateInterval);
+  }
+
   var runSimulation = function() {
     if (!simulationInterval) {
-      var IntervalHandler = function(context) {
-        this.context = context;
-        return () => {
-          if (simRunning) {
-            this.context.step();
-          }
-        }
-      };
-      let intervalHandler = new IntervalHandler(this);
-      simulationInterval = window.setInterval(intervalHandler, uiUpdateInterval);
+      createSimulationInterval.call(this);
     }
     simRunning = true;
   }

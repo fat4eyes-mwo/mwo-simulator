@@ -1260,7 +1260,6 @@ var MechModel = MechModel || (function () {
     }
   }
   var initMechPatterns = function(mech) {
-    //TODO: these are default values. Put these in config consts
     mech.firePattern = MechFirePattern.getDefault();
     mech.componentTargetPattern = MechTargetComponent.getDefault();
     mech.mechTargetPattern = MechTargetMech.getDefault();

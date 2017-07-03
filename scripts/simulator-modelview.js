@@ -111,7 +111,6 @@ var MechModelView = MechModelView || (function() {
             mechInfo.smurfyMechId, mechInfo.smurfyLoadoutId);
   }
 
-  //TODO: Move health logic from view to here?
   var updateHealth = function(mech) {
     updatePaperDoll(mech);
     updateMechHealthNumbers(mech);

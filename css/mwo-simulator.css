@@ -6,6 +6,7 @@ body {
   font-family: sans-serif;
   /*font-family: Orbitron;*/
   font-size: 14px;
+  scroll-behavior: smooth;
 }
 
 div {
@@ -64,9 +65,18 @@ div {
   font-weight: bold;
 }
 
+.controlPanel .simTimeContainer {
+  margin-top : 10px;
+}
+
 .controlPanel .simTime {
   font-weight: bold;
   margin-left: 4px;
+}
+
+.controlPanel .simSpeed {
+  font-weight: bold;
+  float: right;
 }
 
 .controlPanel .speedControl {

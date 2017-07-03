@@ -186,7 +186,6 @@ var MechViewRouter = MechViewRouter || (function() {
                 if (smurfyLoadTrigger.isDone()) {
                   if (smurfyLoadTrigger.isSuccessful()) {
                     isAppStateModified = false;
-                    //TODO: Is statehash still in the closure?
                     prevStateHash = stateHash;
                     successCallback(true);
                   } else {

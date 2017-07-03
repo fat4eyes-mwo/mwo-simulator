@@ -445,7 +445,8 @@ return {
       MechModel.addMech("testUrbanmechId1", MechModel.Team.RED, DummyUrbanmech);
 
       let simulatorParameters = new MechSimulatorLogic.SimulatorParameters(
-                                  DEFAULT_RANGE//range
+                                  DEFAULT_RANGE, //range
+                                  1 //speed factor
                                 );
       MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
       MechModel.initMechTeamPatterns(MechModel.mechTeams[MechModel.Team.BLUE]);
