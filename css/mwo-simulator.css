@@ -4,9 +4,7 @@ body {
   background-color: rgb(32, 32, 32);
   color: rgb(170, 170, 170);
   font-family: sans-serif;
-  /*font-family: Orbitron;*/
   font-size: 14px;
-  scroll-behavior: smooth;
 }
 
 div {

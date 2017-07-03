@@ -152,6 +152,8 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     simTime = 0;
     clearMechStats();
     MechModelView.updateSimTime(simTime);
+    //TODO: debug
+    MechModelView.updateDebugText("");
   }
 
   //Simulation step function. Called every tick
@@ -192,6 +194,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
 
     updateUIWeaponFires();
 
+    //TODO: Debug
     if (!MechModel.isTeamAlive(MechModel.Team.BLUE)) {
       MechModelView.updateDebugText("RED TEAM WINS!");
       pauseSimulation();
@@ -424,11 +427,11 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     mechStats.totalDamage += weaponFire.damageDone.totalDamage();
     mechStats.weaponFires.push(weaponFire);
 
-    // console.log(weaponInfo.name + " completed. Total damage: "
-    //           + weaponFire.damageDone.totalDamage() +
-    //           "(" + weaponFire.damageDone.toString() + ")" +
-    //           " src: " + weaponFire.sourceMech.getName() +
-    //           " dest: " + weaponFire.targetMech.getName());
+    console.log(weaponInfo.name + " completed. Total damage: "
+              + weaponFire.damageDone.totalDamage() +
+              "(" + weaponFire.damageDone.toString() + ")" +
+              " src: " + weaponFire.sourceMech.getName() +
+              " dest: " + weaponFire.targetMech.getName());
   }
 
   var clearMechStats = function() {
