@@ -120,6 +120,14 @@ div {
   padding-top: 5px;
 }
 
+#blueTeam .mechPanel {
+  border-color: rgb(30,144,255);
+}
+
+#redTeam .mechPanel {
+  border-color: rgb(200,50,50);
+}
+
 .mechPanel .mechHealthAndWeapons {
 
 }
@@ -160,14 +168,6 @@ div {
   font-size: 0.9em;
   overflow-y: auto;
   max-height: 300px;
-}
-
-.redPanel {
-  border-color: red;
-}
-
-.bluePanel {
-  border-color: blue;
 }
 
 .template {
@@ -418,15 +418,24 @@ div {
   font-weight: bold;
 }
 
-.statusPanel .mechTargetLabel {
+.statusPanel .mechTargetLabel,
+.statusPanel .mechDPSLabel,
+.statusPanel .mechBurstLabel,
+.statusPanel .mechTotalDamageLabel {
   font-weight: bold;
   font-size: 0.9em;
 }
 
-.statusPanel .mechTargetText {
+.statusPanel .mechTargetText,
+.statusPanel .mechDPSText,
+.statusPanel .mechBurstText,
+.statusPanel .mechTotalDamageText {
   font-size: 0.9em;
   margin-left: 10%;
+  color: gold;
 }
+
+
 
 .teamStats {
   padding-bottom: 5px;
@@ -482,6 +491,12 @@ div {
 
 }
 
+.teamStats .teamSettings {
+  font-family: sans-serif;
+  float: right;
+  padding: 5px;
+}
+
 .button {
   font-size: 0.9em;
   font-weight: bold;
@@ -493,6 +508,7 @@ div {
   color: rgb(30,30,30);
   cursor: pointer;
   user-select: none;
+  transition: background-color 0.4s ease;
 }
 
 .button:hover {
@@ -505,11 +521,26 @@ div {
   cursor: not-allowed;
 }
 
+.textButton {
+    color: gold;
+    transition: color 0.4s ease;
+    cursor: pointer;
+}
+
+.textButton:hover {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.textButton.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .teamStats .addMechButton {
   font-size: 1em;
   max-width: 7em;
   float: right;
-  transition: background-color 0.5s ease;
 }
 
 .modalScreen {
@@ -542,6 +573,14 @@ div {
 
 .addMechDialogContainer {
 
+}
+
+.addMechDialog.blue .addMechDialogTitle{
+  color: rgb(30,144,255);
+}
+
+.addMechDialog.red .addMechDialogTitle{
+  color: rgb(200,50,50);
 }
 
 #addMechDialog-text {

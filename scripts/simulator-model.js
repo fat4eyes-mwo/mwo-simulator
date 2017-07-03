@@ -754,6 +754,7 @@ var MechModel = MechModel || (function () {
       //list of completed weaponFires. Assumed to be sorted in
       //ascending order of createTime
       this.weaponFires = [];
+      this.timeOfDeath = null;
     }
     getBurstDamage(simTime) {
       let burstDamage = 0;

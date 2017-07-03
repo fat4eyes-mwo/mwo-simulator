@@ -104,9 +104,15 @@ var MechModelView = MechModelView || (function() {
     let isAlive = mech.getMechState().isAlive();
     let targetMechName = mech.getTargetMech() ?
                 mech.getTargetMech().getTranslatedName() : "";
+    let mechStats = mech.getMechState().mechStats;
+    let simTime = MechSimulatorLogic.getSimTime();
+    let totalDmg = Number(mechStats.totalDamage);
+    let dps = simTime > 0 ? Number(mechStats.totalDamage) / simTime * 1000: 0;
+    let burst = mechStats.getBurstDamage(simTime);
 
     MechView.updateMechStatusPanel(mech.getMechId(), isAlive,
-                          currTotalHealth, currMaxHealth, targetMechName);
+                          currTotalHealth, currMaxHealth, targetMechName,
+                          dps, burst, totalDmg);
   }
 
   var updateMechTitle = function (mech) {

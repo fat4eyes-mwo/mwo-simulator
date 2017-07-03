@@ -328,6 +328,15 @@ var MechView = MechView || (function() {
   var mechHealthAndWeaponsId = function(mechId) {
     return mechId + "-mechHealthAndWeapons";
   }
+  var mechDPSPanelId = function(mechId) {
+    return mechId + "-mechDPSText";
+  }
+  var mechBurstPanelId = function(mechId) {
+    return mechId + "-mechBurstText";
+  }
+  var mechTotalDamagePanelId = function(mechId) {
+    return mechId + "-mechTotalDamageText";
+  }
   var addMechPanel = function (mech, team) {
     let mechId = mech.getMechId();
     let mechState = mech.getMechState();
@@ -395,6 +404,21 @@ var MechView = MechView || (function() {
     $("#" + mechPanelId(mechId) + " [class~='statusPanel'] [class~='mechTargetText']")
       .attr("id", mechTargetId)
       .html("");
+
+    let mechDPSId = mechDPSPanelId(mechId);
+    $("#" + mechPanelId(mechId) + " [class~='statusPanel'] [class~='mechDPSText']")
+      .attr("id", mechDPSId)
+      .html("");
+
+    let mechBurstId = mechBurstPanelId(mechId);
+    $("#" + mechPanelId(mechId) + " [class~='statusPanel'] [class~='mechBurstText']")
+      .attr("id", mechBurstId)
+      .html("");
+
+    let mechTotalDamageId = mechTotalDamagePanelId(mechId);
+    $("#" + mechPanelId(mechId) + " [class~='statusPanel'] [class~='mechTotalDamageText']")
+      .attr("id", mechTotalDamageId)
+      .html("");
   }
 
   const SMURFY_BASE_URL= "http://mwo.smurfy-net.de/mechlab#";
@@ -412,7 +436,7 @@ var MechView = MechView || (function() {
   }
 
   var updateMechStatusPanel = function(mechId, mechIsAlive,
-        mechCurrTotalHealth, mechCurrMaxHealth, targetMechName) {
+        mechCurrTotalHealth, mechCurrMaxHealth, targetMechName, dps, burst, totalDmg) {
     let mechSummaryHealthId = mechSummaryHealthPanelId(mechId);
     let mechHealthAndWeaponsDivId = mechHealthAndWeaponsId(mechId);
     let mechHealthAndWeaponsDiv =
@@ -443,6 +467,21 @@ var MechView = MechView || (function() {
     let mechTargetId = mechTargetPanelId(mechId);
     let mechTargetDiv = document.getElementById(mechTargetId);
     mechTargetDiv.innerHTML = targetMechName;
+
+    //set mech total damage
+    let mechTotalDamageId = mechTotalDamagePanelId(mechId);
+    let mechTotalDamageDiv = document.getElementById(mechTotalDamageId);
+    mechTotalDamageDiv.innerHTML = Number(totalDmg).toFixed(1);
+
+    //set mech dps
+    let mechDPSId = mechDPSPanelId(mechId);
+    let mechDPSDiv = document.getElementById(mechDPSId);
+    mechDPSDiv.innerHTML = Number(dps).toFixed(1);
+
+    //set mech burst
+    let mechBurstId = mechBurstPanelId(mechId);
+    let mechBurstDiv = document.getElementById(mechBurstId);
+    mechBurstDiv.innerHTML = Number(burst).toFixed(1);
   }
 
   var teamStatsContainerId = function(team) {
@@ -595,6 +634,7 @@ var MechView = MechView || (function() {
       .clone(true)
       .attr("id", "addMechDialogContainer")
       .removeClass("template")
+      .addClass(team)
       .appendTo("#" + MODAL_DIALOG_ID);
 
     if (!addMechDialog_OK_Handler) {
@@ -606,7 +646,7 @@ var MechView = MechView || (function() {
     if (!addMechDialog_Load_Handler) {
       addMechDialog_Load_Handler =new AddMechDialog_Load(this);
     }
-    $("#addMechDialog-ok").attr("data-team", team);
+    $("#addMechDialog-ok").attr("dFata-team", team);
     addMechOKButton =
         new MechButton("addMechDialog-ok", addMechDialog_OK_Handler);
     $("#addMechDialog-cancel").attr("data-team", team);

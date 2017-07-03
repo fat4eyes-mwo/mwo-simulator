@@ -183,6 +183,13 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
               console.log("No target mech for " + mech.getMechId());
             }
           }
+        } else {
+          //dead mech, set time of death if it is not already set
+          let mechStats = mechState.mechStats;
+          if (mechStats.timeOfDeath === null) {
+            mechStats.timeOfDeath = simTime;
+            mechState.updateTypes[MechModel.UpdateType.STATS] = true;
+          }
         }
         MechModelView.updateMech(mech);
       }
@@ -426,6 +433,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     let mechStats = mechState.mechStats;
     mechStats.totalDamage += weaponFire.damageDone.totalDamage();
     mechStats.weaponFires.push(weaponFire);
+    mechState.updateTypes[MechModel.UpdateType.STATS] = true;
 
     console.log(weaponInfo.name + " completed. Total damage: "
               + weaponFire.damageDone.totalDamage() +
