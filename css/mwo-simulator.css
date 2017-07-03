@@ -285,6 +285,7 @@ div {
 
 .mechHealthNumbers .healthNumber {
   text-align: center;
+  cursor: default;
 }
 
 /*Heat bar style*/

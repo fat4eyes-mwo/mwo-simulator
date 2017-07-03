@@ -576,7 +576,6 @@ var MechView = MechView || (function() {
   var addMechButtonHandler;//set on click handler assignment
 
   var updateTeamStats = function(team, mechHealthList, dps, burstDamage) {
-    //TODO: Implement
     let totalTeamCurrHealth = 0;
     let totalTeamMaxHealth = 0;
     let liveMechs = 0;
@@ -681,7 +680,7 @@ var MechView = MechView || (function() {
       let newMechId = MechModel.generateMechId(team, MechView.loadedSmurfyLoadout);
       MechModel.addMech(newMechId, team, smurfyMechLoadout);
       MechViewRouter.modifyAppState();
-      MechModelView.refreshView(); //TODO: Too heavyweight to redo all panels, just add one mechpanel instead
+      MechModelView.refreshView();
       clickContext.hideAddMechDialog(team);
     }
   };
