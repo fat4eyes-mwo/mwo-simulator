@@ -525,14 +525,32 @@ div {
 
 .teamSettings.expanded {
   overflow:hidden;
-  height: 60px;
+  height: 120px;
 }
 
 .teamSettings .teamFiringPatternLabel,
 .teamSettings .teamTargetMechPatternLabel,
 .teamSettings .teamTargetMechComponentLabel,
 .teamSettings .teamTargetMechComponentLabel {
+  margin-top: 3px;
+  margin-bottom: 3px;
   font-weight: bold;
+  text-align: right;
+
+}
+
+#blueTeamStatsContainer .teamFiringPatternLabel,
+#blueTeamStatsContainer .teamTargetMechPatternLabel,
+#blueTeamStatsContainer .teamTargetMechComponentLabel,
+#blueTeamStatsContainer .teamTargetMechComponentLabel {
+  color: rgb(30,144,255);
+}
+
+#redTeamStatsContainer .teamFiringPatternLabel,
+#redTeamStatsContainer .teamTargetMechPatternLabel,
+#redTeamStatsContainer .teamTargetMechComponentLabel,
+#redTeamStatsContainer .teamTargetMechComponentLabel {
+  color: rgb(200,50,50);
 }
 
 .teamSettings .teamFiringPatternValue,
@@ -543,6 +561,7 @@ div {
   width: 100%;
   background-color: rgb(32,32,32);
   border-color: goldenrod;
+  border-width: thin;
   color: rgb(170, 170, 170);
 }
 
