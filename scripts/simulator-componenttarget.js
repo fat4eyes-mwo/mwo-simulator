@@ -60,7 +60,41 @@ var MechTargetComponent = MechTargetComponent || (function () {
   }
 
   var getDefault = function() {
-    return MechTargetComponent.randomAim;
+    return MechTargetComponent.aimForCenterTorso;
+  }
+
+  //returns a list of target patterns for the UI.
+  //format of each entry is
+  //{id : <patternid>, name : <readableName>, pattern : <function>, description : <desc text>, default: <boolean>}
+  //Note: default must be the same as the pattern returned by getDefault()
+  var getPatterns = function() {
+    let patternList = [
+      { id: "aimForCenterTorso",
+        name: "Aim for CT",
+        pattern: aimForCenterTorso,
+        description: "Aim for the center torso.",
+        default: true,
+      },
+      { id: "aimForXLSideTorso",
+        name: "Aim for XL Side Torso",
+        pattern: aimForXLSideTorso,
+        description: "Aim for a side torso if the target has an IS XL Engine. Else aims for the center torso.",
+        default: false,
+      },
+      { id: "aimForLegs",
+        name: "Aim for Legs",
+        pattern: aimForLegs,
+        description: "Aim for the legs.",
+        default: false,
+      },
+      { id: "randomAim",
+        name: "Random",
+        pattern: randomAim,
+        description: "Aim for a random component. Does not include the head.",
+        default: false,
+      }
+    ];
+    return patternList;
   }
 
   return {
@@ -70,5 +104,6 @@ var MechTargetComponent = MechTargetComponent || (function () {
     aimSideTorsoThenCenterTorso: aimSideTorsoThenCenterTorso,
     randomAim : randomAim,
     getDefault : getDefault,
+    getPatterns : getPatterns,
   }
 })();

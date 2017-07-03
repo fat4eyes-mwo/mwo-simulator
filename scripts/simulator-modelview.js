@@ -207,6 +207,20 @@ var MechModelView = MechModelView || (function() {
     MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
   }
 
+  var setTeamFirePattern = function(team, firePattern) {
+    let mechList = MechModel.mechTeams[team];
+    for (let mech of mechList) {
+      mech.firePattern = firePattern;
+    }
+  }
+
+  var setTeamComponentTargetPattern = function(team, componentTargetPattern) {
+    let mechList = MechModel.mechTeams[team];
+    for (let mech of mechList) {
+      mech.componentTargetPattern = componentTargetPattern;
+    }
+  }
+
   return {
     refreshView : refreshView,
     updateHealth : updateHealth,
@@ -218,7 +232,9 @@ var MechModelView = MechModelView || (function() {
     updateDebugText: updateDebugText,
     updateTeamStats: updateTeamStats,
     getSimulatorParameters: getSimulatorParameters,
-    setSimulatorParameters: setSimulatorParameters
+    setSimulatorParameters: setSimulatorParameters,
+    setTeamFirePattern: setTeamFirePattern,
+    setTeamComponentTargetPattern: setTeamComponentTargetPattern,
   };
 
 })();

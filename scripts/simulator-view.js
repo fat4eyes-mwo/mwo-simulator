@@ -578,6 +578,64 @@ var MechView = MechView || (function() {
     $("#" + teamStatsContainerPanelId + " [class~=teamSettings]")
       .attr("data-team", team)
       .attr("id", teamSettingsId(team));
+      populateTeamComponentPattern(team);
+  }
+
+  //store selected value (since we do a lot of refreshViews which recreates this panel)
+  var selectedComponentTargetPatterns = {}; //format: {team : <team>, patternId: <id>}
+  var componentTargetPatternList;
+  var findPatternWithId = function(id, patternList) {
+    for (let entry of patternList) {
+      if (entry.id === id) {
+        return entry.pattern;
+      }
+    }
+    return null;
+  }
+  var populateTeamComponentPattern = function(team) {
+    if (!componentTargetPatternList) {
+      componentTargetPatternList = MechTargetComponent.getPatterns();
+    }
+
+    let teamStatsContainerPanelId = teamStatsContainerId(team);
+    let teamComponentPatternValueJQ =
+      $("#" + teamStatsContainerPanelId + " [class~=teamTargetMechComponentValue]");
+
+    let teamComponentPatternDescJQ =
+      $("#" + teamStatsContainerPanelId + " [class~=teamTargetMechComponentDesc]")
+
+    teamComponentPatternValueJQ.empty();
+    let selectedPattern = selectedComponentTargetPatterns[team];
+    for (let componentPattern of componentTargetPatternList) {
+      $("<option></option>")
+        .attr("value", componentPattern.id)
+        .attr("data-description", componentPattern.description)
+        .html(componentPattern.name)
+        .appendTo(teamComponentPatternValueJQ);
+
+        //if it is the currently selected pattern
+        if (selectedComponentTargetPatterns[team] === componentPattern.id) {
+          teamComponentPatternValueJQ.val(componentPattern.id);
+          teamComponentPatternDescJQ.html(componentPattern.description);
+        }
+        //if default and no selected pattern, set it as the selected pattern
+        if (componentPattern.default && !selectedPattern) {
+          teamComponentPatternValueJQ.val(componentPattern.id);
+          teamComponentPatternDescJQ.html(componentPattern.description);
+          selectedComponentTargetPatterns[team]  = componentPattern.id;
+        }
+    }
+    //change handler
+    teamComponentPatternValueJQ.on('change', (data) => {
+      let selectedValue=teamComponentPatternValueJQ.val();
+      let selectedOption = teamComponentPatternValueJQ.find("[value='" + selectedValue + "']");
+
+      teamComponentPatternDescJQ.html(selectedOption.attr("data-description"));
+      selectedComponentTargetPatterns[team] = selectedValue;
+
+      let componentPattern = findPatternWithId(selectedValue, componentTargetPatternList);
+      MechModelView.setTeamComponentTargetPattern(team, componentPattern);
+    });
   }
 
   var teamSettingsButtonHandler = function() {

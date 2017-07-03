@@ -514,7 +514,7 @@ div {
 }
 
 .teamStats .teamSettingsButtonArrow.expanded {
-  transform: rotate(180deg);
+  transform: rotate(-180deg);
 }
 
 .teamSettings {
@@ -528,10 +528,10 @@ div {
   height: 120px;
 }
 
-.teamSettings .teamFiringPatternLabel,
+.teamSettings .teamFirePatternLabel,
 .teamSettings .teamTargetMechPatternLabel,
 .teamSettings .teamTargetMechComponentLabel,
-.teamSettings .teamTargetMechComponentLabel {
+.teamSettings .teamAccuracyLabel {
   margin-top: 3px;
   margin-bottom: 3px;
   font-weight: bold;
@@ -539,30 +539,33 @@ div {
 
 }
 
-#blueTeamStatsContainer .teamFiringPatternLabel,
+#blueTeamStatsContainer .teamFirePatternLabel,
 #blueTeamStatsContainer .teamTargetMechPatternLabel,
 #blueTeamStatsContainer .teamTargetMechComponentLabel,
-#blueTeamStatsContainer .teamTargetMechComponentLabel {
+#blueTeamStatsContainer .teamAccuracyLabel {
   color: rgb(30,144,255);
 }
 
-#redTeamStatsContainer .teamFiringPatternLabel,
+#redTeamStatsContainer .teamFirePatternLabel,
 #redTeamStatsContainer .teamTargetMechPatternLabel,
 #redTeamStatsContainer .teamTargetMechComponentLabel,
-#redTeamStatsContainer .teamTargetMechComponentLabel {
+#redTeamStatsContainer .teamAccuracyLabel {
   color: rgb(200,50,50);
 }
 
-.teamSettings .teamFiringPatternValue,
+.teamSettings .teamFirePatternValue,
 .teamSettings .teamTargetMechPatternValue,
 .teamSettings .teamTargetMechComponentValue,
-.teamSettings .teamTargetMechComponentValue {
+.teamSettings .teamAccuracyValue {
   display: block;
   width: 100%;
   background-color: rgb(32,32,32);
   border-color: goldenrod;
   border-width: thin;
   color: rgb(170, 170, 170);
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
 }
 
 .button {
