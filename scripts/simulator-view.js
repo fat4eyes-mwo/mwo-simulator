@@ -458,8 +458,26 @@ var MechView = MechView || (function() {
     let displayNameMap = {"blue" : "Blue team", "red" : "Red team"};
     return displayNameMap[team];
   }
+  var teamMechPipsContainerId = function(team) {
+    return team + "-mechPipsContainer";
+  }
+  var teamMechPipId = function(mechId) {
+    return mechId + "-mechPip";
+  }
+  var teamLiveMechsId = function(team) {
+    return team + "-liveMechs";
+  }
+  var teamHealthValueId = function(team) {
+    return team + "-teamHealthValue";
+  }
+  var teamDPSValueId = function(team) {
+    return team + "-teamDPSValue";
+  }
+  var teamBurstDamageId = function(team) {
+    return team + "-teamBurstDamage";
+  }
   var addMechButtonMap = {};
-  var addTeamStatsPanel = function(team) {
+  var addTeamStatsPanel = function(team, mechIds) {
     let teamStatsContainerPanelId = teamStatsContainerId(team);
     $("#teamStats-template")
       .clone(true)
@@ -481,7 +499,34 @@ var MechView = MechView || (function() {
         .attr("id", addMechButtonPanelId)
         .attr("data-team", team);
     addMechButtonMap[team] = new MechButton(addMechButtonPanelId, addMechButtonHandler);
+
+    //mech pips
+    let teamMechPipsContainerDivId = teamMechPipsContainerId(team);
+    $("#" + teamStatsContainerPanelId + " [class~=mechPipsContainer]")
+        .attr("id", teamMechPipsContainerDivId);
+    for (let mechId of mechIds) {
+      $("#mechPip-template")
+        .clone(true)
+        .attr("id", teamMechPipId(mechId))
+        .attr("data-team", team)
+        .attr("data-mech-id", mechId)
+        .removeClass("template")
+        .appendTo("#" + teamMechPipsContainerDivId);
+      //TODO: click handler on pip
+      //Mech health (liveMechs and teamHealthValue)
+      $("#" + teamStatsContainerPanelId + " [class~=liveMechs]")
+        .attr("id", teamLiveMechsId(team));
+      $("#" + teamStatsContainerPanelId + " [class~=teamHealthValue]")
+        .attr("id", teamHealthValueId(team));
+      //teamDPS
+      $("#" + teamStatsContainerPanelId + " [class~=teamDPSValue]")
+        .attr("id", teamDPSValueId(team));
+      //teamBurstDamage
+      $("#" + teamStatsContainerPanelId + " [class~=teamBurstDamageValue]")
+        .attr("id", teamBurstDamageId(team));
+    }
   }
+
   var AddMechButtonHandler = function(clickContext) {
     var context = clickContext;
     return function() {
@@ -491,8 +536,52 @@ var MechView = MechView || (function() {
   }
   var addMechButtonHandler;//set on click handler assignment
 
-  var updateTeamStats = function(team) {
+  var updateTeamStats = function(team, mechHealthList, dps, burstDamage) {
     //TODO: Implement
+    let totalTeamCurrHealth = 0;
+    let totalTeamMaxHealth = 0;
+    let liveMechs = 0;
+    for (let mechHealth of mechHealthList) {
+      let mechId = mechHealth.mechId;
+      let currHealth = mechHealth.currHealth;
+      let maxHealth = mechHealth.maxHealth;
+      let isAlive = mechHealth.isAlive;
+
+      let mechPipDiv = document.getElementById(teamMechPipId(mechId));
+      let percentHealth = Number(currHealth) / Number(maxHealth);
+
+      let color = damageColor(percentHealth, healthDamageGradient);
+      mechPipDiv.style.color = color;
+      if (isAlive) {
+        mechPipDiv.innerHTML = "&#9632;";
+      } else {
+        mechPipDiv.innerHTML = "&#9633;";
+      }
+
+      liveMechs += isAlive ? 1 : 0;
+      totalTeamCurrHealth += isAlive ? currHealth : 0;
+      totalTeamMaxHealth += maxHealth;
+    }
+    //live mechs
+    let liveMechsDiv = document.getElementById(teamLiveMechsId(team));
+    let totalMechs = mechHealthList.length;
+    let percentAlive = totalMechs > 0 ? liveMechs / totalMechs : 0;
+    let color = damageColor(percentAlive, healthDamageGradient);
+    liveMechsDiv.style.color = color;
+    liveMechsDiv.innerHTML = liveMechs + "/" + totalMechs;
+
+    //team health
+    let healthValueDiv = document.getElementById(teamHealthValueId(team));
+    let teamHealthPercent = totalTeamMaxHealth > 0 ?
+            totalTeamCurrHealth / totalTeamMaxHealth : 0;
+    color = damageColor(percentAlive, healthDamageGradient);
+    healthValueDiv.style.color = color;
+    healthValueDiv.innerHTML = "(" + Number(teamHealthPercent * 100).toFixed(1) + "%)";
+
+    let teamDPSValueDiv = document.getElementById(teamDPSValueId(team));
+    teamDPSValueDiv.innerHTML = Number(dps).toFixed(1);
+    let teamBurstDamageDiv = document.getElementById(teamBurstDamageId(team));
+    teamBurstDamageDiv.innerHTML = Number(burstDamage).toFixed(1);
   }
 
   const MODAL_SCREEN_ID = "mechModalScreen";

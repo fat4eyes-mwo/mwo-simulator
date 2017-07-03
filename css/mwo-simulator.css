@@ -112,10 +112,6 @@ div {
   overflow: auto;
 }
 
-.teamStats {
-
-}
-
 .mechPanelList {
 
 }
@@ -450,6 +446,44 @@ div {
   color: rgb(200,50,50);
 }
 
+.teamStats .teamStatsDetails{
+  font-size: 1em;
+  font-weight: bold;
+  font-family: Orbitron;
+}
+
+.teamStats .mechPipsContainer {
+  cursor: pointer;
+}
+
+.teamStats .mechPip {
+  margin-left : 1px;
+  font-size: 1.2em;
+}
+
+.teamStats .mechPip:after {
+  content: " ";
+}
+
+.teamStats .teamHealth .liveMechs {
+}
+
+.teamStats .teamHealth .teamHealthValue {
+}
+
+.teamStats .teamDPS  {
+}
+
+.teamStats .teamDPS .teamDPSValue {
+}
+
+.teamStats .teamBurstDamage  {
+}
+
+.teamStats .teamBurstDamage .teamBurstDamageValue {
+
+}
+
 .button {
   font-size: 0.9em;
   font-weight: bold;
@@ -560,7 +594,7 @@ div {
 }
 
 #addMechDialog-result {
-
+  word-wrap: break-word;
 }
 
 #addMechDialog-result.error {

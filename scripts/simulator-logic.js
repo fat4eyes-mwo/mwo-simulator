@@ -150,6 +150,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     }
     weaponFireQueue = [];
     simTime = 0;
+    clearMechStats();
     MechModelView.updateSimTime(simTime);
   }
 
@@ -262,6 +263,8 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     if (totalHeat > 0) {
       mechState.heatState.currHeat += Number(totalHeat);
       mechState.updateTypes[MechModel.UpdateType.HEAT] = true;
+      let mechStats = mechState.mechStats;
+      mechStats.totalHeat += Number(totalHeat);
     }
   }
 
@@ -353,6 +356,8 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     if (totalHeat > 0) {
       mechState.heatState.currHeat += Number(totalHeat);
       mechState.updateTypes[MechModel.UpdateType.HEAT] = true;
+      let mechStats = mechState.mechStats;
+      mechStats.totalHeat += Number(totalHeat);
     }
   }
 
@@ -380,7 +385,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
             lastTickDamage.multiply(damageFraction);
             tickDamageDone = targetMechState.takeDamage(lastTickDamage);
             weaponFire.damageDone.add(tickDamageDone);
-            //TODO: Add weaponFire.damageDone to mech stats
+            //Add weaponFire.damageDone to mech stats
             logDamage(weaponFire);
           } else {
             tickDamageDone = targetMechState.takeDamage(weaponFire.tickWeaponDamage);
@@ -391,7 +396,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
           targetMech.getMechState().updateTypes[MechModel.UpdateType.HEALTH] = true;
         } else {
           //Weapon disabled before end of burn
-          //TODO: add weaponFire.damageDone to mech stats
+          //add weaponFire.damageDone to mech stats
           logDamage(weaponFire);
         }
       } else if (weaponInfo.hasTravelTime()) {
@@ -400,7 +405,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
           let damageDone = targetMechState.takeDamage(weaponFire.weaponDamage);
           weaponFire.damageDone.add(damageDone);
           targetMech.getMechState().updateTypes[MechModel.UpdateType.HEALTH] = true;
-          //TODO: add weaponFire.damageDone to mechStats
+          //add weaponFire.damageDone to mechStats
           logDamage(weaponFire);
         } else {
           weaponFireQueue.push(weaponFire);
@@ -414,11 +419,25 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
 
   var logDamage = function(weaponFire) {
     let weaponInfo = weaponFire.weaponState.weaponInfo;
-    console.log(weaponInfo.name + " completed. Total damage: "
-              + weaponFire.damageDone.totalDamage() +
-              "(" + weaponFire.damageDone.toString() + ")" +
-              " src: " + weaponFire.sourceMech.getName() +
-              " dest: " + weaponFire.targetMech.getName());
+    let mechState = weaponFire.sourceMech.getMechState();
+    let mechStats = mechState.mechStats;
+    mechStats.totalDamage += weaponFire.damageDone.totalDamage();
+    mechStats.weaponFires.push(weaponFire);
+
+    // console.log(weaponInfo.name + " completed. Total damage: "
+    //           + weaponFire.damageDone.totalDamage() +
+    //           "(" + weaponFire.damageDone.toString() + ")" +
+    //           " src: " + weaponFire.sourceMech.getName() +
+    //           " dest: " + weaponFire.targetMech.getName());
+  }
+
+  var clearMechStats = function() {
+    let teams = [MechModel.Team.BLUE, MechModel.Team.RED];
+    for (let team of teams) {
+      for (let mech of MechModel.mechTeams[team]) {
+        mech.getMechState().clearMechStats();
+      }
+    }
   }
 
   //Compute the heat caused by firing a set of weapons

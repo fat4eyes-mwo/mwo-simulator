@@ -262,7 +262,23 @@
         <div class="teamName column stylishText">Team name</div>
         <div class="addMechButton button column">Add mech</div>
       </div>
+      <div class="row teamStatsDetails">
+        <div class="mechPipsContainer column column-3">
+          <!--mechpip goes here-->
+        </div>
+        <div class="teamHealth column column-2">
+          <span class="liveMechs">0/0</span> <span class="teamHealthValue">(100%)</span>
+        </div>
+        <div class="teamDPS column column-2">
+          <span class="teamDPSValue">0.0</span> dps
+        </div>
+        <div class="teamBurstDamage column column-2">
+          <span class="teamBurstDamageValue">0</span> burst
+        </div>
+      </div>
     </div>
+
+    <span id="mechPip-template" class="template mechPip">&#9632;</span>
 
     <!-- Add mech dialog template -->
     <div id="addMechDialog-template" class="template addMechDialog">

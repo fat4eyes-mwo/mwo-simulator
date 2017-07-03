@@ -269,6 +269,7 @@ var MechModel = MechModel || (function () {
 
       this.updateTypes = {}; //Update types triggered on the current simulation step
       this.ghostHeatMap = {}; //weaponId -> [GhostHeatEntry]. Used in ghost heat computations.
+      this.mechStats = new MechStats(); //stats set in simulation logic
     }
     isAlive() {
       let mechHealth = this.mechHealth;
@@ -395,7 +396,9 @@ var MechModel = MechModel || (function () {
       }
     }
 
-
+    clearMechStats() {
+      this.mechStats = new MechStats();
+    }
   }
 
   class HeatState {
@@ -738,6 +741,31 @@ var MechModel = MechModel || (function () {
         newDamageMap[component] = this.damageMap[component];
       }
       return new WeaponDamage(newDamageMap);
+    }
+  }
+
+  //TODO: Try to move this out of model due to its dependence on WeaponFire
+  //Or move WeaponFire here
+  const BURST_DAMAGE_INTERVAL = 3000; //Interval considered for burst damage calculation
+  class MechStats {
+    constructor() {
+      this.totalDamage = 0;
+      this.totalHeat = 0;
+      //list of completed weaponFires. Assumed to be sorted in
+      //ascending order of createTime
+      this.weaponFires = [];
+    }
+    getBurstDamage(simTime) {
+      let burstDamage = 0;
+      for (let idx = this.weaponFires.length - 1; idx > 0; idx--) {
+        let weaponFire = this.weaponFires[idx];
+        if (simTime - weaponFire.createTime < BURST_DAMAGE_INTERVAL) {
+          burstDamage += weaponFire.damageDone.totalDamage();
+        } else {
+          break;
+        }
+      }
+      return burstDamage;
     }
   }
 

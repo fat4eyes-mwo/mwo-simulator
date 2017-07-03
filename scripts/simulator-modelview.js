@@ -8,11 +8,16 @@ var MechModelView = MechModelView || (function() {
     let mechTeamList = [MechModel.Team.BLUE, MechModel.Team.RED];
     for (let team of mechTeamList) {
       MechView.clear(team);
-      MechView.addTeamStatsPanel(team);
+      let mechIdList = [];
+      for (let mech of MechModel.mechTeams[team]) {
+        mechIdList.push(mech.getMechId());
+      }
+      MechView.addTeamStatsPanel(team, mechIdList);
       for (let mech of MechModel.mechTeams[team]) {
         MechView.addMechPanel(mech, team);
         updateAll(mech);
       }
+      updateTeamStats(team);
     }
     let simulatorParameters = MechSimulatorLogic.getSimulatorParameters();
     MechView.updateControlPanel(simulatorParameters);
@@ -152,8 +157,36 @@ var MechModelView = MechModelView || (function() {
     updateStats(mech);
   }
 
+  class MechHealthToView {
+    constructor(mechId, currHealth, maxHealth, isAlive) {
+      this.mechId = mechId;
+      this.currHealth = currHealth;
+      this.maxHealth = maxHealth;
+      this.isAlive = isAlive;
+    }
+  }
   var updateTeamStats = function(team) {
-    MechView.updateTeamStats(team);
+    let mechHealthList = [];
+    let totalTeamDamage = 0;
+    let totalTeamBurstDamage = 0;
+    for (let mech of MechModel.mechTeams[team]) {
+      let mechStats = mech.getMechState().mechStats;
+      totalTeamDamage += Number(mechStats.totalDamage);
+      let burstDamage = mechStats.getBurstDamage(MechSimulatorLogic.getSimTime());
+      totalTeamBurstDamage += Number(burstDamage);
+      let mechHealth = mech.getMechState().mechHealth;
+      let mechHealthToView =
+            new MechHealthToView(mech.getMechId(),
+                                mechHealth.totalCurrHealth(),
+                                mechHealth.totalMaxHealth(),
+                                mech.getMechState().isAlive());
+      mechHealthList.push(mechHealthToView);
+    }
+    let dps = MechSimulatorLogic.getSimTime() > 0 ?
+                Number(totalTeamDamage)/MechSimulatorLogic.getSimTime() * 1000 : 0;
+    MechView.updateTeamStats(team, mechHealthList,
+            dps,
+            totalTeamBurstDamage);
   }
 
   var updateDebugText = function (text) {

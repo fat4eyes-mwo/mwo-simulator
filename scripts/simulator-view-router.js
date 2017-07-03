@@ -100,6 +100,8 @@ var MechViewRouter = MechViewRouter || (function() {
 
   var loadAppState = function(stateHash, successCallback, failCallback, alwaysCallback) {
     MechModel.clearModel();
+    MechSimulatorLogic.resetSimulation();
+
     isLoading = true;
     //ajax get request to simulator-persistence
     $.ajax({
