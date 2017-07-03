@@ -114,6 +114,36 @@ var MechFirePattern = MechFirePattern || (function () {
     return MechFirePattern.maximumDmgPerHeat;
   }
 
+  var getPatterns = function() {
+    let patternList = [
+      { id: "maximumDmgPerHeat",
+        name: "Max DMG per Heat",
+        pattern: maximumDmgPerHeat,
+        description: "Maximize damage per heat.",
+        default: true,
+      },
+      { id: "alphaNoOverheat",
+        name: "Alpha, no Overheat",
+        pattern: alphaNoOverheat,
+        description: "Always alpha as long as it doesn't cause an overheat.",
+        default: false,
+      },
+      { id: "maxFireNoGhostHeat",
+        name: "Maximum fire rate.",
+        pattern: maxFireNoGhostHeat,
+        description: "Maximize weapons fired as long as it doesn't cause ghost heat.",
+        default: false,
+      },
+      { id: "alphaAtZeroHeat",
+        name: "Alpha when at zero heat.",
+        pattern: alphaAtZeroHeat,
+        description: "Fire all weapons when heat is zero.",
+        default: false,
+      },
+    ];
+    return patternList;
+  }
+
   return {
     alphaAtZeroHeat : alphaAtZeroHeat,
     alphaNoOverheat : alphaNoOverheat,
@@ -121,5 +151,6 @@ var MechFirePattern = MechFirePattern || (function () {
     fireWhenReady : fireWhenReady,
     maxFireNoGhostHeat : maxFireNoGhostHeat,
     getDefault : getDefault,
+    getPatterns : getPatterns,
   };
 })();

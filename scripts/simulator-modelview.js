@@ -221,6 +221,20 @@ var MechModelView = MechModelView || (function() {
     }
   }
 
+  var setTeamAccuracyPattern = function(team, accuracyPattern) {
+    let mechList = MechModel.mechTeams[team];
+    for (let mech of mechList) {
+      mech.accuracyPattern = accuracyPattern;
+    }
+  }
+
+  var setTeamMechTargetPattern = function(team, mechTargetPattern) {
+    let mechList = MechModel.mechTeams[team];
+    for (let mech of mechList) {
+      mech.mechTargetPattern = mechTargetPattern;
+    }
+  }
+
   return {
     refreshView : refreshView,
     updateHealth : updateHealth,
@@ -235,6 +249,8 @@ var MechModelView = MechModelView || (function() {
     setSimulatorParameters: setSimulatorParameters,
     setTeamFirePattern: setTeamFirePattern,
     setTeamComponentTargetPattern: setTeamComponentTargetPattern,
+    setTeamAccuracyPattern: setTeamAccuracyPattern,
+    setTeamMechTargetPattern: setTeamMechTargetPattern,
   };
 
 })();

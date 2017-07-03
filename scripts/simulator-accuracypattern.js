@@ -82,12 +82,68 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
     return MechAccuracyPattern.accuracySpreadToAdjacent(1.0, 0.0);
   }
 
+  var getPatterns = function() {
+    let patternList = [
+      {
+        id:"accuracyPerfect",
+        name:"Perfect accuracy",
+        pattern: accuracySpreadToAdjacent(1.0, 0.0),
+        description:"100% damage to target component.",
+        default:true,
+      },
+      {
+        id:"accuracyTier1",
+        name:"Tier 1",
+        pattern: accuracySpreadToAdjacent(0.85, 0.1),
+        description:"85% damage to target component, 10% to adjacent, 5% miss.",
+        default:false,
+      },
+      {
+        id:"accuracyTier2",
+        name:"Tier 2",
+        pattern: accuracySpreadToAdjacent(0.75, 0.15),
+        description:"75% damage to target component, 15% to adjacent, 10% miss.",
+        default:false,
+      },
+      {
+        id:"accuracyTier3",
+        name:"Tier 3",
+        pattern: accuracySpreadToAdjacent(0.5, 0.25),
+        description:"50% damage to target component, 25% to adjacent, 25% miss.",
+        default:false,
+      },
+      {
+        id:"accuracyTier4",
+        name:"Tier 4",
+        pattern: accuracySpreadToAdjacent(0.4, 0.3),
+        description:"40% damage to target component, 30% to adjacent, 30% miss.",
+        default:false,
+      },
+      {
+        id:"accuracyTier5",
+        name:"Tier 5",
+        pattern: accuracySpreadToAdjacent(0.3, 0.2),
+        description:"30% damage to target component, 20% to adjacent, 50% miss.",
+        default:false,
+      },
+      {
+        id:"accuracyPotato",
+        name:"Tier Potato",
+        pattern: accuracySpreadToAdjacent(0.1, 0.05),
+        description:"10% damage to target component, 5% to adjacent, 85% miss.",
+        default:false,
+      },
+    ];
+    return patternList;
+  }
+
   return {
     fullAccuracyPattern : fullAccuracyPattern,
     accuracySpreadToAdjacent : accuracySpreadToAdjacent,
     getWeaponAccuracyPattern : getWeaponAccuracyPattern,
     cERPPCPattern : cERPPCPattern,
     getDefault : getDefault,
+    getPatterns : getPatterns,
   }
 
 })();

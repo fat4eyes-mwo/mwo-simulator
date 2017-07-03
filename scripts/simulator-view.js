@@ -578,63 +578,102 @@ var MechView = MechView || (function() {
     $("#" + teamStatsContainerPanelId + " [class~=teamSettings]")
       .attr("data-team", team)
       .attr("id", teamSettingsId(team));
-      populateTeamComponentPattern(team);
+    //Populate the team settings panel
+    for (let patternType of patternTypes) {
+      populateTeamPattern(team, patternType);
+    }
   }
 
   //store selected value (since we do a lot of refreshViews which recreates this panel)
-  var selectedComponentTargetPatterns = {}; //format: {team : <team>, patternId: <id>}
-  var componentTargetPatternList;
-  var findPatternWithId = function(id, patternList) {
+  var patternTypes;
+  //values used to initialize the contents of the team settings panel.
+  var initPatternTypes = function() {
+    patternTypes = [
+      {
+        id : "teamTargetMechComponent",
+        //function that returns the patternList for the type
+        patternsFunction : MechTargetComponent.getPatterns,
+        //prefix of the css class name for the UI divs for the patterntype
+        classNamePrefix: "teamTargetMechComponent",
+        //function used to assign the pattern to MechModel.Mech objects
+        setTeamPatternFunction : MechModelView.setTeamComponentTargetPattern,
+      },
+      {
+        id : "teamFirePattern",
+        patternsFunction : MechFirePattern.getPatterns,
+        classNamePrefix: "teamFirePattern",
+        setTeamPatternFunction : MechModelView.setTeamFirePattern,
+      },
+      {
+        id : "teamTargetMechPattern",
+        patternsFunction : MechTargetMech.getPatterns,
+        classNamePrefix: "teamTargetMechPattern",
+        setTeamPatternFunction : MechModelView.setTeamMechTargetPattern,
+      },
+      {
+        id : "teamAccuracy",
+        patternsFunction : MechAccuracyPattern.getPatterns,
+        classNamePrefix: "teamAccuracy",
+        setTeamPatternFunction : MechModelView.setTeamAccuracyPattern,
+      },
+    ];
+  }
+
+  var selectedPatterns = {}; //format is {<team>: {<patternType>: <pattern>}}
+  var patternLists = {} //format is {<patternTypeId>: [patternList]}
+
+  var findPatternWithId = function(patternId, patternList) {
     for (let entry of patternList) {
-      if (entry.id === id) {
+      if (entry.id === patternId) {
         return entry.pattern;
       }
     }
     return null;
   }
-  var populateTeamComponentPattern = function(team) {
-    if (!componentTargetPatternList) {
-      componentTargetPatternList = MechTargetComponent.getPatterns();
+  var populateTeamPattern = function(team, patternType) {
+    if (!patternLists[patternType.id]) {
+      patternLists[patternType.id] = patternType.patternsFunction();
     }
 
     let teamStatsContainerPanelId = teamStatsContainerId(team);
-    let teamComponentPatternValueJQ =
-      $("#" + teamStatsContainerPanelId + " [class~=teamTargetMechComponentValue]");
+    let teamPatternValueJQ =
+      $("#" + teamStatsContainerPanelId + " [class~=" + patternType.classNamePrefix + "Value]");
 
-    let teamComponentPatternDescJQ =
-      $("#" + teamStatsContainerPanelId + " [class~=teamTargetMechComponentDesc]")
+    let teamPatternDescJQ =
+      $("#" + teamStatsContainerPanelId + " [class~=" + patternType.classNamePrefix + "Desc]")
 
-    teamComponentPatternValueJQ.empty();
-    let selectedPattern = selectedComponentTargetPatterns[team];
-    for (let componentPattern of componentTargetPatternList) {
+    teamPatternValueJQ.empty();
+    selectedPatterns[team] = selectedPatterns[team] ? selectedPatterns[team] : {};
+    let selectedPattern = selectedPatterns[team][patternType.id];
+    for (let patternEntry of patternLists[patternType.id]) {
       $("<option></option>")
-        .attr("value", componentPattern.id)
-        .attr("data-description", componentPattern.description)
-        .html(componentPattern.name)
-        .appendTo(teamComponentPatternValueJQ);
+        .attr("value", patternEntry.id)
+        .attr("data-description", patternEntry.description)
+        .html(patternEntry.name)
+        .appendTo(teamPatternValueJQ);
 
         //if it is the currently selected pattern
-        if (selectedComponentTargetPatterns[team] === componentPattern.id) {
-          teamComponentPatternValueJQ.val(componentPattern.id);
-          teamComponentPatternDescJQ.html(componentPattern.description);
+        if (selectedPatterns[team][patternType.id] === patternEntry.id) {
+          teamPatternValueJQ.val(patternEntry.id);
+          teamPatternDescJQ.html(patternEntry.description);
         }
         //if default and no selected pattern, set it as the selected pattern
-        if (componentPattern.default && !selectedPattern) {
-          teamComponentPatternValueJQ.val(componentPattern.id);
-          teamComponentPatternDescJQ.html(componentPattern.description);
-          selectedComponentTargetPatterns[team]  = componentPattern.id;
+        if (patternEntry.default && !selectedPattern) {
+          teamPatternValueJQ.val(patternEntry.id);
+          teamPatternDescJQ.html(patternEntry.description);
+          selectedPatterns[team][patternType.id]  = patternEntry.id;
         }
     }
     //change handler
-    teamComponentPatternValueJQ.on('change', (data) => {
-      let selectedValue=teamComponentPatternValueJQ.val();
-      let selectedOption = teamComponentPatternValueJQ.find("[value='" + selectedValue + "']");
+    teamPatternValueJQ.on('change', (data) => {
+      let selectedValue=teamPatternValueJQ.val();
+      let selectedOption = teamPatternValueJQ.find("[value='" + selectedValue + "']");
 
-      teamComponentPatternDescJQ.html(selectedOption.attr("data-description"));
-      selectedComponentTargetPatterns[team] = selectedValue;
+      teamPatternDescJQ.html(selectedOption.attr("data-description"));
+      selectedPatterns[team][patternType.id] = selectedValue;
 
-      let componentPattern = findPatternWithId(selectedValue, componentTargetPatternList);
-      MechModelView.setTeamComponentTargetPattern(team, componentPattern);
+      let pattern = findPatternWithId(selectedValue, patternLists[patternType.id]);
+      patternType.setTeamPatternFunction(team, pattern);
     });
   }
 
@@ -885,6 +924,7 @@ var MechView = MechView || (function() {
   }
 
   var initView = function() {
+    initPatternTypes();
     initRangeInput();
     initSpeedControl();
     initStateControl();

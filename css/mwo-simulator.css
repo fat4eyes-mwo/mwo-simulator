@@ -536,7 +536,6 @@ div {
   margin-bottom: 3px;
   font-weight: bold;
   text-align: right;
-
 }
 
 #blueTeamStatsContainer .teamFirePatternLabel,
@@ -566,6 +565,15 @@ div {
   border-left: none;
   border-right: none;
   border-bottom: none;
+}
+
+.teamSettings .teamFirePatternDesc,
+.teamSettings .teamTargetMechPatternDesc,
+.teamSettings .teamTargetMechComponentDesc,
+.teamSettings .teamAccuracyDesc {
+  font-size: 0.9em;
+  margin-top: 5px;
+  margin-left: 5px;
 }
 
 .button {
