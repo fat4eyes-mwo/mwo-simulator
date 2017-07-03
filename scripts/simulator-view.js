@@ -721,6 +721,7 @@ var MechView = MechView || (function() {
       MechViewRouter.modifyAppState();
       let mechPanelDivId = mechPanelId(mechId);
       $("#" + mechPanelDivId).remove();
+      MechModelView.refreshView();
     };
   }
   var deleteMechButton_Handler; //singleton
