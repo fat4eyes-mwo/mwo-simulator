@@ -60,7 +60,7 @@ var MechTargetComponent = MechTargetComponent || (function () {
   }
 
   var getDefault = function() {
-    return MechTargetComponent.aimForCenterTorso;
+    return MechTargetComponent.randomAim;
   }
 
   return {

@@ -574,7 +574,7 @@ var MechView = MechView || (function() {
     let healthValueDiv = document.getElementById(teamHealthValueId(team));
     let teamHealthPercent = totalTeamMaxHealth > 0 ?
             totalTeamCurrHealth / totalTeamMaxHealth : 0;
-    color = damageColor(percentAlive, healthDamageGradient);
+    color = damageColor(teamHealthPercent, healthDamageGradient);
     healthValueDiv.style.color = color;
     healthValueDiv.innerHTML = "(" + Number(teamHealthPercent * 100).toFixed(1) + "%)";
 

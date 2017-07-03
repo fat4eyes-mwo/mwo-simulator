@@ -14,6 +14,8 @@ var MechTargetMech = MechTargetMech || (function () {
   }
 
   //{sourceMech, targetMech}
+  //TODO: currTargetMap is not reset across model changes.
+  //Leads to bad state (e.g. attacking mechs that have already been deleted)
   var currTargetMap = {};
   var targetRandomMech = function (mech, enemyMechList) {
     let mechId = mech.getMechId();
