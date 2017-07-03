@@ -85,6 +85,9 @@ div {
 .controlPanel .speedControl .pauseSimulationDivButton,
 .controlPanel .speedControl .stepSimulationDivButton
 {
+  height: 28px;
+  margin-bottom: 2px;
+  line-height: 18px;
 }
 
 
@@ -492,10 +495,55 @@ div {
 
 }
 
-.teamStats .teamSettings {
+.teamStats .teamSettingsButtonContainer {
   font-family: sans-serif;
   float: right;
   padding: 5px;
+}
+
+.teamStats .teamSettingsButton {
+  float:right;
+}
+
+.teamStats .teamSettingsButtonArrow {
+  float:right;
+  color: gold;
+  transition: all 0.5s;
+  cursor: default;
+  user-select: none;
+}
+
+.teamStats .teamSettingsButtonArrow.expanded {
+  transform: rotate(180deg);
+}
+
+.teamSettings {
+  height:0px;
+  transition: height 0.5s ease;
+  overflow:hidden;
+}
+
+.teamSettings.expanded {
+  overflow:hidden;
+  height: 60px;
+}
+
+.teamSettings .teamFiringPatternLabel,
+.teamSettings .teamTargetMechPatternLabel,
+.teamSettings .teamTargetMechComponentLabel,
+.teamSettings .teamTargetMechComponentLabel {
+  font-weight: bold;
+}
+
+.teamSettings .teamFiringPatternValue,
+.teamSettings .teamTargetMechPatternValue,
+.teamSettings .teamTargetMechComponentValue,
+.teamSettings .teamTargetMechComponentValue {
+  display: block;
+  width: 100%;
+  background-color: rgb(32,32,32);
+  border-color: goldenrod;
+  color: rgb(170, 170, 170);
 }
 
 .button {

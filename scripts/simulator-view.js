@@ -515,6 +515,12 @@ var MechView = MechView || (function() {
   var teamBurstDamageId = function(team) {
     return team + "-teamBurstDamage";
   }
+  var teamSettingsButtonId = function(team) {
+    return team + "-teamSettingsButton"
+  }
+  var teamSettingsId = function(team) {
+    return team + "-teamSettings";
+  }
   var addMechButtonMap = {};
   var addTeamStatsPanel = function(team, mechIds) {
     let teamStatsContainerPanelId = teamStatsContainerId(team);
@@ -552,17 +558,41 @@ var MechView = MechView || (function() {
         .removeClass("template")
         .appendTo("#" + teamMechPipsContainerDivId);
       //TODO: click handler on pip
-      //Mech health (liveMechs and teamHealthValue)
-      $("#" + teamStatsContainerPanelId + " [class~=liveMechs]")
-        .attr("id", teamLiveMechsId(team));
-      $("#" + teamStatsContainerPanelId + " [class~=teamHealthValue]")
-        .attr("id", teamHealthValueId(team));
-      //teamDPS
-      $("#" + teamStatsContainerPanelId + " [class~=teamDPSValue]")
-        .attr("id", teamDPSValueId(team));
-      //teamBurstDamage
-      $("#" + teamStatsContainerPanelId + " [class~=teamBurstDamageValue]")
-        .attr("id", teamBurstDamageId(team));
+    }
+    //Mech health (liveMechs and teamHealthValue)
+    $("#" + teamStatsContainerPanelId + " [class~=liveMechs]")
+      .attr("id", teamLiveMechsId(team));
+    $("#" + teamStatsContainerPanelId + " [class~=teamHealthValue]")
+      .attr("id", teamHealthValueId(team));
+    //teamDPS
+    $("#" + teamStatsContainerPanelId + " [class~=teamDPSValue]")
+      .attr("id", teamDPSValueId(team));
+    //teamBurstDamage
+    $("#" + teamStatsContainerPanelId + " [class~=teamBurstDamageValue]")
+      .attr("id", teamBurstDamageId(team));
+    //team settings
+    $("#" + teamStatsContainerPanelId + " [class~=teamSettingsButton]")
+      .attr("data-team", team)
+      .attr("id", teamSettingsButtonId(team))
+      .click(teamSettingsButtonHandler);
+    $("#" + teamStatsContainerPanelId + " [class~=teamSettings]")
+      .attr("data-team", team)
+      .attr("id", teamSettingsId(team));
+  }
+
+  var teamSettingsButtonHandler = function() {
+    let team = $(this).attr("data-team");
+    let teamStatsContainerPanelId = teamStatsContainerId(team);
+    let teamSettingsJQ =
+      $("#" + teamStatsContainerPanelId + " [class~=teamSettings]");
+    let teamSettingsArrowJQ =
+      $("#" + teamStatsContainerPanelId + " [class~=teamSettingsButtonArrow]");
+    if (teamSettingsJQ.hasClass("expanded")) {
+      teamSettingsJQ.removeClass("expanded");
+      teamSettingsArrowJQ.removeClass("expanded");
+    } else {
+      teamSettingsJQ.addClass("expanded");
+      teamSettingsArrowJQ.addClass("expanded");
     }
   }
 
@@ -645,7 +675,7 @@ var MechView = MechView || (function() {
     if (!addMechDialog_Load_Handler) {
       addMechDialog_Load_Handler =new AddMechDialog_Load(this);
     }
-    $("#addMechDialog-ok").attr("dFata-team", team);
+    $("#addMechDialog-ok").attr("data-team", team);
     addMechOKButton =
         new MechButton("addMechDialog-ok", addMechDialog_OK_Handler);
     $("#addMechDialog-cancel").attr("data-team", team);
