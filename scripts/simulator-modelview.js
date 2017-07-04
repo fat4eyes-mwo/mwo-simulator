@@ -191,8 +191,7 @@ var MechModelView = MechModelView || (function() {
     let dps = MechSimulatorLogic.getSimTime() > 0 ?
                 Number(totalTeamDamage)/MechSimulatorLogic.getSimTime() * 1000 : 0;
     MechView.updateTeamStats(team, mechHealthList,
-            dps,
-            totalTeamBurstDamage);
+            Number(totalTeamDamage), dps, totalTeamBurstDamage);
   }
 
   var updateDebugText = function (text) {

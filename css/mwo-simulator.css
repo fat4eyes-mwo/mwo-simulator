@@ -477,21 +477,33 @@ div {
 }
 
 .teamStats .teamHealth .liveMechs {
+  font-size: 1.1em;
 }
 
 .teamStats .teamHealth .teamHealthValue {
+  font-size: 0.9em;
 }
 
 .teamStats .teamDPS  {
+  font-size: 1.1em;
 }
 
 .teamStats .teamDPS .teamDPSValue {
 }
 
 .teamStats .teamBurstDamage  {
+  font-size: 0.9em;
 }
 
 .teamStats .teamBurstDamage .teamBurstDamageValue {
+
+}
+
+.teamStats .teamDamage {
+  font-size: 1.1em;
+}
+
+.teamStats .teamDamageValue {
 
 }
 

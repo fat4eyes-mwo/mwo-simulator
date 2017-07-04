@@ -509,6 +509,9 @@ var MechView = MechView || (function() {
   var teamHealthValueId = function(team) {
     return team + "-teamHealthValue";
   }
+  var teamDamageId = function(team) {
+    return team + "-teamDamage";
+  }
   var teamDPSValueId = function(team) {
     return team + "-teamDPSValue";
   }
@@ -564,6 +567,9 @@ var MechView = MechView || (function() {
       .attr("id", teamLiveMechsId(team));
     $("#" + teamStatsContainerPanelId + " [class~=teamHealthValue]")
       .attr("id", teamHealthValueId(team));
+    //teamDMG
+    $("#" + teamStatsContainerPanelId + " [class~=teamDamageValue]")
+      .attr("id", teamDamageId(team));
     //teamDPS
     $("#" + teamStatsContainerPanelId + " [class~=teamDPSValue]")
       .attr("id", teamDPSValueId(team));
@@ -721,7 +727,7 @@ var MechView = MechView || (function() {
   }
   var addMechButtonHandler;//set on click handler assignment
 
-  var updateTeamStats = function(team, mechHealthList, dps, burstDamage) {
+  var updateTeamStats = function(team, mechHealthList, damage, dps, burstDamage) {
     let totalTeamCurrHealth = 0;
     let totalTeamMaxHealth = 0;
     let liveMechs = 0;
@@ -762,8 +768,13 @@ var MechView = MechView || (function() {
     healthValueDiv.style.color = color;
     healthValueDiv.innerHTML = "(" + Number(teamHealthPercent * 100).toFixed(1) + "%)";
 
+    //damage
+    let teamDamageDiv = document.getElementById(teamDamageId(team));
+    teamDamageDiv.innerHTML = Number(damage).toFixed(1);
+    //dps
     let teamDPSValueDiv = document.getElementById(teamDPSValueId(team));
     teamDPSValueDiv.innerHTML = Number(dps).toFixed(1);
+    //burst
     let teamBurstDamageDiv = document.getElementById(teamBurstDamageId(team));
     teamBurstDamageDiv.innerHTML = Number(burstDamage).toFixed(1);
   }
