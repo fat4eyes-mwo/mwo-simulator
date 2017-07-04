@@ -241,9 +241,18 @@ var MechModelView = MechModelView || (function() {
   }
 
   class TeamReport {
-    constructor(mechReports) {
-      this.mechReports = mechReports;
+    constructor(team) {
+      this.team = team;
       this.weaponStats = new Map();
+      this.mechReports = [];
+      let mechTeam = MechModel.mechTeams[team];
+      for (let mech of mechTeam) {
+        let mechStats = mech.getMechState().mechStats;
+        let mechReport = new MechReport(mech.getMechId(),
+                                          mech.getTranslatedName(),
+                                          mechStats);
+        this.mechReports.push(mechReport);
+      }
       this.computeWeaponStats();
     }
     //consolidate all the weaponStats from the mechs
@@ -288,12 +297,8 @@ var MechModelView = MechModelView || (function() {
     getDPS() {
       return this.getTotalDamage() / MechSimulatorLogic.getSimTime() * 1000;
     }
-    getTotalMaxBurst() {
-      let totalBurst = 0;
-      for (let mechReport of this.mechReports) {
-        totalBurst += mechReport.getMaxBurstDamage();
-      }
-      return totalBurst;
+    getMaxBurst() {
+      return MechModel.getTeamStats(this.team).maxBurstDamage;
     }
   }
 
@@ -392,16 +397,7 @@ var MechModelView = MechModelView || (function() {
   }
 
   var getTeamReport = function(team) {
-    let mechTeam = MechModel.mechTeams[team];
-    let mechReports = [];
-    for (let mech of mechTeam) {
-      let mechStats = mech.getMechState().mechStats;
-      let mechReport = new MechReport(mech.getMechId(),
-                                        mech.getTranslatedName(),
-                                        mechStats);
-      mechReports.push(mechReport);
-    }
-    return new TeamReport(mechReports);
+    return new TeamReport(team);
   }
 
   return {

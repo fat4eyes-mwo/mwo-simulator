@@ -1,10 +1,22 @@
-@import url("https://fonts.googleapis.com/css?family=Orbitron");
+@import url('https://fonts.googleapis.com/css?family=Orbitron');
+$primary-font-color: rgb(170, 170, 170);
+$background-color: rgb(32, 32, 32);
+$off-background-color: rgb(64, 64, 64);
+$blue-team-color: rgb(30,144,255);
+$red-team-color: rgb(200,50,50);
+$heatbar-color: red;
+$heatbar-negative-color: $off-background-color;
+$cooldown-bar-color: rgb(255, 50, 50);
+$cooldown-bar-negative-color : $off-background-color;
 /*Main panel styles*/
 body {
-  background-color: #202020;
-  color: #aaaaaa;
+  background-color: $background-color;
+  color: $primary-font-color;
   font-family: sans-serif;
   font-size: 14px;
+}
+
+div {
 }
 
 .stylishText {
@@ -30,7 +42,11 @@ body {
 
 .byline {
   font-size: 0.8em;
-  color: #aaaaaa;
+  color: $primary-font-color;
+}
+
+.controlPanel {
+
 }
 
 .controlPanel .rangeLabel {
@@ -38,8 +54,8 @@ body {
   font-weight: bold;
 }
 
-.controlPanel .rangeInputContainer {
-  float: right;
+.controlPanel .rangeInputContainer{
+  float:right;
 }
 
 .controlPanel .rangeInput {
@@ -50,14 +66,14 @@ body {
 }
 
 .controlPanel .rangeInput.disabled {
-  background-color: #202020;
+  background-color: $background-color;
   border: none;
-  color: #aaaaaa;
+  color: $primary-font-color;
   font-weight: bold;
 }
 
 .controlPanel .simTimeContainer {
-  margin-top: 10px;
+  margin-top : 10px;
 }
 
 .controlPanel .simTime {
@@ -71,16 +87,19 @@ body {
 }
 
 .controlPanel .speedControl {
-  margin-top: 15px;
+  margin-top:15px;
 }
+
 
 .controlPanel .speedControl .startSimulationDivButton,
 .controlPanel .speedControl .pauseSimulationDivButton,
-.controlPanel .speedControl .stepSimulationDivButton {
+.controlPanel .speedControl .stepSimulationDivButton
+{
   height: 28px;
   margin-bottom: 2px;
   line-height: 18px;
 }
+
 
 .controlPanel .stateControl {
   margin-top: 15px;
@@ -90,14 +109,22 @@ body {
   margin-top: 15px;
 }
 
+.debugPanel {
+
+}
+
 .debugPanel .debugButton {
-  display: none;
+  display : none;
 }
 
 .debugPanel .debugText {
   width: 100%;
   height: 100%;
   overflow: auto;
+}
+
+.mechPanelList {
+
 }
 
 .mechPanel {
@@ -107,25 +134,30 @@ body {
 }
 
 #blueTeam .mechPanel {
-  border-color: dodgerblue;
+  border-color: $blue-team-color;
 }
 
 #redTeam .mechPanel {
-  border-color: #c83232;
+  border-color: $red-team-color;
+}
+
+.mechPanel .mechHealthAndWeapons {
+
 }
 
 .mechPanel .mechHealthAndWeapons.kia {
   opacity: 0.4;
 }
 
+
 .mechPanel .paperDollContainer {
   width: 65%;
-  display: inline-block;
+  display:inline-block;
   vertical-align: top;
 }
 
 .mechPanel .heatBarAndNumber {
-  display: inline-block;
+  display:inline-block;;
   width: 20%;
 }
 
@@ -136,6 +168,8 @@ body {
 
 .mechPanel .heatbarContainer .heatbarFrame {
   margin: auto;
+}
+.mechPanel .heatbarContainer .heatbarFrame .heatbar {
 }
 
 .mechPanel .heatNumber {
@@ -155,7 +189,7 @@ body {
 
 /*Paper doll style*/
 .paperDoll {
-  position: relative;
+  position:relative;
   height: 100px;
   margin: 0% auto;
 }
@@ -163,11 +197,12 @@ body {
 /*Special case for narrow screens (mobile)*/
 @media only screen and (max-width: 550px) {
   .paperDoll {
-    position: relative;
+    position:relative;
     height: 100px;
     width: 50%;
     margin: auto;
   }
+
   .mechPanel .heatBarAndNumber {
     float: right;
   }
@@ -183,69 +218,70 @@ body {
 .paperDoll .mechH,
 .paperDoll .mechRearLT,
 .paperDoll .mechRearRT,
-.paperDoll .mechRearCT {
+.paperDoll .mechRearCT
+{
   border-style: solid;
   border-width: 2px;
   border-radius: 5px;
-  border-color: #202020;
-  position: absolute;
+  border-color: $background-color;
+  position:absolute;
   transition: background-color 0.2s linear, border-color 0.2s linear;
 }
 
 .paperDoll .mechH {
-  top: 0%;
-  left: 39%;
+  top:0%;
+  left:39%;
   width: 10%;
-  height: 7%;
+  height:7%;
 }
 
 .paperDoll .mechLA {
   top: 14%;
-  left: 82%;
-  width: 6%;
-  height: 31%;
+  left:82%;
+  width:6%;
+  height:31%;
 }
 
 .paperDoll .mechLT {
   top: 14%;
-  left: 63%;
-  width: 10%;
-  height: 23%;
+  left:63%;
+  width:10%;
+  height:23%;
 }
 
 .paperDoll .mechCT {
   top: 14%;
-  left: 34%;
-  width: 19%;
-  height: 48%;
+  left:34%;
+  width:19%;
+  height:48%;
 }
 
 .paperDoll .mechRT {
   top: 14%;
-  left: 15%;
-  width: 10%;
-  height: 23%;
+  left:15%;
+  width:10%;
+  height:23%;
 }
 
 .paperDoll .mechRA {
   top: 14%;
-  left: 0%;
-  width: 6%;
-  height: 31%;
+  left:0%;
+  width:6%;
+  height:31%;
 }
 
 .paperDoll .mechLL {
   top: 55%;
-  left: 63%;
-  width: 13%;
-  height: 35%;
+  left:63%;
+  width:13%;
+  height:35%;
 }
 
 .paperDoll .mechRL {
   top: 55%;
-  left: 12%;
-  width: 13%;
-  height: 35%;
+  left:12%;
+  width:13%;
+  height:35%;
 }
 
 .mechHealthNumbers {
@@ -259,6 +295,7 @@ body {
   border-bottom: solid thin white;
 }
 
+
 .mechHealthNumbers .healthNumber {
   text-align: center;
   cursor: default;
@@ -268,17 +305,17 @@ body {
 .heatbarFrame {
   position: relative;
   height: 100px;
-  background-color: red;
+  background-color: $heatbar-color;
   width: 10px;
 }
 
 /*note: the heatbar is actually the empty top part of the heat guage. */
 .heatbar {
   top: 0%;
-  height: 50%;
+  height:50%;
   width: 100%;
-  left: 0%;
-  background-color: #404040;
+  left:0%;
+  background-color: $heatbar-negative-color;
 }
 
 /*Weapon panel styles*/
@@ -289,19 +326,26 @@ body {
   transition: background-color 0.3s ease-out;
 }
 
+.weaponName {
+}
+
+.weaponLocation {
+
+}
+
 .weaponCooldownFrame {
   margin-top: 5px;
   width: 50px;
   height: 5px;
-  background-color: #404040;
+  background-color: $cooldown-bar-negative-color;
   position: relative;
 }
 
 .weaponCooldownBar {
   background-color: red;
-  height: 100%;
+  height:100%;
   width: 0%;
-  position: absolute;
+  position:absolute;
   top: 0%;
   left: 0%;
 }
@@ -310,31 +354,45 @@ body {
   text-align: center;
 }
 
+.weaponPanelRow.Ready {
+}
+
 .weaponPanelRow.Cooldown {
-  color: #ff3232;
+  color : $cooldown-bar-color;
 }
 
 .weaponPanelRow.Firing {
   background-color: gray;
-  color: white;
+  color : white;
 }
 
 .weaponPanelRow.Disabled {
   opacity: 0.5;
-  color: gray;
+  color : gray;
 }
 
 .weaponPanelRow.Spooling {
-  color: white;
+  color : white;
 }
 
 /*Status panel styles*/
+.statusPanelContainer {
+
+}
+
+.statusPanel {
+
+}
+
 .statusPanel .row {
   margin-bottom: 2px;
 }
 
 .titlePanelContainer {
   margin-bottom: 3px;
+}
+
+.titlePanel {
 }
 
 .titlePanel .mechName a {
@@ -391,6 +449,8 @@ body {
   color: goldenrod;
 }
 
+
+
 .teamStats {
   padding-bottom: 5px;
 }
@@ -401,14 +461,13 @@ body {
 }
 
 .teamStats.blue .teamName {
-  color: dodgerblue;
+  color: $blue-team-color;
 }
-
 .teamStats.red .teamName {
-  color: #c83232;
+  color: $red-team-color;
 }
 
-.teamStats .teamStatsDetails {
+.teamStats .teamStatsDetails{
   font-size: 1em;
   font-weight: bold;
   font-family: Orbitron;
@@ -419,7 +478,7 @@ body {
 }
 
 .teamStats .mechPip {
-  margin-left: 1px;
+  margin-left : 1px;
   font-size: 1.2em;
 }
 
@@ -435,16 +494,27 @@ body {
   font-size: 0.9em;
 }
 
-.teamStats .teamDPS {
+.teamStats .teamDPS  {
   font-size: 1.1em;
 }
 
-.teamStats .teamBurstDamage {
+.teamStats .teamDPS .teamDPSValue {
+}
+
+.teamStats .teamBurstDamage  {
   font-size: 0.8em;
+}
+
+.teamStats .teamBurstDamage .teamBurstDamageValue {
+
 }
 
 .teamStats .teamDamage {
   font-size: 1.1em;
+}
+
+.teamStats .teamDamageValue {
+
 }
 
 .teamStats .teamSettingsButtonContainer {
@@ -454,11 +524,11 @@ body {
 }
 
 .teamStats .teamSettingsButton {
-  float: right;
+  float:right;
 }
 
 .teamStats .teamSettingsButtonArrow {
-  float: right;
+  float:right;
   color: gold;
   transition: all 0.5s;
   cursor: default;
@@ -470,13 +540,13 @@ body {
 }
 
 .teamSettings {
-  height: 0px;
+  height:0px;
   transition: height 0.5s ease;
-  overflow: hidden;
+  overflow:hidden;
 }
 
 .teamSettings.expanded {
-  overflow: hidden;
+  overflow:hidden;
   height: 120px;
 }
 
@@ -494,14 +564,14 @@ body {
 #blueTeamStatsContainer .teamTargetMechPatternLabel,
 #blueTeamStatsContainer .teamTargetMechComponentLabel,
 #blueTeamStatsContainer .teamAccuracyLabel {
-  color: dodgerblue;
+  color: $blue-team-color;
 }
 
 #redTeamStatsContainer .teamFirePatternLabel,
 #redTeamStatsContainer .teamTargetMechPatternLabel,
 #redTeamStatsContainer .teamTargetMechComponentLabel,
 #redTeamStatsContainer .teamAccuracyLabel {
-  color: #c83232;
+  color: $red-team-color;
 }
 
 .teamSettings .teamFirePatternValue,
@@ -510,10 +580,10 @@ body {
 .teamSettings .teamAccuracyValue {
   display: block;
   width: 100%;
-  background-color: #202020;
+  background-color: $background-color;
   border-color: goldenrod;
   border-width: thin;
-  color: #aaaaaa;
+  color: $primary-font-color;
   border-left: none;
   border-right: none;
   border-bottom: none;
@@ -537,7 +607,7 @@ body {
   border: solid thin black;
   border-radius: 5px;
   background-color: gold;
-  color: #202020;
+  color: $background-color;
   cursor: pointer;
   user-select: none;
   transition: background-color 0.4s ease;
@@ -545,7 +615,7 @@ body {
 
 .button:hover {
   font-weight: bold;
-  background-color: #ffff1e;
+  background-color: rgb(255,255,30);
 }
 
 .button.disabled {
@@ -554,9 +624,9 @@ body {
 }
 
 .textButton {
-  color: gold;
-  transition: color 0.4s ease;
-  cursor: pointer;
+    color: gold;
+    transition: color 0.4s ease;
+    cursor: pointer;
 }
 
 .textButton:hover {
@@ -584,21 +654,19 @@ body {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: black;
+  background-color: rgba(0, 0, 0, 1);
   background-color: rgba(0, 0, 0, 0.7);
 }
 
 .modalScreen .modalDialog {
-  background-color: #202020;
-  margin: 15% auto;
-  /* 15% from the top and centered */
+  background-color: $background-color;
+  margin: 15% auto; /* 15% from the top and centered */
   padding: 20px;
   border: 1px solid #888;
-  width: 40%;
-  /* Could be more or less, depending on screen size */
+  width: 40%; /* Could be more or less, depending on screen size */
   border-top-left-radius: 10px;
   border-bottom-right-radius: 10px;
-  border-color: #aaaaaa;
+  border-color: $primary-font-color;
 }
 
 .modalScreen .modalDialog.wide {
@@ -606,12 +674,20 @@ body {
   margin-top: 5%;
 }
 
-.addMechDialog.blue .addMechDialogTitle {
-  color: dodgerblue;
+.wideInputText {
 }
 
-.addMechDialog.red .addMechDialogTitle {
-  color: #c83232;
+
+.addMechDialogContainer {
+
+}
+
+.addMechDialog.blue .addMechDialogTitle{
+  color: $blue-team-color;
+}
+
+.addMechDialog.red .addMechDialogTitle{
+  color: $red-team-color;
 }
 
 #addMechDialog-text {
@@ -619,58 +695,38 @@ body {
   border: solid thin gold;
   padding: 3px;
   margin-top: 2px;
-  float: none;
+  float:none;
 }
 
 @keyframes buttonglow {
-  0% {
-    background-color: gold;
-  }
-  50% {
-    background-color: #ffff1e;
-  }
-  100% {
-    background-color: gold;
-  }
+  0% {background-color: gold;}
+  50% {background-color: rgb(255,255,30);}
+  100% {background-color: gold;}
 }
 
 @keyframes textglow {
-  0% {
-    color: goldenrod;
-  }
-  50% {
-    color: yellow;
-  }
-  100% {
-    color: goldenrod;
-  }
+  0% {color: goldenrod;}
+  50% {color: yellow;}
+  100% {color: goldenrod;}
 }
 
 @keyframes progressbarglow {
-  0% {
-    background-color: goldenrod;
-  }
-  50% {
-    background-color: yellow;
-  }
-  100% {
-    background-color: goldenrod;
-  }
+  0% {background-color: goldenrod;}
+  50% {background-color: yellow;}
+  100% {background-color: goldenrod;}
 }
 
+
 @keyframes errorblink {
-  50% {
-    background-color: red;
-    color: white;
-  }
+  50% {background-color: rgb(255, 0, 0); color: white;}
 }
 
 #addMechDialog-load {
-  float: right;
+  float:right;
 }
 
 #addMechDialog-load.loading {
-  cursor: none;
+  cursor:none;
   animation-duration: 1s;
   animation-name: buttonglow;
   animation-iteration-count: infinite;
@@ -691,6 +747,9 @@ body {
   animation-iteration-count: 1;
 }
 
+.loadingScreen {
+}
+
 #loadingScreenPaperDollContainer {
   width: 80px;
   height: 100px;
@@ -703,17 +762,25 @@ body {
   animation-duration: 1s;
   animation-name: textglow;
   animation-iteration-count: infinite;
-  color: goldenrod;
+  color:goldenrod;
 }
 
 .loadingScreenProgress {
-  margin: 5px auto;
+  margin : 5px auto;
   animation-duration: 1s;
   animation-name: progressbarglow;
   animation-iteration-count: infinite;
   background-color: gold;
   width: 0%;
   height: 3px;
+}
+
+.showReportDivButton {
+
+}
+
+.victoryReport {
+
 }
 
 .victoryReport .closeReportButton {
@@ -738,19 +805,24 @@ body {
   font-weight: bold;
 }
 
+.victoryReport .blueReportContainer,
+.victoryReport .redReportContainer {
+
+}
+
 .teamReport .teamName {
   font-size: 1.2em;
   font-weight: bold;
 }
 
 .teamReport.blue .teamName {
-  color: dodgerblue;
-  border-bottom: solid thin dodgerblue;
+  color: $blue-team-color;
+  border-bottom: solid thin $blue-team-color;
 }
 
 .teamReport.red .teamName {
-  color: #c83232;
-  border-bottom: solid thin #c83232;
+  color: $red-team-color;
+  border-bottom: solid thin $red-team-color;
 }
 
 .teamReport .summaryStats {
@@ -767,6 +839,9 @@ body {
   font-size: 1.2em;
 }
 
+.teamReport .label {
+
+}
 .teamReport .value {
   font-weight: bold;
 }
@@ -776,9 +851,9 @@ body {
 }
 
 .teamReport.blue .breakDownTitle {
-  color: dodgerblue;
+  color : $blue-team-color;
 }
 
 .teamReport.red .breakDownTitle {
-  color: #c83232;
+  color : $red-team-color;
 }

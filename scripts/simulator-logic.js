@@ -197,6 +197,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
       }
       if (willUpdateTeamStats[team]) {
         MechModelView.updateTeamStats(team);
+        MechModel.updateModelTeamStats(team);
       }
     }
 

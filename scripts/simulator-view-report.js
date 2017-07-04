@@ -51,13 +51,13 @@ var MechViewReport = MechViewReport || (function() {
 
       let totalDamage = teamReport.getTotalDamage();
       let dps = teamReport.getDPS();
-      let totalBurst = teamReport.getTotalMaxBurst();
+      let maxBurst = teamReport.getMaxBurst();
       $("#" + teamReportId + " [class~=damage]")
         .html(Number(totalDamage).toFixed(1));
       $("#" + teamReportId + " [class~=dps]")
         .html(Number(dps).toFixed(1))
       $("#" + teamReportId + " [class~=maxBurst]")
-        .html(Number(totalBurst).toFixed(1));
+        .html(Number(maxBurst).toFixed(1));
     }
 
     teamReportId(team) {

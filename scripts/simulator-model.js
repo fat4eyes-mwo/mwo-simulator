@@ -58,6 +58,7 @@ var MechModel = MechModel || (function () {
   var mechTeams = {};
   mechTeams[Team.BLUE] = [];
   mechTeams[Team.RED] = [];
+  var teamStats = {}; //format is {<team> : <teamStats>}
   var mechIdMap = {};
 
   class MechInfo {
@@ -782,6 +783,12 @@ var MechModel = MechModel || (function () {
     }
   }
 
+  class TeamStats {
+    constructor() {
+      this.maxBurstDamage = 0;
+    }
+  }
+
   //Get weapon, ammo and mech data from smurfy
   const SMURFY_PROXY_URL = "./php/smurfyproxy.php?path=";
   const WEAPON_DATA_PATH = "data/weapons.json";
@@ -1346,6 +1353,27 @@ var MechModel = MechModel || (function () {
     return false;
   }
 
+  //called every time team-level statistics need to be updated (e.g. when a weapon hits)
+  var updateModelTeamStats = function(team) {
+    let totalTeamBurstDamage = 0;
+    let teamStatEntry = teamStats[team];
+    if (!teamStatEntry) {
+      teamStatEntry = new TeamStats();
+      teamStats[team] = teamStatEntry;
+    }
+    for (let mech of mechTeams[team]) {
+      let burstDamage = mech.getMechState().mechStats.getBurstDamage(MechSimulatorLogic.getSimTime());
+      totalTeamBurstDamage += burstDamage;
+    }
+    if (totalTeamBurstDamage > teamStatEntry.maxBurstDamage) {
+      teamStatEntry.maxBurstDamage = totalTeamBurstDamage;
+    }
+  }
+
+  var getTeamStats = function(team) {
+    return teamStats[team];
+  }
+
   //returns {"i"=<id>, "l"=<loadout>}
   var parseSmurfyURL = function(url) {
     let urlMatcher = /https?:\/\/mwo\.smurfy-net\.de\/mechlab#i=([0-9]+)&l=([a-z0-9]+)/;
@@ -1420,6 +1448,7 @@ var MechModel = MechModel || (function () {
   var clearModel = function() {
     mechTeams[Team.BLUE] = [];
     mechTeams[Team.RED] = [];
+    teamStats = {};
   }
 
   //public members
@@ -1449,6 +1478,8 @@ var MechModel = MechModel || (function () {
     resetState : resetState,
     isTeamAlive : isTeamAlive,
     getAdjacentComponents : getAdjacentComponents,
+    updateModelTeamStats: updateModelTeamStats,
+    getTeamStats: getTeamStats,
     //Note: made public only because of testing. Should not be accessed outside this module
     baseMechStructure : baseMechStructure,
     baseMechArmor : baseMechArmor,
