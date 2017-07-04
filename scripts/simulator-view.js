@@ -174,14 +174,16 @@ var MechView = MechView || (function() {
     let armorLocationDiv = document.getElementById(armorLocationDivId);
     if (armorLocationDiv) {
       armorLocationDiv.innerHTML = Math.round(armor);
-      armorLocationDiv.setAttribute("title", (Number(armor)).toFixed(2));
+      //NOTE: Title change too expensive
+      // armorLocationDiv.setAttribute("title", (Number(armor)).toFixed(2));
       armorLocationDiv.style.color = armorColor;
     }
 
     let structureLocationDiv = document.getElementById(structureLocationDivId);
     if (structureLocationDiv) {
       structureLocationDiv.innerHTML = Math.round(structure)
-      structureLocationDiv.setAttribute("title", (Number(structure)).toFixed(2));
+      //NOTE: Title change too expensive
+      // structureLocationDiv.setAttribute("title", (Number(structure)).toFixed(2));
       structureLocationDiv.style.color = structureColor;
     }
 
@@ -219,6 +221,7 @@ var MechView = MechView || (function() {
   //percent is 0 to 1
   var setHeatbarValue = function (mechId, percent) {
     var invPercent = 1 - percent;
+    //NOTE: jquery too expensive
     // $("#" + heatbarId(mechId) + " > [class=heatbar]")
     //   .height( (100 * invPercent) + "%");
 
@@ -292,7 +295,10 @@ var MechView = MechView || (function() {
     cooldownDiv.style.width = (100*percent) + "%";
   }
   var setWeaponAmmo = function (mechId, weaponIdx, ammo) {
-    $("#" + weaponAmmoId(mechId, weaponIdx)).html(ammo != -1 ? ammo : "&#x221e;");
+    let weaponAmmoDiv = document.getElementById(weaponAmmoId(mechId, weaponIdx));
+    weaponAmmoDiv.innerHTML = ammo != -1 ? ammo : "&#x221e;";
+    //slow jquery
+    // $("#" + weaponAmmoId(mechId, weaponIdx)).html(ammo != -1 ? ammo : "&#x221e;");
   }
   var setWeaponState = function (mechId, weaponIdx, state) {
     //Note: the remove class string must include all the MechModel.WeaponCycle strings
