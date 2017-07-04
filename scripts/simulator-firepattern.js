@@ -23,7 +23,13 @@ var MechFirePattern = MechFirePattern || (function () {
     sortedByDmgPerHeat.sort(damagePerHeatComparator(range));
     let weaponsToFire = [];
     for (let weaponState of sortedByDmgPerHeat) {
-      if (!weaponState.isReady() || !willDoDamage(weaponState, range)) continue;
+      let weaponInfo = weaponState.weaponInfo;
+      let ammoState = mechState.ammoState;
+      if (!weaponState.isReady()  //not ready to fire
+          || !willDoDamage(weaponState, range) //will not do damage
+          //No ammo
+          || (weaponInfo.requiresAmmo() && ammoState.ammoCountForWeapon(weaponInfo.weaponId) <= 0)
+        ) continue; //skip weapon
       //fit as many ready weapons as possible into the available heat
       //starting with those with the best damage:heat ratio
       weaponsToFire.push(weaponState);
