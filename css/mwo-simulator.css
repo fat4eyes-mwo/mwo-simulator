@@ -565,6 +565,7 @@ div {
   border-left: none;
   border-right: none;
   border-bottom: none;
+  font-weight: bold;
 }
 
 .teamSettings .teamFirePatternDesc,

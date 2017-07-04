@@ -74,7 +74,7 @@ var MechModel = MechModel || (function () {
       this.heatsinkInfoList = heatsinkInfoList; //[Heatsink...]
       this.ammoBoxList = ammoBoxList; //[AmmoBox...]
       this.engineInfo = engineInfo;
-      this.tons = tons;
+      this.tons = Number(tons);
     }
   }
 
@@ -398,6 +398,17 @@ var MechModel = MechModel || (function () {
 
     clearMechStats() {
       this.mechStats = new MechStats();
+    }
+
+    getTotalDamageAtRange(range, stepDuration) {
+      let totalDamage = 0;
+      for (let weaponState of this.weaponStateList) {
+        if (!weaponState.active) {
+          continue;
+        }
+        totalDamage += Number(weaponState.weaponInfo.damageAtRange(range, stepDuration));
+      }
+      return totalDamage;
     }
   }
 

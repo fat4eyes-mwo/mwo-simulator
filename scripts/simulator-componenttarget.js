@@ -56,7 +56,34 @@ var MechTargetComponent = MechTargetComponent || (function () {
       }
     }
     return intactComponentList[Math.floor(Math.random() * intactComponentList.length)];
+  }
 
+  //component weights is an object of the form {<component> : <percentWeight>}.
+  //The percent weights of all the components in the object should be
+  //equal to one
+  var weightedRandom = function(componentWeights) {
+    let cumulativePercentMap = new Map();
+    let prevComponent;
+    for (let component in componentWeights) {
+      let weight = componentWeights[component];
+      if (!prevComponent) {
+        cumulativePercentMap.set(component, Number(weight));
+      } else {
+        cumulativePercentMap.set(component, Number(weight) + Number(cumulativePercentMap.get(prevComponent)));
+      }
+      prevComponent = component;
+    }
+
+    return function(sourceMech, targetMech) {
+      let rand = Math.random();
+      //relies on map insertion order to be the same order as the iterator
+      for (let component of cumulativePercentMap.keys()) {
+        if (Number(rand) < Number(cumulativePercentMap.get(component))) {
+          return component;
+        }
+      }
+      return null;
+    }
   }
 
   var getDefault = function() {
@@ -92,7 +119,20 @@ var MechTargetComponent = MechTargetComponent || (function () {
         pattern: randomAim,
         description: "Aim for a random component. Does not include the head.",
         default: false,
-      }
+      },
+      { id: "weightedRandomCT",
+        name: "Weighted Random (CT)",
+        pattern: weightedRandom(
+                      { "centre_torso": 0.6,
+                        "left_torso": 0.1,
+                        "right_torso": 0.1,
+                        "left_arm" : 0.05,
+                        "right_arm" : 0.05,
+                        "left_leg": 0.05,
+                        "right_leg" : 0.05}),
+        description: "60% chance to hit CT, 10% for side torsos, 5% for arms, 5% for legs",
+        default: false,
+      },
     ];
     return patternList;
   }

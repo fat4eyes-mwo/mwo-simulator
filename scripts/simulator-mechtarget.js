@@ -14,7 +14,6 @@ var MechTargetMech = MechTargetMech || (function () {
   }
 
   var targetRandomMech = function (mech, enemyMechList) {
-    let mechId = mech.getMechId();
     let liveEnemyMechs = [];
     for (let enemyMech of enemyMechList) {
       if (enemyMech.getMechState().isAlive()) {
@@ -23,6 +22,38 @@ var MechTargetMech = MechTargetMech || (function () {
     }
     let newTarget = liveEnemyMechs[Math.floor(Math.random() * liveEnemyMechs.length)];
     return newTarget;
+  }
+
+  var targetHighestFirepower = function (mech, enemyMechList) {
+    let maxFirepower;
+    let maxFirepowerMech;
+    let range = MechSimulatorLogic.getSimulatorParameters().range;
+    for (let enemyMech of enemyMechList) {
+      if (enemyMech.getMechState().isAlive()) {
+        let firepower = enemyMech.getMechState().getTotalDamageAtRange(range);
+        if (!maxFirepower || firepower > maxFirepower) {
+          maxFirepower = firepower;
+          maxFirepowerMech = enemyMech;
+        }
+      }
+    }
+    return maxFirepowerMech;
+  }
+
+  var targetHeaviest = function (mech, enemyMechList) {
+    let maxWeight;
+    let maxWeightMech;
+    for (let enemyMech of enemyMechList) {
+      if (enemyMech.getMechState().isAlive()) {
+        let mechInfo = enemyMech.getMechState().mechInfo;
+        let weight = mechInfo.tons;
+        if (!maxWeight || weight > maxWeight) {
+          maxWeight = weight;
+          maxWeightMech = enemyMech;
+        }
+      }
+    }
+    return maxWeightMech;
   }
 
   var getDefault = function() {
@@ -37,6 +68,20 @@ var MechTargetMech = MechTargetMech || (function () {
         pattern: targetMechsInOrder,
         description: "Target mechs from the top to the bottom of the list.",
         default: true,
+      },
+      {
+        id: "targetHighestFirepower",
+        name: "Highest Firepower First",
+        pattern: targetHighestFirepower,
+        description: "Target the enemy mech with the highest firepower at the current range.",
+        default: false,
+      },
+      {
+        id: "targetHeaviest",
+        name: "Heaviest First",
+        pattern: targetHeaviest,
+        description: "Target the heaviest mech first.",
+        default: false,
       },
       {
         id: "targetRandomMech",

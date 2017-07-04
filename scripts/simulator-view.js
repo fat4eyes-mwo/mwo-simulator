@@ -806,6 +806,7 @@ var MechView = MechView || (function() {
       let mechName = smurfyMechData.name;
       let newMechId = MechModel.generateMechId(team, MechView.loadedSmurfyLoadout);
       MechModel.addMech(newMechId, team, smurfyMechLoadout);
+      //TODO: set patterns of added mech to selected team patterns
       MechViewRouter.modifyAppState();
       MechModelView.refreshView();
       clickContext.hideAddMechDialog(team);
