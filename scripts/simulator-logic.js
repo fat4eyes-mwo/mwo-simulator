@@ -6,6 +6,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   var simTime = 0;
   var simulatorParameters;
   var weaponFireQueue = [];
+  var willUpdateTeamStats = {};  //Format: {<team> : boolean}
 
   const stepDuration = 50; //simulation tick length in ms
 
@@ -151,6 +152,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     weaponFireQueue = [];
     simTime = 0;
     clearMechStats();
+    willUpdateTeamStats = {};
     MechModelView.updateSimTime(simTime);
     //TODO: debug
     MechModelView.updateDebugText("");
@@ -159,7 +161,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   //Simulation step function. Called every tick
   var step = function() {
     let teams = [MechModel.Team.BLUE, MechModel.Team.RED];
-
+    willUpdateTeamStats = {};
     processWeaponFires();
 
     for (let team of teams) {
@@ -193,7 +195,9 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
         }
         MechModelView.updateMech(mech);
       }
-      MechModelView.updateTeamStats(team);
+      if (willUpdateTeamStats[team]) {
+        MechModelView.updateTeamStats(team);
+      }
     }
 
     simTime += stepDuration;
@@ -434,6 +438,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     mechStats.totalDamage += weaponFire.damageDone.totalDamage();
     mechStats.weaponFires.push(weaponFire);
     mechState.updateTypes[MechModel.UpdateType.STATS] = true;
+    willUpdateTeamStats[weaponFire.sourceMech.getMechTeam()] = true;
 
     console.log(weaponInfo.name + " completed. Total damage: "
               + weaponFire.damageDone.totalDamage() +
