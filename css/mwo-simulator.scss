@@ -8,6 +8,7 @@ $heatbar-color: red;
 $heatbar-negative-color: $off-background-color;
 $cooldown-bar-color: rgb(255, 50, 50);
 $cooldown-bar-negative-color : $off-background-color;
+$fancy-font-family: Orbitron;
 /*Main panel styles*/
 body {
   background-color: $background-color;
@@ -20,7 +21,7 @@ div {
 }
 
 .stylishText {
-  font-family: Orbitron;
+  font-family: $fancy-font-family;
   /*font-family: sans-serif;;*/
 }
 
@@ -470,7 +471,7 @@ div {
 .teamStats .teamStatsDetails{
   font-size: 1em;
   font-weight: bold;
-  font-family: Orbitron;
+  font-family: $fancy-font-family;
 }
 
 .teamStats .mechPipsContainer {

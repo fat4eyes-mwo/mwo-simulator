@@ -206,14 +206,13 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
 
     updateUIWeaponFires();
 
-    //TODO: Debug
     if (!MechModel.isTeamAlive(MechModel.Team.BLUE)) {
-      MechModelView.updateDebugText("RED TEAM WINS!");
       pauseSimulation();
+      MechModelView.updateVictory(MechModel.Team.RED);
     }
     if (!MechModel.isTeamAlive(MechModel.Team.RED)) {
-      MechModelView.updateDebugText("BLUE TEAM WINS!");
       pauseSimulation();
+      MechModelView.updateVictory(MechModel.Team.BLUE);
     }
 
   }

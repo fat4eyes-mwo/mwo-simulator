@@ -295,10 +295,12 @@ var MechModelView = MechModelView || (function() {
       return totalDamage;
     }
     getDPS() {
-      return this.getTotalDamage() / MechSimulatorLogic.getSimTime() * 1000;
+      let simTime = MechSimulatorLogic.getSimTime();
+      return simTime > 0 ? this.getTotalDamage() / simTime * 1000 : 0;
     }
     getMaxBurst() {
-      return MechModel.getTeamStats(this.team).maxBurstDamage;
+      let teamStats = MechModel.getTeamStats(this.team);
+      return teamStats ? teamStats.maxBurstDamage : 0;
     }
   }
 
@@ -317,6 +319,14 @@ var MechModelView = MechModelView || (function() {
     }
     getTimeOfDeath() {
       return this.mechStats.timeOfDeath;
+    }
+    getDPS() {
+      let endTime = this.mechStats.timeOfDeath ?
+                        this.mechStats.timeOfDeath
+                        : MechSimulatorLogic.getSimTime();
+      return endTime > 0 ?
+                getTotalDamage() / endTime * 1000
+                : 0;
     }
   }
 
@@ -400,6 +410,11 @@ var MechModelView = MechModelView || (function() {
     return new TeamReport(team);
   }
 
+  var updateVictory = function (team) {
+    //TODO: Implement
+    MechModelView.updateDebugText("Team Victory: " + team);
+  }
+
   return {
     refreshView : refreshView,
     updateHealth : updateHealth,
@@ -417,6 +432,7 @@ var MechModelView = MechModelView || (function() {
     setTeamAccuracyPattern: setTeamAccuracyPattern,
     setTeamMechTargetPattern: setTeamMechTargetPattern,
     getTeamReport : getTeamReport,
+    updateVictory: updateVictory,
   };
 
 })();
