@@ -87,7 +87,8 @@ var MechViewRouter = MechViewRouter || (function() {
     .done(function(data) {
       isAppStateModified = false;
       prevStateHash = data.statehash;
-      location.hash = HASH_STATE_FIELD + "=" + data.statehash;
+      window.history.replaceState(
+          null, "", "#" + HASH_STATE_FIELD + "=" + data.statehash);
       successCallback(data);
     })
     .fail(function(data) {
