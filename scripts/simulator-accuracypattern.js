@@ -108,8 +108,8 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
       {
         id:"accuracyTier3",
         name:"Tier 3",
-        pattern: accuracySpreadToAdjacent(0.5, 0.25),
-        description:"50% damage to target component, 25% to adjacent, 25% miss.",
+        pattern: accuracySpreadToAdjacent(0.6, 0.2),
+        description:"60% damage to target component, 20% to adjacent, 20% miss.",
         default:false,
       },
       {
