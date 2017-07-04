@@ -278,6 +278,23 @@ var MechModelView = MechModelView || (function() {
       }
       return ret;
     }
+    getTotalDamage() {
+      let totalDamage = 0;
+      for (let mechReport of this.mechReports) {
+        totalDamage += mechReport.getTotalDamage();
+      }
+      return totalDamage;
+    }
+    getDPS() {
+      return this.getTotalDamage() / MechSimulatorLogic.getSimTime() * 1000;
+    }
+    getTotalMaxBurst() {
+      let totalBurst = 0;
+      for (let mechReport of this.mechReports) {
+        totalBurst += mechReport.getMaxBurstDamage();
+      }
+      return totalBurst;
+    }
   }
 
   class MechReport {
@@ -286,6 +303,9 @@ var MechModelView = MechModelView || (function() {
       this.mechName = mechName;
       this.mechStats = mechStats; //DO NOT ACCESS DIRECTLY IN VIEW. Use the methods instead
       this.weaponReport = new WeaponReport(mechStats.weaponFires);
+    }
+    getMaxBurstDamage() {
+      return this.weaponReport.getMaxBurstDamage();
     }
     getTotalDamage() {
       return this.mechStats.totalDamage;

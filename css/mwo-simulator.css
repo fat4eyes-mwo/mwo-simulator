@@ -660,7 +660,7 @@ div {
 }
 
 .modalScreen .modalDialog.wide {
-  width: 80%;
+  width: 60%;
   margin-top: 5%;
 }
 
@@ -784,13 +784,66 @@ div {
   text-align: center;
 }
 
-.victoryReport .rangeTitle {
+.victoryReport .rangeTitle,
+.victoryReport .rangeValue {
   font-size: 1em;
+  width: 100%;
+  text-align: center;
+}
+
+.victoryReport .rangeValue {
   font-weight: bold;
-  margin:auto;
 }
 
 .victoryReport .blueReportContainer,
 .victoryReport .redReportContainer {
 
+}
+
+.teamReport .teamName {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.teamReport.blue .teamName {
+  color: rgb(30,144,255);
+  border-bottom: solid thin rgb(30,144,255);
+}
+
+.teamReport.red .teamName {
+  color: rgb(200,50,50);
+  border-bottom: solid thin rgb(200,50,50);
+}
+
+.teamReport .summaryStats {
+  margin-left: 10px;
+  margin-bottom: 5px;
+  vertical-align: top;
+}
+
+.teamReport .summaryStats .label {
+  font-size: 1em;
+}
+
+.teamReport .summaryStats .value {
+  font-size: 1.2em;
+}
+
+.teamReport .label {
+
+}
+.teamReport .value {
+  font-weight: bold;
+}
+
+.teamReport .breakDownTitle {
+  font-weight: bold;
+}
+
+.teamReport.blue .breakDownTitle {
+  color : rgb(30,144,255);
+}
+
+.teamReport.red .breakDownTitle {
+  color : rgb(200,50,50);
 }

@@ -1,6 +1,8 @@
 "use strict";
 
 //UI methods
+//TODO: Wrap panel construction in classes, and split them off from this file. It's getting too big.
+
 var MechView = MechView || (function() {
 
   // Paper doll UI functions
@@ -1131,37 +1133,14 @@ var MechView = MechView || (function() {
     progressBar.style.width = textPercent;
   }
 
-  var teamReportPanelId = function(team) {
-    return team + "ReportContainer";
-  }
   var showVictoryReport = function() {
     $("#" + MODAL_DIALOG_ID)
       .addClass("wide")
       .empty();
-    $("#victoryReport-template")
-      .clone(true)
-      .attr("id", "victoryReport")
-      .removeClass("template")
-      .appendTo("#" + MODAL_DIALOG_ID);
 
-    $("#victoryReport [class~=closeReportButton]")
-      .click(() => {
-        MechView.hideVictoryReport();
-      });
-
-    //TODO: Implement
-    let teamList = [MechModel.Team.BLUE, MechModel.Team.RED];
-    for (let team of teamList) {
-      addTeamReport(team, teamReportPanelId(team));
-    }
+    let teamReport = new MechViewReport.VictoryReport(MODAL_DIALOG_ID);
 
     $("#" + MODAL_SCREEN_ID).css("display", "block");
-  }
-
-  var addTeamReport = function(team, reportPanelId) {
-    let teamReport = MechModelView.getTeamReport(team);
-    let teamWeaponStats = teamReport.getWeaponStats();
-    console.log("debug");
   }
 
   var hideVictoryReport = function() {

@@ -24,6 +24,7 @@
     <script src="scripts/util.js"></script>
     <script src="scripts/simulator-view.js"></script>
     <script src="scripts/simulator-view-router.js"></script>
+    <script src="scripts/simulator-view-report.js"></script>
     <script src="scripts/simulator-model.js"></script>
     <script src="scripts/simulator-modelview.js"></script>
     <script src="scripts/simulator-firepattern.js"></script>
@@ -387,7 +388,8 @@
         <div class="victorTitle stylishText">Draw</div>
       </div>
       <div class="row">
-          <div class="rangeTitle"></div>
+          <div class="rangeTitle">Range:</div>
+          <div class="rangeValue"></div>
       </div>
       <div class="row">
           <div class="blueReportContainer column column-6">
@@ -395,6 +397,25 @@
           <div class="redReportContainer column column-6">
           </div>
       </div>
+    </div>
+
+    <!-- Team report template -->
+    <div id="teamReport-template" class="template teamReport">
+      <div class="row teamName stylishText">
+      </div>
+      <div class="summaryStats row">
+        <div class="label column column-1">DMG: </div>
+        <div class="damage value column column-2"></div>
+
+        <div class="label column column-1">DPS: </div>
+        <div class="dps value column column-2"></div>
+
+        <div class="label column column-1">Burst: </div>
+        <div class="maxBurst value column column-2"></div>
+      </div>
+      <div class="breakDownTitle row">Damage Breakdown</div>
+      <div class="mechReportContainer row"></div>
+      <div class="weaponReportContainer row"></div>
     </div>
 
   </body>
