@@ -845,7 +845,8 @@ var MechView = MechView || (function() {
       //TODO: set patterns of added mech to selected team patterns
       setSelectedTeamPatterns(team);
       MechViewRouter.modifyAppState();
-      MechModelView.refreshView();
+      //TODO: should not require a full view refresh. See what can be done.
+      MechModelView.refreshView(true);
       clickContext.hideAddMechDialog(team);
     }
   };
@@ -925,7 +926,9 @@ var MechView = MechView || (function() {
       MechViewRouter.modifyAppState();
       let mechPanelDivId = mechPanelId(mechId);
       $("#" + mechPanelDivId).remove();
-      MechModelView.refreshView();
+      //TODO: should not require a full view refresh. Modify updateTeamStats so
+      //the number of mechpips is consistent when a mech is deleted
+      MechModelView.refreshView(true);
     };
   }
   var deleteMechButton_Handler; //singleton
@@ -1041,7 +1044,8 @@ var MechView = MechView || (function() {
     $("#resetSimulationDivButton").click(() => {
       MechModel.resetState();
       MechSimulatorLogic.resetSimulation();
-      MechModelView.refreshView();
+      //TODO: doesn't need to refresh entire view, see what can be isolated
+      MechModelView.refreshView(false);
     });
   }
 

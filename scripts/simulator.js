@@ -43,7 +43,7 @@ var MechSimulator = MechSimulator || (function() {
   }
 
   function initUI() {
-    MechModelView.refreshView();
+    MechModelView.refreshView(true);
   }
 
   function main() {

@@ -20,7 +20,7 @@ return {
       MechModel.addMech("testBattlemasterId", MechModel.Team.RED, DummyBattleMaster);
       MechModel.addMech("testShadowhawkId", MechModel.Team.RED, DummyShadowhawk);
 
-      MechModelView.refreshView();
+      MechModelView.refreshView(true);
 
       MechView.initHandlers();
 
@@ -105,11 +105,11 @@ return {
       MechModel.addMech("testBattlemasterId", MechModel.Team.RED, DummyBattleMaster);
       MechModel.addMech("testShadowhawkId", MechModel.Team.RED, DummyShadowhawk);
 
-      MechModelView.refreshView();
+      MechModelView.refreshView(true);
 
       $("#resetState").removeClass("debugButton").click(() => {
         MechModel.resetState();
-        MechModelView.refreshView();
+        MechModelView.refreshView(true);
       });
 
       $("#testModelView").removeClass("debugButton").click(() => {
@@ -283,11 +283,11 @@ return {
       MechView.hideLoadingScreen();
 
       MechTest.initTestModelState();
-      MechModelView.refreshView();
+      MechModelView.refreshView(true);
 
       $("#resetState").removeClass("debugButton").click(() => {
         MechModel.resetState();
-        MechModelView.refreshView();
+        MechModelView.refreshView(true);
       });
 
       $("#runSimulationButton").removeClass("debugButton").click(() => {
@@ -307,7 +307,7 @@ return {
       });
 
       $("#refreshUIButton").removeClass("debugButton").click(() => {
-        MechModelView.refreshView();
+        MechModelView.refreshView(true);
       });
 
       $("#saveStateButton").removeClass("debugButton").click(() => {
@@ -337,7 +337,7 @@ return {
         MechViewRouter.loadAppState(hashState,
           function(data) {
             console.log("Success on load app state. Data: " + data);
-            MechModelView.refreshView();
+            MechModelView.refreshView(true);
           },
           function(data) {
             console.log("Fail on load app state. Data: " + data);
@@ -375,7 +375,7 @@ return {
         MechViewRouter.loadAppState(statehash,
           function(data) {
             console.log("Success on load app state. Data: " + data);
-            MechModelView.refreshView();
+            MechModelView.refreshView(true);
           },
           function(data) {
             console.log("Fail on load app state. Data: " + data);
@@ -414,7 +414,7 @@ return {
         MechViewRouter.loadAppState(hashState,
           function(data) {
             console.log("Success on load app state. Data: " + data);
-            MechModelView.refreshView();
+            MechModelView.refreshView(true);
           },
           function(data) {
             console.log("Fail on load app state. Data: " + data);

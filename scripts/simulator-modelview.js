@@ -4,17 +4,23 @@
 var MechModelView = MechModelView || (function() {
 
   //clears the view and recreates all UI elements
-  var refreshView = function () {
+  var refreshView = function (recreateUI = true) {
     let mechTeamList = [MechModel.Team.BLUE, MechModel.Team.RED];
     for (let team of mechTeamList) {
-      MechView.clear(team);
+      if (recreateUI) {
+        MechView.clear(team);
+      }
       let mechIdList = [];
       for (let mech of MechModel.mechTeams[team]) {
         mechIdList.push(mech.getMechId());
       }
-      MechView.addTeamStatsPanel(team, mechIdList);
+      if (recreateUI) {
+        MechView.addTeamStatsPanel(team, mechIdList);
+      }
       for (let mech of MechModel.mechTeams[team]) {
-        MechView.addMechPanel(mech, team);
+        if (recreateUI) {
+          MechView.addMechPanel(mech, team);
+        }
         updateAll(mech);
       }
       updateTeamStats(team);

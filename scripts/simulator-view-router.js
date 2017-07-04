@@ -267,7 +267,7 @@ var MechViewRouter = MechViewRouter || (function() {
       loadAppState(newHash,
         function(data) {
           //success
-          MechModelView.refreshView();
+          MechModelView.refreshView(true);
           console.log("Hash change state load success: " + newHash);
         },
         function(data) {
