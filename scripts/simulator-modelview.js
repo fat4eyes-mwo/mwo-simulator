@@ -240,6 +240,150 @@ var MechModelView = MechModelView || (function() {
     }
   }
 
+  class TeamReport {
+    constructor(mechReports) {
+      this.mechReports = mechReports;
+      this.weaponStats = new Map();
+      this.computeWeaponStats();
+    }
+    //consolidate all the weaponStats from the mechs
+    computeWeaponStats() {
+      for (let mechReport of this.mechReports) {
+        let mechWeaponStats = mechReport.weaponReport.weaponStats;
+        for (let weaponId of mechWeaponStats.keys()) {
+          let weaponStat = this.weaponStats.get(weaponId);
+          let mechWeaponStat = mechWeaponStats.get(weaponId);
+          if (!weaponStat) {
+            //create new entry to avoid changing the contents of mechWeaponStats
+            weaponStat = new WeaponStat(mechWeaponStat.name,
+                              mechWeaponStat.count,
+                              mechWeaponStat.damage,
+                              mechWeaponStat.dps);
+            this.weaponStats.set(weaponId, weaponStat);
+          } else {
+            weaponStat.damage += mechWeaponStat.damage;
+            weaponStat.dps = (weaponStat.dps * weaponStat.count
+                                + mechWeaponStat.dps * mechWeaponStat.count) /
+                                (weaponStat.count + mechWeaponStat.count);
+            weaponStat.count += mechWeaponStat.count;
+          }
+        }
+      }
+    }
+    //returns [{name: <weaponName>, damage: <weaponDamage>, dps: <weaponDPS>}]
+    getWeaponStats() {
+      let ret = [];
+      for (let stats of this.weaponStats.values()) {
+        ret.push(stats);
+      }
+      return ret;
+    }
+  }
+
+  class MechReport {
+    constructor(mechId, mechName, mechStats) {
+      this.mechId = mechId;
+      this.mechName = mechName;
+      this.mechStats = mechStats; //DO NOT ACCESS DIRECTLY IN VIEW. Use the methods instead
+      this.weaponReport = new WeaponReport(mechStats.weaponFires);
+    }
+    getTotalDamage() {
+      return this.mechStats.totalDamage;
+    }
+    getTimeOfDeath() {
+      return this.mechStats.timeOfDeath;
+    }
+  }
+
+  class WeaponReport {
+    constructor(weaponFires) {
+      this.weaponFires = weaponFires; //DO NOT ACCESS THIS DIRECTLY IN VIEW. Use the methods instead
+      this.maxBurstDamage = null; //will be filled in by computeWeaponStats
+      this.weaponStats = new Map(); //weaponId -> {translatedName, count, damage, dps}
+      this.computeWeaponStats();
+    }
+    computeWeaponStats() {
+      let burstDamageStartIdx = null;
+      for (let idx in this.weaponFires) {
+        let weaponFire = this.weaponFires[idx];
+        let weaponInfo = weaponFire.weaponState.weaponInfo;
+        let weaponStat = this.weaponStats.get(weaponInfo.weaponId);
+        let mechState = weaponFire.sourceMech.getMechState();
+        //Latest time the weapon's mech was alive. Used to calculate DPS
+        let endTime = mechState.isAlive() ?
+                          MechSimulatorLogic.getSimTime() :
+                          mechState.mechStats.timeOfDeath;
+        if (!weaponStat) {
+          weaponStat = new WeaponStat(
+                            weaponInfo.translatedName,
+                            1,
+                            weaponFire.damageDone.totalDamage(),
+                            weaponFire.damageDone.totalDamage() / endTime * 1000);
+          this.weaponStats.set(weaponInfo.weaponId, weaponStat);
+        } else {
+          //Add to weapon damage, count and recompute DPS
+          weaponStat.count ++;
+          weaponStat.damage += weaponFire.damageDone.totalDamage();
+          let currDPS = weaponFire.damageDone.totalDamage() / endTime * 1000;
+          weaponStat.dps = ((weaponStat.dps * (weaponStat.count - 1)) + currDPS) / weaponStat.count;
+        }
+
+        //Compute burst damage
+        if (!burstDamageStartIdx) {
+          this.maxBurstDamage = weaponFire.damageDone.totalDamage();
+          burstDamageStartIdx = idx;
+        } else {
+          let currTime = weaponFire.createTime;
+          let burstInterval = MechModel.BURST_DAMAGE_INTERVAL;
+          while ((currTime - this.weaponFires[burstDamageStartIdx].createTime) > burstInterval) {
+            burstDamageStartIdx++;
+          }
+          let currBurstDamage = 0;
+          for (let burstIdx = burstDamageStartIdx; burstIdx <= idx; burstIdx++) {
+            currBurstDamage += this.weaponFires[burstIdx].damageDone.totalDamage();
+          }
+          if (currBurstDamage > this.maxBurstDamage) {
+            this.maxBurstDamage = currBurstDamage;
+          }
+        }
+      }
+    }
+
+    getMaxBurstDamage() {
+      return this.maxBurstDamage;
+    }
+    //returns [{name: <weaponName>, damage: <weaponDamage>, dps: <weaponDPS>}]
+    getWeaponStats() {
+      let ret = [];
+      for (let stats of this.weaponStats.values()) {
+        ret.push(stats);
+      }
+      return ret;
+    }
+  }
+
+  class WeaponStat {
+    constructor(name, count, damage, dps) {
+      this.name = name;
+      this.count = count;
+      this.damage = damage;
+      this.dps = dps;
+    }
+  }
+
+  var getTeamReport = function(team) {
+    let mechTeam = MechModel.mechTeams[team];
+    let mechReports = [];
+    for (let mech of mechTeam) {
+      let mechStats = mech.getMechState().mechStats;
+      let mechReport = new MechReport(mech.getMechId(),
+                                        mech.getTranslatedName(),
+                                        mechStats);
+      mechReports.push(mechReport);
+    }
+    return new TeamReport(mechReports);
+  }
+
   return {
     refreshView : refreshView,
     updateHealth : updateHealth,
@@ -256,6 +400,7 @@ var MechModelView = MechModelView || (function() {
     setTeamComponentTargetPattern: setTeamComponentTargetPattern,
     setTeamAccuracyPattern: setTeamAccuracyPattern,
     setTeamMechTargetPattern: setTeamMechTargetPattern,
+    getTeamReport : getTeamReport,
   };
 
 })();

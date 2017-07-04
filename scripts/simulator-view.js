@@ -835,7 +835,8 @@ var MechView = MechView || (function() {
     return function() {
       let team = $(this).data('team');
       let url = $("#addMechDialog-text").val()
-      console.log("Ok. team: " + team + " URL: " + url);
+      console.log("Mech loaded. team: " + team + " URL: " + url);
+      //TODO: Avoid accessing MechModel directly here. Create a method in ModelView to do this
       let smurfyMechLoadout = MechView.loadedSmurfyLoadout;
       let smurfyMechData = MechModel.getSmurfyMechData(smurfyMechLoadout.mech_id);
       let mechTranslatedName = smurfyMechData.translated_name;
@@ -1047,6 +1048,10 @@ var MechView = MechView || (function() {
       //TODO: doesn't need to refresh entire view, see what can be isolated
       MechModelView.refreshView(false);
     });
+
+    $("#showReportDivButton").click(() => {
+      MechView.showVictoryReport();
+    });
   }
 
   var initMiscControl = function() {
@@ -1126,6 +1131,44 @@ var MechView = MechView || (function() {
     progressBar.style.width = textPercent;
   }
 
+  var teamReportPanelId = function(team) {
+    return team + "ReportContainer";
+  }
+  var showVictoryReport = function() {
+    $("#" + MODAL_DIALOG_ID)
+      .addClass("wide")
+      .empty();
+    $("#victoryReport-template")
+      .clone(true)
+      .attr("id", "victoryReport")
+      .removeClass("template")
+      .appendTo("#" + MODAL_DIALOG_ID);
+
+    $("#victoryReport [class~=closeReportButton]")
+      .click(() => {
+        MechView.hideVictoryReport();
+      });
+
+    //TODO: Implement
+    let teamList = [MechModel.Team.BLUE, MechModel.Team.RED];
+    for (let team of teamList) {
+      addTeamReport(team, teamReportPanelId(team));
+    }
+
+    $("#" + MODAL_SCREEN_ID).css("display", "block");
+  }
+
+  var addTeamReport = function(team, reportPanelId) {
+    let teamReport = MechModelView.getTeamReport(team);
+    let teamWeaponStats = teamReport.getWeaponStats();
+    console.log("debug");
+  }
+
+  var hideVictoryReport = function() {
+    $("#" + MODAL_SCREEN_ID).css("display", "none");
+    $("#" + MODAL_DIALOG_ID).removeClass("wide").empty();
+  }
+
   //public members
   return {
     setPaperDollArmor : setPaperDollArmor,
@@ -1154,6 +1197,8 @@ var MechView = MechView || (function() {
     showLoadingScreen : showLoadingScreen,
     updateLoadingScreenProgress: updateLoadingScreenProgress,
     hideLoadingScreen : hideLoadingScreen,
+    showVictoryReport : showVictoryReport,
+    hideVictoryReport: hideVictoryReport,
 
     //functions that should be private but I need to acceess (usually in handlers)
     loadedSmurfyLoadout: null,

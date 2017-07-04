@@ -767,6 +767,7 @@ var MechModel = MechModel || (function () {
       this.weaponFires = [];
       this.timeOfDeath = null;
     }
+    //assumes simTime >= createTime of last element in the weaponFire list
     getBurstDamage(simTime) {
       let burstDamage = 0;
       for (let idx = this.weaponFires.length - 1; idx > 0; idx--) {
@@ -1433,6 +1434,7 @@ var MechModel = MechModel || (function () {
     WeaponDamage : WeaponDamage,
     Mech : Mech,
     WeaponInfo : WeaponInfo,
+    BURST_DAMAGE_INTERVAL: BURST_DAMAGE_INTERVAL,
     mechTeams : mechTeams,
     initModelData : initModelData,
     initDummyModelData : initDummyModelData,

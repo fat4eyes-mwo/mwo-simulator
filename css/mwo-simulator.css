@@ -659,6 +659,11 @@ div {
   border-color: rgb(170, 170, 170);
 }
 
+.modalScreen .modalDialog.wide {
+  width: 80%;
+  margin-top: 5%;
+}
+
 .wideInputText {
 }
 
@@ -758,4 +763,34 @@ div {
   background-color: gold;
   width: 0%;
   height: 3px;
+}
+
+.showReportDivButton {
+
+}
+
+.victoryReport {
+
+}
+
+.victoryReport .closeReportButton {
+  float: right;
+}
+
+.victoryReport .victorTitle {
+  font-size: 1.5em;
+  font-weight: bold;
+  width: 100%;
+  text-align: center;
+}
+
+.victoryReport .rangeTitle {
+  font-size: 1em;
+  font-weight: bold;
+  margin:auto;
+}
+
+.victoryReport .blueReportContainer,
+.victoryReport .redReportContainer {
+
 }
