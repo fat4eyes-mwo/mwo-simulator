@@ -619,13 +619,21 @@ var MechView = MechView || (function() {
     ];
   }
 
-  var selectedPatterns = {}; //format is {<team>: {<patternType>: <pattern>}}
+  var selectedPatterns = {}; //format is {<team>: {<patternTypeId>: <pattern>, ...}}
   var patternLists = {} //format is {<patternTypeId>: [patternList]}
 
   var findPatternWithId = function(patternId, patternList) {
     for (let entry of patternList) {
       if (entry.id === patternId) {
         return entry.pattern;
+      }
+    }
+    return null;
+  }
+  var findPatternTypeWithId = function(patternTypeId) {
+    for (let patternType of patternTypes) {
+      if (patternType.id === patternTypeId) {
+        return patternType;
       }
     }
     return null;
@@ -675,6 +683,17 @@ var MechView = MechView || (function() {
       let pattern = findPatternWithId(selectedValue, patternLists[patternType.id]);
       patternType.setTeamPatternFunction(team, pattern);
     });
+  }
+
+  //assigns the selected patterns for the given team
+  var setSelectedTeamPatterns = function(team) {
+    let currSelectedPatterns = selectedPatterns[team];
+    for (let patternTypeId in currSelectedPatterns) {
+      let patternType = findPatternTypeWithId(patternTypeId);
+      let patternId = currSelectedPatterns[patternTypeId];
+      let pattern = findPatternWithId(patternId, patternLists[patternType.id]);
+      patternType.setTeamPatternFunction(team, pattern);
+    }
   }
 
   var teamSettingsButtonHandler = function() {
@@ -807,6 +826,7 @@ var MechView = MechView || (function() {
       let newMechId = MechModel.generateMechId(team, MechView.loadedSmurfyLoadout);
       MechModel.addMech(newMechId, team, smurfyMechLoadout);
       //TODO: set patterns of added mech to selected team patterns
+      setSelectedTeamPatterns(team);
       MechViewRouter.modifyAppState();
       MechModelView.refreshView();
       clickContext.hideAddMechDialog(team);

@@ -1,6 +1,7 @@
 //5 dire vs 20 urbies
 //http://localhost:8181/#s=a14468793b3ddb40bb7ec6f197b8d93d5785ff23f648caf2e9b26c342624a7c8
-
+//clan vs is
+//http://localhost:8181/#s=19eaa8f895cce192fd74796522bc4e86039c90a7cbd75c1f3e1edd175383317d
 
 //Gauss PPC summoner
 //http://mwo.smurfy-net.de/mechlab#i=189&l=8d4bb3e475863c7fe5c173c7cc62b9fc86177bda
