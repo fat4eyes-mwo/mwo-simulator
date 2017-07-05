@@ -279,6 +279,7 @@ var MechModelView = MechModelView || (function() {
         }
       }
     }
+
     //returns [{name: <weaponName>, damage: <weaponDamage>, dps: <weaponDPS>}]
     getWeaponStats() {
       let ret = [];
@@ -325,7 +326,7 @@ var MechModelView = MechModelView || (function() {
                         this.mechStats.timeOfDeath
                         : MechSimulatorLogic.getSimTime();
       return endTime > 0 ?
-                getTotalDamage() / endTime * 1000
+                this.getTotalDamage() / endTime * 1000
                 : 0;
     }
   }
@@ -411,8 +412,18 @@ var MechModelView = MechModelView || (function() {
   }
 
   var updateVictory = function (team) {
-    //TODO: Implement
-    MechModelView.updateDebugText("Team Victory: " + team);
+    MechView.showVictoryReport();
+    // MechModelView.updateDebugText("Team Victory: " + team);
+  }
+
+  var getVictorTeam = function () {
+    if (!MechModel.isTeamAlive(MechModel.Team.BLUE)) {
+      return MechModel.Team.RED;
+    }
+    if (!MechModel.isTeamAlive(MechModel.Team.RED)) {
+      return MechModel.Team.BLUE;
+    }
+    return null;
   }
 
   return {
@@ -433,6 +444,7 @@ var MechModelView = MechModelView || (function() {
     setTeamMechTargetPattern: setTeamMechTargetPattern,
     getTeamReport : getTeamReport,
     updateVictory: updateVictory,
+    getVictorTeam : getVictorTeam,
   };
 
 })();

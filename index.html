@@ -381,8 +381,8 @@
 
     <!-- Victory report template -->
     <div id="victoryReport-template" class="template victoryReport">
-      <div class="row">
-        <div class="closeReportButton button">Close</close>
+      <div class="buttonBar row">
+        <div class="closeReportButton button">Close</div>
       </div>
       <div class="row">
         <div class="victorTitle stylishText">Draw</div>
@@ -413,10 +413,42 @@
         <div class="label column column-1">Burst: </div>
         <div class="maxBurst value column column-2"></div>
       </div>
-      <div class="breakDownTitle row">Damage Breakdown</div>
-      <div class="mechReportContainer row"></div>
-      <div class="weaponReportContainer row"></div>
+      <div class="breakDownTitle row">Damage Breakdown By Mech</div>
+      <div class="mechBreakdownContainer row"></div>
+      <div class="breakDownTitle row">Damage Breakdown By Weapon</div>
+      <div class="weaponBreakdownContainer row"></div>
     </div>
+
+
+    <!-- Mech damage breakdown templates -->
+      <div id = "mechBreakdownHeader-template" class="mechBreakdownHeader tableHeader template row">
+        <div class="column column-4">Mech</div>
+        <div class="numberValue column column-2">DMG</div>
+        <div class="numberValue column column-2">DPS</div>
+        <div class="numberValue column column-2">Burst</div>
+        <div class="numberValue column column-2">Time Alive</div>
+      </div>
+      <div id = "mechBreakdownRow-template" class="mechBreakdownRow tableRow template row">
+        <div class="name column column-4"></div>
+        <div class="numberValue damage column column-2"></div>
+        <div class="numberValue dps column column-2"></div>
+        <div class="numberValue burst column column-2"></div>
+        <div class="numberValue timeAlive column column-2"></div>
+      </div>
+
+    <!-- Weapon breakdown row template -->
+      <div id = "weaponBreakdownHeader-template" class="weaponBreakdownHeader tableHeader template row">
+        <div class="column column-4">Weapon</div>
+        <div class="numberValue column column-2">DMG</div>
+        <!-- <div class="numberValue column column-2">DPS</div> -->
+        <div class="numberValue column column-2">Times Fired</div>
+      </div>
+      <div id = "weaponBreakdownRow-template" class="weaponBreakdownRow tableRow template row">
+        <div class="name column column-4"></div>
+        <div class="numberValue damage column column-2"></div>
+        <!-- <div class="numberValue dps column column-2"></div> -->
+        <div class="numberValue count column column-2"></div>
+      </div>
 
   </body>
 </html>

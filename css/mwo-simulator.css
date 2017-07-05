@@ -602,7 +602,7 @@ body {
 }
 
 .modalScreen .modalDialog.wide {
-  width: 60%;
+  width: 80%;
   margin-top: 5%;
 }
 
@@ -716,20 +716,33 @@ body {
   height: 3px;
 }
 
+.victoryReport .buttonBar {
+  position: absolute;
+  width: 80%;
+}
+
 .victoryReport .closeReportButton {
   float: right;
 }
 
 .victoryReport .victorTitle {
-  font-size: 1.5em;
+  font-size: 2em;
   font-weight: bold;
   width: 100%;
   text-align: center;
 }
 
+.victoryReport .victorTitle.blue {
+  color: dodgerblue;
+}
+
+.victoryReport .victorTitle.red {
+  color: #c83232;
+}
+
 .victoryReport .rangeTitle,
 .victoryReport .rangeValue {
-  font-size: 1em;
+  font-size: 1.4em;
   width: 100%;
   text-align: center;
 }
@@ -739,7 +752,7 @@ body {
 }
 
 .teamReport .teamName {
-  font-size: 1.2em;
+  font-size: 1.4em;
   font-weight: bold;
 }
 
@@ -764,7 +777,7 @@ body {
 }
 
 .teamReport .summaryStats .value {
-  font-size: 1.2em;
+  font-size: 1.4em;
 }
 
 .teamReport .value {
@@ -773,6 +786,7 @@ body {
 
 .teamReport .breakDownTitle {
   font-weight: bold;
+  margin-top: 5px;
 }
 
 .teamReport.blue .breakDownTitle {
@@ -781,4 +795,26 @@ body {
 
 .teamReport.red .breakDownTitle {
   color: #c83232;
+}
+
+.teamReport .mechBreakdownContainer,
+.teamReport .weaponBreakdownContainer {
+  margin-left: 10px;
+}
+
+.teamReport .tableHeader {
+  font-weight: bold;
+}
+
+.teamReport.blue .tableHeader {
+  border-bottom: solid thin dodgerblue;
+}
+
+.teamReport.red .tableHeader {
+  border-bottom: solid thin #c83232;
+}
+
+.teamReport .tableRow {
+  font-size: 0.9em;
+  margin-top: 2px;
 }

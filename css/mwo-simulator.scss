@@ -9,6 +9,7 @@ $heatbar-negative-color: $off-background-color;
 $cooldown-bar-color: rgb(255, 50, 50);
 $cooldown-bar-negative-color : $off-background-color;
 $fancy-font-family: Orbitron;
+$modal-wide-width: 80%;
 /*Main panel styles*/
 body {
   background-color: $background-color;
@@ -671,7 +672,7 @@ div {
 }
 
 .modalScreen .modalDialog.wide {
-  width: 60%;
+  width: $modal-wide-width;
   margin-top: 5%;
 }
 
@@ -784,20 +785,33 @@ div {
 
 }
 
+.victoryReport .buttonBar {
+  position : absolute;
+  width: $modal-wide-width;
+}
+
 .victoryReport .closeReportButton {
   float: right;
 }
 
 .victoryReport .victorTitle {
-  font-size: 1.5em;
+  font-size: 2em;
   font-weight: bold;
   width: 100%;
   text-align: center;
 }
 
+.victoryReport .victorTitle.blue {
+  color : $blue-team-color;
+}
+
+.victoryReport .victorTitle.red {
+  color : $red-team-color;
+}
+
 .victoryReport .rangeTitle,
 .victoryReport .rangeValue {
-  font-size: 1em;
+  font-size: 1.4em;
   width: 100%;
   text-align: center;
 }
@@ -812,7 +826,7 @@ div {
 }
 
 .teamReport .teamName {
-  font-size: 1.2em;
+  font-size: 1.4em;
   font-weight: bold;
 }
 
@@ -837,7 +851,7 @@ div {
 }
 
 .teamReport .summaryStats .value {
-  font-size: 1.2em;
+  font-size: 1.4em;
 }
 
 .teamReport .label {
@@ -849,6 +863,7 @@ div {
 
 .teamReport .breakDownTitle {
   font-weight: bold;
+  margin-top: 5px;
 }
 
 .teamReport.blue .breakDownTitle {
@@ -857,4 +872,27 @@ div {
 
 .teamReport.red .breakDownTitle {
   color : $red-team-color;
+}
+
+.teamReport .mechBreakdownContainer,
+.teamReport .weaponBreakdownContainer {
+  margin-left: 10px;
+}
+
+.teamReport .tableHeader {
+  font-weight: bold;
+
+}
+
+.teamReport.blue .tableHeader {
+  border-bottom: solid thin $blue-team-color;
+}
+
+.teamReport.red .tableHeader {
+  border-bottom: solid thin $red-team-color;
+}
+
+.teamReport .tableRow {
+  font-size: 0.9em;
+  margin-top: 2px;
 }

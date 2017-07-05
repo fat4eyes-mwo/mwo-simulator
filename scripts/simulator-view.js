@@ -1052,6 +1052,7 @@ var MechView = MechView || (function() {
     });
 
     $("#showReportDivButton").click(() => {
+      MechSimulatorLogic.pauseSimulation();
       MechView.showVictoryReport();
     });
   }

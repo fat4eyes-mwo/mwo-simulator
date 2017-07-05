@@ -16,6 +16,15 @@ var MechViewReport = MechViewReport || (function() {
           MechView.hideVictoryReport();
         });
 
+      let victorTeam = MechModelView.getVictorTeam();
+      if (victorTeam) {
+        $("#victoryReport [class~=victorTitle]")
+          .addClass(victorTeam)
+          .html(TeamReport.prototype.translateTeamName(victorTeam) + " Victory");
+      } else {
+        $("#victoryReport [class~=victorTitle]").html("Draw");
+      }
+
       let simParams = MechModelView.getSimulatorParameters();
       $("#victoryReport [class~=rangeValue]")
         .html(simParams.range);
@@ -36,8 +45,6 @@ var MechViewReport = MechViewReport || (function() {
   class TeamReport {
     constructor(team, containerId) {
       let teamReport = MechModelView.getTeamReport(team);
-      let teamWeaponStats = teamReport.getWeaponStats();
-
       $("#teamReport-template")
         .clone(true)
         .attr("id", this.teamReportId(team))
@@ -58,10 +65,26 @@ var MechViewReport = MechViewReport || (function() {
         .html(Number(dps).toFixed(1))
       $("#" + teamReportId + " [class~=maxBurst]")
         .html(Number(maxBurst).toFixed(1));
+      let mechBreakdownDivId = this.mechBreakdownId(team);
+      $("#" + teamReportId + " [class~=mechBreakdownContainer]")
+        .attr("id", mechBreakdownDivId);
+      let mechBreakdown = new MechBreakdownTable(teamReport, mechBreakdownDivId);
+      let weaponBreakdownDivId = this.weaponBreakdownId(team);
+      $("#" + teamReportId + " [class~=weaponBreakdownContainer]")
+        .attr("id", weaponBreakdownDivId);
+      let weaponBreakdown = new WeaponBreakdownTable(teamReport, weaponBreakdownDivId);
     }
 
     teamReportId(team) {
       return team + "-teamReport";
+    }
+
+    mechBreakdownId(team) {
+      return team + "-mechBreakdown";
+    }
+
+    weaponBreakdownId(team) {
+      return team + "-weaponBreakdown";
     }
 
     translateTeamName(team) {
@@ -71,6 +94,59 @@ var MechViewReport = MechViewReport || (function() {
         return "Red";
       } else {
         throw "Unexpected team: " + team;
+      }
+    }
+  }
+
+  class MechBreakdownTable {
+    constructor(teamReport, containerId) {
+      //header
+      $("#mechBreakdownHeader-template")
+        .clone(true)
+        .removeAttr("id")
+        .removeClass("template")
+        .appendTo("#" + containerId);
+      for (let mechReport of teamReport.mechReports) {
+        let rowJQ = $("#mechBreakdownRow-template")
+                      .clone(true)
+                      .removeAttr("id")
+                      .removeClass("template")
+                      .appendTo("#" + containerId);
+        rowJQ.find("[class~=name]")
+          .html(mechReport.mechName);
+        rowJQ.find("[class~=damage]")
+          .html(Number(mechReport.getTotalDamage()).toFixed(1));
+        rowJQ.find("[class~=dps]")
+          .html(Number(mechReport.getDPS()).toFixed(1));
+        rowJQ.find("[class~=burst]")
+          .html(Number(mechReport.getMaxBurstDamage()).toFixed(1));
+        let timeAlive = mechReport.getTimeOfDeath();
+        timeAlive = timeAlive ? timeAlive : MechSimulatorLogic.getSimTime();
+        rowJQ.find("[class~=timeAlive]")
+          .html(Number(timeAlive / 1000).toFixed(1) + "s");
+      }
+    }
+  }
+
+  class WeaponBreakdownTable {
+    constructor(teamReport, containerId) {
+      $("#weaponBreakdownHeader-template")
+        .clone(true)
+        .removeAttr("id")
+        .removeClass("template")
+        .appendTo("#" + containerId);
+      let teamWeaponStats = teamReport.getWeaponStats();
+      for (let weaponStatEntry of teamWeaponStats) {
+        let rowJQ = $("#weaponBreakdownRow-template")
+                      .clone(true)
+                      .removeAttr("id")
+                      .removeClass("template")
+                      .appendTo("#" + containerId);
+        rowJQ.find("[class~=name]").html(weaponStatEntry.name);
+        rowJQ.find("[class~=damage]").html(Number(weaponStatEntry.damage).toFixed(1));
+        //TODO: Fix DPS per weapon calculation
+        // rowJQ.find("[class~=dps]").html(Number(weaponStatEntry.dps).toFixed(1));
+        rowJQ.find("[class~=count]").html(Number(weaponStatEntry.count).toFixed(0));
       }
     }
   }
