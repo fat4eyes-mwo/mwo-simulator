@@ -27,7 +27,7 @@ var MechViewReport = MechViewReport || (function() {
 
       let simParams = MechModelView.getSimulatorParameters();
       $("#victoryReport [class~=rangeValue]")
-        .html(simParams.range);
+        .html(Number(simParams.range).toFixed(0) + "m");
 
       let teamList = [MechModel.Team.BLUE, MechModel.Team.RED];
       for (let team of teamList) {

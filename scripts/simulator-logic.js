@@ -206,13 +206,17 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
 
     updateUIWeaponFires();
 
-    if (!MechModel.isTeamAlive(MechModel.Team.BLUE)) {
+    //if one team is dead, stop simulation, compute stats for the current step
+    //and inform ModelView of victory
+    if (!MechModel.isTeamAlive(MechModel.Team.BLUE) ||
+        !MechModel.isTeamAlive(MechModel.Team.RED)) {
       pauseSimulation();
-      MechModelView.updateVictory(MechModel.Team.RED);
-    }
-    if (!MechModel.isTeamAlive(MechModel.Team.RED)) {
-      pauseSimulation();
-      MechModelView.updateVictory(MechModel.Team.BLUE);
+      flushWeaponFireQueue();
+      for (let team of teams) {
+        MechModelView.updateTeamStats(team);
+        MechModel.updateModelTeamStats(team);
+      }
+      MechModelView.updateVictory(MechModelView.getVictorTeam());
     }
 
   }
@@ -391,7 +395,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
       let targetMechState = weaponFire.targetMech.getMechState();
       if (weaponInfo.hasDuration()) {
         weaponFire.durationLeft = Number(weaponFire.durationLeft) - stepDuration;
-        if (weaponFire.weaponState.active) {
+        if (weaponFire.weaponState.active && weaponFire.sourceMech.getMechState().isAlive()) {
           let tickDamageDone;
           if (weaponFire.durationLeft <=0) {
             let lastTickDamage = weaponFire.tickWeaponDamage.clone();
@@ -428,6 +432,14 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
         //should not happen
         throw "Unexpected WeaponFire type";
       }
+    }
+  }
+
+  //log damage from any remaining entries in the weapon fire queue. Done when
+  //one team dies
+  var flushWeaponFireQueue = function() {
+    for (let weaponFire of weaponFireQueue) {
+      logDamage(weaponFire);
     }
   }
 
