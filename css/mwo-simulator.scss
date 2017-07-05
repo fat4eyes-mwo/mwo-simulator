@@ -811,18 +811,18 @@ div {
 
 .victoryReport .rangeTitle,
 .victoryReport .rangeValue {
-  font-size: 1.4em;
   width: 100%;
   text-align: center;
 }
 
 .victoryReport .rangeValue {
   font-weight: bold;
+  font-size: 1.4em;
 }
 
 .victoryReport .blueReportContainer,
 .victoryReport .redReportContainer {
-
+  margin-top: 5px;
 }
 
 .teamReport .teamName {
@@ -895,4 +895,8 @@ div {
 .teamReport .tableRow {
   font-size: 0.9em;
   margin-top: 2px;
+}
+
+.teamReport .numberValue {
+  text-align: right;
 }
