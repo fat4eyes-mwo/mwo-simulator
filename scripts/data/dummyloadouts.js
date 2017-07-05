@@ -2,6 +2,8 @@
 //http://localhost:8181/#s=a14468793b3ddb40bb7ec6f197b8d93d5785ff23f648caf2e9b26c342624a7c8
 //clan vs is
 //http://localhost:8181/#s=19eaa8f895cce192fd74796522bc4e86039c90a7cbd75c1f3e1edd175383317d
+//lrmboat test
+//http://localhost:8181/#s=2adec6e69fd02c6dd8dbc6da606e47f569d8bbe690d4841b7bc8882decda3dcd
 
 //Gauss PPC summoner
 //http://mwo.smurfy-net.de/mechlab#i=189&l=8d4bb3e475863c7fe5c173c7cc62b9fc86177bda
@@ -17,8 +19,13 @@
 //http://mwo.smurfy-net.de/mechlab#i=332&l=f16ab12733e2fae783d6acadb3ed2e82dda6c8ac
 //mpl nova
 //http://mwo.smurfy-net.de/mechlab#i=307&l=a3c570295da663cc10f1d2b1eca41d6e3b4fc47b
+//catapult
+//http://mwo.smurfy-net.de/mechlab#i=12&l=ccd22130859be43016c116144508ff0eafd02703
+//maddog
+//http://mwo.smurfy-net.de/mechlab#i=214&l=e0dfb8f23aa9e091fedb52686d365d5a335a93e8
 
-
+//weaponless atlas
+//http://mwo.smurfy-net.de/mechlab#i=16&l=cb72e3e1264e3b8051193ab4e52686a71dba239c
 
 //http://mwo.smurfy-net.de/mechlab#i=291&l=0673c22705b1651b68e33300644d53eb895cf864
 var DummyArcticCheetah = {

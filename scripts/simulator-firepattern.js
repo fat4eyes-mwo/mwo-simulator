@@ -29,7 +29,9 @@ var MechFirePattern = MechFirePattern || (function () {
           || !willDoDamage(weaponState, range) //will not do damage
           //No ammo
           || (weaponInfo.requiresAmmo() && ammoState.ammoCountForWeapon(weaponInfo.weaponId) <= 0)
-        ) continue; //skip weapon
+        ) {
+        continue; //skip weapon
+      }
       //fit as many ready weapons as possible into the available heat
       //starting with those with the best damage:heat ratio
       weaponsToFire.push(weaponState);

@@ -453,6 +453,46 @@ return {
       MechModel.initMechTeamPatterns(MechModel.mechTeams[MechModel.Team.RED]);
     },
 
+    testLRMSpread : function() {
+      var newTestDamage = () => {
+        return new MechModel.WeaponDamage({"centre_torso" : 10});
+      }
+      let testDamage = newTestDamage();
+
+      let lrmSpreadList = [
+        {name: "LRM5", spread: _LRM5Spread},
+        {name: "LRM10", spread: _LRM10Spread},
+        {name: "LRM15", spread: _LRM15Spread},
+        {name: "LRM20", spread: _LRM20Spread},
+        {name: "ALRM5", spread: _ALRM5Spread},
+        {name: "ALRM10", spread: _ALRM10Spread},
+        {name: "ALRM15", spread: _ALRM15Spread},
+        {name: "ALRM20", spread: _ALRM20Spread},
+        {name: "cLRM5", spread: _cLRM5Spread},
+        {name: "cLRM10", spread: _cLRM10Spread},
+        {name: "cLRM15", spread: _cLRM15Spread},
+        {name: "cLRM20", spread: _cLRM20Spread},
+        {name: "cALRM5", spread: _cALRM5Spread},
+        {name: "cALRM10", spread: _cALRM10Spread},
+        {name: "cALRM15", spread: _cALRM15Spread},
+        {name: "cALRM20", spread: _cALRM20Spread},
+      ]
+
+      for (let lrm of lrmSpreadList) {
+        console.log("----------------------------------------------");
+        console.log(lrm.name + " spread");
+        let lrmPattern = MechAccuracyPattern.lrmPattern(lrm.spread);
+        let range = 180;
+        let transformedDamage = lrmPattern(newTestDamage(), range);
+        console.log("Range: " + range + " " + transformedDamage.toString());
+
+        for (let range = 200; range <= 1000; range += 100) {
+          let transformedDamage = lrmPattern(newTestDamage(), range);
+          console.log("Range: " + range + " " + transformedDamage.toString());
+        }
+      }
+    },
+
     testScratch : function() {
     },
   } //end return publics

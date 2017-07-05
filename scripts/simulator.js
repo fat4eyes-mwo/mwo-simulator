@@ -57,6 +57,7 @@ var MechSimulator = MechSimulator || (function() {
     // MechTest.testSpreadAdjacentDamage();
     // MechTest.testSimulation();
     // MechTest.testPersistence();
+    // MechTest.testLRMSpread();
     init();
   }
 

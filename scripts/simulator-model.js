@@ -23,6 +23,12 @@ var MechModel = MechModel || (function () {
     RIGHT_TORSO_REAR : "right_torso_rear"
   });
 
+  var isRearComponent = function(component) {
+    return component === Component.LEFT_TORSO_REAR ||
+        component === Component.CENTRE_TORSO_REAR ||
+        component === Component.RIGHT_TORSO_REAR;
+  };
+
   const WeaponCycle = Object.freeze({
     READY : "Ready",
     FIRING : "Firing",
@@ -232,14 +238,18 @@ var MechModel = MechModel || (function () {
         ret.addArmorDamage(this.armor);
         this.armor = 0;
       }
-      if (numDamage <= this.structure) {
-        ret.addStructureDamage(numDamage);
-        this.structure = Number(this.structure) - numDamage;
-        numDamage = 0;
+      if (!isRearComponent(this.location)) {
+        if (numDamage <= this.structure) {
+          ret.addStructureDamage(numDamage);
+          this.structure = Number(this.structure) - numDamage;
+          numDamage = 0;
+        } else {
+          ret.addStructureDamage(this.structure);
+          numDamage = Number(numDamage) - Number(this.structure);
+          this.structure = 0;
+        }
       } else {
-        ret.addStructureDamage(this.structure);
-        numDamage = Number(numDamage) - Number(this.structure);
-        this.structure = 0;
+        //TODO: Deal with rear structure damage
       }
       return ret;
     }
@@ -704,8 +714,16 @@ var MechModel = MechModel || (function () {
   class ComponentDamage {
     constructor(location, armor, structure) {
       this.location = location;
-      this.armor = armor;
-      this.structure = structure;
+      if (armor) {
+        this.armor = armor;
+      } else {
+        this.armor = 0;
+      }
+      if (structure) {
+        this.structure = structure;
+      } else {
+        this.structure = 0;
+      }
     }
     add(componentDamage) {
       this.armor += Number(componentDamage.armor);
@@ -740,8 +758,15 @@ var MechModel = MechModel || (function () {
             Number(this.damageMap[location]) * Number(multiplier);
       }
     }
+    getTotalDamage() {
+      let totalDamage = 0;
+      for (let component in this.damageMap) {
+        totalDamage += this.damageMap[component];
+      }
+      return totalDamage;
+    }
     toString() {
-      let ret = "";
+      let ret = "totalDamage: " + this.getTotalDamage();
       for (let component in this.damageMap) {
         ret = ret + " " + component + "=" + this.damageMap[component];
       }

@@ -46,10 +46,31 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
   }
 
   //Weapon specific accuracy patterns
+  //MUST be applied as the first transform on the raw weapon damage (even before mech accuracy)
   var getWeaponAccuracyPattern = function(weaponInfo) {
-    var weaponAccuracyMap = {"ClanERPPC" : MechAccuracyPattern.cERPPCPattern};
+    var weaponAccuracyMap =
+      { "ClanERPPC" : MechAccuracyPattern.cERPPCPattern,
+        "LRM5" : MechAccuracyPattern.lrmPattern(_LRM5Spread),
+        "LRM10" : MechAccuracyPattern.lrmPattern(_LRM10Spread),
+        "LRM15" : MechAccuracyPattern.lrmPattern(_LRM15Spread),
+        "LRM20" : MechAccuracyPattern.lrmPattern(_LRM20Spread),
+        "LRM5_Artemis" : MechAccuracyPattern.lrmPattern(_ALRM5Spread),
+        "LRM10_Artemis" : MechAccuracyPattern.lrmPattern(_ALRM10Spread),
+        "LRM15_Artemis" : MechAccuracyPattern.lrmPattern(_ALRM15Spread),
+        "LRM20_Artemis" : MechAccuracyPattern.lrmPattern(_ALRM20Spread),
+        "ClanLRM5" : MechAccuracyPattern.lrmPattern(_cLRM5Spread),
+        "ClanLRM10" : MechAccuracyPattern.lrmPattern(_cLRM10Spread),
+        "ClanLRM15" : MechAccuracyPattern.lrmPattern(_cLRM15Spread),
+        "ClanLRM20" : MechAccuracyPattern.lrmPattern(_cLRM20Spread),
+        "ClanLRM5_Artemis" : MechAccuracyPattern.lrmPattern(_cALRM5Spread),
+        "ClanLRM10_Artemis" : MechAccuracyPattern.lrmPattern(_cALRM10Spread),
+        "ClanLRM15_Artemis" : MechAccuracyPattern.lrmPattern(_cALRM15Spread),
+        "ClanLRM20_Artemis" : MechAccuracyPattern.lrmPattern(_cALRM20Spread),
+      };
     return weaponAccuracyMap[weaponInfo.name];
   }
+
+  //cERPPC splash
   var cERPPCPattern = function(weaponDamage, range) {
     //assumes weaponDamage only has one entry (the targeted component) and adds
     //the appropriate amount of splash damage
@@ -76,6 +97,93 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
       transformedDamage.damageMap[adjacentLocation] = splashRangeDamage;
     }
     return transformedDamage;
+  }
+
+  //LRM spread
+  class LrmSpread {
+    constructor(range, spread) {
+      this.range = Number(range);
+      this.spread = {}
+      for (let component in MechModel.Component) {
+        let componentVal = MechModel.Component[component]
+        if (MechModel.Component.hasOwnProperty(component)) {
+          let percentDamage = spread[componentVal] ? Number(spread[componentVal]) : 0;
+          if (percentDamage) {
+            this.spread[componentVal] = percentDamage;
+          } else {
+            this.spread[componentVal] = 0;
+          }
+        }
+      }
+    }
+    toString() {
+      let ret = "range : " + this.range;
+      for (let component in this.spread) {
+        ret+= " " + component + ":" + this.spread[component];
+      }
+    }
+  }
+  var lrmPattern = function(lrmSpreadData) {
+    let lrmSpreadList = [];
+    for (let range in lrmSpreadData) {
+      lrmSpreadList.push(new LrmSpread(range, lrmSpreadData[range]));
+    }
+    lrmSpreadList.sort((entry1, entry2) => {
+      return Number(entry1.range) - Number(entry2.range);
+    });
+
+    return function(weaponDamage, range) {
+      let baseIdx = 0;
+      let nextIdx = 0;
+      for (baseIdx = 0; baseIdx < lrmSpreadList.length; baseIdx ++) {
+        if (lrmSpreadList[baseIdx].range < range) {
+          break;
+        }
+      }
+      if (baseIdx >= lrmSpreadList.length - 1) {
+        baseIdx = lrmSpreadList.length - 2;
+      }
+      nextIdx = baseIdx + 1;
+      let baseEntry = lrmSpreadList[baseIdx];
+      let nextEntry = lrmSpreadList[nextIdx];
+      let rangeDiff = range - baseEntry.range;
+
+      let computedSpread = {};
+      for (let component in MechModel.Component) {
+        let componentVal = MechModel.Component[component];
+        if (MechModel.Component.hasOwnProperty(component)) {
+          let slope =
+            (Number(nextEntry.spread[componentVal]) - Number(baseEntry.spread[componentVal])) /
+            (Number(nextEntry.range) - Number(baseEntry.range));
+          let computedPercent = baseEntry.spread[componentVal] + rangeDiff * slope;
+          //sanity check on computedPercent
+          if (computedPercent < 0) {
+            computedPercent = 0;
+          }
+          if (computedPercent > 1) {
+            computedPercent = 1;
+          }
+          computedSpread[componentVal] = computedPercent;
+        }
+      }
+      let computedLRMSpread = new LrmSpread(range, computedSpread);
+      //sanity check on computed spread
+      let totalPercent = 0;
+      for (let component in computedLRMSpread.spread) {
+        totalPercent += computedLRMSpread.spread[component];
+      }
+      if (totalPercent > 1) {
+        console.warn("LRM percentages over 100%:" + computedLRMSpread.toString());
+      }
+      let totalDamage = weaponDamage.getTotalDamage();
+      //transform totalDamage
+      let transformedDamage = weaponDamage.clone();
+      for (let component in computedLRMSpread.spread) {
+        transformedDamage.damageMap[component] =
+            totalDamage * computedLRMSpread.spread[component];
+      }
+      return transformedDamage;
+    }
   }
 
   var getDefault = function() {
@@ -142,6 +250,7 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
     accuracySpreadToAdjacent : accuracySpreadToAdjacent,
     getWeaponAccuracyPattern : getWeaponAccuracyPattern,
     cERPPCPattern : cERPPCPattern,
+    lrmPattern : lrmPattern,
     getDefault : getDefault,
     getPatterns : getPatterns,
   }
