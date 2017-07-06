@@ -305,11 +305,19 @@ var MechModel = MechModel || (function () {
         //apply damage to location
         let componentDamage = this.mechHealth.takeDamage(location, numDamage);
         totalDamage.addComponentDamage(componentDamage);
-        //TODO: apply transfer damage to adjacent component
 
 
         //destroy components if necessary
         if (!this.mechHealth.isIntact(location) && componentDamage.totalDamage() > 0) {
+          if (numDamage > componentDamage.totalDamage()) {
+            let transferDamage = numDamage - componentDamage.totalDamage();
+            let transferLocation = getTransferDamageLocation(location);
+            if (transferLocation) {
+              let transferResult = this.mechHealth.takeDamage(transferLocation, transferDamage);
+              totalDamage.addComponentDamage(transferResult);
+            }
+          }
+
           let destroyComponentDamage = this.destroyComponent(location, false);
           totalDamage.add(destroyComponentDamage);
           //destroy connected arms if torsos are destroyed
@@ -1398,6 +1406,26 @@ var MechModel = MechModel || (function () {
       return [Component.RIGHT_TORSO];
     }
     return [];
+  }
+
+  var getTransferDamageLocation = function(component) {
+    if (component === Component.HEAD) {
+      return null;
+    } else if (component === Component.CENTRE_TORSO) {
+      return null;
+    } else if (component === Component.LEFT_TORSO) {
+      return Component.CENTRE_TORSO;
+    } else if (component === Component.RIGHT_TORSO) {
+      return Component.CENTRE_TORSO;
+    } else if (component === Component.RIGHT_ARM) {
+      return Component.RIGHT_TORSO;
+    } else if (component === Component.LEFT_ARM) {
+      return Component.LEFT_TORSO;
+    } else if (component === Component.LEFT_LEG) {
+      return Component.LEFT_TORSO;
+    } else if (component === Component.RIGHT_LEG) {
+      return Component.RIGHT_TORSO;
+    }
   }
 
   var clearModel = function() {
