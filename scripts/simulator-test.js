@@ -212,27 +212,32 @@ return {
     },
 
     testSpreadAdjacentDamage : function() {
-      var printTestDamageTransform = function (testDamage) {
+      var printTestDamageTransform = function (testDamage, accuracyPattern) {
         let weaponDamage = new MechModel.WeaponDamage(testDamage);
-        let accuracyPattern = MechAccuracyPattern.accuracySpreadToAdjacent(0.5, 0.5);
         let transformedDamage = accuracyPattern(weaponDamage, 200);
         console.log("original damage: " + weaponDamage.toString());
         console.log("transformedDamage: " + transformedDamage.toString());
       }
+      let accuracyPattern = MechAccuracyPattern.accuracySpreadToAdjacent(0.5, 0.5, 0);
+      let accuracyPatternNext = MechAccuracyPattern.accuracySpreadToAdjacent(0.5, 0.3, 0.2);
       let testDamage =
         {"centre_torso": 10,
           "right_torso": 2.5,
           "left_torso": 2.5};
-      printTestDamageTransform(testDamage);
+      printTestDamageTransform(testDamage, accuracyPattern);
+      printTestDamageTransform(testDamage, accuracyPatternNext);
 
       testDamage = {"head" : 10};
-      printTestDamageTransform(testDamage);
+      printTestDamageTransform(testDamage, accuracyPattern);
+      printTestDamageTransform(testDamage, accuracyPatternNext);
 
       testDamage = {"left_torso" : 10, "centre_torso" : 2.5, "left_arm" : 2.5};
-      printTestDamageTransform(testDamage);
+      printTestDamageTransform(testDamage, accuracyPattern);
+      printTestDamageTransform(testDamage, accuracyPatternNext);
 
       testDamage = {"left_arm" : 10, "left_torso" : 2.5};
-      printTestDamageTransform(testDamage);
+      printTestDamageTransform(testDamage, accuracyPattern);
+      printTestDamageTransform(testDamage, accuracyPatternNext);
     },
 
     testListQuirks : function() {

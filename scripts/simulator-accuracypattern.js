@@ -9,10 +9,17 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
     return weaponDamage;
   }
 
-  //Spreads the damage to adjacent components, with the given percentages
-  //percentOnTarget, percentOnAdjacent between 0 and 1, and their total must be less than one
+  //Spreads the damage to adjacent components and those two components over,
+  //with the given percentages percentOnTarget, percentOnAdjacent,
+  //percentOnNextToAdjacent between 0 and 1,
+  //and their total must be less than one
   //Any left over is considered a miss
-  var accuracySpreadToAdjacent = function(percentOnTarget, percentOnAdjacent) {
+  var accuracySpreadToAdjacent = function(percentOnTarget,
+                                            percentOnAdjacent,
+                                            percentOnNextToAdjacent) {
+    if (percentOnTarget + percentOnAdjacent + percentOnNextToAdjacent > 1) {
+      console.warn("Total damage percentage exceeds 1");
+    }
     return function(weaponDamage, range) {
       let transformedDamage = new MechModel.WeaponDamage({});
 
@@ -20,14 +27,14 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
         let newComponentDamage =
             Number(weaponDamage.damageMap[component]) *
             Number(percentOnTarget);
+
         let totalAdjacentDamage =
             Number(weaponDamage.damageMap[component]) *
             Number(percentOnAdjacent);
-
-        transformedDamage.damageMap[component] =
-          transformedDamage.damageMap[component] ?
-            transformedDamage.damageMap[component] + newComponentDamage
-            : newComponentDamage;
+        let currentDamage = transformedDamage.damageMap[component];
+        transformedDamage.damageMap[component] = currentDamage ?
+                                    currentDamage + newComponentDamage
+                                    : newComponentDamage;
         //Assumes there are always 2 adjacent components. If the getAdjacentComponents
         //method only returns one, then half of the totalAdjacentDamage is lost
         //e.g. if the component is an arm, it applies half of the percentOnAdjacent * damge to the connected torso,
@@ -35,10 +42,39 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
         let perAdjacentComponentDamage = totalAdjacentDamage / 2;
         let adjacentComponents = MechModel.getAdjacentComponents(component);
         for (let adjacentComponent of adjacentComponents) {
-          transformedDamage.damageMap[adjacentComponent] =
-            transformedDamage.damageMap[adjacentComponent] ?
-              transformedDamage.damageMap[adjacentComponent] + perAdjacentComponentDamage
-              : perAdjacentComponentDamage;
+          let currentDamage = transformedDamage.damageMap[adjacentComponent];
+          transformedDamage.damageMap[adjacentComponent] = currentDamage ?
+                                    currentDamage + perAdjacentComponentDamage
+                                    : perAdjacentComponentDamage;
+        }
+
+        let totalNextToAdjacentDamage =
+                  Number(weaponDamage.damageMap[component]) *
+                  Number(percentOnNextToAdjacent);
+
+        let nextToAdjacentComponents = [];
+        let alreadyProcessed = new Set(adjacentComponents);
+        alreadyProcessed.add(component);
+        //Find next to adjacent components
+        for (let adjacentComponent of adjacentComponents) {
+          let nextComponents = MechModel.getAdjacentComponents(adjacentComponent);
+          for (let nextComponent of nextComponents) {
+            if (!alreadyProcessed.has(nextComponent)) {
+              nextToAdjacentComponents.push(nextComponent);
+              alreadyProcessed.add(nextComponent);
+            }
+          }
+        }
+        //assumes there are also just 2 components next to the adjacent components
+        //Damage to torso will not transfer to legs in this model (but damage to
+        //legs can transfer to the torso). See MechModel.getAdjacentComponents for
+        //the connectivity graph
+        let perNextAdjacentComponentDamage = totalNextToAdjacentDamage / 2;
+        for (let nextComponent of nextToAdjacentComponents) {
+          let currentDamage = transformedDamage.damageMap[nextComponent];
+          transformedDamage.damageMap[nextComponent] = currentDamage ?
+                                  currentDamage + perNextAdjacentComponentDamage
+                                  : perNextAdjacentComponentDamage;
         }
       }
       return transformedDamage;
@@ -187,7 +223,7 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
   }
 
   var getDefault = function() {
-    return MechAccuracyPattern.accuracySpreadToAdjacent(1.0, 0.0);
+    return accuracySpreadToAdjacent(1.0, 0.0, 0.0);
   }
 
   var getPatterns = function() {
@@ -195,50 +231,50 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
       {
         id:"accuracyPerfect",
         name:"Perfect accuracy",
-        pattern: accuracySpreadToAdjacent(1.0, 0.0),
+        pattern: accuracySpreadToAdjacent(1.0, 0.0, 0.0),
         description:"100% damage to target component.",
         default:true,
       },
       {
         id:"accuracyTier1",
         name:"Tier 1",
-        pattern: accuracySpreadToAdjacent(0.85, 0.1),
-        description:"85% damage to target component, 10% to adjacent, 5% miss.",
+        pattern: accuracySpreadToAdjacent(0.80, 0.10, 0.05),
+        description:"85% damage to target component, 10% to adjacent, 5% to other components, 5% miss.",
         default:false,
       },
       {
         id:"accuracyTier2",
         name:"Tier 2",
-        pattern: accuracySpreadToAdjacent(0.75, 0.15),
-        description:"75% damage to target component, 15% to adjacent, 10% miss.",
+        pattern: accuracySpreadToAdjacent(0.70, 0.15, 0.05),
+        description:"70% damage to target component, 15% to adjacent, 5% to other components, 10% miss.",
         default:false,
       },
       {
         id:"accuracyTier3",
         name:"Tier 3",
-        pattern: accuracySpreadToAdjacent(0.6, 0.2),
-        description:"60% damage to target component, 20% to adjacent, 20% miss.",
+        pattern: accuracySpreadToAdjacent(0.6, 0.20, 0.05),
+        description:"60% damage to target component, 20% to adjacent, 5% to other components, 15% miss.",
         default:false,
       },
       {
         id:"accuracyTier4",
         name:"Tier 4",
-        pattern: accuracySpreadToAdjacent(0.4, 0.3),
-        description:"40% damage to target component, 30% to adjacent, 30% miss.",
+        pattern: accuracySpreadToAdjacent(0.4, 0.3, 0.1),
+        description:"40% damage to target component, 30% to adjacent, 10% to other components, 20% miss.",
         default:false,
       },
       {
         id:"accuracyTier5",
         name:"Tier 5",
-        pattern: accuracySpreadToAdjacent(0.3, 0.2),
-        description:"30% damage to target component, 20% to adjacent, 50% miss.",
+        pattern: accuracySpreadToAdjacent(0.3, 0.2, 0.1),
+        description:"30% damage to target component, 20% to adjacent, 10% to other components, 30% miss.",
         default:false,
       },
       {
         id:"accuracyPotato",
         name:"Tier Potato",
-        pattern: accuracySpreadToAdjacent(0.1, 0.05),
-        description:"10% damage to target component, 5% to adjacent, 85% miss.",
+        pattern: accuracySpreadToAdjacent(0.1, 0.05, 0.05),
+        description:"10% damage to target component, 5% to adjacent, 5% to other components, 80% miss.",
         default:false,
       },
     ];
