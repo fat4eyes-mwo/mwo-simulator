@@ -24,14 +24,16 @@ var MechView = MechView || (function() {
   const healthDamageGradient = Object.freeze([
     {value : 0.0, RGB : {r: 230, g:20, b:20}},
     {value : 0.5, RGB : {r: 230, g:230, b:20}},
-    {value : 0.9, RGB : {r:20, g:230, b:20}},
+    // {value : 0.9, RGB : {r:20, g:230, b:20}},
+    {value : 0.9, RGB : {r:255, g:235, b:24}},
     {value : 1, RGB : {r:170, g:170, b:170}}
   ]);
   //Colors for individual component health numbers
   const componentHealthDamageGradient = Object.freeze([
     {value : 0.0, RGB : {r: 255, g:0, b:0}},
     {value : 0.5, RGB : {r:255, g:255, b:0}},
-    {value : 0.9, RGB : {r:0, g:255, b:0}},
+    // {value : 0.9, RGB : {r:0, g:255, b:0}},
+    {value : 0.9, RGB : {r:255, g:235, b:24}},
     {value : 1, RGB : {r:170, g:170, b:170}}
   ]);
 
