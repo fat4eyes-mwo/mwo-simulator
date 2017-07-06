@@ -81,6 +81,7 @@ var MechModel = MechModel || (function () {
       this.ammoBoxList = ammoBoxListFromSmurfyMechLoadout(smurfyMechLoadout);
       this.engineInfo = engineInfoFromSmurfyMechLoadout(smurfyMechLoadout);
       this.tons = smurfyMechData.details.tons;
+      this.quirks = smurfyMechData.details.quirks;
     }
   }
 
