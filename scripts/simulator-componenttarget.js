@@ -114,6 +114,13 @@ var MechTargetComponent = MechTargetComponent || (function () {
         description: "Aim for the legs.",
         default: false,
       },
+      {
+        id: "aimForSideTorso",
+        name: "Aim for Side Torsos",
+        pattern: aimSideTorsoThenCenterTorso,
+        description: "Aim for side torsos, then center torso.",
+        default: false,
+      },
       { id: "randomAim",
         name: "Random",
         pattern: randomAim,
