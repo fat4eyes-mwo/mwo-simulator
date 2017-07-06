@@ -68,20 +68,19 @@ var MechModel = MechModel || (function () {
   var mechIdMap = {};
 
   class MechInfo {
-    constructor(mechId, smurfyMechId, smurfyLoadoutId, mechName,
-        mechTranslatedName, mechHealth, weaponInfoList, heatsinkInfoList,
-        ammoBoxList, engineInfo, tons) {
-      this.mechId = mechId; //Our mech id (not smurfy's)
-      this.smurfyMechId = smurfyMechId;
-      this.smurfyLoadoutId = smurfyLoadoutId;
-      this.mechName = mechName;
-      this.mechTranslatedName = mechTranslatedName;
-      this.mechHealth = mechHealth;
-      this.weaponInfoList = weaponInfoList; //[WeaponInfo...]
-      this.heatsinkInfoList = heatsinkInfoList; //[Heatsink...]
-      this.ammoBoxList = ammoBoxList; //[AmmoBox...]
-      this.engineInfo = engineInfo;
-      this.tons = Number(tons);
+    constructor(mechId, smurfyMechLoadout) {
+      this.mechId = mechId;
+      this.smurfyMechId = smurfyMechLoadout.mech_id;
+      this.smurfyLoadoutId = smurfyMechLoadout.id;
+      var smurfyMechData = getSmurfyMechData(smurfyMechLoadout.mech_id);
+      this.mechName = smurfyMechData.name;
+      this.mechTranslatedName = smurfyMechData.translated_name;
+      this.mechHealth = mechHealthFromSmurfyMechLoadout(smurfyMechLoadout);
+      this.weaponInfoList = weaponInfoListFromSmurfyMechLoadout(smurfyMechLoadout);
+      this.heatsinkInfoList = heatsinkListFromSmurfyMechLoadout(smurfyMechLoadout);
+      this.ammoBoxList = ammoBoxListFromSmurfyMechLoadout(smurfyMechLoadout);
+      this.engineInfo = engineInfoFromSmurfyMechLoadout(smurfyMechLoadout);
+      this.tons = smurfyMechData.details.tons;
     }
   }
 
@@ -983,27 +982,6 @@ var MechModel = MechModel || (function () {
 
   //Object creation methods.
   //TODO: see if it's better to put these in the object constructors instead
-  var mechInfoFromSmurfyMechLoadout = function (mechId, smurfyMechLoadout) {
-    var mechInfo;
-
-    var smurfyMechId = smurfyMechLoadout.mech_id;
-    var smurfyLoadoutId = smurfyMechLoadout.id;
-    var smurfyMechData = getSmurfyMechData(smurfyMechLoadout.mech_id);
-    var mechName = smurfyMechData.name;
-    var mechTranslatedName = smurfyMechData.translated_name;
-    var mechHealth = mechHealthFromSmurfyMechLoadout(smurfyMechLoadout);
-    var weaponInfoList = weaponInfoListFromSmurfyMechLoadout(smurfyMechLoadout);
-    var heatsinkInfoList = heatsinkListFromSmurfyMechLoadout(smurfyMechLoadout);
-    var ammoBoxList = ammoBoxListFromSmurfyMechLoadout(smurfyMechLoadout);
-    var engineInfo = engineInfoFromSmurfyMechLoadout(smurfyMechLoadout);
-    var tons = smurfyMechData.details.tons;
-
-    mechInfo = new MechInfo(mechId, smurfyMechId, smurfyLoadoutId,
-          mechName, mechTranslatedName, mechHealth,
-          weaponInfoList, heatsinkInfoList, ammoBoxList, engineInfo, tons);
-    return mechInfo;
-  }
-
   var mechHealthFromSmurfyMechLoadout = function (smurfyMechLoadout) {
     var mechHealth;
 
@@ -1256,7 +1234,7 @@ var MechModel = MechModel || (function () {
     var smurfy_mech_id = smurfyMechLoadout.mech_id;
     var smurfyMechData = getSmurfyMechData(smurfy_mech_id);
     var mech_id = new_mech_id;
-    var mechInfo = mechInfoFromSmurfyMechLoadout(new_mech_id, smurfyMechLoadout);
+    var mechInfo = new MechInfo(new_mech_id, smurfyMechLoadout);
     var mechState = new MechState(mechInfo);
     var mechTeam = team;
     var targetMech; //set by simulation

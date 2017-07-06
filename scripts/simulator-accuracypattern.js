@@ -284,7 +284,6 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
                                         computedSpread.adjacent,
                                         computedSpread.nextAdjacent)(weaponDamage, range);
 
-      //TODO: Implement
     }
   }
 

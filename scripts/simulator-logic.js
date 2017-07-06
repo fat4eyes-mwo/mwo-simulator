@@ -154,8 +154,6 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     clearMechStats();
     willUpdateTeamStats = {};
     MechModelView.updateSimTime(simTime);
-    //TODO: debug
-    MechModelView.updateDebugText("");
   }
 
   //Simulation step function. Called every tick
