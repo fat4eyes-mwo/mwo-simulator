@@ -23,7 +23,7 @@ var MechView = MechView || (function() {
   //Colors for health numbers
   const healthDamageGradient = Object.freeze([
     {value : 0.0, RGB : {r: 230, g:20, b:20}},
-    {value : 0.5, RGB : {r: 230, g:230, b:20}},
+    {value : 0.7, RGB : {r: 230, g:230, b:20}},
     // {value : 0.9, RGB : {r:20, g:230, b:20}},
     {value : 0.9, RGB : {r:255, g:235, b:24}},
     {value : 1, RGB : {r:170, g:170, b:170}}
@@ -31,7 +31,7 @@ var MechView = MechView || (function() {
   //Colors for individual component health numbers
   const componentHealthDamageGradient = Object.freeze([
     {value : 0.0, RGB : {r: 255, g:0, b:0}},
-    {value : 0.5, RGB : {r:255, g:255, b:0}},
+    {value : 0.7, RGB : {r:255, g:255, b:0}},
     // {value : 0.9, RGB : {r:0, g:255, b:0}},
     {value : 0.9, RGB : {r:255, g:235, b:24}},
     {value : 1, RGB : {r:170, g:170, b:170}}
@@ -965,10 +965,6 @@ var MechView = MechView || (function() {
     $("#debugText").html(debugText);
   }
 
-  var initHandlers = function () {
-    initPaperDollHandlers();
-  }
-
   var initView = function() {
     initPatternTypes();
     initRangeInput();
@@ -1075,15 +1071,7 @@ var MechView = MechView || (function() {
     });
   }
 
-  var onMouseOverPaperDoll = function () {
-    var mechId = $(this).parent().data("mech-id");
-    var location = $(this).data('location');
-    //TODO: Implement onmouseover
-  }
-
   var initPaperDollHandlers = function () {
-    //attach onmouseover handler to each of the components
-    $("#paperDoll-template > [class^=mech]").mouseover(onMouseOverPaperDoll);
   }
 
   const LOADING_SCREEN_MECH_ID = "fakeLoadingScreenMechId";
@@ -1159,7 +1147,6 @@ var MechView = MechView || (function() {
     addMechPanel : addMechPanel,
     addTeamStatsPanel : addTeamStatsPanel,
     initPaperDollHandlers: initPaperDollHandlers,
-    initHandlers : initHandlers,
     initView : initView,
     setWeaponCooldown: setWeaponCooldown,
     setWeaponAmmo : setWeaponAmmo,

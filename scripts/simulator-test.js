@@ -22,8 +22,6 @@ return {
 
       MechModelView.refreshView(true);
 
-      MechView.initHandlers();
-
       var Handler = function (context) {
         this.context = context;
         return () => {

@@ -5,6 +5,9 @@
 //lrmboat test
 //http://localhost:8181/#s=2adec6e69fd02c6dd8dbc6da606e47f569d8bbe690d4841b7bc8882decda3dcd
 
+//20 vs 20
+//http://localhost:8181/#s=e1f4897ae14687dfaba82e457031e1aef7b08a03936770f59f498a1290baadf4
+
 //Gauss PPC summoner
 //http://mwo.smurfy-net.de/mechlab#i=189&l=8d4bb3e475863c7fe5c173c7cc62b9fc86177bda
 //Machine Gun Arrow
