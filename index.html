@@ -28,6 +28,7 @@
     <script src="scripts/simulator-view-router.js"></script>
     <script src="scripts/simulator-view-report.js"></script>
     <script src="scripts/simulator-view-addmech.js"></script>
+    <script src="scripts/simulator-view-teamstats.js"></script>
     <script src="scripts/simulator-model.js"></script>
     <script src="scripts/simulator-modelview.js"></script>
     <script src="scripts/simulator-firepattern.js"></script>
@@ -253,7 +254,10 @@
                 <div class="mechDPSText"></div>
               </div>
               <div class="column column-4">
-                <div class="mechBurstLabel">Burst</div>
+                <div class="mechBurstLabel">
+                    title="Damage done in a 2 second window"
+                  Burst
+                </div>
                 <div class="mechBurstText"></div>
               </div>
             </div>
@@ -407,13 +411,21 @@
       <div class="row teamName stylishText">
       </div>
       <div class="summaryStats row">
-        <div class="label column column-1">DMG: </div>
+        <div class="label column column-1"
+              title="Total Damage">
+          DMG:
+        </div>
         <div class="damage value column column-2"></div>
 
-        <div class="label column column-1">DPS: </div>
+        <div class="label column column-1"
+              title="Damage per second over the entire simulation">
+          DPS: </div>
         <div class="dps value column column-2"></div>
 
-        <div class="label column column-1">Burst: </div>
+        <div class="label column column-1"
+              title="Max damage done in a 2 second window">
+          Burst:
+        </div>
         <div class="maxBurst value column column-2"></div>
       </div>
       <div class="breakDownTitle row">Damage Breakdown By Mech</div>
@@ -426,10 +438,22 @@
     <!-- Mech damage breakdown templates -->
     <div id = "mechBreakdownHeader-template" class="mechBreakdownHeader tableHeader template row">
       <div class="column column-4">Mech</div>
-      <div class="numberValue column column-2">DMG</div>
-      <div class="numberValue column column-2">DPS</div>
-      <div class="numberValue column column-2">Burst</div>
-      <div class="numberValue column column-2">Time Alive</div>
+      <div class="label numberValue column column-2"
+            title="Total damage.">
+        DMG
+      </div>
+      <div class="label numberValue column column-2"
+            title="Damage per second over the entire simulation.">
+        DPS
+      </div>
+      <div class="label numberValue column column-2"
+          title="Max damage done in a 2 second window.">
+        Burst
+      </div>
+      <div class="label numberValue column column-2"
+            title="Total time mech was active.">
+        Time Alive
+      </div>
     </div>
     <div id = "mechBreakdownRow-template" class="mechBreakdownRow tableRow template row">
       <div class="name column column-4"></div>
@@ -442,9 +466,15 @@
     <!-- Weapon breakdown row template -->
     <div id = "weaponBreakdownHeader-template" class="weaponBreakdownHeader tableHeader template row">
       <div class="column column-4">Weapon</div>
-      <div class="numberValue column column-2">DMG</div>
+      <div class="label numberValue column column-2"
+            title="Total damage.">
+        DMG
+      </div>
       <!-- <div class="numberValue column column-2">DPS</div> -->
-      <div class="numberValue column column-2">Times Fired</div>
+      <div class="label numberValue column column-2"
+            title="Number of times weapon was fired.">
+        Times Fired
+      </div>
     </div>
     <div id = "weaponBreakdownRow-template" class="weaponBreakdownRow tableRow template row">
       <div class="name column column-4"></div>

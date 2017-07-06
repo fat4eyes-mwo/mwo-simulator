@@ -788,6 +788,10 @@ a:hover {
   font-size: 1.4em;
 }
 
+.teamReport .label {
+  cursor: help;
+}
+
 .teamReport .value {
   font-weight: bold;
 }

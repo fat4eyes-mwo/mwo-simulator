@@ -85,7 +85,7 @@ var MechViewAddMech = MechViewAddMech || (function() {
       let newMechId = MechModel.generateMechId(team, MechView.loadedSmurfyLoadout);
       MechModel.addMech(newMechId, team, smurfyMechLoadout);
       //set patterns of added mech to selected team patterns
-      MechView.setSelectedTeamPatterns(team);
+      MechViewTeamStats.setSelectedTeamPatterns(team);
       MechViewRouter.modifyAppState();
       //TODO: should not require a full view refresh. See what can be done.
       MechModelView.refreshView(true);

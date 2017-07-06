@@ -15,7 +15,7 @@ var MechModelView = MechModelView || (function() {
         mechIdList.push(mech.getMechId());
       }
       if (recreateUI) {
-        MechView.addTeamStatsPanel(team, mechIdList);
+        MechViewTeamStats.addTeamStatsPanel(team, mechIdList);
       }
       for (let mech of MechModel.mechTeams[team]) {
         if (recreateUI) {
@@ -196,7 +196,7 @@ var MechModelView = MechModelView || (function() {
     }
     let dps = MechSimulatorLogic.getSimTime() > 0 ?
                 Number(totalTeamDamage)/MechSimulatorLogic.getSimTime() * 1000 : 0;
-    MechView.updateTeamStats(team, mechHealthList,
+    MechViewTeamStats.updateTeamStats(team, mechHealthList,
             Number(totalTeamDamage), dps, totalTeamBurstDamage);
   }
 
