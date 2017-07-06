@@ -85,29 +85,30 @@ var MechModel = MechModel || (function () {
   }
 
   class WeaponInfo {
-    constructor(weaponId, name, translatedName, location,
-      minRange, optRange, maxRange, baseDmg, damageMultiplier,
-      heat, minHeatPenaltyLevel, heatPenalty, heatPenaltyId,
-      cooldown, duration, spinup, speed, ammoPerShot, dps) {
+    constructor(weaponId, location, smurfyWeaponData) {
         this.weaponId = weaponId; //smurfy weapon id
-        this.name = name;
-        this.translatedName = translatedName;
         this.location = location;
-        this.minRange = minRange;
-        this.optRange = optRange;
-        this.maxRange = maxRange;
-        this.baseDmg = baseDmg;
-        this.damageMultiplier = damageMultiplier;
-        this.heat = heat;
-        this.minHeatPenaltyLevel = minHeatPenaltyLevel;
-        this.heatPenalty = heatPenalty;
-        this.heatPenaltyId = heatPenaltyId; //weapons with the same heat penalty id caause ghost heat if above the minHeatPenaltyLevel
-        this.cooldown = cooldown; //cooldown in milliseconds
-        this.duration = duration; //duration in milliseconds
-        this.spinup = spinup; //spinup in milliseconds
-        this.speed = speed; //speed in m/s
-        this.ammoPerShot = ammoPerShot;
-        this.dps = dps;
+
+        this.name = smurfyWeaponData.name;
+        this.translatedName = smurfyWeaponData.translated_name;
+        this.minRange = Number(smurfyWeaponData.min_range);
+        this.optRange = Number(smurfyWeaponData.long_range);
+        this.maxRange = Number(smurfyWeaponData.max_range);
+        this.baseDmg = Number(smurfyWeaponData.calc_stats.baseDmg);
+        this.damageMultiplier = Number(smurfyWeaponData.calc_stats.damageMultiplier);
+        this.heat = Number(smurfyWeaponData.heat);
+        this.minHeatPenaltyLevel = Number(smurfyWeaponData.min_heat_penalty_level);
+        this.heatPenalty = Number(smurfyWeaponData.heat_penalty);
+        this.heatPenaltyId = smurfyWeaponData.heat_penalty_id;
+        //Our cooldown/duration/spinup values are in milliseconds, smurfy is in seconds
+        this.cooldown = Number(smurfyWeaponData.cooldown) * 1000;
+        this.duration = Number(smurfyWeaponData.duration) * 1000;
+        //Spinup data from data/addedweapondata.js
+        this.spinup = (smurfyWeaponData.spinup ? Number(smurfyWeaponData.spinup) : 0) * 1000;
+        this.speed = Number(smurfyWeaponData.speed);
+        this.ammoPerShot = smurfyWeaponData.ammo_per_shot ?
+              Number(smurfyWeaponData.ammo_per_shot) : 0;
+        this.dps = Number(smurfyWeaponData.calc_stats.dps);
       }
       hasDuration() {
         return Number(this.duration) > 0;
@@ -1033,44 +1034,13 @@ var MechModel = MechModel || (function () {
         if (smurfyMechComponentItem.type ==="weapon") {
           let weaponId = smurfyMechComponentItem.id;
           let smurfyWeaponData = getSmurfyWeaponData(weaponId);
-          let weaponInfo = weaponInfoFromSmurfyWeaponData(weaponId, location, smurfyWeaponData);
+          let weaponInfo = new WeaponInfo(weaponId, location, smurfyWeaponData);
           return weaponInfo;
         } else {
           return null;
         }
     });
     return weaponInfoList;
-  }
-
-  var weaponInfoFromSmurfyWeaponData = function (weaponId, location, smurfyWeaponData) {
-    let name = smurfyWeaponData.name;
-    let translatedName = smurfyWeaponData.translated_name;
-    let minRange = smurfyWeaponData.min_range;
-    let optRange = smurfyWeaponData.long_range;
-    let maxRange = smurfyWeaponData.max_range;
-    let baseDmg = smurfyWeaponData.calc_stats.baseDmg;
-    let damageMultiplier = smurfyWeaponData.calc_stats.damageMultiplier;
-    let heat = smurfyWeaponData.heat;
-    let minHeatPenaltyLevel = smurfyWeaponData.min_heat_penalty_level;
-    let heatPenalty = smurfyWeaponData.heat_penalty;
-    let heatPenaltyId = smurfyWeaponData.heat_penalty_id;
-    //Our cooldown/duration/spinup values are in milliseconds, smurfy is in seconds
-    let cooldown = Number(smurfyWeaponData.cooldown) * 1000;
-    let duration = Number(smurfyWeaponData.duration) * 1000;
-    //Spinup data from data/addedweapondata.js
-    let spinup = (smurfyWeaponData.spinup ? Number(smurfyWeaponData.spinup) : 0) * 1000;
-    let speed = smurfyWeaponData.speed;
-    let ammoPerShot = smurfyWeaponData.ammo_per_shot ?
-          smurfyWeaponData.ammo_per_shot : 0;
-    let dps = smurfyWeaponData.calc_stats.dps;
-
-    let weaponInfo = new WeaponInfo(
-      weaponId, name, translatedName, location,
-      minRange, optRange, maxRange, baseDmg, damageMultiplier,
-      heat, minHeatPenaltyLevel, heatPenalty, heatPenaltyId,
-      cooldown, duration, spinup, speed, ammoPerShot, dps
-    );
-    return weaponInfo;
   }
 
   var heatsinkListFromSmurfyMechLoadout = function(smurfyMechLoadout) {
