@@ -210,10 +210,10 @@ _AddedWeaponData = {
     ammo_per_shot : 6
   },
   "ClanNarcBeacon" : {
-    ammo_per_shot : 6
+    ammo_per_shot : 1
   },
   "ClanAntiMissileSystem" : {
-    ammo_per_shot : 6
+    ammo_per_shot : 1
   },
   "ClanAutoCannon2" : {
     ammo_per_shot : 1
