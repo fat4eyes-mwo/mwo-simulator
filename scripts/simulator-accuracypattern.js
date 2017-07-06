@@ -50,22 +50,22 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
   var getWeaponAccuracyPattern = function(weaponInfo) {
     var weaponAccuracyMap =
       { "ClanERPPC" : MechAccuracyPattern.cERPPCPattern,
-        "LRM5" : MechAccuracyPattern.lrmPattern(_LRM5Spread),
-        "LRM10" : MechAccuracyPattern.lrmPattern(_LRM10Spread),
-        "LRM15" : MechAccuracyPattern.lrmPattern(_LRM15Spread),
-        "LRM20" : MechAccuracyPattern.lrmPattern(_LRM20Spread),
-        "LRM5_Artemis" : MechAccuracyPattern.lrmPattern(_ALRM5Spread),
-        "LRM10_Artemis" : MechAccuracyPattern.lrmPattern(_ALRM10Spread),
-        "LRM15_Artemis" : MechAccuracyPattern.lrmPattern(_ALRM15Spread),
-        "LRM20_Artemis" : MechAccuracyPattern.lrmPattern(_ALRM20Spread),
-        "ClanLRM5" : MechAccuracyPattern.lrmPattern(_cLRM5Spread),
-        "ClanLRM10" : MechAccuracyPattern.lrmPattern(_cLRM10Spread),
-        "ClanLRM15" : MechAccuracyPattern.lrmPattern(_cLRM15Spread),
-        "ClanLRM20" : MechAccuracyPattern.lrmPattern(_cLRM20Spread),
-        "ClanLRM5_Artemis" : MechAccuracyPattern.lrmPattern(_cALRM5Spread),
-        "ClanLRM10_Artemis" : MechAccuracyPattern.lrmPattern(_cALRM10Spread),
-        "ClanLRM15_Artemis" : MechAccuracyPattern.lrmPattern(_cALRM15Spread),
-        "ClanLRM20_Artemis" : MechAccuracyPattern.lrmPattern(_cALRM20Spread),
+        "LRM5" : MechAccuracyPattern.seekerPatern(_LRM5Spread),
+        "LRM10" : MechAccuracyPattern.seekerPatern(_LRM10Spread),
+        "LRM15" : MechAccuracyPattern.seekerPatern(_LRM15Spread),
+        "LRM20" : MechAccuracyPattern.seekerPatern(_LRM20Spread),
+        "LRM5_Artemis" : MechAccuracyPattern.seekerPatern(_ALRM5Spread),
+        "LRM10_Artemis" : MechAccuracyPattern.seekerPatern(_ALRM10Spread),
+        "LRM15_Artemis" : MechAccuracyPattern.seekerPatern(_ALRM15Spread),
+        "LRM20_Artemis" : MechAccuracyPattern.seekerPatern(_ALRM20Spread),
+        "ClanLRM5" : MechAccuracyPattern.seekerPatern(_cLRM5Spread),
+        "ClanLRM10" : MechAccuracyPattern.seekerPatern(_cLRM10Spread),
+        "ClanLRM15" : MechAccuracyPattern.seekerPatern(_cLRM15Spread),
+        "ClanLRM20" : MechAccuracyPattern.seekerPatern(_cLRM20Spread),
+        "ClanLRM5_Artemis" : MechAccuracyPattern.seekerPatern(_cALRM5Spread),
+        "ClanLRM10_Artemis" : MechAccuracyPattern.seekerPatern(_cALRM10Spread),
+        "ClanLRM15_Artemis" : MechAccuracyPattern.seekerPatern(_cALRM15Spread),
+        "ClanLRM20_Artemis" : MechAccuracyPattern.seekerPatern(_cALRM20Spread),
       };
     return weaponAccuracyMap[weaponInfo.name];
   }
@@ -99,8 +99,8 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
     return transformedDamage;
   }
 
-  //LRM spread
-  class LrmSpread {
+  //seeking missile spread
+  class SeekerSpread {
     constructor(range, spread) {
       this.range = Number(range);
       this.spread = {}
@@ -123,29 +123,29 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
       }
     }
   }
-  var lrmPattern = function(lrmSpreadData) {
-    let lrmSpreadList = [];
-    for (let range in lrmSpreadData) {
-      lrmSpreadList.push(new LrmSpread(range, lrmSpreadData[range]));
+  var seekerPatern = function(seekerSpreadData) {
+    let seekerSpreadList = [];
+    for (let range in seekerSpreadData) {
+      seekerSpreadList.push(new SeekerSpread(range, seekerSpreadData[range]));
     }
-    lrmSpreadList.sort((entry1, entry2) => {
+    seekerSpreadList.sort((entry1, entry2) => {
       return Number(entry1.range) - Number(entry2.range);
     });
 
     return function(weaponDamage, range) {
       let baseIdx = 0;
       let nextIdx = 0;
-      for (baseIdx = 0; baseIdx < lrmSpreadList.length; baseIdx ++) {
-        if (lrmSpreadList[baseIdx].range < range) {
+      for (baseIdx = 0; baseIdx < seekerSpreadList.length; baseIdx ++) {
+        if (seekerSpreadList[baseIdx].range < range) {
           break;
         }
       }
-      if (baseIdx >= lrmSpreadList.length - 1) {
-        baseIdx = lrmSpreadList.length - 2;
+      if (baseIdx >= seekerSpreadList.length - 1) {
+        baseIdx = seekerSpreadList.length - 2;
       }
       nextIdx = baseIdx + 1;
-      let baseEntry = lrmSpreadList[baseIdx];
-      let nextEntry = lrmSpreadList[nextIdx];
+      let baseEntry = seekerSpreadList[baseIdx];
+      let nextEntry = seekerSpreadList[nextIdx];
       let rangeDiff = range - baseEntry.range;
 
       let computedSpread = {};
@@ -166,21 +166,21 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
           computedSpread[componentVal] = computedPercent;
         }
       }
-      let computedLRMSpread = new LrmSpread(range, computedSpread);
+      let computedSeekerSpread = new SeekerSpread(range, computedSpread);
       //sanity check on computed spread
       let totalPercent = 0;
-      for (let component in computedLRMSpread.spread) {
-        totalPercent += computedLRMSpread.spread[component];
+      for (let component in computedSeekerSpread.spread) {
+        totalPercent += computedSeekerSpread.spread[component];
       }
       if (totalPercent > 1) {
-        console.warn("LRM percentages over 100%:" + computedLRMSpread.toString());
+        console.warn("Seeker percentages over 100%:" + computedSeekerSpread.toString());
       }
       let totalDamage = weaponDamage.getTotalDamage();
       //transform totalDamage
       let transformedDamage = weaponDamage.clone();
-      for (let component in computedLRMSpread.spread) {
+      for (let component in computedSeekerSpread.spread) {
         transformedDamage.damageMap[component] =
-            totalDamage * computedLRMSpread.spread[component];
+            totalDamage * computedSeekerSpread.spread[component];
       }
       return transformedDamage;
     }
@@ -250,7 +250,7 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
     accuracySpreadToAdjacent : accuracySpreadToAdjacent,
     getWeaponAccuracyPattern : getWeaponAccuracyPattern,
     cERPPCPattern : cERPPCPattern,
-    lrmPattern : lrmPattern,
+    seekerPatern : seekerPatern,
     getDefault : getDefault,
     getPatterns : getPatterns,
   }
