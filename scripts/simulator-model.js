@@ -148,25 +148,21 @@ var MechModel = MechModel || (function () {
   }
 
   class Heatsink {
-    constructor(heatsinkId, name, active, location, cooling, engineCooling, internalHeatCapacity, externalHeatCapacity) {
-      this.heatsinkId = heatsinkId;
-      this.name = name;
-      this.active = active;
+    constructor(location, smurfyModuleData) {
       this.location = location;
-      this.cooling = cooling;
-      this.engineCooling = engineCooling;
-      this.internalHeatCapacity = internalHeatCapacity;
-      this.externalHeatCapacity = externalHeatCapacity;
+      this.heatsinkId = smurfyModuleData.id;
+      this.name = smurfyModuleData.name;
+      this.active = true;
+      this.cooling = smurfyModuleData.stats.cooling;
+      this.engineCooling = smurfyModuleData.stats.engineCooling;
+      this.internalHeatCapacity = smurfyModuleData.stats.internal_heat_capacity;
+      this.externalHeatCapacity = smurfyModuleData.stats.external_heat_capacity;
+
+      //keep smurfy module data for cloning
+      this.smurfyModuleData = smurfyModuleData;
     }
     clone() {
-      return new Heatsink(this.heatsinkId,
-        this.name,
-        this.active,
-        this.location,
-        this.cooling,
-        this.engineCooling,
-        this.internalHeatCapacity,
-        this.externalHeatCapacity);
+      return new Heatsink(this.location, this.smurfyModuleData);
     }
   }
 
@@ -313,7 +309,7 @@ var MechModel = MechModel || (function () {
 
 
         //destroy components if necessary
-        if (!this.mechHealth.isIntact(location)) {
+        if (!this.mechHealth.isIntact(location) && componentDamage.totalDamage() > 0) {
           let destroyComponentDamage = this.destroyComponent(location, false);
           totalDamage.add(destroyComponentDamage);
           //destroy connected arms if torsos are destroyed
@@ -324,9 +320,8 @@ var MechModel = MechModel || (function () {
             destroyComponentDamage = this.destroyComponent(Component.RIGHT_ARM, true);
             totalDamage.add(destroyComponentDamage);
           }
-          //update engine stat changes due to component destruction
-          //i.e. reduce clan engine efficiency
-          this.updateEngineHeatStats(location);
+          //update heatStat changes due to component destruction
+          this.updateHeatStats(location);
         }
       }
       return totalDamage;
@@ -387,7 +382,8 @@ var MechModel = MechModel || (function () {
       }
     }
 
-    updateEngineHeatStats(location) {
+    //update heat stats on component destruction
+    updateHeatStats(location) {
       //reduce engine heat efficiency if clan xl engine
       let engineInfo = this.heatState.engineInfo;
       let heatState = this.heatState;
@@ -395,16 +391,17 @@ var MechModel = MechModel || (function () {
         if (location === Component.LEFT_TORSO ||
             location === Component.RIGHT_TORSO) {
           heatState.engineHeatEfficiency = Number(_MechGlobalGameInfo.clan_reduced_xl_heat_efficiency);
-          //recompute heat stats
-          let heatStats = calculateHeatStats(
-                heatState.currHeatsinkList,
-                heatState.engineInfo,
-                heatState.engineHeatEfficiency);
-          heatState.currHeatDissipation = heatStats.heatDissipation;
-          heatState.currMaxHeat = heatStats.heatCapacity;
-          this.updateTypes[UpdateType.HEAT];
+
         }
       }
+      //recompute heat stats
+      let heatStats = calculateHeatStats(
+            heatState.currHeatsinkList,
+            heatState.engineInfo,
+            heatState.engineHeatEfficiency);
+      heatState.currHeatDissipation = heatStats.heatDissipation;
+      heatState.currMaxHeat = heatStats.heatCapacity;
+      this.updateTypes[UpdateType.HEAT];
     }
 
     clearMechStats() {
@@ -1062,22 +1059,7 @@ var MechModel = MechModel || (function () {
     let heatsinkId = smurfyMechComponentItem.id;
     let smurfyModuleData = getSmurfyModuleData(heatsinkId);
 
-    let heatsink = heatsinkFromModuleData(location, smurfyModuleData);
-    return heatsink;
-  }
-
-  var heatsinkFromModuleData = function (location, smurfyModuleData) {
-    let heatsinkId = smurfyModuleData.id;
-    let name = smurfyModuleData.name;
-    let active = true;
-    let cooling = smurfyModuleData.stats.cooling;
-    let engineCooling = smurfyModuleData.stats.engineCooling;
-    let internalHeatCapacity = smurfyModuleData.stats.internal_heat_capacity;
-    let externalHeatCapacity = smurfyModuleData.stats.external_heat_capacity;
-
-    let heatsink = new Heatsink(heatsinkId, name, active, location,
-        cooling, engineCooling,
-        internalHeatCapacity, externalHeatCapacity);
+    let heatsink = new Heatsink(location, smurfyModuleData);
     return heatsink;
   }
 
@@ -1149,7 +1131,7 @@ var MechModel = MechModel || (function () {
     //IS mechs have a default 10 heatsinks unless the slots are filled. Those heatsinks
     //are caught in the loadout.configuration pass.
     let heatsinkCount = isClanXLEngine(smurfyEngineData) ? smurfyEngineData.stats.heatsinks : 10;
-    let heatsink = heatsinkFromModuleData(Component.CENTRE_TORSO, getSmurfyModuleData(engineHeatsinkId));
+    let heatsink = new Heatsink(Component.CENTRE_TORSO, getSmurfyModuleData(engineHeatsinkId));
     let engineInfo = new EngineInfo(engineId, name, heatsink, heatsinkCount);
     return engineInfo;
   }
