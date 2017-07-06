@@ -150,3 +150,70 @@ var _cALRM20Spread = {
             "left_torso": 0.20, "right_torso" :0.20,
             "left_leg" : 0.02, "right_leg" : 0.02,},
 };
+
+////////////////////////////////////////////////////////////////////////////////
+//SRM spread data
+//Reference: https://mwomercs.com/forums/topic/254250-srm-spread-experiments/
+//Adjacent, nextAdjacent values are eyeballed from damage distribution pictures
+//Format for direct fire weapons is
+//{<range> : {target: <percentDamage>, adjacent: <percentDamage>, nextAdjacent: <percentDamage>}}
+var _SRM2Spread = {
+    0 : {target: 1.0, adjacent: 0, nextAdjacent: 0},
+    130 : {target: 0.8697674419, adjacent: .1, nextAdjacent: 0},
+    260 : {target: 0.8697674419, adjacent: .1, nextAdjacent: 0},
+};
+var _SRM4Spread = {
+    0 : {target: 0.9453993933, adjacent: 0.05, nextAdjacent: 0},
+    130 : {target: 0.6589147287, adjacent: .32, nextAdjacent: 0},
+    260 : {target: 0.6212624585, adjacent: .35, nextAdjacent: 0},
+};
+var _SRM6Spread = {
+    0 : {target: 0.9060077519, adjacent: 0.05, nextAdjacent: 0},
+    130 : {target: 0.557543232, adjacent: .40, nextAdjacent: 0.03},
+    260 : {target: 0.557543232, adjacent: .40, nextAdjacent: 0.03},
+};
+var _ASRM2Spread = {
+    0 : {target: 1.0, adjacent: 0.0, nextAdjacent: 0.0},
+    130 : {target: 0.9252845126, adjacent: .05, nextAdjacent: 0.00},
+    260 : {target: 0.9252845126, adjacent: .05, nextAdjacent: 0.00},
+};
+var _ASRM4Spread = {
+    0 : {target: 0.988372093, adjacent: 0.01, nextAdjacent: 0.0},
+    130 : {target: 0.7497995188, adjacent: .30, nextAdjacent: 0.0},
+    260 : {target: 0.7248062016, adjacent: .30, nextAdjacent: 0.0},
+};
+var _ASRM6Spread = {
+    0 : {target: 0.9664082687, adjacent: 0.03, nextAdjacent: 0.0},
+    130 : {target: 0.6902916205, adjacent: .28, nextAdjacent: 0.0},
+    260 : {target: 0.6589147287, adjacent: .32, nextAdjacent: 0.0},
+};
+var _cSRM2Spread = {
+    0 : {target: 1.0, adjacent: 0, nextAdjacent: 0},
+    130 : {target: 0.7663934426, adjacent: .20, nextAdjacent: 0},
+    260 : {target: 0.7923728814, adjacent: .15, nextAdjacent: 0},
+};
+var _cSRM4Spread = {
+    0 : {target: 0.9739583333, adjacent: 0.02, nextAdjacent: 0},
+    130 : {target: 0.584375, adjacent: .40, nextAdjacent: 0},
+    260 : {target: 0.5993589744, adjacent: .35, nextAdjacent: 0},
+};
+var _cSRM6Spread = {
+    0 : {target: 0.9166666667, adjacent: 0.07, nextAdjacent: 0},
+    130 : {target: 0.5194444444, adjacent: .40, nextAdjacent: 0.03},
+    260 : {target: 0.556547619, adjacent: .35, nextAdjacent: 0.02},
+};
+var _cASRM2Spread = {
+    0 : {target: 1.0, adjacent: 0, nextAdjacent: 0},
+    130 : {target: 0.8990384615, adjacent: .05, nextAdjacent: 0.0},
+    260 : {target: 0.8990384615, adjacent: .05, nextAdjacent: 0.0},
+};
+var _cASRM4Spread = {
+    0 : {target: 0.8348214286, adjacent: 0.12, nextAdjacent: 0},
+    130 : {target: 0.73046875, adjacent: .32, nextAdjacent: 0.0},
+    260 : {target: 0.6875, adjacent: .35, nextAdjacent: 0.0},
+};
+var _cASRM6Spread = {
+    0 : {target: 0.9166666667, adjacent: 0.05, nextAdjacent: 0},
+    130 : {target: 0.6233333333, adjacent: .34, nextAdjacent: 0.0},
+    260 : {target: 0.6233333333, adjacent: .34, nextAdjacent: 0.0},
+};

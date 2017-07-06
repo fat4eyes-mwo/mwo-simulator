@@ -4,6 +4,8 @@
 //http://localhost:8181/#s=19eaa8f895cce192fd74796522bc4e86039c90a7cbd75c1f3e1edd175383317d
 //lrmboat test
 //http://localhost:8181/#s=2adec6e69fd02c6dd8dbc6da606e47f569d8bbe690d4841b7bc8882decda3dcd
+//srmboat test
+//http://localhost:8181/#s=f5e1dc499ba7fb93cc9c01655b69ff5a8976d9ec9d3a2e43eaeec4a67ba05185
 
 //20 vs 20
 //http://localhost:8181/#s=e1f4897ae14687dfaba82e457031e1aef7b08a03936770f59f498a1290baadf4
@@ -26,6 +28,10 @@
 //http://mwo.smurfy-net.de/mechlab#i=12&l=ccd22130859be43016c116144508ff0eafd02703
 //maddog
 //http://mwo.smurfy-net.de/mechlab#i=214&l=e0dfb8f23aa9e091fedb52686d365d5a335a93e8
+//shadowhawk
+//http://mwo.smurfy-net.de/mechlab#i=154&l=fbdff04a6abf82aeb905e07d85a4f899bf9ece49
+//DummyStormcrow
+//http://mwo.smurfy-net.de/mechlab#i=183&l=1d9c0251e4085929bc6bace60fa09815a382ff36
 
 //weaponless atlas
 //http://mwo.smurfy-net.de/mechlab#i=16&l=cb72e3e1264e3b8051193ab4e52686a71dba239c

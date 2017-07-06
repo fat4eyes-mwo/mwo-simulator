@@ -86,22 +86,34 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
   var getWeaponAccuracyPattern = function(weaponInfo) {
     var weaponAccuracyMap =
       { "ClanERPPC" : MechAccuracyPattern.cERPPCPattern,
-        "LRM5" : MechAccuracyPattern.seekerPatern(_LRM5Spread),
-        "LRM10" : MechAccuracyPattern.seekerPatern(_LRM10Spread),
-        "LRM15" : MechAccuracyPattern.seekerPatern(_LRM15Spread),
-        "LRM20" : MechAccuracyPattern.seekerPatern(_LRM20Spread),
-        "LRM5_Artemis" : MechAccuracyPattern.seekerPatern(_ALRM5Spread),
-        "LRM10_Artemis" : MechAccuracyPattern.seekerPatern(_ALRM10Spread),
-        "LRM15_Artemis" : MechAccuracyPattern.seekerPatern(_ALRM15Spread),
-        "LRM20_Artemis" : MechAccuracyPattern.seekerPatern(_ALRM20Spread),
-        "ClanLRM5" : MechAccuracyPattern.seekerPatern(_cLRM5Spread),
-        "ClanLRM10" : MechAccuracyPattern.seekerPatern(_cLRM10Spread),
-        "ClanLRM15" : MechAccuracyPattern.seekerPatern(_cLRM15Spread),
-        "ClanLRM20" : MechAccuracyPattern.seekerPatern(_cLRM20Spread),
-        "ClanLRM5_Artemis" : MechAccuracyPattern.seekerPatern(_cALRM5Spread),
-        "ClanLRM10_Artemis" : MechAccuracyPattern.seekerPatern(_cALRM10Spread),
-        "ClanLRM15_Artemis" : MechAccuracyPattern.seekerPatern(_cALRM15Spread),
-        "ClanLRM20_Artemis" : MechAccuracyPattern.seekerPatern(_cALRM20Spread),
+        "LRM5" : MechAccuracyPattern.seekerPattern(_LRM5Spread),
+        "LRM10" : MechAccuracyPattern.seekerPattern(_LRM10Spread),
+        "LRM15" : MechAccuracyPattern.seekerPattern(_LRM15Spread),
+        "LRM20" : MechAccuracyPattern.seekerPattern(_LRM20Spread),
+        "LRM5_Artemis" : MechAccuracyPattern.seekerPattern(_ALRM5Spread),
+        "LRM10_Artemis" : MechAccuracyPattern.seekerPattern(_ALRM10Spread),
+        "LRM15_Artemis" : MechAccuracyPattern.seekerPattern(_ALRM15Spread),
+        "LRM20_Artemis" : MechAccuracyPattern.seekerPattern(_ALRM20Spread),
+        "ClanLRM5" : MechAccuracyPattern.seekerPattern(_cLRM5Spread),
+        "ClanLRM10" : MechAccuracyPattern.seekerPattern(_cLRM10Spread),
+        "ClanLRM15" : MechAccuracyPattern.seekerPattern(_cLRM15Spread),
+        "ClanLRM20" : MechAccuracyPattern.seekerPattern(_cLRM20Spread),
+        "ClanLRM5_Artemis" : MechAccuracyPattern.seekerPattern(_cALRM5Spread),
+        "ClanLRM10_Artemis" : MechAccuracyPattern.seekerPattern(_cALRM10Spread),
+        "ClanLRM15_Artemis" : MechAccuracyPattern.seekerPattern(_cALRM15Spread),
+        "ClanLRM20_Artemis" : MechAccuracyPattern.seekerPattern(_cALRM20Spread),
+        "SRM2" : MechAccuracyPattern.directFireSpreadPattern(_SRM2Spread),
+        "SRM4" : MechAccuracyPattern.directFireSpreadPattern(_SRM4Spread),
+        "SRM6" : MechAccuracyPattern.directFireSpreadPattern(_SRM6Spread),
+        "SRM2_Artemis" : MechAccuracyPattern.directFireSpreadPattern(_ASRM2Spread),
+        "SRM4_Artemis" : MechAccuracyPattern.directFireSpreadPattern(_ASRM4Spread),
+        "SRM6_Artemis" : MechAccuracyPattern.directFireSpreadPattern(_ASRM6Spread),
+        "ClanSRM2": MechAccuracyPattern.directFireSpreadPattern(_cSRM2Spread),
+        "ClanSRM4": MechAccuracyPattern.directFireSpreadPattern(_cSRM4Spread),
+        "ClanSRM6": MechAccuracyPattern.directFireSpreadPattern(_cSRM6Spread),
+        "ClanSRM2_Artemis": MechAccuracyPattern.directFireSpreadPattern(_cASRM2Spread),
+        "ClanSRM4_Artemis": MechAccuracyPattern.directFireSpreadPattern(_cASRM4Spread),
+        "ClanSRM6_Artemis": MechAccuracyPattern.directFireSpreadPattern(_cASRM6Spread),
       };
     return weaponAccuracyMap[weaponInfo.name];
   }
@@ -159,7 +171,20 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
       }
     }
   }
-  var seekerPatern = function(seekerSpreadData) {
+
+  var findSpreadBaseIdx = function(spreadList, range) {
+    let baseIdx = 0;
+    for (baseIdx = spreadList.length - 1; baseIdx > 0; baseIdx --) {
+      if (Number(spreadList[baseIdx].range) < Number(range)) {
+        break;
+      }
+    }
+    if (baseIdx >= spreadList.length - 1) {
+      baseIdx = spreadList.length - 2;
+    }
+    return baseIdx;
+  }
+  var seekerPattern = function(seekerSpreadData) {
     let seekerSpreadList = [];
     for (let range in seekerSpreadData) {
       seekerSpreadList.push(new SeekerSpread(range, seekerSpreadData[range]));
@@ -169,17 +194,9 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
     });
 
     return function(weaponDamage, range) {
-      let baseIdx = 0;
-      let nextIdx = 0;
-      for (baseIdx = 0; baseIdx < seekerSpreadList.length; baseIdx ++) {
-        if (seekerSpreadList[baseIdx].range < range) {
-          break;
-        }
-      }
-      if (baseIdx >= seekerSpreadList.length - 1) {
-        baseIdx = seekerSpreadList.length - 2;
-      }
-      nextIdx = baseIdx + 1;
+      range = Number(range);
+      let baseIdx = findSpreadBaseIdx(seekerSpreadList, range);
+      let nextIdx = baseIdx + 1;
       let baseEntry = seekerSpreadList[baseIdx];
       let nextEntry = seekerSpreadList[nextIdx];
       let rangeDiff = range - baseEntry.range;
@@ -219,6 +236,55 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
             totalDamage * computedSeekerSpread.spread[component];
       }
       return transformedDamage;
+    }
+  }
+
+  class DirectFireSpread {
+    constructor(range, spread) {
+      this.range = Number(range);
+      this.spread = spread;
+    }
+  }
+  var directFireSpreadPattern = function(spreadData) {
+    let spreadList = [];
+    for (let spreadRange in spreadData) {
+      let directFireSpread = new DirectFireSpread(spreadRange, spreadData[spreadRange]);
+      spreadList.push(directFireSpread);
+    }
+    spreadList.sort((entry1, entry2) => {
+      return entry1.range - entry2.range;
+    });
+
+    return function(weaponDamage, range) {
+      range = Number(range);
+      let baseIdx = findSpreadBaseIdx(spreadList, range);
+      let nextIdx = baseIdx + 1;
+
+      let baseRange = Number(spreadList[baseIdx].range);
+      let nextRange = Number(spreadList[nextIdx].range);
+      let computedSpread = {};
+      for (let field in spreadList[baseIdx].spread) {
+        let basePercent = spreadList[baseIdx].spread[field];
+        let nextPercent = spreadList[nextIdx].spread[field];
+        let slope = (Number(nextPercent) - Number(basePercent)) / (nextRange - baseRange);
+        let computedPercent = basePercent + slope * (range - baseRange);
+        computedSpread[field] = computedPercent;
+      }
+
+      //sanity check on computed spread
+      let totalPercent = 0;
+      for (let field in computedSpread) {
+        totalPercent += Number(computedSpread[field]);
+      }
+      if (totalPercent > 1) {
+        console.warn("Direct fire percentages greater than 1: " + totalPercent);
+      }
+
+      return accuracySpreadToAdjacent(computedSpread.target,
+                                        computedSpread.adjacent,
+                                        computedSpread.nextAdjacent)(weaponDamage, range);
+
+      //TODO: Implement
     }
   }
 
@@ -286,7 +352,8 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
     accuracySpreadToAdjacent : accuracySpreadToAdjacent,
     getWeaponAccuracyPattern : getWeaponAccuracyPattern,
     cERPPCPattern : cERPPCPattern,
-    seekerPatern : seekerPatern,
+    seekerPattern : seekerPattern,
+    directFireSpreadPattern : directFireSpreadPattern,
     getDefault : getDefault,
     getPatterns : getPatterns,
   }
