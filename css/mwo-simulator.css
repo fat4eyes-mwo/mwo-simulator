@@ -7,6 +7,15 @@ body {
   font-size: 14px;
 }
 
+a {
+  color: gold;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
 .stylishText {
   font-family: Orbitron;
   /*font-family: sans-serif;;*/
@@ -340,12 +349,6 @@ body {
 .titlePanel .mechName a {
   font-weight: bold;
   font-size: 1.2em;
-  color: gold;
-  text-decoration: none;
-}
-
-.titlePanel .mechName a:hover {
-  text-decoration: underline;
 }
 
 .titlePanel .deleteMechButton {
@@ -826,4 +829,41 @@ body {
 
 .teamReport .numberValue {
   text-align: right;
+}
+
+.tooltip {
+  position: absolute;
+  background-color: #404040;
+  color: #aaaaaa;
+  border: thin solid gold;
+  border-radius: 7px 0px 7px 0px;
+}
+
+.tooltip.hidden {
+  display: none;
+}
+
+@media only screen and (max-width: 550px) {
+  .tooltip {
+    position: relative;
+  }
+}
+
+.tooltipTitle {
+  font-weight: bold;
+  color: gold;
+  margin-bottom: 0.5em;
+}
+
+.modifiedTooltip,
+.permalinkGeneratedTooltip {
+  top: 100%;
+  left: 5%;
+  width: 70%;
+  padding: 5px;
+}
+
+.permalinkGeneratedTooltip a {
+  text-decoration: underline;
+  font-weight: bold;
 }

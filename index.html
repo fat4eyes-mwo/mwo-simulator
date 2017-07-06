@@ -22,6 +22,7 @@
     <script src="scripts/data/addedweapondata.js"></script>
     <script src="scripts/data/weaponspread.js"></script>
 
+    <script src="scripts/simulator-view-widgets.js"></script>
     <script src="scripts/util.js"></script>
     <script src="scripts/simulator-view.js"></script>
     <script src="scripts/simulator-view-router.js"></script>
@@ -422,34 +423,49 @@
 
 
     <!-- Mech damage breakdown templates -->
-      <div id = "mechBreakdownHeader-template" class="mechBreakdownHeader tableHeader template row">
-        <div class="column column-4">Mech</div>
-        <div class="numberValue column column-2">DMG</div>
-        <div class="numberValue column column-2">DPS</div>
-        <div class="numberValue column column-2">Burst</div>
-        <div class="numberValue column column-2">Time Alive</div>
-      </div>
-      <div id = "mechBreakdownRow-template" class="mechBreakdownRow tableRow template row">
-        <div class="name column column-4"></div>
-        <div class="numberValue damage column column-2"></div>
-        <div class="numberValue dps column column-2"></div>
-        <div class="numberValue burst column column-2"></div>
-        <div class="numberValue timeAlive column column-2"></div>
-      </div>
+    <div id = "mechBreakdownHeader-template" class="mechBreakdownHeader tableHeader template row">
+      <div class="column column-4">Mech</div>
+      <div class="numberValue column column-2">DMG</div>
+      <div class="numberValue column column-2">DPS</div>
+      <div class="numberValue column column-2">Burst</div>
+      <div class="numberValue column column-2">Time Alive</div>
+    </div>
+    <div id = "mechBreakdownRow-template" class="mechBreakdownRow tableRow template row">
+      <div class="name column column-4"></div>
+      <div class="numberValue damage column column-2"></div>
+      <div class="numberValue dps column column-2"></div>
+      <div class="numberValue burst column column-2"></div>
+      <div class="numberValue timeAlive column column-2"></div>
+    </div>
 
     <!-- Weapon breakdown row template -->
-      <div id = "weaponBreakdownHeader-template" class="weaponBreakdownHeader tableHeader template row">
-        <div class="column column-4">Weapon</div>
-        <div class="numberValue column column-2">DMG</div>
-        <!-- <div class="numberValue column column-2">DPS</div> -->
-        <div class="numberValue column column-2">Times Fired</div>
+    <div id = "weaponBreakdownHeader-template" class="weaponBreakdownHeader tableHeader template row">
+      <div class="column column-4">Weapon</div>
+      <div class="numberValue column column-2">DMG</div>
+      <!-- <div class="numberValue column column-2">DPS</div> -->
+      <div class="numberValue column column-2">Times Fired</div>
+    </div>
+    <div id = "weaponBreakdownRow-template" class="weaponBreakdownRow tableRow template row">
+      <div class="name column column-4"></div>
+      <div class="numberValue damage column column-2"></div>
+      <!-- <div class="numberValue dps column column-2"></div> -->
+      <div class="numberValue count column column-2"></div>
+    </div>
+
+    <!-- Modified info popup template -->
+    <div id="modifiedTooltip-template" class="modifiedTooltip template">
+      <div class="tooltipTitle">Simulation changed</div>
+      <div>
+      You have made changes to the simulation. Click the 'Permalink' button
+      to save your changes and share them with others.
       </div>
-      <div id = "weaponBreakdownRow-template" class="weaponBreakdownRow tableRow template row">
-        <div class="name column column-4"></div>
-        <div class="numberValue damage column column-2"></div>
-        <!-- <div class="numberValue dps column column-2"></div> -->
-        <div class="numberValue count column column-2"></div>
-      </div>
+    </div>
+
+    <!--Permlink generated popup -->
+    <div id="permalinkGeneratedTooltip-template" class="permalinkGeneratedTooltip template">
+      <a class="permaLink">Permalink</a> generated. Right click the link and
+      copy the link address to the clipboard to share it with other people.
+    <div>
 
   </body>
 </html>

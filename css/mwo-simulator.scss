@@ -10,12 +10,25 @@ $cooldown-bar-color: rgb(255, 50, 50);
 $cooldown-bar-negative-color : $off-background-color;
 $fancy-font-family: Orbitron;
 $modal-wide-width: 80%;
+$link-color: gold;
+$tooltip-background: $off-background-color;
+$tooltip-color: $primary-font-color;
+$tooltip-border: thin solid gold;
+$emphasis-color: gold;
+$mobile-width: 550px;
 /*Main panel styles*/
 body {
   background-color: $background-color;
   color: $primary-font-color;
   font-family: sans-serif;
   font-size: 14px;
+}
+a {
+  color: $link-color;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
 }
 
 div {
@@ -197,7 +210,7 @@ div {
 }
 
 /*Special case for narrow screens (mobile)*/
-@media only screen and (max-width: 550px) {
+@media only screen and (max-width: $mobile-width) {
   .paperDoll {
     position:relative;
     height: 100px;
@@ -400,12 +413,9 @@ div {
 .titlePanel .mechName a {
   font-weight: bold;
   font-size: 1.2em;
-  color: gold;
-  text-decoration: none;
 }
 
 .titlePanel .mechName a:hover {
-  text-decoration: underline;
 }
 
 .titlePanel .deleteMechButton {
@@ -899,4 +909,45 @@ div {
 
 .teamReport .numberValue {
   text-align: right;
+}
+
+.tooltip {
+  position:absolute;
+  background-color: $tooltip-background;
+  color: $tooltip-color;
+  border: $tooltip-border;
+  border-radius: 7px 0px 7px 0px;
+}
+
+.tooltip.hidden {
+  display: none;
+}
+
+@media only screen and (max-width: $mobile-width) {
+  .tooltip {
+    position:relative;
+  }
+}
+
+.tooltipTitle {
+  font-weight: bold;
+  color: $emphasis-color;
+  margin-bottom: 0.5em;
+}
+
+.modifiedTooltip,
+.permalinkGeneratedTooltip {
+  top: 100%;
+  left: 5%;
+  width: 70%;
+  padding: 5px;
+}
+
+.modifiedTooltip {
+
+}
+
+.permalinkGeneratedTooltip a {
+  text-decoration: underline;
+  font-weight: bold;
 }

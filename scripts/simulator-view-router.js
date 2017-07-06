@@ -89,6 +89,7 @@ var MechViewRouter = MechViewRouter || (function() {
       prevStateHash = data.statehash;
       window.history.replaceState(
           null, "", "#" + HASH_STATE_FIELD + "=" + data.statehash);
+      MechView.updateOnAppSaveState();
       successCallback(data);
     })
     .fail(function(data) {
@@ -190,6 +191,7 @@ var MechViewRouter = MechViewRouter || (function() {
                   if (smurfyLoadTrigger.isSuccessful()) {
                     isAppStateModified = false;
                     prevStateHash = stateHash;
+                    MechView.updateOnLoadAppState();
                     successCallback(true);
                   } else {
                     failCallback(false);
@@ -208,6 +210,7 @@ var MechViewRouter = MechViewRouter || (function() {
     isAppStateModified = true;
     prevStateHash=HASH_MODIFIED_STATE;
     location.hash=HASH_STATE_FIELD + "=" + HASH_MODIFIED_STATE;
+    MechView.updateOnModifyAppState();
   }
 
   var getStateHashFromLocation = function() {

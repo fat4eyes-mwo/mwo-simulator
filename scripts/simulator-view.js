@@ -847,7 +847,7 @@ var MechView = MechView || (function() {
       let mechName = smurfyMechData.name;
       let newMechId = MechModel.generateMechId(team, MechView.loadedSmurfyLoadout);
       MechModel.addMech(newMechId, team, smurfyMechLoadout);
-      //TODO: set patterns of added mech to selected team patterns
+      //set patterns of added mech to selected team patterns
       setSelectedTeamPatterns(team);
       MechViewRouter.modifyAppState();
       //TODO: should not require a full view refresh. See what can be done.
@@ -1045,7 +1045,6 @@ var MechView = MechView || (function() {
     $("#resetSimulationDivButton").click(() => {
       MechModel.resetState();
       MechSimulatorLogic.resetSimulation();
-      //TODO: doesn't need to refresh entire view, see what can be isolated
       MechModelView.refreshView(false);
     });
 
@@ -1055,11 +1054,14 @@ var MechView = MechView || (function() {
     });
   }
 
+  var permalinkTooltip;
+  var modifiedTooltip;
   var initMiscControl = function() {
     $("#permalinkButton").click(() => {
       MechViewRouter.saveAppState(
         function(data) {
           //TODO: Show dialog containing the current URL
+          showPermalinkTooltip(location.href);
           console.log("Success on save app state. Data: " + data);
         },
         function(data) {
@@ -1069,9 +1071,40 @@ var MechView = MechView || (function() {
           console.log("Done save app state. Data: " + data);
         });
     });
+    modifiedTooltip = new MechViewWidgets.Tooltip(
+                                "modifiedTooltip-template",
+                                "modifiedTooltip",
+                                "permalinkButton");
+    permalinkTooltip = new MechViewWidgets.Tooltip(
+                                "permalinkGeneratedTooltip-template",
+                                "permalinkGeneratedTooltip",
+                                "permalinkButton");
+
   }
 
-  var initPaperDollHandlers = function () {
+  var showModifiedToolip = function() {
+    permalinkTooltip.hideTooltip();
+    modifiedTooltip.showTooltip();
+  }
+
+  var showPermalinkTooltip = function(link) {
+    modifiedTooltip.hideTooltip();
+    $("#" + permalinkGeneratedTooltip.id + " [class~=permaLink]")
+      .attr("href", link);
+    permalinkTooltip.showTooltip();
+  }
+
+  var updateOnModifyAppState = function() {
+    showModifiedToolip();
+  }
+
+  var updateOnAppSaveState = function() {
+    //make the view consistent with the current state
+  }
+
+  var updateOnLoadAppState = function() {
+    permalinkTooltip.hideTooltip();
+    modifiedTooltip.hideTooltip();
   }
 
   const LOADING_SCREEN_MECH_ID = "fakeLoadingScreenMechId";
@@ -1146,7 +1179,6 @@ var MechView = MechView || (function() {
     setHeatbarValue : setHeatbarValue,
     addMechPanel : addMechPanel,
     addTeamStatsPanel : addTeamStatsPanel,
-    initPaperDollHandlers: initPaperDollHandlers,
     initView : initView,
     setWeaponCooldown: setWeaponCooldown,
     setWeaponAmmo : setWeaponAmmo,
@@ -1168,6 +1200,10 @@ var MechView = MechView || (function() {
     hideLoadingScreen : hideLoadingScreen,
     showVictoryReport : showVictoryReport,
     hideVictoryReport: hideVictoryReport,
+
+    updateOnModifyAppState: updateOnModifyAppState,
+    updateOnAppSaveState: updateOnAppSaveState,
+    updateOnLoadAppState: updateOnLoadAppState,
 
     //functions that should be private but I need to acceess (usually in handlers)
     loadedSmurfyLoadout: null,
