@@ -71,6 +71,7 @@ var MechViewAddMech = MechViewAddMech || (function() {
     $("#" + MechView.MODAL_DIALOG_ID).empty();
   }
 
+  var loadedSmurfyLoadout = null;
   var AddMechDialog_OK = function(context) {
     var clickContext = context;
     return function() {
@@ -78,11 +79,11 @@ var MechViewAddMech = MechViewAddMech || (function() {
       let url = $("#addMechDialog-text").val()
       console.log("Mech loaded. team: " + team + " URL: " + url);
       //TODO: Avoid accessing MechModel directly here. Create a method in ModelView to do this
-      let smurfyMechLoadout = MechView.loadedSmurfyLoadout;
+      let smurfyMechLoadout = loadedSmurfyLoadout;
       let smurfyMechData = MechModel.getSmurfyMechData(smurfyMechLoadout.mech_id);
       let mechTranslatedName = smurfyMechData.translated_name;
       let mechName = smurfyMechData.name;
-      let newMechId = MechModel.generateMechId(team, MechView.loadedSmurfyLoadout);
+      let newMechId = MechModel.generateMechId(team, loadedSmurfyLoadout);
       MechModel.addMech(newMechId, team, smurfyMechLoadout);
       //set patterns of added mech to selected team patterns
       MechViewTeamStats.setSelectedTeamPatterns(team);
@@ -113,8 +114,8 @@ var MechViewAddMech = MechViewAddMech || (function() {
       console.log("Load. team: " + team + " URL: " + url);
 
       let doneCallback = function(data) {
-        MechView.loadedSmurfyLoadout = data;
-        let smurfyMechData = MechModel.getSmurfyMechData(MechView.loadedSmurfyLoadout.mech_id);
+        loadedSmurfyLoadout = data;
+        let smurfyMechData = MechModel.getSmurfyMechData(loadedSmurfyLoadout.mech_id);
         let mechTranslatedName = smurfyMechData.translated_name;
         let mechName = smurfyMechData.name;
         //TODO: put fancy summary of loaded mech in result pane
