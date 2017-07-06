@@ -783,7 +783,7 @@ var MechModel = MechModel || (function () {
 
   //TODO: Try to move this out of model due to its dependence on WeaponFire
   //Or move WeaponFire here
-  const BURST_DAMAGE_INTERVAL = 3000; //Interval considered for burst damage calculation
+  const BURST_DAMAGE_INTERVAL = 2000; //Interval considered for burst damage calculation
   class MechStats {
     constructor() {
       this.totalDamage = 0;
