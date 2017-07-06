@@ -412,7 +412,7 @@ var MechModelView = MechModelView || (function() {
   }
 
   var updateVictory = function (team) {
-    MechView.showVictoryReport();
+    MechViewReport.showVictoryReport();
     // MechModelView.updateDebugText("Team Victory: " + team);
   }
 

@@ -37,48 +37,6 @@ var MechView = MechView || (function() {
     {value : 1, RGB : {r:170, g:170, b:170}}
   ]);
 
-  class MechButton {
-    constructor(id, clickHandler) {
-      this.id = id;
-      this.clickHandler = (function(context) {
-          var clickContext = context;
-          return function(event) {
-            if (clickContext.enabled) {
-              clickHandler.call(event.currentTarget);
-            }
-          }
-      })(this);
-      this.enabled = true;
-      $("#" + this.id).click(this.clickHandler);
-    }
-
-    setHtml(html) {
-      $("#" + this.id).html(html);
-    }
-
-    addClass(className) {
-      $("#" + this.id).addClass(className)
-    }
-
-    removeClass(className) {
-      $("#" + this.id).removeClass(className);
-    }
-
-    disable() {
-      if (this.enabled) {
-        $("#" + this.id).addClass("disabled");
-        this.enabled = false;
-      }
-    }
-
-    enable() {
-      if (!this.enabled) {
-        $("#" + this.id).removeClass("disabled");
-        this.enabled = true;
-      }
-    }
-  }
-
   //gets the damage color for a given percentage of damage
   var damageColor = function (percent, damageGradient) {
     var damageIdx = binarySearchClosest(
@@ -500,9 +458,6 @@ var MechView = MechView || (function() {
   var teamStatsId = function(team) {
     return team + "-teamStatsPanel";
   }
-  var addMechButtonId = function(team) {
-    return team + "-addMechButton";
-  }
   var teamDisplayName = function(team) {
     let displayNameMap = {"blue" : "Blue team", "red" : "Red team"};
     return displayNameMap[team];
@@ -534,7 +489,6 @@ var MechView = MechView || (function() {
   var teamSettingsId = function(team) {
     return team + "-teamSettings";
   }
-  var addMechButtonMap = {};
   var addTeamStatsPanel = function(team, mechIds) {
     let teamStatsContainerPanelId = teamStatsContainerId(team);
     $("#teamStats-template")
@@ -549,14 +503,7 @@ var MechView = MechView || (function() {
             .html(teamDisplayName(team));
 
     //Add mech button
-    let addMechButtonPanelId = addMechButtonId(team);
-    if (!addMechButtonHandler) {
-      addMechButtonHandler = new AddMechButtonHandler(this);
-    }
-    $("#" + teamStatsContainerPanelId + " [class~=addMechButton]")
-        .attr("id", addMechButtonPanelId)
-        .attr("data-team", team);
-    addMechButtonMap[team] = new MechButton(addMechButtonPanelId, addMechButtonHandler);
+    MechViewAddMech.createAddMechButton(team, teamStatsContainerPanelId);
 
     //mech pips
     let teamMechPipsContainerDivId = teamMechPipsContainerId(team);
@@ -728,15 +675,6 @@ var MechView = MechView || (function() {
     }
   }
 
-  var AddMechButtonHandler = function(clickContext) {
-    var context = clickContext;
-    return function() {
-      let team = $(this).data('team');
-      context.showAddMechDialog(team);
-    }
-  }
-  var addMechButtonHandler;//set on click handler assignment
-
   var updateTeamStats = function(team, mechHealthList, damage, dps, burstDamage) {
     let totalTeamCurrHealth = 0;
     let totalTeamMaxHealth = 0;
@@ -791,131 +729,6 @@ var MechView = MechView || (function() {
 
   const MODAL_SCREEN_ID = "mechModalScreen";
   const MODAL_DIALOG_ID = "mechModalDialog";
-  var addMechOKButton;
-  var addMechCancelButton;
-  var addMechLoadButton;
-  var showAddMechDialog = function(team) {
-    $("#" + MODAL_DIALOG_ID).empty();
-    $("#addMechDialog-template")
-      .clone(true)
-      .attr("id", "addMechDialogContainer")
-      .removeClass("template")
-      .addClass(team)
-      .appendTo("#" + MODAL_DIALOG_ID);
-
-    if (!addMechDialog_OK_Handler) {
-      addMechDialog_OK_Handler = new AddMechDialog_OK(this);
-    }
-    if (!addMechDialog_Cancel_Handler) {
-      addMechDialog_Cancel_Handler = new AddMechDialog_Cancel(this);
-    }
-    if (!addMechDialog_Load_Handler) {
-      addMechDialog_Load_Handler =new AddMechDialog_Load(this);
-    }
-    $("#addMechDialog-ok").attr("data-team", team);
-    addMechOKButton =
-        new MechButton("addMechDialog-ok", addMechDialog_OK_Handler);
-    $("#addMechDialog-cancel").attr("data-team", team);
-    addMechCancelButton =
-        new MechButton("addMechDialog-cancel", addMechDialog_Cancel_Handler);
-    $("#addMechDialog-load").attr("data-team", team);
-    addMechLoadButton =
-        new MechButton("addMechDialog-load", addMechDialog_Load_Handler);
-
-    addMechOKButton.disable();
-
-    $("#" + MODAL_SCREEN_ID).css("display", "block");
-
-    $("#addMechDialog-text").focus();
-  }
-
-  var hideAddMechDialog = function(team) {
-    $("#" + MODAL_SCREEN_ID).css("display", "none");
-    $("#" + MODAL_DIALOG_ID).empty();
-  }
-
-  var AddMechDialog_OK = function(context) {
-    var clickContext = context;
-    return function() {
-      let team = $(this).data('team');
-      let url = $("#addMechDialog-text").val()
-      console.log("Mech loaded. team: " + team + " URL: " + url);
-      //TODO: Avoid accessing MechModel directly here. Create a method in ModelView to do this
-      let smurfyMechLoadout = MechView.loadedSmurfyLoadout;
-      let smurfyMechData = MechModel.getSmurfyMechData(smurfyMechLoadout.mech_id);
-      let mechTranslatedName = smurfyMechData.translated_name;
-      let mechName = smurfyMechData.name;
-      let newMechId = MechModel.generateMechId(team, MechView.loadedSmurfyLoadout);
-      MechModel.addMech(newMechId, team, smurfyMechLoadout);
-      //set patterns of added mech to selected team patterns
-      setSelectedTeamPatterns(team);
-      MechViewRouter.modifyAppState();
-      //TODO: should not require a full view refresh. See what can be done.
-      MechModelView.refreshView(true);
-      clickContext.hideAddMechDialog(team);
-    }
-  };
-  var addMechDialog_OK_Handler; //set on dialog creation, singleton
-
-  var AddMechDialog_Cancel = function(context) {
-    var clickContext = context;
-    return function() {
-      let team = $(this).data('team');
-      clickContext.hideAddMechDialog(team);
-    }
-  };
-  var addMechDialog_Cancel_Handler; //set on dialog creation, singleton
-
-  const SMURFY_PROXY_URL = "./php/smurfyproxy.php?path=";
-  var AddMechDialog_Load = function(context) {
-    var clickContext = context;
-
-    return function() {
-      let team = $(this).data('team');
-      let url = $("#addMechDialog-text").val();
-      console.log("Load. team: " + team + " URL: " + url);
-
-      let doneCallback = function(data) {
-        MechView.loadedSmurfyLoadout = data;
-        let smurfyMechData = MechModel.getSmurfyMechData(MechView.loadedSmurfyLoadout.mech_id);
-        let mechTranslatedName = smurfyMechData.translated_name;
-        let mechName = smurfyMechData.name;
-        //TODO: put fancy summary of loaded mech in result pane
-        $("#addMechDialog-result")
-            .removeClass("error")
-            .html("Loaded " + mechTranslatedName);
-        addMechOKButton.enable();
-      };
-      let failCallback = function(data) {
-        $("#addMechDialog-result")
-            .addClass("error")
-            .html("Failed to load " + url);
-      };
-      let alwaysCallback = function(data) {
-        addMechLoadButton.enable();
-        addMechLoadButton.removeClass("loading");
-        addMechLoadButton.setHtml("Load");
-      };
-      let status = MechModel.loadSmurfyMechLoadoutFromURL(url, doneCallback, failCallback, alwaysCallback);
-      if (status) {
-        $("#addMechDialog-result")
-              .removeClass("error")
-              .html("Loading url : " + url);
-        addMechLoadButton.disable();
-        addMechLoadButton.addClass("loading");
-        addMechLoadButton.setHtml("Loading...");
-      } else {
-        $("#addMechDialog-result")
-            .addClass("error")
-            .html("Invalid smurfy URL. Expected format is 'http://mwo.smurfy-net.de/mechlab#i=mechid&l=loadoutid'");
-        addMechLoadButton.enable();
-        addMechLoadButton.removeClass("loading");
-        addMechLoadButton.setHtml("Load");
-        console.log("Invalid smurfy url");
-      }
-    }
-  }
-  var addMechDialog_Load_Handler; //set on dialog creation, singleton
 
   var DeleteMechButton_Handler = function(context) {
     var clickContext = context;
@@ -974,7 +787,7 @@ var MechView = MechView || (function() {
   }
 
   var initRangeInput = function() {
-    let rangeButton = new MechButton("setRangeButton", function() {
+    let rangeButton = new MechViewWidgets.MechButton("setRangeButton", function() {
       let buttonMode = $(this).attr("data-button-mode");
       if (buttonMode === "not-editing") {
         $("#rangeInput")
@@ -1050,7 +863,7 @@ var MechView = MechView || (function() {
 
     $("#showReportDivButton").click(() => {
       MechSimulatorLogic.pauseSimulation();
-      MechView.showVictoryReport();
+      MechViewReport.showVictoryReport();
     });
   }
 
@@ -1157,21 +970,6 @@ var MechView = MechView || (function() {
     progressBar.style.width = textPercent;
   }
 
-  var showVictoryReport = function() {
-    $("#" + MODAL_DIALOG_ID)
-      .addClass("wide")
-      .empty();
-
-    let teamReport = new MechViewReport.VictoryReport(MODAL_DIALOG_ID);
-
-    $("#" + MODAL_SCREEN_ID).css("display", "block");
-  }
-
-  var hideVictoryReport = function() {
-    $("#" + MODAL_SCREEN_ID).css("display", "none");
-    $("#" + MODAL_DIALOG_ID).removeClass("wide").empty();
-  }
-
   //public members
   return {
     setPaperDollArmor : setPaperDollArmor,
@@ -1183,6 +981,7 @@ var MechView = MechView || (function() {
     setWeaponCooldown: setWeaponCooldown,
     setWeaponAmmo : setWeaponAmmo,
     setWeaponState : setWeaponState,
+    setSelectedTeamPatterns: setSelectedTeamPatterns,
     updateMechHealthNumbers : updateMechHealthNumbers,
     updateMechStatusPanel : updateMechStatusPanel,
     updateMechTitlePanel : updateMechTitlePanel,
@@ -1193,13 +992,9 @@ var MechView = MechView || (function() {
     setDebugText : setDebugText,
     clear : clear,
     clearAll : clearAll,
-    showAddMechDialog: showAddMechDialog,
-    hideAddMechDialog: hideAddMechDialog,
     showLoadingScreen : showLoadingScreen,
     updateLoadingScreenProgress: updateLoadingScreenProgress,
     hideLoadingScreen : hideLoadingScreen,
-    showVictoryReport : showVictoryReport,
-    hideVictoryReport: hideVictoryReport,
 
     updateOnModifyAppState: updateOnModifyAppState,
     updateOnAppSaveState: updateOnAppSaveState,
@@ -1207,5 +1002,7 @@ var MechView = MechView || (function() {
 
     //functions that should be private but I need to acceess (usually in handlers)
     loadedSmurfyLoadout: null,
+    MODAL_SCREEN_ID: MODAL_SCREEN_ID,
+    MODAL_DIALOG_ID: MODAL_DIALOG_ID,
   };
 })();//namespace

@@ -13,7 +13,7 @@ var MechViewReport = MechViewReport || (function() {
 
       $("#victoryReport [class~=closeReportButton]")
         .click(() => {
-          MechView.hideVictoryReport();
+          MechViewReport.hideVictoryReport();
         });
 
       let victorTeam = MechModelView.getVictorTeam();
@@ -151,8 +151,25 @@ var MechViewReport = MechViewReport || (function() {
     }
   }
 
+  var showVictoryReport = function() {
+    $("#" + MechView.MODAL_DIALOG_ID)
+      .addClass("wide")
+      .empty();
+
+    let teamReport = new MechViewReport.VictoryReport(MechView.MODAL_DIALOG_ID);
+
+    $("#" + MechView.MODAL_SCREEN_ID).css("display", "block");
+  }
+
+  var hideVictoryReport = function() {
+    $("#" + MechView.MODAL_SCREEN_ID).css("display", "none");
+    $("#" + MechView.MODAL_DIALOG_ID).removeClass("wide").empty();
+  }
+
   return {
     VictoryReport : VictoryReport,
     TeamReport : TeamReport,
+    showVictoryReport : showVictoryReport,
+    hideVictoryReport: hideVictoryReport,
   };
 })();
