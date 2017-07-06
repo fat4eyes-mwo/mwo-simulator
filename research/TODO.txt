@@ -1,0 +1,14 @@
+- Add mech loaded mech summary
+- Defensive quirks (IS)
+- Weapon quirks (cooldown, heat)
+- Streak damage spread
+- LBX damage spread
+- General quirks (+ heat dissipation, etc)
+- Omnipod quirks
+- ATM damage computation
+- RAC mechanics
+- Rocket launcher ammo
+- HMG/LMG dps/ammo computation
+- UAC double tap
+- MG crit effects (just added damage)
+- LBX crit effects (just the added damage)

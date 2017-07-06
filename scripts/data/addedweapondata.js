@@ -26,13 +26,51 @@ _AddedWeaponData = {
     ammo_per_shot : 1,
     spinup : 0.75
   },
+  "HeavyGaussRifle" : {
+    ammo_per_shot : 1,
+    spinup : 1.0
+  },
+  "LightGaussRifle" : {
+    ammo_per_shot : 1,
+    spinup : 0.5
+  },
+  "LBXAutoCannon2" : {
+    ammo_per_shot : 1
+  },
+  "LBXAutoCannon5" : {
+    ammo_per_shot : 1
+  },
   "LBXAutoCannon10" : {
+    ammo_per_shot : 1
+  },
+  "LBXAutoCannon20" : {
     ammo_per_shot : 1
   },
   "MachineGun" : {
     ammo_per_shot : 1
   },
+  "LightMachineGun" :{
+    ammo_per_shot : 1
+  },
+  "HeavyMachineGun" :{
+    ammo_per_shot : 1
+  },
+  "UltraAutoCannon2" : {
+    ammo_per_shot : 1
+  },
   "UltraAutoCannon5" : {
+    ammo_per_shot : 1
+  },
+  "UltraAutoCannon10" : {
+    ammo_per_shot : 2 //NOTE XML file says 1, but it's 2 in game
+  },
+  "UltraAutoCannon20" : {
+    ammo_per_shot : 3 //NOTE: XML file says 1, but it's 3 in game
+  },
+  "RotaryAutoCannon2" : {
+    ammo_per_shot : 1
+  },
+  "RotaryAutoCannon5" : {
     ammo_per_shot : 1
   },
   "LRM5" : {
@@ -55,6 +93,12 @@ _AddedWeaponData = {
   },
   "StreakSRM2" : {
     ammo_per_shot : 2
+  },
+  "StreakSRM4" : {
+    ammo_per_shot : 4
+  },
+  "StreakSRM6" : {
+    ammo_per_shot : 6
   },
   "SRM2_Artemis" : {
     ammo_per_shot : 2
@@ -106,6 +150,12 @@ _AddedWeaponData = {
     spinup : 0.75
   },
   "ClanMachineGun" : {
+    ammo_per_shot : 1
+  },
+  "ClanHeavyMachineGun" : {
+    ammo_per_shot : 1
+  },
+  "ClanLightMachineGun" : {
     ammo_per_shot : 1
   },
   "ClanLRM5" : {
@@ -169,12 +219,52 @@ _AddedWeaponData = {
     ammo_per_shot : 1
   },
   "ClanAutoCannon5" : {
-    ammo_per_shot : 2
+    ammo_per_shot : 2,
   },
   "ClanAutoCannon10" : {
-    ammo_per_shot : 3
+    ammo_per_shot : 3,
   },
   "ClanAutoCannon20" : {
-    ammo_per_shot : 4
+    ammo_per_shot : 4,
+  },
+  "MRM10" : {
+    ammo_per_shot : 10,
+  },
+  "MRM20" : {
+    ammo_per_shot : 20,
+  },
+  "MRM30" : {
+    ammo_per_shot : 30,
+  },
+  "MRM40" : {
+    ammo_per_shot : 40,
+  },
+  "RocketLauncher10" : {
+    ammo_per_shot : 10,
+    //TODO: How to handle ammobox-less rocket launchers?
+  },
+  "RocketLauncher15" :{
+    ammo_per_shot : 15,
+    //TODO: How to handle ammobox-less rocket launchers?
+  },
+  "RocketLauncher20" : {
+    ammo_per_shot : 20,
+    //TODO: How to handle ammobox-less rocket launchers?
+  },
+  "ClanATM3" : {
+    ammo_per_shot : 3,
+    //TODO: Multiple ranges, how to deal with them
+  },
+  "ClanATM6" : {
+    ammo_per_shot : 6,
+    //TODO: Multiple ranges, how to deal with them
+  },
+  "ClanATM9" : {
+    ammo_per_shot : 9,
+    //TODO: Multiple ranges, how to deal with them
+  },
+  "ClanATM12" : {
+    ammo_per_shot : 12,
+    //TODO: Multiple ranges, how to deal with them
   },
 }
