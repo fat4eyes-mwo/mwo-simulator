@@ -50,6 +50,7 @@ Mech Loadout Simulator for Mechwarrior Online
 * UAC double tap
 * Exponential dropoff for cLRMs below min range (right now they do 0 damage below min range)
 * Environmental heat effects
+* Mech skills
 * Crits and weapon/heatsink/ammo destruction. Right now weapons/heatsinks/ammo are only destroyed if the component they are on are destroyed. The crux here is to find a way to simulate this randomness deterministically.
 * Special weapon crit/damage effects (this includes LBX,SRM crits, MG crits and flamer heat).
 * Ammo explosions
