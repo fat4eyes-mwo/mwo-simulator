@@ -9,6 +9,7 @@
 - RAC mechanics
 - Rocket launcher ammo
 - HMG/LMG dps/ammo computation
+- Ambient heat effects
 - UAC double tap
 - MG crit effects (just added damage)
 - LBX crit effects (just the added damage)
