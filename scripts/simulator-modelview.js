@@ -455,6 +455,15 @@ var MechModelView = MechModelView || (function() {
     return null;
   }
 
+  var getMechName = function(mechId, team) {
+    let mech = MechModel.getMechFromId(mechId, team);
+    if (mech) {
+      return mech.getTranslatedName();
+    } else {
+      return null;
+    }
+  }
+
   return {
     refreshView : refreshView,
     updateHealth : updateHealth,
@@ -474,6 +483,7 @@ var MechModelView = MechModelView || (function() {
     getTeamReport : getTeamReport,
     updateVictory: updateVictory,
     getVictorTeam : getVictorTeam,
+    getMechName: getMechName,
   };
 
 })();

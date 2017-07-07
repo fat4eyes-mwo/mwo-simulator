@@ -60,11 +60,14 @@ var MechViewTeamStats = MechViewTeamStats || (function() {
     $("#" + teamStatsContainerPanelId + " [class~=mechPipsContainer]")
         .attr("id", teamMechPipsContainerDivId);
     for (let mechId of mechIds) {
+      let mechName = MechModelView.getMechName(mechId, team);
+      mechName = mechName ? mechName : "";
       $("#mechPip-template")
         .clone(true)
         .attr("id", teamMechPipId(mechId))
         .attr("data-team", team)
         .attr("data-mech-id", mechId)
+        .attr("title", mechName)
         .removeClass("template")
         .appendTo("#" + teamMechPipsContainerDivId);
       //TODO: click handler on pip

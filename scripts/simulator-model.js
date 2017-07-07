@@ -1457,6 +1457,16 @@ var MechModel = MechModel || (function () {
     }
   }
 
+  var getMechFromId = function(mechId, team) {
+    //TODO: add a map if this method gets called often
+    for (let mech of mechTeams[team]) {
+      if (mechId === mech.getMechId()) {
+        return mech;
+      }
+    }
+    return null;
+  }
+
   var clearModel = function() {
     mechTeams[Team.BLUE] = [];
     mechTeams[Team.RED] = [];
@@ -1492,6 +1502,7 @@ var MechModel = MechModel || (function () {
     getAdjacentComponents : getAdjacentComponents,
     updateModelTeamStats: updateModelTeamStats,
     getTeamStats: getTeamStats,
+    getMechFromId: getMechFromId,
     //Note: made public only because of testing. Should not be accessed outside this module
     baseMechStructure : baseMechStructure,
     baseMechArmor : baseMechArmor,
