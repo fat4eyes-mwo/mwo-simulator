@@ -47,7 +47,7 @@ var MechTargetMech = MechTargetMech || (function () {
       if (enemyMech.getMechState().isAlive()) {
         let mechInfo = enemyMech.getMechState().mechInfo;
         let weight = mechInfo.tons;
-        if (!maxWeight || weight > maxWeight) {
+        if (!maxWeight || Number(weight) > Number(maxWeight)) {
           maxWeight = weight;
           maxWeightMech = enemyMech;
         }

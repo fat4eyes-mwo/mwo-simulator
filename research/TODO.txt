@@ -1,5 +1,6 @@
 - AUTOMATED UNIT TESTS!!!!!!
 
+- mech reorder buttons
 - save team settings?
 - Weapon quirks (cooldown, heat)
 - Streak damage spread
