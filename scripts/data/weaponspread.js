@@ -1,9 +1,10 @@
-//each spread should have at least 2 entries for extrapolation
-//format is {<range> : {<component1>:<percentdmg1>, ...}, ...}
 
 //Reference: https://mwomercs.com/forums/topic/254199-lrm-spread-experiments/
 //Non-ct damage are eyeball estimates
 ////////////////////////////////////////////////////////////////////////////////
+//Seeker damage spread
+//each spread should have at least 2 entries for extrapolation
+//format is {<range> : {<component1>:<percentdmg1>, ...}, ...}
 //IS LRMS
 var _LRM5Spread = {
   190 : {"centre_torso" : 0.5343,
@@ -152,11 +153,13 @@ var _cALRM20Spread = {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
+//Direct fire damage spread
+//Format for direct fire weapons is
+//{<range> : {target: <percentDamage>, adjacent: <percentDamage>, nextAdjacent: <percentDamage>}}
+
 //SRM spread data
 //Reference: https://mwomercs.com/forums/topic/254250-srm-spread-experiments/
 //Adjacent, nextAdjacent values are eyeballed from damage distribution pictures
-//Format for direct fire weapons is
-//{<range> : {target: <percentDamage>, adjacent: <percentDamage>, nextAdjacent: <percentDamage>}}
 var _SRM2Spread = {
     0 : {target: 1.0, adjacent: 0, nextAdjacent: 0},
     130 : {target: 0.8697674419, adjacent: .1, nextAdjacent: 0},
