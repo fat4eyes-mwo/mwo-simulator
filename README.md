@@ -4,6 +4,8 @@ Mech Loadout Simulator for Mechwarrior Online
 * [Quick Start](#quick-start-guide)
 * [Slightly Less Quick start](#slightly-less-quick-start-guide)
 * [Reporting Bugs](#guide-for-reporting-bugs)
+* [Current Features](#current-features)
+* [Unsimulated Mechanics](#currently-unsimulated-mechanics)
 
 # Quick Start Guide
 
