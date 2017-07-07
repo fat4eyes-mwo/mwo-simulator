@@ -437,6 +437,9 @@ var MechModel = MechModel || (function () {
               mechInfo.heatsinkInfoList,
               mechInfo.engineInfo,
               this.engineHeatEfficiency);
+      console.log("Heatcalc: " + mechInfo.mechName
+                + " dissipation: " + heatStats.heatDissipation
+                + " capacity: " + heatStats.heatCapacity);
       this.currHeatDissipation = heatStats.heatDissipation;
       this.currMaxHeat = heatStats.heatCapacity;
       //Copy engine info from mech info
@@ -1140,14 +1143,34 @@ var MechModel = MechModel || (function () {
     let engineId = smurfyEngineData.id;
     let name = smurfyEngineData.name;
     let engineHeatsinkId = getEngineHeatsinkId(smurfyMechLoadout);
-    //Heatsink number in module data is total max heatsinks (iincluding slots).
-    //Clan XLs have fixed heatsinks so they are included in the engine count, but
-    //IS mechs have a default 10 heatsinks unless the slots are filled. Those heatsinks
-    //are caught in the loadout.configuration pass.
-    let heatsinkCount = isClanXLEngine(smurfyEngineData) ? smurfyEngineData.stats.heatsinks : 10;
+    //NOTE: The true number of engine internal heatsinks is computed by subtracting
+    //the number of external heatsinks from the smurfy stats heatsink count.
+    //This is because fixed internal heatsinks (e.g. on omnimechs) dont appear as
+    //items in the cetre_torso of smurfyLoadout.configuration.
+    let externalHeatsinkCount = numExternalHeatsinks(smurfyMechLoadout);
+    let smurfyHeatsinkCount = Number(smurfyMechLoadout.stats.heatsinks);
+    let heatsinkCount = smurfyHeatsinkCount - externalHeatsinkCount;
     let heatsink = new Heatsink(Component.CENTRE_TORSO, getSmurfyModuleData(engineHeatsinkId));
     let engineInfo = new EngineInfo(engineId, name, heatsink, heatsinkCount);
     return engineInfo;
+  }
+
+  var isOmnimech = function(smurfyMechLoadout) {
+    return smurfyMechLoadout.configuration[0].omni_pod !== undefined;
+  }
+
+  var numExternalHeatsinks = function(smurfyMechLoadout) {
+    let heatsinkList = collectFromSmurfyConfiguration(smurfyMechLoadout.configuration,
+      function (location, smurfyMechComponentItem) {
+        let itemId = smurfyMechComponentItem.id;
+        if (isHeatsinkModule(itemId) && location !== Component.CENTRE_TORSO) {
+          let heatsink = heatsinkFromSmurfyMechComponentItem(location, smurfyMechComponentItem);
+          return heatsink;
+        } else {
+          return null;
+        }
+      });
+    return heatsinkList.length;
   }
 
   //Calculates the total heat capacity and heat dissipation from a mechInfo
@@ -1160,9 +1183,9 @@ var MechModel = MechModel || (function () {
     for (let heatsink of heatsinkInfoList) {
       if (!heatsink.active) continue;
       if (heatsink.location === Component.CENTRE_TORSO) {
-      //internal non-fixed
-        heatCapacity += Number(heatsink.internalHeatCapacity);
-        heatDissipation += Number(heatsink.engineCooling);
+      //NOTE: internal non-fixed heatsinks are included in the engine heatsink count
+        // heatCapacity += Number(heatsink.internalHeatCapacity);
+        // heatDissipation += Number(heatsink.engineCooling);
       } else {
       //external non-fixed
         heatCapacity += Number(heatsink.externalHeatCapacity);

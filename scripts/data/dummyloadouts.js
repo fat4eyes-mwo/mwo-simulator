@@ -21,6 +21,8 @@
 //http://localhost:8181/#s=5056895c81ee2b79cce1af462105effc3ce7433899bfc03ef32cb98aecd189e9
 //SPL vs ERSL Cheetah
 //http://localhost:8181/#s=eb761b2c0fde126154707f199e1b87ed0573bf588cc173c5fb83535296f538c4
+//Spirit bear Atlases DPS test
+//http://localhost:8181/#s=0ae3bd1305a186f213126f38d8acd999b41c412a33f0fbc4ae18b924461ccf83
 
 //Punching bag atlas
 //http://mwo.smurfy-net.de/mechlab#i=16&l=d179b763d97e4f962243f707e83b60ce4d785fa1
