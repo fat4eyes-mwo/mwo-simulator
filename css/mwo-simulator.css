@@ -921,3 +921,10 @@ a:hover {
 .loadedMech .mechArmament .missile {
   background-color: #6acd97;
 }
+
+.linkPanel {
+  margin-top: 10px;
+  width: 100%;
+  text-align: center;
+  font-size: 0.9em;
+}
