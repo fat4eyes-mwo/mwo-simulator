@@ -20,7 +20,7 @@ Mech and Weapon Simulator for Mechwarrior Online
 8. Click 'Run'.
 9. Click 'Permalink' to save changes and share your simulation.
 
-# Not So Quick Guide for Reporting Bugs
+# Guide for Reporting Bugs
 
 1. Press Ctrl-Shift-i (on Chrome or Firefox) to bring up the Developer Tools.
 2. Click the Console Tab.
