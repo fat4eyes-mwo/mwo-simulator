@@ -85,7 +85,8 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
   //MUST be applied as the first transform on the raw weapon damage (even before mech accuracy)
   var getWeaponAccuracyPattern = function(weaponInfo) {
     var weaponAccuracyMap =
-      { "ClanERPPC" : MechAccuracyPattern.cERPPCPattern,
+      { "ClanERPPC" : MechAccuracyPattern.splashPPCPattern("ClanERPPC"),
+        "HeavyPPC" : MechAccuracyPattern.splashPPCPattern("HeavyPPC"), //in preparation for newtech
         "LRM5" : MechAccuracyPattern.seekerPattern(_LRM5Spread),
         "LRM10" : MechAccuracyPattern.seekerPattern(_LRM10Spread),
         "LRM15" : MechAccuracyPattern.seekerPattern(_LRM15Spread),
@@ -119,32 +120,34 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
   }
 
   //cERPPC splash
-  var cERPPCPattern = function(weaponDamage, range) {
-    //assumes weaponDamage only has one entry (the targeted component) and adds
-    //the appropriate amount of splash damage
-    let baseERPPCDamage =
-        Number(MechModel.getSmurfyWeaponDataByName(
-                      "ClanERPPC").calc_stats.baseDmg);
-    let totalBaseSplashDamage =
-        Number(MechModel.getSmurfyWeaponDataByName(
-                  "ClanERPPC").calc_stats.dmg)
-                  - baseERPPCDamage;
-    let baseRangeDamage;
-    let targetLocation;
-    for (targetLocation in weaponDamage.damageMap) {
-      baseRangeDamage = weaponDamage.damageMap[targetLocation];
-      break;
+  var splashPPCPattern = function(ppcName) {
+    return function(weaponDamage, range) {
+      //assumes weaponDamage only has one entry (the targeted component) and adds
+      //the appropriate amount of splash damage
+      let baseERPPCDamage =
+          Number(MechModel.getSmurfyWeaponDataByName(
+                        ppcName).calc_stats.baseDmg);
+      let totalBaseSplashDamage =
+          Number(MechModel.getSmurfyWeaponDataByName(
+                    ppcName).calc_stats.dmg)
+                    - baseERPPCDamage;
+      let baseRangeDamage;
+      let targetLocation;
+      for (targetLocation in weaponDamage.damageMap) {
+        baseRangeDamage = weaponDamage.damageMap[targetLocation];
+        break;
+      }
+      let damageFraction = Number(baseRangeDamage) / Number(baseERPPCDamage);
+      //splash damage per component. Halve the total splash damage and scale it to
+      //the damagefraction
+      let splashRangeDamage = totalBaseSplashDamage / 2 * damageFraction;
+      let transformedDamage = weaponDamage.clone();
+      let adjacentComponents = MechModel.getAdjacentComponents(targetLocation);
+      for (let adjacentLocation of adjacentComponents) {
+        transformedDamage.damageMap[adjacentLocation] = splashRangeDamage;
+      }
+      return transformedDamage;
     }
-    let damageFraction = Number(baseRangeDamage) / Number(baseERPPCDamage);
-    //splash damage per component. Halve the total splash damage and scale it to
-    //the damagefraction
-    let splashRangeDamage = totalBaseSplashDamage / 2 * damageFraction;
-    let transformedDamage = weaponDamage.clone();
-    let adjacentComponents = MechModel.getAdjacentComponents(targetLocation);
-    for (let adjacentLocation of adjacentComponents) {
-      transformedDamage.damageMap[adjacentLocation] = splashRangeDamage;
-    }
-    return transformedDamage;
   }
 
   //seeking missile spread
@@ -350,7 +353,7 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
     fullAccuracyPattern : fullAccuracyPattern,
     accuracySpreadToAdjacent : accuracySpreadToAdjacent,
     getWeaponAccuracyPattern : getWeaponAccuracyPattern,
-    cERPPCPattern : cERPPCPattern,
+    splashPPCPattern : splashPPCPattern,
     seekerPattern : seekerPattern,
     directFireSpreadPattern : directFireSpreadPattern,
     getDefault : getDefault,
