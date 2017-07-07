@@ -1,4 +1,3 @@
-- Add mech loaded mech summary
 - Defensive quirks (IS)
 - Weapon quirks (cooldown, heat)
 - Streak damage spread

@@ -1012,7 +1012,12 @@ var MechModel = MechModel || (function () {
     var armor = smurfyMechComponent.armor;
     var structure = baseMechStructure(location, tonnage);
     //TODO: Add quirk values to armor and structure
-    componentHealth = new ComponentHealth(location, armor, structure, armor, structure);
+    let bonus = MechModelQuirks.getArmorStructureBonus(location, smurfyMechQuirks);
+    componentHealth = new ComponentHealth(location,
+                                  Number(armor) + Number(bonus.armor),
+                                  Number(structure) + Number(bonus.structure),
+                                  Number(armor) + Number(bonus.armor),
+                                  Number(structure) + Number(bonus.structure));
     return componentHealth;
   }
 
