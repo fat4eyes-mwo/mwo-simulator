@@ -7,7 +7,7 @@ Mech and Weapon Simulator for Mechwarrior Online
 2. Paste [Smurfy](http://mwo.smurfy-net.de/) URL.
 3. Click 'Load'
 4. Click OK once mech is loaded from smurfy.
-5. Add more mechs if you want.
+5. Add more mechs if you want. Click the 'Range' Button if you want to change the engagement range.
 6. Click 'Run'.
 7. Click 'Permalink' to save changes and share your simulation.
 
