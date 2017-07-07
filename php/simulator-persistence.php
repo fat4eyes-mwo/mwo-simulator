@@ -8,6 +8,7 @@
   const POST_STATEHASH_FIELD = "statehash";
   const GET_STATE_FIELD = "s";
   const JSON_STRING_LIMIT = 100000;
+  const LOG_FILE = "./log/persistence.log";
 
   $currDir = getcwd();
   $dataDir = $currDir . "/data";
@@ -44,7 +45,7 @@
 
     $response = array(POST_STATEHASH_FIELD => $jsonHash);
     echo json_encode($response);
-
+    error_log("Saved state: " . $jsonHash . " " . $_SERVER['REMOTE_ADDR'] . "\n", 3, LOG_FILE);
   //Get request to fetch state
   } elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $getStateHash = $_GET[GET_STATE_FIELD];
