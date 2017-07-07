@@ -716,6 +716,10 @@ var MechView = MechView || (function() {
     progressBar.style.width = textPercent;
   }
 
+  var updateTitle = function(title) {
+    document.title = title;
+  }
+
   //public members
   return {
     damageColor: damageColor,
@@ -740,6 +744,7 @@ var MechView = MechView || (function() {
     showLoadingScreen : showLoadingScreen,
     updateLoadingScreenProgress: updateLoadingScreenProgress,
     hideLoadingScreen : hideLoadingScreen,
+    updateTitle: updateTitle,
 
     updateOnModifyAppState: updateOnModifyAppState,
     updateOnAppSaveState: updateOnAppSaveState,

@@ -2,9 +2,9 @@
 
 //Methods that update the MechView from the MechModel, and vice versa
 var MechModelView = MechModelView || (function() {
-
   //clears the view and recreates all UI elements
   var refreshView = function (recreateUI = true) {
+    document.title = getPageTitle();
     let mechTeamList = [MechModel.Team.BLUE, MechModel.Team.RED];
     for (let team of mechTeamList) {
       if (recreateUI) {
@@ -27,6 +27,33 @@ var MechModelView = MechModelView || (function() {
     }
     let simulatorParameters = MechSimulatorLogic.getSimulatorParameters();
     MechView.updateControlPanel(simulatorParameters);
+  }
+
+  const BASE_PAGE_TITLE = "MWO Loadout Simulator";
+  const TITLE_MAX_MECHS = 2;
+  var getPageTitle = function() {
+    let mechTeamList = [MechModel.Team.BLUE, MechModel.Team.RED];
+    let teamTitle = {};
+
+    for (let team of mechTeamList) {
+      teamTitle[team] = "";
+      let mechTeam = MechModel.mechTeams[team];
+      let idx = 0;
+      for (idx in mechTeam) {
+        if (idx >= TITLE_MAX_MECHS) break;
+        let mech = mechTeam[idx];
+        if (idx > 0) {
+          teamTitle[team] += ", ";
+        }
+        teamTitle[team] += mech.getTranslatedName();
+      }
+      if (idx >= TITLE_MAX_MECHS) {
+        teamTitle[team] += ", " + (mechTeam.length - Number(idx)) + " more";
+      }
+    }
+    return BASE_PAGE_TITLE + " : " +
+            teamTitle[MechModel.Team.BLUE] + " VS "
+            + teamTitle[MechModel.Team.RED];
   }
 
   var updateHeat = function(mech) {
