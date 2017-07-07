@@ -1,9 +1,9 @@
 # mwo-simulator
 Mech Loadout Simulator for Mechwarrior Online
 
-[Quick Start](#quick-start-guide)
-[Slightly Less Quick start](#slightly-less-quick-start-guide)
-[Reporting Bugs](#guide-for-reporting-bugs)
+*[Quick Start](#quick-start-guide)
+*[Slightly Less Quick start](#slightly-less-quick-start-guide)
+*[Reporting Bugs](#guide-for-reporting-bugs)
 
 # Quick Start Guide
 
