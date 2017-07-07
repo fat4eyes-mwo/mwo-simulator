@@ -5,16 +5,24 @@ Mech and Weapon Simulator for Mechwarrior Online
 
 1. Click 'Add Mech'.
 2. Paste [Smurfy](http://mwo.smurfy-net.de/) URL.
-3. Click OK.
-4. Add more mechs if you want.
-5. Click 'Run'.
-6. Click 'Permalink' to save changes and share your simulation.
+3. Click 'Load'
+4. Click OK once mech is loaded from smurfy.
+5. Add more mechs if you want.
+6. Click 'Run'.
+7. Click 'Permalink' to save changes and share your simulation.
 
 # Slightly Less Quick Start Guide
 
-  1-4. Same as above
+1-5. Same as above
 
-5. Click 'Settings' to view and set various Team Settings.
-6. Click speed setting (1x to 8x) to set simulation speed.
-7. Click 'Run'.
-8. Click 'Permalink' to save changes and share your simulation.
+6. Click 'Settings' to view and set various Team Settings.
+7. Click Speed setting (1x to 8x) to set simulation speed.
+8. Click 'Run'.
+9. Click 'Permalink' to save changes and share your simulation.
+
+# Not So Quick Guide for Reporting Bugs
+
+1. Press Ctrl-Shift-i (on Chrome or Firefox) to bring up the Developer Tools.
+2. Click the Console Tab.
+3. Right-click on the console window and click Save As...
+4. Go to the project [issue tracker](https://github.com/fat4eyes-mwo/mwo-simulator/issues) to report the issue. Make sure to include the console log and the URL where the simulator failed.

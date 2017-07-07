@@ -1,4 +1,4 @@
-- Defensive quirks (IS)
+- save team settings?
 - Weapon quirks (cooldown, heat)
 - Streak damage spread
 - LBX damage spread

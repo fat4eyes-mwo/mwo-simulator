@@ -35,6 +35,8 @@ var MechSimulator = MechSimulator || (function() {
       function(data) {
         //TODO: Show error screen
         console.log("Error loading mech data: " + data);
+        MechModelView.refreshView(true);
+        location.hash = "";
       },
       function(data) {
         MechView.hideLoadingScreen();

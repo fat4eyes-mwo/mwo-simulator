@@ -847,6 +847,10 @@ a:hover {
   border-radius: 7px 0px 7px 0px;
 }
 
+.tooltip.error {
+  border-color: #ff6464;
+}
+
 .tooltip.hidden {
   display: none;
 }
@@ -863,8 +867,13 @@ a:hover {
   margin-bottom: 0.5em;
 }
 
+.tooltipTitle.error {
+  color: #ff6464;
+}
+
 .modifiedTooltip,
-.permalinkGeneratedTooltip {
+.permalinkGeneratedTooltip,
+.loadErrorTooltip {
   top: 100%;
   left: 5%;
   width: 70%;

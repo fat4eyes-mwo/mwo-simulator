@@ -15,6 +15,7 @@ $tooltip-background: $off-background-color;
 $tooltip-color: $primary-font-color;
 $tooltip-border: thin solid gold;
 $emphasis-color: gold;
+$error-color: rgb(255,100,100);
 $mobile-width: 550px;
 /*Main panel styles*/
 body {
@@ -923,6 +924,10 @@ div {
   border-radius: 7px 0px 7px 0px;
 }
 
+.tooltip.error {
+  border-color: $error-color;
+}
+
 .tooltip.hidden {
   display: none;
 }
@@ -939,8 +944,13 @@ div {
   margin-bottom: 0.5em;
 }
 
+.tooltipTitle.error {
+  color: $error-color;
+}
+
 .modifiedTooltip,
-.permalinkGeneratedTooltip {
+.permalinkGeneratedTooltip,
+.loadErrorTooltip {
   top: 100%;
   left: 5%;
   width: 70%;

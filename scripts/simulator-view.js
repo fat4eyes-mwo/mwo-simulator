@@ -596,6 +596,7 @@ var MechView = MechView || (function() {
 
   var permalinkTooltip;
   var modifiedTooltip;
+  var loadErrorTooltip;
   var initMiscControl = function() {
     $("#permalinkButton").click(() => {
       MechViewRouter.saveAppState(
@@ -619,19 +620,30 @@ var MechView = MechView || (function() {
                                 "permalinkGeneratedTooltip-template",
                                 "permalinkGeneratedTooltip",
                                 "permalinkButton");
-
+    loadErrorTooltip = new MechViewWidgets.Tooltip(
+                                "loadErrorTooltip-template",
+                                "loadErrorTooltip",
+                                "miscControl");
   }
 
   var showModifiedToolip = function() {
     permalinkTooltip.hideTooltip();
+    loadErrorTooltip.hideTooltip();
     modifiedTooltip.showTooltip();
   }
 
   var showPermalinkTooltip = function(link) {
     modifiedTooltip.hideTooltip();
+    loadErrorTooltip.hideTooltip();
     $("#" + permalinkGeneratedTooltip.id + " [class~=permaLink]")
       .attr("href", link);
     permalinkTooltip.showTooltip();
+  }
+
+  var showLoadErrorTooltip = function() {
+    modifiedTooltip.hideTooltip();
+    permalinkTooltip.hideTooltip();
+    loadErrorTooltip.showTooltip();
   }
 
   var updateOnModifyAppState = function() {
@@ -645,6 +657,13 @@ var MechView = MechView || (function() {
   var updateOnLoadAppState = function() {
     permalinkTooltip.hideTooltip();
     modifiedTooltip.hideTooltip();
+    loadErrorTooltip.hideTooltip();
+  }
+
+  var updateOnLoadAppError = function() {
+    permalinkTooltip.hideTooltip();
+    modifiedTooltip.hideTooltip();
+    loadErrorTooltip.showTooltip();
   }
 
   const LOADING_SCREEN_MECH_ID = "fakeLoadingScreenMechId";
@@ -725,6 +744,7 @@ var MechView = MechView || (function() {
     updateOnModifyAppState: updateOnModifyAppState,
     updateOnAppSaveState: updateOnAppSaveState,
     updateOnLoadAppState: updateOnLoadAppState,
+    updateOnLoadAppError: updateOnLoadAppError,
 
     MODAL_SCREEN_ID: MODAL_SCREEN_ID,
     MODAL_DIALOG_ID: MODAL_DIALOG_ID,

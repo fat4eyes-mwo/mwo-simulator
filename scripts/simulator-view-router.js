@@ -276,7 +276,8 @@ var MechViewRouter = MechViewRouter || (function() {
         },
         function(data) {
           //fail
-          //TODO show error dialog
+          MechModelView.refreshView(true);
+          MechView.updateOnLoadAppError();
           console.log("Hash change state load failed: " + newHash);
         },
         function(data) {
