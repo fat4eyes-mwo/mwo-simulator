@@ -417,10 +417,12 @@ var MechModelView = MechModelView || (function() {
   }
 
   var getVictorTeam = function () {
-    if (!MechModel.isTeamAlive(MechModel.Team.BLUE)) {
+    if (!MechModel.isTeamAlive(MechModel.Team.BLUE) &&
+        MechModel.isTeamAlive(MechModel.Team.RED)) {
       return MechModel.Team.RED;
     }
-    if (!MechModel.isTeamAlive(MechModel.Team.RED)) {
+    if (!MechModel.isTeamAlive(MechModel.Team.RED) &&
+        MechModel.isTeamAlive(MechModel.Team.BLUE)) {
       return MechModel.Team.BLUE;
     }
     return null;

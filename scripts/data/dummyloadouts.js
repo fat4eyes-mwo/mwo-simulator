@@ -10,6 +10,25 @@
 //20 vs 20
 //http://localhost:8181/#s=e1f4897ae14687dfaba82e457031e1aef7b08a03936770f59f498a1290baadf4
 
+//Kodiak Draw
+//http://localhost:8181/#s=a3be0c80ec27deaf65a766ee7450e7b75c438986124bcdf561674beffe32771b
+
+//WHM TBR DPS test
+//http://localhost:8181/#s=215c7c1ca3e27060b69f84e8057dc4548a9913498aa7b3980dbdaee62bed3772
+//SCR SHD DPS test
+//http://localhost:8181/#s=3edb6717e734ee445304b41a1077b0ef97be97ab4551fc657eb3ca8e5bc295ef
+//Jenner vs Cheetah DPS test
+//http://localhost:8181/#s=5056895c81ee2b79cce1af462105effc3ce7433899bfc03ef32cb98aecd189e9
+//SPL vs ERSL Cheetah
+//http://localhost:8181/#s=eb761b2c0fde126154707f199e1b87ed0573bf588cc173c5fb83535296f538c4
+
+//Punching bag atlas
+//http://mwo.smurfy-net.de/mechlab#i=16&l=d179b763d97e4f962243f707e83b60ce4d785fa1
+
+//ersl Cheetah
+//http://mwo.smurfy-net.de/mechlab#i=291&l=94bebd78be7c17fa2c635676935eb5435f6bb524
+//Jenner mpl
+//http://mwo.smurfy-net.de/mechlab#i=4&l=be06492229daf0d6a95c7faf2219805c04eb1fc2
 //Gauss PPC summoner
 //http://mwo.smurfy-net.de/mechlab#i=189&l=8d4bb3e475863c7fe5c173c7cc62b9fc86177bda
 //Machine Gun Arrow

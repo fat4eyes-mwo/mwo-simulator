@@ -26,3 +26,4 @@ Mech and Weapon Simulator for Mechwarrior Online
 2. Click the Console Tab.
 3. Right-click on the console window and click Save As...
 4. Go to the project [issue tracker](https://github.com/fat4eyes-mwo/mwo-simulator/issues) to report the issue. Make sure to include the console log and the URL where the simulator failed.
+5. If you are using Edge or Internet Explorer, contact your local exorcist and have these hellspawn banished back to the pit from which they came. (Edge and IE are not supported).

@@ -12,3 +12,5 @@
 - UAC double tap
 - MG crit effects (just added damage)
 - LBX crit effects (just the added damage)
+- Flamer heat effects
+-Exponential decrease for cLRM below minrange
