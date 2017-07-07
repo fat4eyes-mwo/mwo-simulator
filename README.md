@@ -14,7 +14,7 @@ Mech and Weapon Simulator for Mechwarrior Online
 
   1-4. Same as above
 
-5. Click 'Settings' to view various Team Settings.
+5. Click 'Settings' to view and set various Team Settings.
 6. Click speed setting (1x to 8x) to set simulation speed.
 7. Click 'Run'.
 8. Click 'Permalink' to save changes and share your simulation.
