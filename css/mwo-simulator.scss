@@ -710,6 +710,10 @@ div {
   float:none;
 }
 
+#addMechDialog-result {
+  margin: 3px;
+}
+
 @keyframes buttonglow {
   0% {background-color: gold;}
   50% {background-color: rgb(255,255,30);}
@@ -950,4 +954,58 @@ div {
 .permalinkGeneratedTooltip a {
   text-decoration: underline;
   font-weight: bold;
+}
+
+$equipment-color: #3a87ad;
+$beam-color : #cb7834;
+$ballistic-color : #846b95;
+$missile-color: #6acd97;
+$loaded-mech-highlight-border-radius: 4px;
+
+.loadedMech {
+  padding: 5px;
+  line-height: 1.3em;
+}
+
+.loadedMech .mechName {
+  font-weight: bold;
+}
+
+.loadedMech .equipment {
+  border-radius: $loaded-mech-highlight-border-radius;
+  background-color: $equipment-color;
+  margin-left: 3px;
+  margin-right: 3px;
+  padding: 2px 4px;
+  color: white;
+}
+
+.loadedMech .mechArmament {
+}
+
+.loadedMech .mechArmament .weaponRow {
+  margin-bottom: 3px;
+}
+
+.loadedMech .mechArmament .weaponName {
+  padding: 2px;
+}
+
+.loadedMech .mechArmament .count {
+  border-radius: $loaded-mech-highlight-border-radius;
+  margin-left: 3px;
+  margin-right: 3px;
+  padding: 2px 4px;
+  color: white;
+}
+
+.loadedMech .mechArmament .ballistic {
+  background-color: $ballistic-color;
+}
+
+.loadedMech .mechArmament .beam {
+  background-color: $beam-color;
+}
+.loadedMech .mechArmament .missile {
+  background-color: $missile-color;
 }

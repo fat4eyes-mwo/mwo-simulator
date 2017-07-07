@@ -32,6 +32,8 @@ var MechViewAddMech = MechViewAddMech || (function() {
   var addMechCancelButton;
   var addMechLoadButton;
   var showAddMechDialog = function(team) {
+    //TODO: this code possible accumulates handlers on the dialog buttons
+    //due to the use of ids in the template. See what can be done.
     $("#" + MechView.MODAL_DIALOG_ID).empty();
     $("#addMechDialog-template")
       .clone(true)
@@ -39,6 +41,10 @@ var MechViewAddMech = MechViewAddMech || (function() {
       .removeClass("template")
       .addClass(team)
       .appendTo("#" + MechView.MODAL_DIALOG_ID);
+
+    $("#addMechDialog-result")
+          .removeClass("error")
+          .empty();
 
     if (!addMechDialog_OK_Handler) {
       addMechDialog_OK_Handler = new AddMechDialog_OK(this);
@@ -120,14 +126,15 @@ var MechViewAddMech = MechViewAddMech || (function() {
         let mechName = smurfyMechData.name;
         //TODO: put fancy summary of loaded mech in result pane
         $("#addMechDialog-result")
-            .removeClass("error")
-            .html("Loaded " + mechTranslatedName);
+              .removeClass("error")
+              .empty();
+        createLoadedMechPanel("addMechDialog-result", loadedSmurfyLoadout);
         addMechOKButton.enable();
       };
       let failCallback = function(data) {
         $("#addMechDialog-result")
-            .addClass("error")
-            .html("Failed to load " + url);
+              .addClass("error")
+              .html("Failed to load " + url);
       };
       let alwaysCallback = function(data) {
         addMechLoadButton.enable();
@@ -154,6 +161,74 @@ var MechViewAddMech = MechViewAddMech || (function() {
     }
   }
   var addMechDialog_Load_Handler; //set on dialog creation, singleton
+
+  let SMURFY_BASE_URL = "http://mwo.smurfy-net.de/mechlab#";
+  var createLoadedMechPanel = function(containerId, smurfyMechLoadout) {
+    let loadedMechJQ =$("#loadedMech-template")
+                            .clone(true)
+                            .removeAttr("id")
+                            .removeClass("template")
+                            .appendTo("#" + containerId);
+    let smurfyMechId = smurfyMechLoadout.mech_id;
+    let smurfyLoadoutId = smurfyMechLoadout.id;
+
+    //Mech name and link
+    let smurfyMechData = MechModel.getSmurfyMechData(smurfyMechId);
+    let mechLinkJQ = $("<a></a>")
+                          .attr("href", SMURFY_BASE_URL + "i=" + smurfyMechId + "&l=" + smurfyLoadoutId)
+                          .attr("target", "_blank")
+                          .html(smurfyMechData.translated_name);
+    loadedMechJQ.find("[class~=mechName]")
+                .append(mechLinkJQ);
+
+    let mechStats = smurfyMechLoadout.stats;
+    //Mech equipment
+    let mechSpeed = mechStats.top_speed + "km/h";
+    let mechEngine = mechStats.engine_type + " " + mechStats.engine_rating;
+    let heatsink = mechStats.heatsinks + " HS";
+    loadedMechJQ
+        .find("[class~=mechEquipment]")
+        .append(loadedMechSpan(mechSpeed, "equipment"))
+        .append(loadedMechSpan(mechEngine, "equipment"))
+        .append(loadedMechSpan(heatsink, "equipment"));
+
+    //Mech armament
+    for (let weapon of smurfyMechLoadout.stats.armaments) {
+      let smurfyWeaponData = MechModel.getSmurfyWeaponData(weapon.id);
+      let weaponType = smurfyWeaponData.type;
+      loadedMechJQ
+        .find("[class~=mechArmament]")
+        .append(loadedMechWeaponSpan(weapon.name, weapon.count, weaponType));
+    }
+  }
+
+  var loadedMechSpan = function(text, spanClass) {
+    return $("<span>" + text + "</span>").addClass(spanClass);
+  }
+
+  var loadedMechWeaponSpan = function(name, number, type) {
+    let numberClass = loadedMechWeaponClass(type);
+    let ret = $("<div></div>").addClass("weaponRow");
+    ret.append($("<span>" + name + "</span>").addClass("weaponName"));
+    ret.append($("<span>" + number + "</span")
+                  .addClass(numberClass)
+                  .addClass("count")
+                  .html(number));
+    return ret;
+  }
+
+  var loadedMechWeaponClass = function(smurfyType) {
+    if (smurfyType === "BALLISTIC") {
+      return "ballistic";
+    } else if (smurfyType === "BEAM") {
+      return "beam";
+    } else if (smurfyType === "MISSLE") {
+      return "missile";
+    } else {
+      console.warn("Unexpected weapon type: " + smurfyType);
+      return "";
+    }
+  }
 
   return {
     createAddMechButton: createAddMechButton,

@@ -726,7 +726,6 @@ var MechView = MechView || (function() {
     updateOnAppSaveState: updateOnAppSaveState,
     updateOnLoadAppState: updateOnLoadAppState,
 
-    //functions that should be private but I need to acceess (usually in handlers)
     MODAL_SCREEN_ID: MODAL_SCREEN_ID,
     MODAL_DIALOG_ID: MODAL_DIALOG_ID,
   };

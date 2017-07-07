@@ -625,6 +625,10 @@ a:hover {
   float: none;
 }
 
+#addMechDialog-result {
+  margin: 3px;
+}
+
 @keyframes buttonglow {
   0% {
     background-color: gold;
@@ -870,4 +874,50 @@ a:hover {
 .permalinkGeneratedTooltip a {
   text-decoration: underline;
   font-weight: bold;
+}
+
+.loadedMech {
+  padding: 5px;
+  line-height: 1.3em;
+}
+
+.loadedMech .mechName {
+  font-weight: bold;
+}
+
+.loadedMech .equipment {
+  border-radius: 4px;
+  background-color: #3a87ad;
+  margin-left: 3px;
+  margin-right: 3px;
+  padding: 2px 4px;
+  color: white;
+}
+
+.loadedMech .mechArmament .weaponRow {
+  margin-bottom: 3px;
+}
+
+.loadedMech .mechArmament .weaponName {
+  padding: 2px;
+}
+
+.loadedMech .mechArmament .count {
+  border-radius: 4px;
+  margin-left: 3px;
+  margin-right: 3px;
+  padding: 2px 4px;
+  color: white;
+}
+
+.loadedMech .mechArmament .ballistic {
+  background-color: #846b95;
+}
+
+.loadedMech .mechArmament .beam {
+  background-color: #cb7834;
+}
+
+.loadedMech .mechArmament .missile {
+  background-color: #6acd97;
 }
