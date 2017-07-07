@@ -31,3 +31,23 @@ Mech Loadout Simulator for Mechwarrior Online
 3. Right-click on the console window and click Save As...
 4. Go to the project [issue tracker](https://github.com/fat4eyes-mwo/mwo-simulator/issues) to report the issue. Make sure to include the console log and the URL where the simulator failed.
 5. If you are using Edge or Internet Explorer, contact your local exorcist and have these hellspawn banished back to the pit from which they came. (Edge and IE are not supported).
+
+# Current features
+
+1. Uses current mech, weapon and heatsink data from smurfy's.
+2. Simulates duration (for burn weapons) and travel time (for velocity weapons).
+3. Simulates effects of heatsink and ammo box destruction, as well as side torso loss for Clan XL engines.
+5. Simulates weapon spread for the following weapons: All LRMs, all SRMs. Also splash damage for cERPPCs.
+4. Supports armor and structure quirks for IS mechs.
+
+# Currently Unsimulated mechanics
+
+* Damage spread for LBX, Streaks (high priority)
+* Weapon cooldown/heat quirks (high priority)
+* Omnipod specific/set quirks
+* UAC double tap
+* Exponential dropoff for cLRMs below min range (right now they do 0 damage below min range)
+* Environmental heat effects
+* Crits and weapon/heatsink/ammo destruction. Right now weapons/heatsinks/ammo are only destroyed if the component they are on are destroyed. The crux here is to find a way to simulate this randomness deterministically.
+* Special weapon crit/damage effects (this includes LBX,SRM crits, MG crits and flamer heat).
+* Ammo explosions

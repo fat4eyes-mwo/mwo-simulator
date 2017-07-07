@@ -10,7 +10,7 @@
 //20 vs 20
 //http://localhost:8181/#s=e1f4897ae14687dfaba82e457031e1aef7b08a03936770f59f498a1290baadf4
 
-//Kodiak Draw
+//Kodiaks vs Kodiaks
 //http://localhost:8181/#s=a3be0c80ec27deaf65a766ee7450e7b75c438986124bcdf561674beffe32771b
 
 //WHM TBR DPS test

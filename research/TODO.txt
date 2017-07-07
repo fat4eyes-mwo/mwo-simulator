@@ -1,3 +1,5 @@
+- AUTOMATED UNIT TESTS!!!!!!
+
 - save team settings?
 - Weapon quirks (cooldown, heat)
 - Streak damage spread
