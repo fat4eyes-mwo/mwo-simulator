@@ -185,7 +185,7 @@ var MechViewAddMech = MechViewAddMech || (function() {
 
     let mechStats = smurfyMechLoadout.stats;
     //Mech equipment
-    let mechSpeed = mechStats.top_speed + "km/h";
+    let mechSpeed = Number(mechStats.top_speed).toFixed(1) + "km/h";
     let mechEngine = mechStats.engine_type + " " + mechStats.engine_rating;
     let heatsink = mechStats.heatsinks + " HS";
     loadedMechJQ
