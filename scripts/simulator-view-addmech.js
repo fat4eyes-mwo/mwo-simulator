@@ -34,7 +34,9 @@ var MechViewAddMech = MechViewAddMech || (function() {
   var showAddMechDialog = function(team) {
     //TODO: this code possible accumulates handlers on the dialog buttons
     //due to the use of ids in the template. See what can be done.
-    $("#" + MechView.MODAL_DIALOG_ID).empty();
+    $("#" + MechView.MODAL_DIALOG_ID)
+      .empty()
+      .addClass("addmech");
     $("#addMechDialog-template")
       .clone(true)
       .attr("id", "addMechDialogContainer")
@@ -74,7 +76,7 @@ var MechViewAddMech = MechViewAddMech || (function() {
 
   var hideAddMechDialog = function(team) {
     $("#" + MechView.MODAL_SCREEN_ID).css("display", "none");
-    $("#" + MechView.MODAL_DIALOG_ID).empty();
+    $("#" + MechView.MODAL_DIALOG_ID).empty().removeClass("addmech");
   }
 
   var loadedSmurfyLoadout = null;

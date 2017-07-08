@@ -700,6 +700,10 @@ a:hover {
   border-color: #aaaaaa;
 }
 
+.modalScreen .modalDialog.addmech {
+  margin-top: 5%;
+}
+
 .modalScreen .modalDialog.wide {
   width: 80%;
   margin-top: 5%;
