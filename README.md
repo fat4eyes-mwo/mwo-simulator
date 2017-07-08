@@ -16,6 +16,7 @@ Mech Loadout Simulator for Mechwarrior Online
 5. Add more mechs if you want. Click the 'Range' Button if you want to change the engagement range.
 6. Click 'Run'.
 7. Click 'Permalink' to save changes and share your simulation.
+8. Click 'Reset Simulation' to bring dead mechs back to life and start again.
 
 # Slightly Less Quick Start Guide
 
@@ -25,6 +26,7 @@ Mech Loadout Simulator for Mechwarrior Online
 7. Click Speed setting (1x to 8x) to set simulation speed.
 8. Click 'Run'.
 9. Click 'Permalink' to save changes and share your simulation.
+10. Click 'Reset Simulation' to bring dead mechs back to life and start again.
 
 # Guide for Reporting Bugs
 
