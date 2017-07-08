@@ -73,7 +73,6 @@
       log_message("Cache file expired: " . $cacheFile, INFO);
       return FALSE;
     }
-    log_message("Contents read from cache: " . $cacheFile, INFO);
     return file_get_contents($cacheFile);
   }
   function writeToCache($path, $contents) {
