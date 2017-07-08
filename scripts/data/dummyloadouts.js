@@ -13,8 +13,10 @@
 //Kodiaks vs Kodiaks
 //http://localhost:8181/#s=a3be0c80ec27deaf65a766ee7450e7b75c438986124bcdf561674beffe32771b
 
-//WHM TBR DPS test
+//WHM TBR DPS test 200m
 //http://localhost:8181/#s=215c7c1ca3e27060b69f84e8057dc4548a9913498aa7b3980dbdaee62bed3772
+//400m
+//http://localhost:8181/#s=b98ccc3d5794a1f645b1f96337a7c412f9df7d753d9cf24b0fc9f9e71e3613c5
 //SCR SHD DPS test
 //http://localhost:8181/#s=3edb6717e734ee445304b41a1077b0ef97be97ab4551fc657eb3ca8e5bc295ef
 //Jenner vs Cheetah DPS test

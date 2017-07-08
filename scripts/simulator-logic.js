@@ -449,6 +449,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     mechStats.weaponFires.push(weaponFire);
     mechState.updateTypes[MechModel.UpdateType.STATS] = true;
     willUpdateTeamStats[weaponFire.sourceMech.getMechTeam()] = true;
+    willUpdateTeamStats[weaponFire.targetMech.getMechTeam()] = true;
 
     console.log(weaponInfo.name + " completed. Total damage: "
               + weaponFire.damageDone.totalDamage() +
