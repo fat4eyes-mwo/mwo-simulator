@@ -655,6 +655,8 @@ var MechView = MechView || (function() {
     loadErrorTooltip.showTooltip();
   }
 
+  //TODO: You now have multiple entities acting on the same event. Think about
+  //setting up an event scheduler/listeners
   var updateOnModifyAppState = function() {
     showModifiedToolip();
   }
