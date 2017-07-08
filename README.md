@@ -38,11 +38,12 @@
 
 # Current features
 
-1. Uses current mech, weapon and heatsink data from smurfy's.
-2. Simulates duration (for burn weapons) and travel time (for velocity weapons).
-3. Simulates effects of heatsink and ammo box destruction, as well as side torso loss for Clan XL engines.
-5. Simulates weapon spread for the following weapons: All LRMs, all SRMs. Also splash damage for cERPPCs.
-4. Supports armor and structure quirks for IS mechs.
+* Uses current mech, weapon and heatsink data from smurfy's.
+* Most of the heat and damage mechanics (see exceptions below).
+* Simulates duration (for burn weapons) and travel time (for velocity weapons).
+* Simulates effects of heatsink and ammo box destruction, as well as side torso loss for Clan XL engines.
+* Simulates weapon spread for the following weapons: All LRMs, all SRMs. Also splash damage for cERPPCs.
+* Supports armor and structure quirks for IS mechs.
 
 # Currently Unsimulated mechanics
 
