@@ -1,4 +1,5 @@
 <?php
+  include 'consts.php';
 
   //Requests supported:
   //POST: store JSON data, respond {statehash : <statehash>}
@@ -8,7 +9,6 @@
   const POST_STATEHASH_FIELD = "statehash";
   const GET_STATE_FIELD = "s";
   const JSON_STRING_LIMIT = 100000;
-  const LOG_FILE = "./log/persistence.log";
 
   $currDir = getcwd();
   $dataDir = $currDir . "/data";
@@ -27,6 +27,7 @@
     $jsonStateData = json_encode($outputStateData);
     if (strlen($jsonStateData) > JSON_STRING_LIMIT) {
       http_response_code(500);
+      log_message("State string too long :" . strlen($jsonStateData));
       echo "State string too long (>" . JSON_STRING_LIMIT . " bytes)";
       exit;
     }
@@ -39,13 +40,14 @@
     //on error
     if ($fileret === FALSE) {
       http_response_code(500);
+      log_message("Unable to write file " . $filename);
       echo "Unable to write file " . $filename;
       exit;
     }
 
     $response = array(POST_STATEHASH_FIELD => $jsonHash);
     echo json_encode($response);
-    error_log("Saved state: " . $jsonHash . " " . $_SERVER['REMOTE_ADDR'] . "\n", 3, LOG_FILE);
+    log_message("Saved state: " . $jsonHash, INFO);
   //Get request to fetch state
   } elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $getStateHash = $_GET[GET_STATE_FIELD];

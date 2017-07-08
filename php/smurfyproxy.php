@@ -1,4 +1,5 @@
 <?php
+  include 'consts.php';
   //expected get parameter is ?path=/data/XXX.json
   //example: ?path=/data/modules.json
   //see https://github.com/smurfy/mwo-api-sample/tree/master/api-sample
@@ -16,7 +17,22 @@
 
   if ($pathParam != '') {
     $url = $options['host'] . $pathParam;
-    $response = curl_helper($url);
+    //sanity check on path
+    $ret = preg_match("/data\/[^\.]+\.json/", $pathParam, $matches);
+    if (!$ret) {
+      http_response_code(400);
+      echo "Unexpected path: " . $pathParam;
+      log_message("Unexpected path" . $pathParam);
+      exit;
+    }
+    //try to get file from cache
+    $response = getFromCache($pathParam);
+    if ($response == FALSE) {
+      $response = curl_helper($url);
+      log_message("File loaded from smurfy: " . $url, INFO);
+      writeToCache($pathParam, $response);
+    }
+    //respond
     header('Content-Type: application/json');
     echo $response;
   } else {
@@ -39,5 +55,36 @@
     curl_close($curl);
 
     return $response;
+  }
+
+  //Cache results from smurfy. Cache expiry time is set to 1 day (see consts.php)
+  function getFromCache($path) {
+    $cacheFile = PROXY_CACHE_DIR . $path;
+    if (!file_exists($cacheFile)) {
+      log_message("Cache file not found: " .$cacheFile, INFO);
+      return false;
+    }
+    $mtime = filemtime($cacheFile);
+    if (!$mtime) {
+      log_message("Cache file modify time error: " .$cacheFile);
+      return FALSE;
+    }
+    if (time() - $mtime > PROXY_CACHE_EXPIRE_TIME) {
+      log_message("Cache file expired: " . $cacheFile, INFO);
+      return FALSE;
+    }
+    log_message("Contents read from cache: " . $cacheFile, INFO);
+    return file_get_contents($cacheFile);
+  }
+  function writeToCache($path, $contents) {
+    $cacheFile = PROXY_CACHE_DIR . $path;
+    if (!file_exists(dirname($cacheFile))) {
+      mkdir(dirname($cacheFile), 0755, true);
+    }
+    $ret = file_put_contents($cacheFile, $contents);
+    if ($ret == FALSE) {
+      log_message("Error writing cache file " . $cacheFile, ERROR);
+    }
+    log_message("File written to cache: " . $cacheFile, INFO);
   }
  ?>
