@@ -64,6 +64,9 @@
 //100m
 //http://localhost:8181/#s=f8d46c89f4a736ec8348029131bbef9020fe4366a2566111a558c1544e7a05c5
 
+//20 vs 20 Clan vs Is Meta Extravaganza
+//http://localhost:8181/#s=b9f6b06229d7ac56bb27d8d507fa3105daa2d814bfd2ffdb3325c711d5186d9a
+
 //Spirit bear Atlases DPS test
 //http://localhost:8181/#s=0ae3bd1305a186f213126f38d8acd999b41c412a33f0fbc4ae18b924461ccf83
 
