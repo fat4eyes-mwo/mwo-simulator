@@ -1,5 +1,5 @@
 # mwo-simulator
-Mech Loadout Simulator for Mechwarrior Online
+[Mech Loadout Simulator](http://www.4eye-labs.net/mwo-simulator/) for Mechwarrior Online
 
 * [Quick Start](#quick-start-guide)
 * [Slightly Less Quick start](#slightly-less-quick-start-guide)
