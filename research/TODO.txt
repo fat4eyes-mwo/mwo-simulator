@@ -3,7 +3,6 @@
 - mech reorder buttons
 - save team settings?
 - Weapon quirks (cooldown, heat)
-- Streak damage spread
 - LBX damage spread
 - General quirks (+ heat dissipation, etc)
 - Omnipod quirks

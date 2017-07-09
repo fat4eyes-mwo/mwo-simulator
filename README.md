@@ -47,7 +47,7 @@
 
 # Currently Unsimulated mechanics
 
-* Damage spread for LBX, Streaks (high priority)
+* Damage spread for LBX (high priority)
 * Weapon cooldown/heat quirks (high priority)
 * Omnipod specific/set quirks
 * UAC double tap
