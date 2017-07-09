@@ -661,7 +661,7 @@ $team_settings_transition : 0.5s;
 .teamStats .teamSettingsButtonArrow {
   float:right;
   color: gold;
-  transition: height $team_settings_transition ease;
+  transition: all $team_settings_transition ease;
   cursor: default;
   user-select: none;
 }
