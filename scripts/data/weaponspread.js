@@ -152,6 +152,17 @@ var _cALRM20Spread = {
             "left_leg" : 0.02, "right_leg" : 0.02,},
 };
 
+//Streaks
+//Streak damage seems to be evenly distributed across the mech, as each missile
+//targets a random component. This holds true even at point blank range.
+
+var _StreakSpread = {
+  0 : {"centre_torso" : 0.15, "left_torso" : 0.15, "right_torso" : 0.15,
+      "left_arm" : 0.14, "right_arm" : 0.14, "left_leg" : 0.135, "right_leg" : 0.135},
+  270 : {"centre_torso" : 0.15, "left_torso" : 0.15, "right_torso" : 0.15,
+          "left_arm" : 0.14, "right_arm" : 0.14, "left_leg" : 0.135, "right_leg" : 0.135},
+};
+
 ////////////////////////////////////////////////////////////////////////////////
 //Direct fire damage spread
 //Format for direct fire weapons is

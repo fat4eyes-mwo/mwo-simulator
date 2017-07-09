@@ -1,74 +1,77 @@
 //5 dire vs 20 urbies
-//http://localhost:8181/#s=a14468793b3ddb40bb7ec6f197b8d93d5785ff23f648caf2e9b26c342624a7c8
+//http://www.4eye-labs.net/mwo-simulator/#s=a14468793b3ddb40bb7ec6f197b8d93d5785ff23f648caf2e9b26c342624a7c8
 //clan vs is
-//http://localhost:8181/#s=19eaa8f895cce192fd74796522bc4e86039c90a7cbd75c1f3e1edd175383317d
+//http://www.4eye-labs.net/mwo-simulator/#s=19eaa8f895cce192fd74796522bc4e86039c90a7cbd75c1f3e1edd175383317d
 //lrmboat test
-//http://localhost:8181/#s=2adec6e69fd02c6dd8dbc6da606e47f569d8bbe690d4841b7bc8882decda3dcd
+//http://www.4eye-labs.net/mwo-simulator/#s=2adec6e69fd02c6dd8dbc6da606e47f569d8bbe690d4841b7bc8882decda3dcd
 //srmboat test
-//http://localhost:8181/#s=f5e1dc499ba7fb93cc9c01655b69ff5a8976d9ec9d3a2e43eaeec4a67ba05185
+//http://www.4eye-labs.net/mwo-simulator/#s=f5e1dc499ba7fb93cc9c01655b69ff5a8976d9ec9d3a2e43eaeec4a67ba05185
 
 //20 vs 20
-//http://localhost:8181/#s=e1f4897ae14687dfaba82e457031e1aef7b08a03936770f59f498a1290baadf4
+//http://www.4eye-labs.net/mwo-simulator/#s=e1f4897ae14687dfaba82e457031e1aef7b08a03936770f59f498a1290baadf4
 
 //Kodiaks vs Kodiaks
-//http://localhost:8181/#s=a3be0c80ec27deaf65a766ee7450e7b75c438986124bcdf561674beffe32771b
+//http://www.4eye-labs.net/mwo-simulator/#s=a3be0c80ec27deaf65a766ee7450e7b75c438986124bcdf561674beffe32771b
 
 //WHM TBR DPS test
 //200m
-//http://localhost:8181/#s=215c7c1ca3e27060b69f84e8057dc4548a9913498aa7b3980dbdaee62bed3772
+//http://www.4eye-labs.net/mwo-simulator/#s=215c7c1ca3e27060b69f84e8057dc4548a9913498aa7b3980dbdaee62bed3772
 //400m
-//http://localhost:8181/#s=b98ccc3d5794a1f645b1f96337a7c412f9df7d753d9cf24b0fc9f9e71e3613c5
+//http://www.4eye-labs.net/mwo-simulator/#s=b98ccc3d5794a1f645b1f96337a7c412f9df7d753d9cf24b0fc9f9e71e3613c5
 //600m
-//http://localhost:8181/#s=702f76fc7b7afb84871f968885b4f92433aa87e2a928d4dc756fa733ffe4e938
+//http://www.4eye-labs.net/mwo-simulator/#s=702f76fc7b7afb84871f968885b4f92433aa87e2a928d4dc756fa733ffe4e938
+
+//streak test
+//http://localhost:8181/#s=c4206b5a18f323badf1f9c0decbef897afb2a5437018e515ff5760db8232fb5d
 
 //Clan vs IS lasers
 //200m
-//http://localhost:8181/#s=29e09ee3eaf2af73ddf855cbed21252fdcafe8628a8540a8e0939d167aa03744
+//http://www.4eye-labs.net/mwo-simulator/#s=29e09ee3eaf2af73ddf855cbed21252fdcafe8628a8540a8e0939d167aa03744
 //400m
-//http://localhost:8181/#s=c7e43acc3fd87367fd966bf26e790d4f685d0b2aa30b2f10da3ff0e1744dcad7
+//http://www.4eye-labs.net/mwo-simulator/#s=c7e43acc3fd87367fd966bf26e790d4f685d0b2aa30b2f10da3ff0e1744dcad7
 //600m
-//http://localhost:8181/#s=3cdf628ad7e1b33cc994c931efbba9e77260370e652c250a4749b65f8651e611
+//http://www.4eye-labs.net/mwo-simulator/#s=3cdf628ad7e1b33cc994c931efbba9e77260370e652c250a4749b65f8651e611
 
 //Medium brawlers DPS test
 //100m
-//http://localhost:8181/#s=46d97671ebc081231e83283b10c68be4e6563612b66722803fc97c4e6bce9d9a
+//http://www.4eye-labs.net/mwo-simulator/#s=46d97671ebc081231e83283b10c68be4e6563612b66722803fc97c4e6bce9d9a
 //200m
-//http://localhost:8181/#s=8bf0f482b2367fe4d8f5602d14667d41a626e7cea79e7222abd85e506da8a484
+//http://www.4eye-labs.net/mwo-simulator/#s=8bf0f482b2367fe4d8f5602d14667d41a626e7cea79e7222abd85e506da8a484
 
 //Clan vs IS SRM Boats
-//http://localhost:8181/#s=b73455f6a32a73d889080f7fda1f37a2c2f11f0d33bcf19dde90783082e0d2d0
+//http://www.4eye-labs.net/mwo-simulator/#s=b73455f6a32a73d889080f7fda1f37a2c2f11f0d33bcf19dde90783082e0d2d0
 
 //Annoying lights DPS test
 //200m
-//http://localhost:8181/#s=aaf9d131591c4e09dea4d58883a0ebe370177fdb65f749a1dbe212b803e9d055
+//http://www.4eye-labs.net/mwo-simulator/#s=aaf9d131591c4e09dea4d58883a0ebe370177fdb65f749a1dbe212b803e9d055
 //100m
-//http://localhost:8181/#s=c3657e1a9ad8a49cb6693dcb0ab7146b922914286cf97f6f00b880720be92686
+//http://www.4eye-labs.net/mwo-simulator/#s=c3657e1a9ad8a49cb6693dcb0ab7146b922914286cf97f6f00b880720be92686
 
 //Tier 1 meta DPS test
 //200m
-//http://localhost:8181/#s=35b8fb0eb80969036dbcf781d93e6636e093b2fb5f8d7f6c3eb8d74d511bbd25
+//http://www.4eye-labs.net/mwo-simulator/#s=35b8fb0eb80969036dbcf781d93e6636e093b2fb5f8d7f6c3eb8d74d511bbd25
 //400m
-//http://localhost:8181/#s=f89f841640cba8d0ab8bcf9bfcf4a2afe3d5ebc6a628ddd5f3ca9d71f820a434
+//http://www.4eye-labs.net/mwo-simulator/#s=f89f841640cba8d0ab8bcf9bfcf4a2afe3d5ebc6a628ddd5f3ca9d71f820a434
 //600m
-//http://localhost:8181/#s=747c0d9fbe11a56debc7ba22985c476de93225bea909af1dea5a9bb5e71f0fa7
+//http://www.4eye-labs.net/mwo-simulator/#s=747c0d9fbe11a56debc7ba22985c476de93225bea909af1dea5a9bb5e71f0fa7
 //800m
-//http://localhost:8181/#s=994181782027202f5f187185c6bfdb9ba7902a913d4840111e2b799373496681
+//http://www.4eye-labs.net/mwo-simulator/#s=994181782027202f5f187185c6bfdb9ba7902a913d4840111e2b799373496681
 
 
 //SCR SHD DPS test
-//http://localhost:8181/#s=3edb6717e734ee445304b41a1077b0ef97be97ab4551fc657eb3ca8e5bc295ef
+//http://www.4eye-labs.net/mwo-simulator/#s=3edb6717e734ee445304b41a1077b0ef97be97ab4551fc657eb3ca8e5bc295ef
 //Jenner vs Cheetah DPS test
-//http://localhost:8181/#s=5056895c81ee2b79cce1af462105effc3ce7433899bfc03ef32cb98aecd189e9
+//http://www.4eye-labs.net/mwo-simulator/#s=5056895c81ee2b79cce1af462105effc3ce7433899bfc03ef32cb98aecd189e9
 //SPL vs ERSL Cheetah
-//http://localhost:8181/#s=eb761b2c0fde126154707f199e1b87ed0573bf588cc173c5fb83535296f538c4
+//http://www.4eye-labs.net/mwo-simulator/#s=eb761b2c0fde126154707f199e1b87ed0573bf588cc173c5fb83535296f538c4
 //100m
-//http://localhost:8181/#s=f8d46c89f4a736ec8348029131bbef9020fe4366a2566111a558c1544e7a05c5
+//http://www.4eye-labs.net/mwo-simulator/#s=f8d46c89f4a736ec8348029131bbef9020fe4366a2566111a558c1544e7a05c5
 
 //20 vs 20 Clan vs Is Meta Extravaganza
-//http://localhost:8181/#s=b9f6b06229d7ac56bb27d8d507fa3105daa2d814bfd2ffdb3325c711d5186d9a
+//http://www.4eye-labs.net/mwo-simulator/#s=b9f6b06229d7ac56bb27d8d507fa3105daa2d814bfd2ffdb3325c711d5186d9a
 
 //Spirit bear Atlases DPS test
-//http://localhost:8181/#s=0ae3bd1305a186f213126f38d8acd999b41c412a33f0fbc4ae18b924461ccf83
+//http://www.4eye-labs.net/mwo-simulator/#s=0ae3bd1305a186f213126f38d8acd999b41c412a33f0fbc4ae18b924461ccf83
 
 
 //Punching bag atlas
