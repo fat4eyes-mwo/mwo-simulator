@@ -735,6 +735,7 @@ var MechView = MechView || (function() {
   return {
     damageColor: damageColor,
     healthDamageGradient: healthDamageGradient,
+    mechPanelId: mechPanelId,
     setPaperDollArmor : setPaperDollArmor,
     setPaperDollStructure : setPaperDollStructure,
     setHeatbarValue : setHeatbarValue,

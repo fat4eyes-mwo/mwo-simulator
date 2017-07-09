@@ -69,6 +69,7 @@ var MechViewTeamStats = MechViewTeamStats || (function() {
         .attr("data-mech-id", mechId)
         .attr("title", mechName)
         .removeClass("template")
+        .click(mechPipClickHandler)
         .appendTo("#" + teamMechPipsContainerDivId);
       //TODO: click handler on pip
     }
@@ -98,6 +99,18 @@ var MechViewTeamStats = MechViewTeamStats || (function() {
     for (let patternType of patternTypes) {
       populateTeamPattern(team, patternType);
     }
+  }
+  var mechPipClickHandler = function(data) {
+    let thisJQ = $(this);
+    let mechId = thisJQ.attr("data-mech-id");
+    let mechPanelDivId = MechView.mechPanelId(mechId);
+    let mechPanelJQ = $("#" + mechPanelDivId);
+    mechPanelJQ[0].scrollIntoView(false);
+    mechPanelJQ.addClass("flashSelected");
+    mechPanelJQ.on("animationend", function(data) {
+      mechPanelJQ.removeClass("flashSelected")
+      mechPanelJQ.off("animationend");
+    });
   }
 
   //store selected value (since we do a lot of refreshViews which recreates this panel)

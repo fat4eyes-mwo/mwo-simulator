@@ -15,8 +15,11 @@ $tooltip-background: $off-background-color;
 $tooltip-color: $primary-font-color;
 $tooltip-border: thin solid gold;
 $emphasis-color: gold;
+$low-emphasis-color: goldenrod;
+$high-emphasis-color: yellow;
 $error-color: rgb(255,100,100);
 $mobile-width: 0px; //disable mobile for now
+$navbar-top: 0px;
 /*Main panel styles*/
 body {
   background-color: $background-color;
@@ -160,7 +163,8 @@ div {
 }
 
 .controlPanel {
-
+  position: sticky;
+  top: $navbar-top;
 }
 
 .controlPanel .rangeLabel {
@@ -235,6 +239,14 @@ div {
   width: 100%;
   height: 100%;
   overflow: auto;
+}
+
+@keyframes flash {
+  50% {background-color: $off-background-color};
+}
+
+.flashSelected {
+  animation: flash 1s ease;
 }
 
 .mechPanelList {
@@ -557,13 +569,19 @@ div {
 .statusPanel .mechTotalDamageText {
   font-size: 0.9em;
   margin-left: 10%;
-  color: goldenrod;
+  color: $low-emphasis-color;
 }
 
 
+.teamStatsNav {
+  position: sticky;
+  top: $navbar-top;
+  z-index: 1;
+}
 
 .teamStats {
   padding-bottom: 5px;
+  background-color: $background-color;
 }
 
 .teamStats .teamName {
@@ -628,6 +646,8 @@ div {
 
 }
 
+$team_settings_transition : 0.5s;
+
 .teamStats .teamSettingsButtonContainer {
   font-family: sans-serif;
   float: right;
@@ -641,7 +661,7 @@ div {
 .teamStats .teamSettingsButtonArrow {
   float:right;
   color: gold;
-  transition: all 0.5s;
+  transition: height $team_settings_transition ease;
   cursor: default;
   user-select: none;
 }
@@ -652,13 +672,15 @@ div {
 
 .teamSettings {
   height:0px;
-  transition: height 0.5s ease;
+  transition: all $team_settings_transition ease;
+  background-color: $background-color;
   overflow:hidden;
 }
 
 .teamSettings.expanded {
   overflow:hidden;
   height: 120px;
+  border-bottom: solid thin $low-emphasis-color;
 }
 
 .teamSettings .teamFirePatternLabel,
@@ -692,7 +714,7 @@ div {
   display: block;
   width: 100%;
   background-color: $background-color;
-  border-color: goldenrod;
+  border-color: $low-emphasis-color;
   border-width: thin;
   color: $primary-font-color;
   border-left: none;
@@ -824,15 +846,15 @@ div {
 }
 
 @keyframes textglow {
-  0% {color: goldenrod;}
-  50% {color: yellow;}
-  100% {color: goldenrod;}
+  0% {color: $low-emphasis-color;}
+  50% {color: $high-emphasis-color;}
+  100% {color: $low-emphasis-color;}
 }
 
 @keyframes progressbarglow {
-  0% {background-color: goldenrod;}
-  50% {background-color: yellow;}
-  100% {background-color: goldenrod;}
+  0% {background-color: $low-emphasis-color;}
+  50% {background-color: $high-emphasis-color;}
+  100% {background-color: $low-emphasis-color;}
 }
 
 
@@ -881,7 +903,7 @@ div {
   animation-duration: 1s;
   animation-name: textglow;
   animation-iteration-count: infinite;
-  color:goldenrod;
+  color:$low-emphasis-color;
 }
 
 .loadingScreenProgress {
@@ -889,7 +911,7 @@ div {
   animation-duration: 1s;
   animation-name: progressbarglow;
   animation-iteration-count: infinite;
-  background-color: gold;
+  background-color: $emphasis-color;
   width: 0%;
   height: 3px;
 }
