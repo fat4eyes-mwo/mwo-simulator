@@ -122,6 +122,7 @@ var MechFirePattern = MechFirePattern || (function () {
     return MechFirePattern.maximumDmgPerHeat;
   }
 
+  //Returns a list of fire patterns for the UI
   var getPatterns = function() {
     let patternList = [
       { id: "maximumDmgPerHeat",

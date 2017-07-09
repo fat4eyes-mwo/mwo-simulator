@@ -60,6 +60,7 @@ var MechTargetMech = MechTargetMech || (function () {
     return targetMechsInOrder;
   }
 
+  //returns a list of mech target patterns for the UI
   var getPatterns = function() {
     let patternList = [
       {

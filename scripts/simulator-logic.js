@@ -260,7 +260,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
         queueWeaponFire(mech, targetMech, weaponState);
       } else {
         //if weapon has no duration, set state to FIRING, will go to cooldown on the next step
-        weaponState.gotoState(MechModel.WeaponCycle.FIRING,);
+        weaponState.gotoState(MechModel.WeaponCycle.FIRING);
         weaponsFired.push(weaponState);
         let ammoConsumed = 0;
         if (weaponInfo.requiresAmmo()) {

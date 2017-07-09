@@ -6,6 +6,7 @@
 * [Reporting Bugs](#guide-for-reporting-bugs)
 * [Current Features](#current-features)
 * [Unsimulated Mechanics](#currently-unsimulated-mechanics)
+* [Code Guide](#code-guide)
 
 # Quick Start Guide
 
@@ -58,3 +59,15 @@
 * Crits and weapon/heatsink/ammo destruction. Right now weapons/heatsinks/ammo are only destroyed if the component they are on are destroyed. The crux here is to find a way to simulate this randomness deterministically.
 * Special weapon crit/damage effects (this includes LBX,SRM crits, MG crits and flamer heat).
 * Ammo explosions
+
+# Code Guide
+
+For those interested in looking at the code, the most interesting stuff can be found in `scripts/simulator-logic.js`. It contains the simulation loop and most of the mechanics of the simulation.
+
+The definition of the data structures used by the simulation are in `scripts/simulator-model.js`. The important bits are in `class` declarations, most of the other code there is just data conversion from smurfy format to the one used by the simulation.
+
+The weapon fire patterns (which determine how mechs choose what weapons to fire) are in `scripts/simulator-firepattern.js`. Target component patterns (which determine what components a mech targets) are in `scripts/simulator-componenttarget.js`. Target mech patterns (which enemy mech to target) are in `scripts/simulator-mechtarget.js`. And weapon accuracy patterns (which determine how a weapon or mech spreads damage) are in `scripts/simulator-accuracypattern.js`. Read the comments in those files if you want to try adding your own patterns and have them appear in the UI.
+
+The UI code can be found in the files `scripts/simulator-view*.js`. At the moment I woudn't suggest looking at these as they're a bit of a mess, and a big refactoring is coming soon.
+
+The main entry point of the program is in `scripts/simulator.js`.
