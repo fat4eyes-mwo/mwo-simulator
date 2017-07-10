@@ -73,6 +73,11 @@
 //Spirit bear Atlases DPS test
 //http://www.4eye-labs.net/mwo-simulator/#s=0ae3bd1305a186f213126f38d8acd999b41c412a33f0fbc4ae18b924461ccf83
 
+//1 Dire vs 4 urbies
+//http://www.4eye-labs.net/mwo-simulator/#s=9e3c6b92cf231a7c63c8406fdd29b1ea4af5c688f149b79381769af8e8df6a35
+//1 Dire vs 3 urbies
+//http://www.4eye-labs.net/mwo-simulator/#s=28d6814ffdec93a52b9bd4311fb3537e5b8c76dfab5743bf1f62c6d661590b5f
+
 
 //Punching bag atlas
 //http://mwo.smurfy-net.de/mechlab#i=16&l=d179b763d97e4f962243f707e83b60ce4d785fa1

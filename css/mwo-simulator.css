@@ -266,7 +266,7 @@ a:hover {
 .mechPanel .weaponPanelContainer {
   font-size: 0.9em;
   overflow-y: auto;
-  max-height: 300px;
+  max-height: 120px;
 }
 
 .template {
