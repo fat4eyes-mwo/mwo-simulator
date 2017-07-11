@@ -159,7 +159,9 @@ return {
     },
 
     testDamageAtRange : function() {
-      var weaponInfoTest = new MechModel.WeaponInfo("300", "TestPPC", "Test PPC", null, 90, 540, 1080, 10, 1);
+      MechModel.initDummyModelData();
+      let ppcID = 1009;
+      var weaponInfoTest = new MechModel.WeaponInfo(ppcID, "centre_torso", MechModel.getSmurfyWeaponData(ppcID));
       console.log("Weapon " + weaponInfoTest.translatedName +
           " minRange: " + weaponInfoTest.minRange +
           " optRange: " + weaponInfoTest.optRange +
@@ -190,7 +192,8 @@ return {
       damage = weaponInfoTest.damageAtRange(range, stepDuration);
       console.log("range: " + range + " damage: " + damage);
 
-      weaponInfoTest = new MechModel.WeaponInfo("301", "TestSRM6", "Test SRM6", null, 0, 270, 270, 2.15, 6)
+      let srm6ID = 1031;
+      weaponInfoTest = new MechModel.WeaponInfo(srm6ID, "centre_torso", MechModel.getSmurfyWeaponData(srm6ID));
       range = 0;
       damage = weaponInfoTest.damageAtRange(range, stepDuration);
       console.log("range: " + range + " damage: " + damage);

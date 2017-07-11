@@ -15,3 +15,4 @@
 - LBX crit effects (just the added damage)
 - Flamer heat effects
 - Exponential decrease for cLRM damage below minrange
+- Targeting computer effects
