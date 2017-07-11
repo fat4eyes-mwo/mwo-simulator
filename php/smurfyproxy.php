@@ -17,7 +17,7 @@
 
   if ($pathParam != '') {
     $url = $options['host'] . $pathParam;
-    //sanity check on path
+    //sanity check on path so get requests can't read outside the php data directory
     $ret = preg_match("/^data\/[^\.]+\.json$/", $pathParam, $matches);
     if (!$ret) {
       http_response_code(400);

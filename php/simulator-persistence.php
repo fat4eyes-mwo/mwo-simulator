@@ -58,7 +58,8 @@
       echo "Invalid hash";
       exit;
     }
-    $ret = preg_match("/^[^\.]+$/", $getStateHash, $matches);
+    //check on state name so get requests can't read outside the PHP data directory
+    $ret = preg_match("/^[^\.\\\\\/]+$/", $getStateHash, $matches);
     if (!$ret) {
       http_response_code(400);
       Echo "Invalid hash";
