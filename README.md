@@ -49,7 +49,6 @@
 # Currently Unsimulated mechanics
 
 * Damage spread for LBX (high priority)
-* Weapon cooldown/heat quirks (high priority)
 * Omnipod specific/set quirks
 * UAC double tap
 * Exponential dropoff for cLRMs below min range (right now they do 0 damage below min range)
