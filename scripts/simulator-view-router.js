@@ -286,7 +286,9 @@ var MechViewRouter = MechViewRouter || (function() {
           console.log("Hash state change load done: " + newHash);
         });
     } else {
-      //do nothing
+      //do nothing if hash did not change
+      //TODO: see if this should check if the app is in error and load in data
+      //if it is.
     }
   }
 
