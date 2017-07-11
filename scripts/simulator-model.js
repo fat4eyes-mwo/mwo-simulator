@@ -93,9 +93,9 @@ var MechModel = MechModel || (function () {
 
         this.name = smurfyWeaponData.name;
         this.translatedName = smurfyWeaponData.translated_name;
-        this.minRange = Number(smurfyWeaponData.min_range);
-        this.optRange = Number(smurfyWeaponData.long_range);
-        this.maxRange = Number(smurfyWeaponData.max_range);
+        this.baseMinRange = Number(smurfyWeaponData.min_range);
+        this.baseOptRange = Number(smurfyWeaponData.long_range);
+        this.baseMaxRange = Number(smurfyWeaponData.max_range);
         this.baseDmg = Number(smurfyWeaponData.calc_stats.baseDmg);
         this.damageMultiplier = Number(smurfyWeaponData.calc_stats.damageMultiplier);
         this.heat = Number(smurfyWeaponData.heat);
@@ -107,7 +107,6 @@ var MechModel = MechModel || (function () {
         this.duration = Number(smurfyWeaponData.duration) * 1000;
         //Spinup data from data/addedweapondata.js
         this.spinup = (smurfyWeaponData.spinup ? Number(smurfyWeaponData.spinup) : 0) * 1000;
-        //TODO: Apply velocity quirks. Perhaps rename speed to baseSpeed and add a getter
         this.baseSpeed = Number(smurfyWeaponData.speed);
         this.ammoPerShot = smurfyWeaponData.ammo_per_shot ?
               Number(smurfyWeaponData.ammo_per_shot) : 0;
@@ -120,7 +119,31 @@ var MechModel = MechModel || (function () {
         return this.baseSpeed * speedMultiplier;
       }
       set speed(data) {
-        throw "Speed cannot be set.";
+        throw "speed cannot be set.";
+      }
+      get minRange() {
+        let bonuses = MechModelQuirks.getWeaponBonus(this);
+        let rangeMultiplier = 1 + Number(bonuses.range_multiplier);
+        return this.baseMinRange * rangeMultiplier;
+      }
+      set minRange(value) {
+        throw "minRange cannot be set."
+      }
+      get optRange() {
+        let bonuses = MechModelQuirks.getWeaponBonus(this);
+        let rangeMultiplier = 1 + Number(bonuses.range_multiplier);
+        return this.baseOptRange * rangeMultiplier;
+      }
+      set optRange(value) {
+        throw "optRange cannot be set."
+      }
+      get maxRange() {
+        let bonuses = MechModelQuirks.getWeaponBonus(this);
+        let rangeMultiplier = 1 + Number(bonuses.range_multiplier);
+        return this.baseMaxRange * rangeMultiplier;
+      }
+      set maxRange(value) {
+        throw "maxRange cannot be set."
       }
       hasDuration() {
         return Number(this.duration) > 0;
