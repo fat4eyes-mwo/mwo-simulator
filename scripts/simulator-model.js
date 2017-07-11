@@ -154,7 +154,6 @@ var MechModel = MechModel || (function () {
       requiresAmmo() {
         return this.ammoPerShot > 0;
       }
-      //TODO: Apply range quirks
       //range in meters, stepDuration in ms
       damageAtRange(range, stepDuration) {
         let totalDamage = Number(this.baseDmg) * Number(this.damageMultiplier);
