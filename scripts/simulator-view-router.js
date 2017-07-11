@@ -131,7 +131,7 @@ var MechViewRouter = MechViewRouter || (function() {
       failCallback(data);
       //On failure, call the alwaysCallback, becauuse the always handler on this
       //ajax call does nothing so as not to trigger the done callback early when
-      //the request is Successfully
+      //the request is successful
       isLoading = false;
       alwaysCallback(data);
     })
