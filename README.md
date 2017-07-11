@@ -7,6 +7,7 @@
 * [Current Features](#current-features)
 * [Unsimulated Mechanics](#currently-unsimulated-mechanics)
 * [Code Guide](#code-guide)
+* [Update Info](#update-info)
 
 # Quick Start Guide
 
@@ -71,3 +72,7 @@ The weapon fire patterns (which determine how mechs choose what weapons to fire)
 The UI code can be found in the files `scripts/simulator-view*.js`. At the moment I woudn't suggest looking at these as they're a bit of a mess, and a big refactoring is coming soon.
 
 The main entry point of the program is in `scripts/simulator.js`.
+
+# Update Info
+
+* 2017-07-12: Implemented IS weapon quirks (heat, duration, range, cooldown, velocity).
