@@ -75,13 +75,14 @@ var MechModel = MechModel || (function () {
       var smurfyMechData = getSmurfyMechData(smurfyMechLoadout.mech_id);
       this.mechName = smurfyMechData.name;
       this.mechTranslatedName = smurfyMechData.translated_name;
+      this.tons = smurfyMechData.details.tons;
+      //NOTE: Quirks should be set before creating WeaponInfos
+      this.quirks = smurfyMechData.details.quirks;
       this.mechHealth = mechHealthFromSmurfyMechLoadout(smurfyMechLoadout);
       this.weaponInfoList = weaponInfoListFromSmurfyMechLoadout(smurfyMechLoadout, this);
       this.heatsinkInfoList = heatsinkListFromSmurfyMechLoadout(smurfyMechLoadout);
       this.ammoBoxList = ammoBoxListFromSmurfyMechLoadout(smurfyMechLoadout);
       this.engineInfo = engineInfoFromSmurfyMechLoadout(smurfyMechLoadout);
-      this.tons = smurfyMechData.details.tons;
-      this.quirks = smurfyMechData.details.quirks;
     }
   }
 
@@ -112,34 +113,31 @@ var MechModel = MechModel || (function () {
               Number(smurfyWeaponData.ammo_per_shot) : 0;
         this.dps = Number(smurfyWeaponData.calc_stats.dps);
         this.type = smurfyWeaponData.type;
+        this.weaponBonus = MechModelQuirks.getWeaponBonus(this);
       }
       get speed() {
-        let bonuses = MechModelQuirks.getWeaponBonus(this);
-        let speedMultiplier = 1 + Number(bonuses.velocity_multiplier);
+        let speedMultiplier = 1 + Number(this.weaponBonus.velocity_multiplier);
         return this.baseSpeed * speedMultiplier;
       }
       set speed(data) {
         throw "speed cannot be set.";
       }
       get minRange() {
-        let bonuses = MechModelQuirks.getWeaponBonus(this);
-        let rangeMultiplier = 1 + Number(bonuses.range_multiplier);
+        let rangeMultiplier = 1 + Number(this.weaponBonus.range_multiplier);
         return this.baseMinRange * rangeMultiplier;
       }
       set minRange(value) {
         throw "minRange cannot be set."
       }
       get optRange() {
-        let bonuses = MechModelQuirks.getWeaponBonus(this);
-        let rangeMultiplier = 1 + Number(bonuses.range_multiplier);
+        let rangeMultiplier = 1 + Number(this.weaponBonus.range_multiplier);
         return this.baseOptRange * rangeMultiplier;
       }
       set optRange(value) {
         throw "optRange cannot be set."
       }
       get maxRange() {
-        let bonuses = MechModelQuirks.getWeaponBonus(this);
-        let rangeMultiplier = 1 + Number(bonuses.range_multiplier);
+        let rangeMultiplier = 1 + Number(this.weaponBonus.range_multiplier);
         return this.baseMaxRange * rangeMultiplier;
       }
       set maxRange(value) {
@@ -505,14 +503,14 @@ var MechModel = MechModel || (function () {
       if (weaponCycle === WeaponCycle.READY) {
         //do nothing
       } else if (weaponCycle === WeaponCycle.FIRING) {
-        this.durationLeft = this.computeWeaponDuration(this.mechInfo);
+        this.durationLeft = this.computeWeaponDuration();
       } else if (weaponCycle === WeaponCycle.COOLDOWN) {
-        this.cooldownLeft = this.computeWeaponCooldown(this.mechInfo);
+        this.cooldownLeft = this.computeWeaponCooldown();
       } else if (weaponCycle === WeaponCycle.SPOOLING) {
         this.spoolupLeft = Number(this.weaponInfo.spinup);
       } else if (weaponCycle === WeaponCycle.DISABLED) {
         //set cooldown to max so it displays properly in the view
-        this.cooldownLeft = this.computeWeaponCooldown(this.mechInfo);
+        this.cooldownLeft = this.computeWeaponCooldown();
         this.active = false;
       }
     }
@@ -520,25 +518,22 @@ var MechModel = MechModel || (function () {
       return this.weaponCycle === WeaponCycle.READY;
     }
     //Computes the cooldown for this weapon on a mech, taking modifiers into account
-    computeWeaponCooldown(mechInfo) {
-      let quirks = mechInfo.quirks;
-      let weaponBonus = MechModelQuirks.getWeaponBonus(this.weaponInfo);
+    computeWeaponCooldown() {
+      let weaponBonus = this.weaponInfo.weaponBonus;
       let cooldownMultiplier = 1.0 + weaponBonus.cooldown_multiplier;
       return Number(this.weaponInfo.cooldown * cooldownMultiplier);
     }
 
     //Computes this weapon's duration on a mech, taking modifiers into account
-    computeWeaponDuration(mechInfo) {
-      let quirks = mechInfo.quirks;
-      let weaponBonus = MechModelQuirks.getWeaponBonus(this.weaponInfo);
+    computeWeaponDuration() {
+      let weaponBonus = this.weaponInfo.weaponBonus;
       let durationMultiplier = 1.0 + weaponBonus.duration_multiplier;
       return Number(this.weaponInfo.duration * durationMultiplier);
     }
 
     //Computes this weapon's heat on a given mech, taking modifiers into account
-    computeHeat(mechInfo) {
-      let quirks = mechInfo.quirks;
-      let weaponBonus = MechModelQuirks.getWeaponBonus(this.weaponInfo);
+    computeHeat() {
+      let weaponBonus = this.weaponInfo.weaponBonus;
       let heatMultiplier = 1.0 + weaponBonus.heat_multiplier;
       return Number(this.weaponInfo.heat * heatMultiplier);
     }
