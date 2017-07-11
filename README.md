@@ -45,6 +45,7 @@
 * Simulates effects of heatsink and ammo box destruction, as well as side torso loss for Clan XL engines.
 * Simulates weapon spread for the following weapons: All LRMs, all SRMs. Also splash damage for cERPPCs.
 * Supports armor and structure quirks for IS mechs.
+* Supports heat, cooldown, duration, velocity and range multipliers for IS mechs.
 
 # Currently Unsimulated mechanics
 
@@ -61,7 +62,7 @@
 
 # Code Guide
 
-For those interested in looking at the code, the most interesting stuff can be found in `scripts/simulator-logic.js`. It contains the simulation loop and most of the mechanics of the simulation.
+For those interested in looking at the code, the most interesting stuff can be found in `scripts/simulator-logic.js`. It contains the simulation loop and most of the mechanics of the simulation. The main loop function is `step()`.
 
 The definition of the data structures used by the simulation are in `scripts/simulator-model.js`. The important bits are in `class` declarations, most of the other code there is just data conversion from smurfy format to the one used by the simulation.
 
