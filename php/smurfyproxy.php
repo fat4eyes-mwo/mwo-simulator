@@ -18,7 +18,7 @@
   if ($pathParam != '') {
     $url = $options['host'] . $pathParam;
     //sanity check on path
-    $ret = preg_match("/data\/[^\.]+\.json/", $pathParam, $matches);
+    $ret = preg_match("/^data\/[^\.]+\.json$/", $pathParam, $matches);
     if (!$ret) {
       http_response_code(400);
       echo "Unexpected path: " . $pathParam;

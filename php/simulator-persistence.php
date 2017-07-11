@@ -58,6 +58,12 @@
       echo "Invalid hash";
       exit;
     }
+    $ret = preg_match("/^[^\.]+$/", $getStateHash, $matches);
+    if (!$ret) {
+      http_response_code(400);
+      Echo "Invalid hash";
+      exit;
+    }
 
     $filename = $dataDir . "/" . $getStateHash;
 
