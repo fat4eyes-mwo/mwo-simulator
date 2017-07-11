@@ -110,6 +110,7 @@ var MechModel = MechModel || (function () {
         this.ammoPerShot = smurfyWeaponData.ammo_per_shot ?
               Number(smurfyWeaponData.ammo_per_shot) : 0;
         this.dps = Number(smurfyWeaponData.calc_stats.dps);
+        this.type = smurfyWeaponData.type;
       }
       hasDuration() {
         return Number(this.duration) > 0;
@@ -471,14 +472,14 @@ var MechModel = MechModel || (function () {
       if (weaponCycle === WeaponCycle.READY) {
         //do nothing
       } else if (weaponCycle === WeaponCycle.FIRING) {
-        this.durationLeft = this.computeWeaponDuration();
+        this.durationLeft = this.computeWeaponDuration(this.mechInfo);
       } else if (weaponCycle === WeaponCycle.COOLDOWN) {
-        this.cooldownLeft = this.computeWeaponCooldown();
+        this.cooldownLeft = this.computeWeaponCooldown(this.mechInfo);
       } else if (weaponCycle === WeaponCycle.SPOOLING) {
         this.spoolupLeft = Number(this.weaponInfo.spinup);
       } else if (weaponCycle === WeaponCycle.DISABLED) {
         //set cooldown to max so it displays properly in the view
-        this.cooldownLeft = this.computeWeaponCooldown();
+        this.cooldownLeft = this.computeWeaponCooldown(this.mechInfo);
         this.active = false;
       }
     }
@@ -487,20 +488,29 @@ var MechModel = MechModel || (function () {
     }
     //Computes the cooldown for this weapon on a mech, taking modifiers into account
     //TODO: process effect of mech quirks
-    computeWeaponCooldown(mechState) {
-      return Number(this.weaponInfo.cooldown);
+    computeWeaponCooldown(mechInfo) {
+      let quirks = mechInfo.quirks;
+      let weaponBonus = MechModelQuirks.getWeaponBonus(this.weaponInfo, quirks);
+      let cooldownMultiplier = 1.0 + weaponBonus.cooldown_multiplier;
+      return Number(this.weaponInfo.cooldown * cooldownMultiplier);
     }
 
     //Computes this weapon's duration on a mech, taking modifiers into account
     //TODO: process effect of mech quirks
-    computeWeaponDuration(mechState) {
-      return Number(this.weaponInfo.duration);
+    computeWeaponDuration(mechInfo) {
+      let quirks = mechInfo.quirks;
+      let weaponBonus = MechModelQuirks.getWeaponBonus(this.weaponInfo, quirks);
+      let durationMultiplier = 1.0 + weaponBonus.duration_multiplier;
+      return Number(this.weaponInfo.duration * durationMultiplier);
     }
 
     //Computes this weapon's heat on a given mech, taking modifiers into account
     //TODO: process effect of mech quirks
-    computeHeat(mechState) {
-      return Number(this.weaponInfo.heat);
+    computeHeat(mechInfo) {
+      let quirks = mechInfo.quirks;
+      let weaponBonus = MechModelQuirks.getWeaponBonus(this.weaponInfo, quirks);
+      let heatMultiplier = 1.0 + weaponBonus.heat_multiplier;
+      return Number(this.weaponInfo.heat * heatMultiplier);
     }
 
   }

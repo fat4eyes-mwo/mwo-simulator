@@ -480,7 +480,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
 
     for (let weaponState of weaponsFired) {
       let weaponInfo = weaponState.weaponInfo;
-      totalHeat += Number(weaponState.computeHeat(mech)); // base heat
+      totalHeat += Number(weaponState.computeHeat(mech.getMechState().mechInfo)); // base heat
       let ghostHeat = computeGhostHeat(mech, weaponState);
       totalHeat += ghostHeat;
     }
@@ -560,7 +560,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   var predictBaseHeat = function (mech, weaponsFired) {
     let ret = 0;
     for (let weaponState of weaponsFired) {
-      ret = ret + Number(weaponState.computeHeat(mech));
+      ret = ret + Number(weaponState.computeHeat(mech.getMechState().mechInfo));
     }
     return ret;
   }
