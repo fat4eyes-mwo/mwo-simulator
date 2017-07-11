@@ -7,6 +7,9 @@
 //srmboat test
 //http://www.4eye-labs.net/mwo-simulator/#s=f5e1dc499ba7fb93cc9c01655b69ff5a8976d9ec9d3a2e43eaeec4a67ba05185
 
+//lrmboat quirk test
+//http://localhost:8181/#s=542d68c11fb2399272f21455f157fb37f023e4e88d54a511723aff51171d249e
+
 //20 vs 20
 //http://www.4eye-labs.net/mwo-simulator/#s=e1f4897ae14687dfaba82e457031e1aef7b08a03936770f59f498a1290baadf4
 

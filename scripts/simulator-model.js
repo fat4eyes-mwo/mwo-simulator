@@ -76,7 +76,7 @@ var MechModel = MechModel || (function () {
       this.mechName = smurfyMechData.name;
       this.mechTranslatedName = smurfyMechData.translated_name;
       this.mechHealth = mechHealthFromSmurfyMechLoadout(smurfyMechLoadout);
-      this.weaponInfoList = weaponInfoListFromSmurfyMechLoadout(smurfyMechLoadout);
+      this.weaponInfoList = weaponInfoListFromSmurfyMechLoadout(smurfyMechLoadout, this);
       this.heatsinkInfoList = heatsinkListFromSmurfyMechLoadout(smurfyMechLoadout);
       this.ammoBoxList = ammoBoxListFromSmurfyMechLoadout(smurfyMechLoadout);
       this.engineInfo = engineInfoFromSmurfyMechLoadout(smurfyMechLoadout);
@@ -86,9 +86,10 @@ var MechModel = MechModel || (function () {
   }
 
   class WeaponInfo {
-    constructor(weaponId, location, smurfyWeaponData) {
+    constructor(weaponId, location, smurfyWeaponData, mechInfo) {
         this.weaponId = weaponId; //smurfy weapon id
         this.location = location;
+        this.mechInfo = mechInfo;
 
         this.name = smurfyWeaponData.name;
         this.translatedName = smurfyWeaponData.translated_name;
@@ -107,11 +108,19 @@ var MechModel = MechModel || (function () {
         //Spinup data from data/addedweapondata.js
         this.spinup = (smurfyWeaponData.spinup ? Number(smurfyWeaponData.spinup) : 0) * 1000;
         //TODO: Apply velocity quirks. Perhaps rename speed to baseSpeed and add a getter
-        this.speed = Number(smurfyWeaponData.speed);
+        this.baseSpeed = Number(smurfyWeaponData.speed);
         this.ammoPerShot = smurfyWeaponData.ammo_per_shot ?
               Number(smurfyWeaponData.ammo_per_shot) : 0;
         this.dps = Number(smurfyWeaponData.calc_stats.dps);
         this.type = smurfyWeaponData.type;
+      }
+      get speed() {
+        let bonuses = MechModelQuirks.getWeaponBonus(this);
+        let speedMultiplier = 1 + Number(bonuses.velocity_multiplier);
+        return this.baseSpeed * speedMultiplier;
+      }
+      set speed(data) {
+        throw "Speed cannot be set.";
       }
       hasDuration() {
         return Number(this.duration) > 0;
@@ -491,7 +500,7 @@ var MechModel = MechModel || (function () {
     //Computes the cooldown for this weapon on a mech, taking modifiers into account
     computeWeaponCooldown(mechInfo) {
       let quirks = mechInfo.quirks;
-      let weaponBonus = MechModelQuirks.getWeaponBonus(this.weaponInfo, quirks);
+      let weaponBonus = MechModelQuirks.getWeaponBonus(this.weaponInfo);
       let cooldownMultiplier = 1.0 + weaponBonus.cooldown_multiplier;
       return Number(this.weaponInfo.cooldown * cooldownMultiplier);
     }
@@ -499,7 +508,7 @@ var MechModel = MechModel || (function () {
     //Computes this weapon's duration on a mech, taking modifiers into account
     computeWeaponDuration(mechInfo) {
       let quirks = mechInfo.quirks;
-      let weaponBonus = MechModelQuirks.getWeaponBonus(this.weaponInfo, quirks);
+      let weaponBonus = MechModelQuirks.getWeaponBonus(this.weaponInfo);
       let durationMultiplier = 1.0 + weaponBonus.duration_multiplier;
       return Number(this.weaponInfo.duration * durationMultiplier);
     }
@@ -507,7 +516,7 @@ var MechModel = MechModel || (function () {
     //Computes this weapon's heat on a given mech, taking modifiers into account
     computeHeat(mechInfo) {
       let quirks = mechInfo.quirks;
-      let weaponBonus = MechModelQuirks.getWeaponBonus(this.weaponInfo, quirks);
+      let weaponBonus = MechModelQuirks.getWeaponBonus(this.weaponInfo);
       let heatMultiplier = 1.0 + weaponBonus.heat_multiplier;
       return Number(this.weaponInfo.heat * heatMultiplier);
     }
@@ -1049,14 +1058,14 @@ var MechModel = MechModel || (function () {
     return outputList;
   }
 
-  var weaponInfoListFromSmurfyMechLoadout = function (smurfyMechLoadout) {
+  var weaponInfoListFromSmurfyMechLoadout = function (smurfyMechLoadout, mechInfo) {
     var weaponInfoList = [];
     weaponInfoList = collectFromSmurfyConfiguration(smurfyMechLoadout.configuration,
       function (location, smurfyMechComponentItem) {
         if (smurfyMechComponentItem.type ==="weapon") {
           let weaponId = smurfyMechComponentItem.id;
           let smurfyWeaponData = getSmurfyWeaponData(weaponId);
-          let weaponInfo = new WeaponInfo(weaponId, location, smurfyWeaponData);
+          let weaponInfo = new WeaponInfo(weaponId, location, smurfyWeaponData, mechInfo);
           return weaponInfo;
         } else {
           return null;

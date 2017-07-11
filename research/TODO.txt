@@ -1,7 +1,6 @@
 - AUTOMATED UNIT TESTS!!!!!!
 
 - mech reorder buttons
-- apply weapon range and velocity quirks
 - save team settings?
 - LBX damage spread
 - General quirks (+ heat dissipation, etc)

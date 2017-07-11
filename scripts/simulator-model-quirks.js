@@ -39,7 +39,8 @@ var MechModelQuirks = MechModelQuirks || (function () {
 
   //returns {cooldown_multiplier: <bonus>, duration_multiplier: <bonus>,
   //          heat_multiplier: <bonus>, range_multiplier: <bonus>, velocity_multiplier: <bonus>}
-  var getWeaponBonus = function(weaponInfo, quirkList) {
+  var getWeaponBonus = function(weaponInfo) {
+    let quirkList = weaponInfo.mechInfo.quirks;
     let ret = {cooldown_multiplier : 0, duration_multiplier : 0,
               heat_multiplier : 0, range_multiplier : 0, velocity_multiplier : 0};
     for (let quirk of quirkList) {
@@ -59,7 +60,7 @@ var MechModelQuirks = MechModelQuirks || (function () {
         ret[restOfNameComponents] += Number(quirk.value);
       }
     }
-    
+
     return ret;
   }
 
