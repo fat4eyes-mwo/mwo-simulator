@@ -32,7 +32,7 @@ var MechViewAddMech = MechViewAddMech || (function() {
   var addMechCancelButton;
   var addMechLoadButton;
   var showAddMechDialog = function(team) {
-    //TODO: this code possible accumulates handlers on the dialog buttons
+    //TODO: this code possibly accumulates handlers on the dialog buttons
     //due to the use of ids in the template. See what can be done.
     $("#" + MechView.MODAL_DIALOG_ID)
       .empty()
@@ -126,7 +126,6 @@ var MechViewAddMech = MechViewAddMech || (function() {
         let smurfyMechData = MechModel.getSmurfyMechData(loadedSmurfyLoadout.mech_id);
         let mechTranslatedName = smurfyMechData.translated_name;
         let mechName = smurfyMechData.name;
-        //TODO: put fancy summary of loaded mech in result pane
         $("#addMechDialog-result")
               .removeClass("error")
               .empty();

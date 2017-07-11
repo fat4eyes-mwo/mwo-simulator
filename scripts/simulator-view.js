@@ -610,7 +610,6 @@ var MechView = MechView || (function() {
     $("#permalinkButton").click(() => {
       MechViewRouter.saveAppState(
         function(data) {
-          //TODO: Show dialog containing the current URL
           showPermalinkTooltip(location.href);
           console.log("Success on save app state. Data: " + data);
         },

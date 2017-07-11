@@ -71,7 +71,6 @@ var MechViewTeamStats = MechViewTeamStats || (function() {
         .removeClass("template")
         .click(mechPipClickHandler)
         .appendTo("#" + teamMechPipsContainerDivId);
-      //TODO: click handler on pip
     }
     //Mech health (liveMechs and teamHealthValue)
     $("#" + teamStatsContainerPanelId + " [class~=liveMechs]")

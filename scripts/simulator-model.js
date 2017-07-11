@@ -106,6 +106,7 @@ var MechModel = MechModel || (function () {
         this.duration = Number(smurfyWeaponData.duration) * 1000;
         //Spinup data from data/addedweapondata.js
         this.spinup = (smurfyWeaponData.spinup ? Number(smurfyWeaponData.spinup) : 0) * 1000;
+        //TODO: Apply velocity quirks. Perhaps rename speed to baseSpeed and add a getter
         this.speed = Number(smurfyWeaponData.speed);
         this.ammoPerShot = smurfyWeaponData.ammo_per_shot ?
               Number(smurfyWeaponData.ammo_per_shot) : 0;
@@ -121,6 +122,7 @@ var MechModel = MechModel || (function () {
       requiresAmmo() {
         return this.ammoPerShot > 0;
       }
+      //TODO: Apply range quirks
       //range in meters, stepDuration in ms
       damageAtRange(range, stepDuration) {
         let totalDamage = Number(this.baseDmg) * Number(this.damageMultiplier);
@@ -487,7 +489,6 @@ var MechModel = MechModel || (function () {
       return this.weaponCycle === WeaponCycle.READY;
     }
     //Computes the cooldown for this weapon on a mech, taking modifiers into account
-    //TODO: process effect of mech quirks
     computeWeaponCooldown(mechInfo) {
       let quirks = mechInfo.quirks;
       let weaponBonus = MechModelQuirks.getWeaponBonus(this.weaponInfo, quirks);
@@ -496,7 +497,6 @@ var MechModel = MechModel || (function () {
     }
 
     //Computes this weapon's duration on a mech, taking modifiers into account
-    //TODO: process effect of mech quirks
     computeWeaponDuration(mechInfo) {
       let quirks = mechInfo.quirks;
       let weaponBonus = MechModelQuirks.getWeaponBonus(this.weaponInfo, quirks);
@@ -505,7 +505,6 @@ var MechModel = MechModel || (function () {
     }
 
     //Computes this weapon's heat on a given mech, taking modifiers into account
-    //TODO: process effect of mech quirks
     computeHeat(mechInfo) {
       let quirks = mechInfo.quirks;
       let weaponBonus = MechModelQuirks.getWeaponBonus(this.weaponInfo, quirks);
@@ -1024,7 +1023,6 @@ var MechModel = MechModel || (function () {
     var location = smurfyMechComponent.name;
     var armor = smurfyMechComponent.armor;
     var structure = baseMechStructure(location, tonnage);
-    //TODO: Add quirk values to armor and structure
     let bonus = MechModelQuirks.getArmorStructureBonus(location, smurfyMechQuirks);
     componentHealth = new ComponentHealth(location,
                                   Number(armor) + Number(bonus.armor),
@@ -1211,8 +1209,6 @@ var MechModel = MechModel || (function () {
     heatDissipation += Number(engineInfo.heatsinkCount) *
                       Number(engineHeatsink.engineCooling) *
                       Number(engineHeatEfficiency);
-
-    //TODO: see where to get the data for fixed heatsinks
 
     return {
       "heatCapacity" : heatCapacity,
