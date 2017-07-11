@@ -46,6 +46,7 @@
     }
 
     $response = array(POST_STATEHASH_FIELD => $jsonHash);
+    header('Content-Type: application/json');
     echo json_encode($response);
     log_message("Saved state: " . $jsonHash, INFO);
   //Get request to fetch state

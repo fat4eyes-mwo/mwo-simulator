@@ -17,7 +17,8 @@ var MechSimulator = MechSimulator || (function() {
       if (success) {
         console.log("Successfully loaded model init data");
         //router should not be initialized before the smurfy data is
-        //loaded since the
+        //loaded since the hash change listener can start pulling in smurfy
+        //loadout data
         MechViewRouter.initViewRouter();
         initMechs();
       } else {
