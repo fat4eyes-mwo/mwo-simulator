@@ -23,7 +23,8 @@ var MechSimulator = MechSimulator || (function() {
         initMechs();
       } else {
         console.log("Failed to load model init data");
-        //TODO error dialog here
+        MechView.hideLoadingScreen();
+        MechView.updateOnLoadAppError();
       }
     });
   }
