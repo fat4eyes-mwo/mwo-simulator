@@ -193,8 +193,8 @@ var _ASRM2Spread = {
 };
 var _ASRM4Spread = {
     0 : {target: 0.988372093, adjacent: 0.01, nextAdjacent: 0.0},
-    130 : {target: 0.7497995188, adjacent: .30, nextAdjacent: 0.0},
-    260 : {target: 0.7248062016, adjacent: .30, nextAdjacent: 0.0},
+    130 : {target: 0.7497995188, adjacent: .22, nextAdjacent: 0.0},
+    260 : {target: 0.7248062016, adjacent: .23, nextAdjacent: 0.0},
 };
 var _ASRM6Spread = {
     0 : {target: 0.9664082687, adjacent: 0.03, nextAdjacent: 0.0},
