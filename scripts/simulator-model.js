@@ -78,6 +78,9 @@ var MechModel = MechModel || (function () {
       this.tons = smurfyMechData.details.tons;
       //NOTE: Quirks should be set before creating WeaponInfos
       this.quirks = smurfyMechData.details.quirks;
+      //NOTE: General quirk bonus must be computed before collecting heatsinks
+      //(bonus is used in computing heatdissipation)
+      this.generalQuirkBonus = MechModelQuirks.getGeneralBonus(this.quirks);
       this.mechHealth = mechHealthFromSmurfyMechLoadout(smurfyMechLoadout);
       this.weaponInfoList = weaponInfoListFromSmurfyMechLoadout(smurfyMechLoadout, this);
       this.heatsinkInfoList = heatsinkListFromSmurfyMechLoadout(smurfyMechLoadout);
@@ -439,7 +442,8 @@ var MechModel = MechModel || (function () {
       let heatStats = calculateHeatStats(
             heatState.currHeatsinkList,
             heatState.engineInfo,
-            heatState.engineHeatEfficiency);
+            heatState.engineHeatEfficiency,
+            this.mechInfo.generalQuirkBonus);
       heatState.currHeatDissipation = heatStats.heatDissipation;
       heatState.currMaxHeat = heatStats.heatCapacity;
       this.updateTypes[UpdateType.HEAT];
@@ -468,7 +472,8 @@ var MechModel = MechModel || (function () {
       let heatStats = calculateHeatStats(
               mechInfo.heatsinkInfoList,
               mechInfo.engineInfo,
-              this.engineHeatEfficiency);
+              this.engineHeatEfficiency,
+              mechInfo.generalQuirkBonus);
       console.log("Heatcalc: " + mechInfo.mechName
                 + " dissipation: " + heatStats.heatDissipation
                 + " capacity: " + heatStats.heatCapacity);
@@ -1208,7 +1213,8 @@ var MechModel = MechModel || (function () {
   }
 
   //Calculates the total heat capacity and heat dissipation from a mechInfo
-  var calculateHeatStats = function (heatsinkInfoList, engineInfo, engineHeatEfficiency) {
+  var calculateHeatStats = function (heatsinkInfoList, engineInfo,
+                                      engineHeatEfficiency, generalQuirkBonus) {
     const BASE_HEAT_CAPACITY = 30;
     let heatCapacity = BASE_HEAT_CAPACITY;
     let heatDissipation = 0;
@@ -1235,9 +1241,13 @@ var MechModel = MechModel || (function () {
     heatDissipation += Number(engineInfo.heatsinkCount) *
                       Number(engineHeatsink.engineCooling) *
                       Number(engineHeatEfficiency);
-
+    let heatDissipationMultiplier = 1.0;
+    if (generalQuirkBonus.heatloss_multiplier) {
+      heatDissipationMultiplier += generalQuirkBonus.heatloss_multiplier;
+    }
+    heatDissipation = heatDissipation * heatDissipationMultiplier;
     return {
-      "heatCapacity" : heatCapacity,
+      "heatCapacity" : heatCapacity ,
       "heatDissipation" : heatDissipation
     };
   }

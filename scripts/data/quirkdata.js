@@ -1,5 +1,12 @@
 //Constants used by simulator-model-quirks.js to compute quirk bonuses
 
+//quirks that apply to the mech, not a component or weapon
+const _quirkGeneral = {
+  "heatloss_multiplier" : true,
+  "externalheat_multiplier" : true,
+  "sensorrange_additive" : true,
+};
+
 //Defensive quirks
 const _quirkComponentMap = {
   "centre_torso" : "ct",

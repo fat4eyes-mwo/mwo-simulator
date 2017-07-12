@@ -2,6 +2,21 @@
 
 var MechModelQuirks = MechModelQuirks || (function () {
 
+  //returns {<quirk_name>: <value>, ...} for general quirks
+  var getGeneralBonus = function(quirkList) {
+    let ret = {};
+    for (let quirk of quirkList) {
+      if (_quirkGeneral[quirk.name]) {
+        if (!ret[quirk.name]) {
+          ret[quirk.name] = Number(quirk.value);
+        } else {
+          ret[quirk.name] += Number(quirk.value);
+        }
+      }
+    }
+    return ret;
+  }
+
   //returns {armor: <bonus armor>, structure: <bonus structure>}
   var getArmorStructureBonus = function(component, quirkList) {
     let ret = {armor: 0, structure: 0};
@@ -67,6 +82,7 @@ var MechModelQuirks = MechModelQuirks || (function () {
   return {
     getArmorStructureBonus: getArmorStructureBonus,
     getWeaponBonus: getWeaponBonus,
+    getGeneralBonus : getGeneralBonus,
   }
 
 })();
