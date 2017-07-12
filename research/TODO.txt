@@ -3,7 +3,6 @@
 - mech reorder buttons
 - save team settings?
 - LBX damage spread
-- General quirks (+ heat dissipation, etc)
 - Omnipod quirks
 - ATM damage computation
 - RAC mechanics
@@ -16,3 +15,4 @@
 - Flamer heat effects
 - Exponential decrease for cLRM damage below minrange
 - Targeting computer effects
+- General quirks (heat dissipation done, others no effect on simulation)
