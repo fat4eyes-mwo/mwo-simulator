@@ -245,12 +245,25 @@ return {
 
     testListQuirks : function() {
       let quirkMap = {};
+      //mech quirks
       for (let mechIdx in DummyMechData) {
         let smurfyMech = DummyMechData[mechIdx];
         let quirks = smurfyMech.details.quirks;
         if (quirks) {
           for (let quirkEntry of quirks) {
             quirkMap[quirkEntry.name] = true;
+          }
+        }
+      }
+      //omnipod quirks
+      for (let chassis in _DummyOmnipods) {
+        for (let omnipodId in _DummyOmnipods[chassis]) {
+          let omnipodData = _DummyOmnipods[chassis][omnipodId];
+          let quirks = omnipodData.configuration.quirks;
+          if (quirks) {
+            for (let quirkEntry of quirks) {
+              quirkMap[quirkEntry.name] = true;
+            }
           }
         }
       }

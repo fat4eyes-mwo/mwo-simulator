@@ -2,6 +2,22 @@
 
 var MechModelQuirks = MechModelQuirks || (function () {
 
+  var collectOmnipodQuirks = function(smurfyMechLoadout) {
+    let ret = [];
+    if (!MechModel.isOmnimech(smurfyMechLoadout)) {
+      return ret;
+    }
+    for (let component of smurfyMechLoadout.configuration) {
+      let omnipodId = component.omni_pod;
+      if (omnipodId) {
+        let omnipodData = MechModel.getSmurfyOmnipodData(omnipodId);
+        let omnipodQuirks = omnipodData.configuration.quirks;
+        ret = ret.concat(omnipodQuirks);
+      }
+    }
+    return ret;
+  }
+
   //returns {<quirk_name>: <value>, ...} for general quirks
   var getGeneralBonus = function(quirkList) {
     let ret = {};
@@ -83,6 +99,7 @@ var MechModelQuirks = MechModelQuirks || (function () {
     getArmorStructureBonus: getArmorStructureBonus,
     getWeaponBonus: getWeaponBonus,
     getGeneralBonus : getGeneralBonus,
+    collectOmnipodQuirks: collectOmnipodQuirks,
   }
 
 })();

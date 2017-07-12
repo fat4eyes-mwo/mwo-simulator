@@ -1,4 +1,4 @@
-{
+var _DummyOmnipods = {
 	"timberwolf": {
 		"30000": {
 			"details": {
@@ -25238,4 +25238,4 @@
 			}
 		}
 	}
-}
+};

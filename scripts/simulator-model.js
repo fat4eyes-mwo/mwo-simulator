@@ -61,6 +61,7 @@ var MechModel = MechModel || (function () {
   var SmurfyAmmoData = {};
   var SmurfyModuleData = {};
   var SmurfyMechData = {};
+  var SmurfyOmnipodData = {};
   var mechTeams = {};
   mechTeams[Team.BLUE] = [];
   mechTeams[Team.RED] = [];
@@ -77,11 +78,15 @@ var MechModel = MechModel || (function () {
       this.mechTranslatedName = smurfyMechData.translated_name;
       this.tons = smurfyMechData.details.tons;
       //NOTE: Quirks should be set before creating WeaponInfos
-      this.quirks = smurfyMechData.details.quirks;
+      if (isOmnimech(smurfyMechLoadout)) {
+        this.quirks = MechModelQuirks.collectOmnipodQuirks(smurfyMechLoadout);
+      } else {
+        this.quirks = smurfyMechData.details.quirks;
+      }
       //NOTE: General quirk bonus must be computed before collecting heatsinks
       //(bonus is used in computing heatdissipation)
       this.generalQuirkBonus = MechModelQuirks.getGeneralBonus(this.quirks);
-      this.mechHealth = mechHealthFromSmurfyMechLoadout(smurfyMechLoadout);
+      this.mechHealth = mechHealthFromSmurfyMechLoadout(smurfyMechLoadout, this.quirks);
       this.weaponInfoList = weaponInfoListFromSmurfyMechLoadout(smurfyMechLoadout, this);
       this.heatsinkInfoList = heatsinkListFromSmurfyMechLoadout(smurfyMechLoadout);
       this.ammoBoxList = ammoBoxListFromSmurfyMechLoadout(smurfyMechLoadout);
@@ -869,8 +874,9 @@ var MechModel = MechModel || (function () {
   const AMMO_DATA_PATH = 'data/ammo.json';
   const MODULE_DATA_PATH = 'data/modules.json';
   const MECH_DATA_PATH = 'data/mechs.json';
+  const OMNIPOD_DATA_PATH = 'data/omnipods.json';
   var initDataTrigger;
-  var dataPaths = [WEAPON_DATA_PATH , AMMO_DATA_PATH, MODULE_DATA_PATH, MECH_DATA_PATH];
+  var dataPaths = [WEAPON_DATA_PATH , AMMO_DATA_PATH, MODULE_DATA_PATH, MECH_DATA_PATH, OMNIPOD_DATA_PATH];
   var dataPathAssigns = {};
   var initModelData = function (callback) {
     //assigns to the correct variable
@@ -887,6 +893,16 @@ var MechModel = MechModel || (function () {
     dataPathAssigns[MECH_DATA_PATH] = function(data) {
       SmurfyMechData = data;
     };
+    dataPathAssigns[OMNIPOD_DATA_PATH] = function(data) {
+      //NOTE: Process the omnipod data so the omnipod ID is the
+      //main index (instead of the chassis name)
+      SmurfyOmnipodData = {};
+      for (let chassis in data) {
+          for (let omnipodId in data[chassis]) {
+            SmurfyOmnipodData[omnipodId] = data[chassis][omnipodId];
+          }
+      }
+    }
     initDataTrigger = new Trigger(dataPaths);
 
     for (let path of dataPaths) {
@@ -1006,6 +1022,10 @@ var MechModel = MechModel || (function () {
     return SmurfyAmmoData[smurfyItemId];
   }
 
+  var getSmurfyOmnipodData = function(smurfyOmnipodId) {
+    return SmurfyOmnipodData[smurfyOmnipodId];
+  }
+
   var isHeatsinkModule = function(smurfyModuleId) {
     let smurfyModuleData = getSmurfyModuleData(smurfyModuleId);
     return smurfyModuleData && smurfyModuleData.type === "CHeatSinkStats";
@@ -1032,12 +1052,11 @@ var MechModel = MechModel || (function () {
 
   //Object creation methods.
   //TODO: see if it's better to put these in the object constructors instead
-  var mechHealthFromSmurfyMechLoadout = function (smurfyMechLoadout) {
+  var mechHealthFromSmurfyMechLoadout = function (smurfyMechLoadout, quirks) {
     var mechHealth;
 
     var smurfyMechData = getSmurfyMechData(smurfyMechLoadout.mech_id);
     var tonnage = smurfyMechData.details.tons;
-    var quirks = smurfyMechData.details.quirks;
     var componentHealthList = [];
     for (let smurfyMechComponent of smurfyMechLoadout.configuration) {
       let componentHealth = componentHealthFromSmurfyMechComponent(smurfyMechComponent, quirks, tonnage);
@@ -1195,7 +1214,12 @@ var MechModel = MechModel || (function () {
   }
 
   var isOmnimech = function(smurfyMechLoadout) {
-    return smurfyMechLoadout.configuration[0].omni_pod !== undefined;
+    for (let component of smurfyMechLoadout.configuration) {
+      if (component.omni_pod) {
+        return true;
+      }
+    }
+    return false;
   }
 
   var numExternalHeatsinks = function(smurfyMechLoadout) {
@@ -1545,16 +1569,18 @@ var MechModel = MechModel || (function () {
     updateModelTeamStats: updateModelTeamStats,
     getTeamStats: getTeamStats,
     getMechFromId: getMechFromId,
+    isOmnimech: isOmnimech,
     //Note: made public only because of testing. Should not be accessed outside this module
     baseMechStructure : baseMechStructure,
     baseMechArmor : baseMechArmor,
 
-    //smurfy data helper functions. Used by view
+    //smurfy data helper functions.
     getSmurfyMechData : getSmurfyMechData,
     getSmurfyWeaponData : getSmurfyWeaponData,
     getSmurfyWeaponDataByName : getSmurfyWeaponDataByName,
     getSmurfyModuleData : getSmurfyModuleData,
     getSmurfyAmmoData : getSmurfyAmmoData,
+    getSmurfyOmnipodData: getSmurfyOmnipodData,
     loadSmurfyMechLoadoutFromURL : loadSmurfyMechLoadoutFromURL,
     loadSmurfyMechLoadoutFromID : loadSmurfyMechLoadoutFromID,
   };

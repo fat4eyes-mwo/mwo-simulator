@@ -16,6 +16,7 @@ const _quirkComponentMap = {
   "right_arm" : "ra",
   "right_leg" : "rl",
   "right_torso" : "rt",
+  "head" : "hd",
 };
 const _quirkArmorPrefix = "armorresist";
 const _quirkStructurePrefix = "internalresist";
@@ -73,5 +74,23 @@ const _weaponNameMap = {
   "ppc" : ["ERPPC", "PPC", "ClanERPPC"],
   "pulselaser" : ["LargePulseLaser", "MediumPulseLaser", "SmallPulseLaser",
                       "ClanSmallPulseLaser", "ClanMediumPulseLaser", "ClanLargePulseLaser"],
-  "ultraautocannon" : ["UltraAutoCannon5", "ClanUltraAutoCannon2", "ClanUltraAutoCannon5", "ClanUltraAutoCannon10", "ClanUltraAutoCannon20"],
+  "ultraautocannon" : ["UltraAutoCannon5", "UltraAutoCannon2", "UltraAutoCannon10", "UltraAutoCannon20",
+                      "ClanUltraAutoCannon2", "ClanUltraAutoCannon5", "ClanUltraAutoCannon10", "ClanUltraAutoCannon20"],
+  "ac" :["AutoCannon20", "AutoCannon2", "AutoCannon5", "AutoCannon10", "LBXAutoCannon10",
+        "UltraAutoCannon5", "UltraAutoCannon2", "UltraAutoCannon10", "UltraAutoCannon20",
+        "ClanLBXAutoCannon2", "ClanLBXAutoCannon5", "ClanLBXAutoCannon10", "ClanLBXAutoCannon20",
+        "ClanUltraAutoCannon2", "ClanUltraAutoCannon5", "ClanUltraAutoCannon10", "ClanUltraAutoCannon20",
+        "ClanAutoCannon2", "ClanAutoCannon5", "ClanAutoCannon10", "ClanAutoCannon20"],
+  "clanantimissilesystem" : ["C-AMS"],
+  "clanerlaser" : ["ClanERSmallLaser", "ClanERMediumLaser", "ClanERLargeLaser"],
+  "clanerppc" : ["ClanERPPC"],
+  "clangaussrifle" : ["ClanGaussRifle"],
+  "clanmachinegun" : ["ClanMachineGun"],
+  "erlaser" : ["ERLargeLaser", "ERMediumLaser", "ERSmallLaser",
+              "ClanERSmallLaser", "ClanERMediumLaser", "ClanERLargeLaser"],
+  "isantimissilesystem" : ["AMS"],
+  "lbxautocannon" : ["LBXAutoCannon10", "LBXAutoCannon2", "LBXAutoCannon5", "LBXAutoCannon20",
+                    "ClanLBXAutoCannon2", "ClanLBXAutoCannon5", "ClanLBXAutoCannon10", "ClanLBXAutoCannon20",],
+  "srm" : ["SRM2", "SRM2_Artemis", "SRM4", "SRM4_Artemis", "SRM6", "SRM6_Artemis",
+            "ClanSRM2", "ClanSRM2_Artemis", "ClanSRM4", "ClanSRM4_Artemis", "ClanSRM6", "ClanSRM6_Artemis"],
 };
