@@ -16,3 +16,4 @@
 - Exponential decrease for cLRM damage below minrange
 - Targeting computer effects
 - General quirks (heat dissipation done, others no effect on simulation)
+- Test
