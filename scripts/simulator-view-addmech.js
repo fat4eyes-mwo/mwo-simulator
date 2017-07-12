@@ -157,7 +157,7 @@ var MechViewAddMech = MechViewAddMech || (function() {
         addMechLoadButton.enable();
         addMechLoadButton.removeClass("loading");
         addMechLoadButton.setHtml("Load");
-        console.log("Invalid smurfy url");
+        console.error("Invalid smurfy url");
       }
     }
   }

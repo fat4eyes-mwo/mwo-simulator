@@ -22,7 +22,7 @@ var MechSimulator = MechSimulator || (function() {
         MechViewRouter.initViewRouter();
         initMechs();
       } else {
-        console.log("Failed to load model init data");
+        console.error("Failed to load model init data");
         MechView.hideLoadingScreen();
         MechView.updateOnLoadAppError();
       }
@@ -35,7 +35,7 @@ var MechSimulator = MechSimulator || (function() {
         initUI();
       },
       function(data) {
-        console.log("Error loading mech data: " + data);
+        console.error("Error loading mech data: " + data);
         MechModelView.refreshView(true);
         MechView.updateOnLoadAppError();
         location.hash = "";

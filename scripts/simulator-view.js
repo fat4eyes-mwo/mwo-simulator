@@ -614,7 +614,7 @@ var MechView = MechView || (function() {
           console.log("Success on save app state. Data: " + data);
         },
         function(data) {
-          console.log("Fail on save app state. Data: " + data);
+          console.error("Fail on save app state. Data: " + data);
         },
         function(data) {
           console.log("Done save app state. Data: " + data);

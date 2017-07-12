@@ -241,7 +241,7 @@ var MechViewRouter = MechViewRouter || (function() {
         successCallback(data);
       },
       function(data) {
-        console.log("Fail on load app state. Hash: " + hashState);
+        console.error("Fail on load app state. Hash: " + hashState);
         failCallback(data);
       },
       function(data) {
