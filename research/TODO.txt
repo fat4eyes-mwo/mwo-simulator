@@ -3,7 +3,7 @@
 - mech reorder buttons
 - save team settings?
 - LBX damage spread
-- Omnipod quirks
+- Omnipod set quirks
 - ATM damage computation
 - RAC mechanics
 - Rocket launcher ammo
