@@ -419,8 +419,20 @@ div {
   font-weight: bold;
   text-align: center;
   border-bottom: solid thin white;
+  font-family: monospace;
+  cursor: help;
 }
 
+.mechHealthNumbers .healthColumnHeader {
+  font-weight: bold;
+  text-align: right;
+  cursor: help;
+  font-family: monospace;
+}
+
+.mechHealthNumbers .healthCornerHeader {
+  padding-bottom: 1px;
+}
 
 .mechHealthNumbers .healthNumber {
   text-align: center;
