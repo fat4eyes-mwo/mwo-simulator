@@ -370,7 +370,7 @@ a:hover {
 
 .mechHealthNumbers {
   padding-top: 5px;
-  font-size: 90%;
+  font-size: .8em;
 }
 
 .mechHealthNumbers .healthNumberHeader {

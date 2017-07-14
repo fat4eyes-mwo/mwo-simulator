@@ -327,10 +327,9 @@ var MechView = MechView || (function() {
       .attr("id", paperDollContainerId);
     addPaperDoll(mechId, paperDollContainerId);
 
-    var mechHealthNumbersId = mechId + "-mechHealthNumbers";
-    $("#" + mechPanelId(mechId) + " [class~='mechHealthNumbers']")
-      .attr("id", mechHealthNumbersId);
-    addMechHealthNumbers(mech, "#" + mechHealthNumbersId);
+    let mechHealthNumbersContainerJQ =
+            $("#" + mechPanelId(mechId) + " [class~='mechHealthNumbersContainer']");
+    addMechHealthNumbers(mech, mechHealthNumbersContainerJQ);
 
     var heatbarContainerId = mechId + "-heatbarContainer";
     $("#" + mechPanelId(mechId) + " [class~='heatbarContainer']")
