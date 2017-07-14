@@ -35,7 +35,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   //When the damage is completed, it is taken off the queue and its total
   //  damage done is added to the sourceMech's stats
   class WeaponFire {
-    constructor(sourceMech, targetMech, weaponState, range, createTime) {
+    constructor(sourceMech, targetMech, weaponState, range, createTime, ammoConsumed) {
       this.sourceMech = sourceMech;
       this.targetMech = targetMech;
       this.weaponState = weaponState;
@@ -44,6 +44,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
       this.range = range;
       this.createTime = createTime;
       this.damageDone = new MechModel.MechDamage();
+      this.ammoConsumed = ammoConsumed;
       let weaponInfo = weaponState.weaponInfo;
 
       this.totalDuration = weaponInfo.hasDuration() ?
@@ -59,11 +60,16 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
 
     initComputedValues(range) {
       let targetComponent = this.sourceMech.componentTargetPattern(this.sourceMech, this.targetMech);
+      let weaponInfo = this.weaponState.weaponInfo;
       //baseWeaponDamage applies all damage to the target component
       let baseWeaponDamageMap = {};
-      baseWeaponDamageMap[targetComponent] = this.weaponState.weaponInfo.damageAtRange(range, stepDuration);
+      let baseDamage = weaponInfo.damageAtRange(range, stepDuration);
+      if (weaponInfo.requiresAmmo()) {
+        baseDamage = Number(baseDamage) * this.ammoConsumed / weaponInfo.ammoPerShot;
+      }
+      baseWeaponDamageMap[targetComponent] = baseDamage;
       let baseWeaponDamage = new MechModel.WeaponDamage(baseWeaponDamageMap);
-      let weaponInfo = this.weaponState.weaponInfo;
+
       let weaponAccuracyPattern =
           MechAccuracyPattern.getWeaponAccuracyPattern(weaponInfo);
       if (weaponAccuracyPattern) {
@@ -257,7 +263,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
         //if weapon has duration, set state to FIRING
         weaponState.gotoState(MechModel.WeaponCycle.FIRING);
         weaponsFired.push(weaponState);
-        queueWeaponFire(mech, targetMech, weaponState);
+        queueWeaponFire(mech, targetMech, weaponState, 0); //assumes duration weapons don't consume ammo
       } else {
         //if weapon has no duration, set state to FIRING, will go to cooldown on the next step
         weaponState.gotoState(MechModel.WeaponCycle.FIRING);
@@ -267,7 +273,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
           ammoConsumed = mechState.ammoState.consumeAmmo(weaponInfo.weaponId,
                                                         weaponInfo.ammoPerShot);
         }
-        queueWeaponFire(mech, targetMech, weaponState);
+        queueWeaponFire(mech, targetMech, weaponState, ammoConsumed);
       }
 
       mechState.updateTypes[MechModel.UpdateType.COOLDOWN] = true;
@@ -284,9 +290,9 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     }
   }
 
-  var queueWeaponFire = function(sourceMech, targetMech, weaponState) {
+  var queueWeaponFire = function(sourceMech, targetMech, weaponState, ammoConsumed) {
     let range = simulatorParameters.range;
-    let weaponFire = new WeaponFire(sourceMech, targetMech, weaponState, range, simTime);
+    let weaponFire = new WeaponFire(sourceMech, targetMech, weaponState, range, simTime, ammoConsumed);
     weaponFireQueue.push(weaponFire);
   }
 
@@ -341,7 +347,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
           //collect list of weapons fired, for use in heat computation
           weaponsFired.push(weaponState);
           mechState.updateTypes[MechModel.UpdateType.WEAPONSTATE] = true;
-          queueWeaponFire(mech, targetMech, weaponState);
+          queueWeaponFire(mech, targetMech, weaponState, ammoConsumed);
         }
         mechState.updateTypes[MechModel.UpdateType.COOLDOWN] = true;
       } else if (weaponState.weaponCycle === MechModel.WeaponCycle.FIRING) {
