@@ -399,6 +399,7 @@ var MechView = MechView || (function() {
     mechNameDiv.innerHTML = $("<a></a>")
                                   .attr("href", smurfyLink)
                                   .attr("target", "_blank")
+                                  .attr("rel", "noopener")
                                   .html(mechName)
                                   .prop("outerHTML");
   }
