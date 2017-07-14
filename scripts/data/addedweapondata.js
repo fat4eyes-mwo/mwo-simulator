@@ -1,5 +1,6 @@
-
+//TODO: generate these from Game/GameData.pak/Libs/Items/Weapons/Weapons.xml
 //added data for smurfy's WeaponData
+//NOTE: Take ammo_per_shot from the numFiring attribute in the XML file, not the ammoPerShot attribute
 _AddedWeaponData = {
   "AutoCannon20" : {
     ammo_per_shot : 1
@@ -56,16 +57,28 @@ _AddedWeaponData = {
     ammo_per_shot : 1
   },
   "UltraAutoCannon2" : {
-    ammo_per_shot : 1
+    ammo_per_shot : 1,
+    shots_during_cooldown: 1,
+    jamming_chance: 0.15,
+    jammed_time: 3.5,
   },
   "UltraAutoCannon5" : {
-    ammo_per_shot : 1
+    ammo_per_shot : 1,
+    shots_during_cooldown: 1,
+    jamming_chance: 0.15,
+    jammed_time: 6.0,
   },
   "UltraAutoCannon10" : {
-    ammo_per_shot : 2 //NOTE XML file says 1, but it's 2 in game
+    ammo_per_shot : 2, //NOTE use attribute numFiring from XML, not ammoPerShot
+    shots_during_cooldown: 1,
+    jamming_chance: 0.15,
+    jammed_time: 7.5,
   },
   "UltraAutoCannon20" : {
-    ammo_per_shot : 3 //NOTE: XML file says 1, but it's 3 in game
+    ammo_per_shot : 3, //NOTE: use attribute numFiring from XML, not ammoPerShot
+    shots_during_cooldown: 1,
+    jamming_chance: 0.15,
+    jammed_time: 7.5,
   },
   "RotaryAutoCannon2" : {
     ammo_per_shot : 1
@@ -134,16 +147,28 @@ _AddedWeaponData = {
     ammo_per_shot : 1
   },
   "ClanUltraAutoCannon2" : {
-    ammo_per_shot : 1
+    ammo_per_shot : 1,
+    shots_during_cooldown: 1,
+    jamming_chance: 0.17,
+    jammed_time: 3.75,
   },
   "ClanUltraAutoCannon5" : {
-    ammo_per_shot : 2
+    ammo_per_shot : 2,
+    shots_during_cooldown: 1,
+    jamming_chance: 0.17,
+    jammed_time: 6.5,
   },
   "ClanUltraAutoCannon10" : {
-    ammo_per_shot : 3
+    ammo_per_shot : 3,
+    shots_during_cooldown: 1,
+    jamming_chance: 0.17,
+    jammed_time: 8.0,
   },
   "ClanUltraAutoCannon20" : {
-    ammo_per_shot : 4
+    ammo_per_shot : 4,
+    shots_during_cooldown: 1,
+    jamming_chance: 0.17,
+    jammed_time: 8.0,
   },
   "ClanGaussRifle" : {
     ammo_per_shot : 1,
