@@ -503,6 +503,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   //Calculates the ghost heat incurred by a weapon
   //Note that this method has a side effect: it removes stale GhostHeatEntries
   //and adds a new GhostHeatEntry for the weapon
+  //TODO: Fix so a weapon doesn't ghost heat with itself (for UAC double tap)
   var computeGhostHeat = function (mech, weaponState) {
     const HEATMULTIPLIER = [0, 0, 0.08, 0.18, 0.30, 0.45, 0.60, 0.80, 1.10, 1.50, 2.00, 3.00, 5.00];
     let weaponInfo = weaponState.weaponInfo;
