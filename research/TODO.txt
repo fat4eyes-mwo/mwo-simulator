@@ -1,10 +1,10 @@
 - AUTOMATED UNIT TESTS!!!!!!
 
 - mech reorder buttons
-- migrate to Javascript promises
 - save team settings?
 - LBX damage spread
 - UAC double tap
+- migrate to <templates>
 - Omnipod set quirks
 - ATM damage computation
 - RAC mechanics
