@@ -122,8 +122,21 @@ var MechViewRouter = MechViewRouter || (function() {
       simulatorParameters.range = newAppState.range;
       MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
       //Load mechs from smurfy and add them to model
-      loadMechsFromSmurfy(newAppState, stateHash,
-              successCallback, failCallback, alwaysCallback);
+      let loadMechPromise = loadMechsFromSmurfy(newAppState);
+      Promise.resolve(
+        loadMechPromise
+          .then(function(data) {
+            isAppStateModified = false;
+            MechView.updateOnLoadAppState();
+            successCallback(data);
+            return data;
+          })
+          .catch(failCallback)
+        ).then(function(data) {
+          isLoading = false;
+          prevStateHash = stateHash;
+          alwaysCallback(data);
+        });
     })
     .fail(function(data){
       //restore previous history on fail
@@ -143,19 +156,15 @@ var MechViewRouter = MechViewRouter || (function() {
     });
   }
 
-  //Loads the smurfy mechs from the appState into the model. Only calls the
-  //appropriate callback once ALL mechs have been loaded.
-  var loadMechsFromSmurfy = function(newAppState, stateHash,
-                              successCallback, failCallback, alwaysCallback) {
+  //Loads the smurfy mechs from the appState into the model.
+  var loadMechsFromSmurfy = function(newAppState) {
     let teamList = [MechModel.Team.BLUE, MechModel.Team.RED];
     let totalMechsToLoad; //total number of mechs to load
     let currMechsLoaded; //current number of mechs loaded
     if (!newAppState.teams) {
-      //if no teams, immediately call the success callback
-      successCallback(true);
-      alwaysCallback(true);
+      //if no teams, immediately resolve
       isLoading = false;
-      return;
+      return Promise.resolve({});
     }
     for (let team of teamList) {
       if (!newAppState.teams[team]) {
@@ -190,7 +199,7 @@ var MechViewRouter = MechViewRouter || (function() {
       return loadMechPromise;
     });
 
-    combinedTeamPromiseList.reduce(function(prevPromise, currPromise) {
+    let retPromise = combinedTeamPromiseList.reduce(function(prevPromise, currPromise) {
       return prevPromise.then(function() {
           return currPromise.then(function(data) {
             //immediate action on loading a mech
@@ -205,24 +214,9 @@ var MechViewRouter = MechViewRouter || (function() {
             return data;
           });
       });
-    }, Promise.resolve())
-    .then(function(data){
-      //all mechs loaded
-      isAppStateModified = false;
-      prevStateHash = stateHash;
-      MechView.updateOnLoadAppState();
-      isLoading = false;
-      successCallback(true);
-      alwaysCallback(true);
-      return data;
-    })
-    .catch(function(data) {
-      //error on getting mechs
-      isLoading = false;
-      failCallback(false);
-      alwaysCallback(false);
-      return data;
-    });
+    }, Promise.resolve());
+
+    return retPromise;
   }
 
   //Called to let the router know that the app state has changed
