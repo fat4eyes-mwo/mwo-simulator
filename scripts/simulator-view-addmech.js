@@ -121,7 +121,7 @@ var MechViewAddMech = MechViewAddMech || (function() {
       let url = $("#addMechDialog-text").val();
       console.log("Load. team: " + team + " URL: " + url);
 
-      let doneCallback = function(data) {
+      let doneHandler = function(data) {
         loadedSmurfyLoadout = data;
         let smurfyMechData = MechModel.getSmurfyMechData(loadedSmurfyLoadout.mech_id);
         let mechTranslatedName = smurfyMechData.translated_name;
@@ -132,24 +132,29 @@ var MechViewAddMech = MechViewAddMech || (function() {
         createLoadedMechPanel("addMechDialog-result", loadedSmurfyLoadout);
         addMechOKButton.enable();
       };
-      let failCallback = function(data) {
+      let failHandler = function() {
         $("#addMechDialog-result")
               .addClass("error")
               .html("Failed to load " + url);
       };
-      let alwaysCallback = function(data) {
+      let alwaysHandler = function() {
         addMechLoadButton.enable();
         addMechLoadButton.removeClass("loading");
         addMechLoadButton.setHtml("Load");
       };
-      let status = MechModel.loadSmurfyMechLoadoutFromURL(url, doneCallback, failCallback, alwaysCallback);
-      if (status) {
+      let loadMechPromise = MechModel.loadSmurfyMechLoadoutFromURL(url);
+      if (loadMechPromise) {
         $("#addMechDialog-result")
               .removeClass("error")
               .html("Loading url : " + url);
         addMechLoadButton.disable();
         addMechLoadButton.addClass("loading");
         addMechLoadButton.setHtml("Loading...");
+        Promise.resolve(
+          loadMechPromise
+            .then(doneHandler)
+            .catch(failHandler)
+          ).then(alwaysHandler);
       } else {
         $("#addMechDialog-result")
             .addClass("error")
@@ -178,6 +183,7 @@ var MechViewAddMech = MechViewAddMech || (function() {
     let mechLinkJQ = $("<a></a>")
                           .attr("href", SMURFY_BASE_URL + "i=" + smurfyMechId + "&l=" + smurfyLoadoutId)
                           .attr("target", "_blank")
+                          .attr("rel", "noopener")
                           .html(smurfyMechData.translated_name);
     loadedMechJQ.find("[class~=mechName]")
                 .append(mechLinkJQ);

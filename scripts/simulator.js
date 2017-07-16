@@ -13,37 +13,38 @@ var MechSimulator = MechSimulator || (function() {
                                 1 //speed factor
                               );
     MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
-    MechModel.initModelData((success) => {
-      if (success) {
+    MechModel.initModelData()
+      .then(function() {
         console.log("Successfully loaded model init data");
         //router should not be initialized before the smurfy data is
         //loaded since the hash change listener can start pulling in smurfy
         //loadout data
         MechViewRouter.initViewRouter();
         initMechs();
-      } else {
+      })
+      .catch(function() {
         console.error("Failed to load model init data");
         MechView.hideLoadingScreen();
         MechView.updateOnLoadAppError();
-      }
-    });
+      });
   }
 
   function initMechs() {
-    MechViewRouter.loadStateFromLocationHash(
-      function(data) {
+    Promise.resolve(MechViewRouter.loadStateFromLocationHash()
+      .then(function(data) {
         initUI();
-      },
-      function(data) {
-        console.error("Error loading mech data: " + data);
+        return data;
+      })
+      .catch(function(err) {
+        console.error("Error loading mech data: " + err);
         MechModelView.refreshView(true);
         MechView.updateOnLoadAppError();
         location.hash = "";
-      },
-      function(data) {
-        MechView.hideLoadingScreen();
-      }
-    );
+        throw err;
+      })
+    ).then(function(data) {
+      MechView.hideLoadingScreen();
+    });
   }
 
   function initUI() {

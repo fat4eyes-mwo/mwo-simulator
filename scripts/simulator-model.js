@@ -901,12 +901,41 @@ var MechModel = MechModel || (function () {
   const MODULE_DATA_PATH = 'data/modules.json';
   const MECH_DATA_PATH = 'data/mechs.json';
   const OMNIPOD_DATA_PATH = 'data/omnipods.json';
-  var initDataTrigger;
-  var dataPaths = [WEAPON_DATA_PATH , AMMO_DATA_PATH, MODULE_DATA_PATH, MECH_DATA_PATH, OMNIPOD_DATA_PATH];
+  var dataPaths = [WEAPON_DATA_PATH , AMMO_DATA_PATH, MODULE_DATA_PATH,
+                    MECH_DATA_PATH, OMNIPOD_DATA_PATH];
   var dataPathAssigns = {};
-  var initModelData = function (callback) {
+
+  var initDataPromise = function(path) {
+    return new Promise(function(resolve, reject) {
+      $.ajax({
+        url : SMURFY_PROXY_URL + path,
+        type : 'GET',
+        dataType : 'JSON'
+        })
+        .done(function(data) {
+          console.log("Successfully loaded " + path);
+          resolve(data);
+        })
+        .fail(function(data) {
+          console.log("Smurfy " + path + " request failed: " + Error(data));
+          reject(Error(data));
+        });
+    });
+  }
+
+  //NOTE: Process the omnipod data so the omnipod ID is the
+  //main index (instead of the chassis name)
+  var flattenOmnipodData = function(smurfyOmnipodData) {
+    let flatOmnipodData = {};
+    for (let chassis in smurfyOmnipodData) {
+      for (let omnipodId in smurfyOmnipodData[chassis]) {
+        flatOmnipodData[omnipodId] = smurfyOmnipodData[chassis][omnipodId];
+      }
+    }
+    return flatOmnipodData;
+  }
+  var initModelData = function () {
     //assigns to the correct variable
-    //TODO: Just turn all the smurfy data into a map to avoid this
     dataPathAssigns[WEAPON_DATA_PATH] = function(data) {
       SmurfyWeaponData = data;
     };
@@ -920,42 +949,22 @@ var MechModel = MechModel || (function () {
       SmurfyMechData = data;
     };
     dataPathAssigns[OMNIPOD_DATA_PATH] = function(data) {
-      //NOTE: Process the omnipod data so the omnipod ID is the
-      //main index (instead of the chassis name)
-      SmurfyOmnipodData = {};
-      for (let chassis in data) {
-          for (let omnipodId in data[chassis]) {
-            SmurfyOmnipodData[omnipodId] = data[chassis][omnipodId];
-          }
-      }
+      SmurfyOmnipodData = flattenOmnipodData(data);
     }
-    initDataTrigger = new Trigger(dataPaths);
 
+    let initPromises = [];
     for (let path of dataPaths) {
-      $.ajax({
-        url : SMURFY_PROXY_URL + path,
-        type : 'GET',
-        dataType : 'JSON'
-        })
-        .done(function (data) {
-          console.log("Successfully loaded " + path);
-          dataPathAssigns[path](data);
-          initDataTrigger.setSuccess(path);
-        })
-        .fail(function (data) {
-          console.log("Smurfy " + path + " request failed: " + data);
-          initDataTrigger.setFail(path);
-        })
-        .always(function (data) {
-          initDataTrigger.setDone(path);
-          if (initDataTrigger.isDone()) {
-            if (initDataTrigger.isSuccessful()) {
-              MechModel.initAddedData();
-            }
-            callback(initDataTrigger.isSuccessful());
-          }
-        });
+      initPromises.push(initDataPromise(path));
     }
+
+    let loadAllInitData = Promise.all(initPromises);
+    return loadAllInitData.then(function(dataArray) {
+      for (let idx in dataArray) {
+        let path = dataPaths[idx];
+        dataPathAssigns[path](dataArray[idx]);
+      }
+      initAddedData();
+    });
   }
 
   var initAddedData = function() {
@@ -1014,6 +1023,7 @@ var MechModel = MechModel || (function () {
     SmurfyAmmoData = DummyAmmoData;
     SmurfyMechData = DummyMechData;
     SmurfyModuleData = DummyModuleData;
+    SmurfyOmnipodData = flattenOmnipodData(_DummyOmnipods);
     initAddedData();
   };
 
@@ -1475,35 +1485,31 @@ var MechModel = MechModel || (function () {
     }
   }
 
-  var loadSmurfyMechLoadoutFromURL = function(url, doneCallback,
-                                        failCallback, alwaysCallback) {
+  var loadSmurfyMechLoadoutFromURL = function(url) {
     let params = parseSmurfyURL(url);
     if (!params) {
       return null;
     }
-    return loadSmurfyMechLoadoutFromID(params.id, params.loadout,
-                    doneCallback, failCallback, alwaysCallback)
+    return loadSmurfyMechLoadoutFromID(params.id, params.loadout);
   }
 
-  var loadSmurfyMechLoadoutFromID = function(smurfyId, smurfyLoadoutId,
-                                  doneCallback, failCallback, alwaysCallback) {
-    var smurfyLoadoutURL = SMURFY_PROXY_URL + "data/mechs/" + smurfyId
-        + "/loadouts/" + smurfyLoadoutId + ".json";
-    $.ajax({
-        url : smurfyLoadoutURL,
-        type : 'GET',
-        dataType : 'JSON'
-    })
-    .done(function(data) {
-      doneCallback(data);
-    })
-    .fail(function(data) {
-      failCallback(data);
-    })
-    .always(function(data) {
-      alwaysCallback(data);
+  var loadSmurfyMechLoadoutFromID = function(smurfyId, smurfyLoadoutId) {
+    let ret = new Promise(function(resolve, reject) {
+      var smurfyLoadoutURL = SMURFY_PROXY_URL + "data/mechs/" + smurfyId
+          + "/loadouts/" + smurfyLoadoutId + ".json";
+      $.ajax({
+          url : smurfyLoadoutURL,
+          type : 'GET',
+          dataType : 'JSON'
+      })
+      .done(function(data) {
+        resolve(data);
+      })
+      .fail(function(data) {
+        reject(Error(data));
+      });
     });
-    return true;
+    return ret;
   }
 
   //returns a list of adjacent components

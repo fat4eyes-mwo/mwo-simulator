@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <title>MWO Loadout Simulator</title>
@@ -58,7 +58,7 @@
           </div>
           <div class="column column-5">
             <div class="rangeInputContainer">
-              <input id="rangeInput" type="number" class="rangeInput disabled"> m
+              <input id="rangeInput" type="number" class="rangeInput disabled" aria-label="Range"> m
             </div>
           </div>
           <div class="column column-4">
@@ -115,13 +115,15 @@
           </div>
         </div>
         <div class="row linkPanel">
-          <a href="https://github.com/fat4eyes-mwo/mwo-simulator" target="_blank">
+          <a href="https://github.com/fat4eyes-mwo/mwo-simulator"
+              target="_blank" rel="noopener">
             Quick Start Guide</a>
           |
-          <a href="https://github.com/fat4eyes-mwo/mwo-simulator/issues" target="_blank">
+          <a href="https://github.com/fat4eyes-mwo/mwo-simulator/issues"
+              target="_blank" rel="noopener">
             Report bugs</a>
           |
-          <a href="http://mwo.smurfy-net.de/" target="_blank">
+          <a href="http://mwo.smurfy-net.de/" target="_blank" rel="noopener">
             Smurfy</a>
           |
           <a href="http://mwomercs.com/">
@@ -305,7 +307,7 @@
             <div class="column column-9 weaponPanelContainer"></div>
           </div>
           <div class="row">
-            <div class="row mechHealthNumbers"></div>
+            <div class="row mechHealthNumbersContainer"></div>
           </div>
         </div>
       </div>
@@ -347,7 +349,7 @@
       <div class="teamSettings row">
         <div class="column column-3">
           <div class="teamFirePatternLabel">Fire Pattern</div>
-          <select class="teamFirePatternValue">
+          <select class="teamFirePatternValue" aria-label="Fire Pattern">
             <option>Option1</option>
           </select>
           <div class="teamFirePatternDesc">
@@ -355,7 +357,7 @@
         </div>
         <div class="column column-3">
           <div class="teamTargetMechPatternLabel">Target Mech</div>
-          <select class="teamTargetMechPatternValue">
+          <select class="teamTargetMechPatternValue" aria-label="Target Mech">
             <option>Option1</option>
           </select>
           <div class="teamTargetMechPatternDesc">
@@ -363,7 +365,7 @@
         </div>
         <div class="column column-3">
           <div class="teamTargetMechComponentLabel">Target Component</div>
-          <select class="teamTargetMechComponentValue">
+          <select class="teamTargetMechComponentValue" aria-label="Target Component">
             <option>Option1</option>
           </select>
           <div class="teamTargetMechComponentDesc">
@@ -371,7 +373,7 @@
         </div>
         <div class="column column-3">
           <div class="teamAccuracyLabel">Accuracy</div>
-          <select class="teamAccuracyValue">
+          <select class="teamAccuracyValue" aria-label="Accuracy">
             <option>Option1</option>
           </select>
           <div class="teamAccuracyDesc">
@@ -533,7 +535,8 @@
       <div class="tooltipTitle error">Load error</div>
       <p>
         There was an error loading the simulation. Click
-        <a href="https://github.com/fat4eyes-mwo/mwo-simulator" target="_blank">here</a>
+        <a href="https://github.com/fat4eyes-mwo/mwo-simulator"
+            target="_blank" rel="noopener">here</a>
         for instructions on how to report the error.
       </p>
       <p>

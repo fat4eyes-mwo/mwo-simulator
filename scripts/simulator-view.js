@@ -327,10 +327,9 @@ var MechView = MechView || (function() {
       .attr("id", paperDollContainerId);
     addPaperDoll(mechId, paperDollContainerId);
 
-    var mechHealthNumbersId = mechId + "-mechHealthNumbers";
-    $("#" + mechPanelId(mechId) + " [class~='mechHealthNumbers']")
-      .attr("id", mechHealthNumbersId);
-    addMechHealthNumbers(mech, "#" + mechHealthNumbersId);
+    let mechHealthNumbersContainerJQ =
+            $("#" + mechPanelId(mechId) + " [class~='mechHealthNumbersContainer']");
+    addMechHealthNumbers(mech, mechHealthNumbersContainerJQ);
 
     var heatbarContainerId = mechId + "-heatbarContainer";
     $("#" + mechPanelId(mechId) + " [class~='heatbarContainer']")
@@ -399,6 +398,7 @@ var MechView = MechView || (function() {
     mechNameDiv.innerHTML = $("<a></a>")
                                   .attr("href", smurfyLink)
                                   .attr("target", "_blank")
+                                  .attr("rel", "noopener")
                                   .html(mechName)
                                   .prop("outerHTML");
   }
@@ -608,17 +608,20 @@ var MechView = MechView || (function() {
   var loadErrorTooltip;
   var initMiscControl = function() {
     $("#permalinkButton").click(() => {
-      MechViewRouter.saveAppState(
-        function(data) {
+      let saveAppStatePromise = MechViewRouter.saveAppState();
+      Promise.resolve(saveAppStatePromise
+        .then(function(data) {
           showPermalinkTooltip(location.href);
           console.log("Success on save app state. Data: " + data);
-        },
-        function(data) {
-          console.error("Fail on save app state. Data: " + data);
-        },
-        function(data) {
-          console.log("Done save app state. Data: " + data);
-        });
+          return data;
+        })
+        .catch(function(data) {
+          console.error("Fail on save app state." + Error(data));
+          return Error(data);
+        })
+      ).then(function(data) {
+        console.log("Done save app state. Data: " + data);
+      });
     });
     modifiedTooltip = new MechViewWidgets.Tooltip(
                                 "modifiedTooltip-template",

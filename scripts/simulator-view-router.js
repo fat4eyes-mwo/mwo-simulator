@@ -35,13 +35,14 @@ var MechViewRouter = MechViewRouter || (function() {
         let teamList = [MechModel.Team.BLUE, MechModel.Team.RED];
         for (let team of teamList) {
           this.teams[team] = [];
-          for (let mech of MechModel.mechTeams[team]) {
+          for (let mechIdx in MechModel.mechTeams[team]) {
+            let mech = MechModel.mechTeams[team][mechIdx];
             let mechInfo = mech.getMechState().mechInfo;
             let smurfyId = mechInfo.smurfyMechId;
             let smurfyLoadoutId = mechInfo.smurfyLoadoutId;
             this.teams[team].push({
               "smurfyId" : smurfyId,
-              "smurfyLoadoutId" : smurfyLoadoutId
+              "smurfyLoadoutId" : smurfyLoadoutId,
             });
           }
         }
@@ -76,133 +77,145 @@ var MechViewRouter = MechViewRouter || (function() {
   }
 
   //saves the current application state to the server for sharing
-  var saveAppState = function(successCallback, failCallback, alwaysCallback) {
-    let appState = new AppState();
-    $.ajax({
-      url : PERSISTENCE_URL,
-      type : 'POST',
-      dataType : 'JSON',
-      data : appState.serialize(),
-    })
-    .done(function(data) {
-      isAppStateModified = false;
-      prevStateHash = data.statehash;
-      window.history.replaceState(
-          null, "", "#" + HASH_STATE_FIELD + "=" + data.statehash);
-      MechView.updateOnAppSaveState();
-      successCallback(data);
-    })
-    .fail(function(data) {
-      failCallback(data);
-    })
-    .always(function(data) {
-      alwaysCallback(data);
+  var saveAppState = function() {
+    let ret = new Promise(function(resolve, reject) {
+      let appState = new AppState();
+      $.ajax({
+        url : PERSISTENCE_URL,
+        type : 'POST',
+        dataType : 'JSON',
+        data : appState.serialize(),
+      })
+      .done(function(data) {
+        isAppStateModified = false;
+        prevStateHash = data.statehash;
+        window.history.replaceState(
+            null, "", "#" + HASH_STATE_FIELD + "=" + data.statehash);
+        MechView.updateOnAppSaveState();
+        resolve(data);
+      })
+      .fail(function(data) {
+        reject(Error(data));
+      });
     });
+    return ret;
   }
 
-  var loadAppState = function(stateHash, successCallback, failCallback, alwaysCallback) {
-    MechModel.clearModel();
-    MechSimulatorLogic.resetSimulation();
-
-    isLoading = true;
-    //ajax get request to simulator-persistence
-    $.ajax({
-      url: PERSISTENCE_URL + "?" + HASH_STATE_FIELD + "=" + stateHash,
-      type : 'GET',
-      dataType : 'JSON'
-    })
-    .done(function(data) {
-      let newAppState = new AppState(data);
-      //set current app state
-      let simulatorParameters = MechSimulatorLogic.getSimulatorParameters();
-      if (!simulatorParameters) {
-        simulatorParameters = new MechSimulatorLogic.SimulatorParameters();
-      }
-      simulatorParameters.range = newAppState.range;
-      MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
-      //Load mechs from smurfy and add them to model
-      loadMechsFromSmurfy(newAppState, stateHash,
-              successCallback, failCallback, alwaysCallback);
-    })
-    .fail(function(data){
-      //restore previous history on fail
-      let hash = "#" + HASH_STATE_FIELD + "=" + prevStateHash;
-      window.history.replaceState(null, "", hash);
-      failCallback(data);
-      //On failure, call the alwaysCallback, becauuse the always handler on this
-      //ajax call does nothing so as not to trigger the done callback early when
-      //the request is successful
-      isLoading = false;
-      alwaysCallback(data);
-    })
-    .always(function(data) {
-      //Do not call anything here, this is just the always callback of the
-      //request to get state. The successCallback should only be called once
-      //all the mech data have been loaded from calling the smurfyAPI
+  var loadAppState = function(stateHash) {
+    //load state from hash
+    let loadStatePromise = new Promise(function(resolve, reject) {
+      MechModel.clearModel();
+      MechSimulatorLogic.resetSimulation();
+      isLoading = true;
+      //ajax get request to simulator-persistence
+      $.ajax({
+        url: PERSISTENCE_URL + "?" + HASH_STATE_FIELD + "=" + stateHash,
+        type : 'GET',
+        dataType : 'JSON'
+      })
+      .done(function(data) {
+        resolve(data);
+      })
+      .fail(function(data){
+        reject(Error(data));
+      })
     });
 
-    //Loads the smurfy mechs from the appState into the model. Only calls the
-    //appropriate callback once ALL mechs have been loaded.
-    var loadMechsFromSmurfy = function(newAppState, stateHash,
-                                successCallback, failCallback, alwaysCallback) {
-      let teamList = [MechModel.Team.BLUE, MechModel.Team.RED];
-      let totalMechsToLoad; //total number of mechs to load
-      let currMechsLoaded; //current number of mechs loaded
-      if (!newAppState.teams) {
-        //if no teams, immediately call the success callback
-        successCallback(true);
-        alwaysCallback(true);
-        isLoading = false;
-        return;
-      }
-      for (let team of teamList) {
-        if (!newAppState.teams[team]) {
-          newAppState.teams[team] = [];
-        }
-      }
-      let combinedTeamList = newAppState.teams[MechModel.Team.BLUE].concat(
-          newAppState.teams[MechModel.Team.RED]
-      );
-      totalMechsToLoad = combinedTeamList.length;
-      currMechsLoaded = 0;
-      let smurfyLoadTrigger = new Trigger(combinedTeamList);
-      for (let team of teamList) {
-        for (let mechIdx in newAppState.teams[team]) {
-          let mechEntry = newAppState.teams[team][mechIdx];
-          MechModel.loadSmurfyMechLoadoutFromID(
-                mechEntry.smurfyId, mechEntry.smurfyLoadoutId,
-              function(data) {
-                  //success
-                  let smurfyLoadout = data;
-                  let mech_id = MechModel.generateMechId(team, smurfyLoadout);
-                  MechModel.addMechAtIndex(mech_id, team, smurfyLoadout, mechIdx);
-                  smurfyLoadTrigger.setSuccess(mechEntry);
-                  currMechsLoaded++;
-                  MechView.updateLoadingScreenProgress(currMechsLoaded / totalMechsToLoad);
-              },
-              function(data) {
-                //fail
-                smurfyLoadTrigger.setFail(mechEntry);
-              },
-              function(data) {
-                //done
-                smurfyLoadTrigger.setDone(mechEntry);
-                if (smurfyLoadTrigger.isDone()) {
-                  if (smurfyLoadTrigger.isSuccessful()) {
-                    isAppStateModified = false;
-                    prevStateHash = stateHash;
-                    MechView.updateOnLoadAppState();
-                    successCallback(true);
-                  } else {
-                    failCallback(false);
-                  }
-                  isLoading = false;
-                  alwaysCallback(data);
-                }
-              });
-        }
+    //load mechs from the state
+    let loadStateThenMechsPromise = loadStatePromise
+      .then(function(data) {
+          let newAppState = new AppState(data);
+          //set current app state
+          let simulatorParameters = MechSimulatorLogic.getSimulatorParameters();
+          if (!simulatorParameters) {
+            simulatorParameters = new MechSimulatorLogic.SimulatorParameters();
+          }
+          simulatorParameters.range = newAppState.range;
+          MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
+          let loadMechPromise = loadMechsFromSmurfy(newAppState);
+          return loadMechPromise.then(function(data) {
+            isAppStateModified = false;
+            MechView.updateOnLoadAppState();
+            return data;
+          });
+      });
+
+    //TODO: See if the state bookkeeping (isLoading and prevstatehash) can be
+    //put in an 'always' block in this function
+    return loadStateThenMechsPromise
+        .then(function(data) {
+          isLoading = false;
+          prevStateHash = stateHash;
+          return data;
+        })
+        .catch(function(err) {
+          isLoading = false;
+          prevStateHash = stateHash;
+          throw err;
+        });
+  }
+
+  //Loads the smurfy mechs from the appState into the model.
+  var loadMechsFromSmurfy = function(newAppState) {
+    let teamList = [MechModel.Team.BLUE, MechModel.Team.RED];
+    let totalMechsToLoad; //total number of mechs to load
+    let currMechsLoaded; //current number of mechs loaded
+    if (!newAppState.teams) {
+      //if no teams, immediately resolve
+      isLoading = false;
+      return Promise.resolve({});
+    }
+    for (let team of teamList) {
+      if (!newAppState.teams[team]) {
+        newAppState.teams[team] = [];
       }
     }
+
+    let CombinedListEntry = function(team, index, mechEntry) {
+      return {
+        "team" : team,
+        "index" : index,
+        "mechEntry" : mechEntry,
+      }
+    };
+    let combinedTeamList = [];
+    for (let team of teamList) {
+      for (let mechIdx in newAppState.teams[team]) {
+        let mechEntry = newAppState.teams[team][mechIdx];
+        combinedTeamList.push(new CombinedListEntry(team, mechIdx, mechEntry));
+      }
+    }
+
+    totalMechsToLoad = combinedTeamList.length;
+    currMechsLoaded = 0;
+
+    let promiseToEntryMap = new Map();
+    let combinedTeamPromiseList = combinedTeamList.map(function(combinedTeamEntry) {
+      let mechEntry = combinedTeamEntry.mechEntry;
+      let loadMechPromise = MechModel.loadSmurfyMechLoadoutFromID(
+        mechEntry.smurfyId, mechEntry.smurfyLoadoutId);
+      promiseToEntryMap.set(loadMechPromise, combinedTeamEntry);
+      return loadMechPromise;
+    });
+
+    let retPromise = combinedTeamPromiseList.reduce(function(prevPromise, currPromise) {
+      return prevPromise.then(function() {
+          return currPromise.then(function(data) {
+            //immediate action on loading a mech
+            let smurfyLoadout = data;
+            let combinedTeamEntry = promiseToEntryMap.get(currPromise);
+            let team = combinedTeamEntry.team;
+            let mechIdx = combinedTeamEntry.index;
+            let mech_id = MechModel.generateMechId(team, smurfyLoadout);
+            MechModel.addMechAtIndex(mech_id, team, smurfyLoadout, mechIdx);
+            currMechsLoaded++;
+            MechView.updateLoadingScreenProgress(currMechsLoaded / totalMechsToLoad);
+            return data;
+          });
+      });
+    }, Promise.resolve());
+
+    return retPromise;
   }
 
   //Called to let the router know that the app state has changed
@@ -226,28 +239,14 @@ var MechViewRouter = MechViewRouter || (function() {
     return hashState;
   }
 
-  var loadStateFromLocationHash = function(successCallback,
-                                      failCallback, alwaysCallback) {
-
+  var loadStateFromLocationHash = function() {
     let hashState = getStateHashFromLocation();
     if (!hashState) {
       hashState = "default";
       prevStateHash = hashState; //to avoid triggering the hash change handler
       location.hash = HASH_STATE_FIELD + "=default";
     }
-    MechViewRouter.loadAppState(hashState,
-      function(data) {
-        console.log("Loaded application state from hash: " + hashState);
-        successCallback(data);
-      },
-      function(data) {
-        console.error("Fail on load app state. Hash: " + hashState);
-        failCallback(data);
-      },
-      function(data) {
-        console.log("Done on load app state. hash: " + hashState);
-        alwaysCallback(data);
-      });
+    return loadAppState(hashState);
   }
 
   var initViewRouter = function() {
@@ -268,23 +267,24 @@ var MechViewRouter = MechViewRouter || (function() {
       //if hash is different from previous hash, load new state
       MechView.showLoadingScreen();
       console.log("Hash change loading new state from hash : " + newHash);
-      loadAppState(newHash,
-        function(data) {
-          //success
-          MechModelView.refreshView(true);
-          console.log("Hash change state load success: " + newHash);
-        },
-        function(data) {
-          //fail
-          MechModelView.refreshView(true);
-          MechView.updateOnLoadAppError();
-          console.log("Hash change state load failed: " + newHash);
-        },
-        function(data) {
-          //always
-          MechView.hideLoadingScreen();
-          console.log("Hash state change load done: " + newHash);
-        });
+      Promise.resolve(
+        loadAppState(newHash)
+          .then(function() {
+            //success
+            MechModelView.refreshView(true);
+            console.log("Hash change state load success: " + newHash);
+          })
+          .catch(function() {
+            //fail
+            MechModelView.refreshView(true);
+            MechView.updateOnLoadAppError();
+            console.log("Hash change state load failed: " + newHash);
+          })
+      ).then(function() {
+        //always
+        MechView.hideLoadingScreen();
+        console.log("Hash state change load done: " + newHash);
+      });
     } else {
       //do nothing if hash did not change
       //TODO: see if this should check if the app is in error and load in data
