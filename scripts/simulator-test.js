@@ -330,17 +330,18 @@ return {
       });
 
       $("#saveStateButton").removeClass("debugButton").click(() => {
-        MechViewRouter.saveAppState(
-          function(data) {
+        Promise.resolve(MechViewRouter.saveAppState()
+          .then(function (data) {
             console.log("Success on save app state. Data: " + data);
             console.log("statehash: " + data.statehash);
-          },
-          function(data) {
+            return data;
+          })
+          .catch(function (data) {
             console.log("Fail on save app state. Data: " + data);
-          },
-          function(data) {
-            console.log("Done save app state. Data: " + data);
-          });
+          })
+        ).then(function (data) {
+          console.log("Done save app state. Data: " + data);
+        });
       });
 
       $("#loadStateButton").removeClass("debugButton").click(() => {
@@ -353,18 +354,19 @@ return {
         }
         hashState=results[1];
         MechView.showLoadingScreen();
-        MechViewRouter.loadAppState(hashState,
-          function(data) {
+        Promise.resolve(MechViewRouter.loadAppState(hashState)
+          .then(function(data) {
             console.log("Success on load app state. Data: " + data);
             MechModelView.refreshView(true);
-          },
-          function(data) {
+            return data;
+          })
+          .catch(function(data) {
             console.log("Fail on load app state. Data: " + data);
-          },
-          function(data) {
-            console.log("Done on load app state. Data: " + data);
-            MechView.hideLoadingScreen();
-          });
+          })
+        ).then(function(data) {
+          console.log("Done on load app state. Data: " + data);
+          MechView.hideLoadingScreen();
+        });
       });
     },
 
@@ -375,49 +377,50 @@ return {
       MechView.initView();
 
       MechView.showLoadingScreen();
-      MechViewRouter.saveAppState(
-        function(data) {
+      Promise.resolve(MechViewRouter.saveAppState()
+        .then(function(data) {
           console.log("Success on save app state. Data: " + data);
           console.log("statehash: " + data.statehash);
           statehash = data.statehash;
           testGetAppState(statehash);
-        },
-        function(data) {
+          return data;
+        })
+        .catch(function(data) {
           console.log("Fail on save app state. Data: " + data);
-        },
-        function(data) {
-          console.log("Done save app state. Data: " + data);
-        }
-      );
+        })
+      ).then(function(data) {
+        console.log("Done save app state. Data: " + data);
+      });
 
       var testGetAppState = function(statehash) {
-        MechViewRouter.loadAppState(statehash,
-          function(data) {
+        Promise.resolve(MechViewRouter.loadAppState(statehash)
+          .then(function(data) {
             console.log("Success on load app state. Data: " + data);
             MechModelView.refreshView(true);
-          },
-          function(data) {
+            return data;
+          })
+          .catch(function(data) {
             console.log("Fail on load app state. Data: " + data);
-          },
-          function(data) {
-            MechView.hideLoadingScreen();
-            console.log("Done on load app state. Data: " + data);
-          }
-        );
-      }
+          })
+        ).then(function(data) {
+          MechView.hideLoadingScreen();
+          console.log("Done on load app state. Data: " + data);
+        })
+      };
 
       $("#saveStateButton").removeClass("debugButton").click(() => {
-        MechViewRouter.saveAppState(
-          function(data) {
+        Promise.resolve(MechViewRouter.saveAppState()
+          .then(function(data) {
             console.log("Success on save app state. Data: " + data);
             console.log("statehash: " + data.statehash);
-          },
-          function(data) {
+            return data;
+          })
+          .catch(function(data) {
             console.log("Fail on save app state. Data: " + data);
-          },
-          function(data) {
-            console.log("Done save app state. Data: " + data);
-          });
+          })
+        ).then(function(data) {
+          console.log("Done save app state. Data: " + data);
+        });
       });
 
       $("#loadStateButton").removeClass("debugButton").click(() => {
@@ -430,18 +433,19 @@ return {
         }
         hashState=results[1];
         MechView.showLoadingScreen();
-        MechViewRouter.loadAppState(hashState,
-          function(data) {
+        Promise.resolve(MechViewRouter.loadAppState(hashState)
+          .then(function(data) {
             console.log("Success on load app state. Data: " + data);
             MechModelView.refreshView(true);
-          },
-          function(data) {
+            return data;
+          })
+          .catch(function(data) {
             console.log("Fail on load app state. Data: " + data);
-          },
-          function(data) {
-            console.log("Done on load app state. Data: " + data);
-            MechView.hideLoadingScreen();
-          });
+          })
+        ).then(function(data) {
+          console.log("Done on load app state. Data: " + data);
+          MechView.hideLoadingScreen();
+        });
       });
     },
 

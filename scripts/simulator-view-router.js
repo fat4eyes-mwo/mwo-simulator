@@ -101,7 +101,7 @@ var MechViewRouter = MechViewRouter || (function() {
     return ret;
   }
 
-  var loadAppState = function(stateHash, successCallback, failCallback, alwaysCallback) {
+  var loadAppState = function(stateHash) {
     //load state from hash
     let loadStatePromise = new Promise(function(resolve, reject) {
       MechModel.clearModel();
@@ -114,8 +114,7 @@ var MechViewRouter = MechViewRouter || (function() {
         dataType : 'JSON'
       })
       .done(function(data) {
-        let newAppState = new AppState(data);
-        resolve(newAppState);
+        resolve(data);
       })
       .fail(function(data){
         reject(Error(data));
@@ -123,8 +122,9 @@ var MechViewRouter = MechViewRouter || (function() {
     });
 
     //load mechs from the state
-    let retPromise = loadStatePromise
-      .then(function(newAppState) {
+    let loadStateThenMechsPromise = loadStatePromise
+      .then(function(data) {
+          let newAppState = new AppState(data);
           //set current app state
           let simulatorParameters = MechSimulatorLogic.getSimulatorParameters();
           if (!simulatorParameters) {
@@ -140,17 +140,19 @@ var MechViewRouter = MechViewRouter || (function() {
           });
       });
 
-    Promise.resolve(
-      retPromise
-        .then(successCallback)
-        .catch(failCallback)
-    ).then(function(data) {
-      isLoading = false;
-      prevStateHash = stateHash;
-      alwaysCallback(data);
-    });
-
-    // return retPromise;
+    //TODO: See if the state bookkeeping (isLoading and prevstatehash) can be
+    //put in an 'always' block in this function
+    return loadStateThenMechsPromise
+        .then(function(data) {
+          isLoading = false;
+          prevStateHash = stateHash;
+          return data;
+        })
+        .catch(function(err) {
+          isLoading = false;
+          prevStateHash = stateHash;
+          throw err;
+        });
   }
 
   //Loads the smurfy mechs from the appState into the model.
@@ -246,19 +248,20 @@ var MechViewRouter = MechViewRouter || (function() {
       prevStateHash = hashState; //to avoid triggering the hash change handler
       location.hash = HASH_STATE_FIELD + "=default";
     }
-    MechViewRouter.loadAppState(hashState,
-      function(data) {
-        console.log("Loaded application state from hash: " + hashState);
-        successCallback(data);
-      },
-      function(data) {
-        console.error("Fail on load app state. Hash: " + hashState);
-        failCallback(data);
-      },
-      function(data) {
-        console.log("Done on load app state. hash: " + hashState);
-        alwaysCallback(data);
-      });
+    Promise.resolve(
+      loadAppState(hashState)
+        .then(function(data) {
+          console.log("Loaded application state from hash: " + hashState);
+          successCallback(data);
+        })
+        .catch(function(data) {
+          console.error("Fail on load app state. Hash: " + hashState);
+          failCallback(data);
+        })
+    ).then(function(data) {
+      console.log("Done on load app state. hash: " + hashState);
+      alwaysCallback(data);
+    });
   }
 
   var initViewRouter = function() {
@@ -279,23 +282,24 @@ var MechViewRouter = MechViewRouter || (function() {
       //if hash is different from previous hash, load new state
       MechView.showLoadingScreen();
       console.log("Hash change loading new state from hash : " + newHash);
-      loadAppState(newHash,
-        function(data) {
-          //success
-          MechModelView.refreshView(true);
-          console.log("Hash change state load success: " + newHash);
-        },
-        function(data) {
-          //fail
-          MechModelView.refreshView(true);
-          MechView.updateOnLoadAppError();
-          console.log("Hash change state load failed: " + newHash);
-        },
-        function(data) {
-          //always
-          MechView.hideLoadingScreen();
-          console.log("Hash state change load done: " + newHash);
-        });
+      Promise.resolve(
+        loadAppState(newHash)
+          .then(function() {
+            //success
+            MechModelView.refreshView(true);
+            console.log("Hash change state load success: " + newHash);
+          })
+          .catch(function() {
+            //fail
+            MechModelView.refreshView(true);
+            MechView.updateOnLoadAppError();
+            console.log("Hash change state load failed: " + newHash);
+          })
+      ).then(function() {
+        //always
+        MechView.hideLoadingScreen();
+        console.log("Hash state change load done: " + newHash);
+      });
     } else {
       //do nothing if hash did not change
       //TODO: see if this should check if the app is in error and load in data

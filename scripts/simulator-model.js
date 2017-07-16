@@ -897,6 +897,17 @@ var MechModel = MechModel || (function () {
     });
   }
 
+  //NOTE: Process the omnipod data so the omnipod ID is the
+  //main index (instead of the chassis name)
+  var flattenOmnipodData = function(smurfyOmnipodData) {
+    let flatOmnipodData = {};
+    for (let chassis in smurfyOmnipodData) {
+      for (let omnipodId in smurfyOmnipodData[chassis]) {
+        flatOmnipodData[omnipodId] = smurfyOmnipodData[chassis][omnipodId];
+      }
+    }
+    return flatOmnipodData;
+  }
   var initModelData = function (callback) {
     //assigns to the correct variable
     dataPathAssigns[WEAPON_DATA_PATH] = function(data) {
@@ -912,14 +923,7 @@ var MechModel = MechModel || (function () {
       SmurfyMechData = data;
     };
     dataPathAssigns[OMNIPOD_DATA_PATH] = function(data) {
-      //NOTE: Process the omnipod data so the omnipod ID is the
-      //main index (instead of the chassis name)
-      SmurfyOmnipodData = {};
-      for (let chassis in data) {
-        for (let omnipodId in data[chassis]) {
-          SmurfyOmnipodData[omnipodId] = data[chassis][omnipodId];
-        }
-      }
+      SmurfyOmnipodData = flattenOmnipodData(data);
     }
 
     let initPromises = [];
@@ -997,6 +1001,7 @@ var MechModel = MechModel || (function () {
     SmurfyAmmoData = DummyAmmoData;
     SmurfyMechData = DummyMechData;
     SmurfyModuleData = DummyModuleData;
+    SmurfyOmnipodData = flattenOmnipodData(_DummyOmnipods);
     initAddedData();
   };
 
