@@ -132,24 +132,29 @@ var MechViewAddMech = MechViewAddMech || (function() {
         createLoadedMechPanel("addMechDialog-result", loadedSmurfyLoadout);
         addMechOKButton.enable();
       };
-      let failCallback = function(data) {
+      let failCallback = function() {
         $("#addMechDialog-result")
               .addClass("error")
               .html("Failed to load " + url);
       };
-      let alwaysCallback = function(data) {
+      let alwaysCallback = function() {
         addMechLoadButton.enable();
         addMechLoadButton.removeClass("loading");
         addMechLoadButton.setHtml("Load");
       };
-      let status = MechModel.loadSmurfyMechLoadoutFromURL(url, doneCallback, failCallback, alwaysCallback);
-      if (status) {
+      let loadMechPromise = MechModel.loadSmurfyMechLoadoutFromURL(url);
+      if (loadMechPromise) {
         $("#addMechDialog-result")
               .removeClass("error")
               .html("Loading url : " + url);
         addMechLoadButton.disable();
         addMechLoadButton.addClass("loading");
         addMechLoadButton.setHtml("Loading...");
+        Promise.resolve(
+          loadMechPromise
+            .then(doneCallback)
+            .catch(failCallback)
+          ).then(alwaysCallback);
       } else {
         $("#addMechDialog-result")
             .addClass("error")

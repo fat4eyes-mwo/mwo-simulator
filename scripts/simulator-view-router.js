@@ -35,13 +35,14 @@ var MechViewRouter = MechViewRouter || (function() {
         let teamList = [MechModel.Team.BLUE, MechModel.Team.RED];
         for (let team of teamList) {
           this.teams[team] = [];
-          for (let mech of MechModel.mechTeams[team]) {
+          for (let mechIdx in MechModel.mechTeams[team]) {
+            let mech = MechModel.mechTeams[team][mechIdx];
             let mechInfo = mech.getMechState().mechInfo;
             let smurfyId = mechInfo.smurfyMechId;
             let smurfyLoadoutId = mechInfo.smurfyLoadoutId;
             this.teams[team].push({
               "smurfyId" : smurfyId,
-              "smurfyLoadoutId" : smurfyLoadoutId
+              "smurfyLoadoutId" : smurfyLoadoutId,
             });
           }
         }
@@ -140,69 +141,85 @@ var MechViewRouter = MechViewRouter || (function() {
       //request to get state. The successCallback should only be called once
       //all the mech data have been loaded from calling the smurfyAPI
     });
+  }
 
-    //Loads the smurfy mechs from the appState into the model. Only calls the
-    //appropriate callback once ALL mechs have been loaded.
-    var loadMechsFromSmurfy = function(newAppState, stateHash,
-                                successCallback, failCallback, alwaysCallback) {
-      let teamList = [MechModel.Team.BLUE, MechModel.Team.RED];
-      let totalMechsToLoad; //total number of mechs to load
-      let currMechsLoaded; //current number of mechs loaded
-      if (!newAppState.teams) {
-        //if no teams, immediately call the success callback
-        successCallback(true);
-        alwaysCallback(true);
-        isLoading = false;
-        return;
-      }
-      for (let team of teamList) {
-        if (!newAppState.teams[team]) {
-          newAppState.teams[team] = [];
-        }
-      }
-      let combinedTeamList = newAppState.teams[MechModel.Team.BLUE].concat(
-          newAppState.teams[MechModel.Team.RED]
-      );
-      totalMechsToLoad = combinedTeamList.length;
-      currMechsLoaded = 0;
-      let smurfyLoadTrigger = new Trigger(combinedTeamList);
-      for (let team of teamList) {
-        for (let mechIdx in newAppState.teams[team]) {
-          let mechEntry = newAppState.teams[team][mechIdx];
-          MechModel.loadSmurfyMechLoadoutFromID(
-                mechEntry.smurfyId, mechEntry.smurfyLoadoutId,
-              function(data) {
-                  //success
-                  let smurfyLoadout = data;
-                  let mech_id = MechModel.generateMechId(team, smurfyLoadout);
-                  MechModel.addMechAtIndex(mech_id, team, smurfyLoadout, mechIdx);
-                  smurfyLoadTrigger.setSuccess(mechEntry);
-                  currMechsLoaded++;
-                  MechView.updateLoadingScreenProgress(currMechsLoaded / totalMechsToLoad);
-              },
-              function(data) {
-                //fail
-                smurfyLoadTrigger.setFail(mechEntry);
-              },
-              function(data) {
-                //done
-                smurfyLoadTrigger.setDone(mechEntry);
-                if (smurfyLoadTrigger.isDone()) {
-                  if (smurfyLoadTrigger.isSuccessful()) {
-                    isAppStateModified = false;
-                    prevStateHash = stateHash;
-                    MechView.updateOnLoadAppState();
-                    successCallback(true);
-                  } else {
-                    failCallback(false);
-                  }
-                  isLoading = false;
-                  alwaysCallback(data);
-                }
-              });
-        }
+  //Loads the smurfy mechs from the appState into the model. Only calls the
+  //appropriate callback once ALL mechs have been loaded.
+  var loadMechsFromSmurfy = function(newAppState, stateHash,
+                              successCallback, failCallback, alwaysCallback) {
+    let teamList = [MechModel.Team.BLUE, MechModel.Team.RED];
+    let totalMechsToLoad; //total number of mechs to load
+    let currMechsLoaded; //current number of mechs loaded
+    if (!newAppState.teams) {
+      //if no teams, immediately call the success callback
+      successCallback(true);
+      alwaysCallback(true);
+      isLoading = false;
+      return;
+    }
+    for (let team of teamList) {
+      if (!newAppState.teams[team]) {
+        newAppState.teams[team] = [];
       }
     }
+
+    let CombinedListEntry = function(team, index, mechEntry) {
+      return {
+        "team" : team,
+        "index" : index,
+        "mechEntry" : mechEntry,
+      }
+    };
+    let combinedTeamList = [];
+    for (let team of teamList) {
+      for (let mechIdx in newAppState.teams[team]) {
+        let mechEntry = newAppState.teams[team][mechIdx];
+        combinedTeamList.push(new CombinedListEntry(team, mechIdx, mechEntry));
+      }
+    }
+
+    totalMechsToLoad = combinedTeamList.length;
+    currMechsLoaded = 0;
+
+    let promiseToEntryMap = new Map();
+    let combinedTeamPromiseList = combinedTeamList.map(function(combinedTeamEntry) {
+      let mechEntry = combinedTeamEntry.mechEntry;
+      let loadMechPromise = MechModel.loadSmurfyMechLoadoutFromID(
+        mechEntry.smurfyId, mechEntry.smurfyLoadoutId);
+      promiseToEntryMap.set(loadMechPromise, combinedTeamEntry);
+      return loadMechPromise;
+    });
+
+    combinedTeamPromiseList.reduce(function(prevPromise, currPromise) {
+      return prevPromise.then(function() {
+          return currPromise.then(function(data) {
+            //immediate action on loading a mech
+            let smurfyLoadout = data;
+            let combinedTeamEntry = promiseToEntryMap.get(currPromise);
+            let team = combinedTeamEntry.team;
+            let mechIdx = combinedTeamEntry.index;
+            let mech_id = MechModel.generateMechId(team, smurfyLoadout);
+            MechModel.addMechAtIndex(mech_id, team, smurfyLoadout, mechIdx);
+            currMechsLoaded++;
+            MechView.updateLoadingScreenProgress(currMechsLoaded / totalMechsToLoad);
+          });
+      });
+    }, Promise.resolve())
+    .then(function(){
+      //all mechs loaded
+      isAppStateModified = false;
+      prevStateHash = stateHash;
+      MechView.updateOnLoadAppState();
+      isLoading = false;
+      successCallback(true);
+      alwaysCallback(true);
+    })
+    .catch(function() {
+      //error on getting mechs
+      failCallback(false);
+      isLoading = false;
+      alwaysCallback(false);
+    });
   }
 
   //Called to let the router know that the app state has changed

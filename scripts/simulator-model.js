@@ -1458,35 +1458,48 @@ var MechModel = MechModel || (function () {
     }
   }
 
-  var loadSmurfyMechLoadoutFromURL = function(url, doneCallback,
-                                        failCallback, alwaysCallback) {
+  var loadSmurfyMechLoadoutFromURL = function(url) {
     let params = parseSmurfyURL(url);
     if (!params) {
       return null;
     }
-    return loadSmurfyMechLoadoutFromID(params.id, params.loadout,
-                    doneCallback, failCallback, alwaysCallback)
+    return loadSmurfyMechLoadoutFromID(params.id, params.loadout);
   }
 
-  var loadSmurfyMechLoadoutFromID = function(smurfyId, smurfyLoadoutId,
-                                  doneCallback, failCallback, alwaysCallback) {
-    var smurfyLoadoutURL = SMURFY_PROXY_URL + "data/mechs/" + smurfyId
-        + "/loadouts/" + smurfyLoadoutId + ".json";
-    $.ajax({
-        url : smurfyLoadoutURL,
-        type : 'GET',
-        dataType : 'JSON'
-    })
-    .done(function(data) {
-      doneCallback(data);
-    })
-    .fail(function(data) {
-      failCallback(data);
-    })
-    .always(function(data) {
-      alwaysCallback(data);
+  var loadSmurfyMechLoadoutFromID = function(smurfyId, smurfyLoadoutId) {
+    let ret = new Promise(function(resolve, reject) {
+      var smurfyLoadoutURL = SMURFY_PROXY_URL + "data/mechs/" + smurfyId
+          + "/loadouts/" + smurfyLoadoutId + ".json";
+      $.ajax({
+          url : smurfyLoadoutURL,
+          type : 'GET',
+          dataType : 'JSON'
+      })
+      .done(function(data) {
+        resolve(data);
+      })
+      .fail(function(data) {
+        reject(Error(data));
+      });
     });
-    return true;
+    return ret;
+    // var smurfyLoadoutURL = SMURFY_PROXY_URL + "data/mechs/" + smurfyId
+    //     + "/loadouts/" + smurfyLoadoutId + ".json";
+    // $.ajax({
+    //     url : smurfyLoadoutURL,
+    //     type : 'GET',
+    //     dataType : 'JSON'
+    // })
+    // .done(function(data) {
+    //   doneCallback(data);
+    // })
+    // .fail(function(data) {
+    //   failCallback(data);
+    // })
+    // .always(function(data) {
+    //   alwaysCallback(data);
+    // });
+    // return true;
   }
 
   //returns a list of adjacent components

@@ -1,6 +1,7 @@
 - AUTOMATED UNIT TESTS!!!!!!
 
 - mech reorder buttons
+- migrate to Javascript promises
 - save team settings?
 - LBX damage spread
 - UAC double tap
