@@ -102,58 +102,55 @@ var MechViewRouter = MechViewRouter || (function() {
   }
 
   var loadAppState = function(stateHash, successCallback, failCallback, alwaysCallback) {
-    MechModel.clearModel();
-    MechSimulatorLogic.resetSimulation();
+    //load state from hash
+    let loadStatePromise = new Promise(function(resolve, reject) {
+      MechModel.clearModel();
+      MechSimulatorLogic.resetSimulation();
+      isLoading = true;
+      //ajax get request to simulator-persistence
+      $.ajax({
+        url: PERSISTENCE_URL + "?" + HASH_STATE_FIELD + "=" + stateHash,
+        type : 'GET',
+        dataType : 'JSON'
+      })
+      .done(function(data) {
+        let newAppState = new AppState(data);
+        resolve(newAppState);
+      })
+      .fail(function(data){
+        reject(Error(data));
+      })
+    });
 
-    isLoading = true;
-    //ajax get request to simulator-persistence
-    $.ajax({
-      url: PERSISTENCE_URL + "?" + HASH_STATE_FIELD + "=" + stateHash,
-      type : 'GET',
-      dataType : 'JSON'
-    })
-    .done(function(data) {
-      let newAppState = new AppState(data);
-      //set current app state
-      let simulatorParameters = MechSimulatorLogic.getSimulatorParameters();
-      if (!simulatorParameters) {
-        simulatorParameters = new MechSimulatorLogic.SimulatorParameters();
-      }
-      simulatorParameters.range = newAppState.range;
-      MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
-      //Load mechs from smurfy and add them to model
-      let loadMechPromise = loadMechsFromSmurfy(newAppState);
-      Promise.resolve(
-        loadMechPromise
-          .then(function(data) {
+    //load mechs from the state
+    let retPromise = loadStatePromise
+      .then(function(newAppState) {
+          //set current app state
+          let simulatorParameters = MechSimulatorLogic.getSimulatorParameters();
+          if (!simulatorParameters) {
+            simulatorParameters = new MechSimulatorLogic.SimulatorParameters();
+          }
+          simulatorParameters.range = newAppState.range;
+          MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
+          let loadMechPromise = loadMechsFromSmurfy(newAppState);
+          return loadMechPromise.then(function(data) {
             isAppStateModified = false;
             MechView.updateOnLoadAppState();
-            successCallback(data);
             return data;
-          })
-          .catch(failCallback)
-        ).then(function(data) {
-          isLoading = false;
-          prevStateHash = stateHash;
-          alwaysCallback(data);
-        });
-    })
-    .fail(function(data){
-      //restore previous history on fail
-      let hash = "#" + HASH_STATE_FIELD + "=" + prevStateHash;
-      window.history.replaceState(null, "", hash);
-      failCallback(data);
-      //On failure, call the alwaysCallback, becauuse the always handler on this
-      //ajax call does nothing so as not to trigger the done callback early when
-      //the request is successful
+          });
+      });
+
+    Promise.resolve(
+      retPromise
+        .then(successCallback)
+        .catch(failCallback)
+    ).then(function(data) {
       isLoading = false;
+      prevStateHash = stateHash;
       alwaysCallback(data);
-    })
-    .always(function(data) {
-      //Do not call anything here, this is just the always callback of the
-      //request to get state. The successCallback should only be called once
-      //all the mech data have been loaded from calling the smurfyAPI
     });
+
+    // return retPromise;
   }
 
   //Loads the smurfy mechs from the appState into the model.
