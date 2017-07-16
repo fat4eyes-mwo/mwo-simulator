@@ -1,9 +1,10 @@
 "use strict";
+//NOTE:Most tests require dummy data, so make sure to change index.html to
+//include the data/dummyXXX.js files when using these functions
 
 //Test code.
 var MechTest = MechTest || (function() {
 
-//Test code
 var uiTestInterval = null;
 var testIntervalLength = 100;
 var mechIdWeaponCount = []; //number of weapons set for a given mechid
