@@ -28,9 +28,17 @@
     //try to get file from cache
     $response = getFromCache($pathParam);
     if ($response == FALSE) {
-      $response = curl_helper($url);
+      $http_response = curl_helper($url);
       log_message("File loaded from smurfy: " . $url, INFO);
-      writeToCache($pathParam, $response);
+      if ($http_response['code'] == 200) {
+        $response = $http_response['response'];
+        writeToCache($pathParam, $response);
+      } else {
+        http_response_code($http_response['code']);
+        log_message("Error fetching " . $pathParam);
+        echo $http_response['response'];
+        exit;
+      }
     }
     //respond
     header('Content-Type: application/json');
@@ -51,10 +59,14 @@
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
 
     $response = curl_exec($curl);
+    $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
     curl_close($curl);
 
-    return $response;
+    return array(
+      'code' => $httpcode,
+      'response' => $response
+    );
   }
 
   //Cache results from smurfy. Cache expiry time is set to 1 day (see consts.php)
