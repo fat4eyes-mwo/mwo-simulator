@@ -26,16 +26,17 @@
       exit;
     }
     //try to get file from cache
+
     $response = getFromCache($pathParam);
     if ($response == FALSE) {
       $http_response = curl_helper($url);
-      log_message("File loaded from smurfy: " . $url, INFO);
       if ($http_response['code'] == 200) {
+        log_message("File loaded from smurfy: " . $url, INFO);
         $response = $http_response['response'];
         writeToCache($pathParam, $response);
       } else {
         http_response_code($http_response['code']);
-        log_message("Error fetching " . $pathParam);
+        log_message("Error fetching " . $pathParam . " response code:" . $http_response['code']);
         echo $http_response['response'];
         exit;
       }
