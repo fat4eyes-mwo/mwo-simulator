@@ -121,7 +121,7 @@ var MechViewAddMech = MechViewAddMech || (function() {
       let url = $("#addMechDialog-text").val();
       console.log("Load. team: " + team + " URL: " + url);
 
-      let doneCallback = function(data) {
+      let doneHandler = function(data) {
         loadedSmurfyLoadout = data;
         let smurfyMechData = MechModel.getSmurfyMechData(loadedSmurfyLoadout.mech_id);
         let mechTranslatedName = smurfyMechData.translated_name;
@@ -132,12 +132,12 @@ var MechViewAddMech = MechViewAddMech || (function() {
         createLoadedMechPanel("addMechDialog-result", loadedSmurfyLoadout);
         addMechOKButton.enable();
       };
-      let failCallback = function() {
+      let failHandler = function() {
         $("#addMechDialog-result")
               .addClass("error")
               .html("Failed to load " + url);
       };
-      let alwaysCallback = function() {
+      let alwaysHandler = function() {
         addMechLoadButton.enable();
         addMechLoadButton.removeClass("loading");
         addMechLoadButton.setHtml("Load");
@@ -152,9 +152,9 @@ var MechViewAddMech = MechViewAddMech || (function() {
         addMechLoadButton.setHtml("Loading...");
         Promise.resolve(
           loadMechPromise
-            .then(doneCallback)
-            .catch(failCallback)
-          ).then(alwaysCallback);
+            .then(doneHandler)
+            .catch(failHandler)
+          ).then(alwaysHandler);
       } else {
         $("#addMechDialog-result")
             .addClass("error")
