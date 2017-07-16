@@ -1483,23 +1483,6 @@ var MechModel = MechModel || (function () {
       });
     });
     return ret;
-    // var smurfyLoadoutURL = SMURFY_PROXY_URL + "data/mechs/" + smurfyId
-    //     + "/loadouts/" + smurfyLoadoutId + ".json";
-    // $.ajax({
-    //     url : smurfyLoadoutURL,
-    //     type : 'GET',
-    //     dataType : 'JSON'
-    // })
-    // .done(function(data) {
-    //   doneCallback(data);
-    // })
-    // .fail(function(data) {
-    //   failCallback(data);
-    // })
-    // .always(function(data) {
-    //   alwaysCallback(data);
-    // });
-    // return true;
   }
 
   //returns a list of adjacent components

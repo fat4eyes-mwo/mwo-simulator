@@ -77,28 +77,28 @@ var MechViewRouter = MechViewRouter || (function() {
   }
 
   //saves the current application state to the server for sharing
-  var saveAppState = function(successCallback, failCallback, alwaysCallback) {
-    let appState = new AppState();
-    $.ajax({
-      url : PERSISTENCE_URL,
-      type : 'POST',
-      dataType : 'JSON',
-      data : appState.serialize(),
-    })
-    .done(function(data) {
-      isAppStateModified = false;
-      prevStateHash = data.statehash;
-      window.history.replaceState(
-          null, "", "#" + HASH_STATE_FIELD + "=" + data.statehash);
-      MechView.updateOnAppSaveState();
-      successCallback(data);
-    })
-    .fail(function(data) {
-      failCallback(data);
-    })
-    .always(function(data) {
-      alwaysCallback(data);
+  var saveAppState = function() {
+    let ret = new Promise(function(resolve, reject) {
+      let appState = new AppState();
+      $.ajax({
+        url : PERSISTENCE_URL,
+        type : 'POST',
+        dataType : 'JSON',
+        data : appState.serialize(),
+      })
+      .done(function(data) {
+        isAppStateModified = false;
+        prevStateHash = data.statehash;
+        window.history.replaceState(
+            null, "", "#" + HASH_STATE_FIELD + "=" + data.statehash);
+        MechView.updateOnAppSaveState();
+        resolve(data);
+      })
+      .fail(function(data) {
+        reject(Error(data));
+      });
     });
+    return ret;
   }
 
   var loadAppState = function(stateHash, successCallback, failCallback, alwaysCallback) {
@@ -202,10 +202,11 @@ var MechViewRouter = MechViewRouter || (function() {
             MechModel.addMechAtIndex(mech_id, team, smurfyLoadout, mechIdx);
             currMechsLoaded++;
             MechView.updateLoadingScreenProgress(currMechsLoaded / totalMechsToLoad);
+            return data;
           });
       });
     }, Promise.resolve())
-    .then(function(){
+    .then(function(data){
       //all mechs loaded
       isAppStateModified = false;
       prevStateHash = stateHash;
@@ -213,12 +214,14 @@ var MechViewRouter = MechViewRouter || (function() {
       isLoading = false;
       successCallback(true);
       alwaysCallback(true);
+      return data;
     })
-    .catch(function() {
+    .catch(function(data) {
       //error on getting mechs
-      failCallback(false);
       isLoading = false;
+      failCallback(false);
       alwaysCallback(false);
+      return data;
     });
   }
 
