@@ -908,7 +908,7 @@ var MechModel = MechModel || (function () {
     }
     return flatOmnipodData;
   }
-  var initModelData = function (callback) {
+  var initModelData = function () {
     //assigns to the correct variable
     dataPathAssigns[WEAPON_DATA_PATH] = function(data) {
       SmurfyWeaponData = data;
@@ -932,16 +932,12 @@ var MechModel = MechModel || (function () {
     }
 
     let loadAllInitData = Promise.all(initPromises);
-    loadAllInitData.then(function(dataArray) {
+    return loadAllInitData.then(function(dataArray) {
       for (let idx in dataArray) {
         let path = dataPaths[idx];
         dataPathAssigns[path](dataArray[idx]);
       }
       initAddedData();
-      callback(true);
-    })
-    .catch(function(error) {
-      callback(false);
     });
   }
 

@@ -61,13 +61,13 @@ return {
     },
 
     testModelInit : function () {
-      MechModel.initModelData((success) => {
-        if (success) {
+      MechModel.initModelData()
+        .then(function() {
           console.log("Successfully loaded model init data");
-        } else {
+        })
+        .catch(function(err) {
           console.log("Failed to load model init data");
-        }
-      });
+        });
       // MechModel.initDummyModelData();
     },
 
@@ -288,14 +288,14 @@ return {
       //Load data from smurfy
       MechView.initView();
       MechView.showLoadingScreen();
-      MechModel.initModelData((success) => {
-        if (success) {
+      MechModel.initModelData()
+        .then(function() {
           console.log("Successfully loaded model init data");
           MechTest.generateTestUI();
-        } else {
+        })
+        .catch(function() {
           console.log("Failed to load model init data");
-        }
-      });
+        });
     },
 
     generateTestUI : function() {

@@ -239,29 +239,14 @@ var MechViewRouter = MechViewRouter || (function() {
     return hashState;
   }
 
-  var loadStateFromLocationHash = function(successCallback,
-                                      failCallback, alwaysCallback) {
-
+  var loadStateFromLocationHash = function() {
     let hashState = getStateHashFromLocation();
     if (!hashState) {
       hashState = "default";
       prevStateHash = hashState; //to avoid triggering the hash change handler
       location.hash = HASH_STATE_FIELD + "=default";
     }
-    Promise.resolve(
-      loadAppState(hashState)
-        .then(function(data) {
-          console.log("Loaded application state from hash: " + hashState);
-          successCallback(data);
-        })
-        .catch(function(data) {
-          console.error("Fail on load app state. Hash: " + hashState);
-          failCallback(data);
-        })
-    ).then(function(data) {
-      console.log("Done on load app state. hash: " + hashState);
-      alwaysCallback(data);
-    });
+    return loadAppState(hashState);
   }
 
   var initViewRouter = function() {
