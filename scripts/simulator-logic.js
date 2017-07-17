@@ -24,10 +24,13 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
 
   //Parameters of the simulation. Includes range
   class SimulatorParameters {
-    constructor(range, speedFactor = 1, uacJamMethod = UACJamMethod.RANDOM) {
+    constructor(range, speedFactor = 1,
+          uacJamMethod = UACJamMethod.RANDOM,
+          useDoubleTap = true) {
       this.range = range;
       this.uiUpdateInterval = Math.floor(DEFAULT_UI_UPDATE_INTERVAL / Number(speedFactor));
       this.uacJAMMethod = uacJamMethod;
+      this.useDoubleTap = useDoubleTap;
     }
     setSpeedFactor(speedFactor) {
       this.uiUpdateInterval = Math.floor(DEFAULT_UI_UPDATE_INTERVAL / Number(speedFactor));
@@ -252,7 +255,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
 
       //if not ready to fire, proceed to next weapon
       if (!weaponState.active
-          || !weaponState.isReady()) {
+          || !weaponState.canFire()) {
         continue;
       }
       //if no ammo, proceed to next weapon

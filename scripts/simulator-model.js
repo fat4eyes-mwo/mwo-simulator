@@ -540,10 +540,13 @@ var MechModel = MechModel || (function () {
         this.currShotsDuringCooldown = 0;
       }
     }
-    isReady() {
+    canFire() {
       return this.weaponCycle === WeaponCycle.READY ||
             (this.weaponCycle === WeaponCycle.COOLDOWN &&
              this.currShotsDuringCooldown > 0);
+    }
+    isReady() {
+      return this.weaponCycle === WeaponCycle.READY;
     }
     isOnCooldown() {
       return this.weaponCycle === WeaponCycle.COOLDOWN;
