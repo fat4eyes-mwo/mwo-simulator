@@ -26,7 +26,7 @@ var MechModelView = MechModelView || (function() {
       updateTeamStats(team);
     }
     let simulatorParameters = MechSimulatorLogic.getSimulatorParameters();
-    MechView.updateControlPanel(simulatorParameters);
+    MechViewSimSettings.updateControlPanel(simulatorParameters);
   }
 
   const BASE_PAGE_TITLE = "MWO Loadout Simulator";
