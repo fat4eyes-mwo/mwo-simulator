@@ -7,7 +7,9 @@
     <meta name="keywords" content="Mechwarrior Online MWO Loadout Smurfy Simulator">
     <!-- <link rel="stylesheet" href="css/grid.css"> -->
     <link rel="stylesheet" href="css/mwo-simulator.css">
-    <link rel="shortcut icon" type="image/gif" href="favicon.gif" />
+    <link rel="shortcut icon" type="image/gif" href="favicon.gif">
+    <link rel="icon" type="image/png" href="favicon-192x192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon-180x180.png">
     <script src="scripts/lib/jquery-3.2.1.min.js"></script>
 
     <!-- TODO: Look for a module solution -->
@@ -178,380 +180,417 @@
   the component ids in smurfy's api.
   See https://github.com/smurfy/mwo-api-sample/tree/master/api-sample
   under mech loadouts-->
-    <div id="paperDoll-template" class="template paperDoll">
-      <div class="mechH" data-location="head"></div>
-      <div class="mechLA" data-location="left_arm"></div>
-      <div class="mechLT" data-location="left_torso"></div>
-      <div class="mechCT" data-location="centre_torso"></div>
-      <div class="mechRT" data-location="right_torso"></div>
-      <div class="mechRA" data-location="right_arm"></div>
-      <div class="mechLL" data-location="left_leg"></div>
-      <div class="mechRL" data-location="right_leg"></div>
-    </div>
+    <template id="paperDoll-template">
+      <div class="paperDoll">
+        <div class="mechH" data-location="head"></div>
+        <div class="mechLA" data-location="left_arm"></div>
+        <div class="mechLT" data-location="left_torso"></div>
+        <div class="mechCT" data-location="centre_torso"></div>
+        <div class="mechRT" data-location="right_torso"></div>
+        <div class="mechRA" data-location="right_arm"></div>
+        <div class="mechLL" data-location="left_leg"></div>
+        <div class="mechRL" data-location="right_leg"></div>
+      </div>
+    </template>
 
     <!-- Mech health numbers template-->
-    <div id="mechHealthNumbers-template" class="template mechHealthNumbers">
-      <div class="row">
-        <div class="column column-2">&nbsp;</div>
-        <div class="column column-1">
-          <div class="row healthCornerHeader">&nbsp;</div>
-          <div class="row healthColumnHeader" title="Armor">A</div>
-          <div class="row healthColumnHeader" title="Structure">S</div>
+    <template id="mechHealthNumbers-template">
+      <div class="mechHealthNumbers">
+        <div class="row">
+          <div class="column column-2">&nbsp;</div>
+          <div class="column column-1">
+            <div class="row healthCornerHeader">&nbsp;</div>
+            <div class="row healthColumnHeader" title="Armor">A</div>
+            <div class="row healthColumnHeader" title="Structure">S</div>
+          </div>
+          <div class="mechH column column-1" data-location="head" >
+            <div class="row healthNumberHeader" title="Head">H</div>
+            <div class="row healthNumber" data-healthtype="armor"></div>
+            <div class="row healthNumber" data-healthtype="structure"></div>
+          </div>
+          <div class="mechRA column column-1" data-location="right_arm">
+            <div class="row healthNumberHeader" title="Right Arm">RA</div>
+            <div class="row healthNumber" data-healthtype="armor"></div>
+            <div class="row healthNumber" data-healthtype="structure"></div>
+          </div>
+          <div class="mechRT column column-1" data-location="right_torso">
+            <div class="row healthNumberHeader" title="Right Torso">RT</div>
+            <div class="row healthNumber" data-healthtype="armor"></div>
+            <div class="row healthNumber" data-healthtype="structure"></div>
+          </div>
+          <div class="mechCT column column-1" data-location="centre_torso">
+            <div class="row healthNumberHeader" title="Center Arm">CT</div>
+            <div class="row healthNumber" data-healthtype="armor"></div>
+            <div class="row healthNumber" data-healthtype="structure"></div>
+          </div>
+          <div class="mechLT column column-1" data-location="left_torso">
+            <div class="row healthNumberHeader" title="Left Torso">LT</div>
+            <div class="row healthNumber" data-healthtype="armor"></div>
+            <div class="row healthNumber" data-healthtype="structure"></div>
+          </div>
+          <div class="mechLA column column-1" data-location="left_arm">
+            <div class="row healthNumberHeader" title="Left Arm">LA</div>
+            <div class="row healthNumber" data-healthtype="armor"></div>
+            <div class="row healthNumber" data-healthtype="structure"></div>
+          </div>
+          <div class="mechRL column column-1" data-location="right_leg">
+            <div class="row healthNumberHeader" title="Right Leg">RL</div>
+            <div class="row healthNumber" data-healthtype="armor"></div>
+            <div class="row healthNumber" data-healthtype="structure"></div>
+          </div>
+          <div class="mechLL column column-1" data-location="left_leg">
+            <div class="row healthNumberHeader" title="Left Leg">LL</div>
+            <div class="row healthNumber" data-healthtype="armor"></div>
+            <div class="row healthNumber" data-healthtype="structure"></div>
+          </div>
         </div>
-        <div class="mechH column column-1" data-location="head" >
-          <div class="row healthNumberHeader" title="Head">H</div>
-          <div class="row healthNumber" data-healthtype="armor"></div>
-          <div class="row healthNumber" data-healthtype="structure"></div>
-        </div>
-        <div class="mechRA column column-1" data-location="right_arm">
-          <div class="row healthNumberHeader" title="Right Arm">RA</div>
-          <div class="row healthNumber" data-healthtype="armor"></div>
-          <div class="row healthNumber" data-healthtype="structure"></div>
-        </div>
-        <div class="mechRT column column-1" data-location="right_torso">
-          <div class="row healthNumberHeader" title="Right Torso">RT</div>
-          <div class="row healthNumber" data-healthtype="armor"></div>
-          <div class="row healthNumber" data-healthtype="structure"></div>
-        </div>
-        <div class="mechCT column column-1" data-location="centre_torso">
-          <div class="row healthNumberHeader" title="Center Arm">CT</div>
-          <div class="row healthNumber" data-healthtype="armor"></div>
-          <div class="row healthNumber" data-healthtype="structure"></div>
-        </div>
-        <div class="mechLT column column-1" data-location="left_torso">
-          <div class="row healthNumberHeader" title="Left Torso">LT</div>
-          <div class="row healthNumber" data-healthtype="armor"></div>
-          <div class="row healthNumber" data-healthtype="structure"></div>
-        </div>
-        <div class="mechLA column column-1" data-location="left_arm">
-          <div class="row healthNumberHeader" title="Left Arm">LA</div>
-          <div class="row healthNumber" data-healthtype="armor"></div>
-          <div class="row healthNumber" data-healthtype="structure"></div>
-        </div>
-        <div class="mechRL column column-1" data-location="right_leg">
-          <div class="row healthNumberHeader" title="Right Leg">RL</div>
-          <div class="row healthNumber" data-healthtype="armor"></div>
-          <div class="row healthNumber" data-healthtype="structure"></div>
-        </div>
-        <div class="mechLL column column-1" data-location="left_leg">
-          <div class="row healthNumberHeader" title="Left Leg">LL</div>
-          <div class="row healthNumber" data-healthtype="armor"></div>
-          <div class="row healthNumber" data-healthtype="structure"></div>
-        </div>
-
       </div>
-    </div>
+    </template>
 
     <!-- Heatbar template -->
-    <div id="heatbar-template" class="template heatbarFrame">
-      <div class="heatbar"></div>
-    </div>
+    <template id="heatbar-template">
+      <div id="heatbar-template" class="heatbarFrame">
+        <div class="heatbar"></div>
+      </div>
+    </template>
 
     <!--Weapon row template-->
-    <div id="weaponRow-template" class="template weaponPanelRow row">
-      <div class="weaponName column column-6"></div>
-      <div class="weaponLocation column column-1"></div>
-      <div class="weaponCooldownFrame column column-3">
-        <div class="weaponCooldownBar"></div>
+    <template id="weaponRow-template">
+      <div class="weaponPanelRow row">
+        <div class="weaponName column column-6"></div>
+        <div class="weaponLocation column column-1"></div>
+        <div class="weaponCooldownFrame column column-3">
+          <div class="weaponCooldownBar"></div>
+        </div>
+        <div class="weaponAmmo column column-1"></div>
       </div>
-      <div class="weaponAmmo column column-1"></div>
-    </div>
+    </template>
 
     <!-- Mechpanel template -->
-    <div id="mechPanel-template" class="template mechPanel">
-      <div class="row titlePanelContainer">
-        <div class="titlePanel">
-          <div class="mechName column stylishText"></div>
-          <div class="deleteMechButton column">&times;</div>
+    <template id="mechPanel-template">
+      <div class="mechPanel">
+        <div class="row titlePanelContainer">
+          <div class="titlePanel">
+            <div class="mechName column stylishText"></div>
+            <div class="deleteMechButton column">&times;</div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="column column-3 statusPanelContainer">
+            <div class="statusPanel">
+              <div class="row">
+                <div class="mechSummaryHealthLabel column">Health</div>
+                <div class="mechSummaryHealthText column"></div>
+              </div>
+              <div class="row">
+                <div class="mechTargetLabel">Target</div>
+                <div class="mechTargetText">&nbsp;</div>
+              </div>
+              <div class="row">
+                <div class="column column-4">
+                  <div class="mechTotalDamageLabel">DMG</div>
+                  <div class="mechTotalDamageText"></div>
+                </div>
+                <div class="column column-4">
+                  <div class="mechDPSLabel">DPS</div>
+                  <div class="mechDPSText"></div>
+                </div>
+                <div class="column column-4">
+                  <div class="mechBurstLabel"
+                      title="Damage done in a 2 second window">
+                    Burst
+                  </div>
+                  <div class="mechBurstText"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mechHealthAndWeapons column column-9">
+            <div class="row">
+              <div class="column column-3">
+                  <div class="paperDollContainer"></div>
+                  <div class="heatBarAndNumber">
+                    <div class="heatbarContainer"></div>
+                    <div class="heatNumber"></div>
+                  </div>
+              </div>
+              <div class="column column-9 weaponPanelContainer"></div>
+            </div>
+            <div class="row">
+              <div class="row mechHealthNumbersContainer"></div>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="row">
-        <div class="column column-3 statusPanelContainer">
-          <div class="statusPanel">
-            <div class="row">
-              <div class="mechSummaryHealthLabel column">Health</div>
-              <div class="mechSummaryHealthText column"></div>
-            </div>
-            <div class="row">
-              <div class="mechTargetLabel">Target</div>
-              <div class="mechTargetText">&nbsp;</div>
-            </div>
-            <div class="row">
-              <div class="column column-4">
-                <div class="mechTotalDamageLabel">DMG</div>
-                <div class="mechTotalDamageText"></div>
-              </div>
-              <div class="column column-4">
-                <div class="mechDPSLabel">DPS</div>
-                <div class="mechDPSText"></div>
-              </div>
-              <div class="column column-4">
-                <div class="mechBurstLabel"
-                    title="Damage done in a 2 second window">
-                  Burst
-                </div>
-                <div class="mechBurstText"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="mechHealthAndWeapons column column-9">
-          <div class="row">
-            <div class="column column-3">
-                <div class="paperDollContainer"></div>
-                <div class="heatBarAndNumber">
-                  <div class="heatbarContainer"></div>
-                  <div class="heatNumber"></div>
-                </div>
-            </div>
-            <div class="column column-9 weaponPanelContainer"></div>
-          </div>
-          <div class="row">
-            <div class="row mechHealthNumbersContainer"></div>
-          </div>
-        </div>
-      </div>
-    </div>
+    </template>
 
     <!-- Team stats template -->
-    <div id="teamStats-template" class="template teamStats">
-      <div class="row">
-        <div class="teamName column stylishText">Team name</div>
-        <div class="addMechButton button column">Add mech</div>
+    <template id="teamStats-template">
+      <div class="teamStats">
+        <div class="row">
+          <div class="teamName column stylishText">Team name</div>
+          <div class="addMechButton button column">Add mech</div>
+        </div>
+        <div class="row teamStatsDetails">
+          <div class="mechPipsContainer column column-4">
+            <!--mechpip goes here-->
+          </div>
+          <div class="teamHealth column column-2">
+            <span class="liveMechs">0/0</span> <span class="teamHealthValue">(100%)</span>
+          </div>
+          <div class="teamDamage column column-2">
+            <span class="teamDamageValue"></span> DMG
+          </div>
+          <div class="column column-2">
+            <div class="teamDPS row">
+              <span class="teamDPSValue">0.0</span> dps
+            </div>
+            <div class="teamBurstDamage row">
+              <span class="teamBurstDamageValue">0</span> burst
+            </div>
+          </div>
+          <div class="teamSettingsButtonContainer column">
+            <div class="teamSettingsButton textButton">
+              Settings
+            </div>
+            <div class="teamSettingsButtonArrow">
+              &#9660;
+            </div>
+          </div>
+        </div>
+        <div class="teamSettings row">
+          <div class="column column-3">
+            <div class="teamFirePatternLabel">Fire Pattern</div>
+            <select class="teamFirePatternValue" aria-label="Fire Pattern">
+              <option>Option1</option>
+            </select>
+            <div class="teamFirePatternDesc">
+            </div>
+          </div>
+          <div class="column column-3">
+            <div class="teamTargetMechPatternLabel">Target Mech</div>
+            <select class="teamTargetMechPatternValue" aria-label="Target Mech">
+              <option>Option1</option>
+            </select>
+            <div class="teamTargetMechPatternDesc">
+            </div>
+          </div>
+          <div class="column column-3">
+            <div class="teamTargetMechComponentLabel">Target Component</div>
+            <select class="teamTargetMechComponentValue" aria-label="Target Component">
+              <option>Option1</option>
+            </select>
+            <div class="teamTargetMechComponentDesc">
+            </div>
+          </div>
+          <div class="column column-3">
+            <div class="teamAccuracyLabel">Accuracy</div>
+            <select class="teamAccuracyValue" aria-label="Accuracy">
+              <option>Option1</option>
+            </select>
+            <div class="teamAccuracyDesc">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+        </div>
       </div>
-      <div class="row teamStatsDetails">
-        <div class="mechPipsContainer column column-4">
-          <!--mechpip goes here-->
-        </div>
-        <div class="teamHealth column column-2">
-          <span class="liveMechs">0/0</span> <span class="teamHealthValue">(100%)</span>
-        </div>
-        <div class="teamDamage column column-2">
-          <span class="teamDamageValue"></span> DMG
-        </div>
-        <div class="column column-2">
-          <div class="teamDPS row">
-            <span class="teamDPSValue">0.0</span> dps
-          </div>
-          <div class="teamBurstDamage row">
-            <span class="teamBurstDamageValue">0</span> burst
-          </div>
-        </div>
-        <div class="teamSettingsButtonContainer column">
-          <div class="teamSettingsButton textButton">
-            Settings
-          </div>
-          <div class="teamSettingsButtonArrow">
-            &#9660;
-          </div>
-        </div>
-      </div>
-      <div class="teamSettings row">
-        <div class="column column-3">
-          <div class="teamFirePatternLabel">Fire Pattern</div>
-          <select class="teamFirePatternValue" aria-label="Fire Pattern">
-            <option>Option1</option>
-          </select>
-          <div class="teamFirePatternDesc">
-          </div>
-        </div>
-        <div class="column column-3">
-          <div class="teamTargetMechPatternLabel">Target Mech</div>
-          <select class="teamTargetMechPatternValue" aria-label="Target Mech">
-            <option>Option1</option>
-          </select>
-          <div class="teamTargetMechPatternDesc">
-          </div>
-        </div>
-        <div class="column column-3">
-          <div class="teamTargetMechComponentLabel">Target Component</div>
-          <select class="teamTargetMechComponentValue" aria-label="Target Component">
-            <option>Option1</option>
-          </select>
-          <div class="teamTargetMechComponentDesc">
-          </div>
-        </div>
-        <div class="column column-3">
-          <div class="teamAccuracyLabel">Accuracy</div>
-          <select class="teamAccuracyValue" aria-label="Accuracy">
-            <option>Option1</option>
-          </select>
-          <div class="teamAccuracyDesc">
-          </div>
-        </div>
-      </div>
-      <div class="row">
-      </div>
-    </div>
+    </template>
 
-    <span id="mechPip-template" class="template mechPip">&#9632;</span>
+    <template id="mechPip-template">
+      <span class="mechPip">&#9632;</span>
+    </template>
 
     <!-- Add mech dialog template -->
-    <div id="addMechDialog-template" class="template addMechDialog">
-      <div class="row">
-        <h3 class="addMechDialogTitle">Import loadout from smurfy</h3>
+    <template id="addMechDialog-template">
+      <div class="addMechDialog">
+        <div class="row">
+          <h3 class="addMechDialogTitle">Import loadout from smurfy</h3>
+        </div>
+        <div class="row">
+          <input id="addMechDialog-text" type="url" class="column column-10" placeholder="Enter Smurfy URL here">
+          <div id="addMechDialog-load" class="button column column-2">Load</div>
+        </div>
+        <div id="addMechDialog-result" class="row">
+          &nbsp;
+        </div>
+        <div class="row">
+          <div id="addMechDialog-cancel" class="button">Cancel</div>
+          <div id="addMechDialog-ok" class="button">OK</div>
+        </div>
       </div>
-      <div class="row">
-        <input id="addMechDialog-text" type="url" class="column column-10" placeholder="Enter Smurfy URL here">
-        <div id="addMechDialog-load" class="button column column-2">Load</div>
-      </div>
-      <div id="addMechDialog-result" class="row">
-        &nbsp;
-      </div>
-      <div class="row">
-        <div id="addMechDialog-cancel" class="button">Cancel</div>
-        <div id="addMechDialog-ok" class="button">OK</div>
-      </div>
-    </div>
+    </template>
 
     <!-- Loading screen template -->
-    <div id="loadingScreen-template" class="template loadingScreen">
-      <div class = "row">
-        <div id="loadingScreenPaperDollContainer">
+    <template id="loadingScreen-template">
+      <div class="loadingScreen">
+        <div class = "row">
+          <div id="loadingScreenPaperDollContainer">
+          </div>
+        </div>
+        <div class="row loadingScreenText stylishText">
+          Loading...
+        </div>
+        <div id="loadingScreenProgress" class="row loadingScreenProgress">
+          &nbsp;
         </div>
       </div>
-      <div class="row loadingScreenText stylishText">
-        Loading...
-      </div>
-      <div id="loadingScreenProgress" class="row loadingScreenProgress">
-        &nbsp;
-      </div>
-    </div>
+    </template>
 
     <!-- Victory report template -->
-    <div id="victoryReport-template" class="template victoryReport">
-      <div class="buttonBar row">
-        <div class="closeReportButton button">Close</div>
+    <template id="victoryReport-template">
+      <div class="victoryReport">
+        <div class="buttonBar row">
+          <div class="closeReportButton button">Close</div>
+        </div>
+        <div class="row">
+          <div class="victorTitle stylishText">Draw</div>
+        </div>
+        <div class="row">
+            <div class="rangeTitle">Range:</div>
+            <div class="rangeValue"></div>
+        </div>
+        <div class="row">
+            <div class="blueReportContainer column column-6">
+            </div>
+            <div class="redReportContainer column column-6">
+            </div>
+        </div>
       </div>
-      <div class="row">
-        <div class="victorTitle stylishText">Draw</div>
-      </div>
-      <div class="row">
-          <div class="rangeTitle">Range:</div>
-          <div class="rangeValue"></div>
-      </div>
-      <div class="row">
-          <div class="blueReportContainer column column-6">
-          </div>
-          <div class="redReportContainer column column-6">
-          </div>
-      </div>
-    </div>
+    </template>
 
     <!-- Team report template -->
-    <div id="teamReport-template" class="template teamReport">
-      <div class="row teamName stylishText">
-      </div>
-      <div class="summaryStats row">
-        <div class="label column column-1"
-              title="Total Damage">
-          DMG:
+    <template id="teamReport-template">
+      <div class="teamReport">
+        <div class="row teamName stylishText">
         </div>
-        <div class="damage value column column-2"></div>
+        <div class="summaryStats row">
+          <div class="label column column-1"
+                title="Total Damage">
+            DMG:
+          </div>
+          <div class="damage value column column-2"></div>
 
-        <div class="label column column-1"
-              title="Damage per second over the entire simulation">
-          DPS: </div>
-        <div class="dps value column column-2"></div>
+          <div class="label column column-1"
+                title="Damage per second over the entire simulation">
+            DPS: </div>
+          <div class="dps value column column-2"></div>
 
-        <div class="label column column-1"
-              title="Max damage done in a 2 second window">
-          Burst:
+          <div class="label column column-1"
+                title="Max damage done in a 2 second window">
+            Burst:
+          </div>
+          <div class="maxBurst value column column-2"></div>
         </div>
-        <div class="maxBurst value column column-2"></div>
+        <div class="breakDownTitle row">Damage Breakdown By Mech</div>
+        <div class="mechBreakdownContainer row"></div>
+        <div class="breakDownTitle row">Damage Breakdown By Weapon</div>
+        <div class="weaponBreakdownContainer row"></div>
       </div>
-      <div class="breakDownTitle row">Damage Breakdown By Mech</div>
-      <div class="mechBreakdownContainer row"></div>
-      <div class="breakDownTitle row">Damage Breakdown By Weapon</div>
-      <div class="weaponBreakdownContainer row"></div>
-    </div>
+    </template>
 
 
     <!-- Mech damage breakdown templates -->
-    <div id = "mechBreakdownHeader-template" class="mechBreakdownHeader tableHeader template row">
-      <div class="column column-4">Mech</div>
-      <div class="label numberValue column column-2"
-            title="Total damage.">
-        DMG
+    <template id = "mechBreakdownHeader-template">
+      <div class="mechBreakdownHeader tableHeader row">
+        <div class="column column-4">Mech</div>
+        <div class="label numberValue column column-2"
+              title="Total damage.">
+          DMG
+        </div>
+        <div class="label numberValue column column-2"
+              title="Damage per second over the entire simulation.">
+          DPS
+        </div>
+        <div class="label numberValue column column-2"
+            title="Max damage done in a 2 second window.">
+          Burst
+        </div>
+        <div class="label numberValue column column-2"
+              title="Total time mech was active.">
+          Time Alive
+        </div>
       </div>
-      <div class="label numberValue column column-2"
-            title="Damage per second over the entire simulation.">
-        DPS
+    </template>
+    <template id="mechBreakdownRow-template">
+      <div class="mechBreakdownRow tableRow row">
+        <div class="name column column-4"></div>
+        <div class="numberValue damage column column-2"></div>
+        <div class="numberValue dps column column-2"></div>
+        <div class="numberValue burst column column-2"></div>
+        <div class="numberValue timeAlive column column-2"></div>
       </div>
-      <div class="label numberValue column column-2"
-          title="Max damage done in a 2 second window.">
-        Burst
-      </div>
-      <div class="label numberValue column column-2"
-            title="Total time mech was active.">
-        Time Alive
-      </div>
-    </div>
-    <div id = "mechBreakdownRow-template" class="mechBreakdownRow tableRow template row">
-      <div class="name column column-4"></div>
-      <div class="numberValue damage column column-2"></div>
-      <div class="numberValue dps column column-2"></div>
-      <div class="numberValue burst column column-2"></div>
-      <div class="numberValue timeAlive column column-2"></div>
-    </div>
+    </template>
 
     <!-- Weapon breakdown row template -->
-    <div id = "weaponBreakdownHeader-template" class="weaponBreakdownHeader tableHeader template row">
-      <div class="column column-4">Weapon</div>
-      <div class="label numberValue column column-2"
-            title="Total damage.">
-        DMG
+    <template id = "weaponBreakdownHeader-template">
+      <div class="weaponBreakdownHeader tableHeader row">
+        <div class="column column-4">Weapon</div>
+        <div class="label numberValue column column-2"
+              title="Total damage.">
+          DMG
+        </div>
+        <!-- <div class="numberValue column column-2">DPS</div> -->
+        <div class="label numberValue column column-2"
+              title="Number of times weapon was fired.">
+          Times Fired
+        </div>
       </div>
-      <!-- <div class="numberValue column column-2">DPS</div> -->
-      <div class="label numberValue column column-2"
-            title="Number of times weapon was fired.">
-        Times Fired
+    </template>
+    <template id = "weaponBreakdownRow-template">
+      <div class="weaponBreakdownRow tableRow row">
+        <div class="name column column-4"></div>
+        <div class="numberValue damage column column-2"></div>
+        <!-- <div class="numberValue dps column column-2"></div> -->
+        <div class="numberValue count column column-2"></div>
       </div>
-    </div>
-    <div id = "weaponBreakdownRow-template" class="weaponBreakdownRow tableRow template row">
-      <div class="name column column-4"></div>
-      <div class="numberValue damage column column-2"></div>
-      <!-- <div class="numberValue dps column column-2"></div> -->
-      <div class="numberValue count column column-2"></div>
-    </div>
+    </template>
 
     <!-- Modified info popup template -->
-    <div id="modifiedTooltip-template" class="modifiedTooltip template">
-      <div class="tooltipTitle">Simulation changed</div>
-      <div>
-      You have made changes to the simulation. Click the 'Permalink' button
-      to save your changes and share them with others.
+    <template id="modifiedTooltip-template">
+      <div class="modifiedTooltip">
+        <div class="tooltipTitle">Simulation changed</div>
+        <div>
+        You have made changes to the simulation. Click the 'Permalink' button
+        to save your changes and share them with others.
+        </div>
       </div>
-    </div>
+    </template>
 
     <!--Permlink generated popup -->
-    <div id="permalinkGeneratedTooltip-template" class="permalinkGeneratedTooltip template">
-      <a class="permaLink">Permalink</a> generated. Right click the link and
-      copy the link address to the clipboard to share it with other people.
-    </div>
+    <template id="permalinkGeneratedTooltip-template">
+      <div class="permalinkGeneratedTooltip">
+        <a class="permaLink">Permalink</a> generated. Right click the link and
+        copy the link address to the clipboard to share it with other people.
+      </div>
+    </template>
 
     <!--Load error popup template-->
-    <div id="loadErrorTooltip-template" class="loadErrorTooltip error template">
-      <div class="tooltipTitle error">Load error</div>
-      <p>
-        There was an error loading the simulation. Click
-        <a href="https://github.com/fat4eyes-mwo/mwo-simulator"
-            target="_blank" rel="noopener">here</a>
-        for instructions on how to report the error.
-      </p>
-      <p>
-          You can click the browser's
-        back button to go back to previous simulations, or refresh the page for a
-        fresh start.
-      </p>
-    </div>
+    <template id="loadErrorTooltip-template">
+      <div class="loadErrorTooltip error">
+        <div class="tooltipTitle error">Load error</div>
+        <p>
+          There was an error loading the simulation. Click
+          <a href="https://github.com/fat4eyes-mwo/mwo-simulator"
+              target="_blank" rel="noopener">here</a>
+          for instructions on how to report the error.
+        </p>
+        <p>
+            You can click the browser's
+          back button to go back to previous simulations, or refresh the page for a
+          fresh start.
+        </p>
+      </div>
+    </template>
 
     <!--Loaded mech template-->
-    <div id="loadedMech-template" class="loadedMech row">
-      <div class="mechName column"></div>
-      <div class="mechEquipment column"></div>
-      <div class="mechArmament column"></div>
-    </div>
+    <template id="loadedMech-template">
+      <div class="loadedMech row">
+        <div class="mechName column"></div>
+        <div class="mechEquipment column"></div>
+        <div class="mechArmament column"></div>
+      </div>
+    </template>
 
     <!--Google analytics-->
     <script>

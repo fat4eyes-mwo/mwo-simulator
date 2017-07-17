@@ -41,11 +41,10 @@ var MechViewTeamStats = MechViewTeamStats || (function() {
   }
   var addTeamStatsPanel = function(team, mechIds) {
     let teamStatsContainerPanelId = teamStatsContainerId(team);
-    $("#teamStats-template")
-      .clone(true)
+    let teamStatsDiv = MechViewWidgets.cloneTemplate("teamStats-template");
+    $(teamStatsDiv)
       .attr("id", teamStatsId(team))
       .attr("data-team", team)
-      .removeClass("template")
       .addClass(team)
       .appendTo("#" + teamStatsContainerPanelId);
     //Change team name
@@ -62,13 +61,12 @@ var MechViewTeamStats = MechViewTeamStats || (function() {
     for (let mechId of mechIds) {
       let mechName = MechModelView.getMechName(mechId, team);
       mechName = mechName ? mechName : "";
-      $("#mechPip-template")
-        .clone(true)
+      let mechPipSpan = MechViewWidgets.cloneTemplate("mechPip-template");
+      $(mechPipSpan)
         .attr("id", teamMechPipId(mechId))
         .attr("data-team", team)
         .attr("data-mech-id", mechId)
         .attr("title", mechName)
-        .removeClass("template")
         .click(mechPipClickHandler)
         .appendTo("#" + teamMechPipsContainerDivId);
     }

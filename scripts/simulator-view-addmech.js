@@ -37,10 +37,10 @@ var MechViewAddMech = MechViewAddMech || (function() {
     $("#" + MechView.MODAL_DIALOG_ID)
       .empty()
       .addClass("addmech");
-    $("#addMechDialog-template")
-      .clone(true)
+    let addMechDialogDiv =
+        MechViewWidgets.cloneTemplate("addMechDialog-template");
+    $(addMechDialogDiv)
       .attr("id", "addMechDialogContainer")
-      .removeClass("template")
       .addClass(team)
       .appendTo("#" + MechView.MODAL_DIALOG_ID);
 
@@ -150,11 +150,10 @@ var MechViewAddMech = MechViewAddMech || (function() {
         addMechLoadButton.disable();
         addMechLoadButton.addClass("loading");
         addMechLoadButton.setHtml("Loading...");
-        Promise.resolve(
           loadMechPromise
             .then(doneHandler)
             .catch(failHandler)
-          ).then(alwaysHandler);
+            .then(alwaysHandler);
       } else {
         $("#addMechDialog-result")
             .addClass("error")
@@ -170,10 +169,9 @@ var MechViewAddMech = MechViewAddMech || (function() {
 
   let SMURFY_BASE_URL = "http://mwo.smurfy-net.de/mechlab#";
   var createLoadedMechPanel = function(containerId, smurfyMechLoadout) {
-    let loadedMechJQ =$("#loadedMech-template")
-                            .clone(true)
+    let loadedMechDiv = MechViewWidgets.cloneTemplate("loadedMech-template");
+    let loadedMechJQ =$(loadedMechDiv)
                             .removeAttr("id")
-                            .removeClass("template")
                             .appendTo("#" + containerId);
     let smurfyMechId = smurfyMechLoadout.mech_id;
     let smurfyLoadoutId = smurfyMechLoadout.id;

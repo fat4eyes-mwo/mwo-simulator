@@ -30,7 +30,7 @@ var MechSimulator = MechSimulator || (function() {
   }
 
   function initMechs() {
-    Promise.resolve(MechViewRouter.loadStateFromLocationHash()
+    MechViewRouter.loadStateFromLocationHash()
       .then(function(data) {
         initUI();
         return data;
@@ -40,11 +40,10 @@ var MechSimulator = MechSimulator || (function() {
         MechModelView.refreshView(true);
         MechView.updateOnLoadAppError();
         location.hash = "";
-        throw err;
       })
-    ).then(function(data) {
-      MechView.hideLoadingScreen();
-    });
+      .then(function(data) {
+        MechView.hideLoadingScreen();
+      });
   }
 
   function initUI() {
