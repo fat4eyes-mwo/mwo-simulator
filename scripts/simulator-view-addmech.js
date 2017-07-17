@@ -150,11 +150,10 @@ var MechViewAddMech = MechViewAddMech || (function() {
         addMechLoadButton.disable();
         addMechLoadButton.addClass("loading");
         addMechLoadButton.setHtml("Loading...");
-        Promise.resolve(
           loadMechPromise
             .then(doneHandler)
             .catch(failHandler)
-          ).then(alwaysHandler);
+            .then(alwaysHandler);
       } else {
         $("#addMechDialog-result")
             .addClass("error")

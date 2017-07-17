@@ -267,7 +267,6 @@ var MechViewRouter = MechViewRouter || (function() {
       //if hash is different from previous hash, load new state
       MechView.showLoadingScreen();
       console.log("Hash change loading new state from hash : " + newHash);
-      Promise.resolve(
         loadAppState(newHash)
           .then(function() {
             //success
@@ -280,11 +279,11 @@ var MechViewRouter = MechViewRouter || (function() {
             MechView.updateOnLoadAppError();
             console.log("Hash change state load failed: " + newHash);
           })
-      ).then(function() {
-        //always
-        MechView.hideLoadingScreen();
-        console.log("Hash state change load done: " + newHash);
-      });
+          .then(function() {
+            //always
+            MechView.hideLoadingScreen();
+            console.log("Hash state change load done: " + newHash);
+          });
     } else {
       //do nothing if hash did not change
       //TODO: see if this should check if the app is in error and load in data

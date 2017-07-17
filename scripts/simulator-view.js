@@ -606,7 +606,7 @@ var MechView = MechView || (function() {
   var initMiscControl = function() {
     $("#permalinkButton").click(() => {
       let saveAppStatePromise = MechViewRouter.saveAppState();
-      Promise.resolve(saveAppStatePromise
+      saveAppStatePromise
         .then(function(data) {
           showPermalinkTooltip(location.href);
           console.log("Success on save app state. Data: " + data);
@@ -616,9 +616,9 @@ var MechView = MechView || (function() {
           console.error("Fail on save app state." + Error(data));
           return Error(data);
         })
-      ).then(function(data) {
-        console.log("Done save app state. Data: " + data);
-      });
+        .then(function(data) {
+          console.log("Done save app state. Data: " + data);
+        });
     });
     modifiedTooltip = new MechViewWidgets.Tooltip(
                                 "modifiedTooltip-template",
