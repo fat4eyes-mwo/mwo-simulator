@@ -208,17 +208,21 @@ var MechViewAddMech = MechViewAddMech || (function() {
   }
 
   var loadedMechSpan = function(text, spanClass) {
-    return $("<span>" + text + "</span>").addClass(spanClass);
+    let span = MechViewWidgets.cloneTemplate("loadedMechInfo-template");
+    return $(span)
+      .addClass(spanClass)
+      .text(text);
   }
 
   var loadedMechWeaponSpan = function(name, number, type) {
     let numberClass = loadedMechWeaponClass(type);
-    let ret = $("<div></div>").addClass("weaponRow");
-    ret.append($("<span>" + name + "</span>").addClass("weaponName"));
-    ret.append($("<span>" + number + "</span")
-                  .addClass(numberClass)
-                  .addClass("count")
-                  .html(number));
+    let weaponSpan = MechViewWidgets.cloneTemplate("loadedMechWeapon-template");
+    let ret = $(weaponSpan);
+    ret.find(".weaponName")
+      .text(name);
+    ret.find(".count")
+      .addClass(numberClass)
+      .text(number);
     return ret;
   }
 
