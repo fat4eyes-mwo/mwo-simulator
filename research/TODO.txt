@@ -3,7 +3,7 @@
 - mech reorder buttons
 - save team settings?
 - LBX damage spread
-- UAC double tap
+- UAC double tap (expected value and setting to allow user to enable/disable)
 - Omnipod set quirks
 - ATM damage computation
 - RAC mechanics
