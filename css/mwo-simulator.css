@@ -112,6 +112,17 @@ a:hover {
 }
 
 /*End grid*/
+.nojavascript {
+  position: fixed;
+  width: 80%;
+  margin-top: 20%;
+  margin-left: 10%;
+  text-align: center;
+  font-size: 1.5em;
+  color: gold;
+  font-weight: bold;
+}
+
 .stylishText {
   font-family: Orbitron;
   /*font-family: sans-serif;;*/

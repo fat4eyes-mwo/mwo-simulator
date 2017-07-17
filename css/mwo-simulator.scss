@@ -136,6 +136,16 @@ div {
 }
 /*End grid*/
 
+.nojavascript {
+  position: fixed;
+  width: 80%;
+  margin-top:20%;
+  margin-left:10%;
+  text-align: center;
+  font-size: 1.5em;
+  color: $emphasis-color;
+  font-weight: bold;
+}
 
 .stylishText {
   font-family: $fancy-font-family;

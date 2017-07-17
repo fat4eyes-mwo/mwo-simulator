@@ -503,6 +503,7 @@ var MechView = MechView || (function() {
   }
 
   var initView = function() {
+    $("#nojavascript").remove();
     initControlPanel();
     MechViewTeamStats.initPatternTypes();
     initRangeInput();
