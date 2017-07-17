@@ -11,6 +11,7 @@ var mechIdWeaponCount = []; //number of weapons set for a given mechid
 
 return {
     testUIWidgets : function () {
+      MechView.initView();
       MechModel.initDummyModelData();
 
       MechModel.addMech("testCheetahId", MechModel.Team.BLUE, DummyArcticCheetah);
@@ -94,6 +95,7 @@ return {
     },
 
     testModelView : function (){
+      MechView.initView();
       MechModel.initDummyModelData();
 
       MechModel.addMech("testCheetahId", MechModel.Team.BLUE, DummyArcticCheetah);
@@ -162,7 +164,9 @@ return {
     testDamageAtRange : function() {
       MechModel.initDummyModelData();
       let ppcID = 1009;
-      var weaponInfoTest = new MechModel.WeaponInfo(ppcID, "centre_torso", MechModel.getSmurfyWeaponData(ppcID));
+      var mechInfo = new MechModel.MechInfo("testId", DummyStormcrow);
+      var weaponInfoTest = new MechModel.WeaponInfo(ppcID, "centre_torso",
+              MechModel.getSmurfyWeaponData(ppcID), mechInfo);
       console.log("Weapon " + weaponInfoTest.translatedName +
           " minRange: " + weaponInfoTest.minRange +
           " optRange: " + weaponInfoTest.optRange +
@@ -194,7 +198,8 @@ return {
       console.log("range: " + range + " damage: " + damage);
 
       let srm6ID = 1031;
-      weaponInfoTest = new MechModel.WeaponInfo(srm6ID, "centre_torso", MechModel.getSmurfyWeaponData(srm6ID));
+      weaponInfoTest = new MechModel.WeaponInfo(srm6ID, "centre_torso",
+          MechModel.getSmurfyWeaponData(srm6ID), mechInfo);
       range = 0;
       damage = weaponInfoTest.damageAtRange(range, stepDuration);
       console.log("range: " + range + " damage: " + damage);
@@ -505,7 +510,7 @@ return {
       for (let lrm of lrmSpreadList) {
         console.log("----------------------------------------------");
         console.log(lrm.name + " spread");
-        let lrmPattern = MechAccuracyPattern.lrmPattern(lrm.spread);
+        let lrmPattern = MechAccuracyPattern.seekerPattern(lrm.spread);
         let range = 180;
         let transformedDamage = lrmPattern(newTestDamage(), range);
         console.log("Range: " + range + " " + transformedDamage.toString());

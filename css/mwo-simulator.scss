@@ -163,9 +163,12 @@ div {
   color: $primary-font-color;
 }
 
-.controlPanel {
+#controlPanelContainer {
   position: sticky;
   top: $navbar-top;
+}
+
+.controlPanel {
 }
 
 .controlPanel .rangeLabel {

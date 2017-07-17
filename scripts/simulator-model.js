@@ -1585,6 +1585,7 @@ var MechModel = MechModel || (function () {
     MechDamage : MechDamage,
     WeaponDamage : WeaponDamage,
     Mech : Mech,
+    MechInfo : MechInfo,
     WeaponInfo : WeaponInfo,
     BURST_DAMAGE_INTERVAL: BURST_DAMAGE_INTERVAL,
     mechTeams : mechTeams,

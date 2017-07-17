@@ -138,7 +138,7 @@ a:hover {
   color: #aaaaaa;
 }
 
-.controlPanel {
+#controlPanelContainer {
   position: sticky;
   top: 0px;
 }
