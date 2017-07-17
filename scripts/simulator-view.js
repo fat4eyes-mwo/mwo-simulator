@@ -134,7 +134,7 @@ var MechView = MechView || (function() {
 
     let armorLocationDiv = document.getElementById(armorLocationDivId);
     if (armorLocationDiv) {
-      armorLocationDiv.innerHTML = Math.round(armor);
+      armorLocationDiv.textContent = Math.round(armor);
       //NOTE: Title change too expensive
       // armorLocationDiv.setAttribute("title", (Number(armor)).toFixed(2));
       armorLocationDiv.style.color = armorColor;
@@ -142,7 +142,7 @@ var MechView = MechView || (function() {
 
     let structureLocationDiv = document.getElementById(structureLocationDivId);
     if (structureLocationDiv) {
-      structureLocationDiv.innerHTML = Math.round(structure)
+      structureLocationDiv.textContent = Math.round(structure)
       //NOTE: Title change too expensive
       // structureLocationDiv.setAttribute("title", (Number(structure)).toFixed(2));
       structureLocationDiv.style.color = structureColor;
@@ -200,7 +200,7 @@ var MechView = MechView || (function() {
     let heatNumberDiv = document.getElementById(heatNumberId);
 
     // $("#" + heatNumberId).html(heatText);
-    heatNumberDiv.innerHTML = heatText;
+    heatNumberDiv.textContent = heatText;
   }
 
   var weaponRowId = function (mechId, idx) {
@@ -256,7 +256,7 @@ var MechView = MechView || (function() {
   }
   var setWeaponAmmo = function (mechId, weaponIdx, ammo) {
     let weaponAmmoDiv = document.getElementById(weaponAmmoId(mechId, weaponIdx));
-    weaponAmmoDiv.innerHTML = ammo != -1 ? ammo : "&#x221e;";
+    weaponAmmoDiv.textContent = ammo != -1 ? ammo : "\u221e"; //infinity symbol
     //slow jquery
     // $("#" + weaponAmmoId(mechId, weaponIdx)).html(ammo != -1 ? ammo : "&#x221e;");
   }
@@ -392,12 +392,13 @@ var MechView = MechView || (function() {
     let smurfyLink = SMURFY_BASE_URL + "i=" + smurfyMechId + "&l=" + smurfyLayoutId;
     let mechNameDiv = document.getElementById(mechNameId);
 
-    mechNameDiv.innerHTML = $("<a></a>")
-                                  .attr("href", smurfyLink)
-                                  .attr("target", "_blank")
-                                  .attr("rel", "noopener")
-                                  .html(mechName)
-                                  .prop("outerHTML");
+    let mechLink = $("<a></a>").attr("href", smurfyLink)
+                            .attr("target", "_blank")
+                            .attr("rel", "noopener")
+                            .text(mechName);
+    $(mechNameDiv)
+      .empty()
+      .append(mechLink);
   }
 
   var updateMechStatusPanel = function(mechId, mechIsAlive,
@@ -426,27 +427,27 @@ var MechView = MechView || (function() {
     let mechSummaryHealthDiv = document.getElementById(mechSummaryHealthId);
     mechSummaryHealthDiv.style.color =
                   damageColor(percentHealth, healthDamageGradient);
-    mechSummaryHealthDiv.innerHTML = mechSummaryHealthText;
+    mechSummaryHealthDiv.textContent = mechSummaryHealthText;
 
     //update mech target
     let mechTargetId = mechTargetPanelId(mechId);
     let mechTargetDiv = document.getElementById(mechTargetId);
-    mechTargetDiv.innerHTML = targetMechName;
+    mechTargetDiv.textContent = targetMechName;
 
     //set mech total damage
     let mechTotalDamageId = mechTotalDamagePanelId(mechId);
     let mechTotalDamageDiv = document.getElementById(mechTotalDamageId);
-    mechTotalDamageDiv.innerHTML = Number(totalDmg).toFixed(1);
+    mechTotalDamageDiv.textContent = Number(totalDmg).toFixed(1);
 
     //set mech dps
     let mechDPSId = mechDPSPanelId(mechId);
     let mechDPSDiv = document.getElementById(mechDPSId);
-    mechDPSDiv.innerHTML = Number(dps).toFixed(1);
+    mechDPSDiv.textContent = Number(dps).toFixed(1);
 
     //set mech burst
     let mechBurstId = mechBurstPanelId(mechId);
     let mechBurstDiv = document.getElementById(mechBurstId);
-    mechBurstDiv.innerHTML = Number(burst).toFixed(1);
+    mechBurstDiv.textContent = Number(burst).toFixed(1);
   }
 
 

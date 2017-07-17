@@ -254,9 +254,9 @@ var MechViewTeamStats = MechViewTeamStats || (function() {
       let color = MechView.damageColor(percentHealth, MechView.healthDamageGradient);
       mechPipDiv.style.color = color;
       if (isAlive) {
-        mechPipDiv.innerHTML = "&#9632;";
+        mechPipDiv.textContent = "\u25A0"; //solid box
       } else {
-        mechPipDiv.innerHTML = "&#9633;";
+        mechPipDiv.textContent = "\u25A1"; //hollow box
       }
 
       liveMechs += isAlive ? 1 : 0;
@@ -269,7 +269,7 @@ var MechViewTeamStats = MechViewTeamStats || (function() {
     let percentAlive = totalMechs > 0 ? liveMechs / totalMechs : 0;
     let color = MechView.damageColor(percentAlive, MechView.healthDamageGradient);
     liveMechsDiv.style.color = color;
-    liveMechsDiv.innerHTML = liveMechs + "/" + totalMechs;
+    liveMechsDiv.textContent = liveMechs + "/" + totalMechs;
 
     //team health
     let healthValueDiv = document.getElementById(teamHealthValueId(team));
@@ -277,17 +277,17 @@ var MechViewTeamStats = MechViewTeamStats || (function() {
             totalTeamCurrHealth / totalTeamMaxHealth : 0;
     color = MechView.damageColor(teamHealthPercent, MechView.healthDamageGradient);
     healthValueDiv.style.color = color;
-    healthValueDiv.innerHTML = "(" + Number(teamHealthPercent * 100).toFixed(1) + "%)";
+    healthValueDiv.textContent = "(" + Number(teamHealthPercent * 100).toFixed(1) + "%)";
 
     //damage
     let teamDamageDiv = document.getElementById(teamDamageId(team));
-    teamDamageDiv.innerHTML = Number(damage).toFixed(1);
+    teamDamageDiv.textContent = Number(damage).toFixed(1);
     //dps
     let teamDPSValueDiv = document.getElementById(teamDPSValueId(team));
-    teamDPSValueDiv.innerHTML = Number(dps).toFixed(1);
+    teamDPSValueDiv.textContent = Number(dps).toFixed(1);
     //burst
     let teamBurstDamageDiv = document.getElementById(teamBurstDamageId(team));
-    teamBurstDamageDiv.innerHTML = Number(burstDamage).toFixed(1);
+    teamBurstDamageDiv.textContent = Number(burstDamage).toFixed(1);
   }
 
   var clearTeamStats = function(team) {

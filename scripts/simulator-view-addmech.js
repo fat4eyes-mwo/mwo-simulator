@@ -178,7 +178,7 @@ var MechViewAddMech = MechViewAddMech || (function() {
                           .attr("href", SMURFY_BASE_URL + "i=" + smurfyMechId + "&l=" + smurfyLoadoutId)
                           .attr("target", "_blank")
                           .attr("rel", "noopener")
-                          .html(smurfyMechData.translated_name);
+                          .text(smurfyMechData.translated_name);
     loadedMechJQ.find("[class~=mechName]")
                 .append(mechLinkJQ);
 
