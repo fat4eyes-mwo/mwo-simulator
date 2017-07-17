@@ -47,9 +47,8 @@ var MechViewWidgets = MechViewWidgets || (function() {
   class Tooltip {
     constructor(templateId, tooltipId, targetElementId) {
       this.id = tooltipId;
-      $("#" + templateId)
-        .clone(true)
-        .removeClass("template")
+      let tooltipDiv = MechViewWidgets.cloneTemplate(templateId);
+      $(tooltipDiv)
         .addClass("tooltip")
         .addClass("hidden")
         .attr("id", tooltipId)
@@ -70,8 +69,16 @@ var MechViewWidgets = MechViewWidgets || (function() {
     }
   }
 
+  //Clones a template and returns the first element of the template
+  var cloneTemplate = function(templateName) {
+    let template = document.querySelector("#" + templateName);
+    let templateElement = document.importNode(template.content, true);
+    return templateElement.firstElementChild;
+  }
+
   return {
     Tooltip : Tooltip,
     MechButton: MechButton,
+    cloneTemplate: cloneTemplate,
   }
 })();

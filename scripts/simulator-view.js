@@ -66,11 +66,10 @@ var MechView = MechView || (function() {
     return mechId + "-paperDoll";
   }
   var addPaperDoll = function (mechId, paperDollContainer) {
-    $("#paperDoll-template")
-      .clone(true)
+    let paperDollDiv = MechViewWidgets.cloneTemplate("paperDoll-template");
+    $(paperDollDiv)
       .attr("id", paperDollId(mechId))
       .attr("data-mech-id", mechId)
-      .removeClass("template")
       .appendTo("#" + paperDollContainer);
   }
 
@@ -100,11 +99,11 @@ var MechView = MechView || (function() {
   var addMechHealthNumbers = function (mech, mechHealthNumbersContainer) {
     let mechId = mech.getMechId();
     let mechHealthNumbersDivId = mechHealthNumbersId(mechId);
-    $("#mechHealthNumbers-template").
-      clone(true)
+    let mechHealthNumbersDiv =
+        MechViewWidgets.cloneTemplate("mechHealthNumbers-template");
+    $(mechHealthNumbersDiv)
       .attr("id", mechHealthNumbersDivId)
       .attr("data-mech-id", mechId)
-      .removeClass("template")
       .appendTo(mechHealthNumbersContainer);
 
     for (let locationIdx in MechModel.Component) {
@@ -170,11 +169,11 @@ var MechView = MechView || (function() {
     return mechId + "-heatbarValue";
   }
   var addHeatbar = function (mechId, heatbarContainer) {
-    $("#heatbar-template").clone(true)
-    .attr("id", heatbarId(mechId))
-    .attr("data-mech-id", mechId)
-    .removeClass("template")
-    .appendTo(heatbarContainer);
+    let heatbarDiv = MechViewWidgets.cloneTemplate("heatbar-template");
+    $(heatbarDiv)
+      .attr("id", heatbarId(mechId))
+      .attr("data-mech-id", mechId)
+      .appendTo(heatbarContainer);
     $("#" + heatbarId(mechId) + " > [class~=heatbar]")
       .attr("id", heatbarValueId(mechId))
       .attr("data-mech-id", mechId);
@@ -226,12 +225,11 @@ var MechView = MechView || (function() {
   var addWeaponPanel = function (mechId, weaponStateList, ammoState, weaponPanel) {
     for (var idx in weaponStateList) {
       var weaponState = weaponStateList[idx];
-      $("#weaponRow-template")
-        .clone(true)
+      let weaponRowDiv = MechViewWidgets.cloneTemplate("weaponRow-template");
+      $(weaponRowDiv)
         .attr("id", weaponRowId(mechId, idx))
         .attr("data-mech-id", mechId)
         .attr("data-weapon-idx", idx)
-        .removeClass("template")
         .appendTo(weaponPanel);
       $("#" + weaponRowId(mechId, idx) + " .weaponName")
         .attr("id", weaponRowId(mechId, idx) + "-weaponName")
@@ -311,11 +309,10 @@ var MechView = MechView || (function() {
     let weaponStateList = mechState.weaponStateList;
     let ammoState = mechState.ammoState;
     let mechPanelContainer = "#" + team + "Team";
-    $("#mechPanel-template")
-      .clone(true)
+    let mechPanelDiv = MechViewWidgets.cloneTemplate("mechPanel-template");
+    $(mechPanelDiv)
       .attr("id", mechPanelId(mechId))
       .attr("data-mech-id", mechId)
-      .removeClass("template")
       .appendTo(mechPanelContainer);
 
     var mechHealthAndWeaponsDivId = mechHealthAndWeaponsId(mechId);
@@ -684,10 +681,10 @@ var MechView = MechView || (function() {
   const LOADING_SCREEN_ANIMATE_INTERVAL = 200; //ms
   var showLoadingScreen = function() {
     $("#" + MODAL_DIALOG_ID).empty();
-    $("#loadingScreen-template")
-      .clone(true)
+    let loadingScreenDiv =
+        MechViewWidgets.cloneTemplate("loadingScreen-template");
+    $(loadingScreenDiv)
       .attr("id", "loadingScreenContainer")
-      .removeClass("template")
       .appendTo("#" + MODAL_DIALOG_ID);
 
     addPaperDoll(LOADING_SCREEN_MECH_ID, "loadingScreenPaperDollContainer");
