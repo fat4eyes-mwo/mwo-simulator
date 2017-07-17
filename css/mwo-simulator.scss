@@ -8,6 +8,7 @@ $heatbar-color: red;
 $heatbar-negative-color: $off-background-color;
 $cooldown-bar-color: rgb(255, 50, 50);
 $cooldown-bar-negative-color : $off-background-color;
+$jammed-color : maroon;
 $fancy-font-family: Orbitron;
 $modal-wide-width: 80%;
 $link-color: gold;
@@ -162,9 +163,12 @@ div {
   color: $primary-font-color;
 }
 
-.controlPanel {
+#controlPanelContainer {
   position: sticky;
   top: $navbar-top;
+}
+
+.controlPanel {
 }
 
 .controlPanel .rangeLabel {
@@ -483,7 +487,7 @@ div {
 }
 
 .weaponCooldownBar {
-  background-color: red;
+  background-color: $cooldown-bar-color;
   height:100%;
   width: 0%;
   position:absolute;
@@ -514,6 +518,10 @@ div {
 
 .weaponPanelRow.Spooling {
   color : white;
+}
+
+.weaponPanelRow.Jammed {
+  color : $jammed-color;
 }
 
 /*Status panel styles*/

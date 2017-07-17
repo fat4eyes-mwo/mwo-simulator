@@ -138,7 +138,7 @@ a:hover {
   color: #aaaaaa;
 }
 
-.controlPanel {
+#controlPanelContainer {
   position: sticky;
   top: 0px;
 }
@@ -431,7 +431,7 @@ a:hover {
 }
 
 .weaponCooldownBar {
-  background-color: red;
+  background-color: #ff3232;
   height: 100%;
   width: 0%;
   position: absolute;
@@ -459,6 +459,10 @@ a:hover {
 
 .weaponPanelRow.Spooling {
   color: white;
+}
+
+.weaponPanelRow.Jammed {
+  color: maroon;
 }
 
 /*Status panel styles*/

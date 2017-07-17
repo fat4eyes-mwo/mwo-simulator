@@ -34,7 +34,8 @@ var MechModel = MechModel || (function () {
     FIRING : "Firing",
     DISABLED : "Disabled",
     COOLDOWN : "Cooldown",
-    SPOOLING : "Spooling"
+    SPOOLING : "Spooling",
+    JAMMED : "Jammed",
   });
 
   const Faction = Object.freeze({
@@ -121,6 +122,12 @@ var MechModel = MechModel || (function () {
               Number(smurfyWeaponData.ammo_per_shot) : 0;
         this.dps = Number(smurfyWeaponData.calc_stats.dps);
         this.type = smurfyWeaponData.type;
+        this.jamChance = smurfyWeaponData.jamming_chance ?
+                            smurfyWeaponData.jamming_chance : 0;
+        this.jamTime = smurfyWeaponData.jammed_time ?
+                            smurfyWeaponData.jammed_time * 1000 : 0; //convert to milliseconds
+        this.shotsDuringCooldown = smurfyWeaponData.shots_during_cooldown ?
+                                    smurfyWeaponData.shots_during_cooldown : 0;
         this.weaponBonus = MechModelQuirks.getWeaponBonus(this);
       }
       get speed() {
@@ -503,14 +510,18 @@ var MechModel = MechModel || (function () {
       this.cooldownLeft = 0;
       this.spoolupLeft = 0;
       this.durationLeft = 0;
+      this.jamLeft = 0;
+      this.currShotsDuringCooldown = weaponInfo.shotsDuringCooldown;
     }
 
     gotoState(weaponCycle) {
+      let prevCycle = this.weaponCycle;
       this.weaponCycle = weaponCycle;
       this.cooldownLeft = 0;
       this.spoolupLeft = 0;
       this.durationLeft = 0;
       if (weaponCycle === WeaponCycle.READY) {
+        this.currShotsDuringCooldown = this.weaponInfo.shotsDuringCooldown;
         //do nothing
       } else if (weaponCycle === WeaponCycle.FIRING) {
         this.durationLeft = this.computeWeaponDuration();
@@ -522,10 +533,23 @@ var MechModel = MechModel || (function () {
         //set cooldown to max so it displays properly in the view
         this.cooldownLeft = this.computeWeaponCooldown();
         this.active = false;
+      } else if (weaponCycle === WeaponCycle.JAMMED) {
+        this.cooldownLeft = this.computeWeaponCooldown();
+        //TODO Check uacJamMethod to compute jam time
+        this.jamLeft = this.computeJamTime();
+        this.currShotsDuringCooldown = 0;
       }
+    }
+    canFire() {
+      return this.weaponCycle === WeaponCycle.READY ||
+            (this.weaponCycle === WeaponCycle.COOLDOWN &&
+             this.currShotsDuringCooldown > 0);
     }
     isReady() {
       return this.weaponCycle === WeaponCycle.READY;
+    }
+    isOnCooldown() {
+      return this.weaponCycle === WeaponCycle.COOLDOWN;
     }
     //Computes the cooldown for this weapon on a mech, taking modifiers into account
     computeWeaponCooldown() {
@@ -546,6 +570,11 @@ var MechModel = MechModel || (function () {
       let weaponBonus = this.weaponInfo.weaponBonus;
       let heatMultiplier = 1.0 + weaponBonus.heat_multiplier;
       return Number(this.weaponInfo.heat * heatMultiplier);
+    }
+
+    computeJamTime() {
+      //TODO: See if any quirks affect jam time
+      return Number(this.weaponInfo.jamTime);
     }
 
   }
@@ -1556,6 +1585,7 @@ var MechModel = MechModel || (function () {
     MechDamage : MechDamage,
     WeaponDamage : WeaponDamage,
     Mech : Mech,
+    MechInfo : MechInfo,
     WeaponInfo : WeaponInfo,
     BURST_DAMAGE_INTERVAL: BURST_DAMAGE_INTERVAL,
     mechTeams : mechTeams,

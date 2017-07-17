@@ -81,6 +81,11 @@
 //1 Dire vs 3 urbies
 //http://www.4eye-labs.net/mwo-simulator/#s=28d6814ffdec93a52b9bd4311fb3537e5b8c76dfab5743bf1f62c6d661590b5f
 
+//UAC vs AC kodiak DPS
+//meta
+//http://localhost:8181/#s=933c1d28f7b92e05d0257303fc18c254215642d43af6f70998c7ad5df806defd
+//uac5s
+//http://localhost:8181/#s=a967c4f9950ad411b559d2616c9ab3a1092dd6020274f6de1455b82442d23b91
 
 //Punching bag atlas
 //http://mwo.smurfy-net.de/mechlab#i=16&l=d179b763d97e4f962243f707e83b60ce4d785fa1

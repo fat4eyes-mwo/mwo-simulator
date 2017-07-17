@@ -25,7 +25,7 @@ var MechFirePattern = MechFirePattern || (function () {
     for (let weaponState of sortedByDmgPerHeat) {
       let weaponInfo = weaponState.weaponInfo;
       let ammoState = mechState.ammoState;
-      if (!weaponState.isReady()  //not ready to fire
+      if (!canFire(weaponState)  //not ready to fire
           || !willDoDamage(weaponState, range) //will not do damage
           //No ammo
           || (weaponInfo.requiresAmmo() && ammoState.ammoCountForWeapon(weaponInfo.weaponId) <= 0)
@@ -49,7 +49,7 @@ var MechFirePattern = MechFirePattern || (function () {
     let weaponsToFire = [];
     //check if all weapons are ready
     for (let weaponState of mechState.weaponStateList) {
-      if (!weaponState.isReady()) return weaponsToFire;
+      if (!canFire(weaponState)) return weaponsToFire;
     }
     weaponsToFire = Array.from(mechState.weaponStateList);
     if (!willOverheat(mech, weaponsToFire)) {
@@ -63,7 +63,7 @@ var MechFirePattern = MechFirePattern || (function () {
     let mechState = mech.getMechState();
     let weaponsToFire = [];
     for (let weaponState of mechState.weaponStateList) {
-      if (!weaponState.isReady() || !willDoDamage(weaponState, range)) continue;
+      if (!canFire(weaponState) || !willDoDamage(weaponState, range)) continue;
       weaponsToFire.push(weaponState);
       if (willGhostHeat(mech, weaponsToFire) || willOverheat(mech, weaponsToFire)) {
         weaponsToFire.pop();
@@ -116,6 +116,17 @@ var MechFirePattern = MechFirePattern || (function () {
   var willDoDamage = function(weaponState, range) {
     return weaponState.weaponInfo.damageAtRange(range,
                                         MechSimulatorLogic.stepDuration) > 0;
+  }
+
+  //Helper method for determining whether the firepattern can fire a weapon
+  //Uses the useDoubleTap field of SimulatorParameters
+  var canFire = function(weaponState) {
+    let simParams = MechSimulatorLogic.getSimulatorParameters();
+    if (simParams.useDoubleTap) {
+      return weaponState.canFire();
+    } else {
+      return weaponState.isReady();
+    }
   }
 
   var getDefault = function() {

@@ -17,11 +17,20 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   //Interval when ghost heat applies for weapons. 500ms
   const ghostHeatInterval = 500;
 
+  const UACJamMethod = {
+    RANDOM : "random",
+    EXPECTED_VALUE : "expected_value",
+  };
+
   //Parameters of the simulation. Includes range
   class SimulatorParameters {
-    constructor(range, speedFactor = 1) {
+    constructor(range, speedFactor = 1,
+          uacJamMethod = UACJamMethod.RANDOM,
+          useDoubleTap = true) {
       this.range = range;
       this.uiUpdateInterval = Math.floor(DEFAULT_UI_UPDATE_INTERVAL / Number(speedFactor));
+      this.uacJAMMethod = uacJamMethod;
+      this.useDoubleTap = useDoubleTap;
     }
     setSpeedFactor(speedFactor) {
       this.uiUpdateInterval = Math.floor(DEFAULT_UI_UPDATE_INTERVAL / Number(speedFactor));
@@ -246,7 +255,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
 
       //if not ready to fire, proceed to next weapon
       if (!weaponState.active
-          || !(weaponState.weaponCycle === MechModel.WeaponCycle.READY)) {
+          || !weaponState.canFire()) {
         continue;
       }
       //if no ammo, proceed to next weapon
@@ -266,14 +275,35 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
         queueWeaponFire(mech, targetMech, weaponState, 0); //assumes duration weapons don't consume ammo
       } else {
         //if weapon has no duration, set state to FIRING, will go to cooldown on the next step
-        weaponState.gotoState(MechModel.WeaponCycle.FIRING);
-        weaponsFired.push(weaponState);
-        let ammoConsumed = 0;
-        if (weaponInfo.requiresAmmo()) {
-          ammoConsumed = mechState.ammoState.consumeAmmo(weaponInfo.weaponId,
-                                                        weaponInfo.ammoPerShot);
+        let weaponFired = false;
+        if (weaponState.weaponCycle === MechModel.WeaponCycle.READY) {
+          weaponState.gotoState(MechModel.WeaponCycle.FIRING);
+          weaponFired = true;
+        } else if (weaponState.weaponCycle === MechModel.WeaponCycle.COOLDOWN) {
+          //DOUBLE TAP
+          console.log("Double tap: " + weaponState.weaponInfo.name);
+          //check jam chance
+          let rand = Math.random();
+          if (rand <= Number(weaponState.weaponInfo.jamChance)) {
+          // if (true) {
+            //JAM
+            console.log("Jam: " + weaponState.weaponInfo.name);
+            weaponState.gotoState(MechModel.WeaponCycle.JAMMED);
+            weaponFired = false;
+          } else {
+            weaponState.currShotsDuringCooldown -= 1;
+            weaponFired = true;
+          }
         }
-        queueWeaponFire(mech, targetMech, weaponState, ammoConsumed);
+        if (weaponFired) {
+          weaponsFired.push(weaponState);
+          let ammoConsumed = 0;
+          if (weaponInfo.requiresAmmo()) {
+            ammoConsumed = mechState.ammoState.consumeAmmo(weaponInfo.weaponId,
+                                                          weaponInfo.ammoPerShot);
+          }
+          queueWeaponFire(mech, targetMech, weaponState, ammoConsumed);
+        }
       }
 
       mechState.updateTypes[MechModel.UpdateType.COOLDOWN] = true;
@@ -369,6 +399,15 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
         weaponState.cooldownLeft = Math.max(newCooldownLeft, 0);
         if (weaponState.cooldownLeft <= 0) {
           weaponState.gotoState(MechModel.WeaponCycle.READY);
+          mechState.updateTypes[MechModel.UpdateType.WEAPONSTATE] = true;
+        }
+        mechState.updateTypes[MechModel.UpdateType.COOLDOWN] = true;
+      } else if (weaponState.weaponCycle === MechModel.WeaponCycle.JAMMED) {
+        let newJamLeft = Number(weaponState.jamLeft) - stepDuration;
+        weaponState.jamLeft = Math.max(newJamLeft, 0);
+        if (weaponState.jamLeft <= 0) {
+          weaponState.gotoState(MechModel.WeaponCycle.COOLDOWN);
+          weaponState.cooldownLeft += newJamLeft;
           mechState.updateTypes[MechModel.UpdateType.WEAPONSTATE] = true;
         }
         mechState.updateTypes[MechModel.UpdateType.COOLDOWN] = true;
@@ -525,9 +564,24 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
       && (simTime - ghostHeatWeapons[0].timeFired > ghostHeatInterval)) {
       ghostHeatWeapons.shift();
     }
-
-    let ghostHeatEntry = new GhostHeatEntry(simTime, weaponState);
-    ghostHeatWeapons.push(ghostHeatEntry);
+    //see if any of the remaining entries are from the same weapon. In that case
+    //just update the time fired field instead of adding a new entry
+    let addNewEntry = true;
+    for (let ghostHeatIdx in ghostHeatWeapons) {
+      let ghostHeatEntry = ghostHeatWeapons[ghostHeatIdx];
+      if (ghostHeatEntry.weaponState === weaponState) {
+        //update time, remove from array and put at the end of the queue
+        ghostHeatEntry.timeFired = simTime;
+        ghostHeatWeapons.splice(ghostHeatIdx, 1);
+        ghostHeatWeapons.push(ghostHeatEntry);
+        addNewEntry = false;
+        break;
+      }
+    }
+    if (addNewEntry) {
+      let ghostHeatEntry = new GhostHeatEntry(simTime, weaponState);
+      ghostHeatWeapons.push(ghostHeatEntry);
+    }
 
     //calcluate ghost heat
     let ghostHeat = 0;

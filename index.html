@@ -48,7 +48,38 @@
   </head>
   <body>
     <div class="row">
-      <div id="controlPanel" class="column column-2 controlPanel">
+      <div id="controlPanelContainer" class="column column-2">
+      </div>
+      <div class="column column-10">
+        <div class="row teamStatsNav">
+          <div class="column column-6">
+            <div id="blueTeamStatsContainer" class="teamStats"></div>
+          </div>
+          <div class="column column-6">
+            <div id="redTeamStatsContainer" class="teamStats"></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="column column-6 bluePanel">
+            <div id="blueTeam" class="mechPanelList"></div>
+            &nbsp;
+          </div>
+          <div class="column column-6 redPanel">
+            <div id="redTeam" class="mechPanelList"></div>
+            &nbsp;
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="mechModalScreen" class="modalScreen">
+      <div id="mechModalDialog" class="modalDialog">
+      </div>
+    </div>
+
+    <!-- Templates  -->
+    <!-- Control panel template -->
+    <template id="controlPanel-template">
+      <div id="controlPanel" class="controlPanel">
         <div class="row branding">
           <span class="brandingTitle stylishText">MWO</span>
           <span class="tm">&#8482; </span>
@@ -148,33 +179,8 @@
           <div id = "debugText" class="debugText row"></div>
         </div>
       </div>
-      <div class="column column-10">
-        <div class="row teamStatsNav">
-          <div class="column column-6">
-            <div id="blueTeamStatsContainer" class="teamStats"></div>
-          </div>
-          <div class="column column-6">
-            <div id="redTeamStatsContainer" class="teamStats"></div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="column column-6 bluePanel">
-            <div id="blueTeam" class="mechPanelList"></div>
-            &nbsp;
-          </div>
-          <div class="column column-6 redPanel">
-            <div id="redTeam" class="mechPanelList"></div>
-            &nbsp;
-          </div>
-        </div>
-      </div>
-    </div>
-    <div id="mechModalScreen" class="modalScreen">
-      <div id="mechModalDialog" class="modalDialog">
-      </div>
-    </div>
+    </template>
 
-    <!-- Templates  -->
     <!-- Paper doll template -->
     <!--  Note: the data-location string here is intended to be identical to
   the component ids in smurfy's api.

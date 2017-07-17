@@ -503,11 +503,18 @@ var MechView = MechView || (function() {
   }
 
   var initView = function() {
+    initControlPanel();
     MechViewTeamStats.initPatternTypes();
     initRangeInput();
     initSpeedControl();
     initStateControl();
     initMiscControl();
+  }
+
+  var initControlPanel = function() {
+    let controlPanelDiv = MechViewWidgets.cloneTemplate("controlPanel-template");
+    $(controlPanelDiv)
+      .appendTo("#controlPanelContainer");
   }
 
   var initRangeInput = function() {

@@ -78,6 +78,8 @@ var MechModelView = MechModelView || (function() {
         cooldownPercent = Number(weaponState.cooldownLeft) / Number(weaponInfo.cooldown);
       } else if (weaponState.weaponCycle === MechModel.WeaponCycle.SPOOLING) {
         cooldownPercent = 1 - (Number(weaponState.spoolupLeft) / Number(weaponInfo.spinup));
+      } else if (weaponState.weaponCycle === MechModel.WeaponCycle.JAMMED) {
+        cooldownPercent = 1;
       }
       MechView.setWeaponCooldown(mech.getMechId(), weaponIndex, cooldownPercent);
     }

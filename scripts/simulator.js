@@ -54,7 +54,7 @@ var MechSimulator = MechSimulator || (function() {
     // MechTest.testUIWidgets();
     // MechTest.testModelInit();
     // MechTest.testModelOps();
-    //MechTest.testModelBaseHealth();
+    // MechTest.testModelBaseHealth();
     // MechTest.testModelView();
     // MechTest.testDamageAtRange();
     // MechTest.testListQuirks();
