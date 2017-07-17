@@ -4,36 +4,37 @@
 var MechViewReport = MechViewReport || (function() {
 
   class VictoryReport {
-    constructor(containerId) {
+    //this.domElement: contains the element root of the report
+    constructor() {
       let victoryReportDiv =
           MechViewWidgets.cloneTemplate("victoryReport-template");
-      $(victoryReportDiv)
-        .attr("id", "victoryReport")
-        .appendTo("#" + containerId);
+      let reportJQ =$(victoryReportDiv).attr("id", "victoryReport");
+      this.domElement = victoryReportDiv;
 
-      $("#victoryReport [class~=closeReportButton]")
+      reportJQ.find("[class~=closeReportButton]")
         .click(() => {
           MechViewReport.hideVictoryReport();
         });
 
       let victorTeam = MechModelView.getVictorTeam();
       if (victorTeam) {
-        $("#victoryReport [class~=victorTitle]")
+        reportJQ.find("[class~=victorTitle]")
           .addClass(victorTeam)
           .html(TeamReport.prototype.translateTeamName(victorTeam) + " Victory");
       } else {
-        $("#victoryReport [class~=victorTitle]").html("Draw");
+        reportJQ.find("[class~=victorTitle]").html("Draw");
       }
 
       let simParams = MechModelView.getSimulatorParameters();
-      $("#victoryReport [class~=rangeValue]")
+      reportJQ.find("[class~=rangeValue]")
         .html(Number(simParams.range).toFixed(0) + "m");
 
       let teamList = [MechModel.Team.BLUE, MechModel.Team.RED];
       for (let team of teamList) {
-        $("#victoryReport [class~="+ this.teamReportPanelId(team) + "]")
-          .attr("id", this.teamReportPanelId(team));
-        let teamReport = new TeamReport(team, this.teamReportPanelId(team));
+        let teamReport = new TeamReport(team);
+        reportJQ.find("[class~="+ this.teamReportPanelId(team) + "]")
+          .attr("id", this.teamReportPanelId(team))
+          .append(teamReport.domElement);
       }
     }
 
@@ -43,35 +44,40 @@ var MechViewReport = MechViewReport || (function() {
   }
 
   class TeamReport {
-    constructor(team, containerId) {
+    //this.domElement : contains the element root of the team report
+    constructor(team) {
       let teamReport = MechModelView.getTeamReport(team);
       let teamReportDiv = MechViewWidgets.cloneTemplate("teamReport-template");
-      $(teamReportDiv)
-        .attr("id", this.teamReportId(team))
-        .addClass(team)
-        .appendTo("#" + containerId);
+      let teamReportJQ = $(teamReportDiv)
+                            .attr("id", this.teamReportId(team))
+                            .addClass(team);
+      this.domElement = teamReportDiv;
 
       let teamReportId = this.teamReportId(team);
-      $("#" + teamReportId + " [class~=teamName]")
+      teamReportJQ.find("[class~=teamName]")
         .html(this.translateTeamName(team) + " team");
 
       let totalDamage = teamReport.getTotalDamage();
       let dps = teamReport.getDPS();
       let maxBurst = teamReport.getMaxBurst();
-      $("#" + teamReportId + " [class~=damage]")
+      teamReportJQ.find("[class~=damage]")
         .html(Number(totalDamage).toFixed(1));
-      $("#" + teamReportId + " [class~=dps]")
+      teamReportJQ.find("[class~=dps]")
         .html(Number(dps).toFixed(1))
-      $("#" + teamReportId + " [class~=maxBurst]")
+      teamReportJQ.find("[class~=maxBurst]")
         .html(Number(maxBurst).toFixed(1));
+
+      let mechBreakdown = new MechBreakdownTable(teamReport);
       let mechBreakdownDivId = this.mechBreakdownId(team);
-      $("#" + teamReportId + " [class~=mechBreakdownContainer]")
-        .attr("id", mechBreakdownDivId);
-      let mechBreakdown = new MechBreakdownTable(teamReport, mechBreakdownDivId);
+      teamReportJQ.find("[class~=mechBreakdownContainer]")
+              .attr("id", mechBreakdownDivId)
+              .append(mechBreakdown.domElement);
+
+      let weaponBreakdown = new WeaponBreakdownTable(teamReport);
       let weaponBreakdownDivId = this.weaponBreakdownId(team);
-      $("#" + teamReportId + " [class~=weaponBreakdownContainer]")
-        .attr("id", weaponBreakdownDivId);
-      let weaponBreakdown = new WeaponBreakdownTable(teamReport, weaponBreakdownDivId);
+      let weaponBreakdownJQ = teamReportJQ.find("[class~=weaponBreakdownContainer]")
+        .attr("id", weaponBreakdownDivId)
+        .append(weaponBreakdown.domElement);
     }
 
     teamReportId(team) {
@@ -98,19 +104,22 @@ var MechViewReport = MechViewReport || (function() {
   }
 
   class MechBreakdownTable {
+    //this.domElement : the root element of the table
     constructor(teamReport, containerId) {
+      let tableDiv = MechViewWidgets.cloneTemplate("mechBreakdownTable-template");
+      this.domElement = tableDiv;
       //header
       let mechBreakdownHeaderDiv =
           MechViewWidgets.cloneTemplate("mechBreakdownHeader-template");
       $(mechBreakdownHeaderDiv)
         .removeAttr("id")
-        .appendTo("#" + containerId);
+        .appendTo(tableDiv);
       for (let mechReport of teamReport.mechReports) {
         let mechBreakdownRowDiv =
             MechViewWidgets.cloneTemplate("mechBreakdownRow-template");
         let rowJQ = $(mechBreakdownRowDiv)
                       .removeAttr("id")
-                      .appendTo("#" + containerId);
+                      .appendTo(tableDiv);
         rowJQ.find("[class~=name]")
           .html(mechReport.mechName);
         rowJQ.find("[class~=damage]")
@@ -128,19 +137,22 @@ var MechViewReport = MechViewReport || (function() {
   }
 
   class WeaponBreakdownTable {
+    //this.domElement: the root Element of the table
     constructor(teamReport, containerId) {
+      let tableDiv = MechViewWidgets.cloneTemplate("weaponBreakdownTable-template");
+      this.domElement = tableDiv;
       let weaponBreakdownHeaderDiv =
           MechViewWidgets.cloneTemplate("weaponBreakdownHeader-template");
       $(weaponBreakdownHeaderDiv)
         .removeAttr("id")
-        .appendTo("#" + containerId);
+        .appendTo(tableDiv);
       let teamWeaponStats = teamReport.getWeaponStats();
       for (let weaponStatEntry of teamWeaponStats) {
         let weaponBreakdownRowDiv =
             MechViewWidgets.cloneTemplate("weaponBreakdownRow-template");
         let rowJQ = $(weaponBreakdownRowDiv)
                       .removeAttr("id")
-                      .appendTo("#" + containerId);
+                      .appendTo(tableDiv);
         rowJQ.find("[class~=name]").html(weaponStatEntry.name);
         rowJQ.find("[class~=damage]").html(Number(weaponStatEntry.damage).toFixed(1));
         //TODO: Fix DPS per weapon calculation
@@ -151,18 +163,13 @@ var MechViewReport = MechViewReport || (function() {
   }
 
   var showVictoryReport = function() {
-    $("#" + MechView.MODAL_DIALOG_ID)
-      .addClass("wide")
-      .empty();
-
-    let teamReport = new MechViewReport.VictoryReport(MechView.MODAL_DIALOG_ID);
-
-    $("#" + MechView.MODAL_SCREEN_ID).css("display", "block");
+    let teamReport = new MechViewReport.VictoryReport();
+    MechViewWidgets.setModal(teamReport.domElement, "wide");
+    MechViewWidgets.showModal();
   }
 
   var hideVictoryReport = function() {
-    $("#" + MechView.MODAL_SCREEN_ID).css("display", "none");
-    $("#" + MechView.MODAL_DIALOG_ID).removeClass("wide").empty();
+    MechViewWidgets.hideModal("wide");
   }
 
   return {

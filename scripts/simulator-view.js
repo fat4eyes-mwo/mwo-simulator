@@ -451,8 +451,6 @@ var MechView = MechView || (function() {
 
 
 
-  const MODAL_SCREEN_ID = "mechModalScreen";
-  const MODAL_DIALOG_ID = "mechModalDialog";
 
   var DeleteMechButton_Handler = function(context) {
     var clickContext = context;
@@ -688,12 +686,11 @@ var MechView = MechView || (function() {
   var loadingScreenAnimateInterval;
   const LOADING_SCREEN_ANIMATE_INTERVAL = 200; //ms
   var showLoadingScreen = function() {
-    $("#" + MODAL_DIALOG_ID).empty();
     let loadingScreenDiv =
         MechViewWidgets.cloneTemplate("loadingScreen-template");
     $(loadingScreenDiv)
-      .attr("id", "loadingScreenContainer")
-      .appendTo("#" + MODAL_DIALOG_ID);
+      .attr("id", "loadingScreenContainer");
+    MechViewWidgets.setModal(loadingScreenDiv);
 
     addPaperDoll(LOADING_SCREEN_MECH_ID, "loadingScreenPaperDollContainer");
     for (let componentIdx in MechModel.Component) {
@@ -719,12 +716,11 @@ var MechView = MechView || (function() {
       , LOADING_SCREEN_ANIMATE_INTERVAL);
 
     updateLoadingScreenProgress(0);
-    $("#" + MODAL_SCREEN_ID).css("display", "block");
+    MechViewWidgets.showModal();
   }
 
   var hideLoadingScreen = function() {
-    $("#" + MODAL_SCREEN_ID).css("display", "none");
-    $("#" + MODAL_DIALOG_ID).empty();
+    MechViewWidgets.hideModal();
     window.clearInterval(loadingScreenAnimateInterval);
   }
 
@@ -770,7 +766,5 @@ var MechView = MechView || (function() {
     updateOnLoadAppState: updateOnLoadAppState,
     updateOnLoadAppError: updateOnLoadAppError,
 
-    MODAL_SCREEN_ID: MODAL_SCREEN_ID,
-    MODAL_DIALOG_ID: MODAL_DIALOG_ID,
   };
 })();//namespace

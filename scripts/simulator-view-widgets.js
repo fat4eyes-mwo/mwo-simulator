@@ -76,9 +76,41 @@ var MechViewWidgets = MechViewWidgets || (function() {
     return templateElement.firstElementChild;
   }
 
+  const MODAL_SCREEN_ID = "mechModalScreen";
+  const MODAL_DIALOG_ID = "mechModalDialog";
+
+  //sets the content of the modal dialog to element, while optionally adding
+  //a class to the dialog container
+  var setModal = function(element, dialogClass = null) {
+    let dialogJQ = $("#" + MODAL_DIALOG_ID);
+    dialogJQ.empty();
+    if (dialogClass) {
+      dialogJQ.addClass(dialogClass);
+    }
+    dialogJQ.append(element);
+  }
+
+  var showModal = function() {
+    $("#" + MODAL_SCREEN_ID).css("display", "block");
+  }
+
+  //hides the modal dialog, while optionally removing a class from the dialog
+  //container
+  var hideModal = function(dialogClass = null) {
+    $("#" + MODAL_SCREEN_ID).css("display", "none");
+    let dialogJQ = $("#" + MODAL_DIALOG_ID);
+    dialogJQ.empty();
+    if (dialogClass) {
+      dialogJQ.removeClass(dialogClass);
+    }
+  }
+
   return {
     Tooltip : Tooltip,
     MechButton: MechButton,
     cloneTemplate: cloneTemplate,
+    setModal : setModal,
+    showModal : showModal,
+    hideModal : hideModal,
   }
 })();

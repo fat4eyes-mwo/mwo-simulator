@@ -4,6 +4,7 @@
 - save team settings?
 - LBX damage spread
 - UAC double tap (expected value and setting to allow user to enable/disable)
+- Mech details panel (quirk list, later on damage graphs)
 - Omnipod set quirks
 - ATM damage computation
 - RAC mechanics
