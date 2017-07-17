@@ -9,6 +9,7 @@
 - RAC mechanics
 - Rocket launcher ammo
 - HMG/LMG dps/ammo computation
+- Mech details display (quirks, weapon damage summary)
 - Ambient heat effects
 - MG crit effects (just added damage)
 - LBX crit effects (just the added damage)
