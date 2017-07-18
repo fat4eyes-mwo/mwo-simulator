@@ -16135,32 +16135,32 @@ var DummyMechData = {
 				"translated_name": "MISSILE COOLDOWN",
 				"value": -0.2
 			}, {
-				"name": "internalresist_ct_additive",
-				"translated_name": "BASE STRUCTURE (CT)",
+				"name": "armorresist_ct_additive",
+				"translated_name": "BASE ARMOR (CT)",
 				"value": 20
 			}, {
-				"name": "internalresist_lt_additive",
-				"translated_name": "BASE STRUCTURE (LT)",
+				"name": "armorresist_lt_additive",
+				"translated_name": "BASE ARMOR (LT)",
 				"value": 14
 			}, {
-				"name": "internalresist_rt_additive",
-				"translated_name": "BASE STRUCTURE (RT)",
+				"name": "armorresist_rt_additive",
+				"translated_name": "BASE ARMOR (RT)",
 				"value": 14
 			}, {
-				"name": "internalresist_la_additive",
-				"translated_name": "BASE STRUCTURE (LA)",
+				"name": "armorresist_la_additive",
+				"translated_name": "BASE ARMOR (LA)",
 				"value": 15
 			}, {
-				"name": "internalresist_ra_additive",
-				"translated_name": "BASE STRUCTURE (RA)",
+				"name": "armorresist_ra_additive",
+				"translated_name": "BASE ARMOR (RA)",
 				"value": 15
 			}, {
-				"name": "internalresist_ll_additive",
-				"translated_name": "BASE STRUCTURE (LL)",
+				"name": "armorresist_ll_additive",
+				"translated_name": "BASE ARMOR (LL)",
 				"value": 14
 			}, {
-				"name": "internalresist_rl_additive",
-				"translated_name": "BASE STRUCTURE (RL)",
+				"name": "armorresist_rl_additive",
+				"translated_name": "BASE ARMOR (RL)",
 				"value": 14
 			}]
 		}
@@ -45378,6 +45378,2104 @@ var DummyMechData = {
 			}]
 		}
 	},
+	"559": {
+		"id": "559",
+		"name": "uzl-3s",
+		"faction": "InnerSphere",
+		"mech_type": "medium",
+		"family": "uziel",
+		"chassis_translated": "UZIEL",
+		"translated_name": "UZL-3S",
+		"translated_short_name": "UZL-3S",
+		"details": {
+			"type": "",
+			"tons": "50",
+			"top_speed": 126.36,
+			"jump_jets": 6,
+			"ecm": false,
+			"masc": false,
+			"tech_slots": "1",
+			"weapon_mod_slots": "2",
+			"consumable_slots": "1",
+			"engine_range": {
+				"min": 100,
+				"max": 390
+			},
+			"hardpoints": {
+				"ams": 1,
+				"beam": 4,
+				"ballistic": 1,
+				"missle": 1,
+				"ecm": 0
+			},
+			"tuning_config": {
+				"MovementArchetype": "Medium",
+				"MaxMovementSpeed": "16.2",
+				"TorsoTurnSpeedYaw": "117",
+				"TorsoTurnSpeedPitch": "73.13",
+				"ArmTurnSpeedYaw": "292.5",
+				"ArmTurnSpeedPitch": "292.5",
+				"TurnLerpLowRate": "1.63",
+				"TurnLerpMidRate": "1.14",
+				"TurnLerpHighRate": ".87",
+				"AccelLerpLowRate": "169.7",
+				"AccelLerpMidRate": "38.48",
+				"AccelLerpHighRate": "22.63",
+				"DecelLerpLowRate": "142.01",
+				"DecelLerpMidRate": "2150",
+				"DecelLerpHighRate": "2150",
+				"ReverseSpeedMultiplier": "0.666",
+				"MaxTorsoAngleYaw": "125",
+				"MaxTorsoAnglePitch": "35",
+				"MaxArmRotationYaw": "40",
+				"MaxArmRotationPitch": "35",
+				"TurnLerpLowSpeed": "0",
+				"TurnLerpMidSpeed": "0.666",
+				"TurnLerpHighSpeed": "1.0",
+				"DecelLerpLowSpeed": "0",
+				"DecelLerpMidSpeed": "0.666",
+				"DecelLerpHighSpeed": "1.0",
+				"AccelLerpLowSpeed": "0",
+				"AccelLerpMidSpeed": "0.666",
+				"AccelLerpHighSpeed": "1.0",
+				"MaxFreeLookYaw": "60",
+				"MaxFreeLookPitch": "40",
+				"JumpJetSpread": "1.9375"
+			},
+			"price": {
+				"id": 559,
+				"mc": -1,
+				"cb": -1
+			},
+			"max_armor": 338,
+			"quirks": [{
+				"name": "missile_cooldown_multiplier",
+				"translated_name": "MISSILE COOLDOWN",
+				"value": -0.15
+			}, {
+				"name": "ballistic_cooldown_multiplier",
+				"translated_name": "BALLISTIC COOLDOWN",
+				"value": -0.1
+			}]
+		}
+	},
+	"560": {
+		"id": "560",
+		"name": "uzl-2s",
+		"faction": "InnerSphere",
+		"mech_type": "medium",
+		"family": "uziel",
+		"chassis_translated": "UZIEL",
+		"translated_name": "UZL-2S",
+		"translated_short_name": "UZL-2S",
+		"details": {
+			"type": "",
+			"tons": "50",
+			"top_speed": 126.36,
+			"jump_jets": 6,
+			"ecm": false,
+			"masc": false,
+			"tech_slots": "1",
+			"weapon_mod_slots": "2",
+			"consumable_slots": "1",
+			"engine_range": {
+				"min": 100,
+				"max": 390
+			},
+			"hardpoints": {
+				"ams": 1,
+				"beam": 3,
+				"ballistic": 2,
+				"missle": 1,
+				"ecm": 0
+			},
+			"tuning_config": {
+				"MovementArchetype": "Medium",
+				"MaxMovementSpeed": "16.2",
+				"TorsoTurnSpeedYaw": "117",
+				"TorsoTurnSpeedPitch": "73.13",
+				"ArmTurnSpeedYaw": "292.5",
+				"ArmTurnSpeedPitch": "292.5",
+				"TurnLerpLowRate": "1.63",
+				"TurnLerpMidRate": "1.14",
+				"TurnLerpHighRate": ".87",
+				"AccelLerpLowRate": "169.7",
+				"AccelLerpMidRate": "38.48",
+				"AccelLerpHighRate": "22.63",
+				"DecelLerpLowRate": "142.01",
+				"DecelLerpMidRate": "2150",
+				"DecelLerpHighRate": "2150",
+				"ReverseSpeedMultiplier": "0.666",
+				"MaxTorsoAngleYaw": "125",
+				"MaxTorsoAnglePitch": "35",
+				"MaxArmRotationYaw": "40",
+				"MaxArmRotationPitch": "35",
+				"TurnLerpLowSpeed": "0",
+				"TurnLerpMidSpeed": "0.666",
+				"TurnLerpHighSpeed": "1.0",
+				"DecelLerpLowSpeed": "0",
+				"DecelLerpMidSpeed": "0.666",
+				"DecelLerpHighSpeed": "1.0",
+				"AccelLerpLowSpeed": "0",
+				"AccelLerpMidSpeed": "0.666",
+				"AccelLerpHighSpeed": "1.0",
+				"MaxFreeLookYaw": "60",
+				"MaxFreeLookPitch": "40",
+				"JumpJetSpread": "1.9375"
+			},
+			"price": {
+				"id": 560,
+				"mc": -1,
+				"cb": -1
+			},
+			"max_armor": 338,
+			"quirks": [{
+				"name": "missile_cooldown_multiplier",
+				"translated_name": "MISSILE COOLDOWN",
+				"value": -0.15
+			}, {
+				"name": "ppc_velocity_multiplier",
+				"translated_name": "PPC VELOCITY",
+				"value": 0.2
+			}, {
+				"name": "ismachinegun_rof_multiplier",
+				"translated_name": "MACHINE GUN ROF",
+				"value": 0.2
+			}]
+		}
+	},
+	"561": {
+		"id": "561",
+		"name": "uzl-3p",
+		"faction": "InnerSphere",
+		"mech_type": "medium",
+		"family": "uziel",
+		"chassis_translated": "UZIEL",
+		"translated_name": "UZL-3P",
+		"translated_short_name": "UZL-3P",
+		"details": {
+			"type": "",
+			"tons": "50",
+			"top_speed": 126.36,
+			"jump_jets": 6,
+			"ecm": false,
+			"masc": false,
+			"tech_slots": "1",
+			"weapon_mod_slots": "2",
+			"consumable_slots": "1",
+			"engine_range": {
+				"min": 100,
+				"max": 390
+			},
+			"hardpoints": {
+				"ams": 1,
+				"beam": 2,
+				"ballistic": 3,
+				"missle": 1,
+				"ecm": 0
+			},
+			"tuning_config": {
+				"MovementArchetype": "Medium",
+				"MaxMovementSpeed": "16.2",
+				"TorsoTurnSpeedYaw": "117",
+				"TorsoTurnSpeedPitch": "73.13",
+				"ArmTurnSpeedYaw": "292.5",
+				"ArmTurnSpeedPitch": "292.5",
+				"TurnLerpLowRate": "1.63",
+				"TurnLerpMidRate": "1.14",
+				"TurnLerpHighRate": ".87",
+				"AccelLerpLowRate": "169.7",
+				"AccelLerpMidRate": "38.48",
+				"AccelLerpHighRate": "22.63",
+				"DecelLerpLowRate": "142.01",
+				"DecelLerpMidRate": "2150",
+				"DecelLerpHighRate": "2150",
+				"ReverseSpeedMultiplier": "0.666",
+				"MaxTorsoAngleYaw": "125",
+				"MaxTorsoAnglePitch": "35",
+				"MaxArmRotationYaw": "40",
+				"MaxArmRotationPitch": "35",
+				"TurnLerpLowSpeed": "0",
+				"TurnLerpMidSpeed": "0.666",
+				"TurnLerpHighSpeed": "1.0",
+				"DecelLerpLowSpeed": "0",
+				"DecelLerpMidSpeed": "0.666",
+				"DecelLerpHighSpeed": "1.0",
+				"AccelLerpLowSpeed": "0",
+				"AccelLerpMidSpeed": "0.666",
+				"AccelLerpHighSpeed": "1.0",
+				"MaxFreeLookYaw": "60",
+				"MaxFreeLookPitch": "40",
+				"JumpJetSpread": "1.9375"
+			},
+			"price": {
+				"id": 561,
+				"mc": -1,
+				"cb": -1
+			},
+			"max_armor": 338,
+			"quirks": [{
+				"name": "missile_cooldown_multiplier",
+				"translated_name": "MISSILE COOLDOWN",
+				"value": -0.15
+			}]
+		}
+	},
+	"562": {
+		"id": "562",
+		"name": "uzl-5p",
+		"faction": "InnerSphere",
+		"mech_type": "medium",
+		"family": "uziel",
+		"chassis_translated": "UZIEL",
+		"translated_name": "UZL-5P",
+		"translated_short_name": "UZL-5P",
+		"details": {
+			"type": "",
+			"tons": "50",
+			"top_speed": 126.36,
+			"jump_jets": 6,
+			"ecm": false,
+			"masc": false,
+			"tech_slots": "1",
+			"weapon_mod_slots": "2",
+			"consumable_slots": "1",
+			"engine_range": {
+				"min": 100,
+				"max": 390
+			},
+			"hardpoints": {
+				"ams": 1,
+				"beam": 2,
+				"ballistic": 2,
+				"missle": 2,
+				"ecm": 0
+			},
+			"tuning_config": {
+				"MovementArchetype": "Medium",
+				"MaxMovementSpeed": "16.2",
+				"TorsoTurnSpeedYaw": "117",
+				"TorsoTurnSpeedPitch": "73.13",
+				"ArmTurnSpeedYaw": "292.5",
+				"ArmTurnSpeedPitch": "292.5",
+				"TurnLerpLowRate": "1.63",
+				"TurnLerpMidRate": "1.14",
+				"TurnLerpHighRate": ".87",
+				"AccelLerpLowRate": "169.7",
+				"AccelLerpMidRate": "38.48",
+				"AccelLerpHighRate": "22.63",
+				"DecelLerpLowRate": "142.01",
+				"DecelLerpMidRate": "2150",
+				"DecelLerpHighRate": "2150",
+				"ReverseSpeedMultiplier": "0.666",
+				"MaxTorsoAngleYaw": "125",
+				"MaxTorsoAnglePitch": "35",
+				"MaxArmRotationYaw": "40",
+				"MaxArmRotationPitch": "35",
+				"TurnLerpLowSpeed": "0",
+				"TurnLerpMidSpeed": "0.666",
+				"TurnLerpHighSpeed": "1.0",
+				"DecelLerpLowSpeed": "0",
+				"DecelLerpMidSpeed": "0.666",
+				"DecelLerpHighSpeed": "1.0",
+				"AccelLerpLowSpeed": "0",
+				"AccelLerpMidSpeed": "0.666",
+				"AccelLerpHighSpeed": "1.0",
+				"MaxFreeLookYaw": "60",
+				"MaxFreeLookPitch": "40",
+				"JumpJetSpread": "1.9375"
+			},
+			"price": {
+				"id": 562,
+				"mc": -1,
+				"cb": -1
+			},
+			"max_armor": 340,
+			"quirks": [{
+				"name": "ultraautocannon_jamchance_multiplier",
+				"translated_name": "UAC JAM CHANCE",
+				"value": -0.2
+			}, {
+				"name": "erlaser_cooldown_multiplier",
+				"translated_name": "ER LASER COOLDOWN",
+				"value": -0.1
+			}]
+		}
+	},
+	"563": {
+		"id": "563",
+		"name": "uzl-6p",
+		"faction": "InnerSphere",
+		"mech_type": "medium",
+		"family": "uziel",
+		"chassis_translated": "UZIEL",
+		"translated_name": "UZL-6P",
+		"translated_short_name": "UZL-6P",
+		"details": {
+			"type": "",
+			"tons": "50",
+			"top_speed": 105.3,
+			"jump_jets": 6,
+			"ecm": false,
+			"masc": false,
+			"tech_slots": "1",
+			"weapon_mod_slots": "2",
+			"consumable_slots": "1",
+			"engine_range": {
+				"min": 100,
+				"max": 325
+			},
+			"hardpoints": {
+				"ams": 1,
+				"beam": 6,
+				"ballistic": 0,
+				"missle": 0,
+				"ecm": 0
+			},
+			"tuning_config": {
+				"MovementArchetype": "Medium",
+				"MaxMovementSpeed": "16.2",
+				"TorsoTurnSpeedYaw": "117",
+				"TorsoTurnSpeedPitch": "73.13",
+				"ArmTurnSpeedYaw": "292.5",
+				"ArmTurnSpeedPitch": "292.5",
+				"TurnLerpLowRate": "1.63",
+				"TurnLerpMidRate": "1.14",
+				"TurnLerpHighRate": ".87",
+				"AccelLerpLowRate": "169.7",
+				"AccelLerpMidRate": "38.48",
+				"AccelLerpHighRate": "22.63",
+				"DecelLerpLowRate": "142.01",
+				"DecelLerpMidRate": "2150",
+				"DecelLerpHighRate": "2150",
+				"ReverseSpeedMultiplier": "0.666",
+				"MaxTorsoAngleYaw": "125",
+				"MaxTorsoAnglePitch": "35",
+				"MaxArmRotationYaw": "40",
+				"MaxArmRotationPitch": "35",
+				"TurnLerpLowSpeed": "0",
+				"TurnLerpMidSpeed": "0.666",
+				"TurnLerpHighSpeed": "1.0",
+				"DecelLerpLowSpeed": "0",
+				"DecelLerpMidSpeed": "0.666",
+				"DecelLerpHighSpeed": "1.0",
+				"AccelLerpLowSpeed": "0",
+				"AccelLerpMidSpeed": "0.666",
+				"AccelLerpHighSpeed": "1.0",
+				"MaxFreeLookYaw": "60",
+				"MaxFreeLookPitch": "40",
+				"JumpJetSpread": "1.9375"
+			},
+			"price": {
+				"id": 563,
+				"mc": -1,
+				"cb": -1
+			},
+			"max_armor": 338,
+			"quirks": [{
+				"name": "ismachinegun_rof_multiplier",
+				"translated_name": "MACHINE GUN ROF",
+				"value": 0.2
+			}, {
+				"name": "energy_cooldown_multiplier",
+				"translated_name": "ENERGY COOLDOWN",
+				"value": -0.1
+			}]
+		}
+	},
+	"564": {
+		"id": "564",
+		"name": "uzl-be",
+		"faction": "InnerSphere",
+		"mech_type": "medium",
+		"family": "uziel",
+		"chassis_translated": "UZIEL",
+		"translated_name": "BELIAL",
+		"translated_short_name": "UZL-BE",
+		"details": {
+			"type": "Hero",
+			"tons": "50",
+			"top_speed": 126.36,
+			"jump_jets": 6,
+			"ecm": false,
+			"masc": false,
+			"tech_slots": "1",
+			"weapon_mod_slots": "2",
+			"consumable_slots": "1",
+			"engine_range": {
+				"min": 100,
+				"max": 390
+			},
+			"hardpoints": {
+				"ams": 1,
+				"beam": 4,
+				"ballistic": 0,
+				"missle": 2,
+				"ecm": 0
+			},
+			"tuning_config": {
+				"MovementArchetype": "Medium",
+				"MaxMovementSpeed": "16.2",
+				"TorsoTurnSpeedYaw": "117",
+				"TorsoTurnSpeedPitch": "73.13",
+				"ArmTurnSpeedYaw": "292.5",
+				"ArmTurnSpeedPitch": "292.5",
+				"TurnLerpLowRate": "1.63",
+				"TurnLerpMidRate": "1.14",
+				"TurnLerpHighRate": ".87",
+				"AccelLerpLowRate": "169.7",
+				"AccelLerpMidRate": "38.48",
+				"AccelLerpHighRate": "22.63",
+				"DecelLerpLowRate": "142.01",
+				"DecelLerpMidRate": "2150",
+				"DecelLerpHighRate": "2150",
+				"ReverseSpeedMultiplier": "0.666",
+				"MaxTorsoAngleYaw": "125",
+				"MaxTorsoAnglePitch": "35",
+				"MaxArmRotationYaw": "40",
+				"MaxArmRotationPitch": "35",
+				"TurnLerpLowSpeed": "0",
+				"TurnLerpMidSpeed": "0.666",
+				"TurnLerpHighSpeed": "1.0",
+				"DecelLerpLowSpeed": "0",
+				"DecelLerpMidSpeed": "0.666",
+				"DecelLerpHighSpeed": "1.0",
+				"AccelLerpLowSpeed": "0",
+				"AccelLerpMidSpeed": "0.666",
+				"AccelLerpHighSpeed": "1.0",
+				"MaxFreeLookYaw": "60",
+				"MaxFreeLookPitch": "40",
+				"JumpJetSpread": "1.9375"
+			},
+			"price": {
+				"id": 564,
+				"mc": -1,
+				"cb": -1
+			},
+			"max_armor": 338,
+			"quirks": [{
+				"name": "missile_cooldown_multiplier",
+				"translated_name": "MISSILE COOLDOWN",
+				"value": -0.1
+			}]
+		}
+	},
+	"566": {
+		"id": "566",
+		"name": "anh-2a",
+		"faction": "InnerSphere",
+		"mech_type": "assault",
+		"family": "annihilator",
+		"chassis_translated": "ANNIHILATOR",
+		"translated_name": "ANH-2A",
+		"translated_short_name": "ANH-2A",
+		"details": {
+			"type": "",
+			"tons": "100",
+			"top_speed": 48.6,
+			"jump_jets": 0,
+			"ecm": false,
+			"masc": false,
+			"tech_slots": "1",
+			"weapon_mod_slots": "2",
+			"consumable_slots": "1",
+			"engine_range": {
+				"min": 200,
+				"max": 300
+			},
+			"hardpoints": {
+				"ams": 1,
+				"beam": 4,
+				"ballistic": 6,
+				"missle": 0,
+				"ecm": 0
+			},
+			"tuning_config": {
+				"MovementArchetype": "Huge",
+				"MaxMovementSpeed": "16.2",
+				"TorsoTurnSpeedYaw": "54",
+				"TorsoTurnSpeedPitch": "33.75",
+				"ArmTurnSpeedYaw": "135",
+				"ArmTurnSpeedPitch": "135",
+				"TurnLerpLowRate": ".75",
+				"TurnLerpMidRate": ".53",
+				"TurnLerpHighRate": ".4",
+				"AccelLerpLowRate": "27.3",
+				"AccelLerpMidRate": "6.19",
+				"AccelLerpHighRate": "3.64",
+				"DecelLerpLowRate": "65.54",
+				"DecelLerpMidRate": "1100",
+				"DecelLerpHighRate": "1100",
+				"ReverseSpeedMultiplier": "0.666",
+				"MaxTorsoAngleYaw": "90",
+				"MaxTorsoAnglePitch": "20",
+				"MaxArmRotationYaw": "40",
+				"MaxArmRotationPitch": "25",
+				"TurnLerpLowSpeed": "0",
+				"TurnLerpMidSpeed": "0.666",
+				"TurnLerpHighSpeed": "1.0",
+				"DecelLerpLowSpeed": "0",
+				"DecelLerpMidSpeed": "0.666",
+				"DecelLerpHighSpeed": "1.0",
+				"AccelLerpLowSpeed": "0",
+				"AccelLerpMidSpeed": "0.666",
+				"AccelLerpHighSpeed": "1.0",
+				"MaxFreeLookYaw": "60",
+				"MaxFreeLookPitch": "40",
+				"JumpJetSpread": "0"
+			},
+			"price": {
+				"id": 566,
+				"mc": -1,
+				"cb": -1
+			},
+			"max_armor": 614,
+			"quirks": [{
+				"name": "armorresist_ct_additive",
+				"translated_name": "BASE ARMOR (CT)",
+				"value": 31
+			}, {
+				"name": "armorresist_lt_additive",
+				"translated_name": "BASE ARMOR (LT)",
+				"value": 26
+			}, {
+				"name": "armorresist_rt_additive",
+				"translated_name": "BASE ARMOR (RT)",
+				"value": 26
+			}, {
+				"name": "armorresist_la_additive",
+				"translated_name": "BASE ARMOR (LA)",
+				"value": 10
+			}, {
+				"name": "armorresist_ra_additive",
+				"translated_name": "BASE ARMOR (RA)",
+				"value": 10
+			}, {
+				"name": "armorresist_ll_additive",
+				"translated_name": "BASE ARMOR (LL)",
+				"value": 21
+			}, {
+				"name": "armorresist_rl_additive",
+				"translated_name": "BASE ARMOR (RL)",
+				"value": 21
+			}, {
+				"name": "ballistic_heat_multiplier",
+				"translated_name": "Ballistics Heat",
+				"value": -0.1
+			}, {
+				"name": "energy_heat_multiplier",
+				"translated_name": "Energy Heat",
+				"value": -0.1
+			}, {
+				"name": "critchance_receiving_multiplier",
+				"translated_name": "CRIT HIT CHANCE (RECEIVING)",
+				"value": -0.15
+			}]
+		}
+	},
+	"567": {
+		"id": "567",
+		"name": "anh-1a",
+		"faction": "InnerSphere",
+		"mech_type": "assault",
+		"family": "annihilator",
+		"chassis_translated": "ANNIHILATOR",
+		"translated_name": "ANH-1A",
+		"translated_short_name": "ANH-1A",
+		"details": {
+			"type": "",
+			"tons": "100",
+			"top_speed": 48.6,
+			"jump_jets": 0,
+			"ecm": false,
+			"masc": false,
+			"tech_slots": "1",
+			"weapon_mod_slots": "2",
+			"consumable_slots": "1",
+			"engine_range": {
+				"min": 200,
+				"max": 300
+			},
+			"hardpoints": {
+				"ams": 1,
+				"beam": 5,
+				"ballistic": 5,
+				"missle": 0,
+				"ecm": 0
+			},
+			"tuning_config": {
+				"MovementArchetype": "Huge",
+				"MaxMovementSpeed": "16.2",
+				"TorsoTurnSpeedYaw": "54",
+				"TorsoTurnSpeedPitch": "33.75",
+				"ArmTurnSpeedYaw": "135",
+				"ArmTurnSpeedPitch": "135",
+				"TurnLerpLowRate": ".75",
+				"TurnLerpMidRate": ".53",
+				"TurnLerpHighRate": ".4",
+				"AccelLerpLowRate": "27.3",
+				"AccelLerpMidRate": "6.19",
+				"AccelLerpHighRate": "3.64",
+				"DecelLerpLowRate": "65.54",
+				"DecelLerpMidRate": "1100",
+				"DecelLerpHighRate": "1100",
+				"ReverseSpeedMultiplier": "0.666",
+				"MaxTorsoAngleYaw": "90",
+				"MaxTorsoAnglePitch": "20",
+				"MaxArmRotationYaw": "40",
+				"MaxArmRotationPitch": "25",
+				"TurnLerpLowSpeed": "0",
+				"TurnLerpMidSpeed": "0.666",
+				"TurnLerpHighSpeed": "1.0",
+				"DecelLerpLowSpeed": "0",
+				"DecelLerpMidSpeed": "0.666",
+				"DecelLerpHighSpeed": "1.0",
+				"AccelLerpLowSpeed": "0",
+				"AccelLerpMidSpeed": "0.666",
+				"AccelLerpHighSpeed": "1.0",
+				"MaxFreeLookYaw": "60",
+				"MaxFreeLookPitch": "40",
+				"JumpJetSpread": "0"
+			},
+			"price": {
+				"id": 567,
+				"mc": -1,
+				"cb": -1
+			},
+			"max_armor": 614,
+			"quirks": [{
+				"name": "armorresist_ct_additive",
+				"translated_name": "BASE ARMOR (CT)",
+				"value": 31
+			}, {
+				"name": "armorresist_lt_additive",
+				"translated_name": "BASE ARMOR (LT)",
+				"value": 26
+			}, {
+				"name": "armorresist_rt_additive",
+				"translated_name": "BASE ARMOR (RT)",
+				"value": 26
+			}, {
+				"name": "armorresist_la_additive",
+				"translated_name": "BASE ARMOR (LA)",
+				"value": 10
+			}, {
+				"name": "armorresist_ra_additive",
+				"translated_name": "BASE ARMOR (RA)",
+				"value": 10
+			}, {
+				"name": "armorresist_ll_additive",
+				"translated_name": "BASE ARMOR (LL)",
+				"value": 21
+			}, {
+				"name": "armorresist_rl_additive",
+				"translated_name": "BASE ARMOR (RL)",
+				"value": 21
+			}, {
+				"name": "ballistic_heat_multiplier",
+				"translated_name": "Ballistics Heat",
+				"value": -0.1
+			}, {
+				"name": "energy_heat_multiplier",
+				"translated_name": "Energy Heat",
+				"value": -0.1
+			}, {
+				"name": "isautocannon10_cooldown_multiplier",
+				"translated_name": "AC\/10 COOLDOWN",
+				"value": -0.1
+			}, {
+				"name": "critchance_receiving_multiplier",
+				"translated_name": "CRIT HIT CHANCE (RECEIVING)",
+				"value": -0.15
+			}]
+		}
+	},
+	"568": {
+		"id": "568",
+		"name": "anh-1e",
+		"faction": "InnerSphere",
+		"mech_type": "assault",
+		"family": "annihilator",
+		"chassis_translated": "ANNIHILATOR",
+		"translated_name": "ANH-1E",
+		"translated_short_name": "ANH-1E",
+		"details": {
+			"type": "",
+			"tons": "100",
+			"top_speed": 48.6,
+			"jump_jets": 0,
+			"ecm": false,
+			"masc": false,
+			"tech_slots": "1",
+			"weapon_mod_slots": "2",
+			"consumable_slots": "1",
+			"engine_range": {
+				"min": 200,
+				"max": 300
+			},
+			"hardpoints": {
+				"ams": 2,
+				"beam": 8,
+				"ballistic": 0,
+				"missle": 0,
+				"ecm": 0
+			},
+			"tuning_config": {
+				"MovementArchetype": "Huge",
+				"MaxMovementSpeed": "16.2",
+				"TorsoTurnSpeedYaw": "54",
+				"TorsoTurnSpeedPitch": "33.75",
+				"ArmTurnSpeedYaw": "135",
+				"ArmTurnSpeedPitch": "135",
+				"TurnLerpLowRate": ".75",
+				"TurnLerpMidRate": ".53",
+				"TurnLerpHighRate": ".4",
+				"AccelLerpLowRate": "27.3",
+				"AccelLerpMidRate": "6.19",
+				"AccelLerpHighRate": "3.64",
+				"DecelLerpLowRate": "65.54",
+				"DecelLerpMidRate": "1100",
+				"DecelLerpHighRate": "1100",
+				"ReverseSpeedMultiplier": "0.666",
+				"MaxTorsoAngleYaw": "90",
+				"MaxTorsoAnglePitch": "20",
+				"MaxArmRotationYaw": "40",
+				"MaxArmRotationPitch": "25",
+				"TurnLerpLowSpeed": "0",
+				"TurnLerpMidSpeed": "0.666",
+				"TurnLerpHighSpeed": "1.0",
+				"DecelLerpLowSpeed": "0",
+				"DecelLerpMidSpeed": "0.666",
+				"DecelLerpHighSpeed": "1.0",
+				"AccelLerpLowSpeed": "0",
+				"AccelLerpMidSpeed": "0.666",
+				"AccelLerpHighSpeed": "1.0",
+				"MaxFreeLookYaw": "60",
+				"MaxFreeLookPitch": "40",
+				"JumpJetSpread": "0"
+			},
+			"price": {
+				"id": 568,
+				"mc": -1,
+				"cb": -1
+			},
+			"max_armor": 614,
+			"quirks": [{
+				"name": "armorresist_ct_additive",
+				"translated_name": "BASE ARMOR (CT)",
+				"value": 31
+			}, {
+				"name": "armorresist_lt_additive",
+				"translated_name": "BASE ARMOR (LT)",
+				"value": 26
+			}, {
+				"name": "armorresist_rt_additive",
+				"translated_name": "BASE ARMOR (RT)",
+				"value": 26
+			}, {
+				"name": "armorresist_la_additive",
+				"translated_name": "BASE ARMOR (LA)",
+				"value": 10
+			}, {
+				"name": "armorresist_ra_additive",
+				"translated_name": "BASE ARMOR (RA)",
+				"value": 10
+			}, {
+				"name": "armorresist_ll_additive",
+				"translated_name": "BASE ARMOR (LL)",
+				"value": 21
+			}, {
+				"name": "armorresist_rl_additive",
+				"translated_name": "BASE ARMOR (RL)",
+				"value": 21
+			}, {
+				"name": "critchance_receiving_multiplier",
+				"translated_name": "CRIT HIT CHANCE (RECEIVING)",
+				"value": -0.15
+			}, {
+				"name": "energy_heat_multiplier",
+				"translated_name": "Energy Heat",
+				"value": -0.1
+			}, {
+				"name": "ppc_heat_multiplier",
+				"translated_name": "PPC HEAT GENERATION",
+				"value": -0.05
+			}, {
+				"name": "ppc_velocity_multiplier",
+				"translated_name": "PPC VELOCITY",
+				"value": 0.3
+			}]
+		}
+	},
+	"569": {
+		"id": "569",
+		"name": "anh-1x",
+		"faction": "InnerSphere",
+		"mech_type": "assault",
+		"family": "annihilator",
+		"chassis_translated": "ANNIHILATOR",
+		"translated_name": "ANH-1X",
+		"translated_short_name": "ANH-1X",
+		"details": {
+			"type": "",
+			"tons": "100",
+			"top_speed": 48.6,
+			"jump_jets": 0,
+			"ecm": false,
+			"masc": false,
+			"tech_slots": "1",
+			"weapon_mod_slots": "2",
+			"consumable_slots": "1",
+			"engine_range": {
+				"min": 200,
+				"max": 300
+			},
+			"hardpoints": {
+				"ams": 1,
+				"beam": 7,
+				"ballistic": 4,
+				"missle": 0,
+				"ecm": 0
+			},
+			"tuning_config": {
+				"MovementArchetype": "Huge",
+				"MaxMovementSpeed": "16.2",
+				"TorsoTurnSpeedYaw": "54",
+				"TorsoTurnSpeedPitch": "33.75",
+				"ArmTurnSpeedYaw": "135",
+				"ArmTurnSpeedPitch": "135",
+				"TurnLerpLowRate": ".75",
+				"TurnLerpMidRate": ".53",
+				"TurnLerpHighRate": ".4",
+				"AccelLerpLowRate": "27.3",
+				"AccelLerpMidRate": "6.19",
+				"AccelLerpHighRate": "3.64",
+				"DecelLerpLowRate": "65.54",
+				"DecelLerpMidRate": "1100",
+				"DecelLerpHighRate": "1100",
+				"ReverseSpeedMultiplier": "0.666",
+				"MaxTorsoAngleYaw": "90",
+				"MaxTorsoAnglePitch": "20",
+				"MaxArmRotationYaw": "40",
+				"MaxArmRotationPitch": "25",
+				"TurnLerpLowSpeed": "0",
+				"TurnLerpMidSpeed": "0.666",
+				"TurnLerpHighSpeed": "1.0",
+				"DecelLerpLowSpeed": "0",
+				"DecelLerpMidSpeed": "0.666",
+				"DecelLerpHighSpeed": "1.0",
+				"AccelLerpLowSpeed": "0",
+				"AccelLerpMidSpeed": "0.666",
+				"AccelLerpHighSpeed": "1.0",
+				"MaxFreeLookYaw": "60",
+				"MaxFreeLookPitch": "40",
+				"JumpJetSpread": "0"
+			},
+			"price": {
+				"id": 569,
+				"mc": -1,
+				"cb": -1
+			},
+			"max_armor": 614,
+			"quirks": [{
+				"name": "armorresist_ct_additive",
+				"translated_name": "BASE ARMOR (CT)",
+				"value": 31
+			}, {
+				"name": "armorresist_lt_additive",
+				"translated_name": "BASE ARMOR (LT)",
+				"value": 26
+			}, {
+				"name": "armorresist_rt_additive",
+				"translated_name": "BASE ARMOR (RT)",
+				"value": 26
+			}, {
+				"name": "armorresist_la_additive",
+				"translated_name": "BASE ARMOR (LA)",
+				"value": 10
+			}, {
+				"name": "armorresist_ra_additive",
+				"translated_name": "BASE ARMOR (RA)",
+				"value": 10
+			}, {
+				"name": "armorresist_ll_additive",
+				"translated_name": "BASE ARMOR (LL)",
+				"value": 21
+			}, {
+				"name": "armorresist_rl_additive",
+				"translated_name": "BASE ARMOR (RL)",
+				"value": 21
+			}, {
+				"name": "critchance_receiving_multiplier",
+				"translated_name": "CRIT HIT CHANCE (RECEIVING)",
+				"value": -0.15
+			}, {
+				"name": "energy_heat_multiplier",
+				"translated_name": "Energy Heat",
+				"value": -0.1
+			}, {
+				"name": "ballistic_heat_multiplier",
+				"translated_name": "Ballistics Heat",
+				"value": -0.1
+			}, {
+				"name": "islbxautocannon10_cooldown_multiplier",
+				"translated_name": "LB 10-X COOLDOWN",
+				"value": -0.1
+			}]
+		}
+	},
+	"570": {
+		"id": "570",
+		"name": "anh-1p",
+		"faction": "InnerSphere",
+		"mech_type": "assault",
+		"family": "annihilator",
+		"chassis_translated": "ANNIHILATOR",
+		"translated_name": "ANH-1P",
+		"translated_short_name": "ANH-1P",
+		"details": {
+			"type": "",
+			"tons": "100",
+			"top_speed": 48.6,
+			"jump_jets": 0,
+			"ecm": false,
+			"masc": false,
+			"tech_slots": "1",
+			"weapon_mod_slots": "2",
+			"consumable_slots": "1",
+			"engine_range": {
+				"min": 200,
+				"max": 300
+			},
+			"hardpoints": {
+				"ams": 1,
+				"beam": 6,
+				"ballistic": 4,
+				"missle": 0,
+				"ecm": 0
+			},
+			"tuning_config": {
+				"MovementArchetype": "Huge",
+				"MaxMovementSpeed": "16.2",
+				"TorsoTurnSpeedYaw": "54",
+				"TorsoTurnSpeedPitch": "33.75",
+				"ArmTurnSpeedYaw": "135",
+				"ArmTurnSpeedPitch": "135",
+				"TurnLerpLowRate": ".75",
+				"TurnLerpMidRate": ".53",
+				"TurnLerpHighRate": ".4",
+				"AccelLerpLowRate": "27.3",
+				"AccelLerpMidRate": "6.19",
+				"AccelLerpHighRate": "3.64",
+				"DecelLerpLowRate": "65.54",
+				"DecelLerpMidRate": "1100",
+				"DecelLerpHighRate": "1100",
+				"ReverseSpeedMultiplier": "0.666",
+				"MaxTorsoAngleYaw": "90",
+				"MaxTorsoAnglePitch": "20",
+				"MaxArmRotationYaw": "40",
+				"MaxArmRotationPitch": "25",
+				"TurnLerpLowSpeed": "0",
+				"TurnLerpMidSpeed": "0.666",
+				"TurnLerpHighSpeed": "1.0",
+				"DecelLerpLowSpeed": "0",
+				"DecelLerpMidSpeed": "0.666",
+				"DecelLerpHighSpeed": "1.0",
+				"AccelLerpLowSpeed": "0",
+				"AccelLerpMidSpeed": "0.666",
+				"AccelLerpHighSpeed": "1.0",
+				"MaxFreeLookYaw": "60",
+				"MaxFreeLookPitch": "40",
+				"JumpJetSpread": "0"
+			},
+			"price": {
+				"id": 570,
+				"mc": -1,
+				"cb": -1
+			},
+			"max_armor": 614,
+			"quirks": [{
+				"name": "armorresist_ct_additive",
+				"translated_name": "BASE ARMOR (CT)",
+				"value": 31
+			}, {
+				"name": "armorresist_lt_additive",
+				"translated_name": "BASE ARMOR (LT)",
+				"value": 26
+			}, {
+				"name": "armorresist_rt_additive",
+				"translated_name": "BASE ARMOR (RT)",
+				"value": 26
+			}, {
+				"name": "armorresist_la_additive",
+				"translated_name": "BASE ARMOR (LA)",
+				"value": 10
+			}, {
+				"name": "armorresist_ra_additive",
+				"translated_name": "BASE ARMOR (RA)",
+				"value": 10
+			}, {
+				"name": "armorresist_ll_additive",
+				"translated_name": "BASE ARMOR (LL)",
+				"value": 21
+			}, {
+				"name": "armorresist_rl_additive",
+				"translated_name": "BASE ARMOR (RL)",
+				"value": 21
+			}, {
+				"name": "critchance_receiving_multiplier",
+				"translated_name": "CRIT HIT CHANCE (RECEIVING)",
+				"value": -0.15
+			}, {
+				"name": "energy_heat_multiplier",
+				"translated_name": "Energy Heat",
+				"value": -0.1
+			}, {
+				"name": "ballistic_heat_multiplier",
+				"translated_name": "Ballistics Heat",
+				"value": -0.1
+			}]
+		}
+	},
+	"571": {
+		"id": "571",
+		"name": "anh-mb",
+		"faction": "InnerSphere",
+		"mech_type": "assault",
+		"family": "annihilator",
+		"chassis_translated": "ANNIHILATOR",
+		"translated_name": "MEAN BABY",
+		"translated_short_name": "ANH-MB",
+		"details": {
+			"type": "Hero",
+			"tons": "100",
+			"top_speed": 48.6,
+			"jump_jets": 0,
+			"ecm": false,
+			"masc": false,
+			"tech_slots": "1",
+			"weapon_mod_slots": "2",
+			"consumable_slots": "1",
+			"engine_range": {
+				"min": 200,
+				"max": 300
+			},
+			"hardpoints": {
+				"ams": 1,
+				"beam": 6,
+				"ballistic": 0,
+				"missle": 4,
+				"ecm": 0
+			},
+			"tuning_config": {
+				"MovementArchetype": "Huge",
+				"MaxMovementSpeed": "16.2",
+				"TorsoTurnSpeedYaw": "54",
+				"TorsoTurnSpeedPitch": "33.75",
+				"ArmTurnSpeedYaw": "135",
+				"ArmTurnSpeedPitch": "135",
+				"TurnLerpLowRate": ".75",
+				"TurnLerpMidRate": ".53",
+				"TurnLerpHighRate": ".4",
+				"AccelLerpLowRate": "27.3",
+				"AccelLerpMidRate": "6.19",
+				"AccelLerpHighRate": "3.64",
+				"DecelLerpLowRate": "65.54",
+				"DecelLerpMidRate": "1100",
+				"DecelLerpHighRate": "1100",
+				"ReverseSpeedMultiplier": "0.666",
+				"MaxTorsoAngleYaw": "90",
+				"MaxTorsoAnglePitch": "20",
+				"MaxArmRotationYaw": "40",
+				"MaxArmRotationPitch": "25",
+				"TurnLerpLowSpeed": "0",
+				"TurnLerpMidSpeed": "0.666",
+				"TurnLerpHighSpeed": "1.0",
+				"DecelLerpLowSpeed": "0",
+				"DecelLerpMidSpeed": "0.666",
+				"DecelLerpHighSpeed": "1.0",
+				"AccelLerpLowSpeed": "0",
+				"AccelLerpMidSpeed": "0.666",
+				"AccelLerpHighSpeed": "1.0",
+				"MaxFreeLookYaw": "60",
+				"MaxFreeLookPitch": "40",
+				"JumpJetSpread": "0"
+			},
+			"price": {
+				"id": 571,
+				"mc": -1,
+				"cb": -1
+			},
+			"max_armor": 614,
+			"quirks": [{
+				"name": "armorresist_ct_additive",
+				"translated_name": "BASE ARMOR (CT)",
+				"value": 31
+			}, {
+				"name": "armorresist_lt_additive",
+				"translated_name": "BASE ARMOR (LT)",
+				"value": 26
+			}, {
+				"name": "armorresist_rt_additive",
+				"translated_name": "BASE ARMOR (RT)",
+				"value": 26
+			}, {
+				"name": "armorresist_la_additive",
+				"translated_name": "BASE ARMOR (LA)",
+				"value": 10
+			}, {
+				"name": "armorresist_ra_additive",
+				"translated_name": "BASE ARMOR (RA)",
+				"value": 10
+			}, {
+				"name": "armorresist_ll_additive",
+				"translated_name": "BASE ARMOR (LL)",
+				"value": 21
+			}, {
+				"name": "armorresist_rl_additive",
+				"translated_name": "BASE ARMOR (RL)",
+				"value": 21
+			}, {
+				"name": "critchance_receiving_multiplier",
+				"translated_name": "CRIT HIT CHANCE (RECEIVING)",
+				"value": -0.15
+			}, {
+				"name": "energy_heat_multiplier",
+				"translated_name": "Energy Heat",
+				"value": -0.1
+			}, {
+				"name": "missile_heat_multiplier",
+				"translated_name": "MISSILE HEAT GENERATION",
+				"value": -0.1
+			}, {
+				"name": "ppc_velocity_multiplier",
+				"translated_name": "PPC VELOCITY",
+				"value": 0.3
+			}]
+		}
+	},
+	"573": {
+		"id": "573",
+		"name": "cou-prime",
+		"faction": "Clan",
+		"mech_type": "light",
+		"family": "cougar",
+		"chassis_translated": "COUGAR",
+		"translated_name": "COU-PRIME",
+		"translated_short_name": "COU-PRIME",
+		"details": {
+			"type": "",
+			"tons": "35",
+			"top_speed": 81,
+			"jump_jets": 0,
+			"ecm": false,
+			"masc": false,
+			"tech_slots": "1",
+			"weapon_mod_slots": "2",
+			"consumable_slots": "1",
+			"engine_range": {
+				"min": 175,
+				"max": 175
+			},
+			"hardpoints": {
+				"ams": 1,
+				"beam": 2,
+				"ballistic": 0,
+				"missle": 2,
+				"ecm": 0
+			},
+			"tuning_config": {
+				"MovementArchetype": "Tiny",
+				"MaxMovementSpeed": "16.2",
+				"TorsoTurnSpeedYaw": "126",
+				"TorsoTurnSpeedPitch": "78.75",
+				"ArmTurnSpeedYaw": "315",
+				"ArmTurnSpeedPitch": "315",
+				"TurnLerpLowRate": "1.75",
+				"TurnLerpMidRate": "1.23",
+				"TurnLerpHighRate": ".93",
+				"AccelLerpLowRate": "190.04",
+				"AccelLerpMidRate": "43.09",
+				"AccelLerpHighRate": "25.34",
+				"DecelLerpLowRate": "152.93",
+				"DecelLerpMidRate": "2300",
+				"DecelLerpHighRate": "2300",
+				"ReverseSpeedMultiplier": "0.666",
+				"MaxTorsoAngleYaw": "120",
+				"MaxTorsoAnglePitch": "20",
+				"MaxArmRotationYaw": "40",
+				"MaxArmRotationPitch": "30",
+				"TurnLerpLowSpeed": "0",
+				"TurnLerpMidSpeed": "0.666",
+				"TurnLerpHighSpeed": "1.0",
+				"DecelLerpLowSpeed": "0",
+				"DecelLerpMidSpeed": "0.666",
+				"DecelLerpHighSpeed": "1.0",
+				"AccelLerpLowSpeed": "0",
+				"AccelLerpMidSpeed": "0.666",
+				"AccelLerpHighSpeed": "1.0",
+				"MaxFreeLookYaw": "60",
+				"MaxFreeLookPitch": "40",
+				"JumpJetSpread": "0",
+				"MaxArmActuators": "2",
+				"MaxArmYawActuatorNone": "0",
+				"MaxArmYawActuatorOne": "10"
+			},
+			"price": {
+				"id": 573,
+				"mc": -1,
+				"cb": -1
+			},
+			"max_armor": 238,
+			"quirks": []
+		}
+	},
+	"574": {
+		"id": "574",
+		"name": "cou-c",
+		"faction": "Clan",
+		"mech_type": "light",
+		"family": "cougar",
+		"chassis_translated": "COUGAR",
+		"translated_name": "COU-C",
+		"translated_short_name": "COU-C",
+		"details": {
+			"type": "",
+			"tons": "35",
+			"top_speed": 81,
+			"jump_jets": 0,
+			"ecm": false,
+			"masc": false,
+			"tech_slots": "1",
+			"weapon_mod_slots": "2",
+			"consumable_slots": "1",
+			"engine_range": {
+				"min": 175,
+				"max": 175
+			},
+			"hardpoints": {
+				"ams": 0,
+				"beam": 5,
+				"ballistic": 1,
+				"missle": 0,
+				"ecm": 0
+			},
+			"tuning_config": {
+				"MovementArchetype": "Tiny",
+				"MaxMovementSpeed": "16.2",
+				"TorsoTurnSpeedYaw": "126",
+				"TorsoTurnSpeedPitch": "78.75",
+				"ArmTurnSpeedYaw": "315",
+				"ArmTurnSpeedPitch": "315",
+				"TurnLerpLowRate": "1.75",
+				"TurnLerpMidRate": "1.23",
+				"TurnLerpHighRate": ".93",
+				"AccelLerpLowRate": "190.04",
+				"AccelLerpMidRate": "43.09",
+				"AccelLerpHighRate": "25.34",
+				"DecelLerpLowRate": "152.93",
+				"DecelLerpMidRate": "2300",
+				"DecelLerpHighRate": "2300",
+				"ReverseSpeedMultiplier": "0.666",
+				"MaxTorsoAngleYaw": "120",
+				"MaxTorsoAnglePitch": "20",
+				"MaxArmRotationYaw": "40",
+				"MaxArmRotationPitch": "30",
+				"TurnLerpLowSpeed": "0",
+				"TurnLerpMidSpeed": "0.666",
+				"TurnLerpHighSpeed": "1.0",
+				"DecelLerpLowSpeed": "0",
+				"DecelLerpMidSpeed": "0.666",
+				"DecelLerpHighSpeed": "1.0",
+				"AccelLerpLowSpeed": "0",
+				"AccelLerpMidSpeed": "0.666",
+				"AccelLerpHighSpeed": "1.0",
+				"MaxFreeLookYaw": "60",
+				"MaxFreeLookPitch": "40",
+				"JumpJetSpread": "0",
+				"MaxArmActuators": "2",
+				"MaxArmYawActuatorNone": "0",
+				"MaxArmYawActuatorOne": "10"
+			},
+			"price": {
+				"id": 574,
+				"mc": -1,
+				"cb": -1
+			},
+			"max_armor": 238,
+			"quirks": []
+		}
+	},
+	"575": {
+		"id": "575",
+		"name": "cou-d",
+		"faction": "Clan",
+		"mech_type": "light",
+		"family": "cougar",
+		"chassis_translated": "COUGAR",
+		"translated_name": "COU-D",
+		"translated_short_name": "COU-D",
+		"details": {
+			"type": "",
+			"tons": "35",
+			"top_speed": 81,
+			"jump_jets": 0,
+			"ecm": false,
+			"masc": false,
+			"tech_slots": "1",
+			"weapon_mod_slots": "2",
+			"consumable_slots": "1",
+			"engine_range": {
+				"min": 175,
+				"max": 175
+			},
+			"hardpoints": {
+				"ams": 0,
+				"beam": 1,
+				"ballistic": 1,
+				"missle": 2,
+				"ecm": 0
+			},
+			"tuning_config": {
+				"MovementArchetype": "Tiny",
+				"MaxMovementSpeed": "16.2",
+				"TorsoTurnSpeedYaw": "126",
+				"TorsoTurnSpeedPitch": "78.75",
+				"ArmTurnSpeedYaw": "315",
+				"ArmTurnSpeedPitch": "315",
+				"TurnLerpLowRate": "1.75",
+				"TurnLerpMidRate": "1.23",
+				"TurnLerpHighRate": ".93",
+				"AccelLerpLowRate": "190.04",
+				"AccelLerpMidRate": "43.09",
+				"AccelLerpHighRate": "25.34",
+				"DecelLerpLowRate": "152.93",
+				"DecelLerpMidRate": "2300",
+				"DecelLerpHighRate": "2300",
+				"ReverseSpeedMultiplier": "0.666",
+				"MaxTorsoAngleYaw": "120",
+				"MaxTorsoAnglePitch": "20",
+				"MaxArmRotationYaw": "40",
+				"MaxArmRotationPitch": "30",
+				"TurnLerpLowSpeed": "0",
+				"TurnLerpMidSpeed": "0.666",
+				"TurnLerpHighSpeed": "1.0",
+				"DecelLerpLowSpeed": "0",
+				"DecelLerpMidSpeed": "0.666",
+				"DecelLerpHighSpeed": "1.0",
+				"AccelLerpLowSpeed": "0",
+				"AccelLerpMidSpeed": "0.666",
+				"AccelLerpHighSpeed": "1.0",
+				"MaxFreeLookYaw": "60",
+				"MaxFreeLookPitch": "40",
+				"JumpJetSpread": "0",
+				"MaxArmActuators": "2",
+				"MaxArmYawActuatorNone": "0",
+				"MaxArmYawActuatorOne": "10"
+			},
+			"price": {
+				"id": 575,
+				"mc": -1,
+				"cb": -1
+			},
+			"max_armor": 238,
+			"quirks": []
+		}
+	},
+	"576": {
+		"id": "576",
+		"name": "cou-e",
+		"faction": "Clan",
+		"mech_type": "light",
+		"family": "cougar",
+		"chassis_translated": "COUGAR",
+		"translated_name": "COU-E",
+		"translated_short_name": "COU-E",
+		"details": {
+			"type": "",
+			"tons": "35",
+			"top_speed": 81,
+			"jump_jets": 0,
+			"ecm": false,
+			"masc": false,
+			"tech_slots": "1",
+			"weapon_mod_slots": "2",
+			"consumable_slots": "1",
+			"engine_range": {
+				"min": 175,
+				"max": 175
+			},
+			"hardpoints": {
+				"ams": 0,
+				"beam": 3,
+				"ballistic": 0,
+				"missle": 2,
+				"ecm": 0
+			},
+			"tuning_config": {
+				"MovementArchetype": "Tiny",
+				"MaxMovementSpeed": "16.2",
+				"TorsoTurnSpeedYaw": "126",
+				"TorsoTurnSpeedPitch": "78.75",
+				"ArmTurnSpeedYaw": "315",
+				"ArmTurnSpeedPitch": "315",
+				"TurnLerpLowRate": "1.75",
+				"TurnLerpMidRate": "1.23",
+				"TurnLerpHighRate": ".93",
+				"AccelLerpLowRate": "190.04",
+				"AccelLerpMidRate": "43.09",
+				"AccelLerpHighRate": "25.34",
+				"DecelLerpLowRate": "152.93",
+				"DecelLerpMidRate": "2300",
+				"DecelLerpHighRate": "2300",
+				"ReverseSpeedMultiplier": "0.666",
+				"MaxTorsoAngleYaw": "120",
+				"MaxTorsoAnglePitch": "20",
+				"MaxArmRotationYaw": "40",
+				"MaxArmRotationPitch": "30",
+				"TurnLerpLowSpeed": "0",
+				"TurnLerpMidSpeed": "0.666",
+				"TurnLerpHighSpeed": "1.0",
+				"DecelLerpLowSpeed": "0",
+				"DecelLerpMidSpeed": "0.666",
+				"DecelLerpHighSpeed": "1.0",
+				"AccelLerpLowSpeed": "0",
+				"AccelLerpMidSpeed": "0.666",
+				"AccelLerpHighSpeed": "1.0",
+				"MaxFreeLookYaw": "60",
+				"MaxFreeLookPitch": "40",
+				"JumpJetSpread": "0",
+				"MaxArmActuators": "2",
+				"MaxArmYawActuatorNone": "0",
+				"MaxArmYawActuatorOne": "10"
+			},
+			"price": {
+				"id": 576,
+				"mc": -1,
+				"cb": -1
+			},
+			"max_armor": 238,
+			"quirks": []
+		}
+	},
+	"577": {
+		"id": "577",
+		"name": "cou-h",
+		"faction": "Clan",
+		"mech_type": "light",
+		"family": "cougar",
+		"chassis_translated": "COUGAR",
+		"translated_name": "COU-H",
+		"translated_short_name": "COU-H",
+		"details": {
+			"type": "",
+			"tons": "35",
+			"top_speed": 81,
+			"jump_jets": 4,
+			"ecm": false,
+			"masc": false,
+			"tech_slots": "1",
+			"weapon_mod_slots": "2",
+			"consumable_slots": "1",
+			"engine_range": {
+				"min": 175,
+				"max": 175
+			},
+			"hardpoints": {
+				"ams": 0,
+				"beam": 3,
+				"ballistic": 1,
+				"missle": 0,
+				"ecm": 0
+			},
+			"tuning_config": {
+				"MovementArchetype": "Tiny",
+				"MaxMovementSpeed": "16.2",
+				"TorsoTurnSpeedYaw": "126",
+				"TorsoTurnSpeedPitch": "78.75",
+				"ArmTurnSpeedYaw": "315",
+				"ArmTurnSpeedPitch": "315",
+				"TurnLerpLowRate": "1.75",
+				"TurnLerpMidRate": "1.23",
+				"TurnLerpHighRate": ".93",
+				"AccelLerpLowRate": "190.04",
+				"AccelLerpMidRate": "43.09",
+				"AccelLerpHighRate": "25.34",
+				"DecelLerpLowRate": "152.93",
+				"DecelLerpMidRate": "2300",
+				"DecelLerpHighRate": "2300",
+				"ReverseSpeedMultiplier": "0.666",
+				"MaxTorsoAngleYaw": "120",
+				"MaxTorsoAnglePitch": "20",
+				"MaxArmRotationYaw": "40",
+				"MaxArmRotationPitch": "30",
+				"TurnLerpLowSpeed": "0",
+				"TurnLerpMidSpeed": "0.666",
+				"TurnLerpHighSpeed": "1.0",
+				"DecelLerpLowSpeed": "0",
+				"DecelLerpMidSpeed": "0.666",
+				"DecelLerpHighSpeed": "1.0",
+				"AccelLerpLowSpeed": "0",
+				"AccelLerpMidSpeed": "0.666",
+				"AccelLerpHighSpeed": "1.0",
+				"MaxFreeLookYaw": "60",
+				"MaxFreeLookPitch": "40",
+				"JumpJetSpread": "1.25",
+				"MaxArmActuators": "2",
+				"MaxArmYawActuatorNone": "0",
+				"MaxArmYawActuatorOne": "10"
+			},
+			"price": {
+				"id": 577,
+				"mc": -1,
+				"cb": -1
+			},
+			"max_armor": 238,
+			"quirks": []
+		}
+	},
+	"578": {
+		"id": "578",
+		"name": "cou-ba",
+		"faction": "Clan",
+		"mech_type": "light",
+		"family": "cougar",
+		"chassis_translated": "COUGAR",
+		"translated_name": "BLOOD ADDER",
+		"translated_short_name": "COU-BA",
+		"details": {
+			"type": "Hero",
+			"tons": "35",
+			"top_speed": 81,
+			"jump_jets": 0,
+			"ecm": false,
+			"masc": false,
+			"tech_slots": "1",
+			"weapon_mod_slots": "2",
+			"consumable_slots": "1",
+			"engine_range": {
+				"min": 175,
+				"max": 175
+			},
+			"hardpoints": {
+				"ams": 1,
+				"beam": 0,
+				"ballistic": 2,
+				"missle": 2,
+				"ecm": 0
+			},
+			"tuning_config": {
+				"MovementArchetype": "Tiny",
+				"MaxMovementSpeed": "16.2",
+				"TorsoTurnSpeedYaw": "126",
+				"TorsoTurnSpeedPitch": "78.75",
+				"ArmTurnSpeedYaw": "315",
+				"ArmTurnSpeedPitch": "315",
+				"TurnLerpLowRate": "1.75",
+				"TurnLerpMidRate": "1.23",
+				"TurnLerpHighRate": ".93",
+				"AccelLerpLowRate": "190.04",
+				"AccelLerpMidRate": "43.09",
+				"AccelLerpHighRate": "25.34",
+				"DecelLerpLowRate": "152.93",
+				"DecelLerpMidRate": "2300",
+				"DecelLerpHighRate": "2300",
+				"ReverseSpeedMultiplier": "0.666",
+				"MaxTorsoAngleYaw": "120",
+				"MaxTorsoAnglePitch": "20",
+				"MaxArmRotationYaw": "40",
+				"MaxArmRotationPitch": "30",
+				"TurnLerpLowSpeed": "0",
+				"TurnLerpMidSpeed": "0.666",
+				"TurnLerpHighSpeed": "1.0",
+				"DecelLerpLowSpeed": "0",
+				"DecelLerpMidSpeed": "0.666",
+				"DecelLerpHighSpeed": "1.0",
+				"AccelLerpLowSpeed": "0",
+				"AccelLerpMidSpeed": "0.666",
+				"AccelLerpHighSpeed": "1.0",
+				"MaxFreeLookYaw": "60",
+				"MaxFreeLookPitch": "40",
+				"JumpJetSpread": "0",
+				"MaxArmActuators": "2",
+				"MaxArmYawActuatorNone": "0",
+				"MaxArmYawActuatorOne": "10"
+			},
+			"price": {
+				"id": 578,
+				"mc": -1,
+				"cb": -1
+			},
+			"max_armor": 240,
+			"quirks": []
+		}
+	},
+	"580": {
+		"id": "580",
+		"name": "mcii-1",
+		"faction": "Clan",
+		"mech_type": "assault",
+		"family": "madcatmkii",
+		"chassis_translated": "MAD CAT MK II",
+		"translated_name": "MCII-1",
+		"translated_short_name": "MCII-1",
+		"details": {
+			"type": "",
+			"tons": "90",
+			"top_speed": 72,
+			"jump_jets": 3,
+			"ecm": false,
+			"masc": false,
+			"tech_slots": "1",
+			"weapon_mod_slots": "2",
+			"consumable_slots": "1",
+			"engine_range": {
+				"min": 180,
+				"max": 400
+			},
+			"hardpoints": {
+				"ams": 1,
+				"beam": 4,
+				"ballistic": 2,
+				"missle": 2,
+				"ecm": 0
+			},
+			"tuning_config": {
+				"MovementArchetype": "Huge",
+				"MaxMovementSpeed": "16.2",
+				"TorsoTurnSpeedYaw": "63",
+				"TorsoTurnSpeedPitch": "39.38",
+				"ArmTurnSpeedYaw": "157.5",
+				"ArmTurnSpeedPitch": "157.5",
+				"TurnLerpLowRate": ".88",
+				"TurnLerpMidRate": ".61",
+				"TurnLerpHighRate": ".47",
+				"AccelLerpLowRate": "47.64",
+				"AccelLerpMidRate": "10.8",
+				"AccelLerpHighRate": "6.35",
+				"DecelLerpLowRate": "76.46",
+				"DecelLerpMidRate": "1250",
+				"DecelLerpHighRate": "1250",
+				"ReverseSpeedMultiplier": "0.666",
+				"MaxTorsoAngleYaw": "85",
+				"MaxTorsoAnglePitch": "20",
+				"MaxArmRotationYaw": "0",
+				"MaxArmRotationPitch": "30",
+				"TurnLerpLowSpeed": "0",
+				"TurnLerpMidSpeed": "0.666",
+				"TurnLerpHighSpeed": "1.0",
+				"DecelLerpLowSpeed": "0",
+				"DecelLerpMidSpeed": "0.666",
+				"DecelLerpHighSpeed": "1.0",
+				"AccelLerpLowSpeed": "0",
+				"AccelLerpMidSpeed": "0.666",
+				"AccelLerpHighSpeed": "1.0",
+				"MaxFreeLookYaw": "60",
+				"MaxFreeLookPitch": "40",
+				"JumpJetSpread": "4"
+			},
+			"price": {
+				"id": 580,
+				"mc": -1,
+				"cb": -1
+			},
+			"max_armor": 558,
+			"quirks": [{
+				"name": "missile_cooldown_multiplier",
+				"translated_name": "MISSILE COOLDOWN",
+				"value": -0.1
+			}]
+		}
+	},
+	"581": {
+		"id": "581",
+		"name": "mcii-2",
+		"faction": "Clan",
+		"mech_type": "assault",
+		"family": "madcatmkii",
+		"chassis_translated": "MAD CAT MK II",
+		"translated_name": "MCII-2",
+		"translated_short_name": "MCII-2",
+		"details": {
+			"type": "",
+			"tons": "90",
+			"top_speed": 72,
+			"jump_jets": 3,
+			"ecm": false,
+			"masc": false,
+			"tech_slots": "1",
+			"weapon_mod_slots": "2",
+			"consumable_slots": "1",
+			"engine_range": {
+				"min": 180,
+				"max": 400
+			},
+			"hardpoints": {
+				"ams": 1,
+				"beam": 2,
+				"ballistic": 2,
+				"missle": 4,
+				"ecm": 0
+			},
+			"tuning_config": {
+				"MovementArchetype": "Huge",
+				"MaxMovementSpeed": "16.2",
+				"TorsoTurnSpeedYaw": "63",
+				"TorsoTurnSpeedPitch": "39.38",
+				"ArmTurnSpeedYaw": "157.5",
+				"ArmTurnSpeedPitch": "157.5",
+				"TurnLerpLowRate": ".88",
+				"TurnLerpMidRate": ".61",
+				"TurnLerpHighRate": ".47",
+				"AccelLerpLowRate": "47.64",
+				"AccelLerpMidRate": "10.8",
+				"AccelLerpHighRate": "6.35",
+				"DecelLerpLowRate": "76.46",
+				"DecelLerpMidRate": "1250",
+				"DecelLerpHighRate": "1250",
+				"ReverseSpeedMultiplier": "0.666",
+				"MaxTorsoAngleYaw": "85",
+				"MaxTorsoAnglePitch": "20",
+				"MaxArmRotationYaw": "0",
+				"MaxArmRotationPitch": "30",
+				"TurnLerpLowSpeed": "0",
+				"TurnLerpMidSpeed": "0.666",
+				"TurnLerpHighSpeed": "1.0",
+				"DecelLerpLowSpeed": "0",
+				"DecelLerpMidSpeed": "0.666",
+				"DecelLerpHighSpeed": "1.0",
+				"AccelLerpLowSpeed": "0",
+				"AccelLerpMidSpeed": "0.666",
+				"AccelLerpHighSpeed": "1.0",
+				"MaxFreeLookYaw": "60",
+				"MaxFreeLookPitch": "40",
+				"JumpJetSpread": "4"
+			},
+			"price": {
+				"id": 581,
+				"mc": -1,
+				"cb": -1
+			},
+			"max_armor": 558,
+			"quirks": [{
+				"name": "erlaser_cooldown_multiplier",
+				"translated_name": "ER LASER COOLDOWN",
+				"value": -0.1
+			}]
+		}
+	},
+	"582": {
+		"id": "582",
+		"name": "mcii-4",
+		"faction": "Clan",
+		"mech_type": "assault",
+		"family": "madcatmkii",
+		"chassis_translated": "MAD CAT MK II",
+		"translated_name": "MCII-4",
+		"translated_short_name": "MCII-4",
+		"details": {
+			"type": "",
+			"tons": "90",
+			"top_speed": 72,
+			"jump_jets": 4,
+			"ecm": false,
+			"masc": false,
+			"tech_slots": "1",
+			"weapon_mod_slots": "2",
+			"consumable_slots": "1",
+			"engine_range": {
+				"min": 180,
+				"max": 400
+			},
+			"hardpoints": {
+				"ams": 1,
+				"beam": 4,
+				"ballistic": 0,
+				"missle": 4,
+				"ecm": 0
+			},
+			"tuning_config": {
+				"MovementArchetype": "Huge",
+				"MaxMovementSpeed": "16.2",
+				"TorsoTurnSpeedYaw": "63",
+				"TorsoTurnSpeedPitch": "39.38",
+				"ArmTurnSpeedYaw": "157.5",
+				"ArmTurnSpeedPitch": "157.5",
+				"TurnLerpLowRate": ".88",
+				"TurnLerpMidRate": ".61",
+				"TurnLerpHighRate": ".47",
+				"AccelLerpLowRate": "47.64",
+				"AccelLerpMidRate": "10.8",
+				"AccelLerpHighRate": "6.35",
+				"DecelLerpLowRate": "76.46",
+				"DecelLerpMidRate": "1250",
+				"DecelLerpHighRate": "1250",
+				"ReverseSpeedMultiplier": "0.666",
+				"MaxTorsoAngleYaw": "85",
+				"MaxTorsoAnglePitch": "20",
+				"MaxArmRotationYaw": "20",
+				"MaxArmRotationPitch": "30",
+				"TurnLerpLowSpeed": "0",
+				"TurnLerpMidSpeed": "0.666",
+				"TurnLerpHighSpeed": "1.0",
+				"DecelLerpLowSpeed": "0",
+				"DecelLerpMidSpeed": "0.666",
+				"DecelLerpHighSpeed": "1.0",
+				"AccelLerpLowSpeed": "0",
+				"AccelLerpMidSpeed": "0.666",
+				"AccelLerpHighSpeed": "1.0",
+				"MaxFreeLookYaw": "60",
+				"MaxFreeLookPitch": "40",
+				"JumpJetSpread": "4"
+			},
+			"price": {
+				"id": 582,
+				"mc": -1,
+				"cb": -1
+			},
+			"max_armor": 558,
+			"quirks": []
+		}
+	},
+	"583": {
+		"id": "583",
+		"name": "mcii-a",
+		"faction": "Clan",
+		"mech_type": "assault",
+		"family": "madcatmkii",
+		"chassis_translated": "MAD CAT MK II",
+		"translated_name": "MCII-A",
+		"translated_short_name": "MCII-A",
+		"details": {
+			"type": "",
+			"tons": "90",
+			"top_speed": 72,
+			"jump_jets": 3,
+			"ecm": false,
+			"masc": false,
+			"tech_slots": "1",
+			"weapon_mod_slots": "2",
+			"consumable_slots": "1",
+			"engine_range": {
+				"min": 180,
+				"max": 400
+			},
+			"hardpoints": {
+				"ams": 1,
+				"beam": 5,
+				"ballistic": 2,
+				"missle": 2,
+				"ecm": 0
+			},
+			"tuning_config": {
+				"MovementArchetype": "Huge",
+				"MaxMovementSpeed": "16.2",
+				"TorsoTurnSpeedYaw": "63",
+				"TorsoTurnSpeedPitch": "39.38",
+				"ArmTurnSpeedYaw": "157.5",
+				"ArmTurnSpeedPitch": "157.5",
+				"TurnLerpLowRate": ".88",
+				"TurnLerpMidRate": ".61",
+				"TurnLerpHighRate": ".47",
+				"AccelLerpLowRate": "47.64",
+				"AccelLerpMidRate": "10.8",
+				"AccelLerpHighRate": "6.35",
+				"DecelLerpLowRate": "76.46",
+				"DecelLerpMidRate": "1250",
+				"DecelLerpHighRate": "1250",
+				"ReverseSpeedMultiplier": "0.666",
+				"MaxTorsoAngleYaw": "85",
+				"MaxTorsoAnglePitch": "20",
+				"MaxArmRotationYaw": "20",
+				"MaxArmRotationPitch": "30",
+				"TurnLerpLowSpeed": "0",
+				"TurnLerpMidSpeed": "0.666",
+				"TurnLerpHighSpeed": "1.0",
+				"DecelLerpLowSpeed": "0",
+				"DecelLerpMidSpeed": "0.666",
+				"DecelLerpHighSpeed": "1.0",
+				"AccelLerpLowSpeed": "0",
+				"AccelLerpMidSpeed": "0.666",
+				"AccelLerpHighSpeed": "1.0",
+				"MaxFreeLookYaw": "60",
+				"MaxFreeLookPitch": "40",
+				"JumpJetSpread": "4"
+			},
+			"price": {
+				"id": 583,
+				"mc": -1,
+				"cb": -1
+			},
+			"max_armor": 558,
+			"quirks": [{
+				"name": "missile_cooldown_multiplier",
+				"translated_name": "MISSILE COOLDOWN",
+				"value": -0.1
+			}, {
+				"name": "clanmachinegun_rof_multiplier",
+				"translated_name": "MACHINE GUN ROF",
+				"value": 0.2
+			}]
+		}
+	},
+	"584": {
+		"id": "584",
+		"name": "mcii-b",
+		"faction": "Clan",
+		"mech_type": "assault",
+		"family": "madcatmkii",
+		"chassis_translated": "MAD CAT MK II",
+		"translated_name": "MCII-B",
+		"translated_short_name": "MCII-B",
+		"details": {
+			"type": "",
+			"tons": "90",
+			"top_speed": 72,
+			"jump_jets": 3,
+			"ecm": false,
+			"masc": false,
+			"tech_slots": "1",
+			"weapon_mod_slots": "2",
+			"consumable_slots": "1",
+			"engine_range": {
+				"min": 180,
+				"max": 400
+			},
+			"hardpoints": {
+				"ams": 1,
+				"beam": 2,
+				"ballistic": 4,
+				"missle": 2,
+				"ecm": 0
+			},
+			"tuning_config": {
+				"MovementArchetype": "Huge",
+				"MaxMovementSpeed": "16.2",
+				"TorsoTurnSpeedYaw": "63",
+				"TorsoTurnSpeedPitch": "39.38",
+				"ArmTurnSpeedYaw": "157.5",
+				"ArmTurnSpeedPitch": "157.5",
+				"TurnLerpLowRate": ".88",
+				"TurnLerpMidRate": ".61",
+				"TurnLerpHighRate": ".47",
+				"AccelLerpLowRate": "47.64",
+				"AccelLerpMidRate": "10.8",
+				"AccelLerpHighRate": "6.35",
+				"DecelLerpLowRate": "76.46",
+				"DecelLerpMidRate": "1250",
+				"DecelLerpHighRate": "1250",
+				"ReverseSpeedMultiplier": "0.666",
+				"MaxTorsoAngleYaw": "85",
+				"MaxTorsoAnglePitch": "20",
+				"MaxArmRotationYaw": "20",
+				"MaxArmRotationPitch": "30",
+				"TurnLerpLowSpeed": "0",
+				"TurnLerpMidSpeed": "0.666",
+				"TurnLerpHighSpeed": "1.0",
+				"DecelLerpLowSpeed": "0",
+				"DecelLerpMidSpeed": "0.666",
+				"DecelLerpHighSpeed": "1.0",
+				"AccelLerpLowSpeed": "0",
+				"AccelLerpMidSpeed": "0.666",
+				"AccelLerpHighSpeed": "1.0",
+				"MaxFreeLookYaw": "60",
+				"MaxFreeLookPitch": "40",
+				"JumpJetSpread": "4"
+			},
+			"price": {
+				"id": 584,
+				"mc": -1,
+				"cb": -1
+			},
+			"max_armor": 558,
+			"quirks": [{
+				"name": "erlaser_cooldown_multiplier",
+				"translated_name": "ER LASER COOLDOWN",
+				"value": -0.05
+			}, {
+				"name": "ultraautocannon20_cooldown_multiplier",
+				"translated_name": "@UI_QUIRK_ULTRAAUTOCANNON20_COOLDOWN_MULTIPLIER",
+				"value": -0.1
+			}]
+		}
+	},
+	"585": {
+		"id": "585",
+		"name": "mcii-ds",
+		"faction": "Clan",
+		"mech_type": "assault",
+		"family": "madcatmkii",
+		"chassis_translated": "MAD CAT MK II",
+		"translated_name": "DEATHSTRIKE",
+		"translated_short_name": "MCII-DS",
+		"details": {
+			"type": "Hero",
+			"tons": "90",
+			"top_speed": 72,
+			"jump_jets": 3,
+			"ecm": false,
+			"masc": false,
+			"tech_slots": "1",
+			"weapon_mod_slots": "2",
+			"consumable_slots": "1",
+			"engine_range": {
+				"min": 180,
+				"max": 400
+			},
+			"hardpoints": {
+				"ams": 1,
+				"beam": 6,
+				"ballistic": 2,
+				"missle": 0,
+				"ecm": 0
+			},
+			"tuning_config": {
+				"MovementArchetype": "Huge",
+				"MaxMovementSpeed": "16.2",
+				"TorsoTurnSpeedYaw": "63",
+				"TorsoTurnSpeedPitch": "39.38",
+				"ArmTurnSpeedYaw": "157.5",
+				"ArmTurnSpeedPitch": "157.5",
+				"TurnLerpLowRate": ".88",
+				"TurnLerpMidRate": ".61",
+				"TurnLerpHighRate": ".47",
+				"AccelLerpLowRate": "47.64",
+				"AccelLerpMidRate": "10.8",
+				"AccelLerpHighRate": "6.35",
+				"DecelLerpLowRate": "76.46",
+				"DecelLerpMidRate": "1250",
+				"DecelLerpHighRate": "1250",
+				"ReverseSpeedMultiplier": "0.666",
+				"MaxTorsoAngleYaw": "85",
+				"MaxTorsoAnglePitch": "20",
+				"MaxArmRotationYaw": "0",
+				"MaxArmRotationPitch": "30",
+				"TurnLerpLowSpeed": "0",
+				"TurnLerpMidSpeed": "0.666",
+				"TurnLerpHighSpeed": "1.0",
+				"DecelLerpLowSpeed": "0",
+				"DecelLerpMidSpeed": "0.666",
+				"DecelLerpHighSpeed": "1.0",
+				"AccelLerpLowSpeed": "0",
+				"AccelLerpMidSpeed": "0.666",
+				"AccelLerpHighSpeed": "1.0",
+				"MaxFreeLookYaw": "60",
+				"MaxFreeLookPitch": "40",
+				"JumpJetSpread": "4"
+			},
+			"price": {
+				"id": 585,
+				"mc": -1,
+				"cb": -1
+			},
+			"max_armor": 558,
+			"quirks": [{
+				"name": "ultraautocannon_jamchance_multiplier",
+				"translated_name": "UAC JAM CHANCE",
+				"value": -0.2
+			}]
+		}
+	},
 	"548": {
 		"id": "548",
 		"name": "um-k9",
@@ -46136,7 +48234,7 @@ var DummyMechData = {
 			"top_speed": 81,
 			"jump_jets": 0,
 			"ecm": false,
-			"masc": false,
+			"masc": true,
 			"tech_slots": "1",
 			"weapon_mod_slots": "2",
 			"consumable_slots": "1",
@@ -46444,79 +48542,6 @@ var DummyMechData = {
 				"translated_name": "BASE ARMOR (RA)",
 				"value": 10
 			}]
-		}
-	},
-	"990": {
-		"id": "990",
-		"name": "as7-d-dc-escort",
-		"faction": "InnerSphere",
-		"mech_type": "assault",
-		"family": "atlas",
-		"chassis_translated": "ATLAS",
-		"translated_name": "AS7-D-DC",
-		"translated_short_name": "@AS7-D-DC-ESCORT_SHORT",
-		"details": {
-			"type": "",
-			"tons": "100",
-			"top_speed": 58.32,
-			"jump_jets": 0,
-			"ecm": true,
-			"masc": false,
-			"tech_slots": "1",
-			"weapon_mod_slots": "1",
-			"consumable_slots": "1",
-			"engine_range": {
-				"min": 200,
-				"max": 360
-			},
-			"hardpoints": {
-				"ams": 1,
-				"beam": 2,
-				"ballistic": 2,
-				"missle": 3,
-				"ecm": 1
-			},
-			"tuning_config": {
-				"MovementArchetype": "Huge",
-				"MaxMovementSpeed": "20.0",
-				"TorsoTurnSpeedYaw": "54",
-				"TorsoTurnSpeedPitch": "33.75",
-				"ArmTurnSpeedYaw": "135",
-				"ArmTurnSpeedPitch": "135",
-				"TurnLerpLowRate": "0.75",
-				"TurnLerpMidRate": "0.53",
-				"TurnLerpHighRate": "0.4",
-				"AccelLerpLowRate": "27.3",
-				"AccelLerpMidRate": "6.19",
-				"AccelLerpHighRate": "3.64",
-				"DecelLerpLowRate": "65.54",
-				"DecelLerpMidRate": "1100",
-				"DecelLerpHighRate": "1100",
-				"ReverseSpeedMultiplier": "0.666",
-				"MaxTorsoAngleYaw": "80",
-				"MaxTorsoAnglePitch": "16",
-				"MaxArmRotationYaw": "40",
-				"MaxArmRotationPitch": "30",
-				"TurnLerpLowSpeed": "0",
-				"TurnLerpMidSpeed": "0.666",
-				"TurnLerpHighSpeed": "1.0",
-				"DecelLerpLowSpeed": "0",
-				"DecelLerpMidSpeed": "0.666",
-				"DecelLerpHighSpeed": "1.0",
-				"AccelLerpLowSpeed": "0",
-				"AccelLerpMidSpeed": "0.666",
-				"AccelLerpHighSpeed": "1.0",
-				"MaxFreeLookYaw": "55",
-				"MaxFreeLookPitch": "40",
-				"JumpJetSpread": "0"
-			},
-			"price": {
-				"id": 990,
-				"mc": -1,
-				"cb": -1
-			},
-			"max_armor": 614,
-			"quirks": []
 		}
 	}
 };

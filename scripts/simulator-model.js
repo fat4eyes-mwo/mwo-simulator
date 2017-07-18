@@ -56,6 +56,7 @@ var MechModel = MechModel || (function () {
     STD : "std",
     XL : "xl",
     CLAN_XL : "clan_xl",
+    LIGHT : "light",
   };
 
   var SmurfyWeaponData = {};
@@ -338,7 +339,8 @@ var MechModel = MechModel || (function () {
             (mechHealth.isIntact(Component.LEFT_TORSO)
             && mechHealth.isIntact(Component.RIGHT_TORSO))) &&
         //clan xl engine implies at least one side torso is intact
-        (!(engineInfo.getEngineType() === EngineType.CLAN_XL) ||
+        (!(engineInfo.getEngineType() === EngineType.CLAN_XL ||
+            engineInfo.getEngineType() === EngineType.LIGHT) ||
             (mechHealth.isIntact(Component.LEFT_TORSO)
             || mechHealth.isIntact(Component.RIGHT_TORSO)));
     }
@@ -443,7 +445,8 @@ var MechModel = MechModel || (function () {
       //reduce engine heat efficiency if clan xl engine
       let engineInfo = this.heatState.engineInfo;
       let heatState = this.heatState;
-      if (engineInfo.getEngineType() === EngineType.CLAN_XL) {
+      if (engineInfo.getEngineType() === EngineType.CLAN_XL ||
+          engineInfo.getEngineType() === EngineType.LIGHT) {
         if (location === Component.LEFT_TORSO ||
             location === Component.RIGHT_TORSO) {
           heatState.engineHeatEfficiency = Number(_MechGlobalGameInfo.clan_reduced_xl_heat_efficiency);
@@ -748,6 +751,8 @@ var MechModel = MechModel || (function () {
         return EngineType.XL;
       } else if (this.name.startsWith("Engine_Clan_XL")) {
         return EngineType.CLAN_XL;
+      } else if (this.name.startsWith("Engine_Light")) {
+        return EngineType.LIGHT;
       } else {
         throw "Unknown engine type. Name: " + name;
       }

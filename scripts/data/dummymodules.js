@@ -801,6 +801,155 @@ var DummyModuleData = {
 		},
 		"pilot_module": false
 	},
+	"9022": {
+		"id": "9022",
+		"type": "CClanLightBAPStats",
+		"tons": 0.5,
+		"slots": 1,
+		"price": {
+			"id": 9022,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "ClanLightActiveProbe",
+		"translated_name": "C-LIGHT ACTIVE PROBE",
+		"translated_desc": "Increases sensor range, speeds up targeting data, and can detect shut down 'Mechs at close range.",
+		"amount_allowed": 1,
+		"stats": {
+			"rangeboost": "0.15",
+			"gaintimeboost": "0.15",
+			"mechdetectionrange": "90.0"
+		},
+		"pilot_module": false
+	},
+	"9023": {
+		"id": "9023",
+		"type": "CTargetingComputerStats",
+		"tons": 1,
+		"slots": 1,
+		"price": {
+			"id": 9023,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "ISTargetingComputerMkI",
+		"translated_name": "IS TARGETING COMP. MK I",
+		"translated_desc": "Increases AC (except LBX) and PPC projectile speeds; laser ranges; AC (except LBX), PPC, and laser crit chances. Increases sensor range, zoom, and speeds up targeting data.",
+		"amount_allowed": 1,
+		"pilot_module": false
+	},
+	"9024": {
+		"id": "9024",
+		"type": "CTargetingComputerStats",
+		"tons": 2,
+		"slots": 2,
+		"price": {
+			"id": 9024,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "ISTargetingComputerMkII",
+		"translated_name": "IS TARGETING COMP. MK II",
+		"translated_desc": "Increases AC (except LBX) and PPC projectile speeds; laser ranges; AC (except LBX), PPC, and laser crit chances. Increases sensor range, zoom, and speeds up targeting data.",
+		"amount_allowed": 1,
+		"pilot_module": false
+	},
+	"9025": {
+		"id": "9025",
+		"type": "CTargetingComputerStats",
+		"tons": 3,
+		"slots": 3,
+		"price": {
+			"id": 9025,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "ISTargetingComputerMkIII",
+		"translated_name": "IS TARGETING COMP. MK III",
+		"translated_desc": "Increases AC (except LBX) and PPC projectile speeds; laser ranges; AC (except LBX), PPC, and laser crit chances. Increases sensor range, zoom, and speeds up targeting data.",
+		"amount_allowed": 1,
+		"pilot_module": false
+	},
+	"9026": {
+		"id": "9026",
+		"type": "CTargetingComputerStats",
+		"tons": 4,
+		"slots": 4,
+		"price": {
+			"id": 9026,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "ISTargetingComputerMkIV",
+		"translated_name": "IS TARGETING COMP. MK IV",
+		"translated_desc": "Increases AC (except LBX) and PPC projectile speeds; laser ranges; AC (except LBX), PPC, and laser crit chances. Increases sensor range, zoom, and speeds up targeting data.",
+		"amount_allowed": 1,
+		"pilot_module": false
+	},
+	"9027": {
+		"id": "9027",
+		"type": "CTargetingComputerStats",
+		"tons": 5,
+		"slots": 5,
+		"price": {
+			"id": 9027,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "ISTargetingComputerMkV",
+		"translated_name": "IS TARGETING COMP. MK V",
+		"translated_desc": "Increases AC (except LBX) and PPC projectile speeds; laser ranges; AC (except LBX), PPC, and laser crit chances. Increases sensor range, zoom, and speeds up targeting data.",
+		"amount_allowed": 1,
+		"pilot_module": false
+	},
+	"9028": {
+		"id": "9028",
+		"type": "CTargetingComputerStats",
+		"tons": 6,
+		"slots": 6,
+		"price": {
+			"id": 9028,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "ISTargetingComputerMkVI",
+		"translated_name": "IS TARGETING COMP. MK VI",
+		"translated_desc": "Increases AC (except LBX) and PPC projectile speeds; laser ranges; AC (except LBX), PPC, and laser crit chances. Increases sensor range, zoom, and speeds up targeting data.",
+		"amount_allowed": 1,
+		"pilot_module": false
+	},
+	"9029": {
+		"id": "9029",
+		"type": "CTargetingComputerStats",
+		"tons": 7,
+		"slots": 7,
+		"price": {
+			"id": 9029,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "ISTargetingComputerMkVII",
+		"translated_name": "IS TARGETING COMP. MK VII",
+		"translated_desc": "Increases AC (except LBX) and PPC projectile speeds; laser ranges; AC (except LBX), PPC, and laser crit chances. Increases sensor range, zoom, and speeds up targeting data.",
+		"amount_allowed": 1,
+		"pilot_module": false
+	},
+	"9030": {
+		"id": "9030",
+		"type": "CTargetingComputerStats",
+		"tons": 8,
+		"slots": 8,
+		"price": {
+			"id": 9030,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "ISTargetingComputerMkVIII",
+		"translated_name": "IS TARGETING COMP. MK VIII",
+		"translated_desc": "Increases AC (except LBX) and PPC projectile speeds; laser ranges; AC (except LBX), PPC, and laser crit chances. Increases sensor range, zoom, and speeds up targeting data.",
+		"amount_allowed": 1,
+		"pilot_module": false
+	},
 	"1500": {
 		"id": "1500",
 		"type": "CJumpJetStats",
@@ -3497,6 +3646,1287 @@ var DummyModuleData = {
 		},
 		"engine_type": "XL",
 		"side_slots": 3,
+		"pilot_module": false
+	},
+	"3518": {
+		"id": "3518",
+		"type": "CEngineStats",
+		"tons": 0.5,
+		"slots": 6,
+		"price": {
+			"id": 3518,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_100",
+		"translated_name": "LIGHT ENGINE 100",
+		"translated_desc": "A light engine with a 100 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "100",
+			"heatsinks": "4"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3519": {
+		"id": "3519",
+		"type": "CEngineStats",
+		"tons": 2,
+		"slots": 6,
+		"price": {
+			"id": 3519,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_105",
+		"translated_name": "LIGHT ENGINE 105",
+		"translated_desc": "A light engine with a 105 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "105",
+			"heatsinks": "4"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3520": {
+		"id": "3520",
+		"type": "CEngineStats",
+		"tons": 2,
+		"slots": 6,
+		"price": {
+			"id": 3520,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_110",
+		"translated_name": "LIGHT ENGINE 110",
+		"translated_desc": "A light engine with a 110 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "110",
+			"heatsinks": "4"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3521": {
+		"id": "3521",
+		"type": "CEngineStats",
+		"tons": 2,
+		"slots": 6,
+		"price": {
+			"id": 3521,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_115",
+		"translated_name": "LIGHT ENGINE 115",
+		"translated_desc": "A light engine with a 115 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "115",
+			"heatsinks": "4"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3522": {
+		"id": "3522",
+		"type": "CEngineStats",
+		"tons": 2,
+		"slots": 6,
+		"price": {
+			"id": 3522,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_120",
+		"translated_name": "LIGHT ENGINE 120",
+		"translated_desc": "A light engine with a 120 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "120",
+			"heatsinks": "4"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3523": {
+		"id": "3523",
+		"type": "CEngineStats",
+		"tons": 3,
+		"slots": 6,
+		"price": {
+			"id": 3523,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_125",
+		"translated_name": "LIGHT ENGINE 125",
+		"translated_desc": "A light engine with a 125 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "125",
+			"heatsinks": "5"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3524": {
+		"id": "3524",
+		"type": "CEngineStats",
+		"tons": 3.5,
+		"slots": 6,
+		"price": {
+			"id": 3524,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_130",
+		"translated_name": "LIGHT ENGINE 130",
+		"translated_desc": "A light engine with a 130 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "130",
+			"heatsinks": "5"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3525": {
+		"id": "3525",
+		"type": "CEngineStats",
+		"tons": 3.5,
+		"slots": 6,
+		"price": {
+			"id": 3525,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_135",
+		"translated_name": "LIGHT ENGINE 135",
+		"translated_desc": "A light engine with a 135 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "135",
+			"heatsinks": "5"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3526": {
+		"id": "3526",
+		"type": "CEngineStats",
+		"tons": 4,
+		"slots": 6,
+		"price": {
+			"id": 3526,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_140",
+		"translated_name": "LIGHT ENGINE 140",
+		"translated_desc": "A light engine with a 140 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "140",
+			"heatsinks": "5"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3527": {
+		"id": "3527",
+		"type": "CEngineStats",
+		"tons": 4,
+		"slots": 6,
+		"price": {
+			"id": 3527,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_145",
+		"translated_name": "LIGHT ENGINE 145",
+		"translated_desc": "A light engine with a 145 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "145",
+			"heatsinks": "5"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3528": {
+		"id": "3528",
+		"type": "CEngineStats",
+		"tons": 5.5,
+		"slots": 6,
+		"price": {
+			"id": 3528,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_150",
+		"translated_name": "LIGHT ENGINE 150",
+		"translated_desc": "A light engine with a 150 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "150",
+			"heatsinks": "6"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3529": {
+		"id": "3529",
+		"type": "CEngineStats",
+		"tons": 5.5,
+		"slots": 6,
+		"price": {
+			"id": 3529,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_155",
+		"translated_name": "LIGHT ENGINE 155",
+		"translated_desc": "A light engine with a 155 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "155",
+			"heatsinks": "6"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3530": {
+		"id": "3530",
+		"type": "CEngineStats",
+		"tons": 5.5,
+		"slots": 6,
+		"price": {
+			"id": 3530,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_160",
+		"translated_name": "LIGHT ENGINE 160",
+		"translated_desc": "A light engine with a 160 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "160",
+			"heatsinks": "6"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3531": {
+		"id": "3531",
+		"type": "CEngineStats",
+		"tons": 5.5,
+		"slots": 6,
+		"price": {
+			"id": 3531,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_165",
+		"translated_name": "LIGHT ENGINE 165",
+		"translated_desc": "A light engine with a 165 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "165",
+			"heatsinks": "6"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3532": {
+		"id": "3532",
+		"type": "CEngineStats",
+		"tons": 5.5,
+		"slots": 6,
+		"price": {
+			"id": 3532,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_170",
+		"translated_name": "LIGHT ENGINE 170",
+		"translated_desc": "A light engine with a 170 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "170",
+			"heatsinks": "6"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3533": {
+		"id": "3533",
+		"type": "CEngineStats",
+		"tons": 7.5,
+		"slots": 6,
+		"price": {
+			"id": 3533,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_175",
+		"translated_name": "LIGHT ENGINE 175",
+		"translated_desc": "A light engine with a 175 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "175",
+			"heatsinks": "7"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3534": {
+		"id": "3534",
+		"type": "CEngineStats",
+		"tons": 7.5,
+		"slots": 6,
+		"price": {
+			"id": 3534,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_180",
+		"translated_name": "LIGHT ENGINE 180",
+		"translated_desc": "A light engine with a 180 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "180",
+			"heatsinks": "7"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3535": {
+		"id": "3535",
+		"type": "CEngineStats",
+		"tons": 8,
+		"slots": 6,
+		"price": {
+			"id": 3535,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_185",
+		"translated_name": "LIGHT ENGINE 185",
+		"translated_desc": "A light engine with a 185 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "185",
+			"heatsinks": "7"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3536": {
+		"id": "3536",
+		"type": "CEngineStats",
+		"tons": 8,
+		"slots": 6,
+		"price": {
+			"id": 3536,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_190",
+		"translated_name": "LIGHT ENGINE 190",
+		"translated_desc": "A light engine with a 190 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "190",
+			"heatsinks": "7"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3537": {
+		"id": "3537",
+		"type": "CEngineStats",
+		"tons": 8,
+		"slots": 6,
+		"price": {
+			"id": 3537,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_195",
+		"translated_name": "LIGHT ENGINE 195",
+		"translated_desc": "A light engine with a 195 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "195",
+			"heatsinks": "7"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3538": {
+		"id": "3538",
+		"type": "CEngineStats",
+		"tons": 9.5,
+		"slots": 6,
+		"price": {
+			"id": 3538,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_200",
+		"translated_name": "LIGHT ENGINE 200",
+		"translated_desc": "A light engine with a 200 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "200",
+			"heatsinks": "8"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3539": {
+		"id": "3539",
+		"type": "CEngineStats",
+		"tons": 10.5,
+		"slots": 6,
+		"price": {
+			"id": 3539,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_205",
+		"translated_name": "LIGHT ENGINE 205",
+		"translated_desc": "A light engine with a 205 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "205",
+			"heatsinks": "8"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3540": {
+		"id": "3540",
+		"type": "CEngineStats",
+		"tons": 11,
+		"slots": 6,
+		"price": {
+			"id": 3540,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_210",
+		"translated_name": "LIGHT ENGINE 210",
+		"translated_desc": "A light engine with a 210 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "210",
+			"heatsinks": "8"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3541": {
+		"id": "3541",
+		"type": "CEngineStats",
+		"tons": 11.5,
+		"slots": 6,
+		"price": {
+			"id": 3541,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_215",
+		"translated_name": "LIGHT ENGINE 215",
+		"translated_desc": "A light engine with a 215 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "215",
+			"heatsinks": "8"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3542": {
+		"id": "3542",
+		"type": "CEngineStats",
+		"tons": 11.5,
+		"slots": 6,
+		"price": {
+			"id": 3542,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_220",
+		"translated_name": "LIGHT ENGINE 220",
+		"translated_desc": "A light engine with a 220 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "220",
+			"heatsinks": "8"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3543": {
+		"id": "3543",
+		"type": "CEngineStats",
+		"tons": 12.5,
+		"slots": 6,
+		"price": {
+			"id": 3543,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_225",
+		"translated_name": "LIGHT ENGINE 225",
+		"translated_desc": "A light engine with a 225 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "225",
+			"heatsinks": "9"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3544": {
+		"id": "3544",
+		"type": "CEngineStats",
+		"tons": 13,
+		"slots": 6,
+		"price": {
+			"id": 3544,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_230",
+		"translated_name": "LIGHT ENGINE 230",
+		"translated_desc": "A light engine with a 230 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "230",
+			"heatsinks": "9"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3545": {
+		"id": "3545",
+		"type": "CEngineStats",
+		"tons": 13.5,
+		"slots": 6,
+		"price": {
+			"id": 3545,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_235",
+		"translated_name": "LIGHT ENGINE 235",
+		"translated_desc": "A light engine with a 235 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "235",
+			"heatsinks": "9"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3546": {
+		"id": "3546",
+		"type": "CEngineStats",
+		"tons": 14,
+		"slots": 6,
+		"price": {
+			"id": 3546,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_240",
+		"translated_name": "LIGHT ENGINE 240",
+		"translated_desc": "A light engine with a 240 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "240",
+			"heatsinks": "9"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3547": {
+		"id": "3547",
+		"type": "CEngineStats",
+		"tons": 14,
+		"slots": 6,
+		"price": {
+			"id": 3547,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_245",
+		"translated_name": "LIGHT ENGINE 245",
+		"translated_desc": "A light engine with a 245 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "245",
+			"heatsinks": "9"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3548": {
+		"id": "3548",
+		"type": "CEngineStats",
+		"tons": 15.5,
+		"slots": 6,
+		"price": {
+			"id": 3548,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_250",
+		"translated_name": "LIGHT ENGINE 250",
+		"translated_desc": "A light engine with a 250 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "250",
+			"heatsinks": "10"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3549": {
+		"id": "3549",
+		"type": "CEngineStats",
+		"tons": 16,
+		"slots": 6,
+		"price": {
+			"id": 3549,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_255",
+		"translated_name": "LIGHT ENGINE 255",
+		"translated_desc": "A light engine with a 255 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "255",
+			"heatsinks": "10"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3550": {
+		"id": "3550",
+		"type": "CEngineStats",
+		"tons": 16.5,
+		"slots": 6,
+		"price": {
+			"id": 3550,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_260",
+		"translated_name": "LIGHT ENGINE 260",
+		"translated_desc": "A light engine with a 260 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "260",
+			"heatsinks": "10"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3551": {
+		"id": "3551",
+		"type": "CEngineStats",
+		"tons": 16.5,
+		"slots": 6,
+		"price": {
+			"id": 3551,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_265",
+		"translated_name": "LIGHT ENGINE 265",
+		"translated_desc": "A light engine with a 265 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "265",
+			"heatsinks": "10"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3552": {
+		"id": "3552",
+		"type": "CEngineStats",
+		"tons": 17,
+		"slots": 6,
+		"price": {
+			"id": 3552,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_270",
+		"translated_name": "LIGHT ENGINE 270",
+		"translated_desc": "A light engine with a 270 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "270",
+			"heatsinks": "10"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3553": {
+		"id": "3553",
+		"type": "CEngineStats",
+		"tons": 18,
+		"slots": 6,
+		"price": {
+			"id": 3553,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_275",
+		"translated_name": "LIGHT ENGINE 275",
+		"translated_desc": "A light engine with a 275 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "275",
+			"heatsinks": "11"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3554": {
+		"id": "3554",
+		"type": "CEngineStats",
+		"tons": 18,
+		"slots": 6,
+		"price": {
+			"id": 3554,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_280",
+		"translated_name": "LIGHT ENGINE 280",
+		"translated_desc": "A light engine with a 280 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "280",
+			"heatsinks": "11"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3555": {
+		"id": "3555",
+		"type": "CEngineStats",
+		"tons": 18.5,
+		"slots": 6,
+		"price": {
+			"id": 3555,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_285",
+		"translated_name": "LIGHT ENGINE 285",
+		"translated_desc": "A light engine with a 285 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "285",
+			"heatsinks": "11"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3556": {
+		"id": "3556",
+		"type": "CEngineStats",
+		"tons": 19.5,
+		"slots": 6,
+		"price": {
+			"id": 3556,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_290",
+		"translated_name": "LIGHT ENGINE 290",
+		"translated_desc": "A light engine with a 290 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "290",
+			"heatsinks": "11"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3557": {
+		"id": "3557",
+		"type": "CEngineStats",
+		"tons": 19.5,
+		"slots": 6,
+		"price": {
+			"id": 3557,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_295",
+		"translated_name": "LIGHT ENGINE 295",
+		"translated_desc": "A light engine with a 295 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "295",
+			"heatsinks": "11"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3558": {
+		"id": "3558",
+		"type": "CEngineStats",
+		"tons": 20.5,
+		"slots": 6,
+		"price": {
+			"id": 3558,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_300",
+		"translated_name": "LIGHT ENGINE 300",
+		"translated_desc": "A light engine with a 300 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "300",
+			"heatsinks": "12"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3559": {
+		"id": "3559",
+		"type": "CEngineStats",
+		"tons": 22,
+		"slots": 6,
+		"price": {
+			"id": 3559,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_305",
+		"translated_name": "LIGHT ENGINE 305",
+		"translated_desc": "A light engine with a 305 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "305",
+			"heatsinks": "12"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3560": {
+		"id": "3560",
+		"type": "CEngineStats",
+		"tons": 22.5,
+		"slots": 6,
+		"price": {
+			"id": 3560,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_310",
+		"translated_name": "LIGHT ENGINE 310",
+		"translated_desc": "A light engine with a 310 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "310",
+			"heatsinks": "12"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3561": {
+		"id": "3561",
+		"type": "CEngineStats",
+		"tons": 23.5,
+		"slots": 6,
+		"price": {
+			"id": 3561,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_315",
+		"translated_name": "LIGHT ENGINE 315",
+		"translated_desc": "A light engine with a 315 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "315",
+			"heatsinks": "12"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3562": {
+		"id": "3562",
+		"type": "CEngineStats",
+		"tons": 24,
+		"slots": 6,
+		"price": {
+			"id": 3562,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_320",
+		"translated_name": "LIGHT ENGINE 320",
+		"translated_desc": "A light engine with a 320 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "320",
+			"heatsinks": "12"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3563": {
+		"id": "3563",
+		"type": "CEngineStats",
+		"tons": 25,
+		"slots": 6,
+		"price": {
+			"id": 3563,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_325",
+		"translated_name": "LIGHT ENGINE 325",
+		"translated_desc": "A light engine with a 325 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "325",
+			"heatsinks": "13"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3564": {
+		"id": "3564",
+		"type": "CEngineStats",
+		"tons": 25.5,
+		"slots": 6,
+		"price": {
+			"id": 3564,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_330",
+		"translated_name": "LIGHT ENGINE 330",
+		"translated_desc": "A light engine with a 330 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "330",
+			"heatsinks": "13"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3565": {
+		"id": "3565",
+		"type": "CEngineStats",
+		"tons": 26.5,
+		"slots": 6,
+		"price": {
+			"id": 3565,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_335",
+		"translated_name": "LIGHT ENGINE 335",
+		"translated_desc": "A light engine with a 335 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "335",
+			"heatsinks": "13"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3566": {
+		"id": "3566",
+		"type": "CEngineStats",
+		"tons": 27.5,
+		"slots": 6,
+		"price": {
+			"id": 3566,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_340",
+		"translated_name": "LIGHT ENGINE 340",
+		"translated_desc": "A light engine with a 340 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "340",
+			"heatsinks": "13"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3567": {
+		"id": "3567",
+		"type": "CEngineStats",
+		"tons": 28.5,
+		"slots": 6,
+		"price": {
+			"id": 3567,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_345",
+		"translated_name": "LIGHT ENGINE 345",
+		"translated_desc": "A light engine with a 345 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "345",
+			"heatsinks": "13"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3568": {
+		"id": "3568",
+		"type": "CEngineStats",
+		"tons": 29.5,
+		"slots": 6,
+		"price": {
+			"id": 3568,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_350",
+		"translated_name": "LIGHT ENGINE 350",
+		"translated_desc": "A light engine with a 350 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "350",
+			"heatsinks": "14"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3569": {
+		"id": "3569",
+		"type": "CEngineStats",
+		"tons": 31,
+		"slots": 6,
+		"price": {
+			"id": 3569,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_355",
+		"translated_name": "LIGHT ENGINE 355",
+		"translated_desc": "A light engine with a 355 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "355",
+			"heatsinks": "14"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3570": {
+		"id": "3570",
+		"type": "CEngineStats",
+		"tons": 32,
+		"slots": 6,
+		"price": {
+			"id": 3570,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_360",
+		"translated_name": "LIGHT ENGINE 360",
+		"translated_desc": "A light engine with a 360 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "360",
+			"heatsinks": "14"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3571": {
+		"id": "3571",
+		"type": "CEngineStats",
+		"tons": 33,
+		"slots": 6,
+		"price": {
+			"id": 3571,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_365",
+		"translated_name": "LIGHT ENGINE 365",
+		"translated_desc": "A light engine with a 365 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "365",
+			"heatsinks": "14"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3572": {
+		"id": "3572",
+		"type": "CEngineStats",
+		"tons": 34.5,
+		"slots": 6,
+		"price": {
+			"id": 3572,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_370",
+		"translated_name": "LIGHT ENGINE 370",
+		"translated_desc": "A light engine with a 370 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "370",
+			"heatsinks": "14"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3573": {
+		"id": "3573",
+		"type": "CEngineStats",
+		"tons": 36,
+		"slots": 6,
+		"price": {
+			"id": 3573,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_375",
+		"translated_name": "LIGHT ENGINE 375",
+		"translated_desc": "A light engine with a 375 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "375",
+			"heatsinks": "15"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3574": {
+		"id": "3574",
+		"type": "CEngineStats",
+		"tons": 38,
+		"slots": 6,
+		"price": {
+			"id": 3574,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_380",
+		"translated_name": "LIGHT ENGINE 380",
+		"translated_desc": "A light engine with a 380 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "380",
+			"heatsinks": "15"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3575": {
+		"id": "3575",
+		"type": "CEngineStats",
+		"tons": 40,
+		"slots": 6,
+		"price": {
+			"id": 3575,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_385",
+		"translated_name": "LIGHT ENGINE 385",
+		"translated_desc": "A light engine with a 385 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "385",
+			"heatsinks": "15"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3576": {
+		"id": "3576",
+		"type": "CEngineStats",
+		"tons": 41.5,
+		"slots": 6,
+		"price": {
+			"id": 3576,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_390",
+		"translated_name": "LIGHT ENGINE 390",
+		"translated_desc": "A light engine with a 390 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "390",
+			"heatsinks": "15"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3577": {
+		"id": "3577",
+		"type": "CEngineStats",
+		"tons": 44,
+		"slots": 6,
+		"price": {
+			"id": 3577,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_395",
+		"translated_name": "LIGHT ENGINE 395",
+		"translated_desc": "A light engine with a 395 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "395",
+			"heatsinks": "15"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
+		"pilot_module": false
+	},
+	"3578": {
+		"id": "3578",
+		"type": "CEngineStats",
+		"tons": 46.5,
+		"slots": 6,
+		"price": {
+			"id": 3578,
+			"mc": -1,
+			"cb": -1
+		},
+		"name": "Engine_Light_400",
+		"translated_name": "LIGHT ENGINE 400",
+		"translated_desc": "A light engine with a 400 rating.  Requires 2 critical slots in each side torso.",
+		"stats": {
+			"rating": "400",
+			"heatsinks": "16"
+		},
+		"engine_type": "LIGHT",
+		"side_slots": 2,
 		"pilot_module": false
 	},
 	"3418": {

@@ -25237,5 +25237,1364 @@ var _DummyOmnipods = {
 				"cb": -1
 			}
 		}
+	},
+	"cougar": {
+		"30889": {
+			"details": {
+				"id": "30889",
+				"chassis": "cougar",
+				"set": "cou-prime",
+				"component": "head",
+				"translatedName": "COU-PRIME HEAD"
+			},
+			"configuration": {
+				"name": "head",
+				"internalSlots": [],
+				"fixedSlots": [],
+				"quirks": [],
+				"hardpoints": []
+			},
+			"price": {
+				"id": 30889,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30890": {
+			"details": {
+				"id": "30890",
+				"chassis": "cougar",
+				"set": "cou-prime",
+				"component": "left_arm",
+				"translatedName": "COU-PRIME LEFT ARM"
+			},
+			"configuration": {
+				"name": "left_arm",
+				"internalSlots": [{
+					"itemId": 1910,
+					"toggleable": 1,
+					"slots": 1,
+					"tons": "0"
+				}],
+				"fixedSlots": [],
+				"quirks": [],
+				"hardpoints": [{
+					"type": "BEAM",
+					"count": 1,
+					"id": "10"
+				}]
+			},
+			"price": {
+				"id": 30890,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30891": {
+			"details": {
+				"id": "30891",
+				"chassis": "cougar",
+				"set": "cou-prime",
+				"component": "left_torso",
+				"translatedName": "COU-PRIME LEFT TORSO"
+			},
+			"configuration": {
+				"name": "left_torso",
+				"internalSlots": [],
+				"fixedSlots": [],
+				"quirks": [{
+					"name": "internalresist_lt_additive",
+					"translated_name": "BASE STRUCTURE (LT)",
+					"value": 5
+				}],
+				"hardpoints": [{
+					"type": "AMS",
+					"count": 1,
+					"id": "20"
+				}, {
+					"type": "MISSLE",
+					"count": 1,
+					"id": "23",
+					"tubes": [20],
+					"tubes_fallback": true
+				}]
+			},
+			"price": {
+				"id": 30891,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30892": {
+			"details": {
+				"id": "30892",
+				"chassis": "cougar",
+				"set": "cou-prime",
+				"component": "centre_torso",
+				"translatedName": "COU-PRIME CENTER TORSO"
+			},
+			"configuration": {
+				"name": "centre_torso",
+				"internalSlots": [],
+				"fixedSlots": [],
+				"quirks": [{
+					"name": "heatdissipation_multiplier",
+					"translated_name": "Heat Dissipation",
+					"value": 0.12
+				}, {
+					"name": "all_cooldown_multiplier",
+					"translated_name": "COOLDOWN",
+					"value": -0.05
+				}],
+				"hardpoints": []
+			},
+			"price": {
+				"id": 30892,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30893": {
+			"details": {
+				"id": "30893",
+				"chassis": "cougar",
+				"set": "cou-prime",
+				"component": "right_torso",
+				"translatedName": "COU-PRIME RIGHT TORSO"
+			},
+			"configuration": {
+				"name": "right_torso",
+				"internalSlots": [],
+				"fixedSlots": [],
+				"quirks": [{
+					"name": "internalresist_rt_additive",
+					"translated_name": "BASE STRUCTURE (RT)",
+					"value": 5
+				}],
+				"hardpoints": [{
+					"type": "MISSLE",
+					"count": 1,
+					"id": "32",
+					"tubes": [20],
+					"tubes_fallback": true
+				}]
+			},
+			"price": {
+				"id": 30893,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30894": {
+			"details": {
+				"id": "30894",
+				"chassis": "cougar",
+				"set": "cou-prime",
+				"component": "right_arm",
+				"translatedName": "COU-PRIME RIGHT ARM"
+			},
+			"configuration": {
+				"name": "right_arm",
+				"internalSlots": [{
+					"itemId": 1910,
+					"toggleable": 1,
+					"slots": 1,
+					"tons": "0"
+				}],
+				"fixedSlots": [],
+				"quirks": [{
+					"name": "energy_range_multiplier",
+					"translated_name": "ENERGY RANGE",
+					"value": 0.05
+				}],
+				"hardpoints": [{
+					"type": "BEAM",
+					"count": 1,
+					"id": "40"
+				}]
+			},
+			"price": {
+				"id": 30894,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30895": {
+			"details": {
+				"id": "30895",
+				"chassis": "cougar",
+				"set": "cou-prime",
+				"component": "left_leg",
+				"translatedName": "COU-PRIME LEFT LEG"
+			},
+			"configuration": {
+				"name": "left_leg",
+				"internalSlots": [],
+				"fixedSlots": [],
+				"quirks": [{
+					"name": "internalresist_ll_additive",
+					"translated_name": "BASE STRUCTURE (LL)",
+					"value": 16
+				}],
+				"hardpoints": []
+			},
+			"price": {
+				"id": 30895,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30896": {
+			"details": {
+				"id": "30896",
+				"chassis": "cougar",
+				"set": "cou-prime",
+				"component": "right_leg",
+				"translatedName": "COU-PRIME RIGHT LEG"
+			},
+			"configuration": {
+				"name": "right_leg",
+				"internalSlots": [],
+				"fixedSlots": [],
+				"quirks": [{
+					"name": "internalresist_rl_additive",
+					"translated_name": "BASE STRUCTURE (RL)",
+					"value": 16
+				}],
+				"hardpoints": []
+			},
+			"price": {
+				"id": 30896,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30897": {
+			"details": {
+				"id": "30897",
+				"chassis": "cougar",
+				"set": "cou-c",
+				"component": "head",
+				"translatedName": "COU-C HEAD"
+			},
+			"configuration": {
+				"name": "head",
+				"internalSlots": [],
+				"fixedSlots": [],
+				"quirks": [],
+				"hardpoints": [{
+					"type": "BEAM",
+					"count": 1,
+					"id": "0"
+				}]
+			},
+			"price": {
+				"id": 30897,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30898": {
+			"details": {
+				"id": "30898",
+				"chassis": "cougar",
+				"set": "cou-c",
+				"component": "left_arm",
+				"translatedName": "COU-C LEFT ARM"
+			},
+			"configuration": {
+				"name": "left_arm",
+				"internalSlots": [{
+					"itemId": 1910,
+					"toggleable": 1,
+					"slots": 1,
+					"tons": "0"
+				}],
+				"fixedSlots": [],
+				"quirks": [],
+				"hardpoints": [{
+					"type": "BALLISTIC",
+					"count": 1,
+					"id": "11"
+				}]
+			},
+			"price": {
+				"id": 30898,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30899": {
+			"details": {
+				"id": "30899",
+				"chassis": "cougar",
+				"set": "cou-c",
+				"component": "left_torso",
+				"translatedName": "COU-C LEFT TORSO"
+			},
+			"configuration": {
+				"name": "left_torso",
+				"internalSlots": [],
+				"fixedSlots": [],
+				"quirks": [{
+					"name": "armorresist_la_additive",
+					"translated_name": "BASE ARMOR (LA)",
+					"value": 10
+				}, {
+					"name": "ballistic_cooldown_multiplier",
+					"translated_name": "BALLISTIC COOLDOWN",
+					"value": 0.05
+				}],
+				"hardpoints": []
+			},
+			"price": {
+				"id": 30899,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30900": {
+			"details": {
+				"id": "30900",
+				"chassis": "cougar",
+				"set": "cou-c",
+				"component": "centre_torso",
+				"translatedName": "COU-C CENTER TORSO"
+			},
+			"configuration": {
+				"name": "centre_torso",
+				"internalSlots": [],
+				"fixedSlots": [],
+				"quirks": [{
+					"name": "heatdissipation_multiplier",
+					"translated_name": "Heat Dissipation",
+					"value": 0.12
+				}, {
+					"name": "all_cooldown_multiplier",
+					"translated_name": "COOLDOWN",
+					"value": -0.05
+				}],
+				"hardpoints": []
+			},
+			"price": {
+				"id": 30900,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30901": {
+			"details": {
+				"id": "30901",
+				"chassis": "cougar",
+				"set": "cou-c",
+				"component": "right_torso",
+				"translatedName": "COU-C RIGHT TORSO"
+			},
+			"configuration": {
+				"name": "right_torso",
+				"internalSlots": [],
+				"fixedSlots": [],
+				"quirks": [{
+					"name": "armorresist_rt_additive",
+					"translated_name": "BASE ARMOR (RT)",
+					"value": 10
+				}, {
+					"name": "turnlerp_all_multiplier",
+					"translated_name": "TURN RATE",
+					"value": 0.1
+				}, {
+					"name": "accellerp_all_multiplier",
+					"translated_name": "ACCELERATION RATE",
+					"value": 0.1
+				}, {
+					"name": "decellerp_all_multiplier",
+					"translated_name": "DECELERATION RATE",
+					"value": 0.1
+				}],
+				"hardpoints": []
+			},
+			"price": {
+				"id": 30901,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30902": {
+			"details": {
+				"id": "30902",
+				"chassis": "cougar",
+				"set": "cou-c",
+				"component": "right_arm",
+				"translatedName": "COU-C RIGHT ARM"
+			},
+			"configuration": {
+				"name": "right_arm",
+				"internalSlots": [{
+					"itemId": 1910,
+					"toggleable": 1,
+					"slots": 1,
+					"tons": "0"
+				}],
+				"fixedSlots": [],
+				"quirks": [],
+				"hardpoints": [{
+					"type": "BEAM",
+					"count": 4,
+					"id": "43"
+				}]
+			},
+			"price": {
+				"id": 30902,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30903": {
+			"details": {
+				"id": "30903",
+				"chassis": "cougar",
+				"set": "cou-c",
+				"component": "left_leg",
+				"translatedName": "COU-C LEFT LEG"
+			},
+			"configuration": {
+				"name": "left_leg",
+				"internalSlots": [],
+				"fixedSlots": [],
+				"quirks": [{
+					"name": "internalresist_ll_additive",
+					"translated_name": "BASE STRUCTURE (LL)",
+					"value": 16
+				}],
+				"hardpoints": []
+			},
+			"price": {
+				"id": 30903,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30904": {
+			"details": {
+				"id": "30904",
+				"chassis": "cougar",
+				"set": "cou-c",
+				"component": "right_leg",
+				"translatedName": "COU-C RIGHT LEG"
+			},
+			"configuration": {
+				"name": "right_leg",
+				"internalSlots": [],
+				"fixedSlots": [],
+				"quirks": [{
+					"name": "internalresist_rl_additive",
+					"translated_name": "BASE STRUCTURE (RL)",
+					"value": 16
+				}],
+				"hardpoints": []
+			},
+			"price": {
+				"id": 30904,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30905": {
+			"details": {
+				"id": "30905",
+				"chassis": "cougar",
+				"set": "cou-d",
+				"component": "head",
+				"translatedName": "COU-D HEAD"
+			},
+			"configuration": {
+				"name": "head",
+				"internalSlots": [],
+				"fixedSlots": [],
+				"quirks": [],
+				"hardpoints": []
+			},
+			"price": {
+				"id": 30905,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30906": {
+			"details": {
+				"id": "30906",
+				"chassis": "cougar",
+				"set": "cou-d",
+				"component": "left_arm",
+				"translatedName": "COU-D LEFT ARM"
+			},
+			"configuration": {
+				"name": "left_arm",
+				"internalSlots": [{
+					"itemId": 1910,
+					"toggleable": 1,
+					"slots": 1,
+					"tons": "0"
+				}],
+				"fixedSlots": [],
+				"quirks": [],
+				"hardpoints": [{
+					"type": "BEAM",
+					"count": 1,
+					"id": "10"
+				}]
+			},
+			"price": {
+				"id": 30906,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30907": {
+			"details": {
+				"id": "30907",
+				"chassis": "cougar",
+				"set": "cou-d",
+				"component": "left_torso",
+				"translatedName": "COU-D LEFT TORSO"
+			},
+			"configuration": {
+				"name": "left_torso",
+				"internalSlots": [],
+				"fixedSlots": [],
+				"quirks": [{
+					"name": "internalresist_lt_additive",
+					"translated_name": "BASE STRUCTURE (LT)",
+					"value": 5
+				}],
+				"hardpoints": [{
+					"type": "MISSLE",
+					"count": 1,
+					"id": "23",
+					"tubes": [20],
+					"tubes_fallback": true
+				}]
+			},
+			"price": {
+				"id": 30907,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30908": {
+			"details": {
+				"id": "30908",
+				"chassis": "cougar",
+				"set": "cou-d",
+				"component": "centre_torso",
+				"translatedName": "COU-D CENTER TORSO"
+			},
+			"configuration": {
+				"name": "centre_torso",
+				"internalSlots": [],
+				"fixedSlots": [],
+				"quirks": [{
+					"name": "heatdissipation_multiplier",
+					"translated_name": "Heat Dissipation",
+					"value": 0.12
+				}, {
+					"name": "all_cooldown_multiplier",
+					"translated_name": "COOLDOWN",
+					"value": -0.05
+				}],
+				"hardpoints": []
+			},
+			"price": {
+				"id": 30908,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30909": {
+			"details": {
+				"id": "30909",
+				"chassis": "cougar",
+				"set": "cou-d",
+				"component": "right_torso",
+				"translatedName": "COU-D RIGHT TORSO"
+			},
+			"configuration": {
+				"name": "right_torso",
+				"internalSlots": [],
+				"fixedSlots": [],
+				"quirks": [{
+					"name": "internalresist_rt_additive",
+					"translated_name": "BASE STRUCTURE (RT)",
+					"value": 5
+				}],
+				"hardpoints": [{
+					"type": "MISSLE",
+					"count": 1,
+					"id": "32",
+					"tubes": [20],
+					"tubes_fallback": true
+				}]
+			},
+			"price": {
+				"id": 30909,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30910": {
+			"details": {
+				"id": "30910",
+				"chassis": "cougar",
+				"set": "cou-d",
+				"component": "right_arm",
+				"translatedName": "COU-D RIGHT ARM"
+			},
+			"configuration": {
+				"name": "right_arm",
+				"internalSlots": [{
+					"itemId": 1910,
+					"toggleable": 1,
+					"slots": 1,
+					"tons": "0"
+				}],
+				"fixedSlots": [],
+				"quirks": [],
+				"hardpoints": [{
+					"type": "BALLISTIC",
+					"count": 1,
+					"id": "44"
+				}]
+			},
+			"price": {
+				"id": 30910,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30911": {
+			"details": {
+				"id": "30911",
+				"chassis": "cougar",
+				"set": "cou-d",
+				"component": "left_leg",
+				"translatedName": "COU-D LEFT LEG"
+			},
+			"configuration": {
+				"name": "left_leg",
+				"internalSlots": [],
+				"fixedSlots": [],
+				"quirks": [{
+					"name": "internalresist_ll_additive",
+					"translated_name": "BASE STRUCTURE (LL)",
+					"value": 16
+				}],
+				"hardpoints": []
+			},
+			"price": {
+				"id": 30911,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30912": {
+			"details": {
+				"id": "30912",
+				"chassis": "cougar",
+				"set": "cou-d",
+				"component": "right_leg",
+				"translatedName": "COU-D RIGHT LEG"
+			},
+			"configuration": {
+				"name": "right_leg",
+				"internalSlots": [],
+				"fixedSlots": [],
+				"quirks": [{
+					"name": "internalresist_rl_additive",
+					"translated_name": "BASE STRUCTURE (RL)",
+					"value": 16
+				}],
+				"hardpoints": []
+			},
+			"price": {
+				"id": 30912,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30913": {
+			"details": {
+				"id": "30913",
+				"chassis": "cougar",
+				"set": "cou-e",
+				"component": "head",
+				"translatedName": "COU-E HEAD"
+			},
+			"configuration": {
+				"name": "head",
+				"internalSlots": [],
+				"fixedSlots": [],
+				"quirks": [],
+				"hardpoints": [{
+					"type": "BEAM",
+					"count": 1,
+					"id": "0"
+				}]
+			},
+			"price": {
+				"id": 30913,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30914": {
+			"details": {
+				"id": "30914",
+				"chassis": "cougar",
+				"set": "cou-e",
+				"component": "left_arm",
+				"translatedName": "COU-E LEFT ARM"
+			},
+			"configuration": {
+				"name": "left_arm",
+				"internalSlots": [{
+					"itemId": 1910,
+					"toggleable": 1,
+					"slots": 1,
+					"tons": "0"
+				}, {
+					"itemId": 1911,
+					"toggleable": 1,
+					"slots": 1,
+					"tons": "0"
+				}],
+				"fixedSlots": [],
+				"quirks": [],
+				"hardpoints": [{
+					"type": "MISSLE",
+					"count": 1,
+					"id": "12",
+					"tubes": [20],
+					"tubes_fallback": true
+				}]
+			},
+			"price": {
+				"id": 30914,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30915": {
+			"details": {
+				"id": "30915",
+				"chassis": "cougar",
+				"set": "cou-e",
+				"component": "left_torso",
+				"translatedName": "COU-E LEFT TORSO"
+			},
+			"configuration": {
+				"name": "left_torso",
+				"internalSlots": [],
+				"fixedSlots": [],
+				"quirks": [],
+				"hardpoints": [{
+					"type": "BEAM",
+					"count": 1,
+					"id": "21"
+				}]
+			},
+			"price": {
+				"id": 30915,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30916": {
+			"details": {
+				"id": "30916",
+				"chassis": "cougar",
+				"set": "cou-e",
+				"component": "centre_torso",
+				"translatedName": "COU-E CENTER TORSO"
+			},
+			"configuration": {
+				"name": "centre_torso",
+				"internalSlots": [],
+				"fixedSlots": [],
+				"quirks": [{
+					"name": "heatdissipation_multiplier",
+					"translated_name": "Heat Dissipation",
+					"value": 0.12
+				}, {
+					"name": "all_cooldown_multiplier",
+					"translated_name": "COOLDOWN",
+					"value": -0.05
+				}],
+				"hardpoints": []
+			},
+			"price": {
+				"id": 30916,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30917": {
+			"details": {
+				"id": "30917",
+				"chassis": "cougar",
+				"set": "cou-e",
+				"component": "right_torso",
+				"translatedName": "COU-E RIGHT TORSO"
+			},
+			"configuration": {
+				"name": "right_torso",
+				"internalSlots": [],
+				"fixedSlots": [],
+				"quirks": [],
+				"hardpoints": [{
+					"type": "BEAM",
+					"count": 1,
+					"id": "30"
+				}]
+			},
+			"price": {
+				"id": 30917,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30918": {
+			"details": {
+				"id": "30918",
+				"chassis": "cougar",
+				"set": "cou-e",
+				"component": "right_arm",
+				"translatedName": "COU-E RIGHT ARM"
+			},
+			"configuration": {
+				"name": "right_arm",
+				"internalSlots": [{
+					"itemId": 1910,
+					"toggleable": 1,
+					"slots": 1,
+					"tons": "0"
+				}, {
+					"itemId": 1911,
+					"toggleable": 1,
+					"slots": 1,
+					"tons": "0"
+				}],
+				"fixedSlots": [],
+				"quirks": [],
+				"hardpoints": [{
+					"type": "MISSLE",
+					"count": 1,
+					"id": "45",
+					"tubes": [20],
+					"tubes_fallback": true
+				}]
+			},
+			"price": {
+				"id": 30918,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30919": {
+			"details": {
+				"id": "30919",
+				"chassis": "cougar",
+				"set": "cou-e",
+				"component": "left_leg",
+				"translatedName": "COU-E LEFT LEG"
+			},
+			"configuration": {
+				"name": "left_leg",
+				"internalSlots": [],
+				"fixedSlots": [],
+				"quirks": [{
+					"name": "internalresist_ll_additive",
+					"translated_name": "BASE STRUCTURE (LL)",
+					"value": 16
+				}],
+				"hardpoints": []
+			},
+			"price": {
+				"id": 30919,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30920": {
+			"details": {
+				"id": "30920",
+				"chassis": "cougar",
+				"set": "cou-e",
+				"component": "right_leg",
+				"translatedName": "COU-E RIGHT LEG"
+			},
+			"configuration": {
+				"name": "right_leg",
+				"internalSlots": [],
+				"fixedSlots": [],
+				"quirks": [{
+					"name": "internalresist_rl_additive",
+					"translated_name": "BASE STRUCTURE (RL)",
+					"value": 16
+				}],
+				"hardpoints": []
+			},
+			"price": {
+				"id": 30920,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30921": {
+			"details": {
+				"id": "30921",
+				"chassis": "cougar",
+				"set": "cou-h",
+				"component": "head",
+				"translatedName": "COU-H HEAD"
+			},
+			"configuration": {
+				"name": "head",
+				"internalSlots": [],
+				"fixedSlots": [],
+				"quirks": [],
+				"hardpoints": []
+			},
+			"price": {
+				"id": 30921,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30922": {
+			"details": {
+				"id": "30922",
+				"chassis": "cougar",
+				"set": "cou-h",
+				"component": "left_arm",
+				"translatedName": "COU-H LEFT ARM"
+			},
+			"configuration": {
+				"name": "left_arm",
+				"internalSlots": [{
+					"itemId": 1910,
+					"toggleable": 1,
+					"slots": 1,
+					"tons": "0"
+				}],
+				"fixedSlots": [],
+				"quirks": [],
+				"hardpoints": [{
+					"type": "BALLISTIC",
+					"count": 1,
+					"id": "11"
+				}]
+			},
+			"price": {
+				"id": 30922,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30923": {
+			"details": {
+				"id": "30923",
+				"chassis": "cougar",
+				"set": "cou-h",
+				"component": "left_torso",
+				"translatedName": "COU-H LEFT TORSO"
+			},
+			"configuration": {
+				"name": "left_torso",
+				"internalSlots": [],
+				"fixedSlots": [{
+					"itemId": 1503,
+					"type": "module"
+				}, {
+					"itemId": 1503,
+					"type": "module"
+				}],
+				"quirks": [],
+				"hardpoints": []
+			},
+			"price": {
+				"id": 30923,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30924": {
+			"details": {
+				"id": "30924",
+				"chassis": "cougar",
+				"set": "cou-h",
+				"component": "centre_torso",
+				"translatedName": "COU-H CENTER TORSO"
+			},
+			"configuration": {
+				"name": "centre_torso",
+				"internalSlots": [],
+				"fixedSlots": [],
+				"quirks": [{
+					"name": "heatdissipation_multiplier",
+					"translated_name": "Heat Dissipation",
+					"value": 0.12
+				}, {
+					"name": "all_cooldown_multiplier",
+					"translated_name": "COOLDOWN",
+					"value": -0.05
+				}],
+				"hardpoints": []
+			},
+			"price": {
+				"id": 30924,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30925": {
+			"details": {
+				"id": "30925",
+				"chassis": "cougar",
+				"set": "cou-h",
+				"component": "right_torso",
+				"translatedName": "COU-H RIGHT TORSO"
+			},
+			"configuration": {
+				"name": "right_torso",
+				"internalSlots": [],
+				"fixedSlots": [{
+					"itemId": 1503,
+					"type": "module"
+				}, {
+					"itemId": 1503,
+					"type": "module"
+				}],
+				"quirks": [],
+				"hardpoints": []
+			},
+			"price": {
+				"id": 30925,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30926": {
+			"details": {
+				"id": "30926",
+				"chassis": "cougar",
+				"set": "cou-h",
+				"component": "right_arm",
+				"translatedName": "COU-H RIGHT ARM"
+			},
+			"configuration": {
+				"name": "right_arm",
+				"internalSlots": [{
+					"itemId": 1910,
+					"toggleable": 1,
+					"slots": 1,
+					"tons": "0"
+				}, {
+					"itemId": 1911,
+					"toggleable": 1,
+					"slots": 1,
+					"tons": "0"
+				}],
+				"fixedSlots": [],
+				"quirks": [],
+				"hardpoints": [{
+					"type": "BEAM",
+					"count": 3,
+					"id": "46"
+				}]
+			},
+			"price": {
+				"id": 30926,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30927": {
+			"details": {
+				"id": "30927",
+				"chassis": "cougar",
+				"set": "cou-h",
+				"component": "left_leg",
+				"translatedName": "COU-H LEFT LEG"
+			},
+			"configuration": {
+				"name": "left_leg",
+				"internalSlots": [],
+				"fixedSlots": [],
+				"quirks": [{
+					"name": "internalresist_ll_additive",
+					"translated_name": "BASE STRUCTURE (LL)",
+					"value": 16
+				}],
+				"hardpoints": []
+			},
+			"price": {
+				"id": 30927,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30928": {
+			"details": {
+				"id": "30928",
+				"chassis": "cougar",
+				"set": "cou-h",
+				"component": "right_leg",
+				"translatedName": "COU-H RIGHT LEG"
+			},
+			"configuration": {
+				"name": "right_leg",
+				"internalSlots": [],
+				"fixedSlots": [],
+				"quirks": [{
+					"name": "internalresist_rl_additive",
+					"translated_name": "BASE STRUCTURE (RL)",
+					"value": 16
+				}],
+				"hardpoints": []
+			},
+			"price": {
+				"id": 30928,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30929": {
+			"details": {
+				"id": "30929",
+				"chassis": "cougar",
+				"set": "cou-ba",
+				"component": "head",
+				"translatedName": "COU-BA HEAD"
+			},
+			"configuration": {
+				"name": "head",
+				"internalSlots": [],
+				"fixedSlots": [],
+				"quirks": [],
+				"hardpoints": [{
+					"type": "AMS",
+					"count": 1,
+					"id": "1"
+				}]
+			},
+			"price": {
+				"id": 30929,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30930": {
+			"details": {
+				"id": "30930",
+				"chassis": "cougar",
+				"set": "cou-ba",
+				"component": "left_arm",
+				"translatedName": "COU-BA LEFT ARM"
+			},
+			"configuration": {
+				"name": "left_arm",
+				"internalSlots": [{
+					"itemId": 1910,
+					"toggleable": 1,
+					"slots": 1,
+					"tons": "0"
+				}, {
+					"itemId": 1911,
+					"toggleable": 1,
+					"slots": 1,
+					"tons": "0"
+				}],
+				"fixedSlots": [],
+				"quirks": [],
+				"hardpoints": [{
+					"type": "MISSLE",
+					"count": 1,
+					"id": "12",
+					"tubes": [20],
+					"tubes_fallback": true
+				}]
+			},
+			"price": {
+				"id": 30930,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30931": {
+			"details": {
+				"id": "30931",
+				"chassis": "cougar",
+				"set": "cou-ba",
+				"component": "left_torso",
+				"translatedName": "COU-BA LEFT TORSO"
+			},
+			"configuration": {
+				"name": "left_torso",
+				"internalSlots": [],
+				"fixedSlots": [],
+				"quirks": [],
+				"hardpoints": [{
+					"type": "BALLISTIC",
+					"count": 1,
+					"id": "22"
+				}]
+			},
+			"price": {
+				"id": 30931,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30932": {
+			"details": {
+				"id": "30932",
+				"chassis": "cougar",
+				"set": "cou-ba",
+				"component": "centre_torso",
+				"translatedName": "COU-BA CENTER TORSO"
+			},
+			"configuration": {
+				"name": "centre_torso",
+				"internalSlots": [],
+				"fixedSlots": [],
+				"quirks": [{
+					"name": "heatdissipation_multiplier",
+					"translated_name": "Heat Dissipation",
+					"value": 0.12
+				}, {
+					"name": "all_cooldown_multiplier",
+					"translated_name": "COOLDOWN",
+					"value": -0.05
+				}],
+				"hardpoints": []
+			},
+			"price": {
+				"id": 30932,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30933": {
+			"details": {
+				"id": "30933",
+				"chassis": "cougar",
+				"set": "cou-ba",
+				"component": "right_torso",
+				"translatedName": "COU-BA RIGHT TORSO"
+			},
+			"configuration": {
+				"name": "right_torso",
+				"internalSlots": [],
+				"fixedSlots": [],
+				"quirks": [],
+				"hardpoints": [{
+					"type": "BALLISTIC",
+					"count": 1,
+					"id": "31"
+				}]
+			},
+			"price": {
+				"id": 30933,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30934": {
+			"details": {
+				"id": "30934",
+				"chassis": "cougar",
+				"set": "cou-ba",
+				"component": "right_arm",
+				"translatedName": "COU-BA RIGHT ARM"
+			},
+			"configuration": {
+				"name": "right_arm",
+				"internalSlots": [{
+					"itemId": 1910,
+					"toggleable": 1,
+					"slots": 1,
+					"tons": "0"
+				}, {
+					"itemId": 1911,
+					"toggleable": 1,
+					"slots": 1,
+					"tons": "0"
+				}],
+				"fixedSlots": [],
+				"quirks": [],
+				"hardpoints": [{
+					"type": "MISSLE",
+					"count": 1,
+					"id": "45",
+					"tubes": [20],
+					"tubes_fallback": true
+				}]
+			},
+			"price": {
+				"id": 30934,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30935": {
+			"details": {
+				"id": "30935",
+				"chassis": "cougar",
+				"set": "cou-ba",
+				"component": "left_leg",
+				"translatedName": "COU-BA LEFT LEG"
+			},
+			"configuration": {
+				"name": "left_leg",
+				"internalSlots": [],
+				"fixedSlots": [],
+				"quirks": [{
+					"name": "internalresist_ll_additive",
+					"translated_name": "BASE STRUCTURE (LL)",
+					"value": 16
+				}],
+				"hardpoints": []
+			},
+			"price": {
+				"id": 30935,
+				"mc": -1,
+				"cb": -1
+			}
+		},
+		"30936": {
+			"details": {
+				"id": "30936",
+				"chassis": "cougar",
+				"set": "cou-ba",
+				"component": "right_leg",
+				"translatedName": "COU-BA RIGHT LEG"
+			},
+			"configuration": {
+				"name": "right_leg",
+				"internalSlots": [],
+				"fixedSlots": [],
+				"quirks": [{
+					"name": "internalresist_rl_additive",
+					"translated_name": "BASE STRUCTURE (RL)",
+					"value": 16
+				}],
+				"hardpoints": []
+			},
+			"price": {
+				"id": 30936,
+				"mc": -1,
+				"cb": -1
+			}
+		}
 	}
 };

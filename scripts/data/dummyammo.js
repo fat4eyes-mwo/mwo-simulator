@@ -179,6 +179,66 @@ var DummyAmmoData = {
 		"num_shots": 5,
 		"weapons": ["1021"]
 	},
+	"2061": {
+		"id": "2061",
+		"type": "HeavyGaussAmmo",
+		"tons": 1,
+		"slots": 1,
+		"price": {
+			"id": 2061,
+			"mc": -1,
+			"cb": -1
+		},
+		"translated_name": "HEAVY GAUSS AMMO",
+		"translated_desc": "A ferrous nickle-iron slug that is electromagnetically fired from a Heavy Gauss Rifle.",
+		"num_shots": 5,
+		"weapons": ["1057"]
+	},
+	"2062": {
+		"id": "2062",
+		"type": "HeavyGaussAmmo",
+		"tons": 0.5,
+		"slots": 1,
+		"price": {
+			"id": 2062,
+			"mc": -1,
+			"cb": -1
+		},
+		"translated_name": "HEAVY GAUSS AMMO (1\/2)",
+		"translated_desc": "A ferrous nickle-iron slug that is electromagnetically fired from a Heavy Gauss Rifle.",
+		"num_shots": 2,
+		"weapons": ["1057"]
+	},
+	"2069": {
+		"id": "2069",
+		"type": "HeavyMachineGunAmmo",
+		"tons": 1,
+		"slots": 1,
+		"price": {
+			"id": 2069,
+			"mc": -1,
+			"cb": -1
+		},
+		"translated_name": "HMG AMMO",
+		"translated_desc": "Small caliber rounds fired from a Heavy Machine Gun.",
+		"num_shots": 1000,
+		"weapons": ["1061"]
+	},
+	"2070": {
+		"id": "2070",
+		"type": "HeavyMachineGunAmmo",
+		"tons": 0.5,
+		"slots": 1,
+		"price": {
+			"id": 2070,
+			"mc": -1,
+			"cb": -1
+		},
+		"translated_name": "HMG AMMO (1\/2)",
+		"translated_desc": "Small caliber rounds fired from a Heavy Machine Gun.",
+		"num_shots": 500,
+		"weapons": ["1061"]
+	},
 	"2010": {
 		"id": "2010",
 		"type": "LB10-XACAmmo",
@@ -208,6 +268,96 @@ var DummyAmmoData = {
 		"translated_desc": "A splinter round that is fired by a LB 10-X.",
 		"num_shots": 10,
 		"weapons": ["1023"]
+	},
+	"2047": {
+		"id": "2047",
+		"type": "LB2-XACAmmo",
+		"tons": 1,
+		"slots": 1,
+		"price": {
+			"id": 2047,
+			"mc": -1,
+			"cb": -1
+		},
+		"translated_name": "LB 2-X AMMO",
+		"translated_desc": "A splinter round that is fired by an LB 2-X.",
+		"num_shots": 75,
+		"weapons": ["1050"]
+	},
+	"2048": {
+		"id": "2048",
+		"type": "LB2-XACAmmo",
+		"tons": 0.5,
+		"slots": 1,
+		"price": {
+			"id": 2048,
+			"mc": -1,
+			"cb": -1
+		},
+		"translated_name": "LB 2-X AMMO (1\/2)",
+		"translated_desc": "A splinter round that is fired by an LB 2-X.",
+		"num_shots": 37,
+		"weapons": ["1050"]
+	},
+	"2051": {
+		"id": "2051",
+		"type": "LB20-XACAmmo",
+		"tons": 1,
+		"slots": 1,
+		"price": {
+			"id": 2051,
+			"mc": -1,
+			"cb": -1
+		},
+		"translated_name": "LB 20-X AMMO",
+		"translated_desc": "A splinter round that is fired by an LB 20-X.",
+		"num_shots": 7,
+		"weapons": ["1052"]
+	},
+	"2052": {
+		"id": "2052",
+		"type": "LB20-XACAmmo",
+		"tons": 0.5,
+		"slots": 1,
+		"price": {
+			"id": 2052,
+			"mc": -1,
+			"cb": -1
+		},
+		"translated_name": "LB 20-X AMMO (1\/2)",
+		"translated_desc": "A splinter round that is fired by an LB 20-X.",
+		"num_shots": 3,
+		"weapons": ["1052"]
+	},
+	"2049": {
+		"id": "2049",
+		"type": "LB5-XACAmmo",
+		"tons": 1,
+		"slots": 1,
+		"price": {
+			"id": 2049,
+			"mc": -1,
+			"cb": -1
+		},
+		"translated_name": "LB 5-X AMMO",
+		"translated_desc": "A splinter round that is fired by an LB 5-X.",
+		"num_shots": 30,
+		"weapons": ["1051"]
+	},
+	"2050": {
+		"id": "2050",
+		"type": "LB5-XACAmmo",
+		"tons": 0.5,
+		"slots": 1,
+		"price": {
+			"id": 2050,
+			"mc": -1,
+			"cb": -1
+		},
+		"translated_name": "LB 5-X AMMO (1\/2)",
+		"translated_desc": "A splinter round that is fired by an LB 5-X.",
+		"num_shots": 15,
+		"weapons": ["1051"]
 	},
 	"2027": {
 		"id": "2027",
@@ -273,6 +423,96 @@ var DummyAmmoData = {
 		"weapons": ["1041", "1042", "1043", "1044"],
 		"id_artemis_swap": 2042
 	},
+	"2059": {
+		"id": "2059",
+		"type": "LightGaussAmmo",
+		"tons": 1,
+		"slots": 1,
+		"price": {
+			"id": 2059,
+			"mc": -1,
+			"cb": -1
+		},
+		"translated_name": "LIGHT GAUSS AMMO",
+		"translated_desc": "A ferrous nickle-iron slug that is electromagnetically fired from a Light Gauss Rifle.",
+		"num_shots": 20,
+		"weapons": ["1056"]
+	},
+	"2060": {
+		"id": "2060",
+		"type": "LightGaussAmmo",
+		"tons": 0.5,
+		"slots": 1,
+		"price": {
+			"id": 2060,
+			"mc": -1,
+			"cb": -1
+		},
+		"translated_name": "LIGHT GAUSS AMMO (1\/2)",
+		"translated_desc": "A ferrous nickle-iron slug that is electromagnetically fired from a Light Gauss Rifle.",
+		"num_shots": 10,
+		"weapons": ["1056"]
+	},
+	"2067": {
+		"id": "2067",
+		"type": "LightMachineGunAmmo",
+		"tons": 1,
+		"slots": 1,
+		"price": {
+			"id": 2067,
+			"mc": -1,
+			"cb": -1
+		},
+		"translated_name": "LMG AMMO",
+		"translated_desc": "Small caliber rounds fired from a Light Machine Gun.",
+		"num_shots": 2500,
+		"weapons": ["1060"]
+	},
+	"2068": {
+		"id": "2068",
+		"type": "LightMachineGunAmmo",
+		"tons": 0.5,
+		"slots": 1,
+		"price": {
+			"id": 2068,
+			"mc": -1,
+			"cb": -1
+		},
+		"translated_name": "LMG AMMO (1\/2)",
+		"translated_desc": "Small caliber rounds fired from a Light Machine Gun.",
+		"num_shots": 1250,
+		"weapons": ["1060"]
+	},
+	"2071": {
+		"id": "2071",
+		"type": "MRMAmmo",
+		"tons": 1,
+		"slots": 1,
+		"price": {
+			"id": 2071,
+			"mc": -1,
+			"cb": -1
+		},
+		"translated_name": "MRM AMMO",
+		"translated_desc": "A Medium Range Missile.",
+		"num_shots": 300,
+		"weapons": ["1064", "1065", "1066", "1067"]
+	},
+	"2072": {
+		"id": "2072",
+		"type": "MRMAmmo",
+		"tons": 0.5,
+		"slots": 1,
+		"price": {
+			"id": 2072,
+			"mc": -1,
+			"cb": -1
+		},
+		"translated_name": "MRM AMMO (1\/2)",
+		"translated_desc": "A Medium Range Missile.",
+		"num_shots": 150,
+		"weapons": ["1064", "1065", "1066", "1067"]
+	},
 	"2011": {
 		"id": "2011",
 		"type": "MachineGunAmmo",
@@ -332,6 +572,66 @@ var DummyAmmoData = {
 		"translated_desc": "A targeting projectile fired from a NARC cannon.",
 		"num_shots": 6,
 		"weapons": ["1029"]
+	},
+	"2063": {
+		"id": "2063",
+		"type": "RotaryAC2Ammo",
+		"tons": 1,
+		"slots": 1,
+		"price": {
+			"id": 2063,
+			"mc": -1,
+			"cb": -1
+		},
+		"translated_name": "R-AC\/2 AMMO",
+		"translated_desc": "Rapid-fire rounds for the R-AC\/2.",
+		"num_shots": 300,
+		"weapons": ["1058"]
+	},
+	"2064": {
+		"id": "2064",
+		"type": "RotaryAC2Ammo",
+		"tons": 0.5,
+		"slots": 1,
+		"price": {
+			"id": 2064,
+			"mc": -1,
+			"cb": -1
+		},
+		"translated_name": "R-AC\/2 AMMO (1\/2)",
+		"translated_desc": "Rapid-fire rounds for the R-AC\/2.",
+		"num_shots": 150,
+		"weapons": ["1058"]
+	},
+	"2065": {
+		"id": "2065",
+		"type": "RotaryAC5Ammo",
+		"tons": 1,
+		"slots": 1,
+		"price": {
+			"id": 2065,
+			"mc": -1,
+			"cb": -1
+		},
+		"translated_name": "R-AC\/5 AMMO",
+		"translated_desc": "Rapid-fire rounds for the R-AC\/5.",
+		"num_shots": 150,
+		"weapons": ["1059"]
+	},
+	"2066": {
+		"id": "2066",
+		"type": "RotaryAC5Ammo",
+		"tons": 0.5,
+		"slots": 1,
+		"price": {
+			"id": 2066,
+			"mc": -1,
+			"cb": -1
+		},
+		"translated_name": "R-AC\/5 AMMO (1\/2)",
+		"translated_desc": "Rapid-fire rounds for the R-AC\/5.",
+		"num_shots": 75,
+		"weapons": ["1059"]
 	},
 	"2028": {
 		"id": "2028",
@@ -410,7 +710,7 @@ var DummyAmmoData = {
 		"translated_name": "STREAK SRM AMMO",
 		"translated_desc": "A Homing Short Range Missile",
 		"num_shots": 100,
-		"weapons": ["1032"]
+		"weapons": ["1032", "1062", "1063"]
 	},
 	"2044": {
 		"id": "2044",
@@ -425,7 +725,97 @@ var DummyAmmoData = {
 		"translated_name": "STREAK SRM AMMO (1\/2)",
 		"translated_desc": "A Homing Short Range Missile",
 		"num_shots": 50,
-		"weapons": ["1032"]
+		"weapons": ["1032", "1062", "1063"]
+	},
+	"2055": {
+		"id": "2055",
+		"type": "UltraAC10Ammo",
+		"tons": 1,
+		"slots": 1,
+		"price": {
+			"id": 2055,
+			"mc": -1,
+			"cb": -1
+		},
+		"translated_name": "U-AC\/10 AMMO",
+		"translated_desc": "A large caliber slug fired from an U-AC\/10.",
+		"num_shots": 40,
+		"weapons": ["1054"]
+	},
+	"2056": {
+		"id": "2056",
+		"type": "UltraAC10Ammo",
+		"tons": 0.5,
+		"slots": 1,
+		"price": {
+			"id": 2056,
+			"mc": -1,
+			"cb": -1
+		},
+		"translated_name": "U-AC\/10 AMMO (1\/2)",
+		"translated_desc": "A large caliber slug fired from an U-AC\/10.",
+		"num_shots": 20,
+		"weapons": ["1054"]
+	},
+	"2057": {
+		"id": "2057",
+		"type": "UltraAC20Ammo",
+		"tons": 1,
+		"slots": 1,
+		"price": {
+			"id": 2057,
+			"mc": -1,
+			"cb": -1
+		},
+		"translated_name": "U-AC\/20 AMMO",
+		"translated_desc": "A large caliber slug fired from an U-AC\/20.",
+		"num_shots": 21,
+		"weapons": ["1055"]
+	},
+	"2058": {
+		"id": "2058",
+		"type": "UltraAC20Ammo",
+		"tons": 0.5,
+		"slots": 1,
+		"price": {
+			"id": 2058,
+			"mc": -1,
+			"cb": -1
+		},
+		"translated_name": "U-AC\/20 AMMO (1\/2)",
+		"translated_desc": "A large caliber slug fired from an U-AC\/20.",
+		"num_shots": 9,
+		"weapons": ["1055"]
+	},
+	"2053": {
+		"id": "2053",
+		"type": "UltraAC2Ammo",
+		"tons": 1,
+		"slots": 1,
+		"price": {
+			"id": 2053,
+			"mc": -1,
+			"cb": -1
+		},
+		"translated_name": "U-AC\/2 AMMO",
+		"translated_desc": "A large caliber slug fired from an U-AC\/2.",
+		"num_shots": 75,
+		"weapons": ["1053"]
+	},
+	"2054": {
+		"id": "2054",
+		"type": "UltraAC2Ammo",
+		"tons": 0.5,
+		"slots": 1,
+		"price": {
+			"id": 2054,
+			"mc": -1,
+			"cb": -1
+		},
+		"translated_name": "U-AC\/2 AMMO (1\/2)",
+		"translated_desc": "A large caliber slug fired from an U-AC\/2.",
+		"num_shots": 37,
+		"weapons": ["1053"]
 	},
 	"2012": {
 		"id": "2012",
@@ -607,6 +997,36 @@ var DummyAmmoData = {
 		"num_shots": 1000,
 		"weapons": ["1237"]
 	},
+	"2246": {
+		"id": "2246",
+		"type": "ClanATMAmmo",
+		"tons": 1,
+		"slots": 1,
+		"price": {
+			"id": 2246,
+			"mc": -1,
+			"cb": -1
+		},
+		"translated_name": "C-ATM AMMO",
+		"translated_desc": "An Advanced Tactical Missile.",
+		"num_shots": 90,
+		"weapons": ["1249", "1250", "1251", "1252"]
+	},
+	"2247": {
+		"id": "2247",
+		"type": "ClanATMAmmo",
+		"tons": 0.5,
+		"slots": 1,
+		"price": {
+			"id": 2247,
+			"mc": -1,
+			"cb": -1
+		},
+		"translated_name": "C-ATM AMMO (1\/2)",
+		"translated_desc": "An Advanced Tactical Missile.",
+		"num_shots": 45,
+		"weapons": ["1249", "1250", "1251", "1252"]
+	},
 	"2212": {
 		"id": "2212",
 		"type": "ClanGaussAmmo",
@@ -636,6 +1056,36 @@ var DummyAmmoData = {
 		"translated_desc": "A ferrous nickle-iron slug that is electromagnetically fired from a Clan Gauss Rifle.",
 		"num_shots": 5,
 		"weapons": ["1208"]
+	},
+	"2244": {
+		"id": "2244",
+		"type": "ClanHeavyMachineGunAmmo",
+		"tons": 1,
+		"slots": 1,
+		"price": {
+			"id": 2244,
+			"mc": -1,
+			"cb": -1
+		},
+		"translated_name": "C-HMG AMMO",
+		"translated_desc": "Small caliber rounds fired from a Clan Heavy Machine Gun.",
+		"num_shots": 1000,
+		"weapons": ["1243"]
+	},
+	"2245": {
+		"id": "2245",
+		"type": "ClanHeavyMachineGunAmmo",
+		"tons": 0.5,
+		"slots": 1,
+		"price": {
+			"id": 2245,
+			"mc": -1,
+			"cb": -1
+		},
+		"translated_name": "C-HMG AMMO (1\/2)",
+		"translated_desc": "Small caliber rounds fired from a Clan Heavy Machine Gun.",
+		"num_shots": 500,
+		"weapons": ["1243"]
 	},
 	"2204": {
 		"id": "2204",
@@ -820,6 +1270,36 @@ var DummyAmmoData = {
 		"num_shots": 90,
 		"weapons": ["1222", "1223", "1224", "1225"],
 		"id_artemis_swap": 2234
+	},
+	"2242": {
+		"id": "2242",
+		"type": "ClanLightMachineGunAmmo",
+		"tons": 1,
+		"slots": 1,
+		"price": {
+			"id": 2242,
+			"mc": -1,
+			"cb": -1
+		},
+		"translated_name": "C-LMG AMMO",
+		"translated_desc": "Small caliber rounds fired from a Clan Light Machine Gun.",
+		"num_shots": 2500,
+		"weapons": ["1242"]
+	},
+	"2243": {
+		"id": "2243",
+		"type": "ClanLightMachineGunAmmo",
+		"tons": 0.5,
+		"slots": 1,
+		"price": {
+			"id": 2243,
+			"mc": -1,
+			"cb": -1
+		},
+		"translated_name": "C-LMG AMMO (1\/2)",
+		"translated_desc": "Small caliber rounds fired from a Clan Light Machine Gun.",
+		"num_shots": 1250,
+		"weapons": ["1242"]
 	},
 	"2213": {
 		"id": "2213",

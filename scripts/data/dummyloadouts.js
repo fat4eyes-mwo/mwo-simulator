@@ -116,6 +116,10 @@
 //http://mwo.smurfy-net.de/mechlab#i=154&l=fbdff04a6abf82aeb905e07d85a4f899bf9ece49
 //DummyStormcrow
 //http://mwo.smurfy-net.de/mechlab#i=183&l=1d9c0251e4085929bc6bace60fa09815a382ff36
+//Old blackjack
+//http://mwo.smurfy-net.de/mechlab#i=79&l=2687fc03fe4f9997c47f545bd15d5c7d1fae93af
+//ERML blackjack
+//http://mwo.smurfy-net.de/mechlab#i=79&l=722f5765439514ffd6dc510c0ebd8ad4a91985ac
 
 //weaponless atlas
 //http://mwo.smurfy-net.de/mechlab#i=16&l=cb72e3e1264e3b8051193ab4e52686a71dba239c
