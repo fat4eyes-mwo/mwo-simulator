@@ -591,6 +591,9 @@ var MechView = MechView || (function() {
                                 "loadErrorTooltip-template",
                                 "loadErrorTooltip",
                                 "miscControl");
+    $("#settingsButton").click(() => {
+      MechViewSimSettings.showSettingsDialog();
+    });
   }
 
   var showModifiedToolip = function() {

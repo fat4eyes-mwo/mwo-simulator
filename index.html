@@ -151,6 +151,9 @@
             <div id="permalinkButton" class="permalinkButton button column column-6" title="Reset">
               Permalink
             </div>
+            <div id="settingsButton" class="settingsButton button column column-6" title="Settings">
+              Settings
+            </div>
           </div>
         </div>
         <div class="row linkPanel">
@@ -616,6 +619,35 @@
       <div class="weaponRow">
         <span class="weaponName"></span>
         <span class="count"></span>
+      </div>
+    </template>
+
+
+    <!--sim settings template-->
+    <template id="simSettings-template">
+      <div class="simSettings">
+        <div class="row title">
+          <h3>Simulation Settings</h3>
+        </div>
+        <div class="simSettingsList">
+        </div>
+        <div class="row">
+          <div class="button cancelButton">Cancel</div>
+          <div class="button applyButton">Apply</div>
+        </div>
+      </div>
+    </template>
+    <template id="simSettingsEntry-template">
+      <div class="simSettingsEntry row">
+        <div class="label column column-3">
+        </div>
+        <div class="column column-3">
+          <select class="value">
+            <option>Option 1</option>
+          </select>
+        </div>
+        <div class="description column column-6">
+        </div>
       </div>
     </template>
 

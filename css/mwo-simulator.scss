@@ -835,7 +835,7 @@ $team_settings_transition : 0.5s;
   border-color: $primary-font-color;
 }
 
-.modalScreen .modalDialog.addmech {
+.modalScreen .modalDialog.addMech {
   margin-top: 5%;
 }
 
@@ -1178,6 +1178,35 @@ $loaded-mech-highlight-border-radius: 4px;
   background-color: $missile-color;
 }
 
+.modalScreen .modalDialog.simSettingsDialog {
+  width: 50%;
+}
+
+//Debug, do not show settings button yet
+#settingsButton {
+  display: none;
+}
+
+.simSettings .title {
+  color: $emphasis-color;
+}
+
+.simSettings .applyButton,
+.simSettings .cancelButton {
+  float:right;
+}
+
+.simSettings .value {
+  display: block;
+  background-color: $background-color;
+  border-color: $low-emphasis-color;
+  border-width: thin;
+  color: $primary-font-color;
+}
+
+.simSettings .label {
+  color: $emphasis-color;
+}
 
 .linkPanel {
   margin-top: 10px;

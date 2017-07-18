@@ -1,5 +1,8 @@
 "use strict";
-
+//TODO: Start splitting things off from this file, it's getting too long
+//Candidates:
+//  move WeaponFire and weaponFire processing logic to separate Failed
+//  move SimulatorParameters to separate file
 var MechSimulatorLogic = MechSimulatorLogic || (function () {
   var simulationInterval = null;
   var simRunning = false;
@@ -34,6 +37,45 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     }
     setSpeedFactor(speedFactor) {
       this.uiUpdateInterval = Math.floor(DEFAULT_UI_UPDATE_INTERVAL / Number(speedFactor));
+    }
+    //returns setting values and descriptions for the UI
+    //returns
+    //[{
+    //  property: <propertyName>
+    //  name: <readable name>
+    //  values: [{
+    //    id: <id>, must be unique
+    //    name: <display name>
+    //    value: <setting value>
+    //    description: <long description of value>
+    //    default : boolean
+    //  }, ...]
+    //}, ...]
+    //TODO: This could potentially get too long. Find a more modular way of
+    //defining property values
+    getSettings() {
+      return [
+        {
+          property: "useDoubleTap",
+          name: "Use UAC Double Tap",
+          values: [
+            {
+              id: "enable",
+              name: "Enabled",
+              value: true,
+              description: "Allows use of UAC double taps",
+              default: true,
+            },
+            {
+              id: "disable",
+              name: "Disabled",
+              value: false,
+              description: "Disallows use of UAC double taps",
+              default: false,
+            },
+          ],
+        },
+      ];
     }
   }
 
@@ -217,8 +259,6 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     simTime += stepDuration;
     MechModelView.updateSimTime(simTime);
 
-    updateUIWeaponFires();
-
     //if one team is dead, stop simulation, compute stats for the current step
     //and inform ModelView of victory
     if (!MechModel.isTeamAlive(MechModel.Team.BLUE) ||
@@ -324,14 +364,6 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     let range = simulatorParameters.range;
     let weaponFire = new WeaponFire(sourceMech, targetMech, weaponState, range, simTime, ammoConsumed);
     weaponFireQueue.push(weaponFire);
-  }
-
-  var updateUIWeaponFires = function() {
-    // let debugText = "";
-    // for (let weaponFire of weaponFireQueue) {
-    //   debugText += weaponFire.toString() + "<br/><br/>";
-    // }
-    // MechModelView.updateDebugText(debugText);
   }
 
   var dissipateHeat = function(mech) {

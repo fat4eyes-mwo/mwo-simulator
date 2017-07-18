@@ -752,7 +752,7 @@ a:hover {
   border-color: #aaaaaa;
 }
 
-.modalScreen .modalDialog.addmech {
+.modalScreen .modalDialog.addMech {
   margin-top: 5%;
 }
 
@@ -1082,6 +1082,35 @@ a:hover {
 
 .loadedMech .mechArmament .missile {
   background-color: #6acd97;
+}
+
+.modalScreen .modalDialog.simSettingsDialog {
+  width: 50%;
+}
+
+#settingsButton {
+  display: none;
+}
+
+.simSettings .title {
+  color: gold;
+}
+
+.simSettings .applyButton,
+.simSettings .cancelButton {
+  float: right;
+}
+
+.simSettings .value {
+  display: block;
+  background-color: #202020;
+  border-color: goldenrod;
+  border-width: thin;
+  color: #aaaaaa;
+}
+
+.simSettings .label {
+  color: gold;
 }
 
 .linkPanel {

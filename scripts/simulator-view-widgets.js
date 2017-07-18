@@ -52,7 +52,7 @@ var MechViewWidgets = MechViewWidgets || (function() {
         .addClass("tooltip")
         .addClass("hidden")
         .attr("id", tooltipId)
-        .insertAfter("#" + targetElementId);
+        .insertBefore("#" + targetElementId);
       let targetOffset = $("#" + targetElementId);
       let thisLeft = targetOffset.left;
       let thisTop = targetOffset.top + targetOffset.height;
