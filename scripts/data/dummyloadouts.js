@@ -6,6 +6,8 @@
 //http://www.4eye-labs.net/mwo-simulator/#s=2adec6e69fd02c6dd8dbc6da606e47f569d8bbe690d4841b7bc8882decda3dcd
 //srmboat test
 //http://www.4eye-labs.net/mwo-simulator/#s=f5e1dc499ba7fb93cc9c01655b69ff5a8976d9ec9d3a2e43eaeec4a67ba05185
+//mrmboat test
+//http://localhost:8181/#s=672b3825daed58fe6b73d713dd7e09588c8a0a0b2d213d8d9bd78cbb387feb62
 
 //lrmboat quirk test
 //http://localhost:8181/#s=542d68c11fb2399272f21455f157fb37f023e4e88d54a511723aff51171d249e
@@ -96,7 +98,10 @@
 //http://www.4eye-labs.net/mwo-simulator/#s=b444f2d454f662d0b9ab487e32f99c2e30318176d4fa6368c55ef2223fe3d899
 
 //Old BJ1X vs new BJ1X
-//http://www.4eye-labs.net/mwo-simulator/#s=d1acadceab75efdfec9aa48e89fd7c26402bb25a98d900199e30e904ca2e5de1
+//200m
+//http://www.4eye-labs.net/mwo-simulator/#s=2f65bec3b981db5844d23cc231ddfdaab48a90c000cde5a41579d2f974d61363
+//400m
+//http://www.4eye-labs.net/mwo-simulator/#s=d3741e7f285e1bcbc31d46e55dbca232c3af4ef4fd647f68b7c272a991f05d11
 
 //EBJ Vomit test
 //http://www.4eye-labs.net/mwo-simulator/#s=a9534757324d54cba6f91449e2049dd1944c067428a020a6d45d9f2260b70826

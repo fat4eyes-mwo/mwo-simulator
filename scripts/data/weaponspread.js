@@ -231,3 +231,29 @@ var _cASRM6Spread = {
     130 : {target: 0.6233333333, adjacent: .34, nextAdjacent: 0.0},
     260 : {target: 0.6233333333, adjacent: .34, nextAdjacent: 0.0},
 };
+
+//Reference: https://docs.google.com/spreadsheets/d/1pLRKCXA-DT8sHFm0_cMV9bMofXXGTl785yxn3KdCb58/edit?usp=sharing
+var _MRM10Spread = {
+  0 : {target: 0.9166666667, adjacent: 0.05, nextAdjacent: 0.0},
+  100 : {target: 0.5054054054, adjacent: .45, nextAdjacent: 0.0},
+  200 : {target: 0.4921052632, adjacent: .45, nextAdjacent: 0.0},
+  400 : {target: 0.4921052632, adjacent: .45, nextAdjacent: 0.0},
+};
+var _MRM20Spread = {
+  0 : {target: 0.7791666667, adjacent: 0.20, nextAdjacent: 0.0},
+  100 : {target: 0.4675, adjacent: .45, nextAdjacent: 0.05},
+  200 : {target: 0.5194444444, adjacent: .45, nextAdjacent: 0.01},
+  400 : {target: 0.4921052632, adjacent: .45, nextAdjacent: 0.01},
+};
+var _MRM30Spread = {
+  0 : {target: 0.7791666667, adjacent: 0.20, nextAdjacent: 0.0},
+  100 : {target: 0.5194444444, adjacent: .45, nextAdjacent: 0.0},
+  200 : {target: 0.4794871795, adjacent: .40, nextAdjacent: 0.05},
+  400 : {target: 0.4452380952, adjacent: .40, nextAdjacent: 0.05},
+};
+var _MRM40Spread = {
+  0 : {target: 0.7791666667, adjacent: 0.20, nextAdjacent: 0.0},
+  100 : {target: 0.5194444444, adjacent: .40, nextAdjacent: 0.05},
+  200 : {target: 0.4675, adjacent: .40, nextAdjacent: 0.02},
+  400 : {target: 0.425, adjacent: .40, nextAdjacent: 0.05},
+};

@@ -119,6 +119,10 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
         "ClanStreakSRM2" : MechAccuracyPattern.seekerPattern(_StreakSpread),
         "ClanStreakSRM4" : MechAccuracyPattern.seekerPattern(_StreakSpread),
         "ClanStreakSRM6" : MechAccuracyPattern.seekerPattern(_StreakSpread),
+        "MRM10" : MechAccuracyPattern.directFireSpreadPattern(_MRM10Spread),
+        "MRM20" : MechAccuracyPattern.directFireSpreadPattern(_MRM20Spread),
+        "MRM30" : MechAccuracyPattern.directFireSpreadPattern(_MRM30Spread),
+        "MRM40" : MechAccuracyPattern.directFireSpreadPattern(_MRM40Spread),
       };
     return weaponAccuracyMap[weaponInfo.name];
   }
