@@ -7,7 +7,7 @@
 //srmboat test
 //http://www.4eye-labs.net/mwo-simulator/#s=f5e1dc499ba7fb93cc9c01655b69ff5a8976d9ec9d3a2e43eaeec4a67ba05185
 //mrmboat test
-//http://localhost:8181/#s=672b3825daed58fe6b73d713dd7e09588c8a0a0b2d213d8d9bd78cbb387feb62
+//http://www.4eye-labs.net/mwo-simulator/#s=672b3825daed58fe6b73d713dd7e09588c8a0a0b2d213d8d9bd78cbb387feb62
 
 //lrmboat quirk test
 //http://localhost:8181/#s=542d68c11fb2399272f21455f157fb37f023e4e88d54a511723aff51171d249e
