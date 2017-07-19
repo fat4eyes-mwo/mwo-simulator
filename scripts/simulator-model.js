@@ -107,6 +107,7 @@ var MechModel = MechModel || (function () {
         this.baseMinRange = Number(smurfyWeaponData.min_range);
         this.baseOptRange = Number(smurfyWeaponData.long_range);
         this.baseMaxRange = Number(smurfyWeaponData.max_range);
+        this.ranges = smurfyWeaponData.ranges;
         this.baseDmg = Number(smurfyWeaponData.calc_stats.baseDmg);
         this.damageMultiplier = Number(smurfyWeaponData.calc_stats.damageMultiplier);
         this.heat = Number(smurfyWeaponData.heat);
@@ -139,8 +140,8 @@ var MechModel = MechModel || (function () {
         throw "speed cannot be set.";
       }
       get minRange() {
-        let rangeMultiplier = 1 + Number(this.weaponBonus.range_multiplier);
-        return this.baseMinRange * rangeMultiplier;
+        //min range not affected by multiplier
+        return this.baseMinRange;
       }
       set minRange(value) {
         throw "minRange cannot be set."
@@ -177,21 +178,39 @@ var MechModel = MechModel || (function () {
         if (this.duration < 0) {
           totalDamage = this.dps * stepDuration / 1000;
         }
+        let ret = totalDamage;
+        let rangeMultiplier = 1 + Number(this.weaponBonus.range_multiplier);
+
         if (Number(range) < Number(this.minRange)
             || Number(range) > Number(this.maxRange)) {
           return 0;
         }
-        if (Number(this.minRange) <= Number(range) && Number(range) < Number(this.optRange)) {
-          return Number(totalDamage);
-        }
-        if (Number(range) >= Number(this.optRange) && (Number(range) <= Number(this.maxRange))) {
-          let optMaxDiff = Number(this.maxRange) - Number(this.optRange);
-          let rangeOptDiff = Number(range) - Number(this.optRange);
-          if (optMaxDiff === 0) {
-            return Number(totalDamage);
+        for (let rangeIdx in this.ranges) {
+          rangeIdx = Number(rangeIdx);
+          let rangeEntry = this.ranges[rangeIdx];
+          let nextEntry = rangeIdx < this.ranges.length - 1 ?
+                            this.ranges[rangeIdx + 1] :
+                            this.ranges[rangeIdx];
+          let lowerBound = rangeIdx === 0 ?
+                      Number(rangeEntry.start) :
+                      Number(rangeEntry.start) * rangeMultiplier;
+          let upperBound = nextEntry.start * rangeMultiplier;
+          if (upperBound - lowerBound <= 0) continue; //no difference, continue to next
+          if (range >= lowerBound && range <= upperBound) {
+            if (rangeEntry.interpolationToNextRange === "linear") {
+              let fraction = (range - lowerBound) / (upperBound - lowerBound);
+              let currDamage = totalDamage * rangeEntry.damageModifier;
+              let nextDamage = totalDamage * nextEntry.damageModifier;
+              let ret = currDamage - (currDamage - nextDamage) * fraction;
+              return ret;
+            } else if (rangeEntry.interpolationToNextRange === "exponential") {
+              //TODO: Implement exponential damage interpolation
+              return 0;
+            }
           }
-          return Number(totalDamage) * (1 - (rangeOptDiff / optMaxDiff));
         }
+        //not in ranges
+        return 0;
       }
 
   }

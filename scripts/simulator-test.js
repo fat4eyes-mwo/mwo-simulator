@@ -164,60 +164,25 @@ return {
     testDamageAtRange : function() {
       MechModel.initDummyModelData();
       let ppcID = 1009;
-      var mechInfo = new MechModel.MechInfo("testId", DummyStormcrow);
-      var weaponInfoTest = new MechModel.WeaponInfo(ppcID, "centre_torso",
-              MechModel.getSmurfyWeaponData(ppcID), mechInfo);
-      console.log("Weapon " + weaponInfoTest.translatedName +
-          " minRange: " + weaponInfoTest.minRange +
-          " optRange: " + weaponInfoTest.optRange +
-          " maxRange: " + weaponInfoTest.maxRange +
-          " baseDmg: " + weaponInfoTest.baseDmg);
-      const stepDuration = 50;
-      let damage;
-      let range;
-      range = 0;
-      damage = weaponInfoTest.damageAtRange(range, stepDuration);
-      console.log("range: " + range + " damage: " + damage);
-      range = 90;
-      damage = weaponInfoTest.damageAtRange(range, stepDuration);
-      console.log("range: " + range + " damage: " + damage);
-      range = 180;
-      damage = weaponInfoTest.damageAtRange(range, stepDuration);
-      console.log("range: " + range + " damage: " + damage);
-      range = 540;
-      damage = weaponInfoTest.damageAtRange(range, stepDuration);
-      console.log("range: " + range + " damage: " + damage);
-      range = 810;
-      damage = weaponInfoTest.damageAtRange(range, stepDuration);
-      console.log("range: " + range + " damage: " + damage);
-      range = 1080;
-      damage = weaponInfoTest.damageAtRange(range, stepDuration);
-      console.log("range: " + range + " damage: " + damage);
-      range = 2000;
-      damage = weaponInfoTest.damageAtRange(range, stepDuration);
-      console.log("range: " + range + " damage: " + damage);
-
       let srm6ID = 1031;
-      weaponInfoTest = new MechModel.WeaponInfo(srm6ID, "centre_torso",
-          MechModel.getSmurfyWeaponData(srm6ID), mechInfo);
-      range = 0;
-      damage = weaponInfoTest.damageAtRange(range, stepDuration);
-      console.log("range: " + range + " damage: " + damage);
-      range = 90;
-      damage = weaponInfoTest.damageAtRange(range, stepDuration);
-      console.log("range: " + range + " damage: " + damage);
-      range = 180;
-      damage = weaponInfoTest.damageAtRange(range, stepDuration);
-      console.log("range: " + range + " damage: " + damage);
-      range = 270;
-      damage = weaponInfoTest.damageAtRange(range, stepDuration);
-      console.log("range: " + range + " damage: " + damage);
-      range = 300;
-      damage = weaponInfoTest.damageAtRange(range, stepDuration);
-      console.log("range: " + range + " damage: " + damage);
-      range = 2000;
-      damage = weaponInfoTest.damageAtRange(range, stepDuration);
-      console.log("range: " + range + " damage: " + damage);
+      let atm12ID = 1252;
+      let testIds = [ppcID, srm6ID, atm12ID];
+      var mechInfo = new MechModel.MechInfo("testId", DummyStormcrow);
+      for (let weaponId of testIds) {
+        var weaponInfoTest = new MechModel.WeaponInfo(weaponId, "centre_torso",
+                MechModel.getSmurfyWeaponData(weaponId), mechInfo);
+        console.log("Weapon " + weaponInfoTest.translatedName +
+            " minRange: " + weaponInfoTest.minRange +
+            " optRange: " + weaponInfoTest.optRange +
+            " maxRange: " + weaponInfoTest.maxRange +
+            " baseDmg: " + weaponInfoTest.baseDmg);
+        let testRanges = [0, 90, 180, 270, 300, 500, 540, 810, 1080, 2000];
+        const stepDuration = 50;
+        for (let range of testRanges) {
+          let damage = weaponInfoTest.damageAtRange(range, stepDuration);
+          console.log("range: " + range + " damage: " + damage);
+        }
+      }
     },
 
     testSpreadAdjacentDamage : function() {
