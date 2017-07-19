@@ -1,0 +1,16 @@
+{
+  "name": "gamexmlparser",
+  "version": "1.0.0",
+  "description": "Parses XML files from GameData.pak and generates data javascript files for mwo-simulator",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "adm-zip": "^0.4.7",
+    "commander": "^2.11.0",
+    "xml2js": "^0.4.17"
+  }
+}

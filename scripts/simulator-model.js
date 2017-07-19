@@ -124,11 +124,11 @@ var MechModel = MechModel || (function () {
         this.dps = Number(smurfyWeaponData.calc_stats.dps);
         this.type = smurfyWeaponData.type;
         this.jamChance = smurfyWeaponData.jamming_chance ?
-                            smurfyWeaponData.jamming_chance : 0;
+                      Number(smurfyWeaponData.jamming_chance) : 0;
         this.jamTime = smurfyWeaponData.jammed_time ?
-                            smurfyWeaponData.jammed_time * 1000 : 0; //convert to milliseconds
+                      Number(smurfyWeaponData.jammed_time) * 1000 : 0; //convert to milliseconds
         this.shotsDuringCooldown = smurfyWeaponData.shots_during_cooldown ?
-                                    smurfyWeaponData.shots_during_cooldown : 0;
+                      Number(smurfyWeaponData.shots_during_cooldown) : 0;
         this.weaponBonus = MechModelQuirks.getWeaponBonus(this);
       }
       get speed() {

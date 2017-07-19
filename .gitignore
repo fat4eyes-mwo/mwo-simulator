@@ -2,3 +2,4 @@ php/data
 php/log
 php/cache
 backups
+nodejs/gamexmlparser/node_modules
