@@ -69,6 +69,11 @@
 //http://www.4eye-labs.net/mwo-simulator/#s=eb761b2c0fde126154707f199e1b87ed0573bf588cc173c5fb83535296f538c4
 //100m
 //http://www.4eye-labs.net/mwo-simulator/#s=f8d46c89f4a736ec8348029131bbef9020fe4366a2566111a558c1544e7a05c5
+//Cheetah laser comparison
+//120m
+//http://www.4eye-labs.net/mwo-simulator/#s=abe5ad154c1038eb583fe2196d48d0ef0e42ae4d9144869a104c802994a8f55a
+//50m
+//http://www.4eye-labs.net/mwo-simulator/#s=f13f2575262cbfa22913c9da6de1959e854d073727cf4bfcc8f4b7fb26c65080
 
 //20 vs 20 Clan vs Is Meta Extravaganza
 //http://www.4eye-labs.net/mwo-simulator/#s=b9f6b06229d7ac56bb27d8d507fa3105daa2d814bfd2ffdb3325c711d5186d9a
@@ -87,9 +92,19 @@
 //uac5s
 //http://localhost:8181/#s=a967c4f9950ad411b559d2616c9ab3a1092dd6020274f6de1455b82442d23b91
 
+//Old crab vs new crab
+//http://www.4eye-labs.net/mwo-simulator/#s=b444f2d454f662d0b9ab487e32f99c2e30318176d4fa6368c55ef2223fe3d899
+
+//Old BJ1X vs new BJ1X
+//http://www.4eye-labs.net/mwo-simulator/#s=d1acadceab75efdfec9aa48e89fd7c26402bb25a98d900199e30e904ca2e5de1
+
+//EBJ Vomit test
+//http://www.4eye-labs.net/mwo-simulator/#s=a9534757324d54cba6f91449e2049dd1944c067428a020a6d45d9f2260b70826
+
+//weaponless atlas
+//http://mwo.smurfy-net.de/mechlab#i=16&l=cb72e3e1264e3b8051193ab4e52686a71dba239c
 //Punching bag atlas
 //http://mwo.smurfy-net.de/mechlab#i=16&l=d179b763d97e4f962243f707e83b60ce4d785fa1
-
 //ersl Cheetah
 //http://mwo.smurfy-net.de/mechlab#i=291&l=94bebd78be7c17fa2c635676935eb5435f6bb524
 //Jenner mpl
@@ -120,9 +135,9 @@
 //http://mwo.smurfy-net.de/mechlab#i=79&l=2687fc03fe4f9997c47f545bd15d5c7d1fae93af
 //ERML blackjack
 //http://mwo.smurfy-net.de/mechlab#i=79&l=722f5765439514ffd6dc510c0ebd8ad4a91985ac
+//UAC10 blackjack
+//http://mwo.smurfy-net.de/mechlab#i=77&l=d45198309a38242e3e6156e179370299ce4e0835
 
-//weaponless atlas
-//http://mwo.smurfy-net.de/mechlab#i=16&l=cb72e3e1264e3b8051193ab4e52686a71dba239c
 
 //http://mwo.smurfy-net.de/mechlab#i=291&l=0673c22705b1651b68e33300644d53eb895cf864
 var DummyArcticCheetah = {
