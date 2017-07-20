@@ -10,9 +10,9 @@
 //http://www.4eye-labs.net/mwo-simulator/#s=672b3825daed58fe6b73d713dd7e09588c8a0a0b2d213d8d9bd78cbb387feb62
 
 //lrmboat quirk test
-//http://localhost:8181/#s=542d68c11fb2399272f21455f157fb37f023e4e88d54a511723aff51171d249e
+//http://www.4eye-labs.net/#s=542d68c11fb2399272f21455f157fb37f023e4e88d54a511723aff51171d249e
 //atm range test
-//http://localhost:8181/#s=1a44f4d478e3ea65686e0ff57c356634e5b5f202ef3dcbb60a2345f711e4e65e
+//http://www.4eye-labs.net/#s=eac5984609363d8b34e85c3406ff237ebb8cdc5be2f0397f8ba235a2e3736511
 
 //20 vs 20
 //http://www.4eye-labs.net/mwo-simulator/#s=e1f4897ae14687dfaba82e457031e1aef7b08a03936770f59f498a1290baadf4
@@ -29,7 +29,7 @@
 //http://www.4eye-labs.net/mwo-simulator/#s=702f76fc7b7afb84871f968885b4f92433aa87e2a928d4dc756fa733ffe4e938
 
 //streak test
-//http://localhost:8181/#s=c4206b5a18f323badf1f9c0decbef897afb2a5437018e515ff5760db8232fb5d
+//http://www.4eye-labs.net/#s=c4206b5a18f323badf1f9c0decbef897afb2a5437018e515ff5760db8232fb5d
 
 //Clan vs IS lasers
 //200m
@@ -92,9 +92,9 @@
 
 //UAC vs AC kodiak DPS
 //meta
-//http://localhost:8181/#s=933c1d28f7b92e05d0257303fc18c254215642d43af6f70998c7ad5df806defd
+//http://www.4eye-labs.net/#s=933c1d28f7b92e05d0257303fc18c254215642d43af6f70998c7ad5df806defd
 //uac5s
-//http://localhost:8181/#s=a967c4f9950ad411b559d2616c9ab3a1092dd6020274f6de1455b82442d23b91
+//http://www.4eye-labs.net/#s=a967c4f9950ad411b559d2616c9ab3a1092dd6020274f6de1455b82442d23b91
 
 //Old crab vs new crab
 //http://www.4eye-labs.net/mwo-simulator/#s=b444f2d454f662d0b9ab487e32f99c2e30318176d4fa6368c55ef2223fe3d899

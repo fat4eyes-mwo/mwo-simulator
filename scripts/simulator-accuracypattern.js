@@ -83,8 +83,9 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
 
   //Weapon specific accuracy patterns
   //MUST be applied as the first transform on the raw weapon damage (even before mech accuracy)
+  var weaponAccuracyMap;
   var getWeaponAccuracyPattern = function(weaponInfo) {
-    var weaponAccuracyMap =
+    weaponAccuracyMap = weaponAccuracyMap ||
       { "ClanERPPC" : MechAccuracyPattern.splashPPCPattern("ClanERPPC"),
         "HeavyPPC" : MechAccuracyPattern.splashPPCPattern("HeavyPPC"), //in preparation for newtech
         "LRM5" : MechAccuracyPattern.seekerPattern(_LRM5Spread),
@@ -123,6 +124,10 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
         "MRM20" : MechAccuracyPattern.directFireSpreadPattern(_MRM20Spread),
         "MRM30" : MechAccuracyPattern.directFireSpreadPattern(_MRM30Spread),
         "MRM40" : MechAccuracyPattern.directFireSpreadPattern(_MRM40Spread),
+        "ClanATM3" : MechAccuracyPattern.seekerPattern(_cATM3Spread),
+        "ClanATM6" : MechAccuracyPattern.seekerPattern(_cATM6Spread),
+        "ClanATM9" : MechAccuracyPattern.seekerPattern(_cATM9Spread),
+        "ClanATM12" : MechAccuracyPattern.seekerPattern(_cATM12Spread),
       };
     return weaponAccuracyMap[weaponInfo.name];
   }
