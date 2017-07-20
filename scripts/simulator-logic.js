@@ -504,7 +504,6 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   }
 
   var processWeaponFires = function() {
-    //reduce durationLeft/travelLeft, deal damage as necessary
     if (weaponFireQueue.length == 0) {
       return;
     }
@@ -529,6 +528,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     for (let weaponFire of weaponFireQueue) {
       logDamage(weaponFire);
     }
+    weaponFireQueue = [];
   }
 
   var logDamage = function(weaponFire) {
