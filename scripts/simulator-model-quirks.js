@@ -80,7 +80,7 @@ var MechModelQuirks = MechModelQuirks || (function () {
       let restOfNameComponents = quirkNameComponents.slice(1).join("_");
       //general weapon bonuses
       if (_weaponClassMap[firstNameComponent]) {
-        if (weaponInfo.type === _weaponClassMap[firstNameComponent]) {
+        if (_weaponClassMap[firstNameComponent].includes(weaponInfo.type)) {
           ret[restOfNameComponents] += Number(quirk.value);
         }
       }

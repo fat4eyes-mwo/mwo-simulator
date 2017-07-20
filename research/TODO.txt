@@ -1,5 +1,6 @@
 - AUTOMATED UNIT TESTS!!!!!!
 
+- center torso omnipod quirks
 - mech reorder buttons
 - save team settings?
 - LBX damage spread

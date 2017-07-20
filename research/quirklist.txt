@@ -1,5 +1,6 @@
 ac_velocity_multiplier
 accellerp_all_multiplier
+all_cooldown_multiplier
 arm_pitchspeed_multiplier
 arm_yawspeed_multiplier
 armorresist_ct_additive
@@ -35,6 +36,7 @@ erlaser_duration_multiplier
 erlaser_heat_multiplier
 erlaser_range_multiplier
 externalheat_multiplier
+heatdissipation_multiplier
 heatloss_multiplier
 internalresist_ct_additive
 internalresist_la_additive
@@ -109,6 +111,7 @@ missile_velocity_multiplier
 narcbeacon_narcduration_additive
 nonpulselaser_duration_multiplier
 overheatdamage_multiplier
+ppc_heat_multiplier
 ppc_velocity_multiplier
 pulselaser_duration_multiplier
 pulselaser_heat_multiplier
@@ -121,7 +124,8 @@ torso_pitchspeed_multiplier
 torso_yawangle_additive
 torso_yawspeed_multiplier
 turnlerp_all_multiplier
+ultraautocannon20_cooldown_multiplier
 ultraautocannon_jamchance_multiplier
 ultraautocannon_range_multiplier
 ultraautocannon_velocity_multiplier
-numQuirks : 126
+numQuirks : 130

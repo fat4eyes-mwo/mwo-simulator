@@ -25,9 +25,10 @@ const _quirkStructurePrefix = "internalresist";
 //Weapon quirks
 //Map from quirk name weapon types to smurfy weapon types
 const _weaponClassMap = {
-  "ballistic" : "BALLISTIC",
-  "energy" : "BEAM",
-  "missile" : "MISSLE" //(sic) from smurfy data
+  "all" : ["BALLISTIC", "BEAM", "MISSLE"],
+  "ballistic" : ["BALLISTIC"],
+  "energy" : ["BEAM"],
+  "missile" : ["MISSLE"] //(sic) from smurfy data
 };
 
 //Map from quirk weapon names to smurfy weapon names
@@ -76,6 +77,7 @@ const _weaponNameMap = {
                       "ClanSmallPulseLaser", "ClanMediumPulseLaser", "ClanLargePulseLaser"],
   "ultraautocannon" : ["UltraAutoCannon5", "UltraAutoCannon2", "UltraAutoCannon10", "UltraAutoCannon20",
                       "ClanUltraAutoCannon2", "ClanUltraAutoCannon5", "ClanUltraAutoCannon10", "ClanUltraAutoCannon20"],
+  "ultraautocannon20" : ["UltraAutoCannon20", "ClanUltraAutoCannon20"],
   "ac" :["AutoCannon20", "AutoCannon2", "AutoCannon5", "AutoCannon10", "LBXAutoCannon10",
         "UltraAutoCannon5", "UltraAutoCannon2", "UltraAutoCannon10", "UltraAutoCannon20",
         "ClanLBXAutoCannon2", "ClanLBXAutoCannon5", "ClanLBXAutoCannon10", "ClanLBXAutoCannon20",
