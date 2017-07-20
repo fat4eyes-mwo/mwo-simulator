@@ -340,61 +340,13 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     for (let weaponState of weaponStateList) {
       let weaponInfo = weaponState.weaponInfo;
 
-      //if not ready to fire, proceed to next weapon
-      if (!weaponState.active
-          || !weaponState.canFire()) {
-        continue;
-      }
-      //if no ammo, proceed to next weapon
-      if (weaponInfo.requiresAmmo() &&
-        mechState.ammoState.ammoCountForWeapon(weaponInfo.weaponId) <= 0) {
-        continue;
-      }
-
-      if (weaponInfo.spinup > 0) {
-        //if weapon has spoolup, set state to SPOOLING and set value of spoolupLeft
-        weaponState.gotoState(MechModel.WeaponCycle.SPOOLING);
-        //Note: Do NOT add WeaponFire to queue, it will be handled by processCooldowns
-      } else if (weaponInfo.duration > 0) {
-        //if weapon has duration, set state to FIRING
-        weaponState.gotoState(MechModel.WeaponCycle.FIRING);
+      let fireStatus = weaponState.fireWeapon();
+      if (fireStatus.weaponFired) {
         weaponsFired.push(weaponState);
-        queueWeaponFire(mech, targetMech, weaponState, 0); //assumes duration weapons don't consume ammo
-      } else {
-        //if weapon has no duration, set state to FIRING, will go to cooldown on the next step
-        let weaponFired = false;
-        if (weaponState.weaponCycle === MechModel.WeaponCycle.READY) {
-          weaponState.gotoState(MechModel.WeaponCycle.FIRING);
-          weaponFired = true;
-        } else if (weaponState.weaponCycle === MechModel.WeaponCycle.COOLDOWN) {
-          //DOUBLE TAP
-          console.log("Double tap: " + weaponState.weaponInfo.name);
-          //check jam chance
-          let rand = Math.random();
-          if (rand <= Number(weaponState.weaponInfo.jamChance)) {
-          // if (true) {
-            //JAM
-            console.log("Jam: " + weaponState.weaponInfo.name);
-            weaponState.gotoState(MechModel.WeaponCycle.JAMMED);
-            weaponFired = false;
-          } else {
-            weaponState.currShotsDuringCooldown -= 1;
-            weaponFired = true;
-          }
-        }
-        if (weaponFired) {
-          weaponsFired.push(weaponState);
-          let ammoConsumed = 0;
-          if (weaponInfo.requiresAmmo()) {
-            ammoConsumed = mechState.ammoState.consumeAmmo(weaponInfo.weaponId,
-                                                          weaponInfo.ammoPerShot);
-          }
-          queueWeaponFire(mech, targetMech, weaponState, ammoConsumed);
-        }
+        queueWeaponFire(mech, targetMech, weaponState, fireStatus.ammoConsumed);
+        mechState.setUpdate(MechModel.UpdateType.COOLDOWN);
+        mechState.setUpdate(MechModel.UpdateType.WEAPONSTATE);
       }
-
-      mechState.setUpdate(MechModel.UpdateType.COOLDOWN);
-      mechState.setUpdate(MechModel.UpdateType.WEAPONSTATE);
     }
 
     //update mech heat

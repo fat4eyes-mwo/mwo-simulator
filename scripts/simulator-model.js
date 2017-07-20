@@ -339,7 +339,7 @@ var MechModel = MechModel || (function () {
       this.mechInfo = mechInfo;
       this.mechHealth = mechInfo.mechHealth.clone();
       this.heatState = new HeatState(mechInfo);
-      this.weaponStateList = initWeaponStateList(mechInfo);
+      this.weaponStateList = initWeaponStateList(this);
       this.ammoState = new AmmoState(mechInfo);
 
       this.updateTypes = {}; //Update types triggered on the current simulation step
@@ -527,8 +527,8 @@ var MechModel = MechModel || (function () {
   }
 
   class WeaponState {
-    constructor(weaponInfo, mechInfo) {
-      this.mechInfo = mechInfo; //store mechInfo for quirk modifiers
+    constructor(weaponInfo, mechState) {
+      this.mechState = mechState;
       this.weaponInfo = weaponInfo;
       this.active = true;
       this.weaponCycle = WeaponCycle.READY;
@@ -537,6 +537,62 @@ var MechModel = MechModel || (function () {
       this.durationLeft = 0;
       this.jamLeft = 0;
       this.currShotsDuringCooldown = weaponInfo.shotsDuringCooldown;
+    }
+
+    //returns {weaponFired:<boolean>, ammoConsumed:<number>}
+    fireWeapon() {
+      let weaponInfo = this.weaponInfo;
+      let mechState = this.mechState;
+
+      //if not ready to fire, proceed to next weapon
+      if (!this.active || !this.canFire()) {
+        return {weaponFired: false, ammoConsumed: 0};
+      }
+      //if no ammo, proceed to next weapon
+      if (weaponInfo.requiresAmmo() &&
+        mechState.ammoState.ammoCountForWeapon(weaponInfo.weaponId) <= 0) {
+        return {weaponFired: false, ammoConsumed: 0};
+      }
+
+      if (weaponInfo.spinup > 0) {
+        //if weapon has spoolup, set state to SPOOLING and set value of spoolupLeft
+        this.gotoState(MechModel.WeaponCycle.SPOOLING);
+        return {weaponFired: false, ammoConsumed: 0};
+      } else if (weaponInfo.duration > 0) {
+        //if weapon has duration, set state to FIRING
+        this.gotoState(MechModel.WeaponCycle.FIRING);
+        return {weaponFired: true, ammoConsumed: 0}; //assumes duration weapons don't consume ammo
+      } else {
+        //if weapon has no duration, set state to FIRING, will go to cooldown on the next step
+        let weaponFired = false;
+        let ammoConsumed = 0;
+        if (this.weaponCycle === MechModel.WeaponCycle.READY) {
+          this.gotoState(MechModel.WeaponCycle.FIRING);
+          weaponFired = true;
+        } else if (this.weaponCycle === MechModel.WeaponCycle.COOLDOWN) {
+          //DOUBLE TAP
+          console.log("Double tap: " + this.weaponInfo.name);
+          //check jam chance
+          let rand = Math.random();
+          if (rand <= Number(this.weaponInfo.jamChance)) {
+          // if (true) {
+            //JAM
+            console.log("Jam: " + this.weaponInfo.name);
+            this.gotoState(MechModel.WeaponCycle.JAMMED);
+            weaponFired = false;
+          } else {
+            this.currShotsDuringCooldown -= 1;
+            weaponFired = true;
+          }
+        }
+        if (weaponFired) {
+          if (weaponInfo.requiresAmmo()) {
+            ammoConsumed = mechState.ammoState.consumeAmmo(weaponInfo.weaponId,
+                                                          weaponInfo.ammoPerShot);
+          }
+        }
+        return {weaponFired : weaponFired, ammoConsumed: ammoConsumed};
+      }
     }
 
     gotoState(weaponCycle) {
@@ -1342,10 +1398,11 @@ var MechModel = MechModel || (function () {
     };
   }
 
-  var initWeaponStateList = function(mechInfo) {
+  var initWeaponStateList = function(mechState) {
     var weaponStateList = [];
+    let mechInfo = mechState.mechInfo;
     for (let weaponInfo of mechInfo.weaponInfoList) {
-      weaponStateList.push(new WeaponState(weaponInfo, mechInfo));
+      weaponStateList.push(new WeaponState(weaponInfo, mechState));
     }
     return weaponStateList;
   }
