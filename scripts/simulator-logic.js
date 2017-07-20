@@ -483,6 +483,8 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     weaponFireQueue = [];
   }
 
+  //Update mechstats with the completed WeaponFire's damage, and log
+  //results to console
   var logDamage = function(weaponFire) {
     let weaponInfo = weaponFire.weaponState.weaponInfo;
     let mechState = weaponFire.sourceMech.getMechState();

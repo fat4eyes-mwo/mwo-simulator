@@ -823,17 +823,18 @@ var MechModel = MechModel || (function () {
     }
     getEngineType() {
       let engineType;
-      if (this.name.startsWith("Engine_Std")) {
-        return EngineType.STD;
-      } else if (this.name.startsWith("Engine_XL")) {
-        return EngineType.XL;
-      } else if (this.name.startsWith("Engine_Clan_XL")) {
-        return EngineType.CLAN_XL;
-      } else if (this.name.startsWith("Engine_Light")) {
-        return EngineType.LIGHT;
-      } else {
-        throw "Unknown engine type. Name: " + name;
+      let engineMap = {
+        "Engine_Std" : EngineType.STD,
+        "Engine_XL" : EngineType.XL,
+        "Engine_Clan_XL" : EngineType.CLAN_XL,
+        "Engine_Light" : EngineType.LIGHT,
       }
+      for (let enginePrefix in engineMap) {
+        if (this.name.startsWith(enginePrefix)) {
+          return engineMap[enginePrefix];
+        }
+      }
+      throw "Unknown engine type. Name: " + name;
     }
   }
 
