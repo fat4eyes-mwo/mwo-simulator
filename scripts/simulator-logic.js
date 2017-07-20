@@ -1,7 +1,7 @@
 "use strict";
 //TODO: Start splitting things off from this file, it's getting too long
 //Candidates:
-//  move WeaponFire and weaponFire processing logic to separate Failed
+//  move WeaponFire and weaponFire processing logic to separate file
 //  move SimulatorParameters to separate file
 var MechSimulatorLogic = MechSimulatorLogic || (function () {
   var simulationInterval = null;
@@ -105,6 +105,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
 
       this.durationLeft = this.totalDuration;
       this.travelLeft = this.totalTravel;
+      this.complete = false;
 
       this.initComputedValues(range);
     }
@@ -139,6 +140,52 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
         this.tickWeaponDamage = new MechModel.WeaponDamage(tickDamageMap);
       } else {
         this.tickWeaponDamage = this.weaponDamage.clone();
+      }
+    }
+
+    isComplete() {
+      return this.complete;
+    }
+
+    step(stepDuration) {
+      let weaponInfo = this.weaponState.weaponInfo;
+      let sourceMechState = this.sourceMech.getMechState();
+      let targetMechState = this.targetMech.getMechState();
+      if (weaponInfo.hasDuration()) {
+        this.durationLeft = Number(this.durationLeft) - stepDuration;
+        if (this.weaponState.active && sourceMechState.isAlive()) {
+          let tickDamageDone;
+          if (this.durationLeft <=0) {
+            let lastTickDamage = this.tickWeaponDamage.clone();
+            let damageFraction = (stepDuration + this.durationLeft) / stepDuration;
+            lastTickDamage.multiply(damageFraction);
+            tickDamageDone = targetMechState.takeDamage(lastTickDamage);
+            this.damageDone.add(tickDamageDone);
+            this.complete = true;
+          } else {
+            tickDamageDone = targetMechState.takeDamage(this.tickWeaponDamage);
+            this.damageDone.add(tickDamageDone)
+          }
+          targetMechState.updateTypes[MechModel.UpdateType.HEALTH] = true;
+        } else {
+          //Weapon disabled before end of burn
+          //add weaponFire.damageDone to mech stats
+          this.complete = true;
+        }
+      } else if (weaponInfo.hasTravelTime()) {
+        this.travelLeft = Number(this.travelLeft) - stepDuration;
+        if (this.travelLeft <= 0) {
+          let damageDone = targetMechState.takeDamage(this.weaponDamage);
+          this.damageDone.add(damageDone);
+          targetMechState.updateTypes[MechModel.UpdateType.HEALTH] = true;
+          //add weaponFire.damageDone to mechStats
+          this.complete = true;
+        } else {
+          //still has travel time
+        }
+      } else {
+        //should not happen
+        throw "Unexpected WeaponFire type";
       }
     }
 
@@ -362,7 +409,9 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
 
   var queueWeaponFire = function(sourceMech, targetMech, weaponState, ammoConsumed) {
     let range = simulatorParameters.range;
-    let weaponFire = new WeaponFire(sourceMech, targetMech, weaponState, range, simTime, ammoConsumed);
+    let weaponFire = new WeaponFire(sourceMech, targetMech,
+                                    weaponState, range,
+                                    simTime, ammoConsumed);
     weaponFireQueue.push(weaponFire);
   }
 
@@ -465,47 +514,11 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     let startQueueLength = weaponFireQueue.length;
     for (let count = 0; count < startQueueLength; count++) {
       let weaponFire = weaponFireQueue.shift();
-      let weaponInfo = weaponFire.weaponState.weaponInfo;
-      let targetMech = weaponFire.targetMech;
-      let targetMechState = weaponFire.targetMech.getMechState();
-      if (weaponInfo.hasDuration()) {
-        weaponFire.durationLeft = Number(weaponFire.durationLeft) - stepDuration;
-        if (weaponFire.weaponState.active && weaponFire.sourceMech.getMechState().isAlive()) {
-          let tickDamageDone;
-          if (weaponFire.durationLeft <=0) {
-            let lastTickDamage = weaponFire.tickWeaponDamage.clone();
-            let damageFraction = (stepDuration + weaponFire.durationLeft) / stepDuration;
-            lastTickDamage.multiply(damageFraction);
-            tickDamageDone = targetMechState.takeDamage(lastTickDamage);
-            weaponFire.damageDone.add(tickDamageDone);
-            //Add weaponFire.damageDone to mech stats
-            logDamage(weaponFire);
-          } else {
-            tickDamageDone = targetMechState.takeDamage(weaponFire.tickWeaponDamage);
-            weaponFire.damageDone.add(tickDamageDone)
-            //requeue with reduced durationLeft
-            weaponFireQueue.push(weaponFire);
-          }
-          targetMech.getMechState().updateTypes[MechModel.UpdateType.HEALTH] = true;
-        } else {
-          //Weapon disabled before end of burn
-          //add weaponFire.damageDone to mech stats
-          logDamage(weaponFire);
-        }
-      } else if (weaponInfo.hasTravelTime()) {
-        weaponFire.travelLeft = Number(weaponFire.travelLeft) - stepDuration;
-        if (weaponFire.travelLeft <= 0) {
-          let damageDone = targetMechState.takeDamage(weaponFire.weaponDamage);
-          weaponFire.damageDone.add(damageDone);
-          targetMech.getMechState().updateTypes[MechModel.UpdateType.HEALTH] = true;
-          //add weaponFire.damageDone to mechStats
-          logDamage(weaponFire);
-        } else {
-          weaponFireQueue.push(weaponFire);
-        }
+      weaponFire.step(stepDuration);
+      if (weaponFire.isComplete()) {
+        logDamage(weaponFire);
       } else {
-        //should not happen
-        throw "Unexpected WeaponFire type";
+        weaponFireQueue.push(weaponFire);
       }
     }
   }
@@ -574,7 +587,6 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   //Calculates the ghost heat incurred by a weapon
   //Note that this method has a side effect: it removes stale GhostHeatEntries
   //and adds a new GhostHeatEntry for the weapon
-  //TODO: Fix so a weapon doesn't ghost heat with itself (for UAC double tap)
   var computeGhostHeat = function (mech, weaponState) {
     const HEATMULTIPLIER = [0, 0, 0.08, 0.18, 0.30, 0.45, 0.60, 0.80, 1.10, 1.50, 2.00, 3.00, 5.00];
     let weaponInfo = weaponState.weaponInfo;
