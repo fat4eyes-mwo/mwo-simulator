@@ -346,6 +346,9 @@ var MechModel = MechModel || (function () {
       this.ghostHeatMap = {}; //weaponId -> [GhostHeatEntry]. Used in ghost heat computations.
       this.mechStats = new MechStats(); //stats set in simulation logic
     }
+    setUpdate(updateType) {
+      this.updateTypes[updateType] = true;
+    }
     isAlive() {
       let mechHealth = this.mechHealth;
       let engineInfo = this.mechInfo.engineInfo;
@@ -434,7 +437,7 @@ var MechModel = MechModel || (function () {
       //disable ammoboxes in the component
       let disabledAmmo = this.ammoState.disableAmmoBoxes(location);
       if (disabledAmmo.length > 0) {
-        this.updateTypes[UpdateType.WEAPONSTATE] = true;
+        this.setUpdate(UpdateType.WEAPONSTATE);
       }
 
       return destructionDamage;
@@ -445,7 +448,7 @@ var MechModel = MechModel || (function () {
         let weaponInfo = weaponState.weaponInfo;
         if (weaponInfo.location === location) {
           weaponState.gotoState(WeaponCycle.DISABLED);
-          this.updateTypes[UpdateType.WEAPONSTATE] = true;
+          this.setUpdate(UpdateType.WEAPONSTATE);
         }
       }
     }
@@ -454,7 +457,7 @@ var MechModel = MechModel || (function () {
       for (let heatsink of this.heatState.currHeatsinkList) {
         if (heatsink.location === location) {
           heatsink.active = false;
-          this.updateTypes[UpdateType.HEAT] = true;
+          this.setUpdate(UpdateType.HEAT);
         }
       }
     }
@@ -480,7 +483,7 @@ var MechModel = MechModel || (function () {
             this.mechInfo.generalQuirkBonus);
       heatState.currHeatDissipation = heatStats.heatDissipation;
       heatState.currMaxHeat = heatStats.heatCapacity;
-      this.updateTypes[UpdateType.HEAT];
+      this.setUpdate(UpdateType.HEAT);
     }
 
     clearMechStats() {

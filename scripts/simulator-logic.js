@@ -166,7 +166,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
             tickDamageDone = targetMechState.takeDamage(this.tickWeaponDamage);
             this.damageDone.add(tickDamageDone)
           }
-          targetMechState.updateTypes[MechModel.UpdateType.HEALTH] = true;
+          targetMechState.setUpdate(MechModel.UpdateType.HEALTH);
         } else {
           //Weapon disabled before end of burn
           //add weaponFire.damageDone to mech stats
@@ -177,7 +177,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
         if (this.travelLeft <= 0) {
           let damageDone = targetMechState.takeDamage(this.weaponDamage);
           this.damageDone.add(damageDone);
-          targetMechState.updateTypes[MechModel.UpdateType.HEALTH] = true;
+          targetMechState.setUpdate(MechModel.UpdateType.HEALTH);
           //add weaponFire.damageDone to mechStats
           this.complete = true;
         } else {
@@ -279,7 +279,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
             let targetMech = mech.mechTargetPattern(mech, MechModel.mechTeams[enemyTeam(team)]);
             if (targetMech !== mech.getTargetMech()) {
               mech.setTargetMech(targetMech);
-              mechState.updateTypes[MechModel.UpdateType.STATS] = true;
+              mechState.setUpdate(MechModel.UpdateType.STATS);
             }
             if (targetMech) {
               fireWeapons(mech, weaponsToFire, targetMech);
@@ -292,7 +292,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
           let mechStats = mechState.mechStats;
           if (mechStats.timeOfDeath === null) {
             mechStats.timeOfDeath = simTime;
-            mechState.updateTypes[MechModel.UpdateType.STATS] = true;
+            mechState.setUpdate(MechModel.UpdateType.STATS);
           }
         }
         MechModelView.updateMech(mech);
@@ -393,15 +393,15 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
         }
       }
 
-      mechState.updateTypes[MechModel.UpdateType.COOLDOWN] = true;
-      mechState.updateTypes[MechModel.UpdateType.WEAPONSTATE] = true;
+      mechState.setUpdate(MechModel.UpdateType.COOLDOWN);
+      mechState.setUpdate(MechModel.UpdateType.WEAPONSTATE);
     }
 
     //update mech heat
     let totalHeat = computeHeat(mech, weaponsFired);
     if (totalHeat > 0) {
       mechState.heatState.currHeat += Number(totalHeat);
-      mechState.updateTypes[MechModel.UpdateType.HEAT] = true;
+      mechState.setUpdate(MechModel.UpdateType.HEAT);
       let mechStats = mechState.mechStats;
       mechStats.totalHeat += Number(totalHeat);
     }
@@ -424,7 +424,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     let prevHeat = heatState.currHeat;
     heatState.currHeat = Math.max(0, heatState.currHeat - Number(stepHeatDissipation));
     if (heatState.currHeat != prevHeat) {
-      mechState.updateTypes[MechModel.UpdateType.HEAT] = true;
+      mechState.setUpdate(MechModel.UpdateType.HEAT);
     }
   }
 
@@ -457,10 +457,10 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
           }
           //collect list of weapons fired, for use in heat computation
           weaponsFired.push(weaponState);
-          mechState.updateTypes[MechModel.UpdateType.WEAPONSTATE] = true;
+          mechState.setUpdate(MechModel.UpdateType.WEAPONSTATE);
           queueWeaponFire(mech, targetMech, weaponState, ammoConsumed);
         }
-        mechState.updateTypes[MechModel.UpdateType.COOLDOWN] = true;
+        mechState.setUpdate(MechModel.UpdateType.COOLDOWN);
       } else if (weaponState.weaponCycle === MechModel.WeaponCycle.FIRING) {
       //if weapon is firing, reduce durationLeft. if durationLeft <=0, change state to COOLDOWN
         let newDurationLeft = Number(weaponState.durationLeft) - stepDuration;
@@ -470,9 +470,9 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
           //if duration ended in the middle of the tick, subtract the
           //extra time from the cooldown
           weaponState.cooldownLeft +=  newDurationLeft;
-          mechState.updateTypes[MechModel.UpdateType.WEAPONSTATE] = true;
+          mechState.setUpdate(MechModel.UpdateType.WEAPONSTATE);
         }
-        mechState.updateTypes[MechModel.UpdateType.COOLDOWN] = true;
+        mechState.setUpdate(MechModel.UpdateType.COOLDOWN);
       } else if (weaponState.weaponCycle === MechModel.WeaponCycle.COOLDOWN) {
       //if weapon is on cooldown, reduce cooldownLeft.
       //if cooldownLeft <=0, change state to ready
@@ -480,24 +480,24 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
         weaponState.cooldownLeft = Math.max(newCooldownLeft, 0);
         if (weaponState.cooldownLeft <= 0) {
           weaponState.gotoState(MechModel.WeaponCycle.READY);
-          mechState.updateTypes[MechModel.UpdateType.WEAPONSTATE] = true;
+          mechState.setUpdate(MechModel.UpdateType.WEAPONSTATE);
         }
-        mechState.updateTypes[MechModel.UpdateType.COOLDOWN] = true;
+        mechState.setUpdate(MechModel.UpdateType.COOLDOWN);
       } else if (weaponState.weaponCycle === MechModel.WeaponCycle.JAMMED) {
         let newJamLeft = Number(weaponState.jamLeft) - stepDuration;
         weaponState.jamLeft = Math.max(newJamLeft, 0);
         if (weaponState.jamLeft <= 0) {
           weaponState.gotoState(MechModel.WeaponCycle.COOLDOWN);
           weaponState.cooldownLeft += newJamLeft;
-          mechState.updateTypes[MechModel.UpdateType.WEAPONSTATE] = true;
+          mechState.setUpdate(MechModel.UpdateType.WEAPONSTATE);
         }
-        mechState.updateTypes[MechModel.UpdateType.COOLDOWN] = true;
+        mechState.setUpdate(MechModel.UpdateType.COOLDOWN);
       }
     }
     let totalHeat = computeHeat(mech, weaponsFired);
     if (totalHeat > 0) {
       mechState.heatState.currHeat += Number(totalHeat);
-      mechState.updateTypes[MechModel.UpdateType.HEAT] = true;
+      mechState.setUpdate(MechModel.UpdateType.HEAT);
       let mechStats = mechState.mechStats;
       mechStats.totalHeat += Number(totalHeat);
     }
@@ -537,7 +537,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     let mechStats = mechState.mechStats;
     mechStats.totalDamage += weaponFire.damageDone.totalDamage();
     mechStats.weaponFires.push(weaponFire);
-    mechState.updateTypes[MechModel.UpdateType.STATS] = true;
+    mechState.setUpdate(MechModel.UpdateType.STATS);
     willUpdateTeamStats[weaponFire.sourceMech.getMechTeam()] = true;
     willUpdateTeamStats[weaponFire.targetMech.getMechTeam()] = true;
 
