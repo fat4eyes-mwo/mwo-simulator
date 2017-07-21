@@ -227,8 +227,10 @@ var MechViewAddMech = MechViewAddMech || (function() {
       return "ballistic";
     } else if (smurfyType === "BEAM") {
       return "beam";
-    } else if (smurfyType === "MISSLE") {
+    } else if (smurfyType === "MISSLE") {//sic
       return "missile";
+    } else if (smurfyType === "AMS") {
+      return "ams";
     } else {
       console.warn("Unexpected weapon type: " + smurfyType);
       return "";

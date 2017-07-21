@@ -1084,6 +1084,10 @@ a:hover {
   background-color: #6acd97;
 }
 
+.loadedMech .mechArmament .ams {
+  background-color: #cc6664;
+}
+
 .modalScreen .modalDialog.simSettingsDialog {
   width: 50%;
 }

@@ -1127,6 +1127,7 @@ $equipment-color: #3a87ad;
 $beam-color : #cb7834;
 $ballistic-color : #846b95;
 $missile-color: #6acd97;
+$ams-color:#cc6664;
 $loaded-mech-highlight-border-radius: 4px;
 
 .loadedMech {
@@ -1177,7 +1178,9 @@ $loaded-mech-highlight-border-radius: 4px;
 .loadedMech .mechArmament .missile {
   background-color: $missile-color;
 }
-
+.loadedMech .mechArmament .ams {
+  background-color: $ams-color;
+}
 .modalScreen .modalDialog.simSettingsDialog {
   width: 50%;
 }
