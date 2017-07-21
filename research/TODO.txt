@@ -1,6 +1,7 @@
 - AUTOMATED UNIT TESTS!!!!!!
 
 - center torso omnipod quirks
+- RAC mechanics
 - mech reorder buttons
 - save team settings?
 - LBX damage spread
@@ -8,7 +9,6 @@
 - Mech details panel (quirk list, later on damage graphs)
 - Omnipod set quirks
 - ATM damage computation
-- RAC mechanics
 - Rocket launcher ammo
 - HMG/LMG dps/ammo computation
 - Mech details display (quirks, weapon damage summary)

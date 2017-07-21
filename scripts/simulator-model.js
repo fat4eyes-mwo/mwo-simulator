@@ -64,6 +64,7 @@ var MechModel = MechModel || (function () {
   var SmurfyModuleData = {};
   var SmurfyMechData = {};
   var SmurfyOmnipodData = {};
+  var SmurfyCTOmnipods = {};
   var mechTeams = {};
   mechTeams[Team.BLUE] = [];
   mechTeams[Team.RED] = [];
@@ -1012,14 +1013,20 @@ var MechModel = MechModel || (function () {
 
   //NOTE: Process the omnipod data so the omnipod ID is the
   //main index (instead of the chassis name)
+  //also finds the CT omnipods and puts them in a set->omnipod map
   var flattenOmnipodData = function(smurfyOmnipodData) {
     let flatOmnipodData = {};
+    let ctOmnipodMap = {};
     for (let chassis in smurfyOmnipodData) {
       for (let omnipodId in smurfyOmnipodData[chassis]) {
-        flatOmnipodData[omnipodId] = smurfyOmnipodData[chassis][omnipodId];
+        let omnipodEntry = smurfyOmnipodData[chassis][omnipodId];
+        flatOmnipodData[omnipodId] = omnipodEntry;
+        if (omnipodEntry.details.component === "centre_torso") {
+          ctOmnipodMap[omnipodEntry.details.set] = omnipodEntry
+        }
       }
     }
-    return flatOmnipodData;
+    return {flatOmnipodData : flatOmnipodData, ctOmnipodMap : ctOmnipodMap};
   }
   var initModelData = function () {
     //assigns to the correct variable
@@ -1036,7 +1043,9 @@ var MechModel = MechModel || (function () {
       SmurfyMechData = data;
     };
     dataPathAssigns[OMNIPOD_DATA_PATH] = function(data) {
-      SmurfyOmnipodData = flattenOmnipodData(data);
+      let flatData = flattenOmnipodData(data);
+      SmurfyOmnipodData = flatData.flatOmnipodData;
+      SmurfyCTOmnipods = flatData.ctOmnipodMap;
     }
 
     let initPromises = [];
@@ -1147,6 +1156,10 @@ var MechModel = MechModel || (function () {
 
   var getSmurfyOmnipodData = function(smurfyOmnipodId) {
     return SmurfyOmnipodData[smurfyOmnipodId];
+  }
+
+  var getSmurfyCTOmnipod = function(mechName) {
+    return SmurfyCTOmnipods[mechName];
   }
 
   var isHeatsinkModule = function(smurfyModuleId) {
@@ -1389,8 +1402,12 @@ var MechModel = MechModel || (function () {
                       Number(engineHeatsink.engineCooling) *
                       Number(engineHeatEfficiency);
     let heatDissipationMultiplier = 1.0;
+    //TODO: Find the difference between heatloss and heatdissipation
     if (generalQuirkBonus.heatloss_multiplier) {
       heatDissipationMultiplier += generalQuirkBonus.heatloss_multiplier;
+    }
+    if (generalQuirkBonus.heatdissipation_multiplier) {
+      heatDissipationMultiplier += generalQuirkBonus.heatdissipation_multiplier;
     }
     heatDissipation = heatDissipation * heatDissipationMultiplier;
     return {
@@ -1702,6 +1719,7 @@ var MechModel = MechModel || (function () {
     getSmurfyModuleData : getSmurfyModuleData,
     getSmurfyAmmoData : getSmurfyAmmoData,
     getSmurfyOmnipodData: getSmurfyOmnipodData,
+    getSmurfyCTOmnipod: getSmurfyCTOmnipod,
     loadSmurfyMechLoadoutFromURL : loadSmurfyMechLoadoutFromURL,
     loadSmurfyMechLoadoutFromID : loadSmurfyMechLoadoutFromID,
   };

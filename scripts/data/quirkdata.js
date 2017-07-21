@@ -3,6 +3,7 @@
 //quirks that apply to the mech, not a component or weapon
 const _quirkGeneral = {
   "heatloss_multiplier" : true,
+  "heatdissipation_multiplier" : true,
   "externalheat_multiplier" : true,
   "sensorrange_additive" : true,
 };
