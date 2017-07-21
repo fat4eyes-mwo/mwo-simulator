@@ -18,7 +18,11 @@ var MechModelQuirks = MechModelQuirks || (function () {
     //add ct omnipod quirks (smurfy config does not put in omnipod ID for ct)
     let smurfyMechInfo = MechModel.getSmurfyMechData(smurfyMechLoadout.mech_id);
     let ctOmnipod = MechModel.getSmurfyCTOmnipod(smurfyMechInfo.name);
-    ret = ret.concat(ctOmnipod.configuration.quirks);
+    if (ctOmnipod) {
+      ret = ret.concat(ctOmnipod.configuration.quirks);
+    } else {
+      console.warn("Unable to find CT omnipod for " + smurfyMechInfo.name);
+    }
     return ret;
   }
 
