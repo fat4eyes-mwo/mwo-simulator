@@ -1,6 +1,5 @@
 - AUTOMATED UNIT TESTS!!!!!!
 
-- center torso omnipod quirks
 - RAC mechanics
 - mech reorder buttons
 - save team settings?
