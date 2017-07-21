@@ -510,6 +510,13 @@ var MechView = MechView || (function() {
       .appendTo("#controlPanelContainer");
   }
 
+  var setSimulatorSpeedfactor = function(speedFactor) {
+    let simulatorParams = MechSimulatorLogic.getSimulatorParameters();
+    simulatorParams.setSpeedFactor(speedFactor);
+    MechSimulatorLogic.setSimulatorParameters(simulatorParams);
+    $("#simSpeed").html(speedFactor + "x");
+  }
+
   var initSpeedControl = function() {
     $("#startSimulationDivButton").click(() => {
       MechSimulatorLogic.runSimulation();
@@ -523,26 +530,17 @@ var MechView = MechView || (function() {
       MechSimulatorLogic.stepSimulation();
     });
 
-    var setSimulatorSpeedfactor = function(speedFactor) {
-      let simulatorParams = MechSimulatorLogic.getSimulatorParameters();
-      simulatorParams.setSpeedFactor(speedFactor);
-      MechSimulatorLogic.setSimulatorParameters(simulatorParams);
-    }
     $("#speed1xbutton").click(() => {
       setSimulatorSpeedfactor(1);
-      $("#simSpeed").html("1x");
     });
     $("#speed2xbutton").click(() => {
       setSimulatorSpeedfactor(2);
-      $("#simSpeed").html("2x");
     });
     $("#speed4xbutton").click(() => {
       setSimulatorSpeedfactor(4);
-      $("#simSpeed").html("4x");
     });
     $("#speed8xbutton").click(() => {
       setSimulatorSpeedfactor(8);
-      $("#simSpeed").html("8x");
     });
   }
 
@@ -630,12 +628,34 @@ var MechView = MechView || (function() {
     permalinkTooltip.hideTooltip();
     modifiedTooltip.hideTooltip();
     loadErrorTooltip.hideTooltip();
+    doAutoRun();
   }
 
   var updateOnLoadAppError = function() {
     permalinkTooltip.hideTooltip();
     modifiedTooltip.hideTooltip();
     loadErrorTooltip.showTooltip();
+  }
+
+  //called when the app is completely loaded
+  var updateOnAppLoaded = function() {
+    doAutoRun();
+  }
+
+  var doAutoRun = function() {
+    //set sim speed and run sim if run and speed url params are set
+    let runParam = MechViewRouter.getRunFromLocation();
+    let speedParam = MechViewRouter.getSpeedFromLocation();
+    runParam = runParam === "true";
+    speedParam = Number(speedParam);
+    if (speedParam) {
+      setSimulatorSpeedfactor(speedParam);
+    }
+    if (runParam) {
+      MechModel.resetState();
+      MechSimulatorLogic.resetSimulation();
+      MechSimulatorLogic.runSimulation();
+    }
   }
 
   const LOADING_SCREEN_MECH_ID = "fakeLoadingScreenMechId";
@@ -720,6 +740,6 @@ var MechView = MechView || (function() {
     updateOnAppSaveState: updateOnAppSaveState,
     updateOnLoadAppState: updateOnLoadAppState,
     updateOnLoadAppError: updateOnLoadAppError,
-
+    updateOnAppLoaded: updateOnAppLoaded,
   };
 })();//namespace

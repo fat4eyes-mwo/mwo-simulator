@@ -8,6 +8,8 @@ var MechViewRouter = MechViewRouter || (function() {
   const PERSISTENCE_URL = "./php/simulator-persistence.php";
   const PERSISTENCE_STATE_FIELD = "state";
   const HASH_STATE_FIELD = "s";
+  const HASH_RUN_FIELD = "run";
+  const HASH_SPEED_FIELD = "speed";
 
   const HASH_MODIFIED_STATE = "MODIFIED";
 
@@ -226,17 +228,31 @@ var MechViewRouter = MechViewRouter || (function() {
     MechView.updateOnModifyAppState();
   }
 
-  var getStateHashFromLocation = function() {
+  var getParamFromLocationHash = function(param) {
     let fragmentHash = location.hash;
-    let regex = /#s=([^&]*)/;
-    let results = regex.exec(fragmentHash);
-    let hashState;
-    if (!results) {
-      hashState = null;
-    } else {
-      hashState = results[1];
+    if (fragmentHash.startsWith("#")) {
+      fragmentHash = fragmentHash.substring(1);
     }
-    return hashState;
+    fragmentHash = "&" + fragmentHash;
+    let regex = new RegExp(".*&" + param + "=([^&]*).*");
+    let results = regex.exec(fragmentHash);
+    if (results) {
+      return results[1];
+    } else {
+      return null;
+    }
+  }
+
+  var getRunFromLocation = function() {
+    return getParamFromLocationHash(HASH_RUN_FIELD);
+  }
+
+  var getSpeedFromLocation = function() {
+    return getParamFromLocationHash(HASH_SPEED_FIELD);
+  }
+
+  var getStateHashFromLocation = function() {
+    return getParamFromLocationHash(HASH_STATE_FIELD);
   }
 
   var loadStateFromLocationHash = function() {
@@ -297,5 +313,7 @@ var MechViewRouter = MechViewRouter || (function() {
     loadStateFromLocationHash : loadStateFromLocationHash,
     modifyAppState: modifyAppState,
     initViewRouter : initViewRouter,
+    getRunFromLocation : getRunFromLocation,
+    getSpeedFromLocation : getSpeedFromLocation,
   };
 })();

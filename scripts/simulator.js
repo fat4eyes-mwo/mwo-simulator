@@ -43,6 +43,7 @@ var MechSimulator = MechSimulator || (function() {
       })
       .then(function(data) {
         MechView.hideLoadingScreen();
+        MechView.updateOnAppLoaded();
       });
   }
 
