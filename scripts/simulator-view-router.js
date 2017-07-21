@@ -8,7 +8,7 @@ var MechViewRouter = MechViewRouter || (function() {
   const PERSISTENCE_URL = "./php/simulator-persistence.php";
   const PERSISTENCE_STATE_FIELD = "state";
   const HASH_STATE_FIELD = "s";
-  const HASH_RUN_FIELD = "run";
+  const HASH_RUN_FIELD = "autorun";
   const HASH_SPEED_FIELD = "speed";
 
   const HASH_MODIFIED_STATE = "MODIFIED";
