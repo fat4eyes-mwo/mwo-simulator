@@ -10,6 +10,10 @@
 //http://www.4eye-labs.net/mwo-simulator/#s=f5e1dc499ba7fb93cc9c01655b69ff5a8976d9ec9d3a2e43eaeec4a67ba05185
 //mrmboat test
 //http://www.4eye-labs.net/mwo-simulator/#s=672b3825daed58fe6b73d713dd7e09588c8a0a0b2d213d8d9bd78cbb387feb62
+//RAC test
+//http://localhost:8181/#s=98ac7bc00859a71cfc7b985d22b82929f04da7db3d2e8a4f45c7df196dbf4126&autorun=true&speed=8
+//http://localhost:8181/#s=721f1c7bd5b35bf4962dc06ce7880f59f5d5db3bc95a839972b45e4b2e9ee095&autorun=true&speed=8
+//http://localhost:8181/#s=5a07be2d5fc60db0f423dd1e2dc9e48010f96f49c522b581bfc601ba204cf04b&autorun=true&speed=8
 
 //lrmboat quirk test
 //http://www.4eye-labs.net/#s=542d68c11fb2399272f21455f157fb37f023e4e88d54a511723aff51171d249e
@@ -114,6 +118,8 @@
 //http://mwo.smurfy-net.de/mechlab#i=16&l=cb72e3e1264e3b8051193ab4e52686a71dba239c
 //Punching bag atlas
 //http://mwo.smurfy-net.de/mechlab#i=16&l=d179b763d97e4f962243f707e83b60ce4d785fa1
+//RAC mauler
+//http://mwo.smurfy-net.de/mechlab#i=326&l=94faf1167db70b81360f09ae463f5e4688a874a2
 //ersl Cheetah
 //http://mwo.smurfy-net.de/mechlab#i=291&l=94bebd78be7c17fa2c635676935eb5435f6bb524
 //Jenner mpl

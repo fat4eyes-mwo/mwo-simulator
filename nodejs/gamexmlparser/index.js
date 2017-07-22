@@ -59,6 +59,12 @@ class Weapon {
     if (xmlWeaponStats.attr.jamRampDownTime) {
       this.jamRampDownTime = Number(xmlWeaponStats.attr.jamRampDownTime);
     }
+    //special case for machine guns: speed in XML files is just particle
+    //speed not actual weapon speed (which is near instant). Set very high
+    //speed for all machine gun weapons
+    if (this.name.includes("MachineGun")) {
+      this.speed = 10000;
+    }
     this.ranges = [];
     for (let xmlRange of xmlWeaponEntry.Ranges[0].Range) {
       this.ranges.push(new RangeEntry(xmlRange));

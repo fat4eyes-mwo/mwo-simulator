@@ -465,6 +465,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     }
   }
 
+  //TODO: Move computeHeat and computeGhostHeat into MechState
   //Compute the heat caused by firing a set of weapons
   //Ghost heat reference: http://mwomercs.com/forums/topic/127904-heat-scale-the-maths/
   var computeHeat = function (mech, weaponsFired) {

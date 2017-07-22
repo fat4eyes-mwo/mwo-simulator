@@ -1,4 +1,4 @@
-//Generated from GameData.pak Wed, 19 Jul 2017 18:41:30 GMT
+//Generated from GameData.pak Sat, 22 Jul 2017 09:02:12 GMT
 _AddedWeaponData = {
 	"AutoCannon20": {
 		"ammo_per_shot": 1,
@@ -380,6 +380,7 @@ _AddedWeaponData = {
 	"MachineGun": {
 		"ammo_per_shot": 1,
 		"rof": 10,
+		"speed": 10000,
 		"ranges": [
 			{
 				"start": 0,
@@ -1019,6 +1020,7 @@ _AddedWeaponData = {
 	"LightMachineGun": {
 		"ammo_per_shot": 1,
 		"rof": 10,
+		"speed": 10000,
 		"ranges": [
 			{
 				"start": 0,
@@ -1040,6 +1042,7 @@ _AddedWeaponData = {
 	"HeavyMachineGun": {
 		"ammo_per_shot": 1,
 		"rof": 10,
+		"speed": 10000,
 		"ranges": [
 			{
 				"start": 0,
@@ -1425,6 +1428,7 @@ _AddedWeaponData = {
 	"ClanMachineGun": {
 		"ammo_per_shot": 1,
 		"rof": 10,
+		"speed": 10000,
 		"ranges": [
 			{
 				"start": 0,
@@ -2027,6 +2031,7 @@ _AddedWeaponData = {
 	"ClanLightMachineGun": {
 		"ammo_per_shot": 1,
 		"rof": 10,
+		"speed": 10000,
 		"ranges": [
 			{
 				"start": 0,
@@ -2048,6 +2053,7 @@ _AddedWeaponData = {
 	"ClanHeavyMachineGun": {
 		"ammo_per_shot": 1,
 		"rof": 10,
+		"speed": 10000,
 		"ranges": [
 			{
 				"start": 0,
@@ -2380,6 +2386,7 @@ _AddedWeaponData = {
 	"FakeMachineGun": {
 		"ammo_per_shot": 1,
 		"rof": 10,
+		"speed": 10000,
 		"ranges": [
 			{
 				"start": 0,
