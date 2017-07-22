@@ -1,7 +1,6 @@
 "use strict";
 
-//Classes that represent the states of the mechs in the simulation,
-//and methos to populate them from smurfy data
+//Weapon state classes
 var MechModelWeapons = MechModelWeapons || (function () {
   var WeaponCycle = MechModel.WeaponCycle;
 
@@ -146,7 +145,7 @@ var MechModelWeapons = MechModelWeapons || (function () {
       this.cooldownLeft = 0;
     }
 
-    //returns {weaponFired:<boolean>, ammoConsumed:<number>}
+    //returns {newState: <new state>, weaponFired:<boolean>, ammoConsumed:<number>}
     fireWeapon() {
       throw "Abstract method, should not be called";
     }
