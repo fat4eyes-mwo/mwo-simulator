@@ -42,17 +42,18 @@
 
 * Uses current mech, weapon and heatsink data from smurfy's.
 * Most of the heat and damage mechanics (see exceptions below).
-* Simulates duration (for burn weapons) and travel time (for velocity weapons).
-* Simulates effects of heatsink and ammo box destruction, as well as side torso loss for Clan XL engines.
-* Simulates weapon spread for the following weapons: All LRMs, all SRMs. Also splash damage for cERPPCs.
-* Supports armor and structure quirks for IS mechs.
-* Supports heat, cooldown, duration, velocity and range multipliers for IS mechs.
+* Simulates duration (for burn weapons), travel time (for velocity weapons) and jam bar mechanics (for RACs).
+* Simulates the following new tech weapons: All lasers, all PPCs, all Gauss rifles, ATMs, MRMs, RACs.
+* Simulates effects of heatsink and ammo box destruction, as well as side torso loss for Clan XL/Light engines.
+* Simulates weapon spread for the following weapons: All LRMs, all SRMs, all ATMs, all MRMs. Also splash damage for cERPPCs.
+* Supports heat, cooldown, duration, velocity and range multipliers for IS and clan mechs.
+* Simulates effects of mech quirks (see exceptions below).
 
 # Currently Unsimulated mechanics
 
 * Damage spread for LBX (high priority)
-* Omnipod specific/set quirks
-* UAC double tap
+* Omnipod full set quirks.
+* Rocket launchers.
 * Exponential dropoff for cLRMs below min range (right now they do 0 damage below min range)
 * Environmental heat effects
 * Targeting computer effects
@@ -65,7 +66,7 @@
 
 For those interested in looking at the code, the most interesting stuff can be found in `scripts/simulator-logic.js`. It contains the simulation loop and most of the mechanics of the simulation. The main loop function is `step()`.
 
-The definition of the data structures used by the simulation are in `scripts/simulator-model.js`. The important bits are in `class` declarations, most of the other code there is just data conversion from smurfy format to the one used by the simulation.
+The definition of the data structures used by the simulation are in `scripts/simulator-model*.js`. The important bits are in `class` declarations, most of the other code there is just data conversion from smurfy format to the one used by the simulation.
 
 The weapon fire patterns (which determine how mechs choose what weapons to fire) are in `scripts/simulator-firepattern.js`. Target component patterns (which determine what components a mech targets) are in `scripts/simulator-componenttarget.js`. Target mech patterns (which enemy mech to target) are in `scripts/simulator-mechtarget.js`. And weapon accuracy patterns (which determine how a weapon or mech spreads damage) are in `scripts/simulator-accuracypattern.js`. Read the comments in those files if you want to try adding your own patterns and have them appear in the UI.
 
@@ -77,4 +78,4 @@ The main entry point of the program is in `scripts/simulator.js`.
 
 * 2017-07-12: Implemented IS weapon quirks (heat, duration, range, cooldown, velocity).
 * 2017-07-17: Implemented UAC double tap.
-* 2017-07-19: MRM spread. Priority changes to support most of new tech. 
+* 2017-07-19: MRM spread. Priority changes to support most of new tech.
