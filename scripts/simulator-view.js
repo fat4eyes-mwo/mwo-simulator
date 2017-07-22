@@ -247,12 +247,17 @@ var MechView = MechView || (function() {
       setWeaponCooldown(mechId, idx, 0);
     }
   }
-  var setWeaponCooldown = function (mechId, weaponIdx, percent) {
+  var setWeaponCooldown = function (mechId, weaponIdx, percent, type="cooldown") {
     //NOTE: jQuery on weapon cooldowns takes way too much compute time. Use
     //plain javascript for this and other often updated elements
     //$("#" + weaponCooldownBarId(mechId, weaponIdx)).width(100*percent + "%");
     let cooldownDiv = document.getElementById(weaponCooldownBarId(mechId, weaponIdx));
     cooldownDiv.style.width = (100*percent) + "%";
+    if (type === "cooldown") {
+      cooldownDiv.classList.remove("jamBar");
+    } else if (type === "jamBar") {
+      cooldownDiv.classList.add("jamBar");
+    }
   }
   var setWeaponAmmo = function (mechId, weaponIdx, ammo) {
     let weaponAmmoDiv = document.getElementById(weaponAmmoId(mechId, weaponIdx));

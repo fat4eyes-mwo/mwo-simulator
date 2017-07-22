@@ -450,6 +450,10 @@ a:hover {
   left: 0%;
 }
 
+.weaponCooldownBar.jamBar {
+  background-color: yellow;
+}
+
 .weaponAmmo {
   text-align: center;
 }

@@ -8,6 +8,7 @@ $heatbar-color: red;
 $heatbar-negative-color: $off-background-color;
 $cooldown-bar-color: rgb(255, 50, 50);
 $cooldown-bar-negative-color : $off-background-color;
+$jam-bar-color : yellow;
 $jammed-color : maroon;
 $fancy-font-family: Orbitron;
 $modal-wide-width: 80%;
@@ -503,6 +504,10 @@ div {
   position:absolute;
   top: 0%;
   left: 0%;
+}
+
+.weaponCooldownBar.jamBar {
+  background-color: $jam-bar-color;
 }
 
 .weaponAmmo {

@@ -345,11 +345,13 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
       let weaponInfo = weaponState.weaponInfo;
 
       let fireStatus = weaponState.fireWeapon();
+      if (fireStatus.newState) {
+        mechState.setUpdate(MechModel.UpdateType.WEAPONSTATE);
+      }
       if (fireStatus.weaponFired) {
         weaponsFired.push(weaponState);
         queueWeaponFire(mech, targetMech, weaponState, fireStatus.ammoConsumed);
         mechState.setUpdate(MechModel.UpdateType.COOLDOWN);
-        mechState.setUpdate(MechModel.UpdateType.WEAPONSTATE);
       }
     }
 

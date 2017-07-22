@@ -65,13 +65,19 @@ var MechModelView = MechModelView || (function() {
   var updateCooldown = function(mech) {
     let mechState = mech.getMechState();
     for (let weaponIndex in mechState.weaponStateList) {
+      let type = "cooldown";
       let weaponState = mechState.weaponStateList[weaponIndex];
       let weaponInfo = weaponState.weaponInfo;
       let cooldownPercent = 0;
       if (weaponState.weaponCycle === MechModel.WeaponCycle.READY) {
         cooldownPercent = 0;
       } else if (weaponState.weaponCycle === MechModel.WeaponCycle.FIRING) {
-        cooldownPercent = 1;
+        if (weaponState.hasJamBar()) {
+          cooldownPercent = weaponState.getJamProgress();
+          type = "jamBar";
+        } else {
+          cooldownPercent = 1;
+        }
       } else if (weaponState.weaponCycle === MechModel.WeaponCycle.DISABLED) {
         cooldownPercent = 1;
       } else if (weaponState.weaponCycle === MechModel.WeaponCycle.COOLDOWN) {
@@ -81,7 +87,7 @@ var MechModelView = MechModelView || (function() {
       } else if (weaponState.weaponCycle === MechModel.WeaponCycle.JAMMED) {
         cooldownPercent = 1;
       }
-      MechView.setWeaponCooldown(mech.getMechId(), weaponIndex, cooldownPercent);
+      MechView.setWeaponCooldown(mech.getMechId(), weaponIndex, cooldownPercent, type);
     }
   }
 
