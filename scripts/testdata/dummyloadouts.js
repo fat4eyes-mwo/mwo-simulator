@@ -120,6 +120,8 @@
 //http://mwo.smurfy-net.de/mechlab#i=16&l=d179b763d97e4f962243f707e83b60ce4d785fa1
 //RAC mauler
 //http://mwo.smurfy-net.de/mechlab#i=326&l=94faf1167db70b81360f09ae463f5e4688a874a2
+//RAC centurion test
+//http://mwo.smurfy-net.de/mechlab#i=440&l=52b38af817a950f4d5ee1db01db31c6713e3833a
 //ersl Cheetah
 //http://mwo.smurfy-net.de/mechlab#i=291&l=94bebd78be7c17fa2c635676935eb5435f6bb524
 //Jenner mpl

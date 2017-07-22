@@ -530,190 +530,70 @@ var MechModel = MechModel || (function () {
       }
     }
   }
-
   class WeaponState {
-    //TODO This class seriously calls for subclassing into duration,
-    //single-fire and continuous-fire weapons
     constructor(weaponInfo, mechState) {
       this.mechState = mechState;
       this.weaponInfo = weaponInfo;
       this.active = true;
       this.weaponCycle = WeaponCycle.READY;
       this.cooldownLeft = 0;
-      this.spoolupLeft = 0;
-      this.durationLeft = 0;
-      this.jamLeft = 0;
-      this.currShotsDuringCooldown = weaponInfo.shotsDuringCooldown;
-      this.timeToNextAutoShot = 0;
-      this.isOnAutoFire = false;
     }
 
     //returns {weaponFired:<boolean>, ammoConsumed:<number>}
     fireWeapon() {
-      let weaponInfo = this.weaponInfo;
-      let mechState = this.mechState;
-
-      //if not ready to fire, proceed to next weapon
-      if (!this.active || !this.canFire()) {
-        return {weaponFired: false, ammoConsumed: 0};
-      }
-      //if no ammo, proceed to next weapon
-      if (weaponInfo.requiresAmmo() &&
-        mechState.ammoState.ammoCountForWeapon(weaponInfo.weaponId) <= 0) {
-        return {weaponFired: false, ammoConsumed: 0};
-      }
-
-      if (weaponInfo.spinup > 0) {
-        //if weapon has spoolup, set state to SPOOLING and set value of spoolupLeft
-        this.gotoState(MechModel.WeaponCycle.SPOOLING);
-        return {weaponFired: false, ammoConsumed: 0};
-      } else if (weaponInfo.duration > 0) {
-        //if weapon has duration, set state to FIRING
-        this.gotoState(MechModel.WeaponCycle.FIRING);
-        return {weaponFired: true, ammoConsumed: 0}; //assumes duration weapons don't consume ammo
-      } else {
-        //if weapon has no duration, set state to FIRING, will go to cooldown on the next step
-        let weaponFired = false;
-        let ammoConsumed = 0;
-        if (this.weaponCycle === MechModel.WeaponCycle.READY) {
-          this.gotoState(MechModel.WeaponCycle.FIRING);
-          if (this.weaponInfo.isContinuousFire()) {
-            this.isOnAutoFire = true;
-            this.timeToNextAutoShot = this.weaponInfo.timeBetweenAutoShots;
-          }
-          weaponFired = true;
-        } else if (this.weaponCycle === MechModel.WeaponCycle.COOLDOWN) {
-          //DOUBLE TAP
-          console.log("Double tap: " + this.weaponInfo.name);
-          //check jam chance
-          let rand = Math.random();
-          if (rand <= Number(this.weaponInfo.jamChance)) {
-          // if (true) {
-            //JAM
-            console.log("Jam: " + this.weaponInfo.name);
-            this.gotoState(MechModel.WeaponCycle.JAMMED);
-            weaponFired = false;
-          } else {
-            this.currShotsDuringCooldown -= 1;
-            weaponFired = true;
-          }
-        } else if (this.weaponCycle === MechModel.WeaponCycle.FIRING) {
-          //auto fire, process cooldowns will handle the actual firing of the weapon
-          this.isOnAutoFire = true;
-        }
-        if (weaponFired) {
-          if (weaponInfo.requiresAmmo()) {
-            ammoConsumed = mechState.ammoState.consumeAmmo(weaponInfo.weaponId,
-                                                          weaponInfo.ammoPerShot);
-          }
-        }
-        return {weaponFired : weaponFired, ammoConsumed: ammoConsumed};
-      }
+      throw "Abstract method, should not be called";
     }
 
     //processes cooldowns on the weapon, making state changes as necessary
     step(stepDuration) {
-      let ammoConsumed = 0;
-      let weaponFired = false;
+      throw "Abstract method, should not be called";
+    }
+
+    stepStandardFire(stepDuration) {
+      //if weapon is firing, reduce durationLeft. if durationLeft <=0, change state to COOLDOWN
       let newState = null;
       let cooldownChanged = false;
-      let weaponInfo = this.weaponInfo;
-      let ammoState = this.mechState.ammoState;
-      if (!this.active) { //if weapon disabled, return
-        return {newState : newState,
-                weaponFired : weaponFired,
-                ammoConsumed: ammoConsumed,
-                cooldownChanged: cooldownChanged};
+      let newDurationLeft = Number(this.durationLeft) - stepDuration;
+      this.durationLeft = Math.max(newDurationLeft, 0);
+      if (this.durationLeft <= 0) {
+        newState = MechModel.WeaponCycle.COOLDOWN;
+        this.gotoState(newState);
+        //if duration ended in the middle of the tick, subtract the
+        //extra time from the cooldown
+        this.cooldownLeft +=  newDurationLeft;
       }
+      cooldownChanged = true;
+      return {newState : newState, cooldownChanged: cooldownChanged};
+    }
 
-      //if weapon is spooling, reduce spoolleft.
-      //if spoolLeft <=0, change state to COOLDOWN
-      //(assumes all spoolup weapons have no duration,
-      //otherwise next state would be FIRING)
-      if (this.weaponCycle === MechModel.WeaponCycle.SPOOLING) {
-        let newSpoolLeft = Number(this.spoolupLeft) - stepDuration;
-        this.spoolupLeft = Math.max(newSpoolLeft, 0);
-        if (this.spoolupLeft <= 0) {
-          newState = MechModel.WeaponCycle.COOLDOWN;
-          this.gotoState(newState);
-
-          //if the spooling ended in the middle of the tick, subtract the
-          //extra time from the cooldown
-          this.cooldownLeft += newSpoolLeft;
-          //Consume ammo
-          if (weaponInfo.requiresAmmo()) {
-            ammoConsumed = ammoState.consumeAmmo(weaponInfo.weaponId,
-                                                weaponInfo.ammoPerShot);
-          }
-          weaponFired = true;
-        }
-        cooldownChanged = true;
-      } else if (this.weaponCycle === MechModel.WeaponCycle.FIRING
-                  && !this.weaponInfo.isContinuousFire()) {
-      //firing for duration weapons and one-shot weapons
-      //if weapon is firing, reduce durationLeft. if durationLeft <=0, change state to COOLDOWN
-        let newDurationLeft = Number(this.durationLeft) - stepDuration;
-        this.durationLeft = Math.max(newDurationLeft, 0);
-        if (this.durationLeft <= 0) {
-          newState = MechModel.WeaponCycle.COOLDOWN;
-          this.gotoState(newState);
-          //if duration ended in the middle of the tick, subtract the
-          //extra time from the cooldown
-          this.cooldownLeft +=  newDurationLeft;
-        }
-        cooldownChanged = true;
-      }  else if (this.weaponCycle === MechModel.WeaponCycle.FIRING
-                  && this.weaponInfo.isContinuousFire()) {
-        //Continuous fire weapons
-        let newTimeToAutoShot = Number(this.timeToNextAutoShot) - stepDuration;
-        this.timeToNextAutoShot = Math.max(0, newTimeToAutoShot);
-        //continuous fire
-        if (this.isOnAutoFire) {
-          if (this.timeToNextAutoShot <= 0) {
-            if (weaponInfo.requiresAmmo()) {
-              ammoConsumed = ammoState.consumeAmmo(weaponInfo.weaponId,
-                                                  weaponInfo.ammoPerShot);
-            }
-            //decrease time to next auto shot with newTimetoAutoShot if the shot
-            //occurs in the middle of the tick
-            this.timeToNextAutoShot =
-                    this.weaponInfo.timeBetweenAutoShots + newTimeToAutoShot;
-            weaponFired = true;
-            //set new state just so the view gets an update to the weapon status (which includes ammo)
-            newState = MechModel.WeaponCycle.FIRING;
-          }
-        } else {
-          newState = MechModel.WeaponCycle.COOLDOWN;
-          this.gotoState(newState);
-          this.timeToNextAutoShot = 0; //TODO: not strictly correct, should count down whenever the weapon is not firing.
-        }
-        //set isOnAutoFire to false, mech must continue to try firing the
-        //weapon for this to be set to true in the next step
-        this.isOnAutoFire = false;
-      } else if (this.weaponCycle === MechModel.WeaponCycle.COOLDOWN) {
+    stepCooldown(stepDuration) {
       //if weapon is on cooldown, reduce cooldownLeft.
       //if cooldownLeft <=0, change state to ready
-        let newCooldownLeft = Number(this.cooldownLeft) - stepDuration;
-        this.cooldownLeft = Math.max(newCooldownLeft, 0);
-        if (this.cooldownLeft <= 0) {
-          newState = MechModel.WeaponCycle.READY;
-          this.gotoState(newState);
-        }
-        cooldownChanged = true;
-      } else if (this.weaponCycle === MechModel.WeaponCycle.JAMMED) {
-        let newJamLeft = Number(this.jamLeft) - stepDuration;
-        this.jamLeft = Math.max(newJamLeft, 0);
-        if (this.jamLeft <= 0) {
-          newState = MechModel.WeaponCycle.COOLDOWN;
-          this.gotoState(newState);
-          this.cooldownLeft += newJamLeft;
-        }
+      let newState = null;
+      let cooldownChanged = false;
+
+      let newCooldownLeft = Number(this.cooldownLeft) - stepDuration;
+      this.cooldownLeft = Math.max(newCooldownLeft, 0);
+      if (this.cooldownLeft <= 0) {
+        newState = MechModel.WeaponCycle.READY;
+        this.gotoState(newState);
+      }
+      cooldownChanged = true;
+      return {newState: newState, cooldownChanged : cooldownChanged};
+    }
+
+    stepJammed(stepDuration) {
+      let newState = null;
+      let cooldownChanged = false;
+      let newJamLeft = Number(this.jamLeft) - stepDuration;
+      this.jamLeft = Math.max(newJamLeft, 0);
+      if (this.jamLeft <= 0) {
+        newState = MechModel.WeaponCycle.COOLDOWN;
+        this.gotoState(newState);
+        this.cooldownLeft += newJamLeft;
         cooldownChanged = true;
       }
-      return {newState : newState,
-              weaponFired : weaponFired,
-              ammoConsumed: ammoConsumed,
-              cooldownChanged: cooldownChanged};
+      return {newState: newState, cooldownChanged: cooldownChanged};
     }
 
     gotoState(weaponCycle) {
@@ -779,6 +659,277 @@ var MechModel = MechModel || (function () {
     computeJamTime() {
       //TODO: See if any quirks affect jam time
       return Number(this.weaponInfo.jamTime);
+    }
+  }
+
+  //state for duration fire weapons
+  class WeaponStateDurationFire extends WeaponState {
+    constructor(weaponInfo, mechState) {
+      super(weaponInfo, mechState);
+      this.durationLeft = 0;
+    }
+
+    fireWeapon() {
+      //if not ready to fire, proceed to next weapon
+      if (!this.active || !this.canFire()) {
+        return {weaponFired: false, ammoConsumed: 0};
+      }
+      this.gotoState(MechModel.WeaponCycle.FIRING);
+      //assumes duration weapons don't consume ammo
+      return {weaponFired: true, ammoConsumed: 0};
+    }
+
+    step(stepDuration) {
+      let ammoConsumed = 0;
+      let weaponFired = false;
+      let newState = null;
+      let cooldownChanged = false;
+      let weaponInfo = this.weaponInfo;
+      let ammoState = this.mechState.ammoState;
+      if (!this.active) { //if weapon disabled, return
+        return {newState : newState,
+                weaponFired : weaponFired,
+                ammoConsumed: ammoConsumed,
+                cooldownChanged: cooldownChanged};
+      }
+      if (this.weaponCycle === MechModel.WeaponCycle.FIRING) {
+        let fireStatus = this.stepStandardFire(stepDuration);
+        newState = fireStatus.newState;
+        cooldownChanged = fireStatus.cooldownChanged;
+      } else if (this.weaponCycle === MechModel.WeaponCycle.COOLDOWN) {
+        let cooldownStatus = this.stepCooldown(stepDuration);
+        newState = cooldownStatus.newState;
+        cooldownChanged = cooldownStatus.cooldownChanged;
+      }
+      return {newState : newState,
+              weaponFired : weaponFired,
+              ammoConsumed: ammoConsumed,
+              cooldownChanged: cooldownChanged};
+    }
+
+    canFire() {
+      return this.weaponCycle === WeaponCycle.READY;
+    }
+  }
+
+  class WeaponStateSingleFire extends WeaponState {
+    constructor(weaponInfo, mechState) {
+      super(weaponInfo, mechState);
+      this.spoolupLeft = 0;
+      this.jamLeft = 0;
+      this.currShotsDuringCooldown = weaponInfo.shotsDuringCooldown;
+    }
+
+    fireWeapon() {
+      let weaponInfo = this.weaponInfo;
+      let mechState = this.mechState;
+      //if not ready to fire, proceed to next weapon
+      if (!this.active || !this.canFire()) {
+        return {weaponFired: false, ammoConsumed: 0};
+      }
+      //if no ammo, return
+      if (weaponInfo.requiresAmmo() &&
+        mechState.ammoState.ammoCountForWeapon(weaponInfo.weaponId) <= 0) {
+        return {weaponFired: false, ammoConsumed: 0};
+      }
+      if (weaponInfo.spinup > 0) {
+        //if weapon has spoolup, set state to SPOOLING and set value of spoolupLeft
+        this.gotoState(MechModel.WeaponCycle.SPOOLING);
+        return {weaponFired: false, ammoConsumed: 0};
+      } else {
+        let weaponFired = false;
+        let ammoConsumed = 0;
+        if (this.weaponCycle === MechModel.WeaponCycle.READY) {
+          this.gotoState(MechModel.WeaponCycle.FIRING);
+          weaponFired = true;
+        } else if (this.weaponCycle === MechModel.WeaponCycle.COOLDOWN) {
+          //DOUBLE TAP
+          console.log("Double tap: " + this.weaponInfo.name);
+          //check jam chance
+          let rand = Math.random();
+          if (rand <= Number(this.weaponInfo.jamChance)) {
+          // if (true) {
+            //JAM
+            console.log("Jam: " + this.weaponInfo.name);
+            this.gotoState(MechModel.WeaponCycle.JAMMED);
+            weaponFired = false;
+          } else {
+            this.currShotsDuringCooldown -= 1;
+            weaponFired = true;
+          }
+        }
+        if (weaponFired) {
+          if (weaponInfo.requiresAmmo()) {
+            ammoConsumed = mechState.ammoState.consumeAmmo(weaponInfo.weaponId,
+                                                          weaponInfo.ammoPerShot);
+          }
+        }
+        return {weaponFired : weaponFired, ammoConsumed: ammoConsumed};
+      }
+    }
+
+    step(stepDuration) {
+      let ammoConsumed = 0;
+      let weaponFired = false;
+      let newState = null;
+      let cooldownChanged = false;
+      let weaponInfo = this.weaponInfo;
+      let ammoState = this.mechState.ammoState;
+      if (!this.active) { //if weapon disabled, return
+        return {newState : newState,
+                weaponFired : weaponFired,
+                ammoConsumed: ammoConsumed,
+                cooldownChanged: cooldownChanged};
+      }
+      //if weapon is spooling, reduce spoolleft.
+      //if spoolLeft <=0, change state to COOLDOWN
+      //(assumes all spoolup weapons have no duration,
+      //otherwise next state would be FIRING)
+      if (this.weaponCycle === MechModel.WeaponCycle.SPOOLING) {
+        let newSpoolLeft = Number(this.spoolupLeft) - stepDuration;
+        this.spoolupLeft = Math.max(newSpoolLeft, 0);
+        if (this.spoolupLeft <= 0) {
+          newState = MechModel.WeaponCycle.COOLDOWN;
+          this.gotoState(newState);
+
+          //if the spooling ended in the middle of the tick, subtract the
+          //extra time from the cooldown
+          this.cooldownLeft += newSpoolLeft;
+          //Consume ammo
+          if (weaponInfo.requiresAmmo()) {
+            ammoConsumed = ammoState.consumeAmmo(weaponInfo.weaponId,
+                                                weaponInfo.ammoPerShot);
+          }
+          weaponFired = true;
+        }
+        cooldownChanged = true;
+      } else if (this.weaponCycle === MechModel.WeaponCycle.FIRING) {
+        let fireStatus = this.stepStandardFire(stepDuration);
+        newState = fireStatus.newState;
+        cooldownChanged = fireStatus.cooldownChanged;
+      } else if (this.weaponCycle === MechModel.WeaponCycle.COOLDOWN) {
+        let cooldownStatus = this.stepCooldown(stepDuration);
+        newState = cooldownStatus.newState;
+        cooldownChanged = cooldownStatus.cooldownChanged;
+      } else if (this.weaponCycle === MechModel.WeaponCycle.JAMMED) {
+        let jamStatus = this.stepJammed(stepDuration);
+        newState = jamStatus.newState;
+        cooldownChanged = jamStatus.cooldownChanged;
+      }
+      return {newState : newState,
+              weaponFired : weaponFired,
+              ammoConsumed: ammoConsumed,
+              cooldownChanged: cooldownChanged};
+    }
+
+    canFire() {
+      return this.weaponCycle === WeaponCycle.READY ||
+            (this.weaponCycle === WeaponCycle.COOLDOWN &&
+             this.currShotsDuringCooldown > 0);
+    }
+  }
+
+  class WeaponStateContinuousFire extends WeaponState {
+    constructor(weaponInfo, mechState) {
+      super(weaponInfo, mechState);
+      this.timeToNextAutoShot = 0;
+      this.isOnAutoFire = false;
+    }
+
+    fireWeapon() {
+      let weaponInfo = this.weaponInfo;
+      let mechState = this.mechState;
+
+      //if not ready to fire, proceed to next weapon
+      if (!this.active || !this.canFire()) {
+        return {weaponFired: false, ammoConsumed: 0};
+      }
+      //if no ammo, proceed to next weapon
+      if (weaponInfo.requiresAmmo() &&
+        mechState.ammoState.ammoCountForWeapon(weaponInfo.weaponId) <= 0) {
+        return {weaponFired: false, ammoConsumed: 0};
+      }
+      //if weapon has no duration, set state to FIRING, will go to cooldown on the next step
+      let weaponFired = false;
+      let ammoConsumed = 0;
+      if (this.weaponCycle === MechModel.WeaponCycle.READY) {
+        this.gotoState(MechModel.WeaponCycle.FIRING);
+        this.isOnAutoFire = true;
+        this.timeToNextAutoShot = this.weaponInfo.timeBetweenAutoShots;
+        weaponFired = true;
+      } else if (this.weaponCycle === MechModel.WeaponCycle.FIRING) {
+        //auto fire, step() will handle the actual firing of the weapon
+        this.isOnAutoFire = true;
+      }
+      if (weaponFired) {
+        if (weaponInfo.requiresAmmo()) {
+          ammoConsumed = mechState.ammoState.consumeAmmo(weaponInfo.weaponId,
+                                                        weaponInfo.ammoPerShot);
+        }
+      }
+      return {weaponFired : weaponFired, ammoConsumed: ammoConsumed};
+    }
+
+    step(stepDuration) {
+      let ammoConsumed = 0;
+      let weaponFired = false;
+      let newState = null;
+      let cooldownChanged = false;
+      let weaponInfo = this.weaponInfo;
+      let ammoState = this.mechState.ammoState;
+      if (!this.active) { //if weapon disabled, return
+        return {newState : newState,
+                weaponFired : weaponFired,
+                ammoConsumed: ammoConsumed,
+                cooldownChanged: cooldownChanged};
+      }
+
+      if (this.weaponCycle === MechModel.WeaponCycle.FIRING) {
+        //Continuous fire weapons autofire
+        let newTimeToAutoShot = Number(this.timeToNextAutoShot) - stepDuration;
+        this.timeToNextAutoShot = Math.max(0, newTimeToAutoShot);
+        if (this.isOnAutoFire) {
+          if (this.timeToNextAutoShot <= 0) {
+            if (weaponInfo.requiresAmmo()) {
+              ammoConsumed = ammoState.consumeAmmo(weaponInfo.weaponId,
+                                                  weaponInfo.ammoPerShot);
+            }
+            //decrease time to next auto shot with newTimetoAutoShot if the shot
+            //occurs in the middle of the tick
+            this.timeToNextAutoShot =
+                    this.weaponInfo.timeBetweenAutoShots + newTimeToAutoShot;
+            weaponFired = true;
+            //set new state just so the view gets an update to the weapon status (which includes ammo)
+            newState = MechModel.WeaponCycle.FIRING;
+          }
+        } else {
+          newState = MechModel.WeaponCycle.COOLDOWN;
+          this.gotoState(newState);
+          this.timeToNextAutoShot = 0; //TODO: not strictly correct, should count down whenever the weapon is not firing.
+        }
+        //set isOnAutoFire to false, mech must continue to try firing the
+        //weapon for this to be set to true in the next step
+        this.isOnAutoFire = false;
+      }
+      else if (this.weaponCycle === MechModel.WeaponCycle.COOLDOWN) {
+        let cooldownStatus = this.stepCooldown(stepDuration);
+        newState = cooldownStatus.newState;
+        cooldownChanged = cooldownStatus.cooldownChanged;
+      } else if (this.weaponCycle === MechModel.WeaponCycle.JAMMED) {
+        let jamStatus = this.stepJammed(stepDuration);
+        newState = jamStatus.newState;
+        cooldownChanged = jamStatus.cooldownChanged;
+      }
+      return {newState : newState,
+              weaponFired : weaponFired,
+              ammoConsumed: ammoConsumed,
+              cooldownChanged: cooldownChanged};
+    }
+
+    canFire() {
+      return this.weaponCycle === WeaponCycle.READY ||
+            (this.weaponCycle === WeaponCycle.FIRING &&
+            this.weaponInfo.isContinuousFire());
     }
   }
 
@@ -1541,7 +1692,16 @@ var MechModel = MechModel || (function () {
     var weaponStateList = [];
     let mechInfo = mechState.mechInfo;
     for (let weaponInfo of mechInfo.weaponInfoList) {
-      weaponStateList.push(new WeaponState(weaponInfo, mechState));
+      let weaponState = null;
+      if (weaponInfo.hasDuration()) {
+        weaponState = new WeaponStateDurationFire(weaponInfo, mechState);
+      } else if (weaponInfo.isContinuousFire()) {
+        weaponState = new WeaponStateContinuousFire(weaponInfo, mechState);
+      } else {
+        //single-fire
+        weaponState = new WeaponStateSingleFire(weaponInfo, mechState);
+      }
+      weaponStateList.push(weaponState);
     }
     return weaponStateList;
   }
