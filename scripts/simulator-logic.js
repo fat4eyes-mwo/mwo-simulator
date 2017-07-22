@@ -388,65 +388,15 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     let mechState = mech.getMechState();
     let weaponsFired = [];
     for (let weaponState of mechState.weaponStateList) {
-      let weaponInfo = weaponState.weaponInfo;
-      if (!weaponState.active) { //if weapon disabled, proceed to next
-        continue;
+      let stepResult = weaponState.step(getStepDuration());
+      if (stepResult.weaponFired) {
+        weaponsFired.push(weaponState);
+        queueWeaponFire(mech, targetMech, weaponState, stepResult.ammoConsumed);
       }
-
-      //if weapon is spooling, reduce spoolleft.
-      //if spoolLeft <=0, change state to COOLDOWN
-      //(assumes all spoolup weapons have no duration,
-      //otherwise next state would be FIRING)
-      if (weaponState.weaponCycle === MechModel.WeaponCycle.SPOOLING) {
-        let newSpoolLeft = Number(weaponState.spoolupLeft) - getStepDuration();
-        weaponState.spoolupLeft = Math.max(newSpoolLeft, 0);
-        if (weaponState.spoolupLeft <= 0) {
-          weaponState.gotoState(MechModel.WeaponCycle.COOLDOWN);
-          //if the spooling ended in the middle of the tick, subtract the
-          //extra time from the cooldown
-          weaponState.cooldownLeft += newSpoolLeft;
-          //Consume ammo
-          let ammoConsumed = 0;
-          if (weaponInfo.requiresAmmo()) {
-            ammoConsumed = mechState.ammoState.consumeAmmo(weaponInfo.weaponId,
-                                                          weaponInfo.ammoPerShot);
-          }
-          //collect list of weapons fired, for use in heat computation
-          weaponsFired.push(weaponState);
-          mechState.setUpdate(MechModel.UpdateType.WEAPONSTATE);
-          queueWeaponFire(mech, targetMech, weaponState, ammoConsumed);
-        }
-        mechState.setUpdate(MechModel.UpdateType.COOLDOWN);
-      } else if (weaponState.weaponCycle === MechModel.WeaponCycle.FIRING) {
-      //if weapon is firing, reduce durationLeft. if durationLeft <=0, change state to COOLDOWN
-        let newDurationLeft = Number(weaponState.durationLeft) - getStepDuration();
-        weaponState.durationLeft = Math.max(newDurationLeft, 0);
-        if (weaponState.durationLeft <= 0) {
-          weaponState.gotoState(MechModel.WeaponCycle.COOLDOWN);
-          //if duration ended in the middle of the tick, subtract the
-          //extra time from the cooldown
-          weaponState.cooldownLeft +=  newDurationLeft;
-          mechState.setUpdate(MechModel.UpdateType.WEAPONSTATE);
-        }
-        mechState.setUpdate(MechModel.UpdateType.COOLDOWN);
-      } else if (weaponState.weaponCycle === MechModel.WeaponCycle.COOLDOWN) {
-      //if weapon is on cooldown, reduce cooldownLeft.
-      //if cooldownLeft <=0, change state to ready
-        let newCooldownLeft = Number(weaponState.cooldownLeft) - getStepDuration();
-        weaponState.cooldownLeft = Math.max(newCooldownLeft, 0);
-        if (weaponState.cooldownLeft <= 0) {
-          weaponState.gotoState(MechModel.WeaponCycle.READY);
-          mechState.setUpdate(MechModel.UpdateType.WEAPONSTATE);
-        }
-        mechState.setUpdate(MechModel.UpdateType.COOLDOWN);
-      } else if (weaponState.weaponCycle === MechModel.WeaponCycle.JAMMED) {
-        let newJamLeft = Number(weaponState.jamLeft) - getStepDuration();
-        weaponState.jamLeft = Math.max(newJamLeft, 0);
-        if (weaponState.jamLeft <= 0) {
-          weaponState.gotoState(MechModel.WeaponCycle.COOLDOWN);
-          weaponState.cooldownLeft += newJamLeft;
-          mechState.setUpdate(MechModel.UpdateType.WEAPONSTATE);
-        }
+      if (stepResult.newState) {
+        mechState.setUpdate(MechModel.UpdateType.WEAPONSTATE);
+      }
+      if (stepResult.cooldownChanged) {
         mechState.setUpdate(MechModel.UpdateType.COOLDOWN);
       }
     }

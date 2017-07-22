@@ -1,3 +1,5 @@
+//smoketest
+//http://www.4eye-labs.net/mwo-simulator/#s=b9f6b06229d7ac56bb27d8d507fa3105daa2d814bfd2ffdb3325c711d5186d9a
 //5 dire vs 20 urbies
 //http://www.4eye-labs.net/mwo-simulator/#s=a14468793b3ddb40bb7ec6f197b8d93d5785ff23f648caf2e9b26c342624a7c8
 //clan vs is
