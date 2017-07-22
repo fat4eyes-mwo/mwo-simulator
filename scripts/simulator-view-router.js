@@ -10,8 +10,10 @@ var MechViewRouter = MechViewRouter || (function() {
   const HASH_STATE_FIELD = "s";
   const HASH_RUN_FIELD = "autorun";
   const HASH_SPEED_FIELD = "speed";
+  const HASH_FIELDS = [HASH_STATE_FIELD, HASH_RUN_FIELD, HASH_SPEED_FIELD];
 
   const HASH_MODIFIED_STATE = "MODIFIED";
+  const HASH_DEFAULT_STATE = "default";
 
   var isAppStateModified = true;
   var prevStateHash = "";
@@ -91,8 +93,7 @@ var MechViewRouter = MechViewRouter || (function() {
       .done(function(data) {
         isAppStateModified = false;
         prevStateHash = data.statehash;
-        window.history.replaceState(
-            null, "", "#" + HASH_STATE_FIELD + "=" + data.statehash);
+        setParamToLocationHash(HASH_STATE_FIELD, data.statehash, true);
         MechView.updateOnAppSaveState();
         resolve(data);
       })
@@ -224,8 +225,36 @@ var MechViewRouter = MechViewRouter || (function() {
   var modifyAppState = function() {
     isAppStateModified = true;
     prevStateHash=HASH_MODIFIED_STATE;
-    location.hash=HASH_STATE_FIELD + "=" + HASH_MODIFIED_STATE;
+    setParamToLocationHash(HASH_STATE_FIELD, HASH_MODIFIED_STATE);
     MechView.updateOnModifyAppState();
+  }
+
+  var setParamToLocationHash = function(param, value, replaceHistory = false){
+    let paramValues = new Map();
+    for (let currParam of HASH_FIELDS) {
+      let currValue = getParamFromLocationHash(currParam);
+      if (!currValue && param !== currParam) continue;
+      if (param === currParam) {
+        paramValues.set(currParam, value);
+      } else {
+        paramValues.set(currParam, currValue);
+      }
+    }
+    let first = true;
+    let newHashString = "";
+    for (let currParam of paramValues.keys()) {
+      if (!first) {
+        newHashString += "&";
+      } else {
+        first = false;
+      }
+      newHashString += currParam + "=" + paramValues.get(currParam);
+    }
+    if (!replaceHistory) {
+      location.hash = newHashString;
+    } else {
+      window.history.replaceState(null, "", "#" + newHashString);
+    }
   }
 
   var getParamFromLocationHash = function(param) {
@@ -258,9 +287,9 @@ var MechViewRouter = MechViewRouter || (function() {
   var loadStateFromLocationHash = function() {
     let hashState = getStateHashFromLocation();
     if (!hashState) {
-      hashState = "default";
+      hashState = HASH_DEFAULT_STATE;
       prevStateHash = hashState; //to avoid triggering the hash change handler
-      location.hash = HASH_STATE_FIELD + "=default";
+      setParamToLocationHash(HASH_STATE_FIELD, HASH_DEFAULT_STATE);
     }
     return loadAppState(hashState);
   }
@@ -275,7 +304,7 @@ var MechViewRouter = MechViewRouter || (function() {
     if (isLoading) {
       //ignore hash change, change back to previous hash
       let hash = "#" + HASH_STATE_FIELD + "=" + prevStateHash;
-      window.history.replaceState(null, "", hash);
+      setParamToLocationHash(HASH_STATE_FIELD, prevStateHash, true);
       return;
     }
     let newHash = getStateHashFromLocation();
