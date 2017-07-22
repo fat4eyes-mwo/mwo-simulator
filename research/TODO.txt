@@ -1,19 +1,15 @@
 - AUTOMATED UNIT TESTS!!!!!!
 
-- RAC mechanics
+- Rocket launcher ammo
 - mech reorder buttons
 - save team settings?
 - some omnimechs have no CT omnipod entry (HBR-F). See where to find this info.
 - LBX damage spread
 - UAC double tap (expected value and setting to allow user to enable/disable)
-- Mech details panel (quirk list, later on damage graphs)
 - Omnipod set quirks
-- ATM damage computation
-- Rocket launcher ammo
-- HMG/LMG dps/ammo computation
+- MG/HMG/LMG extra struct damage computation
 - Mech details display (quirks, weapon damage summary)
 - Ambient heat effects
-- MG crit effects (just added damage)
 - LBX crit effects (just the added damage)
 - Flamer heat effects
 - Exponential decrease for cLRM damage below minrange
