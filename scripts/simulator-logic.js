@@ -11,7 +11,11 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   var weaponFireQueue = [];
   var willUpdateTeamStats = {};  //Format: {<team> : boolean}
 
-  const stepDuration = 50; //simulation tick length in ms
+  const simStepDuration = 50; //simulation tick length in ms
+
+  var getStepDuration = function() {
+    return simStepDuration;
+  }
 
   //interval between UI updates. Set smaller than step duration to run the
   // simulation faster, but not too small as to lock the browser
@@ -115,7 +119,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
       let weaponInfo = this.weaponState.weaponInfo;
       //baseWeaponDamage applies all damage to the target component
       let baseWeaponDamageMap = {};
-      let baseDamage = weaponInfo.damageAtRange(range, stepDuration);
+      let baseDamage = weaponInfo.damageAtRange(range, getStepDuration());
       if (weaponInfo.requiresAmmo()) {
         baseDamage = Number(baseDamage) * this.ammoConsumed / weaponInfo.ammoPerShot;
       }
@@ -135,7 +139,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
       if (this.totalDuration >0) {
         let tickDamageMap = {};
         for (let component in this.weaponDamage.damageMap) {
-          tickDamageMap[component] = Number(this.weaponDamage.getDamage(component)) / Number(this.totalDuration) * Number(stepDuration);
+          tickDamageMap[component] = Number(this.weaponDamage.getDamage(component)) / Number(this.totalDuration) * Number(getStepDuration());
         }
         this.tickWeaponDamage = new MechModel.WeaponDamage(tickDamageMap);
       } else {
@@ -303,7 +307,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
       }
     }
 
-    simTime += stepDuration;
+    simTime += getStepDuration();
     MechModelView.updateSimTime(simTime);
 
     //if one team is dead, stop simulation, compute stats for the current step
@@ -372,7 +376,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     let heatState = mechState.heatState;
     //heat dissipated per step. Divide currHeatDissipation by 1000
     //because it is in heat per second
-    let stepHeatDissipation = stepDuration * heatState.currHeatDissipation / 1000;
+    let stepHeatDissipation = getStepDuration() * heatState.currHeatDissipation / 1000;
     let prevHeat = heatState.currHeat;
     heatState.currHeat = Math.max(0, heatState.currHeat - Number(stepHeatDissipation));
     if (heatState.currHeat != prevHeat) {
@@ -394,7 +398,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
       //(assumes all spoolup weapons have no duration,
       //otherwise next state would be FIRING)
       if (weaponState.weaponCycle === MechModel.WeaponCycle.SPOOLING) {
-        let newSpoolLeft = Number(weaponState.spoolupLeft) - stepDuration;
+        let newSpoolLeft = Number(weaponState.spoolupLeft) - getStepDuration();
         weaponState.spoolupLeft = Math.max(newSpoolLeft, 0);
         if (weaponState.spoolupLeft <= 0) {
           weaponState.gotoState(MechModel.WeaponCycle.COOLDOWN);
@@ -415,7 +419,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
         mechState.setUpdate(MechModel.UpdateType.COOLDOWN);
       } else if (weaponState.weaponCycle === MechModel.WeaponCycle.FIRING) {
       //if weapon is firing, reduce durationLeft. if durationLeft <=0, change state to COOLDOWN
-        let newDurationLeft = Number(weaponState.durationLeft) - stepDuration;
+        let newDurationLeft = Number(weaponState.durationLeft) - getStepDuration();
         weaponState.durationLeft = Math.max(newDurationLeft, 0);
         if (weaponState.durationLeft <= 0) {
           weaponState.gotoState(MechModel.WeaponCycle.COOLDOWN);
@@ -428,7 +432,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
       } else if (weaponState.weaponCycle === MechModel.WeaponCycle.COOLDOWN) {
       //if weapon is on cooldown, reduce cooldownLeft.
       //if cooldownLeft <=0, change state to ready
-        let newCooldownLeft = Number(weaponState.cooldownLeft) - stepDuration;
+        let newCooldownLeft = Number(weaponState.cooldownLeft) - getStepDuration();
         weaponState.cooldownLeft = Math.max(newCooldownLeft, 0);
         if (weaponState.cooldownLeft <= 0) {
           weaponState.gotoState(MechModel.WeaponCycle.READY);
@@ -436,7 +440,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
         }
         mechState.setUpdate(MechModel.UpdateType.COOLDOWN);
       } else if (weaponState.weaponCycle === MechModel.WeaponCycle.JAMMED) {
-        let newJamLeft = Number(weaponState.jamLeft) - stepDuration;
+        let newJamLeft = Number(weaponState.jamLeft) - getStepDuration();
         weaponState.jamLeft = Math.max(newJamLeft, 0);
         if (weaponState.jamLeft <= 0) {
           weaponState.gotoState(MechModel.WeaponCycle.COOLDOWN);
@@ -465,7 +469,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     let startQueueLength = weaponFireQueue.length;
     for (let count = 0; count < startQueueLength; count++) {
       let weaponFire = weaponFireQueue.shift();
-      weaponFire.step(stepDuration);
+      weaponFire.step(getStepDuration());
       if (weaponFire.isComplete()) {
         logDamage(weaponFire);
       } else {
@@ -636,7 +640,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     getSimTime : getSimTime,
     predictHeat : predictHeat,
     predictBaseHeat : predictBaseHeat,
-    stepDuration : stepDuration,
+    getStepDuration : getStepDuration,
   }
 
 })(); //end namespace
