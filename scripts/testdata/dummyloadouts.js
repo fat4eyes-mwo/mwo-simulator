@@ -2,6 +2,21 @@
 //http://www.4eye-labs.net/mwo-simulator/#s=b9f6b06229d7ac56bb27d8d507fa3105daa2d814bfd2ffdb3325c711d5186d9a
 //default
 
+//new tech comparisons
+//mrms vs atms
+//200m
+//http://www.4eye-labs.net/mwo-simulator/#s=564271e4c90436bea46a18efb310238741e41f953b38dde26c252003242bf368&autorun=true&speed=2
+//400m
+//http://www.4eye-labs.net/mwo-simulator/#s=0e29d9b5ddf389f9d960727de0c90e3f2ab25a6e6ae867d273962c8dfccff9ac&autorun=true&speed=2
+
+//mrm quantity
+//http://www.4eye-labs.net/mwo-simulator/#s=c78356cc06c2fe7291705ebeaa52e4966bffa4ec0a18c07a2455aee926183b9e&autorun=true&speed=2
+
+//racs vs plain old ACs
+//http://www.4eye-labs.net/mwo-simulator/#s=7164710aca8a380baa8b773430e755f74192880be0ed4f2f37a8bc869228f92e&autorun=true&speed=2
+
+//large pulse vs heavy large lasers
+//http://www.4eye-labs.net/mwo-simulator/#s=0db53b3a9ae04484981f4ca1d8e4115eab2553342228f705569628bbc8276a4a&autorun=true&speed=2
 
 //5 dire vs 20 urbies
 //http://www.4eye-labs.net/mwo-simulator/#s=a14468793b3ddb40bb7ec6f197b8d93d5785ff23f648caf2e9b26c342624a7c8
@@ -14,9 +29,7 @@
 //mrmboat test
 //http://www.4eye-labs.net/mwo-simulator/#s=672b3825daed58fe6b73d713dd7e09588c8a0a0b2d213d8d9bd78cbb387feb62
 //RAC test
-//http://localhost:8181/#s=98ac7bc00859a71cfc7b985d22b82929f04da7db3d2e8a4f45c7df196dbf4126&autorun=true&speed=8
-//http://localhost:8181/#s=721f1c7bd5b35bf4962dc06ce7880f59f5d5db3bc95a839972b45e4b2e9ee095&autorun=true&speed=8
-//http://localhost:8181/#s=5a07be2d5fc60db0f423dd1e2dc9e48010f96f49c522b581bfc601ba204cf04b&autorun=true&speed=8
+//http://localhost:8181/#s=7164710aca8a380baa8b773430e755f74192880be0ed4f2f37a8bc869228f92e
 //http://www.4eye-labs.net/mwo-simulator/#s=7164710aca8a380baa8b773430e755f74192880be0ed4f2f37a8bc869228f92e
 
 //lrmboat quirk test
@@ -164,6 +177,8 @@
 //http://mwo.smurfy-net.de/mechlab#i=77&l=d45198309a38242e3e6156e179370299ce4e0835
 //Rocket launcher commando
 //http://mwo.smurfy-net.de/mechlab#i=5&l=823a6acb394ff1b4e2103bb3eff959f48597ad3b
+//RAC urbie
+//http://mwo.smurfy-net.de/mechlab#i=277&l=e65c9a31c08ffe2c0ff809ea574165b1489c9f0f
 
 //http://mwo.smurfy-net.de/mechlab#i=291&l=0673c22705b1651b68e33300644d53eb895cf864
 var DummyArcticCheetah = {
