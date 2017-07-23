@@ -397,10 +397,12 @@ var MechView = MechView || (function() {
     let smurfyLink = SMURFY_BASE_URL + "i=" + smurfyMechId + "&l=" + smurfyLayoutId;
     let mechNameDiv = document.getElementById(mechNameId);
 
+    let externalLinkSpan = MechViewWidgets.cloneTemplate("external-link-template");
     let mechLink = $("<a></a>").attr("href", smurfyLink)
                             .attr("target", "_blank")
                             .attr("rel", "noopener")
-                            .text(mechName);
+                            .text(mechName)
+                            .append(externalLinkSpan);
     $(mechNameDiv)
       .empty()
       .append(mechLink);

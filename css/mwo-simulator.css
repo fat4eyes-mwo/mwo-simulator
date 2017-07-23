@@ -12,6 +12,11 @@ a {
   text-decoration: none;
 }
 
+a svg {
+  fill: gold;
+  margin-left: 3px;
+}
+
 a:hover {
   text-decoration: underline;
 }
