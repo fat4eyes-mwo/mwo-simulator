@@ -265,6 +265,12 @@ var MechModelWeapons = MechModelWeapons || (function () {
       return Number(this.weaponInfo.heat * heatMultiplier);
     }
 
+    computeJamChance() {
+      let weaponBonus = this.weaponInfo.weaponBonus;
+      let jamMultiplier = 1.0 + weaponBonus.jamchance_multiplier;
+      return Number(this.weaponInfo.jamChance) * jamMultiplier;
+    }
+
     computeJamTime() {
       //TODO: See if any quirks affect jam time
       return Number(this.weaponInfo.jamTime);
@@ -360,7 +366,7 @@ var MechModelWeapons = MechModelWeapons || (function () {
         } else if (this.weaponCycle === MechModel.WeaponCycle.COOLDOWN) {
           //check jam chance
           let rand = Math.random();
-          if (rand <= Number(this.weaponInfo.jamChance)) {
+          if (rand <= this.computeJamChance()) {
           // if (true) {
             //JAM
             console.log("Jam: " + this.weaponInfo.name);
@@ -535,7 +541,7 @@ var MechModelWeapons = MechModelWeapons || (function () {
           if (this.hasJamBar() && this.jamBarProgress >= MAXJAM) {
             //check for jam
             let rand = Math.random();
-            if (rand <= Number(this.weaponInfo.jamChance)) {
+            if (rand <= this.computeJamChance()) {
               console.log("Jam: " + this.weaponInfo.name);
               newState = WeaponCycle.JAMMED;
               this.gotoState(newState);

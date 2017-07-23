@@ -1,5 +1,8 @@
 //smoketest
 //http://www.4eye-labs.net/mwo-simulator/#s=b9f6b06229d7ac56bb27d8d507fa3105daa2d814bfd2ffdb3325c711d5186d9a
+//default
+
+
 //5 dire vs 20 urbies
 //http://www.4eye-labs.net/mwo-simulator/#s=a14468793b3ddb40bb7ec6f197b8d93d5785ff23f648caf2e9b26c342624a7c8
 //clan vs is
@@ -14,11 +17,14 @@
 //http://localhost:8181/#s=98ac7bc00859a71cfc7b985d22b82929f04da7db3d2e8a4f45c7df196dbf4126&autorun=true&speed=8
 //http://localhost:8181/#s=721f1c7bd5b35bf4962dc06ce7880f59f5d5db3bc95a839972b45e4b2e9ee095&autorun=true&speed=8
 //http://localhost:8181/#s=5a07be2d5fc60db0f423dd1e2dc9e48010f96f49c522b581bfc601ba204cf04b&autorun=true&speed=8
+//http://www.4eye-labs.net/mwo-simulator/#s=7164710aca8a380baa8b773430e755f74192880be0ed4f2f37a8bc869228f92e
 
 //lrmboat quirk test
 //http://www.4eye-labs.net/#s=542d68c11fb2399272f21455f157fb37f023e4e88d54a511723aff51171d249e
 //atm range test
 //http://www.4eye-labs.net/#s=eac5984609363d8b34e85c3406ff237ebb8cdc5be2f0397f8ba235a2e3736511
+//jamchance quirk test
+//http://localhost:8181/#s=2704ddf835d114763c8c3f1d18efe479eeb8ec06b9097a86292ee2a462a12e69
 
 //20 vs 20
 //http://www.4eye-labs.net/mwo-simulator/#s=e1f4897ae14687dfaba82e457031e1aef7b08a03936770f59f498a1290baadf4
