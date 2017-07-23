@@ -25,6 +25,8 @@
 //http://www.4eye-labs.net/#s=eac5984609363d8b34e85c3406ff237ebb8cdc5be2f0397f8ba235a2e3736511
 //jamchance quirk test
 //http://localhost:8181/#s=2704ddf835d114763c8c3f1d18efe479eeb8ec06b9097a86292ee2a462a12e69
+//rocket launcher test
+//http://localhost:8181/#s=a16536490c0dfbe32a8082720711b9c36be4d4511318f823e187398a0e48edd7
 
 //20 vs 20
 //http://www.4eye-labs.net/mwo-simulator/#s=e1f4897ae14687dfaba82e457031e1aef7b08a03936770f59f498a1290baadf4
@@ -160,7 +162,8 @@
 //http://mwo.smurfy-net.de/mechlab#i=79&l=722f5765439514ffd6dc510c0ebd8ad4a91985ac
 //UAC10 blackjack
 //http://mwo.smurfy-net.de/mechlab#i=77&l=d45198309a38242e3e6156e179370299ce4e0835
-
+//Rocket launcher commando
+//http://mwo.smurfy-net.de/mechlab#i=5&l=823a6acb394ff1b4e2103bb3eff959f48597ad3b
 
 //http://mwo.smurfy-net.de/mechlab#i=291&l=0673c22705b1651b68e33300644d53eb895cf864
 var DummyArcticCheetah = {
@@ -3440,3 +3443,151 @@ DummyMadDog = {
 	"created_at": "2015-03-27T16:13:19+0000",
 	"lsml": "lsml:\/\/rgDWKCoOOBJAECoOOCgA6yzCmJKphvPTz05UqmHt5DeQpheiM6YZz095DeQ3kN5Degph3eQ3kKYYxMSy"
 };
+
+//http://mwo.smurfy-net.de/mechlab#i=5&l=823a6acb394ff1b4e2103bb3eff959f48597ad3b
+_DummyRocketCommando = {
+	"id": "823a6acb394ff1b4e2103bb3eff959f48597ad3b",
+	"mech_id": 5,
+	"valid": true,
+	"configuration": [{
+		"name": "centre_torso",
+		"armor": 0,
+		"actuators": [],
+		"items": [{
+			"id": "1069",
+			"type": "weapon",
+			"name": "ROCKET LAUNCHER 15"
+		}, {
+			"id": "3540",
+			"type": "module",
+			"name": "LIGHT ENGINE 210"
+		}]
+	}, {
+		"name": "right_torso",
+		"armor": 20,
+		"actuators": [],
+		"items": [{
+			"id": "3001",
+			"type": "module",
+			"name": "DOUBLE HEAT SINK"
+		}, {
+			"id": "3001",
+			"type": "module",
+			"name": "DOUBLE HEAT SINK"
+		}, {
+			"id": "3001",
+			"type": "module",
+			"name": "DOUBLE HEAT SINK"
+		}]
+	}, {
+		"name": "right_arm",
+		"armor": 16,
+		"actuators": [],
+		"items": [{
+			"id": "1070",
+			"type": "weapon",
+			"name": "ROCKET LAUNCHER 20"
+		}, {
+			"id": "1070",
+			"type": "weapon",
+			"name": "ROCKET LAUNCHER 20"
+		}]
+	}, {
+		"name": "head",
+		"armor": 18,
+		"actuators": [],
+		"items": []
+	}, {
+		"name": "right_leg",
+		"armor": 24,
+		"actuators": [],
+		"items": []
+	}, {
+		"name": "left_leg",
+		"armor": 24,
+		"actuators": [],
+		"items": []
+	}, {
+		"name": "left_torso",
+		"armor": 20,
+		"actuators": [],
+		"items": []
+	}, {
+		"name": "left_arm",
+		"armor": 7,
+		"actuators": [],
+		"items": []
+	}, {
+		"name": "left_torso_rear",
+		"armor": 4,
+		"actuators": [],
+		"items": []
+	}, {
+		"name": "centre_torso_rear",
+		"armor": 7,
+		"actuators": [],
+		"items": []
+	}, {
+		"name": "right_torso_rear",
+		"armor": 4,
+		"actuators": [],
+		"items": []
+	}],
+	"upgrades": [{
+		"id": "2810",
+		"type": "Armor",
+		"name": "STANDARD ARMOR"
+	}, {
+		"id": "3100",
+		"type": "Structure",
+		"name": "STANDARD STRUCTURE"
+	}, {
+		"id": "3002",
+		"type": "HeatSink",
+		"name": "DOUBLE HEAT SINK"
+	}, {
+		"id": "3051",
+		"type": "Artemis",
+		"name": "STANDARD GUIDANCE"
+	}],
+	"stats": {
+		"used_armor": 144,
+		"used_jump_jets": 0,
+		"granted_jump_jets": 0,
+		"firepower": 96.25,
+		"dps_max": 96.25,
+		"dps_sustained": 0,
+		"cooling_efficiency": 0,
+		"heatsinks": 11,
+		"top_speed": 136.08,
+		"top_speed_tweak": 0,
+		"engine_name": "LIGHT ENGINE 210",
+		"engine_rating": 210,
+		"engine_type": "STD",
+		"armaments": [{
+			"id": "1069",
+			"type": "weapon",
+			"name": "ROCKET LAUNCHER 15",
+			"count": 1
+		}, {
+			"id": "1070",
+			"type": "weapon",
+			"name": "ROCKET LAUNCHER 20",
+			"count": 2
+		}],
+		"ammunition": [],
+		"equipment": [{
+			"id": "3540",
+			"type": "module",
+			"name": "LIGHT ENGINE 210",
+			"count": 1
+		}, {
+			"id": "3001",
+			"type": "module",
+			"name": "DOUBLE HEAT SINK",
+			"count": 3
+		}]
+	},
+	"created_at": "2017-07-23T04:41:51+0000",
+	"lsml": "lsml:\/\/rgAFEBQEGBIABxQEGAfne6\/epzrMzSs0qqq23NJ8mrbZ"
+}
