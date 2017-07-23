@@ -526,6 +526,10 @@ var MechView = MechView || (function() {
 
   var initSpeedControl = function() {
     $("#startSimulationDivButton").click(() => {
+      if (MechModelView.getVictorTeam()) {
+        //if a team already won, reset the sim
+        resetSimulation();
+      }
       MechSimulatorLogic.runSimulation();
     });
 
@@ -551,11 +555,15 @@ var MechView = MechView || (function() {
     });
   }
 
+  var resetSimulation = function() {
+    MechModel.resetState();
+    MechSimulatorLogic.resetSimulation();
+    MechModelView.refreshView(false);
+  }
+
   var initStateControl = function() {
     $("#resetSimulationDivButton").click(() => {
-      MechModel.resetState();
-      MechSimulatorLogic.resetSimulation();
-      MechModelView.refreshView(false);
+      resetSimulation();
     });
 
     $("#showReportDivButton").click(() => {
