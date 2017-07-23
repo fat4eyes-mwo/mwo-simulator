@@ -43,7 +43,7 @@
 * Uses current mech, weapon and heatsink data from smurfy's.
 * Most of the heat and damage mechanics (see exceptions below).
 * Simulates duration (for burn weapons), travel time (for velocity weapons) and jam bar mechanics (for RACs).
-* Simulates the following new tech weapons: All lasers, all PPCs, all Gauss rifles, ATMs, MRMs, RACs.
+* Simulates the following new tech weapons: All lasers, all PPCs, all Gauss rifles, ATMs, MRMs, RACs. Also rocket launchers (1).
 * Simulates effects of heatsink and ammo box destruction, as well as side torso loss for Clan XL/Light engines.
 * Simulates weapon spread for the following weapons: All LRMs, all SRMs, all ATMs, all MRMs. Also splash damage for cERPPCs.
 * Supports heat, cooldown, duration, velocity and range multipliers for IS and clan mechs.
@@ -53,7 +53,6 @@
 
 * Damage spread for LBX (high priority)
 * Omnipod full set quirks.
-* Rocket launchers.
 * Exponential dropoff for cLRMs below min range (right now they do 0 damage below min range)
 * Environmental heat effects
 * Targeting computer effects

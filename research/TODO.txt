@@ -1,6 +1,6 @@
 - AUTOMATED UNIT TESTS!!!!!!
 
-- Rocket launcher ammo
+- Rocket launcher ammo (partially supported, but hacky)
 - mech reorder buttons
 - save team settings?
 - some omnimechs have no CT omnipod entry (HBR-F). See where to find this info.
