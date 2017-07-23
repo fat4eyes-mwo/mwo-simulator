@@ -41,9 +41,13 @@ var MechViewAddMech = MechViewAddMech || (function() {
       .addClass(team);
     MechViewWidgets.setModal(addMechDialogDiv, "addMech");
 
-    $("#addMechDialog-result")
+    let resultPanelJQ = $("#addMechDialog-result");
+    resultPanelJQ
           .removeClass("error")
-          .empty();
+          .empty()
+          .on("animationend", function(data) {
+            resultPanelJQ.removeClass("error");
+          });
 
     if (!addMechDialog_OK_Handler) {
       addMechDialog_OK_Handler = new AddMechDialog_OK(this);
