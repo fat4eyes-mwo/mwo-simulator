@@ -18,6 +18,9 @@
 //large pulse vs heavy large lasers
 //http://www.4eye-labs.net/mwo-simulator/#s=0db53b3a9ae04484981f4ca1d8e4115eab2553342228f705569628bbc8276a4a&autorun=true&speed=2
 
+//ppc blackjack dps test
+//http://www.4eye-labs.net/mwo-simulator/#s=5564107115856671f53ab673edfe77597480a3886be50bfe4e71426bf8413d64
+
 //5 dire vs 20 urbies
 //http://www.4eye-labs.net/mwo-simulator/#s=a14468793b3ddb40bb7ec6f197b8d93d5785ff23f648caf2e9b26c342624a7c8
 //clan vs is
