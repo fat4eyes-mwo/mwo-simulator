@@ -75,7 +75,8 @@ The main entry point of the program is in `scripts/simulator.js`.
 
 # Update Info
 
-* 2017-07-12: Implemented IS weapon quirks (heat, duration, range, cooldown, velocity).
-* 2017-07-17: Implemented UAC double tap.
-* 2017-07-19: MRM spread. Priority changes to support most of new tech.
+* 2017-07-24: Completed rocket launcher implementation.
 * 2017-07-23: Implemented RAC mechanics.
+* 2017-07-19: MRM spread. Priority changes to support most of new tech.
+* 2017-07-17: Implemented UAC double tap.
+* 2017-07-12: Implemented IS weapon quirks (heat, duration, range, cooldown, velocity).
