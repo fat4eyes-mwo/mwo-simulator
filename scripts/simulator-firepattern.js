@@ -48,7 +48,7 @@ var MechFirePattern = MechFirePattern || (function () {
     let weaponsToFire = [];
     //check if all weapons are ready
     for (let weaponState of mechState.weaponStateList) {
-      if (!canFire(weaponState)) return weaponsToFire;
+      if (!canFire(weaponState) && !weaponState.isJammed()) return [];
     }
     weaponsToFire = Array.from(mechState.weaponStateList);
     if (!willOverheat(mech, weaponsToFire)) {

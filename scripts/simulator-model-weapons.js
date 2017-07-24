@@ -261,6 +261,9 @@ var MechModelWeapons = MechModelWeapons || (function () {
     isOnCooldown() {
       return this.weaponCycle === WeaponCycle.COOLDOWN;
     }
+    isJammed() {
+      return this.weaponCycle === WeaponCycle.JAMMED;
+    }
     hasJamBar() {
       return false;
     }
