@@ -87,7 +87,11 @@ var MechTargetComponent = MechTargetComponent || (function () {
   }
 
   var getDefault = function() {
-    return MechTargetComponent.aimForCenterTorso;
+    for (let patternEntry of getPatterns()) {
+      if (patternEntry.default) {
+        return patternEntry.pattern;
+      }
+    }
   }
 
   //returns a list of target patterns for the UI.

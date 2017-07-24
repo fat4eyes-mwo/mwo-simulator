@@ -304,7 +304,11 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
   }
 
   var getDefault = function() {
-    return accuracySpreadToAdjacent(1.0, 0.0, 0.0);
+    for (let patternEntry of getPatterns()) {
+      if (patternEntry.default) {
+        return patternEntry.pattern;
+      }
+    }
   }
 
   //Returns a list of accuracy patterns for the UI

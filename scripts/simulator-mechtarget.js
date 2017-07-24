@@ -62,7 +62,11 @@ var MechTargetMech = MechTargetMech || (function () {
   }
 
   var getDefault = function() {
-    return targetMechsInOrder;
+    for (let patternEntry of getPatterns()) {
+      if (patternEntry.default) {
+        return patternEntry.pattern;
+      }
+    }
   }
 
   var reset = function() {

@@ -129,7 +129,11 @@ var MechFirePattern = MechFirePattern || (function () {
   }
 
   var getDefault = function() {
-    return MechFirePattern.maximumDmgPerHeat;
+    for (let patternEntry of getPatterns()) {
+      if (patternEntry.default) {
+        return patternEntry.pattern;
+      }
+    }
   }
 
   //Returns a list of fire patterns for the UI
