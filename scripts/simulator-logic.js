@@ -262,6 +262,10 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     clearMechStats();
     willUpdateTeamStats = {};
     MechModelView.updateSimTime(simTime);
+    MechAccuracyPattern.reset();
+    MechTargetComponent.reset();
+    MechFirePattern.reset();
+    MechTargetMech.reset();
   }
 
   //Simulation step function. Called every tick

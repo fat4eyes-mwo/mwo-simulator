@@ -13,15 +13,20 @@ var MechTargetMech = MechTargetMech || (function () {
     return null;
   }
 
+  var targetMap = new Map();
   var targetRandomMech = function (mech, enemyMechList) {
-    let liveEnemyMechs = [];
-    for (let enemyMech of enemyMechList) {
-      if (enemyMech.getMechState().isAlive()) {
-        liveEnemyMechs.push(enemyMech);
+    let targetMech = targetMap.get(mech);
+    if (!targetMech || !targetMech.getMechState().isAlive()) {
+      let liveEnemyMechs = [];
+      for (let enemyMech of enemyMechList) {
+        if (enemyMech.getMechState().isAlive()) {
+          liveEnemyMechs.push(enemyMech);
+        }
       }
+      targetMech = liveEnemyMechs[Math.floor(Math.random() * liveEnemyMechs.length)];
+      targetMap.set(mech, targetMech);
     }
-    let newTarget = liveEnemyMechs[Math.floor(Math.random() * liveEnemyMechs.length)];
-    return newTarget;
+    return targetMech;
   }
 
   var targetHighestFirepower = function (mech, enemyMechList) {
@@ -60,12 +65,16 @@ var MechTargetMech = MechTargetMech || (function () {
     return targetMechsInOrder;
   }
 
+  var reset = function() {
+    targetMap = new Map();
+  }
+
   //returns a list of mech target patterns for the UI
   var getPatterns = function() {
     let patternList = [
       {
         id: "targetMechsInOrder",
-        name: "Mechs in order.",
+        name: "Mechs in order",
         pattern: targetMechsInOrder,
         description: "Target mechs from the top to the bottom of the list.",
         default: true,
@@ -100,6 +109,7 @@ var MechTargetMech = MechTargetMech || (function () {
     targetRandomMech : targetRandomMech,
     getDefault : getDefault,
     getPatterns : getPatterns,
+    reset : reset,
   }
 
 })();

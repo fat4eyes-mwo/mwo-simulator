@@ -154,13 +154,17 @@ var MechFirePattern = MechFirePattern || (function () {
         default: false,
       },
       { id: "alphaAtZeroHeat",
-        name: "Alpha when at zero heat.",
+        name: "Alpha when at zero heat",
         pattern: alphaAtZeroHeat,
         description: "Fire all weapons when heat is zero.",
         default: false,
       },
     ];
     return patternList;
+  }
+
+  var reset = function() {
+
   }
 
   return {
@@ -171,5 +175,6 @@ var MechFirePattern = MechFirePattern || (function () {
     maxFireNoGhostHeat : maxFireNoGhostHeat,
     getDefault : getDefault,
     getPatterns : getPatterns,
+    reset : reset,
   };
 })();

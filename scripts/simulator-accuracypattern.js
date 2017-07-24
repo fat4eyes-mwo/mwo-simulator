@@ -363,6 +363,10 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
     return patternList;
   }
 
+  var reset = function() {
+
+  }
+
   return {
     fullAccuracyPattern : fullAccuracyPattern,
     accuracySpreadToAdjacent : accuracySpreadToAdjacent,
@@ -372,6 +376,7 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
     directFireSpreadPattern : directFireSpreadPattern,
     getDefault : getDefault,
     getPatterns : getPatterns,
+    reset : reset,
   }
 
 })();

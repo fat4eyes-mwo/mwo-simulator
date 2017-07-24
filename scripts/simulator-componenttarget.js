@@ -144,6 +144,10 @@ var MechTargetComponent = MechTargetComponent || (function () {
     return patternList;
   }
 
+  var reset = function() {
+
+  }
+
   return {
     aimForCenterTorso : aimForCenterTorso,
     aimForXLSideTorso : aimForXLSideTorso,
@@ -152,5 +156,6 @@ var MechTargetComponent = MechTargetComponent || (function () {
     randomAim : randomAim,
     getDefault : getDefault,
     getPatterns : getPatterns,
+    reset : reset,
   }
 })();
