@@ -18,6 +18,9 @@
 //large pulse vs heavy large lasers
 //http://www.4eye-labs.net/mwo-simulator/#s=0db53b3a9ae04484981f4ca1d8e4115eab2553342228f705569628bbc8276a4a&autorun=true&speed=2
 
+//Warhammer LFE lasers
+//http://localhost:8181/#s=46ba2d3c5da5459254024cf06f7aec54b49701f27829ef5eb6c476d509f22e0d
+
 //ppc blackjack dps test
 //http://www.4eye-labs.net/mwo-simulator/#s=5564107115856671f53ab673edfe77597480a3886be50bfe4e71426bf8413d64
 
