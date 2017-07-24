@@ -1026,10 +1026,8 @@ var MechModel = MechModel || (function () {
     var ammoList = [];
     ammoList = collectFromSmurfyConfiguration(smurfyMechLoadout.configuration,
       function (location, smurfyMechComponentItem) {
-        if (smurfyMechComponentItem.type === "ammo" ||
-            (smurfyMechComponentItem.type === "weapon"
-              && smurfyMechComponentItem.name.startsWith("ROCKET"))) {
-          let ammoBox =ammoBoxFromSmurfyMechComponentItem(location, smurfyMechComponentItem);
+        if (smurfyMechComponentItem.type === "ammo") {
+          let ammoBox = ammoBoxFromSmurfyMechComponentItem(location, smurfyMechComponentItem);
           return ammoBox;
         } else {
           return null;
@@ -1041,21 +1039,11 @@ var MechModel = MechModel || (function () {
 
   var ammoBoxFromSmurfyMechComponentItem = function(location, smurfyMechComponentItem) {
     var ammoBox;
-    if (smurfyMechComponentItem.type === "ammo") {
-      let ammoData = getSmurfyAmmoData(smurfyMechComponentItem.id);
-      let type = ammoData.type;
-      let ammoCount = ammoData.num_shots;
-      let weaponIds = ammoData.weapons;
-      ammoBox = new AmmoBox(type, location, weaponIds, ammoCount, true);
-    } else if (smurfyMechComponentItem.type === "weapon"
-              && smurfyMechComponentItem.name.startsWith("ROCKET")) {
-      //special case for rocket launchers
-      let weaponData = getSmurfyWeaponData(smurfyMechComponentItem.id);
-      let type = weaponData.name + "Ammo";
-      let ammoCount = weaponData.calc_stats.damageMultiplier;
-      let weaponIds = [weaponData.id];
-      ammoBox = new AmmoBox(type, location, weaponIds, ammoCount, true);
-    }
+    let ammoData = getSmurfyAmmoData(smurfyMechComponentItem.id);
+    let type = ammoData.type;
+    let ammoCount = ammoData.num_shots;
+    let weaponIds = ammoData.weapons;
+    ammoBox = new AmmoBox(type, location, weaponIds, ammoCount, true);
 
     return ammoBox;
   }
@@ -1188,8 +1176,13 @@ var MechModel = MechModel || (function () {
           new MechModelWeapons.WeaponStateContinuousFire(weaponInfo, mechState);
       } else {
         //single-fire
-        weaponState =
-          new MechModelWeapons.WeaponStateSingleFire(weaponInfo, mechState);
+        if (weaponInfo.isOneShot) {
+          weaponState =
+            new MechModelWeapons.WeaponStateOneShot(weaponInfo, mechState);
+        } else {
+          weaponState =
+            new MechModelWeapons.WeaponStateSingleFire(weaponInfo, mechState);
+        }
       }
       weaponStateList.push(weaponState);
     }

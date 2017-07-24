@@ -49,6 +49,7 @@ var MechModelWeapons = MechModelWeapons || (function () {
                       Number(smurfyWeaponData.jamRampUpTime) * 1000 : 0;
         this.jamRampDownTime = smurfyWeaponData.jamRampDownTime ?
                       Number(smurfyWeaponData.jamRampDownTime) * 1000 : 0;
+        this.isOneShot = smurfyWeaponData.isOneShot ? true : false;
         this.weaponBonus = MechModelQuirks.getWeaponBonus(this);
         //recompute heat to be heat per SHOT for continuous fire weapons (in smurfy heat is heat per second, not per shot)
         if (this.isContinuousFire()) {
@@ -228,12 +229,31 @@ var MechModelWeapons = MechModelWeapons || (function () {
         this.currShotsDuringCooldown = 0;
       }
     }
+
+    getAvailableAmmo() {
+      if (this.weaponInfo.requiresAmmo()) {
+        let ammoState = this.mechState.ammoState;
+        let ammoCount = ammoState.ammoCounts[this.weaponInfo.weaponId];
+        let ret = ammoCount ? ammoCount.ammoCount : 0;
+        return ret;
+      } else {
+        return -1; //does not need ammo
+      }
+    }
+
+    consumeAmmo() {
+      let weaponInfo = this.weaponInfo;
+      let ammoState = this.mechState.ammoState;
+      let ammoConsumed = 0;
+      if (this.weaponInfo.requiresAmmo()) {
+        ammoConsumed = ammoState.consumeAmmo(weaponInfo.weaponId,
+                                                      weaponInfo.ammoPerShot);
+      }
+      return ammoConsumed;
+    }
+
     canFire() {
-      return this.weaponCycle === WeaponCycle.READY ||
-            (this.weaponCycle === WeaponCycle.COOLDOWN &&
-             this.currShotsDuringCooldown > 0) ||
-            (this.weaponCycle === WeaponCycle.FIRING &&
-            this.weaponInfo.isContinuousFire());
+      throw "Abstract method, should not be called";
     }
     isReady() {
       return this.weaponCycle === WeaponCycle.READY;
@@ -302,7 +322,6 @@ var MechModelWeapons = MechModelWeapons || (function () {
       let newState = null;
       let cooldownChanged = false;
       let weaponInfo = this.weaponInfo;
-      let ammoState = this.mechState.ammoState;
       if (!this.active) { //if weapon disabled, return
         return {newState : newState,
                 weaponFired : weaponFired,
@@ -348,7 +367,7 @@ var MechModelWeapons = MechModelWeapons || (function () {
       }
       //if no ammo, return
       if (weaponInfo.requiresAmmo() &&
-        mechState.ammoState.ammoCountForWeapon(weaponInfo.weaponId) <= 0) {
+          this.getAvailableAmmo() <= 0) {
         return {newState: newState, weaponFired: false, ammoConsumed: 0};
       }
       if (weaponInfo.spinup > 0) {
@@ -381,8 +400,7 @@ var MechModelWeapons = MechModelWeapons || (function () {
         }
         if (weaponFired) {
           if (weaponInfo.requiresAmmo()) {
-            ammoConsumed = mechState.ammoState.consumeAmmo(weaponInfo.weaponId,
-                                                          weaponInfo.ammoPerShot);
+            ammoConsumed = this.consumeAmmo();;
           }
         }
         return {newState : newState, weaponFired : weaponFired, ammoConsumed: ammoConsumed};
@@ -395,7 +413,6 @@ var MechModelWeapons = MechModelWeapons || (function () {
       let newState = null;
       let cooldownChanged = false;
       let weaponInfo = this.weaponInfo;
-      let ammoState = this.mechState.ammoState;
       if (!this.active) { //if weapon disabled, return
         return {newState : newState,
                 weaponFired : weaponFired,
@@ -418,8 +435,7 @@ var MechModelWeapons = MechModelWeapons || (function () {
           this.cooldownLeft += newSpoolLeft;
           //Consume ammo
           if (weaponInfo.requiresAmmo()) {
-            ammoConsumed = ammoState.consumeAmmo(weaponInfo.weaponId,
-                                                weaponInfo.ammoPerShot);
+            ammoConsumed = this.consumeAmmo();;
           }
           weaponFired = true;
         }
@@ -496,7 +512,7 @@ var MechModelWeapons = MechModelWeapons || (function () {
       }
       //if no ammo, proceed to next weapon
       if (weaponInfo.requiresAmmo() &&
-        mechState.ammoState.ammoCountForWeapon(weaponInfo.weaponId) <= 0) {
+        this.getAvailableAmmo() <= 0) {
         return {newState: newState, weaponFired: false, ammoConsumed: 0};
       }
       //if weapon has no duration, set state to FIRING, will go to cooldown on the next step
@@ -513,8 +529,7 @@ var MechModelWeapons = MechModelWeapons || (function () {
       }
       if (weaponFired) {
         if (weaponInfo.requiresAmmo()) {
-          ammoConsumed = mechState.ammoState.consumeAmmo(weaponInfo.weaponId,
-                                                        weaponInfo.ammoPerShot);
+          ammoConsumed = this.consumeAmmo();;
         }
       }
       return {newState: newState, weaponFired : weaponFired, ammoConsumed: ammoConsumed};
@@ -582,15 +597,13 @@ var MechModelWeapons = MechModelWeapons || (function () {
       let ammoConsumed = 0;
       let cooldownChanged = false;
       let weaponInfo = this.weaponInfo;
-      let ammoState = this.mechState.ammoState;
       //Continuous fire weapons autofire
       let newTimeToAutoShot = Number(this.timeToNextAutoShot) - stepDuration;
       this.timeToNextAutoShot = Math.max(0, newTimeToAutoShot);
       if (this.isOnAutoFire) {
         if (this.timeToNextAutoShot <= 0) {
           if (weaponInfo.requiresAmmo()) {
-            ammoConsumed = ammoState.consumeAmmo(weaponInfo.weaponId,
-                                                weaponInfo.ammoPerShot);
+            ammoConsumed = this.consumeAmmo();;
           }
           //decrease time to next auto shot with newTimetoAutoShot if the shot
           //occurs in the middle of the tick
@@ -621,10 +634,32 @@ var MechModelWeapons = MechModelWeapons || (function () {
     }
   }
 
+  class WeaponStateOneShot extends WeaponStateSingleFire {
+    constructor(weaponInfo, mechState) {
+      super(weaponInfo, mechState);
+      this.ammoRemaining = Number(this.weaponInfo.ammoPerShot);
+    }
+
+    getAvailableAmmo() {
+      if (this.weaponInfo.requiresAmmo()) {
+        return this.ammoRemaining;
+      } else {
+        throw "Unexpected: single shot weapon that does not require ammo";
+      }
+    }
+
+    consumeAmmo() {
+      let ret = this.ammoRemaining;
+      this.ammoRemaining = 0;
+      return ret;
+    }
+  }
+
   return {
     WeaponInfo : WeaponInfo,
     WeaponStateDurationFire : WeaponStateDurationFire,
     WeaponStateSingleFire : WeaponStateSingleFire,
     WeaponStateContinuousFire : WeaponStateContinuousFire,
+    WeaponStateOneShot : WeaponStateOneShot,
   }
 })();

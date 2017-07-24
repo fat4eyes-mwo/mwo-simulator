@@ -59,6 +59,9 @@ class Weapon {
     if (xmlWeaponStats.attr.jamRampDownTime) {
       this.jamRampDownTime = Number(xmlWeaponStats.attr.jamRampDownTime);
     }
+    if (xmlWeaponStats.attr.isOneShot) {
+      this.isOneShot = xmlWeaponStats.attr.isOneShot != 0;
+    }
     //special case for machine guns: speed in XML files is just particle
     //speed not actual weapon speed (which is near instant). Set very high
     //speed for all machine gun weapons

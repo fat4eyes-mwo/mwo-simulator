@@ -24,11 +24,10 @@ var MechFirePattern = MechFirePattern || (function () {
     let weaponsToFire = [];
     for (let weaponState of sortedByDmgPerHeat) {
       let weaponInfo = weaponState.weaponInfo;
-      let ammoState = mechState.ammoState;
       if (!canFire(weaponState)  //not ready to fire
           || !willDoDamage(weaponState, range) //will not do damage
           //No ammo
-          || (weaponInfo.requiresAmmo() && ammoState.ammoCountForWeapon(weaponInfo.weaponId) <= 0)
+          || (weaponInfo.requiresAmmo() && weaponState.getAvailableAmmo() <= 0)
         ) {
         continue; //skip weapon
       }

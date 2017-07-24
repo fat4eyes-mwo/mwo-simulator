@@ -1,4 +1,4 @@
-//Generated from GameData.pak Sat, 22 Jul 2017 09:02:12 GMT
+//Generated from GameData.pak Sun, 23 Jul 2017 23:41:28 GMT
 _AddedWeaponData = {
 	"AutoCannon20": {
 		"ammo_per_shot": 1,
@@ -1153,6 +1153,7 @@ _AddedWeaponData = {
 	},
 	"RocketLauncher10": {
 		"ammo_per_shot": 10,
+		"isOneShot": true,
 		"ranges": [
 			{
 				"start": 0,
@@ -1173,6 +1174,7 @@ _AddedWeaponData = {
 	},
 	"RocketLauncher15": {
 		"ammo_per_shot": 15,
+		"isOneShot": true,
 		"ranges": [
 			{
 				"start": 0,
@@ -1193,6 +1195,7 @@ _AddedWeaponData = {
 	},
 	"RocketLauncher20": {
 		"ammo_per_shot": 20,
+		"isOneShot": true,
 		"ranges": [
 			{
 				"start": 0,
