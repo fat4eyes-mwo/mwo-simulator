@@ -76,14 +76,14 @@ var MechView = MechView || (function() {
   //Percent values from 0 to 1
   var setPaperDollArmor = function (mechId, location, percent) {
     var color = damageColor(percent, paperDollDamageGradient);
-    let query = "#" + paperDollId(mechId) + "> [data-location='" + location + "']";
-    $(query)
+    let paperDollDiv = document.getElementById(paperDollId(mechId));
+    $(paperDollDiv).find("> [data-location='" + location + "']")
       .css('border-color', color);
   }
   var setPaperDollStructure = function (mechId, location, percent) {
     var color = damageColor(percent, paperDollDamageGradient);
-    let query = "#" + paperDollId(mechId) + "> [data-location='" + location + "']";
-    $(query)
+    let paperDollDiv = document.getElementById(paperDollId(mechId));
+    $(paperDollDiv).find("> [data-location='" + location + "']")
       .css('background-color', color);
   }
 
@@ -147,18 +147,6 @@ var MechView = MechView || (function() {
       // structureLocationDiv.setAttribute("title", (Number(structure)).toFixed(2));
       structureLocationDiv.style.color = structureColor;
     }
-
-    //Jquery calls are too expensive in frequent UI updates.
-    // $("#" + mechHealthNumbersDivId +
-    //   " [data-location=" + location + "] " +
-    //   " [data-healthtype=armor]")
-    //     .css("color", armorColor)
-    //     .html(Math.round(armor));
-    // $("#" + mechHealthNumbersDivId +
-    //   " [data-location=" + location + "] " +
-    //   " [data-healthtype=structure]")
-    //   .css("color", structureColor)
-    //   .html(Math.round(structure));
   }
 
   //Heatbar UI functions
@@ -173,8 +161,8 @@ var MechView = MechView || (function() {
     $(heatbarDiv)
       .attr("id", heatbarId(mechId))
       .attr("data-mech-id", mechId)
-      .appendTo(heatbarContainer);
-    $("#" + heatbarId(mechId) + " > [class~=heatbar]")
+      .appendTo("#" + heatbarContainer);
+    $(heatbarDiv).find("[class~=heatbar]")
       .attr("id", heatbarValueId(mechId))
       .attr("data-mech-id", mechId);
   }
@@ -182,9 +170,6 @@ var MechView = MechView || (function() {
   //percent is 0 to 1
   var setHeatbarValue = function (mechId, percent) {
     var invPercent = 1 - percent;
-    //NOTE: jquery too expensive
-    // $("#" + heatbarId(mechId) + " > [class=heatbar]")
-    //   .height( (100 * invPercent) + "%");
 
     let heatbarValueDiv = document.getElementById(heatbarValueId(mechId));
     heatbarValueDiv.style.height = (100 * invPercent) + "%";
@@ -198,8 +183,6 @@ var MechView = MechView || (function() {
     let heatText = parseFloat(heatPercent * 100).toFixed(0) + "%" +
                     " (" + parseFloat(currHeat).toFixed(1) + ")";
     let heatNumberDiv = document.getElementById(heatNumberId);
-
-    // $("#" + heatNumberId).html(heatText);
     heatNumberDiv.textContent = heatText;
   }
 
@@ -230,16 +213,16 @@ var MechView = MechView || (function() {
         .attr("id", weaponRowId(mechId, idx))
         .attr("data-mech-id", mechId)
         .attr("data-weapon-idx", idx)
-        .appendTo(weaponPanel);
-      $("#" + weaponRowId(mechId, idx) + " .weaponName")
+        .appendTo("#" + weaponPanel);
+      $(weaponRowDiv).find(".weaponName")
         .attr("id", weaponRowId(mechId, idx) + "-weaponName")
         .html(weaponState.weaponInfo.translatedName);
-      $("#" + weaponRowId(mechId, idx) + " .weaponLocation")
+      $(weaponRowDiv).find(".weaponLocation")
         .attr("id", weaponRowId(mechId, idx) + "-weaponLocation")
         .html(weaponLocAbbr[weaponState.weaponInfo.location]);
-      $("#" + weaponRowId(mechId, idx) + " .weaponCooldownBar")
+      $(weaponRowDiv).find(".weaponCooldownBar")
         .attr("id", weaponCooldownBarId(mechId, idx));
-      $("#" + weaponRowId(mechId, idx) + " .weaponAmmo")
+      $(weaponRowDiv).find(".weaponAmmo")
         .attr("id", weaponAmmoId(mechId, idx));
 
       setWeaponAmmo(mechId, idx, 0);
@@ -248,9 +231,6 @@ var MechView = MechView || (function() {
     }
   }
   var setWeaponCooldown = function (mechId, weaponIdx, percent, type="cooldown") {
-    //NOTE: jQuery on weapon cooldowns takes way too much compute time. Use
-    //plain javascript for this and other often updated elements
-    //$("#" + weaponCooldownBarId(mechId, weaponIdx)).width(100*percent + "%");
     let cooldownDiv = document.getElementById(weaponCooldownBarId(mechId, weaponIdx));
     cooldownDiv.style.width = (100*percent) + "%";
     if (type === "cooldown") {
@@ -262,8 +242,6 @@ var MechView = MechView || (function() {
   var setWeaponAmmo = function (mechId, weaponIdx, ammo) {
     let weaponAmmoDiv = document.getElementById(weaponAmmoId(mechId, weaponIdx));
     weaponAmmoDiv.textContent = ammo != -1 ? ammo : "\u221e"; //infinity symbol
-    //slow jquery
-    // $("#" + weaponAmmoId(mechId, weaponIdx)).html(ammo != -1 ? ammo : "&#x221e;");
   }
   var setWeaponState = function (mechId, weaponIdx, state) {
     //Note: the remove class string must include all the MechModel.WeaponCycle strings
@@ -273,8 +251,10 @@ var MechView = MechView || (function() {
         removeClassString += MechModel.WeaponCycle[weaponCycle] + " ";
       }
     }
-    $("#" + weaponRowId(mechId, weaponIdx)).removeClass(removeClassString);
-    $("#" + weaponRowId(mechId, weaponIdx)).addClass(state);
+    let weaponRowDiv = document.getElementById(weaponRowId(mechId, weaponIdx));
+    let weaponRowJQ = $(weaponRowDiv);
+    weaponRowJQ.removeClass(removeClassString);
+    weaponRowJQ.addClass(state);
   }
 
   //adds a mech panel (which contains a paperDoll, a heatbar and a weaponPanel)
@@ -315,40 +295,41 @@ var MechView = MechView || (function() {
     let ammoState = mechState.ammoState;
     let mechPanelContainer = "#" + team + "Team";
     let mechPanelDiv = MechViewWidgets.cloneTemplate("mechPanel-template");
-    $(mechPanelDiv)
+    let mechPanelJQ = $(mechPanelDiv);
+    mechPanelJQ
       .attr("id", mechPanelId(mechId))
       .attr("data-mech-id", mechId)
       .appendTo(mechPanelContainer);
 
     var mechHealthAndWeaponsDivId = mechHealthAndWeaponsId(mechId);
-    $("#" + mechPanelId(mechId) + " [class~=mechHealthAndWeapons]")
+    mechPanelJQ.find("[class~=mechHealthAndWeapons]")
       .attr("id", mechHealthAndWeaponsDivId);
 
     var paperDollContainerId = mechId + "-paperDollContainer";
-    $("#" + mechPanelId(mechId) + " [class~='paperDollContainer']")
+    mechPanelJQ.find("[class~='paperDollContainer']")
       .attr("id", paperDollContainerId);
     addPaperDoll(mechId, paperDollContainerId);
 
     let mechHealthNumbersContainerJQ =
-            $("#" + mechPanelId(mechId) + " [class~='mechHealthNumbersContainer']");
+            mechPanelJQ.find("[class~='mechHealthNumbersContainer']");
     addMechHealthNumbers(mech, mechHealthNumbersContainerJQ);
 
     var heatbarContainerId = mechId + "-heatbarContainer";
-    $("#" + mechPanelId(mechId) + " [class~='heatbarContainer']")
+    mechPanelJQ.find("[class~='heatbarContainer']")
       .attr("id", heatbarContainerId);
-    addHeatbar(mechId, "#" + heatbarContainerId);
+    addHeatbar(mechId, heatbarContainerId);
 
     var heatNumberId = heatNumberPanelId(mechId);
-    $("#" + mechPanelId(mechId) + " [class~='heatNumber']")
+    mechPanelJQ.find("[class~='heatNumber']")
       .attr("id", heatNumberId);
 
     var weaponPanelContainerId = mechId + "-weaponPanelContainer";
-    $("#" + mechPanelId(mechId) + " [class~='weaponPanelContainer']")
+    mechPanelJQ.find("[class~='weaponPanelContainer']")
       .attr("id", weaponPanelContainerId);
-    addWeaponPanel(mechId, weaponStateList, ammoState, "#" + weaponPanelContainerId);
+    addWeaponPanel(mechId, weaponStateList, ammoState, weaponPanelContainerId);
 
     let mechNameId =  mechNamePanelId(mechId);
-    $("#" + mechPanelId(mechId) + " [class~='titlePanel'] [class~='mechName']")
+    mechPanelJQ.find("[class~='titlePanel'] [class~='mechName']")
       .attr("id", mechNameId)
       .html("");
 
@@ -357,7 +338,7 @@ var MechView = MechView || (function() {
       deleteMechButton_Handler = new DeleteMechButton_Handler(this);
     }
     let mechDeleteButtonDivId = mechDeleteButtonId(mechId);
-    $("#" + mechPanelId(mechId) + " [class~='titlePanel'] [class~='deleteMechButton']")
+    mechPanelJQ.find("[class~='titlePanel'] [class~='deleteMechButton']")
       .attr("id", mechDeleteButtonDivId)
       .attr("data-mech-id", mechId)
       .attr("data-team", team)
@@ -365,27 +346,27 @@ var MechView = MechView || (function() {
 
 
     let mechSummaryHealthId = mechSummaryHealthPanelId(mechId);
-    $("#" + mechPanelId(mechId) + " [class~='statusPanel'] [class~='mechSummaryHealthText']")
+    mechPanelJQ.find("[class~='statusPanel'] [class~='mechSummaryHealthText']")
       .attr("id", mechSummaryHealthId)
       .html("");
 
     let mechTargetId = mechTargetPanelId(mechId);
-    $("#" + mechPanelId(mechId) + " [class~='statusPanel'] [class~='mechTargetText']")
+    mechPanelJQ.find("[class~='statusPanel'] [class~='mechTargetText']")
       .attr("id", mechTargetId)
       .html("");
 
     let mechDPSId = mechDPSPanelId(mechId);
-    $("#" + mechPanelId(mechId) + " [class~='statusPanel'] [class~='mechDPSText']")
+    mechPanelJQ.find("[class~='statusPanel'] [class~='mechDPSText']")
       .attr("id", mechDPSId)
       .html("");
 
     let mechBurstId = mechBurstPanelId(mechId);
-    $("#" + mechPanelId(mechId) + " [class~='statusPanel'] [class~='mechBurstText']")
+    mechPanelJQ.find("[class~='statusPanel'] [class~='mechBurstText']")
       .attr("id", mechBurstId)
       .html("");
 
     let mechTotalDamageId = mechTotalDamagePanelId(mechId);
-    $("#" + mechPanelId(mechId) + " [class~='statusPanel'] [class~='mechTotalDamageText']")
+    mechPanelJQ.find("[class~='statusPanel'] [class~='mechTotalDamageText']")
       .attr("id", mechTotalDamageId)
       .html("");
   }
