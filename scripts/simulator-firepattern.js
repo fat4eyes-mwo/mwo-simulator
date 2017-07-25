@@ -152,7 +152,7 @@ var MechFirePattern = MechFirePattern || (function () {
         default: false,
       },
       { id: "maxFireNoGhostHeat",
-        name: "Maximum fire rate.",
+        name: "Maximum fire rate",
         pattern: maxFireNoGhostHeat,
         description: "Maximize weapons fired as long as it doesn't cause ghost heat.",
         default: false,
