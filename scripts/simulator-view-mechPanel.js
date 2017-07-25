@@ -1,7 +1,6 @@
 "use strict";
 
 var MechViewMechPanel = MechViewMechPanel || (function() {
-  //TODO: move mechpanel methods here
   //Add a paper doll with the given mechId to the element with the id
   //paperDollContainer uses the template paperDoll-template from the main HTML file
   var paperDollId =function (mechId) {

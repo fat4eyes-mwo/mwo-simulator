@@ -1,7 +1,6 @@
 "use strict";
 
 //UI methods
-//TODO: Wrap panel construction in classes, and split them off from this file. It's getting too big.
 
 var MechView = MechView || (function() {
 
