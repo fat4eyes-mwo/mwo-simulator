@@ -50,6 +50,7 @@ var MechModelWeapons = MechModelWeapons || (function () {
         this.jamRampDownTime = smurfyWeaponData.jamRampDownTime ?
                       Number(smurfyWeaponData.jamRampDownTime) * 1000 : 0;
         this.isOneShot = smurfyWeaponData.isOneShot ? true : false;
+        this.volleyDelay = Number(smurfyWeaponData.volleyDelay) * 1000;
         this.weaponBonus = MechModelQuirks.getWeaponBonus(this);
         //recompute heat to be heat per SHOT for continuous fire weapons (in smurfy heat is heat per second, not per shot)
         if (this.isContinuousFire()) {
@@ -144,6 +145,11 @@ var MechModelWeapons = MechModelWeapons || (function () {
       this.active = true;
       this.weaponCycle = WeaponCycle.READY;
       this.cooldownLeft = 0;
+      this.resetVolleyDelay();
+    }
+
+    resetVolleyDelay() {
+      this.volleyDelayLeft = this.weaponInfo.volleyDelay;
     }
 
     //returns {newState: <new state>, weaponFired:<boolean>, ammoConsumed:<number>}
@@ -154,6 +160,23 @@ var MechModelWeapons = MechModelWeapons || (function () {
     //processes cooldowns on the weapon, making state changes as necessary
     step(stepDuration) {
       throw "Abstract method, should not be called";
+    }
+
+    stepPrechecks(stepDuration) {
+      let newState = null;
+      let weaponFired = false;
+      let ammoConsumed = 0;
+      let cooldownChanged = false;
+      if (!this.active) { //if weapon disabled, return
+        return {newState : newState,
+                weaponFired : weaponFired,
+                ammoConsumed: ammoConsumed,
+                cooldownChanged: cooldownChanged};
+      }
+      if (this.weaponCycle !== WeaponCycle.FIRING) {
+        this.volleyDelayLeft = Math.max(0, this.volleyDelayLeft - stepDuration);
+      }
+      return null;
     }
 
     stepStandardFire(stepDuration) {
@@ -203,30 +226,34 @@ var MechModelWeapons = MechModelWeapons || (function () {
       return {newState: newState, cooldownChanged: cooldownChanged};
     }
 
-    gotoState(weaponCycle) {
-      let prevCycle = this.weaponCycle;
+    gotoState(weaponCycle, updateTimers = true) {
+      let prevCooldownLeft = this.cooldownLeft;
       this.weaponCycle = weaponCycle;
-      this.cooldownLeft = 0;
-      this.spoolupLeft = 0;
-      this.durationLeft = 0;
-      if (weaponCycle === WeaponCycle.READY) {
-        this.currShotsDuringCooldown = this.weaponInfo.shotsDuringCooldown;
-        //do nothing
-      } else if (weaponCycle === WeaponCycle.FIRING) {
-        this.durationLeft = this.computeWeaponDuration();
-      } else if (weaponCycle === WeaponCycle.COOLDOWN) {
-        this.cooldownLeft = this.computeWeaponCooldown();
-      } else if (weaponCycle === WeaponCycle.SPOOLING) {
-        this.spoolupLeft = Number(this.weaponInfo.spinup);
-      } else if (weaponCycle === WeaponCycle.DISABLED) {
-        //set cooldown to max so it displays properly in the view
-        this.cooldownLeft = this.computeWeaponCooldown();
-        this.active = false;
-      } else if (weaponCycle === WeaponCycle.JAMMED) {
-        this.cooldownLeft = this.computeWeaponCooldown();
-        //TODO Check uacJamMethod to compute jam time
-        this.jamLeft = this.computeJamTime();
-        this.currShotsDuringCooldown = 0;
+      if (updateTimers) {
+        this.cooldownLeft = 0;
+        this.spoolupLeft = 0;
+        this.durationLeft = 0;
+        if (weaponCycle === WeaponCycle.READY) {
+          this.currShotsDuringCooldown = this.weaponInfo.shotsDuringCooldown;
+        } else if (weaponCycle === WeaponCycle.FIRING) {
+          this.durationLeft = this.computeWeaponDuration();
+          this.resetVolleyDelay();
+        } else if (weaponCycle === WeaponCycle.COOLDOWN) {
+          this.cooldownLeft = this.computeWeaponCooldown();
+        } else if (weaponCycle === WeaponCycle.COOLDOWN_FIRING) {
+          this.cooldownLeft = prevCooldownLeft;
+        } else if (weaponCycle === WeaponCycle.SPOOLING) {
+          this.spoolupLeft = Number(this.weaponInfo.spinup);
+        } else if (weaponCycle === WeaponCycle.DISABLED) {
+          //set cooldown to max so it displays properly in the view
+          this.cooldownLeft = this.computeWeaponCooldown();
+          this.active = false;
+        } else if (weaponCycle === WeaponCycle.JAMMED) {
+          this.cooldownLeft = this.computeWeaponCooldown();
+          //TODO Check uacJamMethod to compute jam time
+          this.jamLeft = this.computeJamTime();
+          this.currShotsDuringCooldown = 0;
+        }
       }
     }
 
@@ -325,11 +352,9 @@ var MechModelWeapons = MechModelWeapons || (function () {
       let newState = null;
       let cooldownChanged = false;
       let weaponInfo = this.weaponInfo;
-      if (!this.active) { //if weapon disabled, return
-        return {newState : newState,
-                weaponFired : weaponFired,
-                ammoConsumed: ammoConsumed,
-                cooldownChanged: cooldownChanged};
+      let precheckStatus = this.stepPrechecks(stepDuration);
+      if (precheckStatus) {
+        return precheckStatus;
       }
       if (this.weaponCycle === MechModel.WeaponCycle.FIRING) {
         let fireStatus = this.stepStandardFire(stepDuration);
@@ -397,6 +422,8 @@ var MechModelWeapons = MechModelWeapons || (function () {
             weaponFired = false;
           } else {
             console.log("Double tap: " + this.weaponInfo.name);
+            newState = MechModel.WeaponCycle.COOLDOWN_FIRING;
+            this.gotoState(newState);
             this.currShotsDuringCooldown -= 1;
             weaponFired = true;
           }
@@ -416,11 +443,9 @@ var MechModelWeapons = MechModelWeapons || (function () {
       let newState = null;
       let cooldownChanged = false;
       let weaponInfo = this.weaponInfo;
-      if (!this.active) { //if weapon disabled, return
-        return {newState : newState,
-                weaponFired : weaponFired,
-                ammoConsumed: ammoConsumed,
-                cooldownChanged: cooldownChanged};
+      let precheckStatus = this.stepPrechecks(stepDuration);
+      if (precheckStatus) {
+        return precheckStatus;
       }
       //if weapon is spooling, reduce spoolleft.
       //if spoolLeft <=0, change state to COOLDOWN
@@ -447,9 +472,14 @@ var MechModelWeapons = MechModelWeapons || (function () {
         let fireStatus = this.stepStandardFire(stepDuration);
         newState = fireStatus.newState;
         cooldownChanged = fireStatus.cooldownChanged;
-      } else if (this.weaponCycle === MechModel.WeaponCycle.COOLDOWN) {
+      } else if (this.weaponCycle === MechModel.WeaponCycle.COOLDOWN ||
+                  this.weaponCycle === MechModel.WeaponCycle.COOLDOWN_FIRING) {
+        if (this.weaponCycle === MechModel.WeaponCycle.COOLDOWN_FIRING) {
+          newState = MechModel.WeaponCycle.COOLDOWN;
+          this.gotoState(newState, false);
+        }
         let cooldownStatus = this.stepCooldown(stepDuration);
-        newState = cooldownStatus.newState;
+        newState = newState || cooldownStatus.newState;
         cooldownChanged = cooldownStatus.cooldownChanged;
       } else if (this.weaponCycle === MechModel.WeaponCycle.JAMMED) {
         let jamStatus = this.stepJammed(stepDuration);
@@ -465,7 +495,8 @@ var MechModelWeapons = MechModelWeapons || (function () {
     canFire() {
       return this.weaponCycle === WeaponCycle.READY ||
             (this.weaponCycle === WeaponCycle.COOLDOWN &&
-             this.currShotsDuringCooldown > 0);
+             this.currShotsDuringCooldown > 0 &&
+             this.volleyDelayLeft <= 0);
     }
   }
 
@@ -544,11 +575,9 @@ var MechModelWeapons = MechModelWeapons || (function () {
       let newState = null;
       let cooldownChanged = false;
       let weaponInfo = this.weaponInfo;
-      if (!this.active) { //if weapon disabled, return
-        return {newState : newState,
-                weaponFired : weaponFired,
-                ammoConsumed: ammoConsumed,
-                cooldownChanged: cooldownChanged};
+      let precheckStatus = this.stepPrechecks(stepDuration);
+      if (precheckStatus) {
+        return precheckStatus;
       }
 
       if (this.weaponCycle === MechModel.WeaponCycle.FIRING) {

@@ -1,7 +1,8 @@
-//Generated from GameData.pak Sun, 23 Jul 2017 23:41:28 GMT
+//Generated from GameData.pak Tue, 25 Jul 2017 00:11:03 GMT
 _AddedWeaponData = {
 	"AutoCannon20": {
 		"ammo_per_shot": 1,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -22,6 +23,7 @@ _AddedWeaponData = {
 	},
 	"MediumLaser": {
 		"ammo_per_shot": 0,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -42,6 +44,7 @@ _AddedWeaponData = {
 	},
 	"LRM20": {
 		"ammo_per_shot": 20,
+		"volleyDelay": 0.5,
 		"ranges": [
 			{
 				"start": 0,
@@ -62,6 +65,7 @@ _AddedWeaponData = {
 	},
 	"SmallLaser": {
 		"ammo_per_shot": 0,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -82,6 +86,7 @@ _AddedWeaponData = {
 	},
 	"SRM4": {
 		"ammo_per_shot": 4,
+		"volleyDelay": 0.25,
 		"ranges": [
 			{
 				"start": 0,
@@ -97,6 +102,7 @@ _AddedWeaponData = {
 	},
 	"ERLargeLaser": {
 		"ammo_per_shot": 0,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -117,6 +123,7 @@ _AddedWeaponData = {
 	},
 	"ERPPC": {
 		"ammo_per_shot": 0,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -137,6 +144,7 @@ _AddedWeaponData = {
 	},
 	"Flamer": {
 		"ammo_per_shot": 0,
+		"volleyDelay": 0.25,
 		"ranges": [
 			{
 				"start": 0,
@@ -152,6 +160,7 @@ _AddedWeaponData = {
 	},
 	"LargeLaser": {
 		"ammo_per_shot": 0,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -172,6 +181,7 @@ _AddedWeaponData = {
 	},
 	"PPC": {
 		"ammo_per_shot": 0,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -197,6 +207,7 @@ _AddedWeaponData = {
 	},
 	"LargePulseLaser": {
 		"ammo_per_shot": 0,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -217,6 +228,7 @@ _AddedWeaponData = {
 	},
 	"MediumPulseLaser": {
 		"ammo_per_shot": 0,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -237,6 +249,7 @@ _AddedWeaponData = {
 	},
 	"SmallPulseLaser": {
 		"ammo_per_shot": 0,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -258,6 +271,7 @@ _AddedWeaponData = {
 	"AntiMissileSystem": {
 		"ammo_per_shot": 1,
 		"rof": 30,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -278,6 +292,7 @@ _AddedWeaponData = {
 	},
 	"AutoCannon2": {
 		"ammo_per_shot": 1,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -298,6 +313,7 @@ _AddedWeaponData = {
 	},
 	"AutoCannon5": {
 		"ammo_per_shot": 1,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -318,6 +334,7 @@ _AddedWeaponData = {
 	},
 	"AutoCannon10": {
 		"ammo_per_shot": 1,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -339,6 +356,7 @@ _AddedWeaponData = {
 	"GaussRifle": {
 		"ammo_per_shot": 1,
 		"spinup": 0.75,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -359,6 +377,7 @@ _AddedWeaponData = {
 	},
 	"LBXAutoCannon10": {
 		"ammo_per_shot": 1,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -380,6 +399,7 @@ _AddedWeaponData = {
 	"MachineGun": {
 		"ammo_per_shot": 1,
 		"rof": 10,
+		"volleyDelay": 0,
 		"speed": 10000,
 		"ranges": [
 			{
@@ -404,6 +424,7 @@ _AddedWeaponData = {
 		"jamming_chance": 0.15,
 		"jammed_time": 6,
 		"shots_during_cooldown": 1,
+		"volleyDelay": 0.5,
 		"ranges": [
 			{
 				"start": 0,
@@ -424,6 +445,7 @@ _AddedWeaponData = {
 	},
 	"LRM5": {
 		"ammo_per_shot": 5,
+		"volleyDelay": 0.5,
 		"ranges": [
 			{
 				"start": 0,
@@ -444,6 +466,7 @@ _AddedWeaponData = {
 	},
 	"LRM10": {
 		"ammo_per_shot": 10,
+		"volleyDelay": 0.5,
 		"ranges": [
 			{
 				"start": 0,
@@ -464,6 +487,7 @@ _AddedWeaponData = {
 	},
 	"LRM15": {
 		"ammo_per_shot": 15,
+		"volleyDelay": 0.5,
 		"ranges": [
 			{
 				"start": 0,
@@ -484,6 +508,7 @@ _AddedWeaponData = {
 	},
 	"NarcBeacon": {
 		"ammo_per_shot": 1,
+		"volleyDelay": 0.25,
 		"ranges": [
 			{
 				"start": 0,
@@ -499,6 +524,7 @@ _AddedWeaponData = {
 	},
 	"SRM2": {
 		"ammo_per_shot": 2,
+		"volleyDelay": 0.25,
 		"ranges": [
 			{
 				"start": 0,
@@ -514,6 +540,7 @@ _AddedWeaponData = {
 	},
 	"SRM6": {
 		"ammo_per_shot": 6,
+		"volleyDelay": 0.25,
 		"ranges": [
 			{
 				"start": 0,
@@ -529,6 +556,7 @@ _AddedWeaponData = {
 	},
 	"StreakSRM2": {
 		"ammo_per_shot": 2,
+		"volleyDelay": 0.25,
 		"ranges": [
 			{
 				"start": 0,
@@ -544,6 +572,7 @@ _AddedWeaponData = {
 	},
 	"TAG": {
 		"ammo_per_shot": 0,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -559,6 +588,7 @@ _AddedWeaponData = {
 	},
 	"SRM2_Artemis": {
 		"ammo_per_shot": 2,
+		"volleyDelay": 0.25,
 		"ranges": [
 			{
 				"start": 0,
@@ -574,6 +604,7 @@ _AddedWeaponData = {
 	},
 	"SRM4_Artemis": {
 		"ammo_per_shot": 4,
+		"volleyDelay": 0.25,
 		"ranges": [
 			{
 				"start": 0,
@@ -589,6 +620,7 @@ _AddedWeaponData = {
 	},
 	"SRM6_Artemis": {
 		"ammo_per_shot": 6,
+		"volleyDelay": 0.25,
 		"ranges": [
 			{
 				"start": 0,
@@ -604,6 +636,7 @@ _AddedWeaponData = {
 	},
 	"LRM5_Artemis": {
 		"ammo_per_shot": 5,
+		"volleyDelay": 0.5,
 		"ranges": [
 			{
 				"start": 0,
@@ -624,6 +657,7 @@ _AddedWeaponData = {
 	},
 	"LRM10_Artemis": {
 		"ammo_per_shot": 10,
+		"volleyDelay": 0.5,
 		"ranges": [
 			{
 				"start": 0,
@@ -644,6 +678,7 @@ _AddedWeaponData = {
 	},
 	"LRM15_Artemis": {
 		"ammo_per_shot": 15,
+		"volleyDelay": 0.5,
 		"ranges": [
 			{
 				"start": 0,
@@ -664,6 +699,7 @@ _AddedWeaponData = {
 	},
 	"LRM20_Artemis": {
 		"ammo_per_shot": 20,
+		"volleyDelay": 0.5,
 		"ranges": [
 			{
 				"start": 0,
@@ -684,6 +720,7 @@ _AddedWeaponData = {
 	},
 	"ERSmallLaser": {
 		"ammo_per_shot": 0,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -704,6 +741,7 @@ _AddedWeaponData = {
 	},
 	"ERMediumLaser": {
 		"ammo_per_shot": 0,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -724,6 +762,7 @@ _AddedWeaponData = {
 	},
 	"LightPPC": {
 		"ammo_per_shot": 0,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -749,6 +788,7 @@ _AddedWeaponData = {
 	},
 	"HeavyPPC": {
 		"ammo_per_shot": 0,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -774,6 +814,7 @@ _AddedWeaponData = {
 	},
 	"SnubNosePPC": {
 		"ammo_per_shot": 0,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -794,6 +835,7 @@ _AddedWeaponData = {
 	},
 	"LBXAutoCannon2": {
 		"ammo_per_shot": 1,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -814,6 +856,7 @@ _AddedWeaponData = {
 	},
 	"LBXAutoCannon5": {
 		"ammo_per_shot": 1,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -834,6 +877,7 @@ _AddedWeaponData = {
 	},
 	"LBXAutoCannon20": {
 		"ammo_per_shot": 1,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -857,6 +901,7 @@ _AddedWeaponData = {
 		"jamming_chance": 0.15,
 		"jammed_time": 3.5,
 		"shots_during_cooldown": 1,
+		"volleyDelay": 0.11,
 		"ranges": [
 			{
 				"start": 0,
@@ -880,6 +925,7 @@ _AddedWeaponData = {
 		"jamming_chance": 0.15,
 		"jammed_time": 7.5,
 		"shots_during_cooldown": 1,
+		"volleyDelay": 0.11,
 		"ranges": [
 			{
 				"start": 0,
@@ -903,6 +949,7 @@ _AddedWeaponData = {
 		"jamming_chance": 0.15,
 		"jammed_time": 7.5,
 		"shots_during_cooldown": 1,
+		"volleyDelay": 0.11,
 		"ranges": [
 			{
 				"start": 0,
@@ -924,6 +971,7 @@ _AddedWeaponData = {
 	"LightGaussRifle": {
 		"ammo_per_shot": 1,
 		"spinup": 0.5,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -945,6 +993,7 @@ _AddedWeaponData = {
 	"HeavyGaussRifle": {
 		"ammo_per_shot": 1,
 		"spinup": 1,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -972,6 +1021,7 @@ _AddedWeaponData = {
 		"rampDownTime": 2,
 		"jamRampUpTime": 6,
 		"jamRampDownTime": 10,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -999,6 +1049,7 @@ _AddedWeaponData = {
 		"rampDownTime": 2,
 		"jamRampUpTime": 6,
 		"jamRampDownTime": 10,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -1020,6 +1071,7 @@ _AddedWeaponData = {
 	"LightMachineGun": {
 		"ammo_per_shot": 1,
 		"rof": 10,
+		"volleyDelay": 0,
 		"speed": 10000,
 		"ranges": [
 			{
@@ -1042,6 +1094,7 @@ _AddedWeaponData = {
 	"HeavyMachineGun": {
 		"ammo_per_shot": 1,
 		"rof": 10,
+		"volleyDelay": 0,
 		"speed": 10000,
 		"ranges": [
 			{
@@ -1063,6 +1116,7 @@ _AddedWeaponData = {
 	},
 	"StreakSRM4": {
 		"ammo_per_shot": 4,
+		"volleyDelay": 0.25,
 		"ranges": [
 			{
 				"start": 0,
@@ -1078,6 +1132,7 @@ _AddedWeaponData = {
 	},
 	"StreakSRM6": {
 		"ammo_per_shot": 6,
+		"volleyDelay": 0.25,
 		"ranges": [
 			{
 				"start": 0,
@@ -1093,6 +1148,7 @@ _AddedWeaponData = {
 	},
 	"MRM10": {
 		"ammo_per_shot": 10,
+		"volleyDelay": 0.05,
 		"ranges": [
 			{
 				"start": 0,
@@ -1108,6 +1164,7 @@ _AddedWeaponData = {
 	},
 	"MRM20": {
 		"ammo_per_shot": 20,
+		"volleyDelay": 0.025,
 		"ranges": [
 			{
 				"start": 0,
@@ -1123,6 +1180,7 @@ _AddedWeaponData = {
 	},
 	"MRM30": {
 		"ammo_per_shot": 30,
+		"volleyDelay": 0.0166,
 		"ranges": [
 			{
 				"start": 0,
@@ -1138,6 +1196,7 @@ _AddedWeaponData = {
 	},
 	"MRM40": {
 		"ammo_per_shot": 40,
+		"volleyDelay": 0.0125,
 		"ranges": [
 			{
 				"start": 0,
@@ -1154,6 +1213,7 @@ _AddedWeaponData = {
 	"RocketLauncher10": {
 		"ammo_per_shot": 10,
 		"isOneShot": true,
+		"volleyDelay": 0.1,
 		"ranges": [
 			{
 				"start": 0,
@@ -1175,6 +1235,7 @@ _AddedWeaponData = {
 	"RocketLauncher15": {
 		"ammo_per_shot": 15,
 		"isOneShot": true,
+		"volleyDelay": 0.1,
 		"ranges": [
 			{
 				"start": 0,
@@ -1196,6 +1257,7 @@ _AddedWeaponData = {
 	"RocketLauncher20": {
 		"ammo_per_shot": 20,
 		"isOneShot": true,
+		"volleyDelay": 0.25,
 		"ranges": [
 			{
 				"start": 0,
@@ -1217,6 +1279,7 @@ _AddedWeaponData = {
 	"LaserAntiMissileSystem": {
 		"ammo_per_shot": 0,
 		"rof": 30,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -1237,6 +1300,7 @@ _AddedWeaponData = {
 	},
 	"ClanLBXAutoCannon2": {
 		"ammo_per_shot": 1,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -1257,6 +1321,7 @@ _AddedWeaponData = {
 	},
 	"ClanLBXAutoCannon5": {
 		"ammo_per_shot": 1,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -1277,6 +1342,7 @@ _AddedWeaponData = {
 	},
 	"ClanLBXAutoCannon10": {
 		"ammo_per_shot": 1,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -1297,6 +1363,7 @@ _AddedWeaponData = {
 	},
 	"ClanLBXAutoCannon20": {
 		"ammo_per_shot": 1,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -1320,6 +1387,7 @@ _AddedWeaponData = {
 		"jamming_chance": 0.17,
 		"jammed_time": 3.75,
 		"shots_during_cooldown": 1,
+		"volleyDelay": 0.11,
 		"ranges": [
 			{
 				"start": 0,
@@ -1343,6 +1411,7 @@ _AddedWeaponData = {
 		"jamming_chance": 0.17,
 		"jammed_time": 6.5,
 		"shots_during_cooldown": 1,
+		"volleyDelay": 0.11,
 		"ranges": [
 			{
 				"start": 0,
@@ -1366,6 +1435,7 @@ _AddedWeaponData = {
 		"jamming_chance": 0.17,
 		"jammed_time": 8,
 		"shots_during_cooldown": 1,
+		"volleyDelay": 0.11,
 		"ranges": [
 			{
 				"start": 0,
@@ -1389,6 +1459,7 @@ _AddedWeaponData = {
 		"jamming_chance": 0.17,
 		"jammed_time": 8,
 		"shots_during_cooldown": 1,
+		"volleyDelay": 0.11,
 		"ranges": [
 			{
 				"start": 0,
@@ -1410,6 +1481,7 @@ _AddedWeaponData = {
 	"ClanGaussRifle": {
 		"ammo_per_shot": 1,
 		"spinup": 0.75,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -1431,6 +1503,7 @@ _AddedWeaponData = {
 	"ClanMachineGun": {
 		"ammo_per_shot": 1,
 		"rof": 10,
+		"volleyDelay": 0,
 		"speed": 10000,
 		"ranges": [
 			{
@@ -1452,6 +1525,7 @@ _AddedWeaponData = {
 	},
 	"ClanFlamer": {
 		"ammo_per_shot": 0,
+		"volleyDelay": 0.25,
 		"ranges": [
 			{
 				"start": 0,
@@ -1467,6 +1541,7 @@ _AddedWeaponData = {
 	},
 	"ClanERSmallLaser": {
 		"ammo_per_shot": 0,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -1487,6 +1562,7 @@ _AddedWeaponData = {
 	},
 	"ClanERMediumLaser": {
 		"ammo_per_shot": 0,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -1507,6 +1583,7 @@ _AddedWeaponData = {
 	},
 	"ClanERLargeLaser": {
 		"ammo_per_shot": 0,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -1527,6 +1604,7 @@ _AddedWeaponData = {
 	},
 	"ClanSmallPulseLaser": {
 		"ammo_per_shot": 0,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -1547,6 +1625,7 @@ _AddedWeaponData = {
 	},
 	"ClanMediumPulseLaser": {
 		"ammo_per_shot": 0,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -1567,6 +1646,7 @@ _AddedWeaponData = {
 	},
 	"ClanLargePulseLaser": {
 		"ammo_per_shot": 0,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -1587,6 +1667,7 @@ _AddedWeaponData = {
 	},
 	"ClanERPPC": {
 		"ammo_per_shot": 0,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -1607,6 +1688,7 @@ _AddedWeaponData = {
 	},
 	"ClanLRM5": {
 		"ammo_per_shot": 5,
+		"volleyDelay": 0.05,
 		"ranges": [
 			{
 				"start": 0,
@@ -1627,6 +1709,7 @@ _AddedWeaponData = {
 	},
 	"ClanLRM10": {
 		"ammo_per_shot": 10,
+		"volleyDelay": 0.05,
 		"ranges": [
 			{
 				"start": 0,
@@ -1647,6 +1730,7 @@ _AddedWeaponData = {
 	},
 	"ClanLRM15": {
 		"ammo_per_shot": 15,
+		"volleyDelay": 0.05,
 		"ranges": [
 			{
 				"start": 0,
@@ -1667,6 +1751,7 @@ _AddedWeaponData = {
 	},
 	"ClanLRM20": {
 		"ammo_per_shot": 20,
+		"volleyDelay": 0.05,
 		"ranges": [
 			{
 				"start": 0,
@@ -1687,6 +1772,7 @@ _AddedWeaponData = {
 	},
 	"ClanLRM5_Artemis": {
 		"ammo_per_shot": 5,
+		"volleyDelay": 0.05,
 		"ranges": [
 			{
 				"start": 0,
@@ -1707,6 +1793,7 @@ _AddedWeaponData = {
 	},
 	"ClanLRM10_Artemis": {
 		"ammo_per_shot": 10,
+		"volleyDelay": 0.05,
 		"ranges": [
 			{
 				"start": 0,
@@ -1727,6 +1814,7 @@ _AddedWeaponData = {
 	},
 	"ClanLRM15_Artemis": {
 		"ammo_per_shot": 15,
+		"volleyDelay": 0.05,
 		"ranges": [
 			{
 				"start": 0,
@@ -1747,6 +1835,7 @@ _AddedWeaponData = {
 	},
 	"ClanLRM20_Artemis": {
 		"ammo_per_shot": 20,
+		"volleyDelay": 0.05,
 		"ranges": [
 			{
 				"start": 0,
@@ -1767,6 +1856,7 @@ _AddedWeaponData = {
 	},
 	"ClanSRM2": {
 		"ammo_per_shot": 2,
+		"volleyDelay": 0.25,
 		"ranges": [
 			{
 				"start": 0,
@@ -1782,6 +1872,7 @@ _AddedWeaponData = {
 	},
 	"ClanSRM4": {
 		"ammo_per_shot": 4,
+		"volleyDelay": 0.25,
 		"ranges": [
 			{
 				"start": 0,
@@ -1797,6 +1888,7 @@ _AddedWeaponData = {
 	},
 	"ClanSRM6": {
 		"ammo_per_shot": 6,
+		"volleyDelay": 0.25,
 		"ranges": [
 			{
 				"start": 0,
@@ -1812,6 +1904,7 @@ _AddedWeaponData = {
 	},
 	"ClanSRM2_Artemis": {
 		"ammo_per_shot": 2,
+		"volleyDelay": 0.25,
 		"ranges": [
 			{
 				"start": 0,
@@ -1827,6 +1920,7 @@ _AddedWeaponData = {
 	},
 	"ClanSRM4_Artemis": {
 		"ammo_per_shot": 4,
+		"volleyDelay": 0.25,
 		"ranges": [
 			{
 				"start": 0,
@@ -1842,6 +1936,7 @@ _AddedWeaponData = {
 	},
 	"ClanSRM6_Artemis": {
 		"ammo_per_shot": 6,
+		"volleyDelay": 0.25,
 		"ranges": [
 			{
 				"start": 0,
@@ -1857,6 +1952,7 @@ _AddedWeaponData = {
 	},
 	"ClanStreakSRM2": {
 		"ammo_per_shot": 2,
+		"volleyDelay": 0.25,
 		"ranges": [
 			{
 				"start": 0,
@@ -1872,6 +1968,7 @@ _AddedWeaponData = {
 	},
 	"ClanStreakSRM4": {
 		"ammo_per_shot": 4,
+		"volleyDelay": 0.25,
 		"ranges": [
 			{
 				"start": 0,
@@ -1887,6 +1984,7 @@ _AddedWeaponData = {
 	},
 	"ClanStreakSRM6": {
 		"ammo_per_shot": 6,
+		"volleyDelay": 0.25,
 		"ranges": [
 			{
 				"start": 0,
@@ -1902,6 +2000,7 @@ _AddedWeaponData = {
 	},
 	"ClanNarcBeacon": {
 		"ammo_per_shot": 1,
+		"volleyDelay": 0.25,
 		"ranges": [
 			{
 				"start": 0,
@@ -1917,6 +2016,7 @@ _AddedWeaponData = {
 	},
 	"ClanTAG": {
 		"ammo_per_shot": 0,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -1933,6 +2033,7 @@ _AddedWeaponData = {
 	"ClanAntiMissileSystem": {
 		"ammo_per_shot": 1,
 		"rof": 30,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -1953,6 +2054,7 @@ _AddedWeaponData = {
 	},
 	"ClanAutoCannon2": {
 		"ammo_per_shot": 1,
+		"volleyDelay": 0.11,
 		"ranges": [
 			{
 				"start": 0,
@@ -1973,6 +2075,7 @@ _AddedWeaponData = {
 	},
 	"ClanAutoCannon5": {
 		"ammo_per_shot": 2,
+		"volleyDelay": 0.11,
 		"ranges": [
 			{
 				"start": 0,
@@ -1993,6 +2096,7 @@ _AddedWeaponData = {
 	},
 	"ClanAutoCannon10": {
 		"ammo_per_shot": 3,
+		"volleyDelay": 0.11,
 		"ranges": [
 			{
 				"start": 0,
@@ -2013,6 +2117,7 @@ _AddedWeaponData = {
 	},
 	"ClanAutoCannon20": {
 		"ammo_per_shot": 4,
+		"volleyDelay": 0.11,
 		"ranges": [
 			{
 				"start": 0,
@@ -2034,6 +2139,7 @@ _AddedWeaponData = {
 	"ClanLightMachineGun": {
 		"ammo_per_shot": 1,
 		"rof": 10,
+		"volleyDelay": 0,
 		"speed": 10000,
 		"ranges": [
 			{
@@ -2056,6 +2162,7 @@ _AddedWeaponData = {
 	"ClanHeavyMachineGun": {
 		"ammo_per_shot": 1,
 		"rof": 10,
+		"volleyDelay": 0,
 		"speed": 10000,
 		"ranges": [
 			{
@@ -2077,6 +2184,7 @@ _AddedWeaponData = {
 	},
 	"ClanERMicroLaser": {
 		"ammo_per_shot": 0,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -2097,6 +2205,7 @@ _AddedWeaponData = {
 	},
 	"ClanMicroPulseLaser": {
 		"ammo_per_shot": 0,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -2117,6 +2226,7 @@ _AddedWeaponData = {
 	},
 	"ClanHeavySmallLaser": {
 		"ammo_per_shot": 0,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -2137,6 +2247,7 @@ _AddedWeaponData = {
 	},
 	"ClanHeavyMediumLaser": {
 		"ammo_per_shot": 0,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -2157,6 +2268,7 @@ _AddedWeaponData = {
 	},
 	"ClanHeavyLargeLaser": {
 		"ammo_per_shot": 0,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -2177,6 +2289,7 @@ _AddedWeaponData = {
 	},
 	"ClanATM3": {
 		"ammo_per_shot": 3,
+		"volleyDelay": 0.05,
 		"ranges": [
 			{
 				"start": 0,
@@ -2217,6 +2330,7 @@ _AddedWeaponData = {
 	},
 	"ClanATM6": {
 		"ammo_per_shot": 6,
+		"volleyDelay": 0.05,
 		"ranges": [
 			{
 				"start": 0,
@@ -2257,6 +2371,7 @@ _AddedWeaponData = {
 	},
 	"ClanATM9": {
 		"ammo_per_shot": 9,
+		"volleyDelay": 0.05,
 		"ranges": [
 			{
 				"start": 0,
@@ -2297,6 +2412,7 @@ _AddedWeaponData = {
 	},
 	"ClanATM12": {
 		"ammo_per_shot": 12,
+		"volleyDelay": 0.05,
 		"ranges": [
 			{
 				"start": 0,
@@ -2337,6 +2453,7 @@ _AddedWeaponData = {
 	},
 	"ClanLightTAG": {
 		"ammo_per_shot": 0,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -2353,6 +2470,7 @@ _AddedWeaponData = {
 	"ClanLaserAntiMissileSystem": {
 		"ammo_per_shot": 0,
 		"rof": 30,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -2373,6 +2491,7 @@ _AddedWeaponData = {
 	},
 	"DropShipLargePulseLaser": {
 		"ammo_per_shot": 0,
+		"volleyDelay": 0,
 		"ranges": [
 			{
 				"start": 0,
@@ -2389,6 +2508,7 @@ _AddedWeaponData = {
 	"FakeMachineGun": {
 		"ammo_per_shot": 1,
 		"rof": 10,
+		"volleyDelay": 0,
 		"speed": 10000,
 		"ranges": [
 			{

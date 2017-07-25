@@ -467,7 +467,8 @@ a:hover {
   color: #ff3232;
 }
 
-.weaponPanelRow.Firing {
+.weaponPanelRow.Firing,
+.weaponPanelRow.CooldownFiring {
   background-color: gray;
   color: white;
 }

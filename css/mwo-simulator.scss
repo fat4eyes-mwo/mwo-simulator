@@ -525,7 +525,8 @@ div {
   color : $cooldown-bar-color;
 }
 
-.weaponPanelRow.Firing {
+.weaponPanelRow.Firing,
+.weaponPanelRow.CooldownFiring {
   background-color: gray;
   color : white;
 }

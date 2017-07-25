@@ -34,6 +34,7 @@ var MechModel = MechModel || (function () {
     FIRING : "Firing",
     DISABLED : "Disabled",
     COOLDOWN : "Cooldown",
+    COOLDOWN_FIRING : "CooldownFiring", //Double tap while on cooldown
     SPOOLING : "Spooling",
     JAMMED : "Jammed",
   });
