@@ -100,7 +100,7 @@ var MechViewTeamStats = MechViewTeamStats || (function() {
   var mechPipClickHandler = function(data) {
     let thisJQ = $(this);
     let mechId = thisJQ.attr("data-mech-id");
-    let mechPanelDivId = MechView.mechPanelId(mechId);
+    let mechPanelDivId = MechViewMechPanel.mechPanelId(mechId);
     let mechPanelJQ = $("#" + mechPanelDivId);
     mechPanelJQ[0].scrollIntoView(false);
     mechPanelJQ.addClass("flashSelected");
@@ -251,7 +251,7 @@ var MechViewTeamStats = MechViewTeamStats || (function() {
       let mechPipDiv = document.getElementById(teamMechPipId(mechId));
       let percentHealth = Number(currHealth) / Number(maxHealth);
 
-      let color = MechView.damageColor(percentHealth, MechView.healthDamageGradient);
+      let color = MechViewWidgets.damageColor(percentHealth, MechViewWidgets.healthDamageGradient);
       mechPipDiv.style.color = color;
       if (isAlive) {
         mechPipDiv.textContent = "\u25A0"; //solid box
@@ -267,7 +267,7 @@ var MechViewTeamStats = MechViewTeamStats || (function() {
     let liveMechsDiv = document.getElementById(teamLiveMechsId(team));
     let totalMechs = mechHealthList.length;
     let percentAlive = totalMechs > 0 ? liveMechs / totalMechs : 0;
-    let color = MechView.damageColor(percentAlive, MechView.healthDamageGradient);
+    let color = MechViewWidgets.damageColor(percentAlive, MechViewWidgets.healthDamageGradient);
     liveMechsDiv.style.color = color;
     liveMechsDiv.textContent = liveMechs + "/" + totalMechs;
 
@@ -275,7 +275,7 @@ var MechViewTeamStats = MechViewTeamStats || (function() {
     let healthValueDiv = document.getElementById(teamHealthValueId(team));
     let teamHealthPercent = totalTeamMaxHealth > 0 ?
             totalTeamCurrHealth / totalTeamMaxHealth : 0;
-    color = MechView.damageColor(teamHealthPercent, MechView.healthDamageGradient);
+    color = MechViewWidgets.damageColor(teamHealthPercent, MechViewWidgets.healthDamageGradient);
     healthValueDiv.style.color = color;
     healthValueDiv.textContent = "(" + Number(teamHealthPercent * 100).toFixed(1) + "%)";
 

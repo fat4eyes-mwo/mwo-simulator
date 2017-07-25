@@ -867,7 +867,9 @@ var MechModel = MechModel || (function () {
     SmurfyAmmoData = DummyAmmoData;
     SmurfyMechData = DummyMechData;
     SmurfyModuleData = DummyModuleData;
-    SmurfyOmnipodData = flattenOmnipodData(_DummyOmnipods);
+    let flatData = flattenOmnipodData(_DummyOmnipods);
+    SmurfyOmnipodData = flatData.flatOmnipodData;
+    SmurfyCTOmnipods = flatData.ctOmnipodMap;
     initAddedData();
   };
 

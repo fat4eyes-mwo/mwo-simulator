@@ -19,7 +19,7 @@ var MechModelView = MechModelView || (function() {
       }
       for (let mech of MechModel.mechTeams[team]) {
         if (recreateUI) {
-          MechView.addMechPanel(mech, team);
+          MechViewMechPanel.addMechPanel(mech, team);
         }
         updateAll(mech);
       }
@@ -59,7 +59,7 @@ var MechModelView = MechModelView || (function() {
   var updateHeat = function(mech) {
     let heatState = mech.getMechState().heatState;
 
-    MechView.updateHeat(mech.getMechId(), heatState.currHeat, heatState.currMaxHeat);
+    MechViewMechPanel.updateHeat(mech.getMechId(), heatState.currHeat, heatState.currMaxHeat);
   }
 
   var updateCooldown = function(mech) {
@@ -87,7 +87,7 @@ var MechModelView = MechModelView || (function() {
       } else if (weaponState.weaponCycle === MechModel.WeaponCycle.JAMMED) {
         cooldownPercent = 1;
       }
-      MechView.setWeaponCooldown(mech.getMechId(), weaponIndex, cooldownPercent, type);
+      MechViewMechPanel.setWeaponCooldown(mech.getMechId(), weaponIndex, cooldownPercent, type);
     }
   }
 
@@ -95,10 +95,10 @@ var MechModelView = MechModelView || (function() {
     let mechState = mech.getMechState();
     for (let weaponIndex in mechState.weaponStateList) {
       let weaponState = mechState.weaponStateList[weaponIndex];
-      MechView.setWeaponState(mech.getMechId(), weaponIndex, weaponState.weaponCycle);
+      MechViewMechPanel.setWeaponState(mech.getMechId(), weaponIndex, weaponState.weaponCycle);
       let ammoState = mech.getMechState().ammoState;
       let weaponAmmoCount = weaponState.getAvailableAmmo();
-      MechView.setWeaponAmmo(mech.getMechId(), weaponIndex, weaponAmmoCount);
+      MechViewMechPanel.setWeaponAmmo(mech.getMechId(), weaponIndex, weaponAmmoCount);
     }
   }
 
@@ -109,20 +109,22 @@ var MechModelView = MechModelView || (function() {
       let location = mechComponentHealth.location;
       let armorPercent = Number(mechComponentHealth.armor) / Number(mechComponentHealth.maxArmor);
       let structurePercent = Number(mechComponentHealth.structure) / Number(mechComponentHealth.maxStructure);
-      MechView.setPaperDollArmor(mechId, location, armorPercent);
-      MechView.setPaperDollStructure(mechId, location, structurePercent);
+      MechViewMechPanel.setPaperDollArmor(mechId, location, armorPercent);
+      MechViewMechPanel.setPaperDollStructure(mechId, location, structurePercent);
     }
   }
 
   var updateMechHealthNumbers = function (mech) {
     let mechHealth = mech.getMechState().mechHealth;
     for (let mechComponentHealth of mechHealth.componentHealth) {
-      MechView.updateMechHealthNumbers(mech.getMechId(),
-                        mechComponentHealth.location,
-                        mechComponentHealth.armor,
-                        mechComponentHealth.structure,
-                        mechComponentHealth.maxArmor,
-                        mechComponentHealth.maxStructure);
+      MechViewMechPanel.updateMechHealthNumbers(mech.getMechId(),
+                            {
+                              location: mechComponentHealth.location,
+                              armor: mechComponentHealth.armor,
+                              structure: mechComponentHealth.structure,
+                              maxArmor: mechComponentHealth.maxArmor,
+                              maxStructure: mechComponentHealth.maxStructure
+                            });
     }
   }
 
@@ -140,7 +142,7 @@ var MechModelView = MechModelView || (function() {
     let dps = simTime > 0 ? Number(mechStats.totalDamage) / simTime * 1000: 0;
     let burst = mechStats.getBurstDamage(simTime);
 
-    MechView.updateMechStatusPanel(mech.getMechId(), isAlive,
+    MechViewMechPanel.updateMechStatusPanel(mech.getMechId(), isAlive,
                           currTotalHealth, currMaxHealth, targetMechName,
                           dps, burst, totalDmg);
   }
@@ -148,7 +150,7 @@ var MechModelView = MechModelView || (function() {
   var updateMechTitle = function (mech) {
     let mechName = mech.getTranslatedName();
     let mechInfo = mech.getMechState().mechInfo;
-    MechView.updateMechTitlePanel(mech.getMechId(), mechName,
+    MechViewMechPanel.updateMechTitlePanel(mech.getMechId(), mechName,
             mechInfo.smurfyMechId, mechInfo.smurfyLoadoutId);
   }
 

@@ -49,15 +49,15 @@ return {
       $.each(mechTeam, (index, mech) => {
         for (var property in MechModel.Component) {
           if (MechModel.Component.hasOwnProperty(property)) {
-            MechView.setPaperDollArmor(mech.getMechId(), MechModel.Component[property], Math.random());
-            MechView.setPaperDollStructure(mech.getMechId(), MechModel.Component[property], Math.random());
+            MechViewMechPanel.setPaperDollArmor(mech.getMechId(), MechModel.Component[property], Math.random());
+            MechViewMechPanel.setPaperDollStructure(mech.getMechId(), MechModel.Component[property], Math.random());
           }
         }
-        MechView.setHeatbarValue(mech.getMechId(), Math.random());
+        MechViewMechPanel.setHeatbarValue(mech.getMechId(), Math.random());
         for (var i = 0; i < mech.getMechInfo().weaponInfoList.length; i++) {
-          MechView.setWeaponCooldown(mech.getMechId(), i, Math.random());
-          MechView.setWeaponAmmo(mech.getMechId(), i, Math.random() > 0.2 ? Math.floor(Math.random() * 100) : -1);
-          MechView.setWeaponState(mech.getMechId(), i, weaponStates[Math.floor(weaponStates.length * Math.random())]);
+          MechViewMechPanel.setWeaponCooldown(mech.getMechId(), i, Math.random());
+          MechViewMechPanel.setWeaponAmmo(mech.getMechId(), i, Math.random() > 0.2 ? Math.floor(Math.random() * 100) : -1);
+          MechViewMechPanel.setWeaponState(mech.getMechId(), i, weaponStates[Math.floor(weaponStates.length * Math.random())]);
         }
       });
     },
@@ -169,7 +169,7 @@ return {
       let testIds = [ppcID, srm6ID, atm12ID];
       var mechInfo = new MechModel.MechInfo("testId", DummyStormcrow);
       for (let weaponId of testIds) {
-        var weaponInfoTest = new MechModel.WeaponInfo(weaponId, "centre_torso",
+        var weaponInfoTest = new MechModelWeapons.WeaponInfo(weaponId, "centre_torso",
                 MechModel.getSmurfyWeaponData(weaponId), mechInfo);
         console.log("Weapon " + weaponInfoTest.translatedName +
             " minRange: " + weaponInfoTest.minRange +
