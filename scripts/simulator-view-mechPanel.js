@@ -384,9 +384,6 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
     mechBurstDiv.textContent = Number(burst).toFixed(1);
   }
 
-
-
-
   var DeleteMechButton_Handler = function(context) {
     var clickContext = context;
 
@@ -408,8 +405,19 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
   }
   var deleteMechButton_Handler; //singleton
 
+  //scrolls to and flashes the selected mech panel
+  var highlightMechPanel = function(mechId) {
+    let mechPanelDivId = mechPanelId(mechId);
+    let mechPanelJQ = $("#" + mechPanelDivId);
+    mechPanelJQ[0].scrollIntoView(false);
+    mechPanelJQ.addClass("flashSelected");
+    mechPanelJQ.on("animationend", function(data) {
+      mechPanelJQ.removeClass("flashSelected")
+      mechPanelJQ.off("animationend");
+    });
+  }
+
   return {
-    mechPanelId: mechPanelId,
     addPaperDoll: addPaperDoll,
     setPaperDollArmor : setPaperDollArmor,
     setPaperDollStructure : setPaperDollStructure,
@@ -422,5 +430,6 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
     updateMechStatusPanel : updateMechStatusPanel,
     updateMechTitlePanel : updateMechTitlePanel,
     updateHeat: updateHeat,
+    highlightMechPanel : highlightMechPanel,
   }
 })();

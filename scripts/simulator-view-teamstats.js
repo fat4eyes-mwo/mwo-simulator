@@ -100,14 +100,7 @@ var MechViewTeamStats = MechViewTeamStats || (function() {
   var mechPipClickHandler = function(data) {
     let thisJQ = $(this);
     let mechId = thisJQ.attr("data-mech-id");
-    let mechPanelDivId = MechViewMechPanel.mechPanelId(mechId);
-    let mechPanelJQ = $("#" + mechPanelDivId);
-    mechPanelJQ[0].scrollIntoView(false);
-    mechPanelJQ.addClass("flashSelected");
-    mechPanelJQ.on("animationend", function(data) {
-      mechPanelJQ.removeClass("flashSelected")
-      mechPanelJQ.off("animationend");
-    });
+    MechViewMechPanel.highlightMechPanel(mechId);
   }
 
   //store selected value (since we do a lot of refreshViews which recreates this panel)
