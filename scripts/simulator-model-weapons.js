@@ -648,7 +648,10 @@ var MechModelWeapons = MechModelWeapons || (function () {
       } else {
         newState = MechModel.WeaponCycle.COOLDOWN;
         this.gotoState(newState);
-        this.timeToNextAutoShot = 0; //TODO: not strictly correct, should count down whenever the weapon is not firing.
+        //TODO: not strictly correct, should count down whenever the weapon is
+        //not firing. However since rampup times are larger than autoshot times,
+        //this should not affect correctness of behavior
+        this.timeToNextAutoShot = 0;
       }
       //set isOnAutoFire to false, mech must continue to try firing the
       //weapon for this to be set to true in the next step
