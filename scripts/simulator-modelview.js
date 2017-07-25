@@ -81,7 +81,7 @@ var MechModelView = MechModelView || (function() {
       } else if (weaponState.weaponCycle === MechModel.WeaponCycle.DISABLED) {
         cooldownPercent = 1;
       } else if (weaponState.weaponCycle === MechModel.WeaponCycle.COOLDOWN) {
-        cooldownPercent = Number(weaponState.cooldownLeft) / Number(weaponInfo.cooldown);
+        cooldownPercent = Number(weaponState.cooldownLeft) / Number(weaponState.computeWeaponCooldown());
       } else if (weaponState.weaponCycle === MechModel.WeaponCycle.SPOOLING) {
         cooldownPercent = 1 - (Number(weaponState.spoolupLeft) / Number(weaponInfo.spinup));
       } else if (weaponState.weaponCycle === MechModel.WeaponCycle.JAMMED) {
