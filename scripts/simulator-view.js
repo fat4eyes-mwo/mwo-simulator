@@ -4,11 +4,18 @@
 
 var MechView = MechView || (function() {
 
-  var clear = function (team) {
+  var clearMechList = function(team) {
     let teamMechPanelId = team + "Team";
     $("#" + teamMechPanelId).empty();
+  }
 
+  var clearMechStats = function(team) {
     MechViewTeamStats.clearTeamStats(team);
+  }
+
+  var clear = function (team) {
+    clearMechList(team);
+    clearMechStats(team);
   }
 
   var clearAll = function () {
@@ -81,7 +88,7 @@ var MechView = MechView || (function() {
   var resetSimulation = function() {
     MechModel.resetState();
     MechSimulatorLogic.resetSimulation();
-    MechModelView.refreshView(false);
+    MechModelView.refreshView([]);
   }
 
   var initStateControl = function() {
@@ -254,6 +261,8 @@ var MechView = MechView || (function() {
     updateSimTime : updateSimTime,
     resetSimulation : resetSimulation,
     setDebugText : setDebugText,
+    clearMechList : clearMechList,
+    clearMechStats : clearMechStats,
     clear : clear,
     clearAll : clearAll,
     showLoadingScreen : showLoadingScreen,

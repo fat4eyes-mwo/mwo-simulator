@@ -1,5 +1,6 @@
 - AUTOMATED UNIT TESTS!!!!!!
 
+- slow performance on dragover when there are many mechs (too much layouting, see what causes it)
 - save team settings?
 - some omnimechs have no CT omnipod entry (HBR-F). See where to find this info.
 - LBX damage spread

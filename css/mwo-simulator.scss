@@ -335,18 +335,19 @@ div {
 }
 
 .mechPanel {
+  position: relative;
   transition: margin 0.5s ease;
 }
 .mechPanel.droptarget {
   background-color: $off-background-color;
-  margin-top: 20px;
+  margin-top: 20px; //TODO: expensive when there are many mechs
 }
 
 .mechPanel.droptarget::before {
   content: "\25BA";
-  position:relative;
+  position:absolute;
   left: -20px;
-  top: -20px;
+  top: -10px;
   z-index: 20;
   color: $emphasis-color;
 }

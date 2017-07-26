@@ -37,7 +37,7 @@ var MechSimulator = MechSimulator || (function() {
       })
       .catch(function(err) {
         console.error("Error loading mech data: " + err);
-        MechModelView.refreshView(true);
+        MechModelView.refreshView();
         MechView.updateOnLoadAppError();
         location.hash = "";
       })
@@ -48,7 +48,7 @@ var MechSimulator = MechSimulator || (function() {
   }
 
   function initUI() {
-    MechModelView.refreshView(true);
+    MechModelView.refreshView();
   }
 
   function main() {

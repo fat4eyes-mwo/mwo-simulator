@@ -315,12 +315,12 @@ var MechViewRouter = MechViewRouter || (function() {
         loadAppState(newHash)
           .then(function() {
             //success
-            MechModelView.refreshView(true);
+            MechModelView.refreshView();
             console.log("Hash change state load success: " + newHash);
           })
           .catch(function() {
             //fail
-            MechModelView.refreshView(true);
+            MechModelView.refreshView();
             MechView.updateOnLoadAppError();
             console.log("Hash change state load failed: " + newHash);
           })

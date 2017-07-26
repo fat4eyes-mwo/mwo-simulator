@@ -92,12 +92,12 @@ var MechViewAddMech = MechViewAddMech || (function() {
       let mechTranslatedName = smurfyMechData.translated_name;
       let mechName = smurfyMechData.name;
       let newMechId = MechModel.generateMechId(loadedSmurfyLoadout);
-      MechModel.addMech(newMechId, team, smurfyMechLoadout);
+      let newMech = MechModel.addMech(newMechId, team, smurfyMechLoadout);
       //set patterns of added mech to selected team patterns
       MechViewTeamStats.setSelectedTeamPatterns(team);
       MechViewRouter.modifyAppState();
-      //TODO: should not require a full view refresh. See what can be done.
-      MechModelView.refreshView(true);
+      MechViewMechPanel.addMechPanel(newMech, team);
+      MechModelView.refreshView([MechModelView.ViewUpdate.TEAMSTATS]);
       clickContext.hideAddMechDialog(team);
     }
   };

@@ -290,6 +290,7 @@ a:hover {
 }
 
 .mechPanel {
+  position: relative;
   transition: margin 0.5s ease;
 }
 
@@ -300,9 +301,9 @@ a:hover {
 
 .mechPanel.droptarget::before {
   content: "\25BA";
-  position: relative;
+  position: absolute;
   left: -20px;
-  top: -20px;
+  top: -10px;
   z-index: 20;
   color: gold;
 }

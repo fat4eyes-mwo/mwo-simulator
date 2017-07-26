@@ -411,9 +411,7 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
       $("#" + mechPanelDivId).remove();
 
       MechView.resetSimulation();
-      //TODO: should not require a full view refresh. Modify updateTeamStats so
-      //the number of mechpips is consistent when a mech is deleted
-      MechModelView.refreshView(true);
+      MechModelView.refreshView([MechModelView.ViewUpdate.TEAMSTATS]);
     };
   }
   var deleteMechButton_Handler; //singleton
@@ -587,6 +585,7 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
           console.log("Drop: src=" + srcMechId + " dest=" + mechId);
           toggleMoveMech(srcMechId);
           MechViewRouter.modifyAppState();
+          MechModelView.refreshView([MechModelView.ViewUpdate.TEAMSTATS]);
         }
       }
     }
