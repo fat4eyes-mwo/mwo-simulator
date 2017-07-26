@@ -1281,17 +1281,17 @@ var MechModel = MechModel || (function () {
   }
 
 
-  var generateMechId = function(team, smurfyMechLoadout) {
+  var generateMechId = function(smurfyMechLoadout) {
     let smurfyMechData =
       MechModel.getSmurfyMechData(smurfyMechLoadout.mech_id);
     let mechName = smurfyMechData.name;
     let rand = function() {
       return Math.floor(Math.random() * 0x10000).toString(16);
     }
-    let newMechId = team + "-" + mechName + "-" +
+    let newMechId = mechName + "-" +
         rand() + "-" + rand() + "-" + rand() + "-" + rand();
     while (mechIdMap[newMechId]) {
-      newMechId = newMechId = team + "-" + mechName +
+      newMechId = newMechId = mechName +
           rand() + "-" + rand() + "-" + rand() + "-" + rand();
       mechIdMap[newMechId] = true;
     }
