@@ -954,6 +954,13 @@ a:hover {
   height: 3px;
 }
 
+.loadingTip {
+  font-size: 0.8em;
+  margin: auto;
+  color: goldenrod;
+  width: 50%;
+}
+
 .victoryReport .buttonBar {
   position: absolute;
   width: 80%;

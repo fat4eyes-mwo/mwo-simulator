@@ -1028,6 +1028,13 @@ $team_settings_transition : 0.5s;
   height: 3px;
 }
 
+.loadingTip {
+  font-size: 0.8em;
+  margin: auto;
+  color: $low-emphasis-color;
+  width: 50%;
+}
+
 .showReportDivButton {
 
 }
