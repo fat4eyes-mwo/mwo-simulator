@@ -334,6 +334,10 @@ div {
   cursor: move;
 }
 
+.mechPanel.droptarget {
+  background-color: $off-background-color;
+}
+
 .template {
   display: none;
 }

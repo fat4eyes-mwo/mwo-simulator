@@ -282,6 +282,9 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
     //move button
     addMoveMechButton(mechId, team, mechPanelJQ);
 
+    //drag and drop handlers
+    addDragAndDropHandlers(mechId, mechPanelJQ);
+
     //Mech stats
     let mechSummaryHealthId = mechSummaryHealthPanelId(mechId);
     mechPanelJQ.find("[class~='statusPanel'] [class~='mechSummaryHealthText']")
@@ -432,6 +435,7 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
       .append(moveIconSVG)
       .click(moveMechButton_handler);
   }
+
   var MoveMechButton_Handler = function(context) {
     let clickContext = context;
 
@@ -456,6 +460,119 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
     }
   }
   var moveMechButton_handler; //initialized on first addMoveMechButton call
+
+  var addDragAndDropHandlers = function(mechId, mechPanelJQ) {
+    if (!mechOnDragHandler) {
+      mechOnDragHandler = new MechOnDragHandler(this);
+    }
+    mechPanelJQ.on("dragstart", mechOnDragHandler);
+
+    if (!mechOnDragOverHandler) {
+      mechOnDragOverHandler = new MechOnDragOverHandler(this);
+    }
+    mechPanelJQ.on("dragover", mechOnDragOverHandler);
+
+    if (!mechOnDragEnterHandler) {
+      mechOnDragEnterHandler = new MechOnDragEnterHandler(this);
+    }
+    mechPanelJQ.on("dragenter", mechOnDragEnterHandler);
+
+    if (!mechOnDragLeaveHandler) {
+      mechOnDragLeaveHandler = new MechOnDragLeaveHandler(this);
+    }
+    mechPanelJQ.on("dragleave", mechOnDragLeaveHandler);
+
+    if (!mechOnDropHandler) {
+      mechOnDropHandler = new MechOnDropHandler(this);
+    }
+    mechPanelJQ.on("drop", mechOnDropHandler);
+  }
+
+  var MechOnDragHandler = function(context) {
+    return function(jqEvent) {
+      let mechId = $(this).data("mech-id");
+      let origEvent = jqEvent.originalEvent;
+      origEvent.dataTransfer.setData("text/plain", mechId);
+      origEvent.dataTransfer.effectAllowed = "move";
+      console.log("Drag start: " + mechId);
+    }
+  }
+  var mechOnDragHandler = null;
+
+  let dragOverCounterMap = new Map();
+  var getDragOverCounter = function(mechId) {
+    if (!dragOverCounterMap.get(mechId)) {
+      dragOverCounterMap.set(mechId, 0);
+    }
+    return dragOverCounterMap.get(mechId);
+  }
+  var setDragOverCounter = function(mechId, value) {
+    dragOverCounterMap.set(mechId, value);
+  }
+
+  var MechOnDragOverHandler = function(context) {
+    return function(jqEvent) {
+      let thisJQ = $(this);
+      let mechId = thisJQ.data("mech-id");
+      let origEvent= jqEvent.originalEvent;
+      jqEvent.preventDefault();
+
+      //allow move on drop
+      origEvent.dataTransfer.dropEffect= "move";
+    }
+  }
+  var mechOnDragOverHandler = null;
+
+  var MechOnDragEnterHandler = function(context) {
+    return function(jqEvent) {
+      let thisJQ = $(this);
+      let mechId = thisJQ.data("mech-id");
+      let origEvent= jqEvent.originalEvent;
+      jqEvent.preventDefault();
+
+      //allow move on drop
+      origEvent.dataTransfer.dropEffect= "move";
+
+      let counter = getDragOverCounter(mechId);
+      counter++;
+      setDragOverCounter(mechId, counter);
+      if (counter === 1) {
+        thisJQ.addClass("droptarget");
+      }
+    }
+  }
+  var mechOnDragEnterHandler = null;
+
+  var MechOnDragLeaveHandler = function(context) {
+    return function(jqEvent) {
+      let thisJQ = $(this);
+      let mechId = thisJQ.data("mech-id");
+      let origEvent= jqEvent.originalEvent;
+      jqEvent.preventDefault();
+
+      let counter = getDragOverCounter(mechId);
+      counter--;
+      setDragOverCounter(mechId, counter);
+      if (counter === 0) {
+        thisJQ.removeClass("droptarget");
+      }
+    }
+  }
+  var mechOnDragLeaveHandler = null;
+
+  var MechOnDropHandler = function(context) {
+    return function(jqEvent) {
+      let thisJQ = $(this);
+      let mechId = thisJQ.data("mech-id");
+      let origEvent= jqEvent.originalEvent;
+      let srcMechId = origEvent.dataTransfer.getData("text/plain");
+      jqEvent.preventDefault();
+      thisJQ.removeClass("droptarget");
+      setDragOverCounter(mechId, 0);
+      console.log("Drop: src=" + srcMechId + " dest=" + mechId);
+    }
+  }
+  var mechOnDropHandler = null;
 
   //scrolls to and flashes the selected mech panel
   var highlightMechPanel = function(mechId) {
