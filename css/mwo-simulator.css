@@ -289,8 +289,22 @@ a:hover {
   cursor: move;
 }
 
+.mechPanel {
+  transition: margin 0.5s ease;
+}
+
 .mechPanel.droptarget {
   background-color: #404040;
+  margin-top: 20px;
+}
+
+.mechPanel.droptarget::before {
+  content: "\25BA";
+  position: relative;
+  left: -20px;
+  top: -20px;
+  z-index: 20;
+  color: gold;
 }
 
 .template {
