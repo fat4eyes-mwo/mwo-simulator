@@ -14,7 +14,6 @@ a {
 
 a svg {
   fill: gold;
-  margin-left: 3px;
 }
 
 a:hover {
@@ -285,6 +284,11 @@ a:hover {
   max-height: 120px;
 }
 
+.mechPanel.dragging {
+  background-color: #404040;
+  cursor: move;
+}
+
 .template {
   display: none;
 }
@@ -500,21 +504,67 @@ a:hover {
   font-size: 1.2em;
 }
 
-.titlePanel .deleteMechButton {
-  float: right;
-  background-color: maroon;
-  border: thin solid white;
+.titlePanel .mechName svg {
+  margin-left: 3px;
+}
+
+.titlePanel .titleButton {
   border-radius: 5px;
   font-size: 1.2em;
   padding-left: 2px;
   padding-right: 2px;
-  font-weight: bold;
-  color: white;
   cursor: pointer;
+  margin-left: 1%;
+}
+
+.titlePanel .titleButton svg {
+  vertical-align: middle;
+}
+
+.titlePanel .deleteMechButton {
+  float: right;
+  background-color: maroon;
+  border: thin solid white;
+  font-weight: bold;
+}
+
+.titlePanel .deleteMechButton svg {
+  width: 0.6em;
+  height: 0.6em;
+  fill: white;
 }
 
 .titlePanel .deleteMechButton:hover {
   background-color: red;
+}
+
+.titlePanel .moveMechButton {
+  float: right;
+  background-color: #202020;
+  border: thin solid gold;
+}
+
+.titlePanel .moveMechButton svg {
+  width: 1em;
+  height: 1em;
+  fill: gold;
+}
+
+.titlePanel .moveMechButton[data-dragenabled="true"] {
+  background-color: gold;
+}
+
+.titlePanel .moveMechButton[data-dragenabled="true"]:hover {
+  background-color: yellow;
+}
+
+.titlePanel .moveMechButton[data-dragenabled="true"] svg,
+.titlePanel .moveMechButton[data-dragenabled="true"]:hover svg {
+  fill: #202020;
+}
+
+.titlePanel .moveMechButton:hover {
+  background-color: #404040;
 }
 
 .statusPanel .mechSummaryHealthLabel {

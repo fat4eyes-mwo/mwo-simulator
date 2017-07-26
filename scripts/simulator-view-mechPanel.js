@@ -213,9 +213,6 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
   var mechNamePanelId = function(mechId) {
     return mechId + "-mechName";
   }
-  var mechDeleteButtonId = function(mechId) {
-    return mechId + "-deleteButton";
-  }
   var heatNumberPanelId = function(mechId) {
     return mechId + "-heatbarNumber";
   }
@@ -280,17 +277,12 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
       .html("");
 
     //delete button
-    if (!deleteMechButton_Handler) {
-      deleteMechButton_Handler = new DeleteMechButton_Handler(this);
-    }
-    let mechDeleteButtonDivId = mechDeleteButtonId(mechId);
-    mechPanelJQ.find("[class~='titlePanel'] [class~='deleteMechButton']")
-      .attr("id", mechDeleteButtonDivId)
-      .attr("data-mech-id", mechId)
-      .attr("data-team", team)
-      .click(deleteMechButton_Handler);
+    addDeleteMechButton(mechId, team, mechPanelJQ);
 
+    //move button
+    addMoveMechButton(mechId, team, mechPanelJQ);
 
+    //Mech stats
     let mechSummaryHealthId = mechSummaryHealthPanelId(mechId);
     mechPanelJQ.find("[class~='statusPanel'] [class~='mechSummaryHealthText']")
       .attr("id", mechSummaryHealthId)
@@ -384,6 +376,24 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
     mechBurstDiv.textContent = Number(burst).toFixed(1);
   }
 
+  //Delete button
+  var mechDeleteButtonId = function(mechId) {
+    return mechId + "-deleteButton";
+  }
+  var addDeleteMechButton = function(mechId, team, mechPanelJQ) {
+    if (!deleteMechButton_Handler) {
+      deleteMechButton_Handler = new DeleteMechButton_Handler(this);
+    }
+    let deleteIconSVG = MechViewWidgets.cloneTemplate("delete-icon-template");
+    let mechDeleteButtonDivId = mechDeleteButtonId(mechId);
+    mechPanelJQ.find("[class~='titlePanel'] [class~='deleteMechButton']")
+      .attr("id", mechDeleteButtonDivId)
+      .attr("data-mech-id", mechId)
+      .attr("data-team", team)
+      .append(deleteIconSVG)
+      .click(deleteMechButton_Handler);
+  }
+
   var DeleteMechButton_Handler = function(context) {
     var clickContext = context;
 
@@ -404,6 +414,48 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
     };
   }
   var deleteMechButton_Handler; //singleton
+
+  var moveMechButtonId = function(mechId) {
+    return mechId + "-moveButton";
+  }
+  var addMoveMechButton = function(mechId, team, mechPanelJQ) {
+    let moveIconSVG = MechViewWidgets.cloneTemplate("move-icon-template");
+    let mechMoveButtonDivId = moveMechButtonId(mechId);
+    if (!moveMechButton_handler) {
+      moveMechButton_handler = new MoveMechButton_Handler(this);
+    }
+    mechPanelJQ.find("[class~='titlePanel'] [class~='moveMechButton']")
+      .attr("id", mechMoveButtonDivId)
+      .attr("data-mech-id", mechId)
+      .attr("data-team", team)
+      .attr("data-dragenabled", "false")
+      .append(moveIconSVG)
+      .click(moveMechButton_handler);
+  }
+  var MoveMechButton_Handler = function(context) {
+    let clickContext = context;
+
+    return function() {
+      let thisJQ = $(this);
+      let mechId = thisJQ.data("mech-id");
+      let team = thisJQ.data("team");
+      let dragEnabled = thisJQ.attr("data-dragenabled") === "true";
+      let mechPanelDivId = mechPanelId(mechId);
+      let mechPanelJQ = $("#" + mechPanelDivId);
+      dragEnabled = !dragEnabled; //toggle
+      thisJQ.attr("data-dragenabled", dragEnabled);
+      if (dragEnabled) {
+        mechPanelJQ
+          .attr("draggable", "true")
+          .addClass("dragging");
+      } else {
+        mechPanelJQ
+          .attr("draggable", "false")
+          .removeClass("dragging");
+      }
+    }
+  }
+  var moveMechButton_handler; //initialized on first addMoveMechButton call
 
   //scrolls to and flashes the selected mech panel
   var highlightMechPanel = function(mechId) {
