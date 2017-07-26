@@ -1259,19 +1259,54 @@ var MechModel = MechModel || (function () {
   }
 
   //TODO: Put in maps if this gets called often
-  var deleteMech = function(mech_id) {
+  var getMechPosFromId = function(mech_id) {
     let teamList = [Team.BLUE, Team.RED];
     for (let team of teamList) {
       let mechList = mechTeams[team];
       for (let mechIdx in mechList) {
         let mech = mechList[mechIdx];
         if (mech.getMechId() === mech_id) {
-          mechList.splice(mechIdx, 1);
-          return true;
+          return {team: team, index: mechIdx};
         }
       }
     }
-    return false;
+    return null;
+  }
+
+  var getMechFromPos = function(mechPos) {
+    return mechTeams[mechPos.team][mechPos.index];
+  }
+
+  var deleteMech = function(mech_id) {
+    let mechPos = getMechPosFromId(mech_id);
+    if (!mechPos) return false;
+    let mechList = mechTeams[mechPos.team];
+    mechList.splice(mechPos.index, 1);
+    return true;
+  }
+
+  //removes src mech from its current position and inserts it before dest mech
+  var moveMech = function(srcMechId, destMechId) {
+    let srcMechPos = getMechPosFromId(srcMechId);
+    if (!srcMechPos) return false;
+
+    let srcMech = getMechFromPos(srcMechPos);
+
+    let status = deleteMech(srcMechId);
+    if (!status) return false;
+
+    //get dest pos AFTER delete to keep indices straight when moving in the same list
+    let destMechPos = getMechPosFromId(destMechId);
+    if (!destMechPos) {
+      //reinsert deleted mech on error
+      insertMechList.splice(srcMechPos.index, 0, srcMech);
+      return false;
+    }
+
+    srcMech.setMechTeam(destMechPos.team);
+    let insertMechList = mechTeams[destMechPos.team];
+    insertMechList.splice(destMechPos.index, 0, srcMech);
+    return true;
   }
 
   //Debug, set default mech patterns
@@ -1435,16 +1470,10 @@ var MechModel = MechModel || (function () {
   }
 
   var getMechFromId = function(mechId) {
-    //TODO: add a map if this method gets called often
-    let teamList = [Team.BLUE, Team.RED];
-    for (let team of teamList) {
-      for (let mech of mechTeams[team]) {
-        if (mechId === mech.getMechId()) {
-          return mech;
-        }
-      }
-    }
-    return null;
+    let mechPos = getMechPosFromId(mechId);
+    if (!mechPos) return null;
+
+    return mechTeams[mechPos.team][mechPos.index];
   }
 
   var clearModel = function() {
@@ -1473,6 +1502,7 @@ var MechModel = MechModel || (function () {
     addMech : addMech,
     addMechAtIndex : addMechAtIndex,
     deleteMech : deleteMech,
+    moveMech : moveMech,
     clearModel : clearModel,
     generateMechId : generateMechId,
     initMechPatterns: initMechPatterns,

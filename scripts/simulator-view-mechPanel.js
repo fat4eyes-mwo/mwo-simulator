@@ -435,26 +435,29 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
       .click(moveMechButton_handler);
   }
 
+  var toggleMoveMech = function(mechId) {
+    let moveMechButtonJQ = $("#" + moveMechButtonId(mechId));
+    let dragEnabled = moveMechButtonJQ.attr("data-dragenabled") === "true";
+    let mechPanelDivId = mechPanelId(mechId);
+    let mechPanelJQ = $("#" + mechPanelDivId);
+    dragEnabled = !dragEnabled; //toggle
+    moveMechButtonJQ.attr("data-dragenabled", dragEnabled);
+    if (dragEnabled) {
+      mechPanelJQ
+        .attr("draggable", "true")
+        .addClass("dragging");
+    } else {
+      mechPanelJQ
+        .attr("draggable", "false")
+        .removeClass("dragging");
+    }
+  }
   var MoveMechButton_Handler = function(context) {
     let clickContext = context;
 
     return function() {
-      let thisJQ = $(this);
-      let mechId = thisJQ.data("mech-id");
-      let dragEnabled = thisJQ.attr("data-dragenabled") === "true";
-      let mechPanelDivId = mechPanelId(mechId);
-      let mechPanelJQ = $("#" + mechPanelDivId);
-      dragEnabled = !dragEnabled; //toggle
-      thisJQ.attr("data-dragenabled", dragEnabled);
-      if (dragEnabled) {
-        mechPanelJQ
-          .attr("draggable", "true")
-          .addClass("dragging");
-      } else {
-        mechPanelJQ
-          .attr("draggable", "false")
-          .removeClass("dragging");
-      }
+      let mechId = $(this).data("mech-id");
+      toggleMoveMech(mechId);
     }
   }
   var moveMechButton_handler; //initialized on first addMoveMechButton call
@@ -576,8 +579,15 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
           .insertBefore(thisJQ);
 
         MechView.resetSimulation();
-
-        console.log("Drop: src=" + srcMechId + " dest=" + mechId);
+        let status = MechModel.moveMech(srcMechId, mechId);
+        if (!status) {
+          console.error("Error moving mech. src=" +
+                          srcMechId + " dest=" + mechId);
+        } else {
+          console.log("Drop: src=" + srcMechId + " dest=" + mechId);
+          toggleMoveMech(srcMechId);
+          MechViewRouter.modifyAppState();
+        }
       }
     }
   }
