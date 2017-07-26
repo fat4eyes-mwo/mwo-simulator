@@ -392,7 +392,6 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
     mechPanelJQ.find("[class~='titlePanel'] [class~='deleteMechButton']")
       .attr("id", mechDeleteButtonDivId)
       .attr("data-mech-id", mechId)
-      .attr("data-team", team)
       .append(deleteIconSVG)
       .click(deleteMechButton_Handler);
   }
@@ -402,15 +401,16 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
 
     return function() {
       let mechId = $(this).data("mech-id");
-      let team = $(this).data("team");
-      console.log("Deleting " + mechId + " of team " + team);
-      let result = MechModel.deleteMech(mechId, team);
+      console.log("Deleting " + mechId);
+      let result = MechModel.deleteMech(mechId);
       if (!result) {
         throw "Error deleting " + mechId;
       }
       MechViewRouter.modifyAppState();
       let mechPanelDivId = mechPanelId(mechId);
       $("#" + mechPanelDivId).remove();
+
+      MechView.resetSimulation();
       //TODO: should not require a full view refresh. Modify updateTeamStats so
       //the number of mechpips is consistent when a mech is deleted
       MechModelView.refreshView(true);
@@ -430,7 +430,6 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
     mechPanelJQ.find("[class~='titlePanel'] [class~='moveMechButton']")
       .attr("id", mechMoveButtonDivId)
       .attr("data-mech-id", mechId)
-      .attr("data-team", team)
       .attr("data-dragenabled", "false")
       .append(moveIconSVG)
       .click(moveMechButton_handler);
@@ -442,7 +441,6 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
     return function() {
       let thisJQ = $(this);
       let mechId = thisJQ.data("mech-id");
-      let team = thisJQ.data("team");
       let dragEnabled = thisJQ.attr("data-dragenabled") === "true";
       let mechPanelDivId = mechPanelId(mechId);
       let mechPanelJQ = $("#" + mechPanelDivId);
@@ -515,8 +513,8 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
       let thisJQ = $(this);
       let mechId = thisJQ.data("mech-id");
       let origEvent= jqEvent.originalEvent;
-      jqEvent.preventDefault();
 
+      jqEvent.preventDefault();
       //allow move on drop
       origEvent.dataTransfer.dropEffect= "move";
     }
@@ -567,9 +565,20 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
       let origEvent= jqEvent.originalEvent;
       let srcMechId = origEvent.dataTransfer.getData("text/plain");
       jqEvent.preventDefault();
+
       thisJQ.removeClass("droptarget");
       setDragOverCounter(mechId, 0);
-      console.log("Drop: src=" + srcMechId + " dest=" + mechId);
+
+      if (mechId !== srcMechId) {
+        let srcMechJQ = $("#" + mechPanelId(srcMechId));
+        srcMechJQ
+          .detach()
+          .insertBefore(thisJQ);
+
+        MechView.resetSimulation();
+
+        console.log("Drop: src=" + srcMechId + " dest=" + mechId);
+      }
     }
   }
   var mechOnDropHandler = null;

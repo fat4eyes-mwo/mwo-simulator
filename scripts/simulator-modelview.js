@@ -455,7 +455,7 @@ var MechModelView = MechModelView || (function() {
   }
 
   var getMechName = function(mechId, team) {
-    let mech = MechModel.getMechFromId(mechId, team);
+    let mech = MechModel.getMechFromId(mechId);
     if (mech) {
       return mech.getTranslatedName();
     } else {

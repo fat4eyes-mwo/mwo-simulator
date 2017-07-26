@@ -252,6 +252,7 @@ var MechView = MechView || (function() {
   return {
     initView : initView,
     updateSimTime : updateSimTime,
+    resetSimulation : resetSimulation,
     setDebugText : setDebugText,
     clear : clear,
     clearAll : clearAll,

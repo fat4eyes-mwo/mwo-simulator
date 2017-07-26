@@ -1227,6 +1227,9 @@ var MechModel = MechModel || (function () {
       getMechTeam : function() {
         return mechTeam;
       },
+      setMechTeam : function(team) {
+        mechTeam = team;
+      },
       setTargetMech : function(newTarget) {
         targetMech = newTarget;
       },
@@ -1255,13 +1258,17 @@ var MechModel = MechModel || (function () {
     return newMech;
   }
 
-  var deleteMech = function(mech_id, team) {
-    let mechList = mechTeams[team];
-    for (let mechIdx in mechList) {
-      let mech = mechList[mechIdx];
-      if (mech.getMechId() === mech_id) {
-        mechList.splice(mechIdx, 1);
-        return true;
+  //TODO: Put in maps if this gets called often
+  var deleteMech = function(mech_id) {
+    let teamList = [Team.BLUE, Team.RED];
+    for (let team of teamList) {
+      let mechList = mechTeams[team];
+      for (let mechIdx in mechList) {
+        let mech = mechList[mechIdx];
+        if (mech.getMechId() === mech_id) {
+          mechList.splice(mechIdx, 1);
+          return true;
+        }
       }
     }
     return false;
@@ -1427,11 +1434,14 @@ var MechModel = MechModel || (function () {
     }
   }
 
-  var getMechFromId = function(mechId, team) {
+  var getMechFromId = function(mechId) {
     //TODO: add a map if this method gets called often
-    for (let mech of mechTeams[team]) {
-      if (mechId === mech.getMechId()) {
-        return mech;
+    let teamList = [Team.BLUE, Team.RED];
+    for (let team of teamList) {
+      for (let mech of mechTeams[team]) {
+        if (mechId === mech.getMechId()) {
+          return mech;
+        }
       }
     }
     return null;
