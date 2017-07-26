@@ -75,6 +75,7 @@ The main entry point of the program is in `scripts/simulator.js`.
 
 # Update Info
 
+* 2017-07-27: Added drag and drop mech reordering.
 * 2017-07-24: Completed rocket launcher implementation.
 * 2017-07-23: Implemented RAC mechanics.
 * 2017-07-19: MRM spread. Priority changes to support most of new tech.
