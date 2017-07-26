@@ -959,6 +959,7 @@ a:hover {
   margin: auto;
   color: goldenrod;
   width: 50%;
+  text-align: center;
 }
 
 .victoryReport .buttonBar {
