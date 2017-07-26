@@ -22,6 +22,8 @@ $high-emphasis-color: yellow;
 $error-color: rgb(255,100,100);
 $mobile-width: 0px; //disable mobile for now
 $navbar-top: 0px;
+$button-bgcolor: gold;
+$button-hover-bgcolor: rgb(255, 255, 30);
 /*Main panel styles*/
 body {
   background-color: $background-color;
@@ -35,7 +37,6 @@ a {
 }
 a svg {
   fill: $link-color;
-  margin-left: 3px;
 }
 a:hover {
   text-decoration: underline;
@@ -328,6 +329,29 @@ div {
   max-height: 120px;
 }
 
+.mechPanel.dragging {
+  background-color: $off-background-color;
+  cursor: move;
+}
+
+.mechPanel {
+  position: relative;
+  transition: margin 0.5s ease;
+}
+.mechPanel.droptarget {
+  background-color: $off-background-color;
+  margin-top: 20px; //TODO: expensive when there are many mechs
+}
+
+.mechPanel.droptarget::before {
+  content: "\25BA";
+  position:absolute;
+  left: -20px;
+  top: -10px;
+  z-index: 20;
+  color: $emphasis-color;
+}
+
 .template {
   display: none;
 }
@@ -569,24 +593,69 @@ div {
   font-size: 1.2em;
 }
 
+.titlePanel .mechName svg {
+  margin-left: 3px;
+}
+
 .titlePanel .mechName a:hover {
+}
+
+.titlePanel .titleButton {
+  border-radius: 5px;
+  font-size: 1.2em;
+  padding-left: 2px;
+  padding-right: 2px;
+  cursor: pointer;
+  margin-left: 1%;
+}
+
+.titlePanel .titleButton svg {
+  vertical-align: middle;
 }
 
 .titlePanel .deleteMechButton {
   float: right;
   background-color: maroon;
   border: thin solid white;
-  border-radius: 5px;
-  font-size: 1.2em;
-  padding-left: 2px;
-  padding-right: 2px;
   font-weight: bold;
-  color: white;
-  cursor: pointer;
+}
+
+.titlePanel .deleteMechButton svg {
+  width: 0.6em;
+  height: 0.6em;
+  fill: white;
 }
 
 .titlePanel .deleteMechButton:hover {
   background-color: red;
+}
+
+.titlePanel .moveMechButton {
+  float: right;
+  background-color: $background-color;
+  border: thin solid $emphasis-color;
+}
+
+.titlePanel .moveMechButton svg {
+  width: 1em;
+  height: 1em;
+  fill: $emphasis-color;
+}
+
+.titlePanel .moveMechButton[data-dragenabled="true"] {
+  background-color: $emphasis-color;
+}
+.titlePanel .moveMechButton[data-dragenabled="true"]:hover {
+  background-color: $high-emphasis-color;
+}
+
+.titlePanel .moveMechButton[data-dragenabled="true"] svg,
+.titlePanel .moveMechButton[data-dragenabled="true"]:hover svg {
+  fill: $background-color;
+}
+
+.titlePanel .moveMechButton:hover {
+  background-color: $off-background-color;
 }
 
 .statusPanel .mechSummaryHealthLabel {
@@ -782,7 +851,7 @@ $team_settings_transition : 0.5s;
   padding: 5px;
   border: solid thin black;
   border-radius: 5px;
-  background-color: gold;
+  background-color: $button-bgcolor;
   color: $background-color;
   cursor: pointer;
   user-select: none;
@@ -791,7 +860,7 @@ $team_settings_transition : 0.5s;
 
 .button:hover {
   font-weight: bold;
-  background-color: rgb(255,255,30);
+  background-color: $button-hover-bgcolor;
 }
 
 .button.disabled {

@@ -3,22 +3,29 @@
 //Methods that update the MechView from the MechModel, and vice versa
 var MechModelView = MechModelView || (function() {
   //clears the view and recreates all UI elements
-  var refreshView = function (recreateUI = true) {
+  const ViewUpdate = Object.freeze({
+    TEAMSTATS : "teamstats",
+    MECHLISTS : "mechlists",
+  });
+  var refreshView = function (updates = [ViewUpdate.TEAMSTATS, ViewUpdate.MECHLISTS]) {
     document.title = getPageTitle();
     let mechTeamList = [MechModel.Team.BLUE, MechModel.Team.RED];
     for (let team of mechTeamList) {
-      if (recreateUI) {
-        MechView.clear(team);
+      if (updates.includes(ViewUpdate.MECHLISTS)) {
+        MechView.clearMechList(team);
+      }
+      if (updates.includes(ViewUpdate.TEAMSTATS)) {
+        MechView.clearMechStats(team);
       }
       let mechIdList = [];
       for (let mech of MechModel.mechTeams[team]) {
         mechIdList.push(mech.getMechId());
       }
-      if (recreateUI) {
+      if (updates.includes(ViewUpdate.TEAMSTATS)) {
         MechViewTeamStats.addTeamStatsPanel(team, mechIdList);
       }
       for (let mech of MechModel.mechTeams[team]) {
-        if (recreateUI) {
+        if (updates.includes(ViewUpdate.MECHLISTS)) {
           MechViewMechPanel.addMechPanel(mech, team);
         }
         updateAll(mech);
@@ -455,7 +462,7 @@ var MechModelView = MechModelView || (function() {
   }
 
   var getMechName = function(mechId, team) {
-    let mech = MechModel.getMechFromId(mechId, team);
+    let mech = MechModel.getMechFromId(mechId);
     if (mech) {
       return mech.getTranslatedName();
     } else {
@@ -464,6 +471,7 @@ var MechModelView = MechModelView || (function() {
   }
 
   return {
+    ViewUpdate : ViewUpdate,
     refreshView : refreshView,
     updateHealth : updateHealth,
     updateHeat : updateHeat,

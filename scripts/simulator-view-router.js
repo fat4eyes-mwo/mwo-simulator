@@ -209,7 +209,7 @@ var MechViewRouter = MechViewRouter || (function() {
             let combinedTeamEntry = promiseToEntryMap.get(currPromise);
             let team = combinedTeamEntry.team;
             let mechIdx = combinedTeamEntry.index;
-            let mech_id = MechModel.generateMechId(team, smurfyLoadout);
+            let mech_id = MechModel.generateMechId(smurfyLoadout);
             MechModel.addMechAtIndex(mech_id, team, smurfyLoadout, mechIdx);
             currMechsLoaded++;
             MechView.updateLoadingScreenProgress(currMechsLoaded / totalMechsToLoad);
@@ -315,12 +315,12 @@ var MechViewRouter = MechViewRouter || (function() {
         loadAppState(newHash)
           .then(function() {
             //success
-            MechModelView.refreshView(true);
+            MechModelView.refreshView();
             console.log("Hash change state load success: " + newHash);
           })
           .catch(function() {
             //fail
-            MechModelView.refreshView(true);
+            MechModelView.refreshView();
             MechView.updateOnLoadAppError();
             console.log("Hash change state load failed: " + newHash);
           })
