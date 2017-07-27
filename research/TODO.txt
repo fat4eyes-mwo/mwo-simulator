@@ -2,6 +2,7 @@
 
 - Migrate to Typescript
 
+- bug in default firing pattern (eg stock annihilator not firing lasers at start)
 - drag on mobile
 - slow performance on dragover when there are many mechs (too much layouting, see what causes it)
 - save team settings?

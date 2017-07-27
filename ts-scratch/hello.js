@@ -1,13 +1,16 @@
-var Greeter = (function () {
-    function Greeter(greeting) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class Greeter {
+    constructor(greeting) {
         this.greeting = greeting;
     }
-    Greeter.prototype.greet = function () {
+    greet() {
         return "<h1>" + this.greeting + "</h1>";
-    };
-    return Greeter;
-}());
+    }
+}
+exports.Greeter = Greeter;
 ;
-var greeter = new Greeter("Hello, Ministry of Programming!");
+var greeter = new Greeter("Hello, Dudes of Programming!");
 var str = greeter.greet();
 console.log(str);
+//# sourceMappingURL=hello.js.map
