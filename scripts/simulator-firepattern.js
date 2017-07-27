@@ -34,9 +34,15 @@ var MechFirePattern = MechFirePattern || (function () {
       //fit as many ready weapons as possible into the available heat
       //starting with those with the best damage:heat ratio
       weaponsToFire.push(weaponState);
-      if (willGhostHeat(mech, weaponsToFire) || willOverheat(mech, weaponsToFire)) {
+      let overheat = willOverheat(mech, weaponsToFire);
+      let ghostheat = willGhostHeat(mech, weaponsToFire);
+      if (overheat || ghostheat) {
         weaponsToFire.pop();
-        continue;
+        if (ghostheat) {
+          continue;
+        } else if (overheat) {
+          break; //if near heatcap, wait for the better heat/dmg weapon
+        }
       }
     }
     return weaponsToFire;
