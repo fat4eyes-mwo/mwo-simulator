@@ -471,16 +471,6 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
     }
     mechPanelJQ.on("dragover", mechOnDragOverHandler);
 
-    if (!mechOnDragEnterHandler) {
-      mechOnDragEnterHandler = new MechOnDragEnterHandler(this);
-    }
-    mechPanelJQ.on("dragenter", mechOnDragEnterHandler);
-
-    if (!mechOnDragLeaveHandler) {
-      mechOnDragLeaveHandler = new MechOnDragLeaveHandler(this);
-    }
-    mechPanelJQ.on("dragleave", mechOnDragLeaveHandler);
-
     if (!mechOnDropHandler) {
       mechOnDropHandler = new MechOnDropHandler(this);
     }
@@ -498,17 +488,7 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
   }
   var mechOnDragHandler = null;
 
-  let dragOverCounterMap = new Map();
-  var getDragOverCounter = function(mechId) {
-    if (!dragOverCounterMap.get(mechId)) {
-      dragOverCounterMap.set(mechId, 0);
-    }
-    return dragOverCounterMap.get(mechId);
-  }
-  var setDragOverCounter = function(mechId, value) {
-    dragOverCounterMap.set(mechId, value);
-  }
-
+  let prevDropTarget = null;
   var MechOnDragOverHandler = function(context) {
     return function(jqEvent) {
       let thisJQ = $(this);
@@ -518,46 +498,17 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
       jqEvent.preventDefault();
       //allow move on drop
       origEvent.dataTransfer.dropEffect= "move";
+      if (prevDropTarget !== mechId) {
+        if (prevDropTarget) {
+          let prevDropTargetJQ = $("#" + mechPanelId(prevDropTarget));
+          prevDropTargetJQ.removeClass("droptarget");
+          thisJQ.addClass("droptarget");
+        }
+        prevDropTarget = mechId;
+      }
     }
   }
   var mechOnDragOverHandler = null;
-
-  var MechOnDragEnterHandler = function(context) {
-    return function(jqEvent) {
-      let thisJQ = $(this);
-      let mechId = thisJQ.data("mech-id");
-      let origEvent= jqEvent.originalEvent;
-      jqEvent.preventDefault();
-
-      //allow move on drop
-      origEvent.dataTransfer.dropEffect= "move";
-
-      let counter = getDragOverCounter(mechId);
-      counter++;
-      setDragOverCounter(mechId, counter);
-      if (counter === 1) {
-        thisJQ.addClass("droptarget");
-      }
-    }
-  }
-  var mechOnDragEnterHandler = null;
-
-  var MechOnDragLeaveHandler = function(context) {
-    return function(jqEvent) {
-      let thisJQ = $(this);
-      let mechId = thisJQ.data("mech-id");
-      let origEvent= jqEvent.originalEvent;
-      jqEvent.preventDefault();
-
-      let counter = getDragOverCounter(mechId);
-      counter--;
-      setDragOverCounter(mechId, counter);
-      if (counter === 0) {
-        thisJQ.removeClass("droptarget");
-      }
-    }
-  }
-  var mechOnDragLeaveHandler = null;
 
   var MechOnDropHandler = function(context) {
     return function(jqEvent) {
@@ -568,7 +519,7 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
       jqEvent.preventDefault();
 
       thisJQ.removeClass("droptarget");
-      setDragOverCounter(mechId, 0);
+      prevDropTarget = null;
 
       if (mechId !== srcMechId) {
         let srcMechJQ = $("#" + mechPanelId(srcMechId));
