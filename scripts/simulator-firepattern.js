@@ -36,7 +36,7 @@ var MechFirePattern = MechFirePattern || (function () {
       weaponsToFire.push(weaponState);
       if (willGhostHeat(mech, weaponsToFire) || willOverheat(mech, weaponsToFire)) {
         weaponsToFire.pop();
-        break;
+        continue;
       }
     }
     return weaponsToFire;
