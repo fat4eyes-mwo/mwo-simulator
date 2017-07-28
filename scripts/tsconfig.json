@@ -12,6 +12,7 @@
     },
     "files": [
       "simulator-model-quirks.ts",
+      "simulator-model-weapons.ts",
       "simulator-smurfytypes.ts",
       "data/quirkdata.ts"
     ],

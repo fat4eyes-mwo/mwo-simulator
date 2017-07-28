@@ -82,7 +82,7 @@ namespace MechModelQuirks {
 
   //returns {cooldown_multiplier: <bonus>, duration_multiplier: <bonus>,
   //          heat_multiplier: <bonus>, range_multiplier: <bonus>, velocity_multiplier: <bonus>}
-  export var getWeaponBonus = function(weaponInfo : any) {
+  export var getWeaponBonus = function(weaponInfo : any) : {[index:string] : number} {
     let quirkList = weaponInfo.mechInfo.quirks;
     let ret : {[index:string] : number} = {cooldown_multiplier : 0, duration_multiplier : 0,
               heat_multiplier : 0, range_multiplier : 0, velocity_multiplier : 0,

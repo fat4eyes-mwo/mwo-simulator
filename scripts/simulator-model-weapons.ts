@@ -1,11 +1,48 @@
 "use strict";
+/// <reference path="simulator-smurfytypes.ts" />
 
 //Weapon state classes
-var MechModelWeapons = MechModelWeapons || (function () {
+namespace MechModelWeapons {
   var WeaponCycle = MechModel.WeaponCycle;
 
-  class WeaponInfo {
-    constructor(weaponId, location, smurfyWeaponData, mechInfo) {
+  export class WeaponInfo {
+    weaponId : string;
+    location : string;
+    mechInfo : any; //TODO replace with correct type
+    name : string;
+    translatedName : string;
+    baseMinRange : number;
+    baseOptRange : number;
+    baseMaxRange : number;
+    ranges : SmurfyTypes.SmurfyWeaponRange[];
+    baseDmg : number;
+    damageMultiplier : number;
+    heat : number;
+    minHeatPenaltyLevel : number;
+    heatPenalty : number;
+    heatPenaltyId : number;
+    cooldown : number;
+    duration : number;
+    spinup : number;
+    baseSpeed : number;
+    ammoPerShot : number;
+    dps : number; //TODO see if we still need this
+    type : string;
+    jamChance : number;
+    jamTime : number;
+    shotsDuringCooldown : number;
+    timeBetweenAutoShots : number;
+    rampUpTime : number;
+    rampDownTime : number;
+    jamRampUpTime : number;
+    jamRampDownTime : number;
+    isOneShot : boolean;
+    volleyDelay : number;
+    weaponBonus : {[index:string] : number};
+    constructor(weaponId : string,
+                location : string,
+                smurfyWeaponData : SmurfyTypes.SmurfyWeaponData ,
+                mechInfo : any) { //TODO Replace with correct type
         this.weaponId = weaponId; //smurfy weapon id
         this.location = location;
         this.mechInfo = mechInfo;
@@ -98,7 +135,7 @@ var MechModelWeapons = MechModelWeapons || (function () {
         return this.ammoPerShot > 0;
       }
       //range in meters, stepDuration in ms
-      damageAtRange(range, stepDuration) {
+      damageAtRange(range : number, stepDuration : number) {
         let totalDamage = Number(this.baseDmg) * Number(this.damageMultiplier);
         let ret = totalDamage;
         let rangeMultiplier = 1 + Number(this.weaponBonus.range_multiplier);
@@ -107,7 +144,8 @@ var MechModelWeapons = MechModelWeapons || (function () {
             || Number(range) > Number(this.maxRange)) {
           return 0;
         }
-        for (let rangeIdx in this.ranges) {
+        let rangeIdx : any; //TODO find a way to make array indices numbers
+        for (rangeIdx in this.ranges) {
           rangeIdx = Number(rangeIdx);
           let rangeEntry = this.ranges[rangeIdx];
           let nextEntry = rangeIdx < this.ranges.length - 1 ?
@@ -136,10 +174,30 @@ var MechModelWeapons = MechModelWeapons || (function () {
       }
   }
 
+  export interface WeaponStateChange {
+    newState? : any; //TODO replace with weaponCycle
+    weaponFired? : boolean;
+    ammoConsumed? : number;
+    cooldownChanged? : boolean;
+  }
+
   //abstract class for weapon state. concrete classes follow below
   //WeaponStateDurationFire, WeaponStateSingleFire, WeaponStateContinuousFire
-  class WeaponState {
-    constructor(weaponInfo, mechState) {
+  //TODO : replace :any types
+  export abstract class WeaponState {
+    mechState : any;
+    weaponInfo : any;
+    active : boolean;
+    weaponCycle : any;
+    cooldownLeft : number;
+    volleyDelayLeft : number;
+    //TODO: see if these fields can be pushed to subclasses without too much method duplication
+    durationLeft : number;
+    jamLeft : number;
+    spoolupLeft : number;
+    currShotsDuringCooldown : number;
+
+    constructor(weaponInfo : any, mechState : any) {
       this.mechState = mechState;
       this.weaponInfo = weaponInfo;
       this.active = true;
@@ -148,21 +206,17 @@ var MechModelWeapons = MechModelWeapons || (function () {
       this.resetVolleyDelay();
     }
 
-    resetVolleyDelay() {
+    resetVolleyDelay() : void {
       this.volleyDelayLeft = this.weaponInfo.volleyDelay;
     }
 
     //returns {newState: <new state>, weaponFired:<boolean>, ammoConsumed:<number>}
-    fireWeapon() {
-      throw "Abstract method, should not be called";
-    }
+    abstract fireWeapon() : WeaponStateChange;
 
     //processes cooldowns on the weapon, making state changes as necessary
-    step(stepDuration) {
-      throw "Abstract method, should not be called";
-    }
+    abstract step(stepDuration : number) : WeaponStateChange;
 
-    stepPrechecks(stepDuration) {
+    stepPrechecks(stepDuration : number) : WeaponStateChange {
       let newState = null;
       let weaponFired = false;
       let ammoConsumed = 0;
@@ -179,7 +233,7 @@ var MechModelWeapons = MechModelWeapons || (function () {
       return null;
     }
 
-    stepStandardFire(stepDuration) {
+    stepStandardFire(stepDuration : number) : WeaponStateChange {
       //if weapon is firing, reduce durationLeft. if durationLeft <=0, change state to COOLDOWN
       let newState = null;
       let cooldownChanged = false;
@@ -196,7 +250,7 @@ var MechModelWeapons = MechModelWeapons || (function () {
       return {newState : newState, cooldownChanged: cooldownChanged};
     }
 
-    stepCooldown(stepDuration) {
+    stepCooldown(stepDuration : number) {
       //if weapon is on cooldown, reduce cooldownLeft.
       //if cooldownLeft <=0, change state to ready
       let newState = null;
@@ -212,7 +266,7 @@ var MechModelWeapons = MechModelWeapons || (function () {
       return {newState: newState, cooldownChanged : cooldownChanged};
     }
 
-    stepJammed(stepDuration) {
+    stepJammed(stepDuration : number) {
       let newState = null;
       let cooldownChanged = false;
       let newJamLeft = Number(this.jamLeft) - stepDuration;
@@ -226,7 +280,7 @@ var MechModelWeapons = MechModelWeapons || (function () {
       return {newState: newState, cooldownChanged: cooldownChanged};
     }
 
-    gotoState(weaponCycle, updateTimers = true) {
+    gotoState(weaponCycle : any, updateTimers = true) {
       let prevCooldownLeft = this.cooldownLeft;
       this.weaponCycle = weaponCycle;
       if (updateTimers) {
@@ -328,13 +382,13 @@ var MechModelWeapons = MechModelWeapons || (function () {
   }
 
   //state for duration fire weapons (e.g. lasers)
-  class WeaponStateDurationFire extends WeaponState {
+  export class WeaponStateDurationFire extends WeaponState {
     constructor(weaponInfo, mechState) {
       super(weaponInfo, mechState);
       this.durationLeft = 0;
     }
 
-    fireWeapon() {
+    fireWeapon() : WeaponStateChange {
       let newState = null;
       //if not ready to fire, proceed to next weapon
       if (!this.active || !this.canFire()) {
@@ -346,7 +400,7 @@ var MechModelWeapons = MechModelWeapons || (function () {
       return {newState: newState, weaponFired: true, ammoConsumed: 0};
     }
 
-    step(stepDuration) {
+    step(stepDuration : number) {
       let ammoConsumed = 0;
       let weaponFired = false;
       let newState = null;
@@ -377,15 +431,15 @@ var MechModelWeapons = MechModelWeapons || (function () {
   }
 
   //Single fire weapons (ACs, PPCs, UACs, Gauss)
-  class WeaponStateSingleFire extends WeaponState {
-    constructor(weaponInfo, mechState) {
+  export class WeaponStateSingleFire extends WeaponState {
+    constructor(weaponInfo : any, mechState : any) {
       super(weaponInfo, mechState);
       this.spoolupLeft = 0;
       this.jamLeft = 0;
       this.currShotsDuringCooldown = weaponInfo.shotsDuringCooldown;
     }
 
-    fireWeapon() {
+    fireWeapon() : WeaponStateChange {
       let newState = null;
       let weaponInfo = this.weaponInfo;
       let mechState = this.mechState;
@@ -437,7 +491,7 @@ var MechModelWeapons = MechModelWeapons || (function () {
       }
     }
 
-    step(stepDuration) {
+    step(stepDuration : number) : WeaponStateChange {
       let ammoConsumed = 0;
       let weaponFired = false;
       let newState = null;
@@ -502,8 +556,13 @@ var MechModelWeapons = MechModelWeapons || (function () {
 
   //Continuous fire weapons (MGs, Flamers, RACs)
   const MAXJAM = 100;
-  class WeaponStateContinuousFire extends WeaponState {
-    constructor(weaponInfo, mechState) {
+  export class WeaponStateContinuousFire extends WeaponState {
+    timeToNextAutoShot : number;
+    isOnAutoFire : boolean;
+    jamBarProgress : number;
+    rampUpLeft : number;
+
+    constructor(weaponInfo : any, mechState : any) {
       super(weaponInfo, mechState);
       this.timeToNextAutoShot = 0;
       this.isOnAutoFire = false;
@@ -512,30 +571,30 @@ var MechModelWeapons = MechModelWeapons || (function () {
       this.resetRampup();
     }
 
-    hasJamBar() {
+    hasJamBar() : boolean {
       return this.weaponInfo.jamRampUpTime > 0;
     }
     //returns 0 to 1
-    getJamProgress() {
+    getJamProgress() : number {
       return this.jamBarProgress / MAXJAM;
     }
 
-    incrementJamBar(stepDuration) {
+    incrementJamBar(stepDuration : number) : void {
       let stepProgress = MAXJAM * (stepDuration / this.weaponInfo.jamRampUpTime);
       this.jamBarProgress = Math.min(MAXJAM, this.jamBarProgress + stepProgress);
     }
 
-    decrementJamBar(stepDuration) {
+    decrementJamBar(stepDuration : number) : void {
       let stepProgress = MAXJAM * (stepDuration / this.weaponInfo.jamRampDownTime);
       this.jamBarProgress = Math.max(0, this.jamBarProgress - stepProgress);
     }
 
-    resetRampup() {
+    resetRampup() : void {
       this.rampUpLeft = this.weaponInfo.rampUpTime ?
                           Number(this.weaponInfo.rampUpTime) : 0;
     }
 
-    fireWeapon() {
+    fireWeapon() : WeaponStateChange {
       let newState = null;
       let weaponInfo = this.weaponInfo;
       let mechState = this.mechState;
@@ -569,7 +628,7 @@ var MechModelWeapons = MechModelWeapons || (function () {
       return {newState: newState, weaponFired : weaponFired, ammoConsumed: ammoConsumed};
     }
 
-    step(stepDuration) {
+    step(stepDuration : number) : WeaponStateChange {
       let ammoConsumed = 0;
       let weaponFired = false;
       let newState = null;
@@ -623,7 +682,7 @@ var MechModelWeapons = MechModelWeapons || (function () {
               cooldownChanged: cooldownChanged};
     }
 
-    stepAutoFire(stepDuration) {
+    stepAutoFire(stepDuration : number) : WeaponStateChange {
       let newState = null;
       let weaponFired = false;
       let ammoConsumed = 0;
@@ -669,8 +728,10 @@ var MechModelWeapons = MechModelWeapons || (function () {
     }
   }
 
-  class WeaponStateOneShot extends WeaponStateSingleFire {
-    constructor(weaponInfo, mechState) {
+  export class WeaponStateOneShot extends WeaponStateSingleFire {
+    ammoRemaining : number;
+
+    constructor(weaponInfo : any, mechState : any) {
       super(weaponInfo, mechState);
       this.ammoRemaining = Number(this.weaponInfo.ammoPerShot);
     }
@@ -689,12 +750,4 @@ var MechModelWeapons = MechModelWeapons || (function () {
       return ret;
     }
   }
-
-  return {
-    WeaponInfo : WeaponInfo,
-    WeaponStateDurationFire : WeaponStateDurationFire,
-    WeaponStateSingleFire : WeaponStateSingleFire,
-    WeaponStateContinuousFire : WeaponStateContinuousFire,
-    WeaponStateOneShot : WeaponStateOneShot,
-  }
-})();
+};

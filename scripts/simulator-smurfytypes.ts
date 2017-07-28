@@ -145,7 +145,26 @@ namespace SmurfyTypes {
     min_heat_penalty_level: number,
     heat_penalty: number,
     heat_penalty_id: number,
-    ammo_per_shot : number //added from addedweapondata.js
+    //fields below are added from addedweapondata.js
+    ammo_per_shot : number,
+    spinup : number,
+    jamming_chance : number,
+    jammed_time : number,
+    shots_during_cooldown : number,
+    rof : number,
+    rampUpTime : number,
+    rampDownTime : number,
+    jamRampUpTime : number,
+    jamRampDownTime : number,
+    isOneShot : boolean,
+    volleyDelay : number,
+    ranges : SmurfyWeaponRange[],
+  }
+
+  export interface SmurfyWeaponRange {
+    start : number;
+    damageModifier : number;
+    interpolationToNextRange : string;
   }
 
   export interface SmurfyWeaponCalcStats {
