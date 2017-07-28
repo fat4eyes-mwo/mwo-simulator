@@ -11,6 +11,7 @@
 //and methos to populate them from smurfy data
 var MechModel;
 (function (MechModel) {
+    //TODO: See if you can get a tighter type for enums. Try aliasing
     MechModel.Team = {
         BLUE: "blue",
         RED: "red"
@@ -903,9 +904,6 @@ var MechModel;
         componentHealth = new ComponentHealth(location, Number(armor) + Number(bonus.armor), Number(structure) + Number(bonus.structure), Number(armor) + Number(bonus.armor), Number(structure) + Number(bonus.structure));
         return componentHealth;
     };
-    //returns a list from a smurfy configuration list using a collectionFunction
-    //collectFunction paramters are (location, smurfyMechComponentItem)
-    //and returns a value if it is to be added to the list, undefined/null if not
     var collectFromSmurfyConfiguration = function (smurfyMechConfiguration, collectFunction) {
         var outputList = [];
         for (let smurfyMechComponent of smurfyMechConfiguration) {
@@ -1042,7 +1040,6 @@ var MechModel;
         });
         return heatsinkList.length;
     };
-    //Calculates the total heat capacity and heat dissipation from a mechInfo
     var calculateHeatStats = function (heatsinkInfoList, engineInfo, engineHeatEfficiency, generalQuirkBonus) {
         const BASE_HEAT_CAPACITY = 30;
         let heatCapacity = BASE_HEAT_CAPACITY;
@@ -1283,7 +1280,6 @@ var MechModel;
     MechModel.getTeamStats = function (team) {
         return teamStats[team];
     };
-    //returns {"i"=<id>, "l"=<loadout>}
     var parseSmurfyURL = function (url) {
         let urlMatcher = /https?:\/\/mwo\.smurfy-net\.de\/mechlab#i=([0-9]+)&l=([a-z0-9]+)/;
         let results = urlMatcher.exec(url);

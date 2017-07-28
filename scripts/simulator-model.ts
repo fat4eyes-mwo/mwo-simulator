@@ -11,7 +11,7 @@
 //Classes that represent the states of the mechs in the simulation,
 //and methos to populate them from smurfy data
 namespace MechModel  {
-
+  //TODO: See if you can get a tighter type for enums. Try aliasing
   export const Team  : {[index:string] : string} = {
     BLUE : "blue",
     RED : "red"
@@ -1083,9 +1083,13 @@ namespace MechModel  {
   //returns a list from a smurfy configuration list using a collectionFunction
   //collectFunction paramters are (location, smurfyMechComponentItem)
   //and returns a value if it is to be added to the list, undefined/null if not
+  type CollectorFunction =
+    (location: string,
+      componentItem : SmurfyTypes.SmurfyMechComponentItem)
+        => any;
   var collectFromSmurfyConfiguration =
       function (smurfyMechConfiguration : SmurfyTypes.SmurfyMechComponent[],
-                collectFunction : any) { //TODO: Add function type
+                collectFunction : CollectorFunction) {
     var outputList = [];
     for (let smurfyMechComponent of smurfyMechConfiguration) {
       let location = smurfyMechComponent.name;
@@ -1104,8 +1108,7 @@ namespace MechModel  {
                 mechInfo : MechInfo) {
     var weaponInfoList = [];
     weaponInfoList = collectFromSmurfyConfiguration(smurfyMechLoadout.configuration,
-      function (location : string,
-                smurfyMechComponentItem : SmurfyTypes.SmurfyMechComponentItem) {
+      function (location, smurfyMechComponentItem) : WeaponInfo {
         if (smurfyMechComponentItem.type ==="weapon") {
           let weaponId = smurfyMechComponentItem.id;
           let smurfyWeaponData = getSmurfyWeaponData(weaponId);
@@ -1123,8 +1126,7 @@ namespace MechModel  {
       function(smurfyMechLoadout : SmurfyTypes.SmurfyMechLoadout) {
     var heatsinkList = [];
     heatsinkList = collectFromSmurfyConfiguration(smurfyMechLoadout.configuration,
-      function (location : string,
-                smurfyMechComponentItem : SmurfyTypes.SmurfyMechComponentItem) {
+      function (location, smurfyMechComponentItem) : Heatsink {
         let itemId = smurfyMechComponentItem.id;
         if (isHeatsinkModule(itemId)) {
           let heatsink = heatsinkFromSmurfyMechComponentItem(location, smurfyMechComponentItem);
@@ -1138,7 +1140,7 @@ namespace MechModel  {
 
   var heatsinkFromSmurfyMechComponentItem =
       function (location : string,
-                smurfyMechComponentItem : SmurfyTypes.SmurfyMechComponentItem) {
+                smurfyMechComponentItem : SmurfyTypes.SmurfyMechComponentItem) : Heatsink {
     let heatsinkId = smurfyMechComponentItem.id;
     let smurfyModuleData = getSmurfyModuleData(heatsinkId);
 
@@ -1150,8 +1152,7 @@ namespace MechModel  {
       function (smurfyMechLoadout : SmurfyTypes.SmurfyMechLoadout) {
     var ammoList = [];
     ammoList = collectFromSmurfyConfiguration(smurfyMechLoadout.configuration,
-      function (location : string,
-                smurfyMechComponentItem : SmurfyTypes.SmurfyMechComponentItem) {
+      function (location, smurfyMechComponentItem) : AmmoBox {
         if (smurfyMechComponentItem.type === "ammo") {
           let ammoBox = ammoBoxFromSmurfyMechComponentItem(location, smurfyMechComponentItem);
           return ammoBox;
@@ -1165,7 +1166,8 @@ namespace MechModel  {
 
   var ammoBoxFromSmurfyMechComponentItem =
       function(location : string,
-                smurfyMechComponentItem : SmurfyTypes.SmurfyMechComponentItem) {
+                smurfyMechComponentItem : SmurfyTypes.SmurfyMechComponentItem)
+                : AmmoBox {
     var ammoBox;
     let ammoData = getSmurfyAmmoData(smurfyMechComponentItem.id);
     let type = ammoData.type;
@@ -1180,7 +1182,7 @@ namespace MechModel  {
   //Gets the heatsink module id of the heatsinks in the engine.
   //Uses direct name matching because there doesn't seem to be an id reference
   //from the heatsink upgrade items to the associated heatsink
-  var getEngineHeatsinkId = function(smurfyMechLoadout: SmurfyTypes.SmurfyMechLoadout) {
+  var getEngineHeatsinkId = function(smurfyMechLoadout: SmurfyTypes.SmurfyMechLoadout) : string {
     var upgradeToIdMap : {[index:string] : string} = {
       "STANDARD HEAT SINK" : ISSingleHeatsinkId,
       "DOUBLE HEAT SINK" : ISDoubleHeatsinkId,
@@ -1208,7 +1210,7 @@ namespace MechModel  {
       smurfyModuleData.type === "CEngineStats";
   }
   var engineInfoFromSmurfyMechLoadout =
-      function(smurfyMechLoadout: SmurfyTypes.SmurfyMechLoadout) {
+      function(smurfyMechLoadout: SmurfyTypes.SmurfyMechLoadout) : EngineInfo {
     let smurfyEngineData = getEngineSmurfyModuleData(smurfyMechLoadout);
     let engineId = smurfyEngineData.id;
     let name = smurfyEngineData.name;
@@ -1225,7 +1227,8 @@ namespace MechModel  {
     return engineInfo;
   }
 
-  export var isOmnimech = function(smurfyMechLoadout: SmurfyTypes.SmurfyMechLoadout) {
+  export var isOmnimech =
+      function(smurfyMechLoadout: SmurfyTypes.SmurfyMechLoadout) : boolean {
     for (let component of smurfyMechLoadout.configuration) {
       if (component.omni_pod) {
         return true;
@@ -1234,7 +1237,8 @@ namespace MechModel  {
     return false;
   }
 
-  var numExternalHeatsinks = function(smurfyMechLoadout: SmurfyTypes.SmurfyMechLoadout) {
+  var numExternalHeatsinks =
+      function(smurfyMechLoadout: SmurfyTypes.SmurfyMechLoadout) : number {
     let heatsinkList = collectFromSmurfyConfiguration(smurfyMechLoadout.configuration,
       function (location : string, smurfyMechComponentItem : SmurfyTypes.SmurfyMechComponentItem) {
         let itemId = smurfyMechComponentItem.id;
@@ -1249,10 +1253,15 @@ namespace MechModel  {
   }
 
   //Calculates the total heat capacity and heat dissipation from a mechInfo
+  interface HeatStats {
+    heatCapacity : number,
+    heatDissipation : number,
+  }
   var calculateHeatStats = function (heatsinkInfoList : Heatsink[],
                           engineInfo : EngineInfo,
                           engineHeatEfficiency : number,
-                          generalQuirkBonus : MechModelQuirks.GeneralBonus) {
+                          generalQuirkBonus : MechModelQuirks.GeneralBonus)
+                          : HeatStats {
     const BASE_HEAT_CAPACITY = 30;
     let heatCapacity = BASE_HEAT_CAPACITY;
     let heatDissipation = 0;
@@ -1294,7 +1303,7 @@ namespace MechModel  {
     };
   }
 
-  var initWeaponStateList = function(mechState : MechState) {
+  var initWeaponStateList = function(mechState : MechState) : MechModelWeapons.WeaponState[] {
     var weaponStateList = [];
     let mechInfo = mechState.mechInfo;
     for (let weaponInfo of mechInfo.weaponInfoList) {
@@ -1380,7 +1389,8 @@ namespace MechModel  {
 
   export var addMech = function(mech_id : string,
                                 team : string,
-                                smurfyMechLoadout : SmurfyTypes.SmurfyMechLoadout) {
+                                smurfyMechLoadout : SmurfyTypes.SmurfyMechLoadout)
+                                : Mech {
     var newMech = new Mech(mech_id, team, smurfyMechLoadout);
     mechTeams[team].push(newMech);
     console.log("Added mech mech_id: " + mech_id +
@@ -1392,7 +1402,8 @@ namespace MechModel  {
   export var addMechAtIndex = function(mech_id : string,
                                   team : string,
                                   smurfyMechLoadout : SmurfyTypes.SmurfyMechLoadout,
-                                  index : number) {
+                                  index : number)
+                                  : Mech {
     var newMech = new Mech(mech_id, team, smurfyMechLoadout);
     mechTeams[team][index] = newMech;
     console.log("Added mech mech_id: " + mech_id
@@ -1421,11 +1432,11 @@ namespace MechModel  {
     return null;
   }
 
-  var getMechFromPos = function(mechPos : MechPos) {
+  var getMechFromPos = function(mechPos : MechPos) : Mech {
     return mechTeams[mechPos.team][mechPos.index];
   }
 
-  export var deleteMech = function(mech_id : string) {
+  export var deleteMech = function(mech_id : string) : boolean {
     let mechPos = getMechPosFromId(mech_id);
     if (!mechPos) return false;
     let mechList = mechTeams[mechPos.team];
@@ -1434,7 +1445,8 @@ namespace MechModel  {
   }
 
   //removes src mech from its current position and inserts it before dest mech
-  export var moveMech = function(srcMechId : string, destMechId : string) {
+  export var moveMech =
+      function(srcMechId : string, destMechId : string) : boolean {
     let srcMechPos = getMechPosFromId(srcMechId);
     if (!srcMechPos) return false;
 
@@ -1459,7 +1471,7 @@ namespace MechModel  {
   }
 
   //Debug, set default mech patterns
-  export var initMechTeamPatterns = function(mechTeam : Mech[]) {
+  export var initMechTeamPatterns = function(mechTeam : Mech[]) : void {
     for (let mech of mechTeam) {
       initMechPatterns(mech);
     }
@@ -1510,7 +1522,7 @@ namespace MechModel  {
   }
 
   //called every time team-level statistics need to be updated (e.g. when a weapon hits)
-  export var updateModelTeamStats = function(team : string) {
+  export var updateModelTeamStats = function(team : string) : void {
     let totalTeamBurstDamage = 0;
     let teamStatEntry = teamStats[team];
     if (!teamStatEntry) {
@@ -1526,12 +1538,16 @@ namespace MechModel  {
     }
   }
 
-  export var getTeamStats = function(team : string) {
+  export var getTeamStats = function(team : string) : TeamStats {
     return teamStats[team];
   }
 
   //returns {"i"=<id>, "l"=<loadout>}
-  var parseSmurfyURL = function(url : string) {
+  interface SmurfyLoadoutId {
+    id : string;
+    loadout : string;
+  }
+  var parseSmurfyURL = function(url : string) : SmurfyLoadoutId {
     let urlMatcher = /https?:\/\/mwo\.smurfy-net\.de\/mechlab#i=([0-9]+)&l=([a-z0-9]+)/;
     let results = urlMatcher.exec(url);
     if (results) {
@@ -1556,7 +1572,7 @@ namespace MechModel  {
   }
 
   export var loadSmurfyMechLoadoutFromID =
-        function(smurfyId : string, smurfyLoadoutId : string) {
+        function(smurfyId : string, smurfyLoadoutId : string) : Promise<any> {
     let ret = new Promise(function(resolve, reject) {
       var smurfyLoadoutURL = SMURFY_PROXY_URL + "data/mechs/" + smurfyId
           + "/loadouts/" + smurfyLoadoutId + ".json";
@@ -1577,7 +1593,7 @@ namespace MechModel  {
 
   //returns a list of adjacent components
   //MechModel.Component -> [MechModel.Component...]
-  export var getAdjacentComponents = function(component : string) {
+  export var getAdjacentComponents = function(component : string) : string[] {
     if (component === Component.HEAD) {
       return [];
     } else if (component === Component.CENTRE_TORSO) {
@@ -1598,7 +1614,7 @@ namespace MechModel  {
     return [];
   }
 
-  var getTransferDamageLocation = function(component : string) {
+  var getTransferDamageLocation = function(component : string) : string {
     if (component === Component.HEAD) {
       return null;
     } else if (component === Component.CENTRE_TORSO) {
@@ -1618,14 +1634,14 @@ namespace MechModel  {
     }
   }
 
-  export var getMechFromId = function(mechId : string) {
+  export var getMechFromId = function(mechId : string) : Mech {
     let mechPos = getMechPosFromId(mechId);
     if (!mechPos) return null;
 
     return mechTeams[mechPos.team][mechPos.index];
   }
 
-  export var clearModel = function() {
+  export var clearModel = function() : void{
     mechTeams[Team.BLUE] = [];
     mechTeams[Team.RED] = [];
     teamStats = {};
