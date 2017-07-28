@@ -7,9 +7,10 @@
         "sourceMap": true,
         "target": "es6",
         "strict": true,
-        "forceConsistentCasingInFileNames": true
+        "forceConsistentCasingInFileNames": true,
+        "outFile" : "./js/out.js"
     },
     "files": [
-      "hello.ts"
+      "main.ts"
     ]
 }
