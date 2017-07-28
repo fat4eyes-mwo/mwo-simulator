@@ -29,7 +29,6 @@ var MechModelQuirks;
         }
         return ret;
     };
-    //returns {<quirk_name>: <value>, ...} for general quirks
     MechModelQuirks.getGeneralBonus = function (quirkList) {
         let ret = {};
         for (let quirk of quirkList) {
@@ -44,7 +43,6 @@ var MechModelQuirks;
         }
         return ret;
     };
-    //returns {armor: <bonus armor>, structure: <bonus structure>}
     MechModelQuirks.getArmorStructureBonus = function (component, quirkList) {
         let ret = { armor: 0, structure: 0 };
         for (let quirk of quirkList) {
@@ -79,8 +77,6 @@ var MechModelQuirks;
             }
         }
     })();
-    //returns {cooldown_multiplier: <bonus>, duration_multiplier: <bonus>,
-    //          heat_multiplier: <bonus>, range_multiplier: <bonus>, velocity_multiplier: <bonus>}
     MechModelQuirks.getWeaponBonus = function (weaponInfo) {
         let quirkList = weaponInfo.mechInfo.quirks;
         let ret = { cooldown_multiplier: 0, duration_multiplier: 0,

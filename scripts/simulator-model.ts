@@ -8,8 +8,6 @@
 /// <reference path="data/addedheatsinkdata.ts" />
 /// <reference path="data/addedweapondata.ts" />
 
-
-
 //Classes that represent the states of the mechs in the simulation,
 //and methos to populate them from smurfy data
 namespace MechModel  {
