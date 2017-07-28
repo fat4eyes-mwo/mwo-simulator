@@ -1,9 +1,13 @@
 "use strict";
+/// <reference path="data/quirkdata.ts" />
+/// <reference path="simulator-model.ts" />
+/// <reference path="simulator-smurfytypes.ts" />
 
-var MechModelQuirks = MechModelQuirks || (function () {
+//TODO: Remove : any types
+namespace MechModelQuirks {
 
-  var collectOmnipodQuirks = function(smurfyMechLoadout) {
-    let ret = [];
+  export var collectOmnipodQuirks = function(smurfyMechLoadout : SmurfyTypes.SmurfyMechLoadout) {
+    let ret : SmurfyTypes.SmurfyQuirk[] = [];
     if (!MechModel.isOmnimech(smurfyMechLoadout)) {
       return ret;
     }
@@ -27,8 +31,8 @@ var MechModelQuirks = MechModelQuirks || (function () {
   }
 
   //returns {<quirk_name>: <value>, ...} for general quirks
-  var getGeneralBonus = function(quirkList) {
-    let ret = {};
+  export var getGeneralBonus = function(quirkList : SmurfyTypes.SmurfyQuirk[]) {
+    let ret : {[index:string] : number} = {};
     for (let quirk of quirkList) {
       if (_quirkGeneral[quirk.name]) {
         if (!ret[quirk.name]) {
@@ -42,7 +46,7 @@ var MechModelQuirks = MechModelQuirks || (function () {
   }
 
   //returns {armor: <bonus armor>, structure: <bonus structure>}
-  var getArmorStructureBonus = function(component, quirkList) {
+  export var getArmorStructureBonus = function(component : string, quirkList : SmurfyTypes.SmurfyQuirk[]) {
     let ret = {armor: 0, structure: 0};
 
     for (let quirk of quirkList) {
@@ -61,14 +65,14 @@ var MechModelQuirks = MechModelQuirks || (function () {
 
   //Reversed version of _weaponNameMap in quirkData.js. For faster lookup of weapon names
   //format is weaponName -> {set of quirks that applies to the weapon}
-  var reversedWeaponNameMap = {};
+  var reversedWeaponNameMap : {[index:string] : Set<string>} = {};
   //Initialize the map. Make sure that quirkData.js is loaded before simulator-model-quirks.js
   (function initReversedWeaponNameMap() {
     for (let quirkName in _weaponNameMap) {
       for (let weaponName of _weaponNameMap[quirkName]) {
         let reverseEntry = reversedWeaponNameMap[weaponName];
         if (!reverseEntry) {
-          reverseEntry = new Set();
+          reverseEntry = new Set<string>();
           reversedWeaponNameMap[weaponName] = reverseEntry;
         }
         reverseEntry.add(quirkName);
@@ -78,9 +82,9 @@ var MechModelQuirks = MechModelQuirks || (function () {
 
   //returns {cooldown_multiplier: <bonus>, duration_multiplier: <bonus>,
   //          heat_multiplier: <bonus>, range_multiplier: <bonus>, velocity_multiplier: <bonus>}
-  var getWeaponBonus = function(weaponInfo) {
+  export var getWeaponBonus = function(weaponInfo : any) {
     let quirkList = weaponInfo.mechInfo.quirks;
-    let ret = {cooldown_multiplier : 0, duration_multiplier : 0,
+    let ret : {[index:string] : number} = {cooldown_multiplier : 0, duration_multiplier : 0,
               heat_multiplier : 0, range_multiplier : 0, velocity_multiplier : 0,
               jamchance_multiplier: 0};
     for (let quirk of quirkList) {
@@ -103,12 +107,4 @@ var MechModelQuirks = MechModelQuirks || (function () {
 
     return ret;
   }
-
-  return {
-    getArmorStructureBonus: getArmorStructureBonus,
-    getWeaponBonus: getWeaponBonus,
-    getGeneralBonus : getGeneralBonus,
-    collectOmnipodQuirks: collectOmnipodQuirks,
-  }
-
-})();
+}

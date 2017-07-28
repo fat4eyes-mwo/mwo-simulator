@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "removeComments": false,
+        "preserveConstEnums": true,
+        "sourceMap": true,
+        "target": "es6",
+        "strict": false,
+        "forceConsistentCasingInFileNames": true,
+        "outDir" : "../genscripts/"
+    },
+    "files": [
+      "simulator-model-quirks.ts",
+      "simulator-smurfytypes.ts",
+      "data/quirkdata.ts"
+    ],
+    "includes" : [
+      "scripts/**/*.js"
+    ]
+}
