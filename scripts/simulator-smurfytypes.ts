@@ -18,7 +18,7 @@ namespace SmurfyTypes {
     name: string, //values are from SmurfyMechModel.Component
     armor: number, //is a string when loaded from JSON
     actuators: SmurfyMechComponentItem[], //[SmurfyMechComponentItem...]
-    omni_pod: number,
+    omni_pod: string,
     items: SmurfyMechComponentItem[], //[SmurfyMechComponentItem...]
   }
 
@@ -76,6 +76,7 @@ namespace SmurfyTypes {
   }
 
   //SmurfyMechData classes
+  export type SmurfyMechDataList = {[index:string] : SmurfyMechData};
   export interface SmurfyMechData {
     id: string,
     name: string,
@@ -90,7 +91,7 @@ namespace SmurfyTypes {
 
   export interface SmurfyMechDetails {
     type: string,
-    tons: string,
+    tons: number,
     top_speed: number,
     jump_jets: number,
     ecm: boolean,
@@ -120,6 +121,7 @@ namespace SmurfyTypes {
     value: number,
   }
 
+  export type SmurfyWeaponDataList = {[index: string] : SmurfyWeaponData};
   //SmurfyWeaponData Classes
   export interface SmurfyWeaponData {
     id: string,
@@ -175,10 +177,13 @@ namespace SmurfyTypes {
     ehs: number,
   }
 
+  export type SmurfyModuleDataList = {[index:string] : SmurfyModuleData};
+
   export interface SmurfyModuleData { //Common properties for SmurfyHeatsinkModuleData, SmurfyEngineModuleData
     id : string,
     type : string,
     name : string,
+    stats : any,
   }
 
   //ModuleData with type = CHeatSinkStats
@@ -202,11 +207,38 @@ namespace SmurfyTypes {
     heatsinks : number,
   }
 
+  export type SmurfyAmmoDataList = {[index:string] : SmurfyAmmoData};
   export interface SmurfyAmmoData {
     id : string,
     type : string,
     name : string,
     num_shots : number,
     weapons : string[], //[string] weapons that use this ammo
+  }
+
+  export type SmurfyOmnipodData = {[index:string] : SmurfyChassisOmnipods}
+
+  export type SmurfyChassisOmnipods = {[index:string] : SmurfyOmnipod}
+
+  export interface SmurfyOmnipod {
+    details : OmnipodDetails,
+    configuration : OmnipodConfiguration,
+    price : any, //not used currently
+  }
+
+  export interface OmnipodDetails {
+    id : string,
+    chassis : string,
+    set : string;
+    component : string;
+    translatedName : string;
+  }
+
+  export interface OmnipodConfiguration {
+    name : string,
+    internalSlots : any[], //not used yet
+    fixedSlots : any[], //not used yet
+    quirks : SmurfyQuirk[],
+    hardpoints : any[], //not used yet
   }
 }

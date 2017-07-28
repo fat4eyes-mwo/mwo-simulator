@@ -1,4 +1,5 @@
-var DummyMechData = {
+namespace DummyData {
+export var DummyMechData = {
 	"1": {
 		"id": "1",
 		"name": "hbk-4g",
@@ -48545,3 +48546,5 @@ var DummyMechData = {
 		}
 	}
 };
+
+}

@@ -1,5 +1,6 @@
 //base mech structure. Reference: http://mwo.gamepedia.com/Internal_Structure
-var _MechBaseStructure = {
+namespace GlobalGameInfo {
+export var _MechBaseStructure : {[index:string] : any} = {
   "20" : {
     "head" : 18,
     "left_arm" : 6,
@@ -170,4 +171,5 @@ var _MechBaseStructure = {
     "centre_torso" : 62,
     "left_torso" : 42
   }
+}
 }

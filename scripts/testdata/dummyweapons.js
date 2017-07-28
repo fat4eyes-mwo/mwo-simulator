@@ -1,4 +1,5 @@
-var DummyWeaponData = {
+namespace DummyData {
+export var DummyWeaponData = {
 	"1000": {
 		"id": "1000",
 		"type": "BALLISTIC",
@@ -4301,3 +4302,4 @@ var DummyWeaponData = {
 		"heat_penalty_id": 0
 	}
 };
+}

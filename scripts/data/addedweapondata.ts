@@ -1,5 +1,7 @@
-//Generated from GameData.pak Tue, 25 Jul 2017 00:11:03 GMT
-_AddedWeaponData = {
+//Generated from GameData.pak Fri, 28 Jul 2017 08:32:32 GMT
+namespace AddedData {
+
+export var _AddedWeaponData : {[index:string] : any} = {
 	"AutoCannon20": {
 		"ammo_per_shot": 1,
 		"volleyDelay": 0,
@@ -2529,3 +2531,4 @@ _AddedWeaponData = {
 		]
 	}
 };
+}

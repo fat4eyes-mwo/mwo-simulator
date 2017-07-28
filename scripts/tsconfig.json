@@ -11,10 +11,15 @@
         "outDir" : "../genscripts/"
     },
     "files": [
+      "simulator-model.ts",
       "simulator-model-quirks.ts",
       "simulator-model-weapons.ts",
       "simulator-smurfytypes.ts",
-      "data/quirkdata.ts"
+      "data/quirkdata.ts",
+      "data/globalgameinfo.ts",
+      "data/basehealth.ts",
+      "data/addedheatsinkdata.ts",
+      "data/addedweapondata.ts"
     ],
     "includes" : [
       "scripts/**/*.js"

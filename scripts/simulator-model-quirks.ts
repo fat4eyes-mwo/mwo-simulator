@@ -6,7 +6,9 @@
 //TODO: Remove : any types
 namespace MechModelQuirks {
 
-  export var collectOmnipodQuirks = function(smurfyMechLoadout : SmurfyTypes.SmurfyMechLoadout) {
+  export var collectOmnipodQuirks =
+    function(smurfyMechLoadout : SmurfyTypes.SmurfyMechLoadout)
+      : SmurfyTypes.SmurfyQuirk[] {
     let ret : SmurfyTypes.SmurfyQuirk[] = [];
     if (!MechModel.isOmnimech(smurfyMechLoadout)) {
       return ret;
@@ -31,7 +33,9 @@ namespace MechModelQuirks {
   }
 
   //returns {<quirk_name>: <value>, ...} for general quirks
-  export var getGeneralBonus = function(quirkList : SmurfyTypes.SmurfyQuirk[]) {
+  export type GeneralBonus = {[index:string] : number};
+  export var getGeneralBonus =
+    function(quirkList : SmurfyTypes.SmurfyQuirk[]) : GeneralBonus {
     let ret : {[index:string] : number} = {};
     for (let quirk of quirkList) {
       if (_quirkGeneral[quirk.name]) {
@@ -46,7 +50,12 @@ namespace MechModelQuirks {
   }
 
   //returns {armor: <bonus armor>, structure: <bonus structure>}
-  export var getArmorStructureBonus = function(component : string, quirkList : SmurfyTypes.SmurfyQuirk[]) {
+  export interface HealthBonus {
+    armor : number;
+    structure : number;
+  }
+  export var getArmorStructureBonus =
+    function(component : string, quirkList : SmurfyTypes.SmurfyQuirk[]) : HealthBonus {
     let ret = {armor: 0, structure: 0};
 
     for (let quirk of quirkList) {
@@ -67,7 +76,7 @@ namespace MechModelQuirks {
   //format is weaponName -> {set of quirks that applies to the weapon}
   var reversedWeaponNameMap : {[index:string] : Set<string>} = {};
   //Initialize the map. Make sure that quirkData.js is loaded before simulator-model-quirks.js
-  (function initReversedWeaponNameMap() {
+  (function initReversedWeaponNameMap() : void {
     for (let quirkName in _weaponNameMap) {
       for (let weaponName of _weaponNameMap[quirkName]) {
         let reverseEntry = reversedWeaponNameMap[weaponName];
@@ -82,7 +91,8 @@ namespace MechModelQuirks {
 
   //returns {cooldown_multiplier: <bonus>, duration_multiplier: <bonus>,
   //          heat_multiplier: <bonus>, range_multiplier: <bonus>, velocity_multiplier: <bonus>}
-  export var getWeaponBonus = function(weaponInfo : any) : {[index:string] : number} {
+  export type WeaponBonus = {[index:string] : number};
+  export var getWeaponBonus = function(weaponInfo : any) : WeaponBonus {
     let quirkList = weaponInfo.mechInfo.quirks;
     let ret : {[index:string] : number} = {cooldown_multiplier : 0, duration_multiplier : 0,
               heat_multiplier : 0, range_multiplier : 0, velocity_multiplier : 0,

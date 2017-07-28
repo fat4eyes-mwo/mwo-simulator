@@ -1,15 +1,25 @@
 "use strict";
+/// <reference path="lib/jquery-3.2.d.ts" />
+/// <reference path="simulator-model-quirks.ts" />
+/// <reference path="simulator-model-weapons.ts" />
+/// <reference path="simulator-smurfytypes.ts" />
+/// <reference path="data/globalgameinfo.ts" />
+/// <reference path="data/basehealth.ts" />
+/// <reference path="data/addedheatsinkdata.ts" />
+/// <reference path="data/addedweapondata.ts" />
+
+
 
 //Classes that represent the states of the mechs in the simulation,
 //and methos to populate them from smurfy data
-var MechModel = MechModel || (function () {
+namespace MechModel  {
 
-  const Team = Object.freeze({
+  export const Team = {
     BLUE : "blue",
     RED : "red"
-  });
+  };
 
-  const Component = Object.freeze({
+  export const Component = {
     HEAD : "head",
     RIGHT_ARM :"right_arm",
     RIGHT_TORSO : "right_torso",
@@ -21,15 +31,15 @@ var MechModel = MechModel || (function () {
     LEFT_TORSO_REAR : "left_torso_rear",
     CENTRE_TORSO_REAR : "centre_torso_rear",
     RIGHT_TORSO_REAR : "right_torso_rear"
-  });
+  };
 
-  var isRearComponent = function(component) {
+  export var isRearComponent = function(component : string) {
     return component === Component.LEFT_TORSO_REAR ||
         component === Component.CENTRE_TORSO_REAR ||
         component === Component.RIGHT_TORSO_REAR;
   };
 
-  const WeaponCycle = Object.freeze({
+  export const WeaponCycle = {
     READY : "Ready",
     FIRING : "Firing",
     DISABLED : "Disabled",
@@ -37,14 +47,14 @@ var MechModel = MechModel || (function () {
     COOLDOWN_FIRING : "CooldownFiring", //Double tap while on cooldown
     SPOOLING : "Spooling",
     JAMMED : "Jammed",
-  });
+  };
 
-  const Faction = Object.freeze({
+  export const Faction = {
     INNER_SPHERE : "InnerSphere",
     CLAN : "Clan"
-  });
+  };
 
-  const UpdateType = {
+  export const UpdateType = {
     FULL : "full",
     HEALTH : "health",
     HEAT : "heat",
@@ -53,34 +63,49 @@ var MechModel = MechModel || (function () {
     STATS : "stats"
   };
 
-  const EngineType = {
+  export const EngineType = {
     STD : "std",
     XL : "xl",
     CLAN_XL : "clan_xl",
     LIGHT : "light",
   };
 
-  var SmurfyWeaponData = {};
-  var SmurfyAmmoData = {};
-  var SmurfyModuleData = {};
-  var SmurfyMechData = {};
-  var SmurfyOmnipodData = {};
-  var SmurfyCTOmnipods = {};
-  var mechTeams = {};
+  var SmurfyWeaponData : SmurfyTypes.SmurfyWeaponDataList = null;
+  var SmurfyAmmoData : SmurfyTypes.SmurfyAmmoDataList = null;
+  var SmurfyModuleData : SmurfyTypes.SmurfyModuleDataList = null;
+  var SmurfyMechData : SmurfyTypes.SmurfyMechDataList = null;
+  var SmurfyOmnipodData : FlatOmnipodData = {};
+  var SmurfyCTOmnipods : CTOmnipodMap = {};
+  //TODO: replace with proper type
+  export var mechTeams : {[index:string] : any[]} = {};
   mechTeams[Team.BLUE] = [];
   mechTeams[Team.RED] = [];
-  var teamStats = {}; //format is {<team> : <teamStats>}
-  var mechIdMap = {};
+  var teamStats : {[index:string] : TeamStats} = {}; //format is {<team> : <teamStats>}
+  var mechIdMap : {[index:string] : boolean}= {};
 
-  class MechInfo {
-    constructor(mechId, smurfyMechLoadout) {
+  export class MechInfo {
+    mechId : string;
+    smurfyMechId : string;
+    smurfyLoadoutId : string;
+    mechName : string;
+    mechTranslatedName : string;
+    tons : number;
+    quirks : SmurfyTypes.SmurfyQuirk[];
+    generalQuirkBonus : MechModelQuirks.GeneralBonus;
+    mechHealth : MechHealth;
+    weaponInfoList : MechModelWeapons.WeaponInfo[];
+    heatsinkInfoList : Heatsink[];
+    ammoBoxList : AmmoBox[];
+    engineInfo : EngineInfo;
+
+    constructor(mechId : string, smurfyMechLoadout : SmurfyTypes.SmurfyMechLoadout) {
       this.mechId = mechId;
       this.smurfyMechId = smurfyMechLoadout.mech_id;
       this.smurfyLoadoutId = smurfyMechLoadout.id;
       var smurfyMechData = getSmurfyMechData(smurfyMechLoadout.mech_id);
       this.mechName = smurfyMechData.name;
       this.mechTranslatedName = smurfyMechData.translated_name;
-      this.tons = smurfyMechData.details.tons;
+      this.tons = Number(smurfyMechData.details.tons);
       //NOTE: Quirks should be set before creating WeaponInfos
       if (isOmnimech(smurfyMechLoadout)) {
         this.quirks = MechModelQuirks.collectOmnipodQuirks(smurfyMechLoadout);
@@ -98,8 +123,19 @@ var MechModel = MechModel || (function () {
     }
   }
 
-  class Heatsink {
-    constructor(location, smurfyModuleData) {
+  export class Heatsink {
+    location : string;
+    heatsinkId : string;
+    name : string;
+    active : boolean;
+    cooling : number;
+    engineCooling : number;
+    internalHeatCapacity : number;
+    externalHeatCapacity : number;
+    smurfyModuleData : SmurfyTypes.SmurfyHeatsinkModuleData;
+
+    constructor(location : string,
+                smurfyModuleData : SmurfyTypes.SmurfyHeatsinkModuleData) {
       this.location = location;
       this.heatsinkId = smurfyModuleData.id;
       this.name = smurfyModuleData.name;
@@ -121,7 +157,9 @@ var MechModel = MechModel || (function () {
   //http://mwomercs.com/forums/topic/176345-understanding-damage/
   //TODO: Find a non-random way to simulate critical hits
   class MechHealth {
-    constructor(componentHealth) {
+    componentHealth : ComponentHealth[];
+    componentHealthMap : {[index : string] : ComponentHealth};
+    constructor(componentHealth : ComponentHealth[]) {
       //TODO: try to get rid of this componentHealth list
       this.componentHealth = componentHealth; //[ComponentHealth...]
       this.componentHealthMap = {};
@@ -129,31 +167,31 @@ var MechModel = MechModel || (function () {
         this.componentHealthMap[component.location] = component;
       }
     }
-    getComponentHealth(location) {
+    getComponentHealth(location : string) : ComponentHealth {
       return this.componentHealthMap[location];
     }
-    isIntact(location) {
+    isIntact(location : string) : boolean {
       return this.getComponentHealth(location).isIntact();
     }
-    takeDamage(location, numDamage) {
+    takeDamage(location : string, numDamage : number) : ComponentDamage {
       return this.componentHealthMap[location].takeDamage(numDamage);
     }
-    totalCurrHealth() {
+    totalCurrHealth() : number {
       let ret = 0;
       for (let componentHealthEntry of this.componentHealth) {
         ret = Number(ret) + componentHealthEntry.totalCurrHealth();
       }
       return ret;
     }
-    totalMaxHealth() {
+    totalMaxHealth() : number {
       let ret = 0;
       for (let componentHealthEntry of this.componentHealth) {
         ret = Number(ret) + componentHealthEntry.totalMaxHealth();
       }
       return ret;
     }
-    clone() {
-      let newComponentHealth = [];
+    clone() : MechHealth {
+      let newComponentHealth : ComponentHealth[] = [];
       for (let componentHealthEntry of this.componentHealth) {
         newComponentHealth.push(componentHealthEntry.clone());
       }
@@ -161,21 +199,29 @@ var MechModel = MechModel || (function () {
     }
   }
 
-  class ComponentHealth {
-    constructor(location, armor, structure, maxArmor, maxStructure) {
+  export class ComponentHealth {
+    location : string;
+    armor : number;
+    structure : number;
+    maxArmor : number;
+    maxStructure : number;
+
+    constructor(location : string,
+                armor : number, structure : number,
+                maxArmor : number, maxStructure : number) {
       this.location = location;
       this.armor = armor; //current armor. used in state
       this.structure = structure;
       this.maxArmor = maxArmor; //maximum armor from loadout
       this.maxStructure = maxStructure; //maximum structure from loadout
     }
-    isIntact() {
+    isIntact() : boolean {
       return this.structure > 0;
     }
     //returns a ComponentDamage with actual damage dealt
     //NOTE: Does not take rear components into account
-    takeDamage(numDamage) {
-      let ret = new ComponentDamage(this.location, 0, 0);
+    takeDamage(numDamage : number) : ComponentDamage {
+      let ret : ComponentDamage  = new ComponentDamage(this.location, 0, 0);
       if (numDamage <= this.armor) {
         this.armor = Number(this.armor) - numDamage;
         ret.addArmorDamage(numDamage);
@@ -200,15 +246,15 @@ var MechModel = MechModel || (function () {
       }
       return ret;
     }
-    totalCurrHealth() {
+    totalCurrHealth() : number {
       return Number(this.armor) +
           ((this.structure) ? Number(this.structure) : 0); //special case for undefined structure in rear components
     }
-    totalMaxHealth() {
+    totalMaxHealth() : number {
       return Number(this.maxArmor) +
         ((this.maxStructure) ? Number(this.maxStructure) : 0); //special case for undefined structure in rear components
     }
-    clone() {
+    clone() : ComponentHealth {
       return new ComponentHealth(this.location,
         this.armor,
         this.structure,
@@ -217,8 +263,21 @@ var MechModel = MechModel || (function () {
     }
   }
 
-  class MechState {
-    constructor(mechInfo) {
+  //TODO : is actually UpdateTypes -> boolean, try to see if it can be made explicit
+  export type UpdateSet = {[index:string] : boolean};
+  //TODO: is actually string -> GhostHeatEntry. Change when you get to simulator logic
+  type GhostHeatMap = {[index:string] : any}
+  export class MechState {
+    mechInfo : MechInfo;
+    mechHealth : MechHealth;
+    heatState : HeatState;
+    weaponStateList : MechModelWeapons.WeaponState[];
+    ammoState : AmmoState;
+    updateTypes : UpdateSet;
+    ghostHeatMap : GhostHeatMap;
+    mechStats : MechStats;
+
+    constructor(mechInfo : MechInfo) {
       this.mechInfo = mechInfo;
       this.mechHealth = mechInfo.mechHealth.clone();
       this.heatState = new HeatState(mechInfo);
@@ -229,10 +288,11 @@ var MechModel = MechModel || (function () {
       this.ghostHeatMap = {}; //weaponId -> [GhostHeatEntry]. Used in ghost heat computations.
       this.mechStats = new MechStats(); //stats set in simulation logic
     }
-    setUpdate(updateType) {
+    //TODO: Is acutally UpdateType. See if it can be made explicit
+    setUpdate(updateType : string) : void {
       this.updateTypes[updateType] = true;
     }
-    isAlive() {
+    isAlive() : boolean {
       let mechHealth = this.mechHealth;
       let engineInfo = this.mechInfo.engineInfo;
       return mechHealth.isIntact(Component.HEAD) &&
@@ -249,18 +309,18 @@ var MechModel = MechModel || (function () {
             (mechHealth.isIntact(Component.LEFT_TORSO)
             || mechHealth.isIntact(Component.RIGHT_TORSO)));
     }
+
     //Takes damage to components specified in weaponDamage.
     //Returns a MechDamage object that describes how much damage the mech took
     //MechDamage includes damage from destroyed components
     //reference: http://mwomercs.com/forums/topic/176345-understanding-damage/
-    takeDamage(weaponDamage) {
+    takeDamage(weaponDamage : WeaponDamage) : MechDamage {
       let totalDamage = new MechDamage();
       for (let location in weaponDamage.damageMap) {
         let numDamage = weaponDamage.getDamage(location);
         //apply damage to location
         let componentDamage = this.mechHealth.takeDamage(location, numDamage);
         totalDamage.addComponentDamage(componentDamage);
-
 
         //destroy components if necessary
         if (!this.mechHealth.isIntact(location) && componentDamage.totalDamage() > 0) {
@@ -296,7 +356,7 @@ var MechModel = MechModel || (function () {
     //the component destruction
     //includeArmor is true if the remaining armor shoud be added to the component
     //destruction damage (i.e. when destroying arms after a torso destruction)
-    destroyComponent(location, includeArmor) {
+    destroyComponent(location : string, includeArmor : boolean) : MechDamage {
       let destructionDamage = new MechDamage();
       let componentHealth = this.mechHealth.getComponentHealth(location);
 
@@ -326,7 +386,7 @@ var MechModel = MechModel || (function () {
       return destructionDamage;
     }
 
-    disableWeapons(location) {
+    disableWeapons(location : string) : void {
       for (let weaponState of this.weaponStateList) {
         let weaponInfo = weaponState.weaponInfo;
         if (weaponInfo.location === location) {
@@ -336,7 +396,7 @@ var MechModel = MechModel || (function () {
       }
     }
 
-    disableHeatsinks(location) {
+    disableHeatsinks(location : string) : void {
       for (let heatsink of this.heatState.currHeatsinkList) {
         if (heatsink.location === location) {
           heatsink.active = false;
@@ -346,7 +406,7 @@ var MechModel = MechModel || (function () {
     }
 
     //update heat stats on component destruction
-    updateHeatStats(location) {
+    updateHeatStats(location : string) : void {
       //reduce engine heat efficiency if clan xl engine
       let engineInfo = this.heatState.engineInfo;
       let heatState = this.heatState;
@@ -354,8 +414,8 @@ var MechModel = MechModel || (function () {
           engineInfo.getEngineType() === EngineType.LIGHT) {
         if (location === Component.LEFT_TORSO ||
             location === Component.RIGHT_TORSO) {
-          heatState.engineHeatEfficiency = Number(_MechGlobalGameInfo.clan_reduced_xl_heat_efficiency);
-
+          heatState.engineHeatEfficiency =
+            Number(GlobalGameInfo._MechGlobalGameInfo.clan_reduced_xl_heat_efficiency);
         }
       }
       //recompute heat stats
@@ -369,11 +429,11 @@ var MechModel = MechModel || (function () {
       this.setUpdate(UpdateType.HEAT);
     }
 
-    clearMechStats() {
+    clearMechStats() : void {
       this.mechStats = new MechStats();
     }
 
-    getTotalDamageAtRange(range, stepDuration) {
+    getTotalDamageAtRange(range : number, stepDuration : number) : number {
       let totalDamage = 0;
       for (let weaponState of this.weaponStateList) {
         if (!weaponState.active) {
@@ -385,8 +445,15 @@ var MechModel = MechModel || (function () {
     }
   }
 
-  class HeatState {
-    constructor(mechInfo) {
+  export class HeatState {
+    currHeat : number;
+    engineHeatEfficiency : number;
+    currHeatDissipation : number;
+    currMaxHeat : number;
+    engineInfo : EngineInfo;
+    currHeatsinkList : Heatsink[];
+
+    constructor(mechInfo : MechInfo) {
       this.currHeat = 0;
       this.engineHeatEfficiency = 1;
       let heatStats = calculateHeatStats(
@@ -409,8 +476,12 @@ var MechModel = MechModel || (function () {
     }
   }
 
-  class AmmoState {
-    constructor(mechInfo) {
+  type AmmoCountMap = {[index : string] : AmmoCount};
+  export class AmmoState {
+    ammoCounts : AmmoCountMap;
+    ammoBoxList : AmmoBox[];
+
+    constructor(mechInfo : MechInfo) {
       let sourceAmmoBoxList = mechInfo.ammoBoxList;
       this.ammoCounts = {}; //weaponId->AmmoCount
       this.ammoBoxList = [];
@@ -422,7 +493,7 @@ var MechModel = MechModel || (function () {
       //sort ammoBoxList in ammo consumption order so the lists in the ammoCounts
       //are also sorted in consumption order
       //reference: https://mwomercs.com/forums/topic/65553-guide-ammo-depleting-priorities-or-in-what-order-is-your-ammo-being-used/
-      let ammoLocationOrderIndex = function(location) {
+      let ammoLocationOrderIndex = function(location : string) {
         const locationOrder =
           [Component.HEAD, Component.CENTRE_TORSO, Component.RIGHT_TORSO, Component.LEFT_TORSO,
             Component.LEFT_ARM, Component.RIGHT_ARM, Component.LEFT_LEG, Component.RIGHT_LEG];
@@ -433,7 +504,7 @@ var MechModel = MechModel || (function () {
           }
         }
       }
-      this.ammoBoxList.sort((x, y) => {
+      this.ammoBoxList.sort((x : AmmoBox, y : AmmoBox) => {
         return ammoLocationOrderIndex(x.location) -
                   ammoLocationOrderIndex(y.location);
       });
@@ -456,7 +527,7 @@ var MechModel = MechModel || (function () {
     }
 
     //returns the amount of ammo available for a given weapon id.
-    ammoCountForWeapon(weaponId) {
+    ammoCountForWeapon(weaponId : string) : number {
       let ammoCount = this.ammoCounts[weaponId];
       if (ammoCount) {
         return ammoCount.ammoCount;
@@ -467,7 +538,7 @@ var MechModel = MechModel || (function () {
 
     //tries to consume a given amount of ammo for a weaponInfo
     //returns the amount of ammo actually consumed
-    consumeAmmo(weaponId, amount) {
+    consumeAmmo(weaponId : string, amount : number) : number {
       let ammoCount = this.ammoCounts[weaponId];
       if (ammoCount) {
         return ammoCount.consumeAmmo(amount);
@@ -478,7 +549,7 @@ var MechModel = MechModel || (function () {
 
     //Disables ammo boxes and reduces the corresponding AmmoCount
     //Returns the set of disabled ammo boxes
-    disableAmmoBoxes(location) {
+    disableAmmoBoxes(location : string) : AmmoBox[] {
       let ret = [];
       for (let ammoBox of this.ammoBoxList) {
         if (ammoBox.location === location) {
@@ -495,7 +566,13 @@ var MechModel = MechModel || (function () {
   }
 
   //The amount of ammo for a given set of weapons
-  class AmmoCount {
+  export class AmmoCount {
+    weaponIds : string[];
+    ammoCount : number;
+    ammoBoxList : AmmoBox[];
+    maxAmmoCount : number;
+    currAmmoBoxIdx : number;
+
     constructor() {
       this.weaponIds = [];
       this.ammoCount = 0; //Total ammo count of all the boxes in the ammoBoxList
@@ -504,7 +581,7 @@ var MechModel = MechModel || (function () {
       this.currAmmoBoxIdx = 0;
     }
 
-    addAmmoBox(ammoBox) {
+    addAmmoBox(ammoBox : AmmoBox) {
       this.weaponIds = ammoBox.weaponIds;
       this.ammoCount += Number(ammoBox.ammoCount);
       this.maxAmmoCount += Number(ammoBox.ammoCount);
@@ -513,7 +590,7 @@ var MechModel = MechModel || (function () {
 
     //tries to consume a given amount of ammo. returns the actual amount of ammo
     //consumed
-    consumeAmmo(amount) {
+    consumeAmmo(amount : number) {
       let amountConsumed = 0;
       while (amount > 0 && this.currAmmoBoxIdx < this.ammoBoxList.length) {
         let currAmmoBox = this.ammoBoxList[this.currAmmoBoxIdx];
@@ -540,8 +617,15 @@ var MechModel = MechModel || (function () {
   }
 
   //Represents an ammo box on the mech.
-  class AmmoBox {
-    constructor(type, location, weaponIds, ammoCount, intact) {
+  export class AmmoBox {
+    type : string;
+    location : string;
+    weaponIds : string[];
+    ammoCount : number;
+    intact : boolean;
+
+    constructor(type : string, location: string,
+                weaponIds : string[], ammoCount : number, intact : boolean) {
       this.type = type;
       this.location = location;
       this.weaponIds = weaponIds; //[weaponId...]
@@ -557,8 +641,13 @@ var MechModel = MechModel || (function () {
     }
   }
 
-  class EngineInfo {
-    constructor(engineId, name, heatsink, heatsinkCount) {
+  export class EngineInfo {
+    engineId : string;
+    name : string;
+    heatsink : Heatsink;
+    heatsinkCount : number;
+
+    constructor(engineId : string, name : string, heatsink : Heatsink, heatsinkCount : number) {
       this.engineId = engineId; //Same as module id in smurfy ModuleData
       this.name = name; //Readable name, from smurfy ModuleData
       this.heatsink = heatsink; //heatsink object that represents the type of heatsinks in the engine
@@ -570,9 +659,9 @@ var MechModel = MechModel || (function () {
         this.heatsink.clone(),
         this.heatsinkCount);
     }
-    getEngineType() {
+    getEngineType() : string {
       let engineType;
-      let engineMap = {
+      let engineMap : {[index:string] : string} = {
         "Engine_Std" : EngineType.STD,
         "Engine_XL" : EngineType.XL,
         "Engine_Clan_XL" : EngineType.CLAN_XL,
@@ -589,11 +678,13 @@ var MechModel = MechModel || (function () {
 
   //represents damage done to a mech
   //A map from MechModel.Components -> ComponentDamage
-  class MechDamage {
+  export class MechDamage {
+    componentDamage : {[index:string] : ComponentDamage};
     constructor() {
       this.componentDamage = {}; //Component->ComponentDamage
     }
-    add(mechDamage) {
+
+    add(mechDamage : MechDamage) : void {
       for (let location in mechDamage.componentDamage) {
         if (!this.componentDamage[location]) {
           this.componentDamage[location] = new ComponentDamage(location, 0, 0);
@@ -601,24 +692,24 @@ var MechModel = MechModel || (function () {
         this.componentDamage[location].add(mechDamage.componentDamage[location]);
       }
     }
-    addComponentDamage(componentDamage) {
+    addComponentDamage(componentDamage : ComponentDamage) : void {
       let location = componentDamage.location;
       if (!this.componentDamage[location]) {
         this.componentDamage[location] = new ComponentDamage(location, 0, 0);
       }
       this.componentDamage[location].add(componentDamage);
     }
-    getComponentDamage(location) {
+    getComponentDamage(location : string) : ComponentDamage {
       return this.componentDamage[location];
     }
-    totalDamage() {
+    totalDamage() : number {
       let ret = 0;
       for (let component in this.componentDamage) {
         ret = Number(ret) + this.componentDamage[component].totalDamage();
       }
       return ret;
     }
-    toString() {
+    toString() : string {
       let ret = "";
       for (let location in this.componentDamage) {
         ret = ret + " " + this.componentDamage[location].toString();
@@ -627,8 +718,12 @@ var MechModel = MechModel || (function () {
     }
   }
 
-  class ComponentDamage {
-    constructor(location, armor, structure) {
+  export class ComponentDamage {
+    location : string;
+    armor : number;
+    structure : number;
+
+    constructor(location : string, armor : number, structure : number) {
       this.location = location;
       if (armor) {
         this.armor = armor;
@@ -641,55 +736,58 @@ var MechModel = MechModel || (function () {
         this.structure = 0;
       }
     }
-    add(componentDamage) {
+    add(componentDamage : ComponentDamage) : ComponentDamage {
       this.armor += Number(componentDamage.armor);
       this.structure += Number(componentDamage.structure);
       return this;
     }
-    addArmorDamage(damage) {
+    addArmorDamage(damage : number) : void {
       this.armor += Number(damage);
     }
-    addStructureDamage(damage) {
+    addStructureDamage(damage : number) : void {
       this.structure += Number(damage);
     }
-    totalDamage() {
+    totalDamage() : number {
       return Number(this.armor) + Number(this.structure);
     }
-    toString() {
+    toString() : string {
       return "location: " + this.location + " armordmg: " + this.armor + " structdmg: " + this.structure;
     }
   }
 
   //Damage dealt by a weapon.
-  class WeaponDamage {
-    constructor(damageMap) {
+  export type DamageMap = {[index:string] : number};
+  export class WeaponDamage {
+    damageMap : DamageMap;
+
+    constructor(damageMap : DamageMap) {
       this.damageMap = damageMap; //MechModel.Component -> Number
     }
-    getDamage(component) {
+    getDamage(component : string) : number {
       return this.damageMap[component];
     }
-    multiply(multiplier) {
+    multiply(multiplier : number) : void {
       for (var location in this.damageMap) {
         this.damageMap[location] =
             Number(this.damageMap[location]) * Number(multiplier);
       }
     }
-    getTotalDamage() {
+    getTotalDamage() : number {
       let totalDamage = 0;
       for (let component in this.damageMap) {
         totalDamage += this.damageMap[component];
       }
       return totalDamage;
     }
-    toString() {
+    toString() : string {
       let ret = "totalDamage: " + this.getTotalDamage();
       for (let component in this.damageMap) {
         ret = ret + " " + component + "=" + this.damageMap[component];
       }
       return ret;
     }
-    clone() {
-      var newDamageMap = {};
+    clone() : WeaponDamage {
+      var newDamageMap : DamageMap = {};
       for (let component in this.damageMap) {
         newDamageMap[component] = this.damageMap[component];
       }
@@ -699,8 +797,13 @@ var MechModel = MechModel || (function () {
 
   //TODO: Try to move this out of model due to its dependence on WeaponFire
   //Or move WeaponFire here
-  const BURST_DAMAGE_INTERVAL = 2000; //Interval considered for burst damage calculation
-  class MechStats {
+  export const BURST_DAMAGE_INTERVAL = 2000; //Interval considered for burst damage calculation
+  export class MechStats {
+    totalDamage : number;
+    totalHeat : number;
+    weaponFires : any[]; //TODO: Actually WeaponFires[], change when you get to simulator-logic
+    timeOfDeath : number;
+
     constructor() {
       this.totalDamage = 0;
       this.totalHeat = 0;
@@ -710,7 +813,7 @@ var MechModel = MechModel || (function () {
       this.timeOfDeath = null;
     }
     //assumes simTime >= createTime of last element in the weaponFire list
-    getBurstDamage(simTime) {
+    getBurstDamage(simTime : number) : number {
       let burstDamage = 0;
       for (let idx = this.weaponFires.length - 1; idx > 0; idx--) {
         let weaponFire = this.weaponFires[idx];
@@ -724,7 +827,9 @@ var MechModel = MechModel || (function () {
     }
   }
 
-  class TeamStats {
+  export class TeamStats {
+    maxBurstDamage : number;
+
     constructor() {
       this.maxBurstDamage = 0;
     }
@@ -739,20 +844,21 @@ var MechModel = MechModel || (function () {
   const OMNIPOD_DATA_PATH = 'data/omnipods.json';
   var dataPaths = [WEAPON_DATA_PATH , AMMO_DATA_PATH, MODULE_DATA_PATH,
                     MECH_DATA_PATH, OMNIPOD_DATA_PATH];
-  var dataPathAssigns = {};
+  var dataPathAssigns : {[index:string] : (data: any) => void} = {};
 
-  var initDataPromise = function(path) {
+  //TODO: See what the right generic type for the promise is here
+  var initDataPromise = function(path : string) : Promise<any> {
     return new Promise(function(resolve, reject) {
       $.ajax({
         url : SMURFY_PROXY_URL + path,
         type : 'GET',
         dataType : 'JSON'
         })
-        .done(function(data) {
+        .done(function(data : any) {
           console.log("Successfully loaded " + path);
           resolve(data);
         })
-        .fail(function(data) {
+        .fail(function(data : any) {
           console.log("Smurfy " + path + " request failed: " + Error(data));
           reject(Error(data));
         });
@@ -762,9 +868,11 @@ var MechModel = MechModel || (function () {
   //NOTE: Process the omnipod data so the omnipod ID is the
   //main index (instead of the chassis name)
   //also finds the CT omnipods and puts them in a set->omnipod map
-  var flattenOmnipodData = function(smurfyOmnipodData) {
-    let flatOmnipodData = {};
-    let ctOmnipodMap = {};
+  type FlatOmnipodData = {[index:string] : SmurfyTypes.SmurfyOmnipod};
+  type CTOmnipodMap = {[index:string] : SmurfyTypes.SmurfyOmnipod};
+  var flattenOmnipodData = function(smurfyOmnipodData : SmurfyTypes.SmurfyOmnipodData) {
+    let flatOmnipodData : FlatOmnipodData = {};
+    let ctOmnipodMap : CTOmnipodMap = {};
     for (let chassis in smurfyOmnipodData) {
       for (let omnipodId in smurfyOmnipodData[chassis]) {
         let omnipodEntry = smurfyOmnipodData[chassis][omnipodId];
@@ -776,7 +884,7 @@ var MechModel = MechModel || (function () {
     }
     return {flatOmnipodData : flatOmnipodData, ctOmnipodMap : ctOmnipodMap};
   }
-  var initModelData = function () {
+  export var initModelData = function () : Promise<void> {
     //assigns to the correct variable
     dataPathAssigns[WEAPON_DATA_PATH] = function(data) {
       SmurfyWeaponData = data;
@@ -811,7 +919,7 @@ var MechModel = MechModel || (function () {
     });
   }
 
-  var initAddedData = function() {
+  export var initAddedData = function() {
     initHeatsinkIds();
     initAddedHeatsinkData();
     initAddedWeaponData();
@@ -820,11 +928,11 @@ var MechModel = MechModel || (function () {
   const ISHeatsinkName = "HeatSink_MkI";
   const ISDoubleHeatsinkName = "DoubleHeatSink_MkI";
   const ClanDoubleHeatsinkName = "ClanDoubleHeatSink";
-  var ISSingleHeatsinkId;
-  var ISDoubleHeatsinkId;
-  var ClanDoubleHeatsinkId;
+  var ISSingleHeatsinkId : string;
+  var ISDoubleHeatsinkId : string;
+  var ClanDoubleHeatsinkId : string;
   const heatsinkType = "CHeatSinkStats";
-  var initHeatsinkIds = function() {
+  var initHeatsinkIds = function() : void {
     for (let moduleId in SmurfyModuleData) {
       let moduleData = SmurfyModuleData[moduleId];
       if (moduleData.type === heatsinkType) {
@@ -845,7 +953,7 @@ var MechModel = MechModel || (function () {
     for (let idx in SmurfyModuleData) {
       let moduleData = SmurfyModuleData[idx];
       if (moduleData.type === "CHeatSinkStats") {
-        let addedData = _AddedHeatsinkData[moduleData.name];
+        let addedData = AddedData._AddedHeatsinkData[moduleData.name];
         $.extend(moduleData.stats, addedData);
       }
     }
@@ -856,13 +964,13 @@ var MechModel = MechModel || (function () {
   var initAddedWeaponData = function() {
     for (let idx in SmurfyWeaponData) {
       let weaponData = SmurfyWeaponData[idx];
-      let addedData = _AddedWeaponData[weaponData.name];
+      let addedData = AddedData._AddedWeaponData[weaponData.name];
       $.extend(weaponData, addedData);
     }
   }
 
   //Load dummy data from javascript files in data folder
-  var initDummyModelData = function() {
+  export var initDummyModelData = function() {
     SmurfyWeaponData = DummyWeaponData;
     SmurfyAmmoData = DummyAmmoData;
     SmurfyMechData = DummyMechData;
@@ -873,16 +981,18 @@ var MechModel = MechModel || (function () {
     initAddedData();
   };
 
-  var getSmurfyMechData = function(smurfyMechId) {
+  export var getSmurfyMechData =
+      function(smurfyMechId : string) : SmurfyTypes.SmurfyMechData {
     return SmurfyMechData[smurfyMechId];
   };
 
-  var getSmurfyWeaponData = function(smurfyItemId) {
+  export var getSmurfyWeaponData =
+      function(smurfyItemId : string) : SmurfyTypes.SmurfyWeaponData {
     return SmurfyWeaponData[smurfyItemId];
   }
 
-  var smurfyWeaponNameMap = {};
-  var getSmurfyWeaponDataByName = function(smurfyName) {
+  var smurfyWeaponNameMap : {[index:string] : SmurfyTypes.SmurfyWeaponData} = {};
+  export var getSmurfyWeaponDataByName = function(smurfyName : string) : SmurfyTypes.SmurfyWeaponData {
     if (smurfyWeaponNameMap[smurfyName]) {
       return smurfyWeaponNameMap[smurfyName];
     }
@@ -896,39 +1006,39 @@ var MechModel = MechModel || (function () {
     return null;
   }
 
-  var getSmurfyModuleData = function(smurfyModuleId) {
+  export var getSmurfyModuleData = function(smurfyModuleId : string) {
     return SmurfyModuleData[smurfyModuleId];
   }
 
-  var getSmurfyAmmoData = function(smurfyItemId) {
+  export var getSmurfyAmmoData = function(smurfyItemId : string) {
     return SmurfyAmmoData[smurfyItemId];
   }
 
-  var getSmurfyOmnipodData = function(smurfyOmnipodId) {
+  export var getSmurfyOmnipodData = function(smurfyOmnipodId : string) {
     return SmurfyOmnipodData[smurfyOmnipodId];
   }
 
-  var getSmurfyCTOmnipod = function(mechName) {
+  export var getSmurfyCTOmnipod = function(mechName : string) {
     return SmurfyCTOmnipods[mechName];
   }
 
-  var isHeatsinkModule = function(smurfyModuleId) {
+  var isHeatsinkModule = function(smurfyModuleId : string) {
     let smurfyModuleData = getSmurfyModuleData(smurfyModuleId);
     return smurfyModuleData && smurfyModuleData.type === "CHeatSinkStats";
   }
 
-  var isEngineModule = function(smurfyModuleId) {
+  var isEngineModule = function(smurfyModuleId : string) {
     let smurfyModuleData = getSmurfyModuleData(smurfyModuleId);
     return smurfyModuleData && smurfyModuleData.type === "CEngineStats";
   }
 
   //base structure value computation for a given tonnage.
   //Reference: http://mwo.gamepedia.com/Internal_Structure
-  var baseMechStructure = function(location, tonnage) {
-    return _MechBaseStructure[tonnage][location];
+  export var baseMechStructure = function(location : string, tonnage : number) : number {
+    return GlobalGameInfo._MechBaseStructure[tonnage][location];
   }
 
-  var baseMechArmor = function(location, tonnage) {
+  export var baseMechArmor = function(location : string, tonnage : number) : number {
     if (location === Component.HEAD) {
       return baseMechStructure(location, tonnage);
     } else {
@@ -938,7 +1048,9 @@ var MechModel = MechModel || (function () {
 
   //Object creation methods.
   //TODO: see if it's better to put these in the object constructors instead
-  var mechHealthFromSmurfyMechLoadout = function (smurfyMechLoadout, quirks) {
+  var mechHealthFromSmurfyMechLoadout =
+      function (smurfyMechLoadout : SmurfyTypes.SmurfyMechLoadout,
+                quirks : SmurfyTypes.SmurfyQuirk[]) {
     var mechHealth;
 
     var smurfyMechData = getSmurfyMechData(smurfyMechLoadout.mech_id);
@@ -953,7 +1065,10 @@ var MechModel = MechModel || (function () {
     return mechHealth;
   }
 
-  var componentHealthFromSmurfyMechComponent = function (smurfyMechComponent, smurfyMechQuirks, tonnage) {
+  var componentHealthFromSmurfyMechComponent =
+      function (smurfyMechComponent : SmurfyTypes.SmurfyMechComponent,
+                smurfyMechQuirks : SmurfyTypes.SmurfyQuirk[],
+                tonnage : number) {
     var componentHealth; //return value
 
     var location = smurfyMechComponent.name;
@@ -971,7 +1086,9 @@ var MechModel = MechModel || (function () {
   //returns a list from a smurfy configuration list using a collectionFunction
   //collectFunction paramters are (location, smurfyMechComponentItem)
   //and returns a value if it is to be added to the list, undefined/null if not
-  var collectFromSmurfyConfiguration = function (smurfyMechConfiguration, collectFunction) {
+  var collectFromSmurfyConfiguration =
+      function (smurfyMechConfiguration : SmurfyTypes.SmurfyMechComponent[],
+                collectFunction : any) { //TODO: Add function type
     var outputList = [];
     for (let smurfyMechComponent of smurfyMechConfiguration) {
       let location = smurfyMechComponent.name;
@@ -985,10 +1102,13 @@ var MechModel = MechModel || (function () {
     return outputList;
   }
 
-  var weaponInfoListFromSmurfyMechLoadout = function (smurfyMechLoadout, mechInfo) {
+  var weaponInfoListFromSmurfyMechLoadout =
+      function (smurfyMechLoadout : SmurfyTypes.SmurfyMechLoadout,
+                mechInfo : MechInfo) {
     var weaponInfoList = [];
     weaponInfoList = collectFromSmurfyConfiguration(smurfyMechLoadout.configuration,
-      function (location, smurfyMechComponentItem) {
+      function (location : string,
+                smurfyMechComponentItem : SmurfyTypes.SmurfyMechComponentItem) {
         if (smurfyMechComponentItem.type ==="weapon") {
           let weaponId = smurfyMechComponentItem.id;
           let smurfyWeaponData = getSmurfyWeaponData(weaponId);
@@ -1002,10 +1122,12 @@ var MechModel = MechModel || (function () {
     return weaponInfoList;
   }
 
-  var heatsinkListFromSmurfyMechLoadout = function(smurfyMechLoadout) {
+  var heatsinkListFromSmurfyMechLoadout =
+      function(smurfyMechLoadout : SmurfyTypes.SmurfyMechLoadout) {
     var heatsinkList = [];
     heatsinkList = collectFromSmurfyConfiguration(smurfyMechLoadout.configuration,
-      function (location, smurfyMechComponentItem) {
+      function (location : string,
+                smurfyMechComponentItem : SmurfyTypes.SmurfyMechComponentItem) {
         let itemId = smurfyMechComponentItem.id;
         if (isHeatsinkModule(itemId)) {
           let heatsink = heatsinkFromSmurfyMechComponentItem(location, smurfyMechComponentItem);
@@ -1017,7 +1139,9 @@ var MechModel = MechModel || (function () {
     return heatsinkList;
   }
 
-  var heatsinkFromSmurfyMechComponentItem = function (location, smurfyMechComponentItem) {
+  var heatsinkFromSmurfyMechComponentItem =
+      function (location : string,
+                smurfyMechComponentItem : SmurfyTypes.SmurfyMechComponentItem) {
     let heatsinkId = smurfyMechComponentItem.id;
     let smurfyModuleData = getSmurfyModuleData(heatsinkId);
 
@@ -1025,10 +1149,12 @@ var MechModel = MechModel || (function () {
     return heatsink;
   }
 
-  var ammoBoxListFromSmurfyMechLoadout = function (smurfyMechLoadout) {
+  var ammoBoxListFromSmurfyMechLoadout =
+      function (smurfyMechLoadout : SmurfyTypes.SmurfyMechLoadout) {
     var ammoList = [];
     ammoList = collectFromSmurfyConfiguration(smurfyMechLoadout.configuration,
-      function (location, smurfyMechComponentItem) {
+      function (location : string,
+                smurfyMechComponentItem : SmurfyTypes.SmurfyMechComponentItem) {
         if (smurfyMechComponentItem.type === "ammo") {
           let ammoBox = ammoBoxFromSmurfyMechComponentItem(location, smurfyMechComponentItem);
           return ammoBox;
@@ -1040,7 +1166,9 @@ var MechModel = MechModel || (function () {
     return ammoList;
   }
 
-  var ammoBoxFromSmurfyMechComponentItem = function(location, smurfyMechComponentItem) {
+  var ammoBoxFromSmurfyMechComponentItem =
+      function(location : string,
+                smurfyMechComponentItem : SmurfyTypes.SmurfyMechComponentItem) {
     var ammoBox;
     let ammoData = getSmurfyAmmoData(smurfyMechComponentItem.id);
     let type = ammoData.type;
@@ -1055,8 +1183,8 @@ var MechModel = MechModel || (function () {
   //Gets the heatsink module id of the heatsinks in the engine.
   //Uses direct name matching because there doesn't seem to be an id reference
   //from the heatsink upgrade items to the associated heatsink
-  var getEngineHeatsinkId = function(smurfyMechLoadout) {
-    var upgradeToIdMap = {
+  var getEngineHeatsinkId = function(smurfyMechLoadout: SmurfyTypes.SmurfyMechLoadout) {
+    var upgradeToIdMap : {[index:string] : string} = {
       "STANDARD HEAT SINK" : ISSingleHeatsinkId,
       "DOUBLE HEAT SINK" : ISDoubleHeatsinkId,
       "CLAN DOUBLE HEAT SINK" : ClanDoubleHeatsinkId
@@ -1068,7 +1196,7 @@ var MechModel = MechModel || (function () {
     }
     return null; //should not happen
   }
-  var getEngineSmurfyModuleData = function(smurfyMechLoadout) {
+  var getEngineSmurfyModuleData = function(smurfyMechLoadout: SmurfyTypes.SmurfyMechLoadout) {
     for (let equipment of smurfyMechLoadout.stats.equipment) {
       let equipmentModuleData = getSmurfyModuleData(equipment.id);
       if (equipmentModuleData.type === "CEngineStats") {
@@ -1078,11 +1206,12 @@ var MechModel = MechModel || (function () {
     return null;//should not happen
   }
 
-  var isClanXLEngine = function(smurfyModuleData) {
+  var isClanXLEngine = function(smurfyModuleData : SmurfyTypes.SmurfyModuleData) {
      return smurfyModuleData.name.startsWith("Engine_Clan") &&
       smurfyModuleData.type === "CEngineStats";
   }
-  var engineInfoFromSmurfyMechLoadout = function(smurfyMechLoadout) {
+  var engineInfoFromSmurfyMechLoadout =
+      function(smurfyMechLoadout: SmurfyTypes.SmurfyMechLoadout) {
     let smurfyEngineData = getEngineSmurfyModuleData(smurfyMechLoadout);
     let engineId = smurfyEngineData.id;
     let name = smurfyEngineData.name;
@@ -1099,7 +1228,7 @@ var MechModel = MechModel || (function () {
     return engineInfo;
   }
 
-  var isOmnimech = function(smurfyMechLoadout) {
+  export var isOmnimech = function(smurfyMechLoadout: SmurfyTypes.SmurfyMechLoadout) {
     for (let component of smurfyMechLoadout.configuration) {
       if (component.omni_pod) {
         return true;
@@ -1108,9 +1237,9 @@ var MechModel = MechModel || (function () {
     return false;
   }
 
-  var numExternalHeatsinks = function(smurfyMechLoadout) {
+  var numExternalHeatsinks = function(smurfyMechLoadout: SmurfyTypes.SmurfyMechLoadout) {
     let heatsinkList = collectFromSmurfyConfiguration(smurfyMechLoadout.configuration,
-      function (location, smurfyMechComponentItem) {
+      function (location : string, smurfyMechComponentItem : SmurfyTypes.SmurfyMechComponentItem) {
         let itemId = smurfyMechComponentItem.id;
         if (isHeatsinkModule(itemId) && location !== Component.CENTRE_TORSO) {
           let heatsink = heatsinkFromSmurfyMechComponentItem(location, smurfyMechComponentItem);
@@ -1123,8 +1252,10 @@ var MechModel = MechModel || (function () {
   }
 
   //Calculates the total heat capacity and heat dissipation from a mechInfo
-  var calculateHeatStats = function (heatsinkInfoList, engineInfo,
-                                      engineHeatEfficiency, generalQuirkBonus) {
+  var calculateHeatStats = function (heatsinkInfoList : Heatsink[],
+                          engineInfo : EngineInfo,
+                          engineHeatEfficiency : number,
+                          generalQuirkBonus : MechModelQuirks.GeneralBonus) {
     const BASE_HEAT_CAPACITY = 30;
     let heatCapacity = BASE_HEAT_CAPACITY;
     let heatDissipation = 0;
@@ -1166,7 +1297,7 @@ var MechModel = MechModel || (function () {
     };
   }
 
-  var initWeaponStateList = function(mechState) {
+  var initWeaponStateList = function(mechState : MechState) {
     var weaponStateList = [];
     let mechInfo = mechState.mechInfo;
     for (let weaponInfo of mechInfo.weaponInfoList) {
@@ -1193,53 +1324,111 @@ var MechModel = MechModel || (function () {
   }
 
   //constructor
-  var Mech = function (new_mech_id, team, smurfyMechLoadout) {
-    var smurfy_mech_id = smurfyMechLoadout.mech_id;
-    var smurfyMechData = getSmurfyMechData(smurfy_mech_id);
-    var mech_id = new_mech_id;
-    var mechInfo = new MechInfo(new_mech_id, smurfyMechLoadout);
-    var mechState = new MechState(mechInfo);
-    var mechTeam = team;
-    var targetMech; //set by simulation
-    return {
-      firePattern : null, //Set after initialization
-      componentTargetPattern : null, //Set after initialization
-      mechTargetPattern : null, //set after initialization
-      accuracyPattern : null, //set after initialization
-      getName : function() {
-        return smurfyMechData.name;
-      },
-      getTranslatedName : function () {
-        return smurfyMechData.translated_name;
-      },
-      getMechId : function() {
-        return mech_id;
-      },
-      getMechInfo : function() {
-        return mechInfo;
-      },
-      getMechState : function() {
-        return mechState;
-      },
-      resetMechState : function() {
-        mechState = new MechState(mechInfo);
-      },
-      getMechTeam : function() {
-        return mechTeam;
-      },
-      setMechTeam : function(team) {
-        mechTeam = team;
-      },
-      setTargetMech : function(newTarget) {
-        targetMech = newTarget;
-      },
-      getTargetMech : function() {
-        return targetMech;
-      }
-    };
-  };
+  export class Mech {
+    firePattern : any; //Set after initialization
+    componentTargetPattern : any; //Set after initialization
+    mechTargetPattern : any; //set after initialization
+    accuracyPattern : any; //set after initialization
+    private smurfy_mech_id : string;
+    private smurfyMechData : SmurfyTypes.SmurfyMechData;
+    private mech_id : string;
+    private mechInfo : MechInfo;
+    private mechState : MechState;
+    private mechTeam : string;
+    private targetMech : Mech;
 
-  var addMech = function(mech_id, team, smurfyMechLoadout) {
+    constructor(new_mech_id : string,
+                team : string,
+                smurfyMechLoadout : SmurfyTypes.SmurfyMechLoadout) {
+      this.smurfy_mech_id = smurfyMechLoadout.mech_id;
+      this.smurfyMechData = getSmurfyMechData(this.smurfy_mech_id);
+      this.mech_id = new_mech_id;
+      this.mechInfo = new MechInfo(new_mech_id, smurfyMechLoadout);
+      this.mechState = new MechState(this.mechInfo);
+      this.mechTeam = team;
+      this.targetMech; //set by simulation
+    }
+
+    getName() {
+      return this.smurfyMechData.name;
+    }
+    getTranslatedName() {
+      return this.smurfyMechData.translated_name;
+    }
+    getMechId() {
+      return this.mech_id;
+    }
+    getMechInfo()  {
+      return this.mechInfo;
+    }
+    getMechState() {
+      return this.mechState;
+    }
+    resetMechState() {
+      this.mechState = new MechState(this.mechInfo);
+    }
+    getMechTeam() {
+      return this.mechTeam;
+    }
+    setMechTeam(team : string) {
+      this.mechTeam = team;
+    }
+    setTargetMech(newTarget : Mech) {
+      this.targetMech = newTarget;
+    }
+    getTargetMech() {
+      return this.targetMech;
+    }
+  }
+  // var Mech = function (new_mech_id, team, smurfyMechLoadout)  {
+  //   var smurfy_mech_id = smurfyMechLoadout.mech_id;
+  //   var smurfyMechData = getSmurfyMechData(smurfy_mech_id);
+  //   var mech_id = new_mech_id;
+  //   var mechInfo = new MechInfo(new_mech_id, smurfyMechLoadout);
+  //   var mechState = new MechState(mechInfo);
+  //   var mechTeam = team;
+  //   var targetMech; //set by simulation
+  //   return {
+  //     firePattern : null, //Set after initialization
+  //     componentTargetPattern : null, //Set after initialization
+  //     mechTargetPattern : null, //set after initialization
+  //     accuracyPattern : null, //set after initialization
+  //     getName : function() {
+  //       return smurfyMechData.name;
+  //     },
+  //     getTranslatedName : function () {
+  //       return smurfyMechData.translated_name;
+  //     },
+  //     getMechId : function() {
+  //       return mech_id;
+  //     },
+  //     getMechInfo : function() {
+  //       return mechInfo;
+  //     },
+  //     getMechState : function() {
+  //       return mechState;
+  //     },
+  //     resetMechState : function() {
+  //       mechState = new MechState(mechInfo);
+  //     },
+  //     getMechTeam : function() {
+  //       return mechTeam;
+  //     },
+  //     setMechTeam : function(team) {
+  //       mechTeam = team;
+  //     },
+  //     setTargetMech : function(newTarget) {
+  //       targetMech = newTarget;
+  //     },
+  //     getTargetMech : function() {
+  //       return targetMech;
+  //     }
+  //   };
+  // };
+
+  export var addMech = function(mech_id : string,
+                                team : string,
+                                smurfyMechLoadout : SmurfyTypes.SmurfyMechLoadout) {
     var newMech = new Mech(mech_id, team, smurfyMechLoadout);
     mechTeams[team].push(newMech);
     console.log("Added mech mech_id: " + mech_id +
@@ -1248,7 +1437,10 @@ var MechModel = MechModel || (function () {
     return newMech;
   };
 
-  var addMechAtIndex = function(mech_id, team, smurfyMechLoadout, index) {
+  export var addMechAtIndex = function(mech_id : string,
+                                  team : string,
+                                  smurfyMechLoadout : SmurfyTypes.SmurfyMechLoadout,
+                                  index : number) {
     var newMech = new Mech(mech_id, team, smurfyMechLoadout);
     mechTeams[team][index] = newMech;
     console.log("Added mech mech_id: " + mech_id
@@ -1259,25 +1451,29 @@ var MechModel = MechModel || (function () {
   }
 
   //TODO: Put in maps if this gets called often
-  var getMechPosFromId = function(mech_id) {
+  interface MechPos {
+    team : string;
+    index : number;
+  }
+  var getMechPosFromId = function(mech_id : string) : MechPos {
     let teamList = [Team.BLUE, Team.RED];
     for (let team of teamList) {
       let mechList = mechTeams[team];
       for (let mechIdx in mechList) {
         let mech = mechList[mechIdx];
         if (mech.getMechId() === mech_id) {
-          return {team: team, index: mechIdx};
+          return {team: team, index: Number(mechIdx)};
         }
       }
     }
     return null;
   }
 
-  var getMechFromPos = function(mechPos) {
+  var getMechFromPos = function(mechPos : MechPos) {
     return mechTeams[mechPos.team][mechPos.index];
   }
 
-  var deleteMech = function(mech_id) {
+  export var deleteMech = function(mech_id : string) {
     let mechPos = getMechPosFromId(mech_id);
     if (!mechPos) return false;
     let mechList = mechTeams[mechPos.team];
@@ -1286,7 +1482,7 @@ var MechModel = MechModel || (function () {
   }
 
   //removes src mech from its current position and inserts it before dest mech
-  var moveMech = function(srcMechId, destMechId) {
+  export var moveMech = function(srcMechId : string, destMechId : string) {
     let srcMechPos = getMechPosFromId(srcMechId);
     if (!srcMechPos) return false;
 
@@ -1297,9 +1493,10 @@ var MechModel = MechModel || (function () {
 
     //get dest pos AFTER delete to keep indices straight when moving in the same list
     let destMechPos = getMechPosFromId(destMechId);
+    let deletedMechList = mechTeams[srcMechPos.team];
     if (!destMechPos) {
       //reinsert deleted mech on error
-      insertMechList.splice(srcMechPos.index, 0, srcMech);
+      deletedMechList.splice(srcMechPos.index, 0, srcMech);
       return false;
     }
 
@@ -1310,20 +1507,19 @@ var MechModel = MechModel || (function () {
   }
 
   //Debug, set default mech patterns
-  var initMechTeamPatterns = function(mechTeam) {
+  export var initMechTeamPatterns = function(mechTeam : Mech[]) {
     for (let mech of mechTeam) {
       initMechPatterns(mech);
     }
   }
-  var initMechPatterns = function(mech) {
+  export var initMechPatterns = function(mech : Mech) {
     mech.firePattern = MechFirePattern.getDefault();
     mech.componentTargetPattern = MechTargetComponent.getDefault();
     mech.mechTargetPattern = MechTargetMech.getDefault();
     mech.accuracyPattern = MechAccuracyPattern.getDefault();
   }
 
-
-  var generateMechId = function(smurfyMechLoadout) {
+  export var generateMechId = function(smurfyMechLoadout : SmurfyTypes.SmurfyMechLoadout) {
     let smurfyMechData =
       MechModel.getSmurfyMechData(smurfyMechLoadout.mech_id);
     let mechName = smurfyMechData.name;
@@ -1335,13 +1531,13 @@ var MechModel = MechModel || (function () {
     while (mechIdMap[newMechId]) {
       newMechId = newMechId = mechName +
           rand() + "-" + rand() + "-" + rand() + "-" + rand();
-      mechIdMap[newMechId] = true;
     }
+    mechIdMap[newMechId] = true;
     return newMechId;
   }
 
   //Resets the MechStates of all mechs to their fresh value
-  var resetState = function() {
+  export var resetState = function() {
     let teams = [Team.BLUE, Team.RED];
     for (let team of teams) {
       let mechTeam = mechTeams[team];
@@ -1351,7 +1547,7 @@ var MechModel = MechModel || (function () {
     }
   }
 
-  var isTeamAlive = function(team) {
+  export var isTeamAlive = function(team : string) : boolean {
     let mechTeam = mechTeams[team];
     for (let mech of mechTeam) {
       if (mech.getMechState().isAlive()) {
@@ -1362,7 +1558,7 @@ var MechModel = MechModel || (function () {
   }
 
   //called every time team-level statistics need to be updated (e.g. when a weapon hits)
-  var updateModelTeamStats = function(team) {
+  export var updateModelTeamStats = function(team : string) {
     let totalTeamBurstDamage = 0;
     let teamStatEntry = teamStats[team];
     if (!teamStatEntry) {
@@ -1378,12 +1574,12 @@ var MechModel = MechModel || (function () {
     }
   }
 
-  var getTeamStats = function(team) {
+  export var getTeamStats = function(team : string) {
     return teamStats[team];
   }
 
   //returns {"i"=<id>, "l"=<loadout>}
-  var parseSmurfyURL = function(url) {
+  var parseSmurfyURL = function(url : string) {
     let urlMatcher = /https?:\/\/mwo\.smurfy-net\.de\/mechlab#i=([0-9]+)&l=([a-z0-9]+)/;
     let results = urlMatcher.exec(url);
     if (results) {
@@ -1399,7 +1595,7 @@ var MechModel = MechModel || (function () {
     }
   }
 
-  var loadSmurfyMechLoadoutFromURL = function(url) {
+  export var loadSmurfyMechLoadoutFromURL = function(url : string) {
     let params = parseSmurfyURL(url);
     if (!params) {
       return null;
@@ -1407,7 +1603,8 @@ var MechModel = MechModel || (function () {
     return loadSmurfyMechLoadoutFromID(params.id, params.loadout);
   }
 
-  var loadSmurfyMechLoadoutFromID = function(smurfyId, smurfyLoadoutId) {
+  export var loadSmurfyMechLoadoutFromID =
+        function(smurfyId : string, smurfyLoadoutId : string) {
     let ret = new Promise(function(resolve, reject) {
       var smurfyLoadoutURL = SMURFY_PROXY_URL + "data/mechs/" + smurfyId
           + "/loadouts/" + smurfyLoadoutId + ".json";
@@ -1416,10 +1613,10 @@ var MechModel = MechModel || (function () {
           type : 'GET',
           dataType : 'JSON'
       })
-      .done(function(data) {
+      .done(function(data : any) {
         resolve(data);
       })
-      .fail(function(data) {
+      .fail(function(data : any) {
         reject(Error(data));
       });
     });
@@ -1428,7 +1625,7 @@ var MechModel = MechModel || (function () {
 
   //returns a list of adjacent components
   //MechModel.Component -> [MechModel.Component...]
-  var getAdjacentComponents = function(component) {
+  export var getAdjacentComponents = function(component : string) {
     if (component === Component.HEAD) {
       return [];
     } else if (component === Component.CENTRE_TORSO) {
@@ -1449,7 +1646,7 @@ var MechModel = MechModel || (function () {
     return [];
   }
 
-  var getTransferDamageLocation = function(component) {
+  var getTransferDamageLocation = function(component : string) {
     if (component === Component.HEAD) {
       return null;
     } else if (component === Component.CENTRE_TORSO) {
@@ -1469,65 +1666,16 @@ var MechModel = MechModel || (function () {
     }
   }
 
-  var getMechFromId = function(mechId) {
+  export var getMechFromId = function(mechId : string) {
     let mechPos = getMechPosFromId(mechId);
     if (!mechPos) return null;
 
     return mechTeams[mechPos.team][mechPos.index];
   }
 
-  var clearModel = function() {
+  export var clearModel = function() {
     mechTeams[Team.BLUE] = [];
     mechTeams[Team.RED] = [];
     teamStats = {};
   }
-
-  //public members
-  return {
-    Component: Component,
-    WeaponCycle: WeaponCycle,
-    Team : Team,
-    Faction : Faction,
-    UpdateType : UpdateType,
-    EngineType : EngineType,
-    MechDamage : MechDamage,
-    WeaponDamage : WeaponDamage,
-    Mech : Mech,
-    MechInfo : MechInfo,
-    BURST_DAMAGE_INTERVAL: BURST_DAMAGE_INTERVAL,
-    mechTeams : mechTeams,
-    initModelData : initModelData,
-    initDummyModelData : initDummyModelData,
-    initAddedData : initAddedData,
-    addMech : addMech,
-    addMechAtIndex : addMechAtIndex,
-    deleteMech : deleteMech,
-    moveMech : moveMech,
-    clearModel : clearModel,
-    generateMechId : generateMechId,
-    initMechPatterns: initMechPatterns,
-    initMechTeamPatterns : initMechTeamPatterns,
-    resetState : resetState,
-    isTeamAlive : isTeamAlive,
-    getAdjacentComponents : getAdjacentComponents,
-    updateModelTeamStats: updateModelTeamStats,
-    getTeamStats: getTeamStats,
-    getMechFromId: getMechFromId,
-    isOmnimech: isOmnimech,
-    //Note: made public only because of testing. Should not be accessed outside this module
-    baseMechStructure : baseMechStructure,
-    baseMechArmor : baseMechArmor,
-
-    //smurfy data helper functions.
-    getSmurfyMechData : getSmurfyMechData,
-    getSmurfyWeaponData : getSmurfyWeaponData,
-    getSmurfyWeaponDataByName : getSmurfyWeaponDataByName,
-    getSmurfyModuleData : getSmurfyModuleData,
-    getSmurfyAmmoData : getSmurfyAmmoData,
-    getSmurfyOmnipodData: getSmurfyOmnipodData,
-    getSmurfyCTOmnipod: getSmurfyCTOmnipod,
-    loadSmurfyMechLoadoutFromURL : loadSmurfyMechLoadoutFromURL,
-    loadSmurfyMechLoadoutFromID : loadSmurfyMechLoadoutFromID,
-  };
-
-})(); //namespace end
+}

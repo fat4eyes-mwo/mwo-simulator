@@ -113,8 +113,10 @@ var generateAddedWeaponData = function (parsedXML) {
 var writeAddedWeaponData = function(addedWeaponData, filePath) {
   let dataString = JSON.stringify(addedWeaponData, null, "\t");
   let writeString = "//Generated from GameData.pak " + new Date().toUTCString() + "\n";
-  writeString += "_AddedWeaponData = ";
+  writeString += "namespace AddedData {\n\n";
+  writeString += "export var _AddedWeaponData : {[index:string] : any} = ";
   writeString += dataString + ";";
+  writeString += "\n}";
   FS.writeFile(filePath, writeString, function(err) {
     if (err) {
       console.error("Error writing file " + filePath + " : " + err);
@@ -132,7 +134,7 @@ var main = function() {
       console.log("Script data dir: " + scriptDataDir);
       let parsedWeapons = loadGameData(mwoDir + "/Game/GameData.pak");
       let addedWeaponData = generateAddedWeaponData(parsedWeapons);
-      writeAddedWeaponData(addedWeaponData, scriptDataDir + "/addedweapondata.js");
+      writeAddedWeaponData(addedWeaponData, scriptDataDir + "/addedweapondata.ts");
     })
     .parse(process.argv);
 }
