@@ -5,4 +5,5 @@ namespace ModuleA {
     console.log(ret);
     return ret;
   }
+  export const constA = "foo A";
 }

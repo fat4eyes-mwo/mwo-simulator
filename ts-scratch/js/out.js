@@ -7,6 +7,7 @@ var ModuleA;
         return ret;
     }
     ModuleA.funcA = funcA;
+    ModuleA.constA = "foo A";
 })(ModuleA || (ModuleA = {}));
 var ModuleB;
 (function (ModuleB) {
@@ -20,12 +21,10 @@ var ModuleB;
 /// <reference path="../scripts/lib/jquery-3.2.d.ts" />
 /// <reference path="moduleA.ts" />
 /// <reference path="moduleB.ts" />
-var A = ModuleA;
-var B = ModuleB;
 var Main;
 (function (Main) {
     function main() {
-        $("#debugText").text("Hello again from typescript" + A.funcA("Foo") + B.bfunc("Bar"));
+        $("#debugText").text("Hello again from typescript" + ModuleA.funcA("Foo") + ModuleB.bfunc("Bar"));
     }
     Main.main = main;
 })(Main || (Main = {}));
