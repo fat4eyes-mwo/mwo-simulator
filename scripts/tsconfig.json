@@ -20,7 +20,8 @@
       "data/globalgameinfo.ts",
       "data/basehealth.ts",
       "data/addedheatsinkdata.ts",
-      "data/addedweapondata.ts"
+      "data/addedweapondata.ts",
+      "lib/jquery-3.2.d.ts"
     ],
     "includes" : [
       "scripts/**/*.js"
