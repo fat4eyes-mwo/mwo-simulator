@@ -1,0 +1,1 @@
+//# sourceMappingURL=simulator-patterns.js.map

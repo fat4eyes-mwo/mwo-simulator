@@ -66,7 +66,6 @@ var MechModel;
     var SmurfyMechData = null;
     var SmurfyOmnipodData = {};
     var SmurfyCTOmnipods = {};
-    //TODO: replace with proper type
     MechModel.mechTeams = {};
     MechModel.mechTeams[MechModel.Team.BLUE] = [];
     MechModel.mechTeams[MechModel.Team.RED] = [];
@@ -1156,51 +1155,6 @@ var MechModel;
         }
     }
     MechModel.Mech = Mech;
-    // var Mech = function (new_mech_id, team, smurfyMechLoadout)  {
-    //   var smurfy_mech_id = smurfyMechLoadout.mech_id;
-    //   var smurfyMechData = getSmurfyMechData(smurfy_mech_id);
-    //   var mech_id = new_mech_id;
-    //   var mechInfo = new MechInfo(new_mech_id, smurfyMechLoadout);
-    //   var mechState = new MechState(mechInfo);
-    //   var mechTeam = team;
-    //   var targetMech; //set by simulation
-    //   return {
-    //     firePattern : null, //Set after initialization
-    //     componentTargetPattern : null, //Set after initialization
-    //     mechTargetPattern : null, //set after initialization
-    //     accuracyPattern : null, //set after initialization
-    //     getName : function() {
-    //       return smurfyMechData.name;
-    //     },
-    //     getTranslatedName : function () {
-    //       return smurfyMechData.translated_name;
-    //     },
-    //     getMechId : function() {
-    //       return mech_id;
-    //     },
-    //     getMechInfo : function() {
-    //       return mechInfo;
-    //     },
-    //     getMechState : function() {
-    //       return mechState;
-    //     },
-    //     resetMechState : function() {
-    //       mechState = new MechState(mechInfo);
-    //     },
-    //     getMechTeam : function() {
-    //       return mechTeam;
-    //     },
-    //     setMechTeam : function(team) {
-    //       mechTeam = team;
-    //     },
-    //     setTargetMech : function(newTarget) {
-    //       targetMech = newTarget;
-    //     },
-    //     getTargetMech : function() {
-    //       return targetMech;
-    //     }
-    //   };
-    // };
     MechModel.addMech = function (mech_id, team, smurfyMechLoadout) {
         var newMech = new Mech(mech_id, team, smurfyMechLoadout);
         MechModel.mechTeams[team].push(newMech);
