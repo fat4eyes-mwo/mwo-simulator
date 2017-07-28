@@ -186,7 +186,7 @@ namespace MechModelWeapons {
   //TODO : replace :any types
   export abstract class WeaponState {
     mechState : any;
-    weaponInfo : any;
+    weaponInfo : WeaponInfo;
     active : boolean;
     weaponCycle : any;
     cooldownLeft : number;
@@ -197,7 +197,7 @@ namespace MechModelWeapons {
     spoolupLeft : number;
     currShotsDuringCooldown : number;
 
-    constructor(weaponInfo : any, mechState : any) {
+    constructor(weaponInfo : WeaponInfo, mechState : any) {
       this.mechState = mechState;
       this.weaponInfo = weaponInfo;
       this.active = true;
@@ -383,7 +383,7 @@ namespace MechModelWeapons {
 
   //state for duration fire weapons (e.g. lasers)
   export class WeaponStateDurationFire extends WeaponState {
-    constructor(weaponInfo, mechState) {
+    constructor(weaponInfo : WeaponInfo, mechState : any) {
       super(weaponInfo, mechState);
       this.durationLeft = 0;
     }
@@ -432,7 +432,7 @@ namespace MechModelWeapons {
 
   //Single fire weapons (ACs, PPCs, UACs, Gauss)
   export class WeaponStateSingleFire extends WeaponState {
-    constructor(weaponInfo : any, mechState : any) {
+    constructor(weaponInfo : WeaponInfo, mechState : any) {
       super(weaponInfo, mechState);
       this.spoolupLeft = 0;
       this.jamLeft = 0;
@@ -562,7 +562,7 @@ namespace MechModelWeapons {
     jamBarProgress : number;
     rampUpLeft : number;
 
-    constructor(weaponInfo : any, mechState : any) {
+    constructor(weaponInfo : WeaponInfo, mechState : any) {
       super(weaponInfo, mechState);
       this.timeToNextAutoShot = 0;
       this.isOnAutoFire = false;
@@ -731,7 +731,7 @@ namespace MechModelWeapons {
   export class WeaponStateOneShot extends WeaponStateSingleFire {
     ammoRemaining : number;
 
-    constructor(weaponInfo : any, mechState : any) {
+    constructor(weaponInfo : WeaponInfo, mechState : any) {
       super(weaponInfo, mechState);
       this.ammoRemaining = Number(this.weaponInfo.ammoPerShot);
     }
