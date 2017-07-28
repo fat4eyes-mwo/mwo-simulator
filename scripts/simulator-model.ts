@@ -8,15 +8,33 @@
 /// <reference path="data/addedheatsinkdata.ts" />
 /// <reference path="data/addedweapondata.ts" />
 
+import SmurfyMechLoadout = SmurfyTypes.SmurfyMechLoadout;
+import SmurfyMechData = SmurfyTypes.SmurfyMechData;
+import SmurfyWeaponData = SmurfyTypes.SmurfyWeaponData;
+import SmurfyQuirk = SmurfyTypes.SmurfyQuirk;
+import SmurfyMechComponent = SmurfyTypes.SmurfyMechComponent;
+import SmurfyMechComponentItem = SmurfyTypes.SmurfyMechComponentItem;
+import SmurfyModuleData = SmurfyTypes.SmurfyModuleData;
+import SmurfyWeaponDataList = SmurfyTypes.SmurfyWeaponDataList;
+import SmurfyMechDataList = SmurfyTypes.SmurfyMechDataList;
+import SmurfyModuleDataList = SmurfyTypes.SmurfyModuleDataList;
+import SmurfyAmmoDataList = SmurfyTypes.SmurfyAmmoDataList;
+import SmurfyHeatsinkModuleData = SmurfyTypes.SmurfyHeatsinkModuleData;
+import SmurfyOmnipod = SmurfyTypes.SmurfyOmnipod;
+import SmurfyOmnipodData = SmurfyTypes.SmurfyOmnipodData;
+
 //Classes that represent the states of the mechs in the simulation,
 //and methos to populate them from smurfy data
 namespace MechModel  {
-  //TODO: See if you can get a tighter type for enums. Try aliasing
-  export const Team  : {[index:string] : string} = {
+  //TODO: See if you can get a tighter type for enums. Try aliasing.
+  //Also check when string enums get put into Typescript
+  export type Team = string;
+  export const Team  : {[index:string] : Team} = {
     BLUE : "blue",
     RED : "red"
   };
 
+  export type Component = string;
   export const Component : {[index:string] : string} = {
     HEAD : "head",
     RIGHT_ARM :"right_arm",
@@ -37,7 +55,8 @@ namespace MechModel  {
         component === Component.RIGHT_TORSO_REAR;
   };
 
-  export const WeaponCycle : {[index:string] : string}  = {
+  export type WeaponCycle = string;
+  export const WeaponCycle : {[index:string] : WeaponCycle}  = {
     READY : "Ready",
     FIRING : "Firing",
     DISABLED : "Disabled",
@@ -47,12 +66,14 @@ namespace MechModel  {
     JAMMED : "Jammed",
   };
 
-  export const Faction : {[index:string] : string}  = {
+  export type Faction = string;
+  export const Faction : {[index:string] : Faction}  = {
     INNER_SPHERE : "InnerSphere",
     CLAN : "Clan"
   };
 
-  export const UpdateType : {[index:string] : string}  = {
+  export type UpdateType = string;
+  export const UpdateType : {[index:string] : UpdateType}  = {
     FULL : "full",
     HEALTH : "health",
     HEAT : "heat",
@@ -61,17 +82,18 @@ namespace MechModel  {
     STATS : "stats"
   };
 
-  export const EngineType : {[index:string] : string}  = {
+  export type EngineType = string;
+  export const EngineType : {[index:string] : EngineType}  = {
     STD : "std",
     XL : "xl",
     CLAN_XL : "clan_xl",
     LIGHT : "light",
   };
 
-  var SmurfyWeaponData : SmurfyTypes.SmurfyWeaponDataList = null;
-  var SmurfyAmmoData : SmurfyTypes.SmurfyAmmoDataList = null;
-  var SmurfyModuleData : SmurfyTypes.SmurfyModuleDataList = null;
-  var SmurfyMechData : SmurfyTypes.SmurfyMechDataList = null;
+  var SmurfyWeaponData : SmurfyWeaponDataList = null;
+  var SmurfyAmmoData : SmurfyAmmoDataList = null;
+  var SmurfyModuleData : SmurfyModuleDataList = null;
+  var SmurfyMechData : SmurfyMechDataList = null;
   var SmurfyOmnipodData : FlatOmnipodData = {};
   var SmurfyCTOmnipods : CTOmnipodMap = {};
   export var mechTeams : {[index:string] : Mech[]} = {};
@@ -87,7 +109,7 @@ namespace MechModel  {
     mechName : string;
     mechTranslatedName : string;
     tons : number;
-    quirks : SmurfyTypes.SmurfyQuirk[];
+    quirks : SmurfyQuirk[];
     generalQuirkBonus : MechModelQuirks.GeneralBonus;
     mechHealth : MechHealth;
     weaponInfoList : MechModelWeapons.WeaponInfo[];
@@ -95,7 +117,7 @@ namespace MechModel  {
     ammoBoxList : AmmoBox[];
     engineInfo : EngineInfo;
 
-    constructor(mechId : string, smurfyMechLoadout : SmurfyTypes.SmurfyMechLoadout) {
+    constructor(mechId : string, smurfyMechLoadout : SmurfyMechLoadout) {
       this.mechId = mechId;
       this.smurfyMechId = smurfyMechLoadout.mech_id;
       this.smurfyLoadoutId = smurfyMechLoadout.id;
@@ -129,10 +151,10 @@ namespace MechModel  {
     engineCooling : number;
     internalHeatCapacity : number;
     externalHeatCapacity : number;
-    smurfyModuleData : SmurfyTypes.SmurfyHeatsinkModuleData;
+    smurfyModuleData : SmurfyHeatsinkModuleData;
 
     constructor(location : string,
-                smurfyModuleData : SmurfyTypes.SmurfyHeatsinkModuleData) {
+                smurfyModuleData : SmurfyHeatsinkModuleData) {
       this.location = location;
       this.heatsinkId = smurfyModuleData.id;
       this.name = smurfyModuleData.name;
@@ -865,9 +887,9 @@ namespace MechModel  {
   //NOTE: Process the omnipod data so the omnipod ID is the
   //main index (instead of the chassis name)
   //also finds the CT omnipods and puts them in a set->omnipod map
-  type FlatOmnipodData = {[index:string] : SmurfyTypes.SmurfyOmnipod};
-  type CTOmnipodMap = {[index:string] : SmurfyTypes.SmurfyOmnipod};
-  var flattenOmnipodData = function(smurfyOmnipodData : SmurfyTypes.SmurfyOmnipodData) {
+  type FlatOmnipodData = {[index:string] : SmurfyOmnipod};
+  type CTOmnipodMap = {[index:string] : SmurfyOmnipod};
+  var flattenOmnipodData = function(smurfyOmnipodData : SmurfyOmnipodData) {
     let flatOmnipodData : FlatOmnipodData = {};
     let ctOmnipodMap : CTOmnipodMap = {};
     for (let chassis in smurfyOmnipodData) {
@@ -979,17 +1001,17 @@ namespace MechModel  {
   };
 
   export var getSmurfyMechData =
-      function(smurfyMechId : string) : SmurfyTypes.SmurfyMechData {
+      function(smurfyMechId : string) : SmurfyMechData {
     return SmurfyMechData[smurfyMechId];
   };
 
   export var getSmurfyWeaponData =
-      function(smurfyItemId : string) : SmurfyTypes.SmurfyWeaponData {
+      function(smurfyItemId : string) : SmurfyWeaponData {
     return SmurfyWeaponData[smurfyItemId];
   }
 
-  var smurfyWeaponNameMap : {[index:string] : SmurfyTypes.SmurfyWeaponData} = {};
-  export var getSmurfyWeaponDataByName = function(smurfyName : string) : SmurfyTypes.SmurfyWeaponData {
+  var smurfyWeaponNameMap : {[index:string] : SmurfyWeaponData} = {};
+  export var getSmurfyWeaponDataByName = function(smurfyName : string) : SmurfyWeaponData {
     if (smurfyWeaponNameMap[smurfyName]) {
       return smurfyWeaponNameMap[smurfyName];
     }
@@ -1046,8 +1068,8 @@ namespace MechModel  {
   //Object creation methods.
   //TODO: see if it's better to put these in the object constructors instead
   var mechHealthFromSmurfyMechLoadout =
-      function (smurfyMechLoadout : SmurfyTypes.SmurfyMechLoadout,
-                quirks : SmurfyTypes.SmurfyQuirk[]) {
+      function (smurfyMechLoadout : SmurfyMechLoadout,
+                quirks : SmurfyQuirk[]) {
     var mechHealth;
 
     var smurfyMechData = getSmurfyMechData(smurfyMechLoadout.mech_id);
@@ -1063,8 +1085,8 @@ namespace MechModel  {
   }
 
   var componentHealthFromSmurfyMechComponent =
-      function (smurfyMechComponent : SmurfyTypes.SmurfyMechComponent,
-                smurfyMechQuirks : SmurfyTypes.SmurfyQuirk[],
+      function (smurfyMechComponent : SmurfyMechComponent,
+                smurfyMechQuirks : SmurfyQuirk[],
                 tonnage : number) {
     var componentHealth; //return value
 
@@ -1085,10 +1107,10 @@ namespace MechModel  {
   //and returns a value if it is to be added to the list, undefined/null if not
   type CollectorFunction =
     (location: string,
-      componentItem : SmurfyTypes.SmurfyMechComponentItem)
+      componentItem : SmurfyMechComponentItem)
         => any;
   var collectFromSmurfyConfiguration =
-      function (smurfyMechConfiguration : SmurfyTypes.SmurfyMechComponent[],
+      function (smurfyMechConfiguration : SmurfyMechComponent[],
                 collectFunction : CollectorFunction) {
     var outputList = [];
     for (let smurfyMechComponent of smurfyMechConfiguration) {
@@ -1104,7 +1126,7 @@ namespace MechModel  {
   }
 
   var weaponInfoListFromSmurfyMechLoadout =
-      function (smurfyMechLoadout : SmurfyTypes.SmurfyMechLoadout,
+      function (smurfyMechLoadout : SmurfyMechLoadout,
                 mechInfo : MechInfo) {
     var weaponInfoList = [];
     weaponInfoList = collectFromSmurfyConfiguration(smurfyMechLoadout.configuration,
@@ -1123,7 +1145,7 @@ namespace MechModel  {
   }
 
   var heatsinkListFromSmurfyMechLoadout =
-      function(smurfyMechLoadout : SmurfyTypes.SmurfyMechLoadout) {
+      function(smurfyMechLoadout : SmurfyMechLoadout) {
     var heatsinkList = [];
     heatsinkList = collectFromSmurfyConfiguration(smurfyMechLoadout.configuration,
       function (location, smurfyMechComponentItem) : Heatsink {
@@ -1140,7 +1162,7 @@ namespace MechModel  {
 
   var heatsinkFromSmurfyMechComponentItem =
       function (location : string,
-                smurfyMechComponentItem : SmurfyTypes.SmurfyMechComponentItem) : Heatsink {
+                smurfyMechComponentItem : SmurfyMechComponentItem) : Heatsink {
     let heatsinkId = smurfyMechComponentItem.id;
     let smurfyModuleData = getSmurfyModuleData(heatsinkId);
 
@@ -1149,7 +1171,7 @@ namespace MechModel  {
   }
 
   var ammoBoxListFromSmurfyMechLoadout =
-      function (smurfyMechLoadout : SmurfyTypes.SmurfyMechLoadout) {
+      function (smurfyMechLoadout : SmurfyMechLoadout) {
     var ammoList = [];
     ammoList = collectFromSmurfyConfiguration(smurfyMechLoadout.configuration,
       function (location, smurfyMechComponentItem) : AmmoBox {
@@ -1166,7 +1188,7 @@ namespace MechModel  {
 
   var ammoBoxFromSmurfyMechComponentItem =
       function(location : string,
-                smurfyMechComponentItem : SmurfyTypes.SmurfyMechComponentItem)
+                smurfyMechComponentItem : SmurfyMechComponentItem)
                 : AmmoBox {
     var ammoBox;
     let ammoData = getSmurfyAmmoData(smurfyMechComponentItem.id);
@@ -1182,7 +1204,7 @@ namespace MechModel  {
   //Gets the heatsink module id of the heatsinks in the engine.
   //Uses direct name matching because there doesn't seem to be an id reference
   //from the heatsink upgrade items to the associated heatsink
-  var getEngineHeatsinkId = function(smurfyMechLoadout: SmurfyTypes.SmurfyMechLoadout) : string {
+  var getEngineHeatsinkId = function(smurfyMechLoadout: SmurfyMechLoadout) : string {
     var upgradeToIdMap : {[index:string] : string} = {
       "STANDARD HEAT SINK" : ISSingleHeatsinkId,
       "DOUBLE HEAT SINK" : ISDoubleHeatsinkId,
@@ -1195,7 +1217,7 @@ namespace MechModel  {
     }
     return null; //should not happen
   }
-  var getEngineSmurfyModuleData = function(smurfyMechLoadout: SmurfyTypes.SmurfyMechLoadout) {
+  var getEngineSmurfyModuleData = function(smurfyMechLoadout: SmurfyMechLoadout) {
     for (let equipment of smurfyMechLoadout.stats.equipment) {
       let equipmentModuleData = getSmurfyModuleData(equipment.id);
       if (equipmentModuleData.type === "CEngineStats") {
@@ -1205,12 +1227,12 @@ namespace MechModel  {
     return null;//should not happen
   }
 
-  var isClanXLEngine = function(smurfyModuleData : SmurfyTypes.SmurfyModuleData) {
+  var isClanXLEngine = function(smurfyModuleData : SmurfyModuleData) {
      return smurfyModuleData.name.startsWith("Engine_Clan") &&
       smurfyModuleData.type === "CEngineStats";
   }
   var engineInfoFromSmurfyMechLoadout =
-      function(smurfyMechLoadout: SmurfyTypes.SmurfyMechLoadout) : EngineInfo {
+      function(smurfyMechLoadout: SmurfyMechLoadout) : EngineInfo {
     let smurfyEngineData = getEngineSmurfyModuleData(smurfyMechLoadout);
     let engineId = smurfyEngineData.id;
     let name = smurfyEngineData.name;
@@ -1228,7 +1250,7 @@ namespace MechModel  {
   }
 
   export var isOmnimech =
-      function(smurfyMechLoadout: SmurfyTypes.SmurfyMechLoadout) : boolean {
+      function(smurfyMechLoadout: SmurfyMechLoadout) : boolean {
     for (let component of smurfyMechLoadout.configuration) {
       if (component.omni_pod) {
         return true;
@@ -1238,9 +1260,9 @@ namespace MechModel  {
   }
 
   var numExternalHeatsinks =
-      function(smurfyMechLoadout: SmurfyTypes.SmurfyMechLoadout) : number {
+      function(smurfyMechLoadout: SmurfyMechLoadout) : number {
     let heatsinkList = collectFromSmurfyConfiguration(smurfyMechLoadout.configuration,
-      function (location : string, smurfyMechComponentItem : SmurfyTypes.SmurfyMechComponentItem) {
+      function (location : string, smurfyMechComponentItem : SmurfyMechComponentItem) {
         let itemId = smurfyMechComponentItem.id;
         if (isHeatsinkModule(itemId) && location !== Component.CENTRE_TORSO) {
           let heatsink = heatsinkFromSmurfyMechComponentItem(location, smurfyMechComponentItem);
@@ -1336,7 +1358,7 @@ namespace MechModel  {
     mechTargetPattern : any; //set after initialization
     accuracyPattern : MechAccuracyPattern.AccuracyPattern; //set after initialization
     private smurfy_mech_id : string;
-    private smurfyMechData : SmurfyTypes.SmurfyMechData;
+    private smurfyMechData : SmurfyMechData;
     private mech_id : string;
     private mechInfo : MechInfo;
     private mechState : MechState;
@@ -1345,7 +1367,7 @@ namespace MechModel  {
 
     constructor(new_mech_id : string,
                 team : string,
-                smurfyMechLoadout : SmurfyTypes.SmurfyMechLoadout) {
+                smurfyMechLoadout : SmurfyMechLoadout) {
       this.smurfy_mech_id = smurfyMechLoadout.mech_id;
       this.smurfyMechData = getSmurfyMechData(this.smurfy_mech_id);
       this.mech_id = new_mech_id;
@@ -1389,7 +1411,7 @@ namespace MechModel  {
 
   export var addMech = function(mech_id : string,
                                 team : string,
-                                smurfyMechLoadout : SmurfyTypes.SmurfyMechLoadout)
+                                smurfyMechLoadout : SmurfyMechLoadout)
                                 : Mech {
     var newMech = new Mech(mech_id, team, smurfyMechLoadout);
     mechTeams[team].push(newMech);
@@ -1401,7 +1423,7 @@ namespace MechModel  {
 
   export var addMechAtIndex = function(mech_id : string,
                                   team : string,
-                                  smurfyMechLoadout : SmurfyTypes.SmurfyMechLoadout,
+                                  smurfyMechLoadout : SmurfyMechLoadout,
                                   index : number)
                                   : Mech {
     var newMech = new Mech(mech_id, team, smurfyMechLoadout);
@@ -1483,7 +1505,7 @@ namespace MechModel  {
     mech.accuracyPattern = MechAccuracyPattern.getDefault();
   }
 
-  export var generateMechId = function(smurfyMechLoadout : SmurfyTypes.SmurfyMechLoadout) {
+  export var generateMechId = function(smurfyMechLoadout : SmurfyMechLoadout) {
     let smurfyMechData =
       MechModel.getSmurfyMechData(smurfyMechLoadout.mech_id);
     let mechName = smurfyMechData.name;

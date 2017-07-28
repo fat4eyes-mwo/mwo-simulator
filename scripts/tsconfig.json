@@ -18,6 +18,7 @@
       "simulator-smurfytypes.ts",
       "simulator-patterns.ts",
       "simulator-accuracypattern.ts",
+      "simulator-componenttarget.ts",
       "data/quirkdata.ts",
       "data/globalgameinfo.ts",
       "data/basehealth.ts",

@@ -1,6 +1,6 @@
 "use strict";
 
-//Classes representing smurfy types. Only used for reference and autocompletion
+//Type definitions for smurfy types
 
 namespace SmurfyTypes {
 

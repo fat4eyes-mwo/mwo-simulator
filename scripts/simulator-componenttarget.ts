@@ -1,14 +1,23 @@
 "use strict";
+/// <reference path="simulator-model.ts" />
+/// <reference path="simulator-model-weapons.ts" />
+/// <reference path="simulator-patterns.ts" />
 
-var MechTargetComponent = MechTargetComponent || (function () {
+import Mech = MechModel.Mech;
+import Component = MechModel.Component;
 
+namespace MechTargetComponent {
+
+  export type TargetComponentPattern = (sourceMech : Mech, targetMech : Mech) => Component;
   //These functions return which component of a mech should be targeted
   //function(sourceMech, targetMech) -> MechModel.Component
-  var aimForCenterTorso = function(sourceMech, targetMech) {
+  export var aimForCenterTorso =
+      function(sourceMech : Mech, targetMech : Mech) : string {
     return MechModel.Component.CENTRE_TORSO;
   }
 
-  var aimForXLSideTorso = function(sourceMech, targetMech) {
+  export var aimForXLSideTorso =
+      function(sourceMech : Mech, targetMech : Mech) : Component {
     let mechInfo = targetMech.getMechInfo();
     if (mechInfo.engineInfo.getEngineType() === MechModel.EngineType.XL) {
       return MechModel.Component.RIGHT_TORSO;
@@ -17,7 +26,8 @@ var MechTargetComponent = MechTargetComponent || (function () {
     }
   }
 
-  var aimForLegs = function(sourceMech, targetMech) {
+  export var aimForLegs =
+      function(sourceMech : Mech, targetMech : Mech) : Component {
     let mechState = targetMech.getMechState();
     if (mechState.mechHealth.isIntact(MechModel.Component.LEFT_LEG)) {
       return MechModel.Component.LEFT_LEG;
@@ -26,7 +36,8 @@ var MechTargetComponent = MechTargetComponent || (function () {
     }
   }
 
-  var aimSideTorsoThenCenterTorso = function(sourceMech, targetMech) {
+  export var aimSideTorsoThenCenterTorso =
+      function(sourceMech : Mech, targetMech : Mech) : Component {
     let targetMechHealth = targetMech.getMechState().mechHealth;
     let Component = MechModel.Component;
     if (targetMechHealth.isIntact(Component.RIGHT_TORSO)) {
@@ -38,7 +49,7 @@ var MechTargetComponent = MechTargetComponent || (function () {
     }
   }
 
-  var randomAim = function(sourceMech, targetMech) {
+  export var randomAim = function(sourceMech : Mech, targetMech : Mech) : Component {
     let Component = MechModel.Component;
     let componentList = [
       Component.RIGHT_ARM,
@@ -61,7 +72,9 @@ var MechTargetComponent = MechTargetComponent || (function () {
   //component weights is an object of the form {<component> : <percentWeight>}.
   //The percent weights of all the components in the object should be
   //equal to one
-  var weightedRandom = function(componentWeights) {
+  var weightedRandom =
+      function(componentWeights : {[index:string] : number})
+                : TargetComponentPattern {
     let cumulativePercentMap = new Map();
     let prevComponent;
     for (let component in componentWeights) {
@@ -74,7 +87,7 @@ var MechTargetComponent = MechTargetComponent || (function () {
       prevComponent = component;
     }
 
-    return function(sourceMech, targetMech) {
+    return function(sourceMech : Mech, targetMech : Mech) : Component {
       let rand = Math.random();
       //relies on map insertion order to be the same order as the iterator
       for (let component of cumulativePercentMap.keys()) {
@@ -86,7 +99,7 @@ var MechTargetComponent = MechTargetComponent || (function () {
     }
   }
 
-  var getDefault = function() {
+  export var getDefault = function() : TargetComponentPattern {
     for (let patternEntry of getPatterns()) {
       if (patternEntry.default) {
         return patternEntry.pattern;
@@ -98,7 +111,7 @@ var MechTargetComponent = MechTargetComponent || (function () {
   //format of each entry is
   //{id : <patternid>, name : <readableName>, pattern : <function>, description : <desc text>, default: <boolean>}
   //Note: default must be the same as the pattern returned by getDefault()
-  var getPatterns = function() {
+  export var getPatterns = function() : Pattern[] {
     let patternList = [
       { id: "aimForCenterTorso",
         name: "Aim for CT",
@@ -148,18 +161,7 @@ var MechTargetComponent = MechTargetComponent || (function () {
     return patternList;
   }
 
-  var reset = function() {
+  export var reset = function() {
 
   }
-
-  return {
-    aimForCenterTorso : aimForCenterTorso,
-    aimForXLSideTorso : aimForXLSideTorso,
-    aimForLegs : aimForLegs,
-    aimSideTorsoThenCenterTorso: aimSideTorsoThenCenterTorso,
-    randomAim : randomAim,
-    getDefault : getDefault,
-    getPatterns : getPatterns,
-    reset : reset,
-  }
-})();
+}
