@@ -1,10 +1,24 @@
 "use strict";
+/// <reference path="simulator-model.ts" />
+/// <reference path="simulator-model-weapons.ts" />
+/// <reference path="simulator-patterns.ts" />
+/// <reference path="data/weaponspread.ts" />
 
-var MechAccuracyPattern = MechAccuracyPattern || (function () {
+import WeaponDamage = MechModel.WeaponDamage;
+import WeaponInfo = MechModelWeapons.WeaponInfo;
+import WeaponSpread = GlobalGameInfo.WeaponSpread;
+import WeaponSpreadAtRange = GlobalGameInfo.WeaponSpreadAtRange;
+import Pattern = ModelPatterns.Pattern;
 
+namespace MechAccuracyPattern {
+
+  export type AccuracyPattern =
+      (weaponDamage : WeaponDamage, range : number) => WeaponDamage;
   //Functions that determine how damage from a weapon is spread
   //type is function(MechModel.WeaponDamage, range) -> MechModel.WeaponDamage
-  var fullAccuracyPattern = function(weaponDamage, range) {
+  export var fullAccuracyPattern =
+      function(weaponDamage : WeaponDamage,
+              range : number) : WeaponDamage {
     //Does not spread the damage
     return weaponDamage;
   }
@@ -14,13 +28,14 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
   //percentOnNextToAdjacent between 0 and 1,
   //and their total must be less than one
   //Any left over is considered a miss
-  var accuracySpreadToAdjacent = function(percentOnTarget,
-                                            percentOnAdjacent,
-                                            percentOnNextToAdjacent) {
+  export var accuracySpreadToAdjacent =
+      function(percentOnTarget : number,
+              percentOnAdjacent : number,
+              percentOnNextToAdjacent : number) : AccuracyPattern {
     if (percentOnTarget + percentOnAdjacent + percentOnNextToAdjacent > 1) {
       console.warn("Total damage percentage exceeds 1");
     }
-    return function(weaponDamage, range) {
+    return function(weaponDamage : WeaponDamage, range : number) : WeaponDamage {
       let transformedDamage = new MechModel.WeaponDamage({});
 
       for (let component in weaponDamage.damageMap) {
@@ -83,58 +98,58 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
 
   //Weapon specific accuracy patterns
   //MUST be applied as the first transform on the raw weapon damage (even before mech accuracy)
-  var weaponAccuracyMap;
-  var getWeaponAccuracyPattern = function(weaponInfo) {
+  var weaponAccuracyMap : {[index:string] : AccuracyPattern};
+  export var getWeaponAccuracyPattern = function(weaponInfo : WeaponInfo) : AccuracyPattern {
     weaponAccuracyMap = weaponAccuracyMap ||
-      { "ClanERPPC" : MechAccuracyPattern.splashPPCPattern("ClanERPPC"),
-        "HeavyPPC" : MechAccuracyPattern.splashPPCPattern("HeavyPPC"), //in preparation for newtech
-        "LRM5" : MechAccuracyPattern.seekerPattern(_LRM5Spread),
-        "LRM10" : MechAccuracyPattern.seekerPattern(_LRM10Spread),
-        "LRM15" : MechAccuracyPattern.seekerPattern(_LRM15Spread),
-        "LRM20" : MechAccuracyPattern.seekerPattern(_LRM20Spread),
-        "LRM5_Artemis" : MechAccuracyPattern.seekerPattern(_ALRM5Spread),
-        "LRM10_Artemis" : MechAccuracyPattern.seekerPattern(_ALRM10Spread),
-        "LRM15_Artemis" : MechAccuracyPattern.seekerPattern(_ALRM15Spread),
-        "LRM20_Artemis" : MechAccuracyPattern.seekerPattern(_ALRM20Spread),
-        "ClanLRM5" : MechAccuracyPattern.seekerPattern(_cLRM5Spread),
-        "ClanLRM10" : MechAccuracyPattern.seekerPattern(_cLRM10Spread),
-        "ClanLRM15" : MechAccuracyPattern.seekerPattern(_cLRM15Spread),
-        "ClanLRM20" : MechAccuracyPattern.seekerPattern(_cLRM20Spread),
-        "ClanLRM5_Artemis" : MechAccuracyPattern.seekerPattern(_cALRM5Spread),
-        "ClanLRM10_Artemis" : MechAccuracyPattern.seekerPattern(_cALRM10Spread),
-        "ClanLRM15_Artemis" : MechAccuracyPattern.seekerPattern(_cALRM15Spread),
-        "ClanLRM20_Artemis" : MechAccuracyPattern.seekerPattern(_cALRM20Spread),
-        "SRM2" : MechAccuracyPattern.directFireSpreadPattern(_SRM2Spread),
-        "SRM4" : MechAccuracyPattern.directFireSpreadPattern(_SRM4Spread),
-        "SRM6" : MechAccuracyPattern.directFireSpreadPattern(_SRM6Spread),
-        "SRM2_Artemis" : MechAccuracyPattern.directFireSpreadPattern(_ASRM2Spread),
-        "SRM4_Artemis" : MechAccuracyPattern.directFireSpreadPattern(_ASRM4Spread),
-        "SRM6_Artemis" : MechAccuracyPattern.directFireSpreadPattern(_ASRM6Spread),
-        "ClanSRM2": MechAccuracyPattern.directFireSpreadPattern(_cSRM2Spread),
-        "ClanSRM4": MechAccuracyPattern.directFireSpreadPattern(_cSRM4Spread),
-        "ClanSRM6": MechAccuracyPattern.directFireSpreadPattern(_cSRM6Spread),
-        "ClanSRM2_Artemis": MechAccuracyPattern.directFireSpreadPattern(_cASRM2Spread),
-        "ClanSRM4_Artemis": MechAccuracyPattern.directFireSpreadPattern(_cASRM4Spread),
-        "ClanSRM6_Artemis": MechAccuracyPattern.directFireSpreadPattern(_cASRM6Spread),
-        "StreakSRM2" : MechAccuracyPattern.seekerPattern(_StreakSpread),
-        "ClanStreakSRM2" : MechAccuracyPattern.seekerPattern(_StreakSpread),
-        "ClanStreakSRM4" : MechAccuracyPattern.seekerPattern(_StreakSpread),
-        "ClanStreakSRM6" : MechAccuracyPattern.seekerPattern(_StreakSpread),
-        "MRM10" : MechAccuracyPattern.directFireSpreadPattern(_MRM10Spread),
-        "MRM20" : MechAccuracyPattern.directFireSpreadPattern(_MRM20Spread),
-        "MRM30" : MechAccuracyPattern.directFireSpreadPattern(_MRM30Spread),
-        "MRM40" : MechAccuracyPattern.directFireSpreadPattern(_MRM40Spread),
-        "ClanATM3" : MechAccuracyPattern.seekerPattern(_cATM3Spread),
-        "ClanATM6" : MechAccuracyPattern.seekerPattern(_cATM6Spread),
-        "ClanATM9" : MechAccuracyPattern.seekerPattern(_cATM9Spread),
-        "ClanATM12" : MechAccuracyPattern.seekerPattern(_cATM12Spread),
+      { "ClanERPPC" : splashPPCPattern("ClanERPPC"),
+        "HeavyPPC" : splashPPCPattern("HeavyPPC"), //in preparation for newtech
+        "LRM5" : seekerPattern(GlobalGameInfo._LRM5Spread),
+        "LRM10" : seekerPattern(GlobalGameInfo._LRM10Spread),
+        "LRM15" : seekerPattern(GlobalGameInfo._LRM15Spread),
+        "LRM20" : seekerPattern(GlobalGameInfo._LRM20Spread),
+        "LRM5_Artemis" : seekerPattern(GlobalGameInfo._ALRM5Spread),
+        "LRM10_Artemis" : seekerPattern(GlobalGameInfo._ALRM10Spread),
+        "LRM15_Artemis" : seekerPattern(GlobalGameInfo._ALRM15Spread),
+        "LRM20_Artemis" : seekerPattern(GlobalGameInfo._ALRM20Spread),
+        "ClanLRM5" : seekerPattern(GlobalGameInfo._cLRM5Spread),
+        "ClanLRM10" : seekerPattern(GlobalGameInfo._cLRM10Spread),
+        "ClanLRM15" : seekerPattern(GlobalGameInfo._cLRM15Spread),
+        "ClanLRM20" : seekerPattern(GlobalGameInfo._cLRM20Spread),
+        "ClanLRM5_Artemis" : seekerPattern(GlobalGameInfo._cALRM5Spread),
+        "ClanLRM10_Artemis" : seekerPattern(GlobalGameInfo._cALRM10Spread),
+        "ClanLRM15_Artemis" : seekerPattern(GlobalGameInfo._cALRM15Spread),
+        "ClanLRM20_Artemis" : seekerPattern(GlobalGameInfo._cALRM20Spread),
+        "SRM2" : directFireSpreadPattern(GlobalGameInfo._SRM2Spread),
+        "SRM4" : directFireSpreadPattern(GlobalGameInfo._SRM4Spread),
+        "SRM6" : directFireSpreadPattern(GlobalGameInfo._SRM6Spread),
+        "SRM2_Artemis" : directFireSpreadPattern(GlobalGameInfo._ASRM2Spread),
+        "SRM4_Artemis" : directFireSpreadPattern(GlobalGameInfo._ASRM4Spread),
+        "SRM6_Artemis" : directFireSpreadPattern(GlobalGameInfo._ASRM6Spread),
+        "ClanSRM2": directFireSpreadPattern(GlobalGameInfo._cSRM2Spread),
+        "ClanSRM4": directFireSpreadPattern(GlobalGameInfo._cSRM4Spread),
+        "ClanSRM6": directFireSpreadPattern(GlobalGameInfo._cSRM6Spread),
+        "ClanSRM2_Artemis": directFireSpreadPattern(GlobalGameInfo._cASRM2Spread),
+        "ClanSRM4_Artemis": directFireSpreadPattern(GlobalGameInfo._cASRM4Spread),
+        "ClanSRM6_Artemis": directFireSpreadPattern(GlobalGameInfo._cASRM6Spread),
+        "StreakSRM2" : seekerPattern(GlobalGameInfo._StreakSpread),
+        "ClanStreakSRM2" : seekerPattern(GlobalGameInfo._StreakSpread),
+        "ClanStreakSRM4" : seekerPattern(GlobalGameInfo._StreakSpread),
+        "ClanStreakSRM6" : seekerPattern(GlobalGameInfo._StreakSpread),
+        "MRM10" : directFireSpreadPattern(GlobalGameInfo._MRM10Spread),
+        "MRM20" : directFireSpreadPattern(GlobalGameInfo._MRM20Spread),
+        "MRM30" : directFireSpreadPattern(GlobalGameInfo._MRM30Spread),
+        "MRM40" : directFireSpreadPattern(GlobalGameInfo._MRM40Spread),
+        "ClanATM3" : seekerPattern(GlobalGameInfo._cATM3Spread),
+        "ClanATM6" : seekerPattern(GlobalGameInfo._cATM6Spread),
+        "ClanATM9" : seekerPattern(GlobalGameInfo._cATM9Spread),
+        "ClanATM12" : seekerPattern(GlobalGameInfo._cATM12Spread),
       };
     return weaponAccuracyMap[weaponInfo.name];
   }
 
   //cERPPC splash
-  var splashPPCPattern = function(ppcName) {
-    return function(weaponDamage, range) {
+  export var splashPPCPattern = function(ppcName : string) : AccuracyPattern {
+    return function(weaponDamage : WeaponDamage, range : number) {
       //assumes weaponDamage only has one entry (the targeted component) and adds
       //the appropriate amount of splash damage
       let baseERPPCDamage =
@@ -165,7 +180,9 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
 
   //seeking missile spread
   class SeekerSpread {
-    constructor(range, spread) {
+    range : number;
+    spread : WeaponSpreadAtRange;
+    constructor(range : number, spread : WeaponSpreadAtRange) {
       this.range = Number(range);
       this.spread = {}
       for (let component in MechModel.Component) {
@@ -188,7 +205,8 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
     }
   }
 
-  var findSpreadBaseIdx = function(spreadList, range) {
+  var findSpreadBaseIdx =
+      function(spreadList : SeekerSpread[], range : number) : number {
     let baseIdx = 0;
     for (baseIdx = spreadList.length - 1; baseIdx > 0; baseIdx --) {
       if (Number(spreadList[baseIdx].range) < Number(range)) {
@@ -200,16 +218,16 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
     }
     return baseIdx;
   }
-  var seekerPattern = function(seekerSpreadData) {
-    let seekerSpreadList = [];
+  export var seekerPattern = function(seekerSpreadData : WeaponSpread) {
+    let seekerSpreadList : SeekerSpread[] = [];
     for (let range in seekerSpreadData) {
-      seekerSpreadList.push(new SeekerSpread(range, seekerSpreadData[range]));
+      seekerSpreadList.push(new SeekerSpread(Number(range), seekerSpreadData[range]));
     }
     seekerSpreadList.sort((entry1, entry2) => {
       return Number(entry1.range) - Number(entry2.range);
     });
 
-    return function(weaponDamage, range) {
+    return function(weaponDamage : WeaponDamage , range : number) {
       range = Number(range);
       let baseIdx = findSpreadBaseIdx(seekerSpreadList, range);
       let nextIdx = baseIdx + 1;
@@ -217,7 +235,7 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
       let nextEntry = seekerSpreadList[nextIdx];
       let rangeDiff = range - baseEntry.range;
 
-      let computedSpread = {};
+      let computedSpread : WeaponSpreadAtRange = {};
       for (let component in MechModel.Component) {
         let componentVal = MechModel.Component[component];
         if (MechModel.Component.hasOwnProperty(component)) {
@@ -256,29 +274,32 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
   }
 
   class DirectFireSpread {
-    constructor(range, spread) {
+    range : number;
+    spread : WeaponSpreadAtRange;
+    constructor(range : number, spread : WeaponSpreadAtRange) {
       this.range = Number(range);
       this.spread = spread;
     }
   }
-  var directFireSpreadPattern = function(spreadData) {
-    let spreadList = [];
+  export var directFireSpreadPattern =
+      function(spreadData : WeaponSpread) : AccuracyPattern {
+    let spreadList : DirectFireSpread[] = [];
     for (let spreadRange in spreadData) {
-      let directFireSpread = new DirectFireSpread(spreadRange, spreadData[spreadRange]);
+      let directFireSpread = new DirectFireSpread(Number(spreadRange), spreadData[spreadRange]);
       spreadList.push(directFireSpread);
     }
-    spreadList.sort((entry1, entry2) => {
+    spreadList.sort((entry1 : DirectFireSpread, entry2 : DirectFireSpread) => {
       return entry1.range - entry2.range;
     });
 
-    return function(weaponDamage, range) {
+    return function(weaponDamage : WeaponDamage, range : number) : WeaponDamage {
       range = Number(range);
       let baseIdx = findSpreadBaseIdx(spreadList, range);
       let nextIdx = baseIdx + 1;
 
       let baseRange = Number(spreadList[baseIdx].range);
       let nextRange = Number(spreadList[nextIdx].range);
-      let computedSpread = {};
+      let computedSpread : WeaponSpreadAtRange = {};
       for (let field in spreadList[baseIdx].spread) {
         let basePercent = spreadList[baseIdx].spread[field];
         let nextPercent = spreadList[nextIdx].spread[field];
@@ -303,7 +324,7 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
     }
   }
 
-  var getDefault = function() {
+  export var getDefault = function() : AccuracyPattern {
     for (let patternEntry of getPatterns()) {
       if (patternEntry.default) {
         return patternEntry.pattern;
@@ -312,7 +333,7 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
   }
 
   //Returns a list of accuracy patterns for the UI
-  var getPatterns = function() {
+  export var getPatterns = function() : Pattern[] {
     let patternList = [
       {
         id:"accuracyPerfect",
@@ -367,20 +388,7 @@ var MechAccuracyPattern = MechAccuracyPattern || (function () {
     return patternList;
   }
 
-  var reset = function() {
+  export var reset = function() {
 
   }
-
-  return {
-    fullAccuracyPattern : fullAccuracyPattern,
-    accuracySpreadToAdjacent : accuracySpreadToAdjacent,
-    getWeaponAccuracyPattern : getWeaponAccuracyPattern,
-    splashPPCPattern : splashPPCPattern,
-    seekerPattern : seekerPattern,
-    directFireSpreadPattern : directFireSpreadPattern,
-    getDefault : getDefault,
-    getPatterns : getPatterns,
-    reset : reset,
-  }
-
-})();
+}

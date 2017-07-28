@@ -12,12 +12,12 @@
 //and methos to populate them from smurfy data
 namespace MechModel  {
 
-  export const Team = {
+  export const Team  : {[index:string] : string} = {
     BLUE : "blue",
     RED : "red"
   };
 
-  export const Component = {
+  export const Component : {[index:string] : string} = {
     HEAD : "head",
     RIGHT_ARM :"right_arm",
     RIGHT_TORSO : "right_torso",
@@ -31,13 +31,13 @@ namespace MechModel  {
     RIGHT_TORSO_REAR : "right_torso_rear"
   };
 
-  export var isRearComponent = function(component : string) {
+  export var isRearComponent = function(component : string) : boolean {
     return component === Component.LEFT_TORSO_REAR ||
         component === Component.CENTRE_TORSO_REAR ||
         component === Component.RIGHT_TORSO_REAR;
   };
 
-  export const WeaponCycle = {
+  export const WeaponCycle : {[index:string] : string}  = {
     READY : "Ready",
     FIRING : "Firing",
     DISABLED : "Disabled",
@@ -47,12 +47,12 @@ namespace MechModel  {
     JAMMED : "Jammed",
   };
 
-  export const Faction = {
+  export const Faction : {[index:string] : string}  = {
     INNER_SPHERE : "InnerSphere",
     CLAN : "Clan"
   };
 
-  export const UpdateType = {
+  export const UpdateType : {[index:string] : string}  = {
     FULL : "full",
     HEALTH : "health",
     HEAT : "heat",
@@ -61,7 +61,7 @@ namespace MechModel  {
     STATS : "stats"
   };
 
-  export const EngineType = {
+  export const EngineType : {[index:string] : string}  = {
     STD : "std",
     XL : "xl",
     CLAN_XL : "clan_xl",
@@ -74,8 +74,7 @@ namespace MechModel  {
   var SmurfyMechData : SmurfyTypes.SmurfyMechDataList = null;
   var SmurfyOmnipodData : FlatOmnipodData = {};
   var SmurfyCTOmnipods : CTOmnipodMap = {};
-  //TODO: replace with proper type
-  export var mechTeams : {[index:string] : any[]} = {};
+  export var mechTeams : {[index:string] : Mech[]} = {};
   mechTeams[Team.BLUE] = [];
   mechTeams[Team.RED] = [];
   var teamStats : {[index:string] : TeamStats} = {}; //format is {<team> : <teamStats>}
@@ -1326,7 +1325,7 @@ namespace MechModel  {
     firePattern : any; //Set after initialization
     componentTargetPattern : any; //Set after initialization
     mechTargetPattern : any; //set after initialization
-    accuracyPattern : any; //set after initialization
+    accuracyPattern : MechAccuracyPattern.AccuracyPattern; //set after initialization
     private smurfy_mech_id : string;
     private smurfyMechData : SmurfyTypes.SmurfyMechData;
     private mech_id : string;
@@ -1378,51 +1377,6 @@ namespace MechModel  {
       return this.targetMech;
     }
   }
-  // var Mech = function (new_mech_id, team, smurfyMechLoadout)  {
-  //   var smurfy_mech_id = smurfyMechLoadout.mech_id;
-  //   var smurfyMechData = getSmurfyMechData(smurfy_mech_id);
-  //   var mech_id = new_mech_id;
-  //   var mechInfo = new MechInfo(new_mech_id, smurfyMechLoadout);
-  //   var mechState = new MechState(mechInfo);
-  //   var mechTeam = team;
-  //   var targetMech; //set by simulation
-  //   return {
-  //     firePattern : null, //Set after initialization
-  //     componentTargetPattern : null, //Set after initialization
-  //     mechTargetPattern : null, //set after initialization
-  //     accuracyPattern : null, //set after initialization
-  //     getName : function() {
-  //       return smurfyMechData.name;
-  //     },
-  //     getTranslatedName : function () {
-  //       return smurfyMechData.translated_name;
-  //     },
-  //     getMechId : function() {
-  //       return mech_id;
-  //     },
-  //     getMechInfo : function() {
-  //       return mechInfo;
-  //     },
-  //     getMechState : function() {
-  //       return mechState;
-  //     },
-  //     resetMechState : function() {
-  //       mechState = new MechState(mechInfo);
-  //     },
-  //     getMechTeam : function() {
-  //       return mechTeam;
-  //     },
-  //     setMechTeam : function(team) {
-  //       mechTeam = team;
-  //     },
-  //     setTargetMech : function(newTarget) {
-  //       targetMech = newTarget;
-  //     },
-  //     getTargetMech : function() {
-  //       return targetMech;
-  //     }
-  //   };
-  // };
 
   export var addMech = function(mech_id : string,
                                 team : string,

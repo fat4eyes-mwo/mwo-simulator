@@ -16,9 +16,12 @@
       "simulator-model-quirks.ts",
       "simulator-model-weapons.ts",
       "simulator-smurfytypes.ts",
+      "simulator-patterns.ts",
+      "simulator-accuracypattern.ts",
       "data/quirkdata.ts",
       "data/globalgameinfo.ts",
       "data/basehealth.ts",
+      "data/weaponspread.ts",
       "data/addedheatsinkdata.ts",
       "data/addedweapondata.ts",
       "lib/jquery-3.2.d.ts"

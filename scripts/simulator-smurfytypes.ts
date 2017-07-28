@@ -175,6 +175,7 @@ namespace SmurfyTypes {
     dps: number,
     hps: number,
     ehs: number,
+    dmg: number,
   }
 
   export type SmurfyModuleDataList = {[index:string] : SmurfyModuleData};
