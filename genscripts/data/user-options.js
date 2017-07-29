@@ -1,3 +1,8 @@
+//User-changable options in SimulatorParameters. Used in
+//simulator-view-simsettings to populate the settings dialog
+//to populate the settings dialog
+//to populate the settings dialog
+//to populate the settings dialog
 var MechSimulatorLogic;
 (function (MechSimulatorLogic) {
     MechSimulatorLogic.UACJamMethod = {

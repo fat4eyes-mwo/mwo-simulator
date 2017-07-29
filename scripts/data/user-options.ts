@@ -1,4 +1,5 @@
-
+//User-changable options in SimulatorParameters. Used in
+//simulator-view-simsettings to populate the settings dialog
 namespace MechSimulatorLogic {
   export type UACJamMethod = string;
   export const UACJamMethod : {[index:string] : string}= {
