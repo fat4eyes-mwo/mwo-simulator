@@ -1,6 +1,8 @@
 "use strict";
 /// <reference path="simulator-view-widgets.ts" />
+/// <reference path="simulator-model.ts" />
 //UI methods
+//TODO: Remove direct references to MechModel
 var MechView;
 (function (MechView) {
     MechView.clearMechList = function (team) {

@@ -1,5 +1,6 @@
 "use strict";
 /// <reference path="simulator-model.ts" />
+/// <reference path="simulator-view-widgets.ts" />
 var MechViewMechPanel;
 (function (MechViewMechPanel) {
     //Add a paper doll with the given mechId to the element with the id
