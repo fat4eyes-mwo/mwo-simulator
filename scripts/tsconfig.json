@@ -19,6 +19,7 @@
       "simulator-patterns.ts",
       "simulator-accuracypattern.ts",
       "simulator-componenttarget.ts",
+      "simulator-firepattern.ts",
       "data/quirkdata.ts",
       "data/globalgameinfo.ts",
       "data/basehealth.ts",

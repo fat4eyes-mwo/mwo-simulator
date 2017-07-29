@@ -1,10 +1,18 @@
 "use strict";
+/// <reference path="simulator-model.ts" />
+/// <reference path="simulator-model-weapons.ts" />
+/// <reference path="simulator-patterns.ts" />
 
 //Fire patterns are functions that take a mech and return a list of weaponstates
 //which represent the weapons to fire
-var MechFirePattern = MechFirePattern || (function () {
+namespace MechFirePattern {
+  import Mech = MechModel.Mech;
+  import Pattern = ModelPatterns.Pattern;
+  import WeaponState = MechModelWeapons.WeaponState;
 
-  var alphaAtZeroHeat = function (mech, range) {
+  export type FirePattern = (mech : Mech, range : number) => WeaponState[];
+  export var alphaAtZeroHeat =
+      function (mech : Mech, range : number) : WeaponState[] {
     let mechState = mech.getMechState();
     if (mechState.heatState.currHeat <= 0) {
       return mechState.weaponStateList;
@@ -16,7 +24,8 @@ var MechFirePattern = MechFirePattern || (function () {
   //Will always try to fire the weapons with the highest damage to heat ratio
   //If not possible will wait until enough heat is available
   //Avoids ghost heat
-  var maximumDmgPerHeat = function (mech, range) {
+  export var maximumDmgPerHeat =
+      function (mech : Mech, range : number) : WeaponState[] {
     let mechState = mech.getMechState();
     let sortedByDmgPerHeat = Array.from(mechState.weaponStateList);
     //sort weaponsToFire by damage/heat at the given range in decreasing order
@@ -49,7 +58,8 @@ var MechFirePattern = MechFirePattern || (function () {
   }
 
   //Always alpha, as long as it does not cause an overheat
-  var alphaNoOverheat = function (mech, range) {
+  export var alphaNoOverheat =
+      function (mech : Mech, range : number) : WeaponState[] {
     let mechState = mech.getMechState();
     let weaponsToFire = [];
     //check if all weapons are ready
@@ -64,7 +74,8 @@ var MechFirePattern = MechFirePattern || (function () {
     }
   }
 
-  var maxFireNoGhostHeat = function (mech, range) {
+  export var maxFireNoGhostHeat =
+      function (mech : Mech, range : number) : WeaponState[] {
     let mechState = mech.getMechState();
     let weaponsToFire = [];
     for (let weaponState of mechState.weaponStateList) {
@@ -78,7 +89,7 @@ var MechFirePattern = MechFirePattern || (function () {
     return weaponsToFire;
   }
 
-  var fireWhenReady = function(mech, range) {
+  export var fireWhenReady = function(mech : Mech, range : number) : WeaponState[] {
     let mechState = mech.getMechState();
     let weaponsToFire = [];
     for (let weaponState of mechState.weaponStateList) {
@@ -90,8 +101,10 @@ var MechFirePattern = MechFirePattern || (function () {
   }
 
   //Util functions
-  var damagePerHeatComparator = function(range) {
-    return (weaponA, weaponB) => {
+  var damagePerHeatComparator =
+      function(range : number)
+              : (weaponA : WeaponState, weaponB : WeaponState) => number {
+    return (weaponA : WeaponState, weaponB : WeaponState) => {
       let weaponInfoA = weaponA.weaponInfo;
       let dmgPerHeatA = weaponInfoA.heat > 0 ?
               weaponInfoA.damageAtRange(range, MechSimulatorLogic.getStepDuration())
@@ -106,26 +119,29 @@ var MechFirePattern = MechFirePattern || (function () {
     };
   }
 
-  var willOverheat = function(mech, weaponsToFire) {
+  var willOverheat =
+      function(mech : Mech, weaponsToFire : WeaponState[]) : boolean {
     let predictedHeat = MechSimulatorLogic.predictHeat(mech, weaponsToFire);
     let heatState = mech.getMechState().heatState;
     return heatState.currHeat + predictedHeat > heatState.currMaxHeat;
   }
 
-  var willGhostHeat = function(mech, weaponsToFire) {
+  var willGhostHeat =
+      function(mech : Mech, weaponsToFire : WeaponState[]) : boolean {
     let predictedHeat = MechSimulatorLogic.predictHeat(mech, weaponsToFire);
     let baseHeat = MechSimulatorLogic.predictBaseHeat(mech, weaponsToFire);
     return predictedHeat > baseHeat;
   }
 
-  var willDoDamage = function(weaponState, range) {
+  var willDoDamage =
+      function(weaponState : WeaponState, range : number) : boolean {
     return weaponState.weaponInfo.damageAtRange(range,
                                         MechSimulatorLogic.getStepDuration()) > 0;
   }
 
   //Helper method for determining whether the firepattern can fire a weapon
   //Uses the useDoubleTap field of SimulatorParameters
-  var canFire = function(weaponState) {
+  var canFire = function(weaponState : WeaponState) : boolean {
     let simParams = MechSimulatorLogic.getSimulatorParameters();
     if (simParams.useDoubleTap) {
       return weaponState.canFire();
@@ -134,7 +150,7 @@ var MechFirePattern = MechFirePattern || (function () {
     }
   }
 
-  var getDefault = function() {
+  export var getDefault = function() : FirePattern {
     for (let patternEntry of getPatterns()) {
       if (patternEntry.default) {
         return patternEntry.pattern;
@@ -143,7 +159,7 @@ var MechFirePattern = MechFirePattern || (function () {
   }
 
   //Returns a list of fire patterns for the UI
-  var getPatterns = function() {
+  export var getPatterns = function() : Pattern[] {
     let patternList = [
       { id: "maximumDmgPerHeat",
         name: "Max DMG per Heat",
@@ -173,18 +189,7 @@ var MechFirePattern = MechFirePattern || (function () {
     return patternList;
   }
 
-  var reset = function() {
+  export var reset = function() {
 
   }
-
-  return {
-    alphaAtZeroHeat : alphaAtZeroHeat,
-    alphaNoOverheat : alphaNoOverheat,
-    maximumDmgPerHeat : maximumDmgPerHeat,
-    fireWhenReady : fireWhenReady,
-    maxFireNoGhostHeat : maxFireNoGhostHeat,
-    getDefault : getDefault,
-    getPatterns : getPatterns,
-    reset : reset,
-  };
-})();
+}

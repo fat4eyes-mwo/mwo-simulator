@@ -333,9 +333,8 @@ namespace MechModelWeapons {
       return ammoConsumed;
     }
 
-    canFire() {
-      throw "Abstract method, should not be called";
-    }
+    abstract canFire() : boolean;
+    
     isReady() {
       return this.weaponCycle === WeaponCycle.READY;
     }
