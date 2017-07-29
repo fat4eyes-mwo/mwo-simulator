@@ -1,5 +1,6 @@
 "use strict";
 /// <reference path="simulator-model.ts" />
+/// <reference path="simulator-view-widgets.ts" />
 
 namespace MechViewMechPanel {
   type Component = string;

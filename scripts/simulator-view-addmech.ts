@@ -1,37 +1,47 @@
+/// <reference path="simulator-model.ts" />
+/// <reference path="simulator-view-widgets.ts" />
+/// <reference path="simulator-view-mechPanel.ts" />
+/// <reference path="simulator-smurfytypes.ts" />
 
 "use strict";
 
-var MechViewAddMech = MechViewAddMech || (function() {
+namespace MechViewAddMech {
+  type Team = MechModel.Team;
+  type MechButton = MechViewWidgets.MechButton;
+  type SmurfyMechLoadout = SmurfyTypes.SmurfyMechLoadout;
 
-  var addMechButtonId = function(team) {
+  var addMechButtonId = function(team : Team) : string {
     return team + "-addMechButton";
   }
 
-  var addMechButtonMap = {};
-  var createAddMechButton = function(team, containerId) {
+  var addMechButtonMap : {[index:string] : MechButton} = {};
+  export var createAddMechButton = function(team : Team, containerId : string) : void {
     let addMechButtonPanelId = addMechButtonId(team);
     if (!addMechButtonHandler) {
-      addMechButtonHandler = new AddMechButtonHandler(this);
+      addMechButtonHandler = createAddMechButtonHandler(this);
     }
     $("#" + containerId + " [class~=addMechButton]")
         .attr("id", addMechButtonPanelId)
         .attr("data-team", team);
-    addMechButtonMap[team] = new MechViewWidgets.MechButton(addMechButtonPanelId, addMechButtonHandler);
+    addMechButtonMap[team] =
+        new MechViewWidgets.MechButton(addMechButtonPanelId,
+                                        addMechButtonHandler);
   }
 
-  var AddMechButtonHandler = function(clickContext) {
+  type ClickHandler = () => void;
+  var createAddMechButtonHandler = function(clickContext : any) : ClickHandler {
     var context = clickContext;
     return function() {
       let team = $(this).data('team');
       context.showAddMechDialog(team);
     }
   }
-  var addMechButtonHandler;//set on click handler assignment
+  var addMechButtonHandler : ClickHandler;//set on click handler assignment
 
-  var addMechOKButton;
-  var addMechCancelButton;
-  var addMechLoadButton;
-  var showAddMechDialog = function(team) {
+  var addMechOKButton : MechButton;
+  var addMechCancelButton : MechButton;
+  var addMechLoadButton : MechButton;
+  export var showAddMechDialog = function(team : Team) : void {
     //TODO: this code possibly accumulates handlers on the dialog buttons
     //due to the use of ids in the template. See what can be done.
     let addMechDialogDiv =
@@ -50,13 +60,13 @@ var MechViewAddMech = MechViewAddMech || (function() {
           });
 
     if (!addMechDialog_OK_Handler) {
-      addMechDialog_OK_Handler = new AddMechDialog_OK(this);
+      addMechDialog_OK_Handler = createAddMechDialog_OK(this);
     }
     if (!addMechDialog_Cancel_Handler) {
-      addMechDialog_Cancel_Handler = new AddMechDialog_Cancel(this);
+      addMechDialog_Cancel_Handler = createAddMechDialog_Cancel(this);
     }
     if (!addMechDialog_Load_Handler) {
-      addMechDialog_Load_Handler =new AddMechDialog_Load(this);
+      addMechDialog_Load_Handler = createAddMechDialog_Load(this);
     }
     $("#addMechDialog-ok").attr("data-team", team);
     addMechOKButton =
@@ -75,12 +85,12 @@ var MechViewAddMech = MechViewAddMech || (function() {
     $("#addMechDialog-text").focus();
   }
 
-  var hideAddMechDialog = function(team) {
+  export var hideAddMechDialog = function(team : Team) : void {
     MechViewWidgets.hideModal("addMech");
   }
 
-  var loadedSmurfyLoadout = null;
-  var AddMechDialog_OK = function(context) {
+  var loadedSmurfyLoadout : SmurfyMechLoadout = null;
+  var createAddMechDialog_OK = function(context : any) : ClickHandler {
     var clickContext = context;
     return function() {
       let team = $(this).data('team');
@@ -101,27 +111,27 @@ var MechViewAddMech = MechViewAddMech || (function() {
       clickContext.hideAddMechDialog(team);
     }
   };
-  var addMechDialog_OK_Handler; //set on dialog creation, singleton
+  var addMechDialog_OK_Handler : ClickHandler; //set on dialog creation, singleton
 
-  var AddMechDialog_Cancel = function(context) {
+  var createAddMechDialog_Cancel = function(context : any) : ClickHandler {
     var clickContext = context;
     return function() {
       let team = $(this).data('team');
       clickContext.hideAddMechDialog(team);
     }
   };
-  var addMechDialog_Cancel_Handler; //set on dialog creation, singleton
+  var addMechDialog_Cancel_Handler : ClickHandler; //set on dialog creation, singleton
 
   const SMURFY_PROXY_URL = "./php/smurfyproxy.php?path=";
-  var AddMechDialog_Load = function(context) {
+  var createAddMechDialog_Load = function(context : any) : ClickHandler {
     var clickContext = context;
 
     return function() {
       let team = $(this).data('team');
-      let url = $("#addMechDialog-text").val();
+      let url : string = String($("#addMechDialog-text").val());
       console.log("Load. team: " + team + " URL: " + url);
 
-      let doneHandler = function(data) {
+      let doneHandler = function(data : any) {
         loadedSmurfyLoadout = data;
         let smurfyMechData = MechModel.getSmurfyMechData(loadedSmurfyLoadout.mech_id);
         let mechTranslatedName = smurfyMechData.translated_name;
@@ -165,10 +175,13 @@ var MechViewAddMech = MechViewAddMech || (function() {
       }
     }
   }
-  var addMechDialog_Load_Handler; //set on dialog creation, singleton
+  var addMechDialog_Load_Handler : ClickHandler; //set on dialog creation, singleton
 
   let SMURFY_BASE_URL = "http://mwo.smurfy-net.de/mechlab#";
-  var createLoadedMechPanel = function(containerId, smurfyMechLoadout) {
+  var createLoadedMechPanel =
+      function(containerId : string,
+              smurfyMechLoadout : SmurfyMechLoadout)
+              : void {
     let loadedMechDiv = MechViewWidgets.cloneTemplate("loadedMech-template");
     let loadedMechJQ =$(loadedMechDiv)
                             .removeAttr("id")
@@ -188,9 +201,9 @@ var MechViewAddMech = MechViewAddMech || (function() {
 
     let mechStats = smurfyMechLoadout.stats;
     //Mech equipment
-    let mechSpeed = Number(mechStats.top_speed).toFixed(1) + "km/h";
-    let mechEngine = mechStats.engine_type + " " + mechStats.engine_rating;
-    let heatsink = mechStats.heatsinks + " HS";
+    let mechSpeed : string = Number(mechStats.top_speed).toFixed(1) + "km/h";
+    let mechEngine : string = mechStats.engine_type + " " + mechStats.engine_rating;
+    let heatsink : string = mechStats.heatsinks + " HS";
     loadedMechJQ
         .find("[class~=mechEquipment]")
         .append(loadedMechSpan(mechSpeed, "equipment"))
@@ -207,14 +220,15 @@ var MechViewAddMech = MechViewAddMech || (function() {
     }
   }
 
-  var loadedMechSpan = function(text, spanClass) {
+  var loadedMechSpan = function(text : string, spanClass : string) : JQuery {
     let span = MechViewWidgets.cloneTemplate("loadedMechInfo-template");
     return $(span)
       .addClass(spanClass)
       .text(text);
   }
 
-  var loadedMechWeaponSpan = function(name, number, type) {
+  var loadedMechWeaponSpan =
+      function(name : string, number : number, type : string) : JQuery {
     let numberClass = loadedMechWeaponClass(type);
     let weaponSpan = MechViewWidgets.cloneTemplate("loadedMechWeapon-template");
     let ret = $(weaponSpan);
@@ -226,7 +240,7 @@ var MechViewAddMech = MechViewAddMech || (function() {
     return ret;
   }
 
-  var loadedMechWeaponClass = function(smurfyType) {
+  var loadedMechWeaponClass = function(smurfyType : string) : string {
     if (smurfyType === "BALLISTIC") {
       return "ballistic";
     } else if (smurfyType === "BEAM") {
@@ -240,11 +254,4 @@ var MechViewAddMech = MechViewAddMech || (function() {
       return "";
     }
   }
-
-  return {
-    createAddMechButton: createAddMechButton,
-    showAddMechDialog: showAddMechDialog,
-    hideAddMechDialog: hideAddMechDialog,
-  }
-
-})();
+}
