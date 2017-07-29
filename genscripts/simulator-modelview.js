@@ -311,6 +311,7 @@ var MechModelView;
             return teamStats ? teamStats.maxBurstDamage : 0;
         }
     }
+    MechModelView.TeamReport = TeamReport;
     class MechReport {
         constructor(mechId, mechName, mechStats) {
             this.mechId = mechId;
