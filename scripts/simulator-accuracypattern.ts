@@ -5,11 +5,11 @@
 /// <reference path="data/weaponspread.ts" />
 
 namespace MechAccuracyPattern {
-  import WeaponDamage = MechModel.WeaponDamage;
-  import WeaponInfo = MechModelWeapons.WeaponInfo;
-  import WeaponSpread = GlobalGameInfo.WeaponSpread;
-  import WeaponSpreadAtRange = GlobalGameInfo.WeaponSpreadAtRange;
-  import Pattern = ModelPatterns.Pattern;
+  type WeaponDamage = MechModel.WeaponDamage;
+  type WeaponInfo = MechModelWeapons.WeaponInfo;
+  type WeaponSpread = GlobalGameInfo.WeaponSpread;
+  type WeaponSpreadAtRange = GlobalGameInfo.WeaponSpreadAtRange;
+  type Pattern = ModelPatterns.Pattern;
 
   export type AccuracyPattern =
       (weaponDamage : WeaponDamage, range : number) => WeaponDamage;

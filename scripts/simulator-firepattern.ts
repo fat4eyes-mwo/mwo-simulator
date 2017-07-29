@@ -6,9 +6,9 @@
 //Fire patterns are functions that take a mech and return a list of weaponstates
 //which represent the weapons to fire
 namespace MechFirePattern {
-  import Mech = MechModel.Mech;
-  import Pattern = ModelPatterns.Pattern;
-  import WeaponState = MechModelWeapons.WeaponState;
+  type Mech = MechModel.Mech;
+  type Pattern = ModelPatterns.Pattern;
+  type WeaponState = MechModelWeapons.WeaponState;
 
   export type FirePattern = (mech : Mech, range : number) => WeaponState[];
   export var alphaAtZeroHeat =

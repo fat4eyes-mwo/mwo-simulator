@@ -4,8 +4,8 @@
 /// <reference path="simulator-patterns.ts" />
 
 namespace MechTargetMech  {
-  import Mech = MechModel.Mech;
-  import Pattern = ModelPatterns.Pattern;
+  type Mech = MechModel.Mech;
+  type Pattern = ModelPatterns.Pattern;
 
   export type TargetMechPattern = (mech : Mech, enemyMechList : Mech[]) => Mech;
   //These functions return which enemy mech to target

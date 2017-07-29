@@ -4,9 +4,9 @@
 /// <reference path="simulator-patterns.ts" />
 
 namespace MechTargetComponent {
-  import Mech = MechModel.Mech;
-  import Component = MechModel.Component;
-  import Pattern = ModelPatterns.Pattern;
+  type Mech = MechModel.Mech;
+  type Component = MechModel.Component;
+  type Pattern = ModelPatterns.Pattern;
 
   export type TargetComponentPattern = (sourceMech : Mech, targetMech : Mech) => Component;
   //These functions return which component of a mech should be targeted

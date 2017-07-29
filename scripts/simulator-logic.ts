@@ -6,14 +6,14 @@
 //  move WeaponFire and weaponFire processing logic to separate file
 //  move SimulatorParameters to separate file
 namespace MechSimulatorLogic {
-  import Team = MechModel.Team;
-  import Mech = MechModel.Mech;
-  import WeaponInfo = MechModelWeapons.WeaponInfo;
-  import WeaponState = MechModelWeapons.WeaponState;
-  import WeaponDamage = MechModel.WeaponDamage;
-  import MechDamage = MechModel.MechDamage;
-  import DamageMap = MechModel.DamageMap;
-  import GhostHeatMap = MechModel.GhostHeatMap;
+  type Team = MechModel.Team;
+  type Mech = MechModel.Mech;
+  type WeaponInfo = MechModelWeapons.WeaponInfo;
+  type WeaponState = MechModelWeapons.WeaponState;
+  type WeaponDamage = MechModel.WeaponDamage;
+  type MechDamage = MechModel.MechDamage;
+  type DamageMap = MechModel.DamageMap;
+  type GhostHeatMap = MechModel.GhostHeatMap;
 
   var simulationInterval : number = null;
   var simRunning = false;

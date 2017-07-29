@@ -9,24 +9,25 @@
 /// <reference path="data/addedheatsinkdata.ts" />
 /// <reference path="data/addedweapondata.ts" />
 
-import SmurfyMechLoadout = SmurfyTypes.SmurfyMechLoadout;
-import SmurfyMechData = SmurfyTypes.SmurfyMechData;
-import SmurfyWeaponData = SmurfyTypes.SmurfyWeaponData;
-import SmurfyQuirk = SmurfyTypes.SmurfyQuirk;
-import SmurfyMechComponent = SmurfyTypes.SmurfyMechComponent;
-import SmurfyMechComponentItem = SmurfyTypes.SmurfyMechComponentItem;
-import SmurfyModuleData = SmurfyTypes.SmurfyModuleData;
-import SmurfyWeaponDataList = SmurfyTypes.SmurfyWeaponDataList;
-import SmurfyMechDataList = SmurfyTypes.SmurfyMechDataList;
-import SmurfyModuleDataList = SmurfyTypes.SmurfyModuleDataList;
-import SmurfyAmmoDataList = SmurfyTypes.SmurfyAmmoDataList;
-import SmurfyHeatsinkModuleData = SmurfyTypes.SmurfyHeatsinkModuleData;
-import SmurfyOmnipod = SmurfyTypes.SmurfyOmnipod;
-import SmurfyOmnipodData = SmurfyTypes.SmurfyOmnipodData;
-
 //Classes that represent the states of the mechs in the simulation,
 //and methos to populate them from smurfy data
 namespace MechModel  {
+  type WeaponInfo = MechModelWeapons.WeaponInfo;
+  type WeaponState = MechModelWeapons.WeaponState;
+  type SmurfyMechLoadout = SmurfyTypes.SmurfyMechLoadout;
+  type SmurfyMechData = SmurfyTypes.SmurfyMechData;
+  type SmurfyWeaponData = SmurfyTypes.SmurfyWeaponData;
+  type SmurfyQuirk = SmurfyTypes.SmurfyQuirk;
+  type SmurfyMechComponent = SmurfyTypes.SmurfyMechComponent;
+  type SmurfyMechComponentItem = SmurfyTypes.SmurfyMechComponentItem;
+  type SmurfyModuleData = SmurfyTypes.SmurfyModuleData;
+  type SmurfyWeaponDataList = SmurfyTypes.SmurfyWeaponDataList;
+  type SmurfyMechDataList = SmurfyTypes.SmurfyMechDataList;
+  type SmurfyModuleDataList = SmurfyTypes.SmurfyModuleDataList;
+  type SmurfyAmmoDataList = SmurfyTypes.SmurfyAmmoDataList;
+  type SmurfyHeatsinkModuleData = SmurfyTypes.SmurfyHeatsinkModuleData;
+  type SmurfyOmnipod = SmurfyTypes.SmurfyOmnipod;
+  type SmurfyOmnipodData = SmurfyTypes.SmurfyOmnipodData;
   //TODO: See if you can get a tighter type for enums. Try aliasing.
   //Also check when string enums get put into Typescript
   export type Team = string;
@@ -820,7 +821,7 @@ namespace MechModel  {
   export class MechStats {
     totalDamage : number;
     totalHeat : number;
-    weaponFires : MechSimulatorLogic.WeaponFire[]; 
+    weaponFires : MechSimulatorLogic.WeaponFire[];
     timeOfDeath : number;
 
     constructor() {
@@ -989,6 +990,7 @@ namespace MechModel  {
   }
 
   //Load dummy data from javascript files in data folder
+  //TODO: Separate dummy test data from non-test code
   export var initDummyModelData = function() {
     SmurfyWeaponData = DummyWeaponData;
     SmurfyAmmoData = DummyAmmoData;
