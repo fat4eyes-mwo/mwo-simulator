@@ -1,18 +1,21 @@
+/// <reference path="simulator-view-router.ts" />
+/// <reference path="simulator-model.ts" />
+/// <reference path="simulator-modelview.ts" />
 "use strict";
 
-var MechSimulator = MechSimulator || (function() {
+namespace MechSimulator {
 
   const DEFAULT_RANGE = 200;
+  const DEFAULT_SPEED = 1;
 
-  function init() {
+  function init() : void {
     MechView.initView();
     MechView.showLoadingScreen();
 
-    let simulatorParameters = new MechSimulatorLogic.SimulatorParameters(
-                                DEFAULT_RANGE, //range
-                                1 //speed factor
-                              );
+    let simulatorParameters =
+      new MechSimulatorLogic.SimulatorParameters(DEFAULT_RANGE, DEFAULT_SPEED);
     MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
+
     MechModel.initModelData()
       .then(function() {
         console.log("Successfully loaded model init data");
@@ -29,7 +32,7 @@ var MechSimulator = MechSimulator || (function() {
       });
   }
 
-  function initMechs() {
+  function initMechs() : void {
     MechViewRouter.loadStateFromLocationHash()
       .then(function(data) {
         initUI();
@@ -47,11 +50,11 @@ var MechSimulator = MechSimulator || (function() {
       });
   }
 
-  function initUI() {
+  function initUI() : void{
     MechModelView.refreshView();
   }
 
-  function main() {
+  export function main() : void {
     // MechTest.testUIWidgets();
     // MechTest.testModelInit();
     // MechTest.testModelOps();
@@ -65,11 +68,7 @@ var MechSimulator = MechSimulator || (function() {
     // MechTest.testLRMSpread();
     init();
   }
+}
 
-  return {
-    main: main,
-  }
-
-})();
-
+//Entry point
 $(document).ready(MechSimulator.main);

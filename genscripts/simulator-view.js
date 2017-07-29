@@ -156,10 +156,8 @@ var MechView;
     };
     var doAutoRun = function () {
         //set sim speed and run sim if run and speed url params are set
-        let runParam = MechViewRouter.getRunFromLocation();
-        let speedParam = MechViewRouter.getSpeedFromLocation();
-        runParam = runParam === "true";
-        speedParam = Number(speedParam);
+        let runParam = MechViewRouter.getRunFromLocation() === "true";
+        let speedParam = Number(MechViewRouter.getSpeedFromLocation());
         if (speedParam) {
             setSimulatorSpeedfactor(speedParam);
         }

@@ -12,6 +12,13 @@
         "outDir" : "../genscripts/"
     },
     "files": [
+      "lib/jquery-3.2.d.ts",
+      "data/quirkdata.ts",
+      "data/globalgameinfo.ts",
+      "data/basehealth.ts",
+      "data/weaponspread.ts",
+      "data/addedheatsinkdata.ts",
+      "data/addedweapondata.ts",
       "util.ts",
       "simulator-view-widgets.ts",
       "simulator-view.ts",
@@ -32,13 +39,7 @@
       "simulator-firepattern.ts",
       "simulator-mechtarget.ts",
       "simulator-logic.ts",
-      "data/quirkdata.ts",
-      "data/globalgameinfo.ts",
-      "data/basehealth.ts",
-      "data/weaponspread.ts",
-      "data/addedheatsinkdata.ts",
-      "data/addedweapondata.ts",
-      "lib/jquery-3.2.d.ts"
+      "simulator.ts"
     ],
     "includes" : [
       "scripts/**/*.js"

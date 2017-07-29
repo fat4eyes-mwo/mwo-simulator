@@ -191,10 +191,8 @@ namespace MechView {
 
   var doAutoRun = function() : void {
     //set sim speed and run sim if run and speed url params are set
-    let runParam = MechViewRouter.getRunFromLocation();
-    let speedParam = MechViewRouter.getSpeedFromLocation();
-    runParam = runParam === "true";
-    speedParam = Number(speedParam);
+    let runParam : boolean = MechViewRouter.getRunFromLocation() === "true";
+    let speedParam : number = Number(MechViewRouter.getSpeedFromLocation());
     if (speedParam) {
       setSimulatorSpeedfactor(speedParam);
     }
