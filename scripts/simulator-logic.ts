@@ -261,29 +261,16 @@ namespace MechSimulatorLogic {
     return simulatorParameters;
   }
 
-  class IntervalHandler {
-    context : any;
-    constructor(context : any) {
-      this.context = context;
-    }
-    handler() {
-      if (simRunning) {
-        this.context.step();
-      }
-    }
-  }
   var createSimulationInterval = function() : void  {
-    // TODO: Old constructor, keep for comparison until commit
-    // var IntervalHandler = function(context : any) : () => void {
-    //   this.context = context;
-    //   return () => {
-    //     if (simRunning) {
-    //       this.context.step();
-    //     }
-    //   }
-    // };
-    let intervalHandler = new IntervalHandler(this);
-    simulationInterval = window.setInterval(intervalHandler.handler,
+    var createIntervalHandler = function(context : any) : () => void {
+      return () => {
+        if (simRunning) {
+          context.step();
+        }
+      }
+    };
+    let intervalHandler = createIntervalHandler(this);
+    simulationInterval = window.setInterval(intervalHandler,
                                         simulatorParameters.uiUpdateInterval);
   }
 
