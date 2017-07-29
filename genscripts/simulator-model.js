@@ -1,4 +1,13 @@
 "use strict";
+/// <reference path="lib/jquery-3.2.d.ts" />
+/// <reference path="simulator-model-quirks.ts" />
+/// <reference path="simulator-model-weapons.ts" />
+/// <reference path="simulator-smurfytypes.ts" />
+/// <reference path="simulator-logic.ts" />
+/// <reference path="data/globalgameinfo.ts" />
+/// <reference path="data/basehealth.ts" />
+/// <reference path="data/addedheatsinkdata.ts" />
+/// <reference path="data/addedweapondata.ts" />
 //Classes that represent the states of the mechs in the simulation,
 //and methos to populate them from smurfy data
 var MechModel;
@@ -809,6 +818,7 @@ var MechModel;
         }
     };
     //Load dummy data from javascript files in data folder
+    //TODO: Separate dummy test data from non-test code
     MechModel.initDummyModelData = function () {
         SmurfyWeaponData = DummyWeaponData;
         SmurfyAmmoData = DummyAmmoData;

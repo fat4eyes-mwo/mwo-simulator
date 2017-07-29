@@ -124,11 +124,12 @@ namespace MechViewWidgets {
         .addClass("hidden")
         .attr("id", tooltipId)
         .insertBefore("#" + targetElementId);
-      let targetOffset = $("#" + targetElementId);
-      let thisLeft = targetOffset.left;
-      let thisTop = targetOffset.top + targetOffset.height;
-      $("#" + this.id)
-        .css({"left": thisLeft, "top" : thisTop});
+      //TODO Fix absolutely positioned tooltip location
+      // let targetElement = $("#" + targetElementId)[0];
+      // let thisLeft = targetElement.offsetLeft;
+      // let thisTop = targetElement.offsetTop + targetElement.offsetHeight;
+      // $("#" + this.id)
+      //   .css({"left": thisLeft, "top" : thisTop});
     }
 
     showTooltip() {
@@ -142,7 +143,7 @@ namespace MechViewWidgets {
 
   //Clones a template and returns the first element of the template
   export var cloneTemplate = function(templateName : string) {
-    let template = document.querySelector("#" + templateName);
+    let template : Element = document.querySelector("#" + templateName);
     let templateElement = document.importNode(template.content, true);
     return templateElement.firstElementChild;
   }
@@ -162,7 +163,7 @@ namespace MechViewWidgets {
     dialogJQ.append(element);
   }
 
-  var showModal = function() : void {
+  export var showModal = function() : void {
     $("#" + MODAL_SCREEN_ID).css("display", "block");
   }
 
