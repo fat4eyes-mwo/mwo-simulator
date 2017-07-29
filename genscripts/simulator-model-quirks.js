@@ -1,8 +1,8 @@
 "use strict";
 /// <reference path="data/quirkdata.ts" />
 /// <reference path="simulator-model.ts" />
+/// <reference path="simulator-model-weapons.ts" />
 /// <reference path="simulator-smurfytypes.ts" />
-//TODO: Remove : any types
 var MechModelQuirks;
 (function (MechModelQuirks) {
     MechModelQuirks.collectOmnipodQuirks = function (smurfyMechLoadout) {

@@ -1,5 +1,6 @@
 "use strict";
 /// <reference path="simulator-smurfytypes.ts" />
+/// <reference path="simulator-model.ts" />
 //Weapon state classes
 var MechModelWeapons;
 (function (MechModelWeapons) {
@@ -105,14 +106,12 @@ var MechModelWeapons;
                 || Number(range) > Number(this.maxRange)) {
                 return 0;
             }
-            let rangeIdx; //TODO find a way to make array indices numbers
-            for (rangeIdx in this.ranges) {
-                rangeIdx = Number(rangeIdx);
+            for (let rangeIdx in this.ranges) {
                 let rangeEntry = this.ranges[rangeIdx];
-                let nextEntry = rangeIdx < this.ranges.length - 1 ?
-                    this.ranges[rangeIdx + 1] :
+                let nextEntry = Number(rangeIdx) < this.ranges.length - 1 ?
+                    this.ranges[Number(rangeIdx) + 1] :
                     this.ranges[rangeIdx];
-                let lowerBound = rangeIdx === 0 ?
+                let lowerBound = Number(rangeIdx) === 0 ?
                     Number(rangeEntry.start) :
                     Number(rangeEntry.start) * rangeMultiplier;
                 let upperBound = nextEntry.start * rangeMultiplier;
@@ -139,7 +138,6 @@ var MechModelWeapons;
     MechModelWeapons.WeaponInfo = WeaponInfo;
     //abstract class for weapon state. concrete classes follow below
     //WeaponStateDurationFire, WeaponStateSingleFire, WeaponStateContinuousFire
-    //TODO : replace :any types
     class WeaponState {
         constructor(weaponInfo, mechState) {
             this.mechState = mechState;

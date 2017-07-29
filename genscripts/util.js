@@ -3,6 +3,7 @@
 //the array
 var Util;
 (function (Util) {
+    //TODO: See if this method is still worth it
     function binarySearchClosest(array, key, keyCompare) {
         var low = 0;
         var high = array.length - 1;

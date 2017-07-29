@@ -1,14 +1,17 @@
 "use strict";
 /// <reference path="simulator-smurfytypes.ts" />
+/// <reference path="simulator-model.ts" />
 
 //Weapon state classes
 namespace MechModelWeapons {
-  var WeaponCycle = MechModel.WeaponCycle;
+  import WeaponCycle = MechModel.WeaponCycle;
+  type MechInfo = MechModel.MechInfo;
+  type MechState = MechModel.MechState;
 
   export class WeaponInfo {
     weaponId : string;
     location : string;
-    mechInfo : any; //TODO replace with correct type
+    mechInfo : MechInfo;
     name : string;
     translatedName : string;
     baseMinRange : number;
@@ -42,7 +45,7 @@ namespace MechModelWeapons {
     constructor(weaponId : string,
                 location : string,
                 smurfyWeaponData : SmurfyTypes.SmurfyWeaponData ,
-                mechInfo : any) { //TODO Replace with correct type
+                mechInfo : MechInfo) {
         this.weaponId = weaponId; //smurfy weapon id
         this.location = location;
         this.mechInfo = mechInfo;
@@ -144,14 +147,12 @@ namespace MechModelWeapons {
             || Number(range) > Number(this.maxRange)) {
           return 0;
         }
-        let rangeIdx : any; //TODO find a way to make array indices numbers
-        for (rangeIdx in this.ranges) {
-          rangeIdx = Number(rangeIdx);
+        for (let rangeIdx in this.ranges) {
           let rangeEntry = this.ranges[rangeIdx];
-          let nextEntry = rangeIdx < this.ranges.length - 1 ?
-                            this.ranges[rangeIdx + 1] :
+          let nextEntry = Number(rangeIdx) < this.ranges.length - 1 ?
+                            this.ranges[Number(rangeIdx) + 1] :
                             this.ranges[rangeIdx];
-          let lowerBound = rangeIdx === 0 ?
+          let lowerBound = Number(rangeIdx) === 0 ?
                       Number(rangeEntry.start) :
                       Number(rangeEntry.start) * rangeMultiplier;
           let upperBound = nextEntry.start * rangeMultiplier;
@@ -175,7 +176,7 @@ namespace MechModelWeapons {
   }
 
   export interface WeaponStateChange {
-    newState? : any; //TODO replace with weaponCycle
+    newState? : WeaponCycle;
     weaponFired? : boolean;
     ammoConsumed? : number;
     cooldownChanged? : boolean;
@@ -183,12 +184,11 @@ namespace MechModelWeapons {
 
   //abstract class for weapon state. concrete classes follow below
   //WeaponStateDurationFire, WeaponStateSingleFire, WeaponStateContinuousFire
-  //TODO : replace :any types
   export abstract class WeaponState {
-    mechState : any;
+    mechState : MechState;
     weaponInfo : WeaponInfo;
     active : boolean;
-    weaponCycle : any;
+    weaponCycle : WeaponCycle;
     cooldownLeft : number;
     volleyDelayLeft : number;
     //TODO: see if these fields can be pushed to subclasses without too much method duplication
@@ -197,7 +197,7 @@ namespace MechModelWeapons {
     spoolupLeft : number;
     currShotsDuringCooldown : number;
 
-    constructor(weaponInfo : WeaponInfo, mechState : any) {
+    constructor(weaponInfo : WeaponInfo, mechState : MechState) {
       this.mechState = mechState;
       this.weaponInfo = weaponInfo;
       this.active = true;
@@ -280,7 +280,7 @@ namespace MechModelWeapons {
       return {newState: newState, cooldownChanged: cooldownChanged};
     }
 
-    gotoState(weaponCycle : any, updateTimers = true) {
+    gotoState(weaponCycle : WeaponCycle, updateTimers = true) {
       let prevCooldownLeft = this.cooldownLeft;
       this.weaponCycle = weaponCycle;
       if (updateTimers) {
@@ -385,7 +385,7 @@ namespace MechModelWeapons {
 
   //state for duration fire weapons (e.g. lasers)
   export class WeaponStateDurationFire extends WeaponState {
-    constructor(weaponInfo : WeaponInfo, mechState : any) {
+    constructor(weaponInfo : WeaponInfo, mechState : MechState) {
       super(weaponInfo, mechState);
       this.durationLeft = 0;
     }
@@ -434,7 +434,7 @@ namespace MechModelWeapons {
 
   //Single fire weapons (ACs, PPCs, UACs, Gauss)
   export class WeaponStateSingleFire extends WeaponState {
-    constructor(weaponInfo : WeaponInfo, mechState : any) {
+    constructor(weaponInfo : WeaponInfo, mechState : MechState) {
       super(weaponInfo, mechState);
       this.spoolupLeft = 0;
       this.jamLeft = 0;
@@ -564,7 +564,7 @@ namespace MechModelWeapons {
     jamBarProgress : number;
     rampUpLeft : number;
 
-    constructor(weaponInfo : WeaponInfo, mechState : any) {
+    constructor(weaponInfo : WeaponInfo, mechState : MechState) {
       super(weaponInfo, mechState);
       this.timeToNextAutoShot = 0;
       this.isOnAutoFire = false;
@@ -733,7 +733,7 @@ namespace MechModelWeapons {
   export class WeaponStateOneShot extends WeaponStateSingleFire {
     ammoRemaining : number;
 
-    constructor(weaponInfo : WeaponInfo, mechState : any) {
+    constructor(weaponInfo : WeaponInfo, mechState : MechState) {
       super(weaponInfo, mechState);
       this.ammoRemaining = Number(this.weaponInfo.ammoPerShot);
     }

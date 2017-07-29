@@ -5,6 +5,7 @@
 namespace Util {
   export type AnyFunction = (...params : any[]) => any;
 
+  //TODO: See if this method is still worth it
   export function binarySearchClosest(array : any[],
                                   key : any,
                                   keyCompare : (v1: any, v2: any) => number) {

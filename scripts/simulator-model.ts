@@ -308,8 +308,7 @@ namespace MechModel  {
       this.ghostHeatMap = {}; //weaponId -> [GhostHeatEntry]. Used in ghost heat computations.
       this.mechStats = new MechStats(); //stats set in simulation logic
     }
-    //TODO: Is acutally UpdateType. See if it can be made explicit
-    setUpdate(updateType : string) : void {
+    setUpdate(updateType : UpdateType) : void {
       this.updateTypes[updateType] = true;
     }
     isAlive() : boolean {
@@ -1360,9 +1359,9 @@ namespace MechModel  {
 
   //constructor
   export class Mech {
-    firePattern : any; //Set after initialization
-    componentTargetPattern : any; //Set after initialization
-    mechTargetPattern : any; //set after initialization
+    firePattern : MechFirePattern.FirePattern; //Set after initialization
+    componentTargetPattern : MechTargetComponent.TargetComponentPattern; //Set after initialization
+    mechTargetPattern : MechTargetMech.TargetMechPattern; //set after initialization
     accuracyPattern : MechAccuracyPattern.AccuracyPattern; //set after initialization
     private smurfy_mech_id : string;
     private smurfyMechData : SmurfyMechData;

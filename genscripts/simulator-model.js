@@ -226,7 +226,6 @@ var MechModel;
             this.ghostHeatMap = {}; //weaponId -> [GhostHeatEntry]. Used in ghost heat computations.
             this.mechStats = new MechStats(); //stats set in simulation logic
         }
-        //TODO: Is acutally UpdateType. See if it can be made explicit
         setUpdate(updateType) {
             this.updateTypes[updateType] = true;
         }

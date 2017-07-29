@@ -318,7 +318,7 @@ namespace MechModelView {
 
   export class TeamReport {
     team : Team;
-    weaponStats : Map<string, WeaponStat>; //TODO Tighten type
+    weaponStats : Map<string, WeaponStat>; 
     mechReports : MechReport[];
     constructor(team : Team) {
       this.team = team;
