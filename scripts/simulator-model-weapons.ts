@@ -135,7 +135,7 @@ namespace MechModelWeapons {
         return this.ammoPerShot > 0;
       }
       //range in meters, stepDuration in ms
-      damageAtRange(range : number, stepDuration : number) {
+      damageAtRange(range : number) {
         let totalDamage = Number(this.baseDmg) * Number(this.damageMultiplier);
         let ret = totalDamage;
         let rangeMultiplier = 1 + Number(this.weaponBonus.range_multiplier);
@@ -334,7 +334,7 @@ namespace MechModelWeapons {
     }
 
     abstract canFire() : boolean;
-    
+
     isReady() {
       return this.weaponCycle === WeaponCycle.READY;
     }

@@ -452,13 +452,13 @@ namespace MechModel  {
       this.mechStats = new MechStats();
     }
 
-    getTotalDamageAtRange(range : number, stepDuration : number) : number {
+    getTotalDamageAtRange(range : number) : number {
       let totalDamage = 0;
       for (let weaponState of this.weaponStateList) {
         if (!weaponState.active) {
           continue;
         }
-        totalDamage += Number(weaponState.weaponInfo.damageAtRange(range, stepDuration));
+        totalDamage += Number(weaponState.weaponInfo.damageAtRange(range));
       }
       return totalDamage;
     }

@@ -1,10 +1,17 @@
 "use strict";
+/// <reference path="simulator-model.ts" />
+/// <reference path="simulator-model-weapons.ts" />
+/// <reference path="simulator-patterns.ts" />
 
-var MechTargetMech = MechTargetMech || (function () {
+namespace MechTargetMech  {
+  import Mech = MechModel.Mech;
+  import Pattern = ModelPatterns.Pattern;
 
+  export type TargetMechPattern = (mech : Mech, enemyMechList : Mech[]) => Mech;
   //These functions return which enemy mech to target
   //function(MechModel.Mech, [MechModel.Mech])-> MechModel.Mech
-  var targetMechsInOrder = function (mech, enemyMechList) {
+  export var targetMechsInOrder =
+      function (mech : Mech, enemyMechList : Mech[]) : Mech {
     for (let enemyMech of enemyMechList) {
       if (enemyMech.getMechState().isAlive()) {
         return enemyMech;
@@ -13,8 +20,8 @@ var MechTargetMech = MechTargetMech || (function () {
     return null;
   }
 
-  var targetMap = new Map();
-  var targetRandomMech = function (mech, enemyMechList) {
+  var targetMap = new Map<Mech, Mech>();
+  export var targetRandomMech = function (mech : Mech, enemyMechList : Mech[]) : Mech {
     let targetMech = targetMap.get(mech);
     if (!targetMech || !targetMech.getMechState().isAlive()) {
       let liveEnemyMechs = [];
@@ -29,7 +36,8 @@ var MechTargetMech = MechTargetMech || (function () {
     return targetMech;
   }
 
-  var targetHighestFirepower = function (mech, enemyMechList) {
+  var targetHighestFirepower =
+      function (mech : Mech, enemyMechList : Mech[]) : Mech {
     let maxFirepower;
     let maxFirepowerMech;
     let range = MechSimulatorLogic.getSimulatorParameters().range;
@@ -45,9 +53,9 @@ var MechTargetMech = MechTargetMech || (function () {
     return maxFirepowerMech;
   }
 
-  var targetHeaviest = function (mech, enemyMechList) {
-    let maxWeight;
-    let maxWeightMech;
+  var targetHeaviest = function (mech : Mech, enemyMechList : Mech[]) : Mech {
+    let maxWeight : number;
+    let maxWeightMech : Mech;
     for (let enemyMech of enemyMechList) {
       if (enemyMech.getMechState().isAlive()) {
         let mechInfo = enemyMech.getMechState().mechInfo;
@@ -61,7 +69,7 @@ var MechTargetMech = MechTargetMech || (function () {
     return maxWeightMech;
   }
 
-  var getDefault = function() {
+  export var getDefault = function() : TargetMechPattern {
     for (let patternEntry of getPatterns()) {
       if (patternEntry.default) {
         return patternEntry.pattern;
@@ -69,12 +77,12 @@ var MechTargetMech = MechTargetMech || (function () {
     }
   }
 
-  var reset = function() {
+  export var reset = function() : void {
     targetMap = new Map();
   }
 
   //returns a list of mech target patterns for the UI
-  var getPatterns = function() {
+  export var getPatterns = function() : Pattern[] {
     let patternList = [
       {
         id: "targetMechsInOrder",
@@ -107,13 +115,4 @@ var MechTargetMech = MechTargetMech || (function () {
     ];
     return patternList;
   }
-
-  return {
-    targetMechsInOrder : targetMechsInOrder,
-    targetRandomMech : targetRandomMech,
-    getDefault : getDefault,
-    getPatterns : getPatterns,
-    reset : reset,
-  }
-
-})();
+}
