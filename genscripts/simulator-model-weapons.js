@@ -267,9 +267,6 @@ var MechModelWeapons;
             }
             return ammoConsumed;
         }
-        canFire() {
-            throw "Abstract method, should not be called";
-        }
         isReady() {
             return this.weaponCycle === WeaponCycle.READY;
         }

@@ -2,8 +2,6 @@
 /// <reference path="simulator-model.ts" />
 /// <reference path="simulator-model-weapons.ts" />
 /// <reference path="simulator-patterns.ts" />
-var Mech = MechModel.Mech;
-var Component = MechModel.Component;
 var MechTargetComponent;
 (function (MechTargetComponent) {
     //These functions return which component of a mech should be targeted

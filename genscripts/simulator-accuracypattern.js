@@ -3,8 +3,6 @@
 /// <reference path="simulator-model-weapons.ts" />
 /// <reference path="simulator-patterns.ts" />
 /// <reference path="data/weaponspread.ts" />
-var WeaponDamage = MechModel.WeaponDamage;
-var WeaponInfo = MechModelWeapons.WeaponInfo;
 var MechAccuracyPattern;
 (function (MechAccuracyPattern) {
     //Functions that determine how damage from a weapon is spread
