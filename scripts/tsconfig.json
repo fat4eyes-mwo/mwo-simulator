@@ -15,6 +15,7 @@
       "util.ts",
       "simulator-view-widgets.ts",
       "simulator-view.ts",
+      "simulator-view-mechPanel.ts",
       "simulator-model.ts",
       "simulator-model-quirks.ts",
       "simulator-model-weapons.ts",

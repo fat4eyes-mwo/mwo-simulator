@@ -6,6 +6,7 @@
 /// <reference path="simulator-firepattern.ts" />
 /// <reference path="simulator-mechtarget.ts" />
 /// <reference path="simulator-patterns.ts" />
+/// <reference path="simulator-view-mechPanel.ts" />
 
 //Methods that update the MechView from the MechModel, and vice versa
 namespace MechModelView {
@@ -115,7 +116,7 @@ namespace MechModelView {
       } else if (weaponState.weaponCycle === MechModel.WeaponCycle.JAMMED) {
         cooldownPercent = 1;
       }
-      MechViewMechPanel.setWeaponCooldown(mech.getMechId(), weaponIndex, cooldownPercent, type);
+      MechViewMechPanel.setWeaponCooldown(mech.getMechId(), Number(weaponIndex), cooldownPercent, type);
     }
   }
 
@@ -123,10 +124,10 @@ namespace MechModelView {
     let mechState = mech.getMechState();
     for (let weaponIndex in mechState.weaponStateList) {
       let weaponState = mechState.weaponStateList[weaponIndex];
-      MechViewMechPanel.setWeaponState(mech.getMechId(), weaponIndex, weaponState.weaponCycle);
+      MechViewMechPanel.setWeaponState(mech.getMechId(), Number(weaponIndex), weaponState.weaponCycle);
       let ammoState = mech.getMechState().ammoState;
       let weaponAmmoCount = weaponState.getAvailableAmmo();
-      MechViewMechPanel.setWeaponAmmo(mech.getMechId(), weaponIndex, weaponAmmoCount);
+      MechViewMechPanel.setWeaponAmmo(mech.getMechId(), Number(weaponIndex), weaponAmmoCount);
     }
   }
 

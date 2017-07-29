@@ -1,12 +1,20 @@
 "use strict";
+/// <reference path="simulator-model.ts" />
 
-var MechViewMechPanel = MechViewMechPanel || (function() {
+namespace MechViewMechPanel {
+  type Component = string;
+  type Mech = MechModel.Mech;
+  type WeaponState = MechModelWeapons.WeaponState;
+  type AmmoState = MechModel.AmmoState;
+  type WeaponCycle = MechModel.WeaponCycle;
+  type Team = MechModel.Team;
   //Add a paper doll with the given mechId to the element with the id
   //paperDollContainer uses the template paperDoll-template from the main HTML file
-  var paperDollId =function (mechId) {
+  var paperDollId =function (mechId : string) : string {
     return mechId + "-paperDoll";
   }
-  var addPaperDoll = function (mechId, paperDollContainer) {
+  export var addPaperDoll =
+      function (mechId : string, paperDollContainer : string) : void {
     let paperDollDiv = MechViewWidgets.cloneTemplate("paperDoll-template");
     $(paperDollDiv)
       .attr("id", paperDollId(mechId))
@@ -15,29 +23,40 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
   }
 
   //Percent values from 0 to 1
-  var setPaperDollArmor = function (mechId, location, percent) {
+  export var setPaperDollArmor =
+      function (mechId : string,
+                location : Component,
+                percent : number)
+                : void {
     var color = MechViewWidgets.damageColor(percent, MechViewWidgets.paperDollDamageGradient);
     let paperDollDiv = document.getElementById(paperDollId(mechId));
     $(paperDollDiv).find("> [data-location='" + location + "']")
       .css('border-color', color);
   }
-  var setPaperDollStructure = function (mechId, location, percent) {
+  export var setPaperDollStructure =
+      function (mechId : string,
+                location : Component,
+                percent : number)
+                : void {
     var color = MechViewWidgets.damageColor(percent, MechViewWidgets.paperDollDamageGradient);
     let paperDollDiv = document.getElementById(paperDollId(mechId));
     $(paperDollDiv).find("> [data-location='" + location + "']")
       .css('background-color', color);
   }
 
-  var mechHealthNumbersId = function (mechId) {
+  var mechHealthNumbersId = function (mechId : string) : string {
     return mechId + "-mechHealthNumbers";
   }
-  var mechHealthNumbersArmorId = function(mechId, location) {
+  var mechHealthNumbersArmorId =
+      function(mechId : string, location : Component) : string {
     return mechId + "-mechHealthNumbers-" + location + "-armor";
   }
-  var mechHealthNumbersStructureId = function(mechId, location) {
+  var mechHealthNumbersStructureId =
+      function(mechId : string, location : Component) : string {
     return mechId + "-mechHealthNumbers-" + location + "-structure";
   }
-  var addMechHealthNumbers = function (mech, mechHealthNumbersContainer) {
+  var addMechHealthNumbers =
+      function (mech : Mech, mechHealthNumbersContainer : JQuery) : void {
     let mechId = mech.getMechId();
     let mechHealthNumbersDivId = mechHealthNumbersId(mechId);
     let mechHealthNumbersDiv =
@@ -62,7 +81,15 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
     }
   }
 
-  var updateMechHealthNumbers = function(mechId, updateParams) {
+  export interface HealthUpdate {
+    location : Component;
+    armor : number;
+    structure : number;
+    maxArmor : number;
+    maxStructure : number;
+  }
+  export var updateMechHealthNumbers =
+      function(mechId : string, updateParams : HealthUpdate) : void {
     let location = updateParams.location;
     let armor = updateParams.armor;
     let structure = updateParams.structure;
@@ -80,7 +107,7 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
 
     let armorLocationDiv = document.getElementById(armorLocationDivId);
     if (armorLocationDiv) {
-      armorLocationDiv.textContent = Math.round(armor);
+      armorLocationDiv.textContent = String(Math.round(armor));
       //NOTE: Title change too expensive
       // armorLocationDiv.setAttribute("title", (Number(armor)).toFixed(2));
       armorLocationDiv.style.color = armorColor;
@@ -88,7 +115,7 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
 
     let structureLocationDiv = document.getElementById(structureLocationDivId);
     if (structureLocationDiv) {
-      structureLocationDiv.textContent = Math.round(structure)
+      structureLocationDiv.textContent = String(Math.round(structure));
       //NOTE: Title change too expensive
       // structureLocationDiv.setAttribute("title", (Number(structure)).toFixed(2));
       structureLocationDiv.style.color = structureColor;
@@ -96,13 +123,14 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
   }
 
   //Heatbar UI functions
-  var heatbarId = function (mechId) {
+  var heatbarId = function (mechId : string) : string {
     return mechId + "-heatbar";
   }
-  var heatbarValueId = function (mechId) {
+  var heatbarValueId = function (mechId : string) : string {
     return mechId + "-heatbarValue";
   }
-  var addHeatbar = function (mechId, heatbarContainer) {
+  var addHeatbar =
+      function (mechId : string, heatbarContainer : string) : void {
     let heatbarDiv = MechViewWidgets.cloneTemplate("heatbar-template");
     $(heatbarDiv)
       .attr("id", heatbarId(mechId))
@@ -114,34 +142,38 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
   }
   //Sets the heatbar value for a given mech id to a specified percentage. Value of
   //percent is 0 to 1
-  var setHeatbarValue = function (mechId, percent) {
+  export var setHeatbarValue = function (mechId : string, percent : number) : void {
     var invPercent = 1 - percent;
 
     let heatbarValueDiv = document.getElementById(heatbarValueId(mechId));
     heatbarValueDiv.style.height = (100 * invPercent) + "%";
   }
 
-  var updateHeat = function(mechId, currHeat, currMaxHeat) {
+  export var updateHeat =
+      function(mechId : string,
+              currHeat : number,
+              currMaxHeat : number)
+              : void {
     let heatPercent = Number(currHeat) / Number(currMaxHeat);
     setHeatbarValue(mechId, heatPercent);
 
     var heatNumberId = heatNumberPanelId(mechId);
-    let heatText = parseFloat(heatPercent * 100).toFixed(0) + "%" +
-                    " (" + parseFloat(currHeat).toFixed(1) + ")";
+    let heatText = Number(heatPercent * 100).toFixed(0) + "%" +
+                    " (" + Number(currHeat).toFixed(1) + ")";
     let heatNumberDiv = document.getElementById(heatNumberId);
     heatNumberDiv.textContent = heatText;
   }
 
-  var weaponRowId = function (mechId, idx) {
+  var weaponRowId = function (mechId : string, idx : number) : string {
     return mechId + "-" + idx + "-weaponrow";
   }
-  var weaponCooldownBarId = function (mechId, idx) {
+  var weaponCooldownBarId = function (mechId : string, idx : number) : string {
     return weaponRowId(mechId, idx) + "-weaponCooldownBar";
   }
-  var weaponAmmoId = function(mechId, idx) {
+  var weaponAmmoId = function(mechId : string, idx : number) : string {
     return weaponRowId(mechId, idx) + "-weaponAmmo";
   }
-  const weaponLocAbbr = {
+  const weaponLocAbbr : {[index:string] : string} = {
     "head" : "H",
     "left_arm" : "LA",
     "left_torso" : "LT",
@@ -151,32 +183,44 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
     "left_leg" : "LL",
     "right_leg" : "RL"
   }
-  var addWeaponPanel = function (mechId, weaponStateList, ammoState, weaponPanel) {
+  //TODO: Do not directly access WeaponState and AmmoState here
+  var addWeaponPanel =
+      function (mechId : string,
+                weaponStateList : WeaponState[],
+                ammoState : AmmoState,
+                weaponPanel : string)
+                : void {
     for (var idx in weaponStateList) {
       var weaponState = weaponStateList[idx];
       let weaponRowDiv = MechViewWidgets.cloneTemplate("weaponRow-template");
       $(weaponRowDiv)
-        .attr("id", weaponRowId(mechId, idx))
+        .attr("id", weaponRowId(mechId, Number(idx)))
         .attr("data-mech-id", mechId)
         .attr("data-weapon-idx", idx)
         .appendTo("#" + weaponPanel);
       $(weaponRowDiv).find(".weaponName")
-        .attr("id", weaponRowId(mechId, idx) + "-weaponName")
+        .attr("id", weaponRowId(mechId, Number(idx)) + "-weaponName")
         .html(weaponState.weaponInfo.translatedName);
       $(weaponRowDiv).find(".weaponLocation")
-        .attr("id", weaponRowId(mechId, idx) + "-weaponLocation")
+        .attr("id", weaponRowId(mechId, Number(idx)) + "-weaponLocation")
         .html(weaponLocAbbr[weaponState.weaponInfo.location]);
       $(weaponRowDiv).find(".weaponCooldownBar")
-        .attr("id", weaponCooldownBarId(mechId, idx));
+        .attr("id", weaponCooldownBarId(mechId, Number(idx)));
       $(weaponRowDiv).find(".weaponAmmo")
-        .attr("id", weaponAmmoId(mechId, idx));
+        .attr("id", weaponAmmoId(mechId, Number(idx)));
 
-      setWeaponAmmo(mechId, idx, 0);
-      setWeaponState(mechId, idx, weaponState.weaponCycle);
-      setWeaponCooldown(mechId, idx, 0);
+      setWeaponAmmo(mechId, Number(idx), 0);
+      setWeaponState(mechId, Number(idx), weaponState.weaponCycle);
+      setWeaponCooldown(mechId, Number(idx), 0);
     }
   }
-  var setWeaponCooldown = function (mechId, weaponIdx, percent, type="cooldown") {
+  export type WeaponBarType = string;
+  export var setWeaponCooldown =
+      function (mechId : string,
+                weaponIdx : number,
+                percent : number,
+                type : WeaponBarType ="cooldown")
+                : void{
     let cooldownDiv = document.getElementById(weaponCooldownBarId(mechId, weaponIdx));
     cooldownDiv.style.width = (100*percent) + "%";
     if (type === "cooldown") {
@@ -185,11 +229,20 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
       cooldownDiv.classList.add("jamBar");
     }
   }
-  var setWeaponAmmo = function (mechId, weaponIdx, ammo) {
-    let weaponAmmoDiv = document.getElementById(weaponAmmoId(mechId, weaponIdx));
-    weaponAmmoDiv.textContent = ammo != -1 ? ammo : "\u221e"; //infinity symbol
+  export var setWeaponAmmo =
+      function (mechId : string,
+                weaponIdx : number,
+                ammo : number)
+                : void {
+    let weaponAmmoDiv : Node = document.getElementById(weaponAmmoId(mechId, weaponIdx));
+    weaponAmmoDiv.textContent = ammo != -1 ? String(ammo) : "\u221e"; //infinity symbol
   }
-  var setWeaponState = function (mechId, weaponIdx, state) {
+
+  export var setWeaponState =
+      function (mechId : string,
+                weaponIdx : number,
+                state : WeaponCycle)
+                : void {
     //Note: the remove class string must include all the MechModel.WeaponCycle strings
     let removeClassString = "";
     for (let weaponCycle in MechModel.WeaponCycle) {
@@ -204,34 +257,34 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
   }
 
   //adds a mech panel (which contains a paperDoll, a heatbar and a weaponPanel)
-  function mechPanelId(mechId) {
+  function mechPanelId(mechId : string) : string {
     return mechId + "-mechPanel";
   }
-  var mechSummaryHealthPanelId = function(mechId) {
+  var mechSummaryHealthPanelId = function(mechId : string) : string {
     return mechId + "-mechSummaryHealth";
   }
-  var mechNamePanelId = function(mechId) {
+  var mechNamePanelId = function(mechId : string) : string {
     return mechId + "-mechName";
   }
-  var heatNumberPanelId = function(mechId) {
+  var heatNumberPanelId = function(mechId : string) : string {
     return mechId + "-heatbarNumber";
   }
-  var mechTargetPanelId = function(mechId) {
+  var mechTargetPanelId = function(mechId : string) : string {
     return mechId + "-mechTarget";
   }
-  var mechHealthAndWeaponsId = function(mechId) {
+  var mechHealthAndWeaponsId = function(mechId : string) : string {
     return mechId + "-mechHealthAndWeapons";
   }
-  var mechDPSPanelId = function(mechId) {
+  var mechDPSPanelId = function(mechId : string) : string {
     return mechId + "-mechDPSText";
   }
-  var mechBurstPanelId = function(mechId) {
+  var mechBurstPanelId = function(mechId : string) : string {
     return mechId + "-mechBurstText";
   }
-  var mechTotalDamagePanelId = function(mechId) {
+  var mechTotalDamagePanelId = function(mechId : string) : string {
     return mechId + "-mechTotalDamageText";
   }
-  var addMechPanel = function (mech, team) {
+  export var addMechPanel = function (mech : Mech, team : Team) : void {
     let mechId = mech.getMechId();
     let mechState = mech.getMechState();
     let weaponStateList = mechState.weaponStateList;
@@ -313,7 +366,12 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
   }
 
   const SMURFY_BASE_URL= "http://mwo.smurfy-net.de/mechlab#";
-  var updateMechTitlePanel = function(mechId, mechName, smurfyMechId, smurfyLayoutId) {
+  export var updateMechTitlePanel =
+      function(mechId : string,
+              mechName : string,
+              smurfyMechId : string,
+              smurfyLayoutId : string)
+              : void {
     let mechNameId = mechNamePanelId(mechId);
     //Create smurfy link then set the mech name
     let smurfyLink = SMURFY_BASE_URL + "i=" + smurfyMechId + "&l=" + smurfyLayoutId;
@@ -330,8 +388,17 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
       .append(mechLink);
   }
 
-  var updateMechStatusPanel = function(mechId, mechIsAlive,
-        mechCurrTotalHealth, mechCurrMaxHealth, targetMechName, dps, burst, totalDmg) {
+  //TODO: Wrap these params in an object
+  export var updateMechStatusPanel =
+      function(mechId : string,
+              mechIsAlive : boolean,
+              mechCurrTotalHealth : number,
+              mechCurrMaxHealth : number,
+              targetMechName : string,
+              dps : number,
+              burst : number,
+              totalDmg : number)
+              : void {
     let mechSummaryHealthId = mechSummaryHealthPanelId(mechId);
     let mechHealthAndWeaponsDivId = mechHealthAndWeaponsId(mechId);
     let mechHealthAndWeaponsDiv =
@@ -380,12 +447,16 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
   }
 
   //Delete button
-  var mechDeleteButtonId = function(mechId) {
+  var mechDeleteButtonId = function(mechId : string) : string {
     return mechId + "-deleteButton";
   }
-  var addDeleteMechButton = function(mechId, team, mechPanelJQ) {
+  var addDeleteMechButton =
+      function(mechId : string,
+              team : Team,
+              mechPanelJQ : JQuery)
+              : void {
     if (!deleteMechButton_Handler) {
-      deleteMechButton_Handler = new DeleteMechButton_Handler(this);
+      deleteMechButton_Handler = createDeleteMechButtonHandler(this);
     }
     let deleteIconSVG = MechViewWidgets.cloneTemplate("delete-icon-template");
     let mechDeleteButtonDivId = mechDeleteButtonId(mechId);
@@ -396,7 +467,7 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
       .click(deleteMechButton_Handler);
   }
 
-  var DeleteMechButton_Handler = function(context) {
+  var createDeleteMechButtonHandler = function(context : any) {
     var clickContext = context;
 
     return function() {
@@ -414,16 +485,20 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
       MechModelView.refreshView([MechModelView.ViewUpdate.TEAMSTATS]);
     };
   }
-  var deleteMechButton_Handler; //singleton
+  var deleteMechButton_Handler : () => void; //singleton
 
-  var moveMechButtonId = function(mechId) {
+  var moveMechButtonId = function(mechId : string) : string {
     return mechId + "-moveButton";
   }
-  var addMoveMechButton = function(mechId, team, mechPanelJQ) {
+  var addMoveMechButton =
+      function(mechId : string,
+              team : Team,
+              mechPanelJQ : JQuery)
+              : void {
     let moveIconSVG = MechViewWidgets.cloneTemplate("move-icon-template");
     let mechMoveButtonDivId = moveMechButtonId(mechId);
     if (!moveMechButton_handler) {
-      moveMechButton_handler = new MoveMechButton_Handler(this);
+      moveMechButton_handler = createMoveMechButtonHandler(this);
     }
     mechPanelJQ.find("[class~='titlePanel'] [class~='moveMechButton']")
       .attr("id", mechMoveButtonDivId)
@@ -433,13 +508,13 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
       .click(moveMechButton_handler);
   }
 
-  var toggleMoveMech = function(mechId) {
+  var toggleMoveMech = function(mechId : string) : void {
     let moveMechButtonJQ = $("#" + moveMechButtonId(mechId));
     let dragEnabled = moveMechButtonJQ.attr("data-dragenabled") === "true";
     let mechPanelDivId = mechPanelId(mechId);
     let mechPanelJQ = $("#" + mechPanelDivId);
     dragEnabled = !dragEnabled; //toggle
-    moveMechButtonJQ.attr("data-dragenabled", dragEnabled);
+    moveMechButtonJQ.attr("data-dragenabled", String(dragEnabled));
     if (dragEnabled) {
       mechPanelJQ
         .attr("draggable", "true")
@@ -450,7 +525,7 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
         .removeClass("dragging");
     }
   }
-  var MoveMechButton_Handler = function(context) {
+  var createMoveMechButtonHandler = function(context : any) : () => void {
     let clickContext = context;
 
     return function() {
@@ -458,42 +533,44 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
       toggleMoveMech(mechId);
     }
   }
-  var moveMechButton_handler; //initialized on first addMoveMechButton call
+  var moveMechButton_handler : () => void; //initialized on first addMoveMechButton call
 
-  var addDragAndDropHandlers = function(mechId, mechPanelJQ) {
+  var addDragAndDropHandlers =
+      function(mechId : string, mechPanelJQ : JQuery) : void {
     if (!mechOnDragHandler) {
-      mechOnDragHandler = new MechOnDragHandler(this);
+      mechOnDragHandler = createMechOnDragHandler(this);
     }
     mechPanelJQ.on("dragstart", mechOnDragHandler);
 
     if (!mechOnDragOverHandler) {
-      mechOnDragOverHandler = new MechOnDragOverHandler(this);
+      mechOnDragOverHandler = createMechOnDragOverHandler(this);
     }
     mechPanelJQ.on("dragover", mechOnDragOverHandler);
 
     if (!mechOnDropHandler) {
-      mechOnDropHandler = new MechOnDropHandler(this);
+      mechOnDropHandler = createMechOnDropHandler(this);
     }
     mechPanelJQ.on("drop", mechOnDropHandler);
   }
-
-  var MechOnDragHandler = function(context) {
-    return function(jqEvent) {
+  type JQEventHandler = (ev : JQuery.Event) => void;
+  var createMechOnDragHandler = function(context : any) : JQEventHandler {
+    return function(jqEvent : JQuery.Event) {
       let mechId = $(this).data("mech-id");
-      let origEvent = jqEvent.originalEvent;
+      let origEvent = <DragEvent> jqEvent.originalEvent;
       origEvent.dataTransfer.setData("text/plain", mechId);
       origEvent.dataTransfer.effectAllowed = "move";
       console.log("Drag start: " + mechId);
     }
   }
-  var mechOnDragHandler = null;
+  var mechOnDragHandler : JQEventHandler = null;
 
-  let prevDropTarget = null;
-  var MechOnDragOverHandler = function(context) {
-    return function(jqEvent) {
+  let prevDropTarget : string = null;
+  var createMechOnDragOverHandler =
+      function(context : any) : JQEventHandler {
+    return function(jqEvent : JQuery.Event) {
       let thisJQ = $(this);
       let mechId = thisJQ.data("mech-id");
-      let origEvent= jqEvent.originalEvent;
+      let origEvent= <DragEvent> jqEvent.originalEvent;
 
       jqEvent.preventDefault();
       //allow move on drop
@@ -508,13 +585,14 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
       }
     }
   }
-  var mechOnDragOverHandler = null;
+  var mechOnDragOverHandler : JQEventHandler = null;
 
-  var MechOnDropHandler = function(context) {
-    return function(jqEvent) {
+  var createMechOnDropHandler =
+      function(context : any) : JQEventHandler {
+    return function(jqEvent : JQuery.Event) : void {
       let thisJQ = $(this);
       let mechId = thisJQ.data("mech-id");
-      let origEvent= jqEvent.originalEvent;
+      let origEvent= <DragEvent>jqEvent.originalEvent;
       let srcMechId = origEvent.dataTransfer.getData("text/plain");
       jqEvent.preventDefault();
 
@@ -541,10 +619,10 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
       }
     }
   }
-  var mechOnDropHandler = null;
+  var mechOnDropHandler : JQEventHandler = null;
 
   //scrolls to and flashes the selected mech panel
-  var highlightMechPanel = function(mechId) {
+  export var highlightMechPanel = function(mechId : string) : void {
     let mechPanelDivId = mechPanelId(mechId);
     let mechPanelJQ = $("#" + mechPanelDivId);
     mechPanelJQ[0].scrollIntoView(false);
@@ -554,20 +632,4 @@ var MechViewMechPanel = MechViewMechPanel || (function() {
       mechPanelJQ.off("animationend");
     });
   }
-
-  return {
-    addPaperDoll: addPaperDoll,
-    setPaperDollArmor : setPaperDollArmor,
-    setPaperDollStructure : setPaperDollStructure,
-    setHeatbarValue : setHeatbarValue,
-    addMechPanel : addMechPanel,
-    setWeaponCooldown: setWeaponCooldown,
-    setWeaponAmmo : setWeaponAmmo,
-    setWeaponState : setWeaponState,
-    updateMechHealthNumbers : updateMechHealthNumbers,
-    updateMechStatusPanel : updateMechStatusPanel,
-    updateMechTitlePanel : updateMechTitlePanel,
-    updateHeat: updateHeat,
-    highlightMechPanel : highlightMechPanel,
-  }
-})();
+}

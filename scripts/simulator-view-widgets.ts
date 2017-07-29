@@ -142,8 +142,9 @@ namespace MechViewWidgets {
   }
 
   //Clones a template and returns the first element of the template
-  export var cloneTemplate = function(templateName : string) {
-    let template : Element = document.querySelector("#" + templateName);
+  export var cloneTemplate = function(templateName : string) : Element {
+    let template : HTMLTemplateElement =
+        <HTMLTemplateElement> document.querySelector("#" + templateName);
     let templateElement = document.importNode(template.content, true);
     return templateElement.firstElementChild;
   }
