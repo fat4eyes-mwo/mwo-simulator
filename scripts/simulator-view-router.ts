@@ -1,9 +1,12 @@
-
+/// <reference path="simulator-model.ts" />
+/// <reference path="simulator-view.ts" />
+/// <reference path="simulator-logic.ts" />
 "use strict";
 
 //Router. Deals with interactions of the application state and the url hash fragment
 //Uses the ./php/simulator-persistence.php for storing application state to server
-var MechViewRouter = MechViewRouter || (function() {
+namespace MechViewRouter {
+  type Team = MechModel.Team;
 
   const PERSISTENCE_URL = "./php/simulator-persistence.php";
   const PERSISTENCE_STATE_FIELD = "state";
@@ -23,12 +26,26 @@ var MechViewRouter = MechViewRouter || (function() {
   //length of the layoutids. Just persist the app state in the server and
   //send the hashed filename to the URL same as smurfy does.
 
+  //The object transmitted/received from the server
+  interface RemotePersistedState {
+    state : PersistedState;
+  }
   //The current state of the application
-  //format is {range : <range>, teams : {blue : [{smurfyId1, smurfyLoadoutId1}, ...], red: [...]}
+  interface PersistedState {
+    range : number,
+    teams : {[index:string] : PersistedMechState[]}
+  }
+  interface PersistedMechState {
+    smurfyId : string,
+    smurfyLoadoutId : string,
+  }
   class AppState {
+    range : number;
+    teams : {[index:string] : PersistedMechState[]};
+
     //if no parameters, from current app state
     //else read the contents of loadedAppState into the object
-    constructor(loadedAppState) {
+    constructor(loadedAppState? : RemotePersistedState) {
       if (arguments.length == 1) {
         this.range = loadedAppState.state.range;
         this.teams = loadedAppState.state.teams;
@@ -61,8 +78,8 @@ var MechViewRouter = MechViewRouter || (function() {
     //  { range: <range>,
     //    teams: {"blue" :[{"smurfyId" :<blueid1>, "smurfyLoadoutId": <blue1id>}...]}
     //            , "red" : [<redteamentries>]}}}
-    serialize() {
-      let ret = {};
+    serialize() : RemotePersistedState {
+      let ret : PersistedState = {range : null, teams : {}};
       ret.range = this.range;
       ret.teams = {};
       let teamList = [MechModel.Team.BLUE, MechModel.Team.RED];
@@ -81,7 +98,7 @@ var MechViewRouter = MechViewRouter || (function() {
   }
 
   //saves the current application state to the server for sharing
-  var saveAppState = function() {
+  export var saveAppState = function() : Promise<any> {
     let ret = new Promise(function(resolve, reject) {
       let appState = new AppState();
       $.ajax({
@@ -98,13 +115,13 @@ var MechViewRouter = MechViewRouter || (function() {
         resolve(data);
       })
       .fail(function(data) {
-        reject(Error(data));
+        reject(Error(String(data)));
       });
     });
     return ret;
   }
 
-  var loadAppState = function(stateHash) {
+  export var loadAppState = function(stateHash : string) : Promise<any> {
     //load state from hash
     let loadStatePromise = new Promise(function(resolve, reject) {
       MechModel.clearModel();
@@ -120,18 +137,19 @@ var MechViewRouter = MechViewRouter || (function() {
         resolve(data);
       })
       .fail(function(data){
-        reject(Error(data));
+        reject(Error(String(data)));
       })
     });
 
     //load mechs from the state
     let loadStateThenMechsPromise = loadStatePromise
       .then(function(data) {
-          let newAppState = new AppState(data);
+          let newAppState = new AppState(<RemotePersistedState> data);
           //set current app state
           let simulatorParameters = MechSimulatorLogic.getSimulatorParameters();
           if (!simulatorParameters) {
-            simulatorParameters = new MechSimulatorLogic.SimulatorParameters();
+            simulatorParameters =
+                new MechSimulatorLogic.SimulatorParameters(newAppState.range);
           }
           simulatorParameters.range = newAppState.range;
           MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
@@ -159,10 +177,10 @@ var MechViewRouter = MechViewRouter || (function() {
   }
 
   //Loads the smurfy mechs from the appState into the model.
-  var loadMechsFromSmurfy = function(newAppState) {
+  var loadMechsFromSmurfy = function(newAppState : AppState) : Promise<any> {
     let teamList = [MechModel.Team.BLUE, MechModel.Team.RED];
-    let totalMechsToLoad; //total number of mechs to load
-    let currMechsLoaded; //current number of mechs loaded
+    let totalMechsToLoad : number; //total number of mechs to load
+    let currMechsLoaded : number; //current number of mechs loaded
     if (!newAppState.teams) {
       //if no teams, immediately resolve
       isLoading = false;
@@ -174,29 +192,40 @@ var MechViewRouter = MechViewRouter || (function() {
       }
     }
 
-    let CombinedListEntry = function(team, index, mechEntry) {
+    interface CombinedListEntry {
+      team : Team;
+      index : number;
+      mechEntry : PersistedMechState;
+    }
+    let createCombinedListEntry =
+        function(team : Team,
+                index : number,
+                mechEntry : PersistedMechState)
+                : CombinedListEntry {
       return {
         "team" : team,
         "index" : index,
         "mechEntry" : mechEntry,
       }
     };
-    let combinedTeamList = [];
+
+    let combinedTeamList : CombinedListEntry[] = [];
     for (let team of teamList) {
       for (let mechIdx in newAppState.teams[team]) {
         let mechEntry = newAppState.teams[team][mechIdx];
-        combinedTeamList.push(new CombinedListEntry(team, mechIdx, mechEntry));
+        combinedTeamList.push(createCombinedListEntry(team, Number(mechIdx), mechEntry));
       }
     }
 
     totalMechsToLoad = combinedTeamList.length;
     currMechsLoaded = 0;
 
-    let promiseToEntryMap = new Map();
+    let promiseToEntryMap = new Map<Promise<any>, CombinedListEntry>();
     let combinedTeamPromiseList = combinedTeamList.map(function(combinedTeamEntry) {
       let mechEntry = combinedTeamEntry.mechEntry;
-      let loadMechPromise = MechModel.loadSmurfyMechLoadoutFromID(
-        mechEntry.smurfyId, mechEntry.smurfyLoadoutId);
+      let loadMechPromise =
+        MechModel.loadSmurfyMechLoadoutFromID(mechEntry.smurfyId,
+                                              mechEntry.smurfyLoadoutId);
       promiseToEntryMap.set(loadMechPromise, combinedTeamEntry);
       return loadMechPromise;
     });
@@ -222,15 +251,16 @@ var MechViewRouter = MechViewRouter || (function() {
   }
 
   //Called to let the router know that the app state has changed
-  var modifyAppState = function() {
+  export var modifyAppState = function() {
     isAppStateModified = true;
-    prevStateHash=HASH_MODIFIED_STATE;
+    prevStateHash = HASH_MODIFIED_STATE;
     setParamToLocationHash(HASH_STATE_FIELD, HASH_MODIFIED_STATE);
     MechView.updateOnModifyAppState();
   }
 
-  var setParamToLocationHash = function(param, value, replaceHistory = false){
-    let paramValues = new Map();
+  var setParamToLocationHash =
+      function(param : string, value : string, replaceHistory = false) : void {
+    let paramValues = new Map<string, string>();
     for (let currParam of HASH_FIELDS) {
       let currValue = getParamFromLocationHash(currParam);
       if (!currValue && param !== currParam) continue;
@@ -257,7 +287,7 @@ var MechViewRouter = MechViewRouter || (function() {
     }
   }
 
-  var getParamFromLocationHash = function(param) {
+  var getParamFromLocationHash = function(param : string) : string {
     let fragmentHash = location.hash;
     if (fragmentHash.startsWith("#")) {
       fragmentHash = fragmentHash.substring(1);
@@ -272,19 +302,19 @@ var MechViewRouter = MechViewRouter || (function() {
     }
   }
 
-  var getRunFromLocation = function() {
+  export var getRunFromLocation = function() : string {
     return getParamFromLocationHash(HASH_RUN_FIELD);
   }
 
-  var getSpeedFromLocation = function() {
+  export var getSpeedFromLocation = function() : string {
     return getParamFromLocationHash(HASH_SPEED_FIELD);
   }
 
-  var getStateHashFromLocation = function() {
+  var getStateHashFromLocation = function() :string {
     return getParamFromLocationHash(HASH_STATE_FIELD);
   }
 
-  var loadStateFromLocationHash = function() {
+  export var loadStateFromLocationHash = function() : Promise<any> {
     let hashState = getStateHashFromLocation();
     if (!hashState) {
       hashState = HASH_DEFAULT_STATE;
@@ -294,12 +324,12 @@ var MechViewRouter = MechViewRouter || (function() {
     return loadAppState(hashState);
   }
 
-  var initViewRouter = function() {
+  export var initViewRouter = function() : void {
     //Listen to hash changes
     window.addEventListener("hashchange", hashChangeListener, false);
   }
 
-  var hashChangeListener = function() {
+  var hashChangeListener = function() : void {
     console.log("Hash change: " + location.hash);
     if (isLoading) {
       //ignore hash change, change back to previous hash
@@ -335,14 +365,4 @@ var MechViewRouter = MechViewRouter || (function() {
       //if it is.
     }
   }
-
-  return {
-    saveAppState : saveAppState,
-    loadAppState : loadAppState,
-    loadStateFromLocationHash : loadStateFromLocationHash,
-    modifyAppState: modifyAppState,
-    initViewRouter : initViewRouter,
-    getRunFromLocation : getRunFromLocation,
-    getSpeedFromLocation : getSpeedFromLocation,
-  };
-})();
+}

@@ -16,6 +16,7 @@
       "simulator-view-widgets.ts",
       "simulator-view.ts",
       "simulator-view-mechPanel.ts",
+      "simulator-view-router.ts",
       "simulator-view-addmech.ts",
       "simulator-view-teamstats.ts",
       "simulator-view-simsettings.ts",
