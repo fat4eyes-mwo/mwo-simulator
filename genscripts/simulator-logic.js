@@ -185,6 +185,7 @@ var MechSimulatorLogic;
                 " damageDone: " + this.damageDone.toString();
         }
     }
+    MechSimulatorLogic.WeaponFire = WeaponFire;
     MechSimulatorLogic.setSimulatorParameters = function (parameters) {
         simulatorParameters = parameters;
         //refresh simulationInterval if it is already present
