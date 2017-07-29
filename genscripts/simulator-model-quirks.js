@@ -61,22 +61,36 @@ var MechModelQuirks;
         }
         return ret;
     };
-    //Reversed version of _weaponNameMap in quirkData.js. For faster lookup of weapon names
-    //format is weaponName -> {set of quirks that applies to the weapon}
-    var reversedWeaponNameMap = {};
-    //Initialize the map. Make sure that quirkData.js is loaded before simulator-model-quirks.js
-    (function initReversedWeaponNameMap() {
-        for (let quirkName in MechModelQuirks._weaponNameMap) {
-            for (let weaponName of MechModelQuirks._weaponNameMap[quirkName]) {
-                let reverseEntry = reversedWeaponNameMap[weaponName];
-                if (!reverseEntry) {
-                    reverseEntry = new Set();
-                    reversedWeaponNameMap[weaponName] = reverseEntry;
-                }
-                reverseEntry.add(quirkName);
-            }
+    class ReverseWeaponQuirkMap {
+        constructor() {
+            this.reversedWeaponNameMap = null;
         }
-    })();
+        getApplicableQuirks(weaponName) {
+            return this.getReversedWeaponNameMap()[weaponName];
+        }
+        getReversedWeaponNameMap() {
+            if (!this.reversedWeaponNameMap) {
+                this.reversedWeaponNameMap = this.initReversedWeaponNameMap();
+            }
+            return this.reversedWeaponNameMap;
+        }
+        //Initialize the map. Make sure that quirkData.js is loaded before simulator-model-quirks.js
+        initReversedWeaponNameMap() {
+            let ret = {};
+            for (let quirkName in MechModelQuirks._weaponNameMap) {
+                for (let weaponName of MechModelQuirks._weaponNameMap[quirkName]) {
+                    let reverseEntry = ret[weaponName];
+                    if (!reverseEntry) {
+                        reverseEntry = new Set();
+                        ret[weaponName] = reverseEntry;
+                    }
+                    reverseEntry.add(quirkName);
+                }
+            }
+            return ret;
+        }
+    }
+    var reversedWeaponQuirkMap = new ReverseWeaponQuirkMap();
     MechModelQuirks.getWeaponBonus = function (weaponInfo) {
         let quirkList = weaponInfo.mechInfo.quirks;
         let ret = { cooldown_multiplier: 0, duration_multiplier: 0,
@@ -93,7 +107,7 @@ var MechModelQuirks;
                 }
             }
             //specific weapon bonuses
-            let applicableQuirks = reversedWeaponNameMap[weaponInfo.name];
+            let applicableQuirks = reversedWeaponQuirkMap.getApplicableQuirks(weaponInfo.name);
             if (applicableQuirks && applicableQuirks.has(firstNameComponent)) {
                 ret[restOfNameComponents] += Number(quirk.value);
             }
