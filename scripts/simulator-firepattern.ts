@@ -107,12 +107,12 @@ namespace MechFirePattern {
     return (weaponA : WeaponState, weaponB : WeaponState) => {
       let weaponInfoA = weaponA.weaponInfo;
       let dmgPerHeatA = weaponInfoA.heat > 0 ?
-              weaponInfoA.damageAtRange(range, MechSimulatorLogic.getStepDuration())
+              weaponInfoA.damageAtRange(range)
                 / weaponInfoA.heat :
               Number.MAX_VALUE;
       let weaponInfoB = weaponB.weaponInfo;
       let dmgPerHeatB = weaponInfoB.heat > 0 ?
-              weaponInfoB.damageAtRange(range, MechSimulatorLogic.getStepDuration())
+              weaponInfoB.damageAtRange(range)
                 / weaponInfoB.heat :
               Number.MAX_VALUE;
       return dmgPerHeatB - dmgPerHeatA;
@@ -135,8 +135,7 @@ namespace MechFirePattern {
 
   var willDoDamage =
       function(weaponState : WeaponState, range : number) : boolean {
-    return weaponState.weaponInfo.damageAtRange(range,
-                                        MechSimulatorLogic.getStepDuration()) > 0;
+    return weaponState.weaponInfo.damageAtRange(range) > 0;
   }
 
   //Helper method for determining whether the firepattern can fire a weapon
