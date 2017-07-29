@@ -16,7 +16,7 @@ namespace MechSimulator {
       new MechSimulatorLogic.SimulatorParameters(DEFAULT_RANGE, DEFAULT_SPEED);
     MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
 
-    MechModel.initModelData()
+    MechModel.initModelData()//foo
       .then(function() {
         console.log("Successfully loaded model init data");
         //router should not be initialized before the smurfy data is
@@ -55,17 +55,6 @@ namespace MechSimulator {
   }
 
   export function main() : void {
-    // MechTest.testUIWidgets();
-    // MechTest.testModelInit();
-    // MechTest.testModelOps();
-    // MechTest.testModelBaseHealth();
-    // MechTest.testModelView();
-    // MechTest.testDamageAtRange();
-    // MechTest.testListQuirks();
-    // MechTest.testSpreadAdjacentDamage();
-    // MechTest.testSimulation();
-    // MechTest.testPersistence();
-    // MechTest.testLRMSpread();
     init();
   }
 }

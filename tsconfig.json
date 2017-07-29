@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "removeComments": false,
+        "preserveConstEnums": true,
+        "sourceMap": true,
+        "target": "es6",
+        "lib" : ["DOM","ES6","DOM.Iterable","ScriptHost","ES2016"],
+        "strict": false,
+        "forceConsistentCasingInFileNames": true,
+        "outDir" : "build/"
+    },
+    "include" : [
+      "scripts/lib/*.ts",
+      "scripts/data/*.ts",
+      "scripts/*.ts",
+      "test-scripts/**/*.ts"
+    ]
+}
