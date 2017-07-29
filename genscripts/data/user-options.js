@@ -4,7 +4,7 @@ var MechSimulatorLogic;
         RANDOM: "random",
         EXPECTED_VALUE: "expected_value",
     };
-    MechSimulatorLogic.USE_DOUBLE_TAP_SETTING = {
+    MechSimulatorLogic.UAC_DOUBLE_TAP_SETTING = {
         property: "useDoubleTap",
         name: "Use UAC Double Tap",
         values: [

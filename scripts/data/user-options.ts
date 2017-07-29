@@ -19,7 +19,7 @@ namespace MechSimulatorLogic {
     default: boolean,
   }
 
-  export const USE_DOUBLE_TAP_SETTING : SimUserSetting = {
+  export const UAC_DOUBLE_TAP_SETTING : SimUserSetting = {
     property: "useDoubleTap",
     name: "Use UAC Double Tap",
     values: [

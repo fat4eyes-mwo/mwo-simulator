@@ -36,7 +36,7 @@ var MechSimulatorLogic;
         //returns setting values and descriptions for the UI
         getSettings() {
             return [
-                MechSimulatorLogic.USE_DOUBLE_TAP_SETTING,
+                MechSimulatorLogic.UAC_DOUBLE_TAP_SETTING,
                 MechSimulatorLogic.UAC_JAM_SETTING
             ];
         }
