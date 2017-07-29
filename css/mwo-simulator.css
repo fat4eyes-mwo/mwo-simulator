@@ -1179,6 +1179,10 @@ a:hover {
   width: 50%;
 }
 
+#settingsButton {
+  display: none;
+}
+
 .simSettings .title {
   color: gold;
 }

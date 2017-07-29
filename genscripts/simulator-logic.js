@@ -61,6 +61,26 @@ var MechSimulatorLogic;
                         },
                     ],
                 },
+                {
+                    property: "uacJAMMethod",
+                    name: "UAC Jam Method",
+                    values: [
+                        {
+                            id: "random",
+                            name: "Random",
+                            value: UACJamMethod.RANDOM,
+                            description: "UACs jam at random, same as in game.",
+                            default: true,
+                        },
+                        {
+                            id: "expected_value",
+                            name: "Expected Value",
+                            value: UACJamMethod.EXPECTED_VALUE,
+                            description: "Simulates UAC jams by adding (jamTime * jamChange) to the weapon cooldown.",
+                            default: false,
+                        },
+                    ],
+                }
             ];
         }
     }

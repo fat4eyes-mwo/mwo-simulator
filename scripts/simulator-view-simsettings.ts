@@ -6,6 +6,7 @@
 
 namespace MechViewSimSettings {
   type SimulatorParameters = MechSimulatorLogic.SimulatorParameters;
+  type SimParamUserSettings = MechSimulatorLogic.SimParamUserSettings;
 
   export var initRangeInput = function() : void {
     let rangeJQ = $("#rangeInput");
@@ -64,7 +65,7 @@ namespace MechViewSimSettings {
     domElement : Element;
     propertyMap : Map<string, Map<string, any>>;
     //TODO: Proper type  for simParams
-    constructor(simSettings? : any) {
+    constructor(simSettings : SimParamUserSettings) {
       let settingsDiv = MechViewWidgets.cloneTemplate("simSettings-template");
       this.domElement = settingsDiv;
       this.propertyMap = new Map();
@@ -87,8 +88,8 @@ namespace MechViewSimSettings {
     getSettingValue(property : string, valueId : string) {
       return this.propertyMap.get(property).get(valueId);
     }
-    //TODO: Correct type for simSettings
-    populateSettings(simSettings? : any) {
+
+    populateSettings(simSettings : SimParamUserSettings) {
       let SimulatorParameters = MechSimulatorLogic.SimulatorParameters;
       let settingsList = SimulatorParameters.prototype.getSettings();
       let entryListJQ = $(this.domElement).find(".simSettingsList");
@@ -125,9 +126,10 @@ namespace MechViewSimSettings {
   }
 
   export var showSettingsDialog = function() {
-    let dialog = new SettingsDialog();
-    MechViewWidgets.setModal(dialog.domElement, "simSettingsDialog");
+    let simulatorParameters = MechSimulatorLogic.getSimulatorParameters();
 
+    let dialog = new SettingsDialog(simulatorParameters);
+    MechViewWidgets.setModal(dialog.domElement, "simSettingsDialog");
     MechViewWidgets.showModal();
   }
 
