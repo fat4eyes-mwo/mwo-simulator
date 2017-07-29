@@ -313,7 +313,7 @@ namespace MechModelView {
     }
   }
 
-  class TeamReport {
+  export class TeamReport {
     team : Team;
     weaponStats : Map<string, WeaponStat>; //TODO Tighten type
     mechReports : MechReport[];

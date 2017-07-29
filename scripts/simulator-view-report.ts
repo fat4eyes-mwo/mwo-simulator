@@ -1,10 +1,14 @@
+/// <reference path="simulator-view-widgets.ts" />
+/// <reference path="simulator-model.ts" />
 
 "use strict";
 
-var MechViewReport = MechViewReport || (function() {
+namespace MechViewReport {
+  type Team = MechModel.Team;
 
-  class VictoryReport {
-    //this.domElement: contains the element root of the report
+  export class VictoryReport {
+    domElement : Element;
+
     constructor() {
       let victoryReportDiv =
           MechViewWidgets.cloneTemplate("victoryReport-template");
@@ -29,7 +33,7 @@ var MechViewReport = MechViewReport || (function() {
       reportJQ.find("[class~=rangeValue]")
         .html(Number(simParams.range).toFixed(0) + "m");
 
-      let teamList = [MechModel.Team.BLUE, MechModel.Team.RED];
+      let teamList : Team[] = [MechModel.Team.BLUE, MechModel.Team.RED];
       for (let team of teamList) {
         let teamReport = new TeamReport(team);
         reportJQ.find("[class~="+ this.teamReportPanelId(team) + "]")
@@ -38,14 +42,15 @@ var MechViewReport = MechViewReport || (function() {
       }
     }
 
-    teamReportPanelId(team) {
+    teamReportPanelId(team : Team) : string {
       return team + "ReportContainer";
     }
   }
 
-  class TeamReport {
-    //this.domElement : contains the element root of the team report
-    constructor(team) {
+  export class TeamReport {
+    domElement : Element;
+
+    constructor(team : Team) {
       let teamReport = MechModelView.getTeamReport(team);
       let teamReportDiv = MechViewWidgets.cloneTemplate("teamReport-template");
       let teamReportJQ = $(teamReportDiv)
@@ -80,19 +85,19 @@ var MechViewReport = MechViewReport || (function() {
         .append(weaponBreakdown.domElement);
     }
 
-    teamReportId(team) {
+    teamReportId(team : Team) : string {
       return team + "-teamReport";
     }
 
-    mechBreakdownId(team) {
+    mechBreakdownId(team : Team) : string {
       return team + "-mechBreakdown";
     }
 
-    weaponBreakdownId(team) {
+    weaponBreakdownId(team : Team) : string {
       return team + "-weaponBreakdown";
     }
 
-    translateTeamName(team) {
+    translateTeamName(team : Team) : string {
       if (team === "blue") {
         return "Blue";
       } else if (team === "red") {
@@ -104,8 +109,9 @@ var MechViewReport = MechViewReport || (function() {
   }
 
   class MechBreakdownTable {
-    //this.domElement : the root element of the table
-    constructor(teamReport, containerId) {
+    domElement : Element;
+
+    constructor(teamReport : MechModelView.TeamReport) {
       let tableDiv = MechViewWidgets.cloneTemplate("mechBreakdownTable-template");
       this.domElement = tableDiv;
       //header
@@ -137,8 +143,9 @@ var MechViewReport = MechViewReport || (function() {
   }
 
   class WeaponBreakdownTable {
-    //this.domElement: the root Element of the table
-    constructor(teamReport, containerId) {
+    domElement : Element;
+
+    constructor(teamReport : MechModelView.TeamReport) {
       let tableDiv = MechViewWidgets.cloneTemplate("weaponBreakdownTable-template");
       this.domElement = tableDiv;
       let weaponBreakdownHeaderDiv =
@@ -162,20 +169,13 @@ var MechViewReport = MechViewReport || (function() {
     }
   }
 
-  var showVictoryReport = function() {
+  export var showVictoryReport = function() {
     let teamReport = new MechViewReport.VictoryReport();
     MechViewWidgets.setModal(teamReport.domElement, "wide");
     MechViewWidgets.showModal();
   }
 
-  var hideVictoryReport = function() {
+  export var hideVictoryReport = function() {
     MechViewWidgets.hideModal("wide");
   }
-
-  return {
-    VictoryReport : VictoryReport,
-    TeamReport : TeamReport,
-    showVictoryReport : showVictoryReport,
-    hideVictoryReport: hideVictoryReport,
-  };
-})();
+}
