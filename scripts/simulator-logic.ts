@@ -1,5 +1,6 @@
 "use strict";
 /// <reference path="simulator-model.ts" />
+/// <reference path="data/user-options.ts" />
 
 //TODO: Start splitting things off from this file, it's getting too long
 //Candidates:
@@ -35,24 +36,6 @@ namespace MechSimulatorLogic {
   //Interval when ghost heat applies for weapons. 500ms
   const ghostHeatInterval = 500;
 
-  type UACJamMethod = string;
-  const UACJamMethod : {[index:string] : string}= {
-    RANDOM : "random",
-    EXPECTED_VALUE : "expected_value",
-  };
-
-  export interface SimSetting {
-    property : string,
-    name : string,
-    values : SimSettingValue[],
-  }
-  export interface SimSettingValue {
-    id : string,
-    name : string,
-    value : any, //TODO : see if you can make this type tighter
-    description : string,
-    default: boolean,
-  }
   export interface SimParamUserSettings {
     uacJAMMethod : UACJamMethod;
     useDoubleTap : boolean;
@@ -78,50 +61,10 @@ namespace MechSimulatorLogic {
     }
 
     //returns setting values and descriptions for the UI
-    //TODO: This could potentially get too long. Find a more modular way of
-    //defining property values
-    getSettings() : SimSetting[] {
+    getSettings() : SimUserSetting[] {
       return [
-        {
-          property: "useDoubleTap",
-          name: "Use UAC Double Tap",
-          values: [
-            {
-              id: "enable",
-              name: "Enabled",
-              value: true,
-              description: "Allows use of UAC double taps",
-              default: true,
-            },
-            {
-              id: "disable",
-              name: "Disabled",
-              value: false,
-              description: "Disallows use of UAC double taps",
-              default: false,
-            },
-          ],
-        },
-        {
-          property: "uacJAMMethod",
-          name: "UAC Jam Method",
-          values: [
-            {
-              id: "random",
-              name: "Random",
-              value: UACJamMethod.RANDOM,
-              description: "UACs jam at random, same as in game.",
-              default: true,
-            },
-            {
-              id: "expected_value",
-              name: "Expected Value",
-              value: UACJamMethod.EXPECTED_VALUE,
-              description: "Simulates UAC jams by adding (jamTime * jamChange) to the weapon cooldown.",
-              default: false,
-            },
-          ],
-        }
+        USE_DOUBLE_TAP_SETTING,
+        UAC_JAM_SETTING
       ];
     }
   }

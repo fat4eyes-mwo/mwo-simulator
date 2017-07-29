@@ -1,5 +1,6 @@
 "use strict";
 /// <reference path="simulator-model.ts" />
+/// <reference path="data/user-options.ts" />
 //TODO: Start splitting things off from this file, it's getting too long
 //Candidates:
 //  move WeaponFire and weaponFire processing logic to separate file
@@ -21,13 +22,9 @@ var MechSimulatorLogic;
     const DEFAULT_UI_UPDATE_INTERVAL = 50;
     //Interval when ghost heat applies for weapons. 500ms
     const ghostHeatInterval = 500;
-    const UACJamMethod = {
-        RANDOM: "random",
-        EXPECTED_VALUE: "expected_value",
-    };
     //Parameters of the simulation. Includes range
     class SimulatorParameters {
-        constructor(range, speedFactor = 1, uacJamMethod = UACJamMethod.RANDOM, useDoubleTap = true) {
+        constructor(range, speedFactor = 1, uacJamMethod = MechSimulatorLogic.UACJamMethod.RANDOM, useDoubleTap = true) {
             this.range = range;
             this.uiUpdateInterval = Math.floor(DEFAULT_UI_UPDATE_INTERVAL / Number(speedFactor));
             this.uacJAMMethod = uacJamMethod;
@@ -37,50 +34,10 @@ var MechSimulatorLogic;
             this.uiUpdateInterval = Math.floor(DEFAULT_UI_UPDATE_INTERVAL / Number(speedFactor));
         }
         //returns setting values and descriptions for the UI
-        //TODO: This could potentially get too long. Find a more modular way of
-        //defining property values
         getSettings() {
             return [
-                {
-                    property: "useDoubleTap",
-                    name: "Use UAC Double Tap",
-                    values: [
-                        {
-                            id: "enable",
-                            name: "Enabled",
-                            value: true,
-                            description: "Allows use of UAC double taps",
-                            default: true,
-                        },
-                        {
-                            id: "disable",
-                            name: "Disabled",
-                            value: false,
-                            description: "Disallows use of UAC double taps",
-                            default: false,
-                        },
-                    ],
-                },
-                {
-                    property: "uacJAMMethod",
-                    name: "UAC Jam Method",
-                    values: [
-                        {
-                            id: "random",
-                            name: "Random",
-                            value: UACJamMethod.RANDOM,
-                            description: "UACs jam at random, same as in game.",
-                            default: true,
-                        },
-                        {
-                            id: "expected_value",
-                            name: "Expected Value",
-                            value: UACJamMethod.EXPECTED_VALUE,
-                            description: "Simulates UAC jams by adding (jamTime * jamChange) to the weapon cooldown.",
-                            default: false,
-                        },
-                    ],
-                }
+                MechSimulatorLogic.USE_DOUBLE_TAP_SETTING,
+                MechSimulatorLogic.UAC_JAM_SETTING
             ];
         }
     }

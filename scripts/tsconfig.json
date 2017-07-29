@@ -19,6 +19,7 @@
       "data/weaponspread.ts",
       "data/addedheatsinkdata.ts",
       "data/addedweapondata.ts",
+      "data/user-options.ts",
       "testdata/dummy.d.ts",
       "util.ts",
       "simulator-view-widgets.ts",
