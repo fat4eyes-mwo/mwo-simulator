@@ -97,7 +97,7 @@ var MechModelWeapons;
             return this.ammoPerShot > 0;
         }
         //range in meters, stepDuration in ms
-        damageAtRange(range, stepDuration) {
+        damageAtRange(range) {
             let totalDamage = Number(this.baseDmg) * Number(this.damageMultiplier);
             let ret = totalDamage;
             let rangeMultiplier = 1 + Number(this.weaponBonus.range_multiplier);
