@@ -19,6 +19,7 @@
       "data/weaponspread.ts",
       "data/addedheatsinkdata.ts",
       "data/addedweapondata.ts",
+      "testdata/dummy.d.ts",
       "util.ts",
       "simulator-view-widgets.ts",
       "simulator-view.ts",
@@ -39,7 +40,8 @@
       "simulator-firepattern.ts",
       "simulator-mechtarget.ts",
       "simulator-logic.ts",
-      "simulator.ts"
+      "simulator.ts",
+      "simulator-test.ts"
     ],
     "includes" : [
       "scripts/**/*.js"

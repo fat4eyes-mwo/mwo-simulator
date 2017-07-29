@@ -185,10 +185,9 @@
 //http://mwo.smurfy-net.de/mechlab#i=5&l=823a6acb394ff1b4e2103bb3eff959f48597ad3b
 //RAC urbie
 //http://mwo.smurfy-net.de/mechlab#i=277&l=e65c9a31c08ffe2c0ff809ea574165b1489c9f0f
-namespace DummyData {
 
 //http://mwo.smurfy-net.de/mechlab#i=291&l=0673c22705b1651b68e33300644d53eb895cf864
-export var DummyArcticCheetah = {
+var DummyArcticCheetah = {
 	"id": "0673c22705b1651b68e33300644d53eb895cf864",
 	"mech_id": 291,
 	"valid": true,
@@ -364,7 +363,7 @@ export var DummyArcticCheetah = {
 }
 
 //http://mwo.smurfy-net.de/mechlab#i=310&l=4e36e8d64502fc77e9c463aa3002f7d27cfe705f
-export var DummyBattleMaster = {
+var DummyBattleMaster = {
 	"id": "4e36e8d64502fc77e9c463aa3002f7d27cfe705f",
 	"mech_id": 310,
 	"valid": true,
@@ -539,7 +538,7 @@ export var DummyBattleMaster = {
 }
 
 //http://mwo.smurfy-net.de/mechlab#i=285&l=85a320fe5a58bc19ea63f3457b4fd33942bc4928
-export var DummyExecutioner = {
+var DummyExecutioner = {
 	"id": "85a320fe5a58bc19ea63f3457b4fd33942bc4928",
 	"mech_id": 285,
 	"valid": true,
@@ -754,7 +753,7 @@ export var DummyExecutioner = {
 };
 
 //http://mwo.smurfy-net.de/mechlab#i=138&l=51f1355f16afdc0c7f86b0069e28635744859857
-export var DummyFireStarter = {
+var DummyFireStarter = {
 	"id": "51f1355f16afdc0c7f86b0069e28635744859857",
 	"mech_id": 138,
 	"valid": true,
@@ -910,7 +909,7 @@ export var DummyFireStarter = {
 }
 
 //http://mwo.smurfy-net.de/mechlab#i=383&l=e98b6cc50991cca88ca7ab1fce29631d0203d5ca
-export var DummyWarHammer = {
+var DummyWarHammer = {
 	"id": "e98b6cc50991cca88ca7ab1fce29631d0203d5ca",
 	"mech_id": 383,
 	"valid": true,
@@ -1098,7 +1097,7 @@ export var DummyWarHammer = {
 }
 
 //http://mwo.smurfy-net.de/mechlab#i=309&l=3ad2a73e6d8a532941cddcad311085bf92673da3
-export var DummyTimberwolf = {
+var DummyTimberwolf = {
 	"id": "3ad2a73e6d8a532941cddcad311085bf92673da3",
 	"mech_id": 309,
 	"valid": true,
@@ -1303,7 +1302,7 @@ export var DummyTimberwolf = {
 }
 
 //http://mwo.smurfy-net.de/mechlab#i=332&l=09b8c111f321277b8e7afaa2d233294f0f67c4de
-export var DummyCrab = {
+var DummyCrab = {
 	"id": "09b8c111f321277b8e7afaa2d233294f0f67c4de",
 	"mech_id": 332,
 	"valid": true,
@@ -1450,7 +1449,7 @@ export var DummyCrab = {
 }
 
 //http://mwo.smurfy-net.de/mechlab#i=368&l=fb5d6e0621d91bed6125ccb96b09a0cfd68edc96
-export var DummyHunchback2C = {
+var DummyHunchback2C = {
 	"id": "fb5d6e0621d91bed6125ccb96b09a0cfd68edc96",
 	"mech_id": 368,
 	"valid": true,
@@ -1659,7 +1658,7 @@ export var DummyHunchback2C = {
 }
 
 //http://mwo.smurfy-net.de/mechlab#i=326&l=31148ee451cd55e98509de362bb55191611aed52
-export var DummyMauler = {
+var DummyMauler = {
 	"id": "31148ee451cd55e98509de362bb55191611aed52",
 	"mech_id": 326,
 	"valid": true,
@@ -1846,7 +1845,7 @@ export var DummyMauler = {
 	"lsml": "lsml:\/\/rgFGAUQISBJsCEQISAHne6\/upzrMqfT8+n0+TbPp9Z9Z9PsXqfT6fs+n1sg="
 }
 
-export var DummyKodiak = {
+var DummyKodiak = {
 	"id": "7aa2092fe4cfbf27ddad5adb52dc9e1dda85839f",
 	"mech_id": 408,
 	"valid": true,
@@ -2062,7 +2061,7 @@ export var DummyKodiak = {
 }
 
 //http://mwo.smurfy-net.de/api/data/mechs/9/loadouts/stock.json
-export var DummyStockHunchback = {
+var DummyStockHunchback = {
 	"id": "stock",
 	"mech_id": 9,
 	"valid": true,
@@ -2247,7 +2246,7 @@ export var DummyStockHunchback = {
 }
 
 //http://mwo.smurfy-net.de/mechlab#i=154&l=fbdff04a6abf82aeb905e07d85a4f899bf9ece49
-export var DummyShadowhawk = {
+var DummyShadowhawk = {
 	"id": "fbdff04a6abf82aeb905e07d85a4f899bf9ece49",
 	"mech_id": 154,
 	"valid": true,
@@ -2445,7 +2444,7 @@ export var DummyShadowhawk = {
 }
 
 //http://mwo.smurfy-net.de/mechlab#i=183&l=1d9c0251e4085929bc6bace60fa09815a382ff36
-export var DummyStormcrow = {
+var DummyStormcrow = {
 	"id": "1d9c0251e4085929bc6bace60fa09815a382ff36",
 	"mech_id": 183,
 	"valid": true,
@@ -2662,7 +2661,7 @@ export var DummyStormcrow = {
 };
 
 //http://mwo.smurfy-net.de/mechlab#i=183&l=18e9d47cc01bbd2b698b2b8bb3257b240be36386
-export var DummyStormcrowLowAmmo = {
+var DummyStormcrowLowAmmo = {
 	"id": "18e9d47cc01bbd2b698b2b8bb3257b240be36386",
 	"mech_id": 183,
 	"valid": true,
@@ -2850,7 +2849,7 @@ export var DummyStormcrowLowAmmo = {
 };
 
 //http://mwo.smurfy-net.de/api/data/mechs/277/loadouts/stock.json
-export var DummyUrbanmech = {
+var DummyUrbanmech = {
 	"id": "stock",
 	"mech_id": 277,
 	"valid": true,
@@ -3039,7 +3038,7 @@ export var DummyUrbanmech = {
 };
 
 //http://mwo.smurfy-net.de/mechlab#i=12&l=ccd22130859be43016c116144508ff0eafd02703
-export var DummyCatapult = {
+var DummyCatapult = {
 	"id": "ccd22130859be43016c116144508ff0eafd02703",
 	"mech_id": 12,
 	"valid": true,
@@ -3236,7 +3235,7 @@ export var DummyCatapult = {
 	"lsml": "lsml:\/\/rgAMKCoSMRJAFCoSMSjne6\/upzrMS1jbcWKsY2Kbjx48ePHjtS1k"
 };
 
-export var DummyMadDog = {
+var DummyMadDog = {
 	"id": "e0dfb8f23aa9e091fedb52686d365d5a335a93e8",
 	"mech_id": 214,
 	"valid": true,
@@ -3467,7 +3466,7 @@ export var DummyMadDog = {
 };
 
 //http://mwo.smurfy-net.de/mechlab#i=5&l=823a6acb394ff1b4e2103bb3eff959f48597ad3b
-export var _DummyRocketCommando = {
+var _DummyRocketCommando = {
 	"id": "823a6acb394ff1b4e2103bb3eff959f48597ad3b",
 	"mech_id": 5,
 	"valid": true,
@@ -3612,6 +3611,4 @@ export var _DummyRocketCommando = {
 	},
 	"created_at": "2017-07-23T04:41:51+0000",
 	"lsml": "lsml:\/\/rgAFEBQEGBIABxQEGAfne6\/epzrMzSs0qqq23NJ8mrbZ"
-}
-
 }

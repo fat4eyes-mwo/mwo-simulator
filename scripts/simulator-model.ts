@@ -989,18 +989,23 @@ namespace MechModel  {
     }
   }
 
-  //Load dummy data from javascript files in data folder
-  //TODO: Separate dummy test data from non-test code
-  export var initDummyModelData = function() {
-    SmurfyWeaponData = DummyWeaponData;
-    SmurfyAmmoData = DummyAmmoData;
-    SmurfyMechData = DummyMechData;
-    SmurfyModuleData = DummyModuleData;
-    let flatData = flattenOmnipodData(_DummyOmnipods);
-    SmurfyOmnipodData = flatData.flatOmnipodData;
-    SmurfyCTOmnipods = flatData.ctOmnipodMap;
-    initAddedData();
-  };
+  //Used by test
+  export var setInitModelData = function(
+    weaponData : SmurfyWeaponDataList,
+    ammoData : SmurfyAmmoDataList,
+    mechData : SmurfyMechDataList,
+    moduleData : SmurfyModuleDataList,
+    omnipodData : SmurfyOmnipodData,
+    ): void {
+      SmurfyWeaponData = weaponData;
+      SmurfyAmmoData = ammoData;
+      SmurfyMechData = mechData;
+      SmurfyModuleData = moduleData;
+      let flatData = flattenOmnipodData(omnipodData);
+      SmurfyOmnipodData = flatData.flatOmnipodData;
+      SmurfyCTOmnipods = flatData.ctOmnipodMap;
+      initAddedData();
+  }
 
   export var getSmurfyMechData =
       function(smurfyMechId : string) : SmurfyMechData {

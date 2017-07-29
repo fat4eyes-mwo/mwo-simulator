@@ -1,5 +1,4 @@
-namespace DummyData {
-export var _DummyOmnipods = {
+var _DummyOmnipods = {
 	"timberwolf": {
 		"30000": {
 			"details": {
@@ -26599,5 +26598,3 @@ export var _DummyOmnipods = {
 		}
 	}
 };
-
-}

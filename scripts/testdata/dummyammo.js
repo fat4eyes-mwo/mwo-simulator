@@ -1,6 +1,5 @@
-namespace DummyData {
 
-export var DummyAmmoData = {
+var DummyAmmoData = {
 	"2007": {
 		"id": "2007",
 		"type": "AC10Ammo",
@@ -1578,5 +1577,3 @@ export var DummyAmmoData = {
 		"weapons": ["1205"]
 	}
 };
-
-}

@@ -1,18 +1,33 @@
 "use strict";
 //NOTE:Most tests require dummy data, so make sure to change index.html to
 //include the data/dummyXXX.js files when using these functions
+//TODO: Move simulator-test and dummydata into a separate project
 
 //Test code.
-var MechTest = MechTest || (function() {
+namespace MechTest {
+  type Team = MechModel.Team;
+  type Mech = MechModel.Mech;
+  type WeaponDamage = MechModel.WeaponDamage;
+  type DamageMap = MechModel.DamageMap;
+  type AccuracyPattern = MechAccuracyPattern.AccuracyPattern;
 
-var uiTestInterval = null;
-var testIntervalLength = 100;
-var mechIdWeaponCount = []; //number of weapons set for a given mechid
+  var uiTestInterval : number = null;
+  var testIntervalLength = 100;
+  var mechIdWeaponCount = []; //number of weapons set for a given mechid
 
-return {
-    testUIWidgets : function () {
+  //Load dummy data from javascript files in data folder
+  var initDummyModelData = function() {
+    MechModel.setInitModelData(
+        DummyWeaponData,
+        DummyAmmoData,
+        DummyMechData,
+        DummyModuleData,
+        _DummyOmnipods);
+  };
+
+  export var testUIWidgets = function () {
       MechView.initView();
-      MechModel.initDummyModelData();
+      initDummyModelData();
 
       MechModel.addMech("testCheetahId", MechModel.Team.BLUE, DummyArcticCheetah);
       MechModel.addMech("testExecutionerId", MechModel.Team.BLUE, DummyExecutioner);
@@ -24,8 +39,7 @@ return {
 
       MechModelView.refreshView();
 
-      var Handler = function (context) {
-        this.context = context;
+      var createHandler = function (context : any) {
         return () => {
           if (uiTestInterval == null) {
             uiTestInterval = window.setInterval(() => {
@@ -38,11 +52,11 @@ return {
           }
         };
       };
-      var handler = new Handler(this);
+      var handler = createHandler(this);
       $("#testUI").removeClass("debugButton").click(handler);
-    },
+    }
 
-    testUI : function (mechTeam) {
+    export var testUI = function (mechTeam : Mech[]) {
       var weaponStates = [MechModel.WeaponCycle.READY,
           MechModel.WeaponCycle.FIRING,
           MechModel.WeaponCycle.DISABLED];
@@ -60,9 +74,9 @@ return {
           MechViewMechPanel.setWeaponState(mech.getMechId(), i, weaponStates[Math.floor(weaponStates.length * Math.random())]);
         }
       });
-    },
+    }
 
-    testModelInit : function () {
+    export var testModelInit = function () {
       MechModel.initModelData()
         .then(function() {
           console.log("Successfully loaded model init data");
@@ -70,19 +84,18 @@ return {
         .catch(function(err) {
           console.log("Failed to load model init data");
         });
-      // MechModel.initDummyModelData();
-    },
+    }
 
-    testModelOps : function () {
-      MechModel.initDummyModelData();
+    export var testModelOps = function () {
+      initDummyModelData();
       // MechModel.addMech("testCheetahId", MechModel.Team.BLUE, DummyArcticCheetah);
       // MechModel.addMech("testExecutionerId", MechModel.Team.BLUE, DummyExecutioner);
       MechModel.addMech("testMaulerId", MechModel.Team.RED, DummyMauler);
       // MechModel.addMech("testFirestarterId", MechModel.Team.RED, DummyFireStarter);
       MechModel.addMech("testBattlemasterId", MechModel.Team.RED, DummyBattleMaster);
-    },
+    }
 
-    testModelBaseHealth : function() {
+    export var testModelBaseHealth = function() {
       for (var tonnage = 20; tonnage <=100; tonnage += 5) {
         for (var property in MechModel.Component) {
           if (MechModel.Component.hasOwnProperty(property)) {
@@ -92,11 +105,11 @@ return {
           }
         }
       }
-    },
+    }
 
-    testModelView : function (){
+    export var testModelView = function (){
       MechView.initView();
-      MechModel.initDummyModelData();
+      initDummyModelData();
 
       MechModel.addMech("testCheetahId", MechModel.Team.BLUE, DummyArcticCheetah);
       MechModel.addMech("testExecutionerId", MechModel.Team.BLUE, DummyExecutioner);
@@ -159,18 +172,18 @@ return {
           }
         }
       });
-    },
+    }
 
-    testDamageAtRange : function() {
-      MechModel.initDummyModelData();
+    export var testDamageAtRange = function() {
+      initDummyModelData();
       let ppcID = 1009;
       let srm6ID = 1031;
       let atm12ID = 1252;
       let testIds = [ppcID, srm6ID, atm12ID];
       var mechInfo = new MechModel.MechInfo("testId", DummyStormcrow);
       for (let weaponId of testIds) {
-        var weaponInfoTest = new MechModelWeapons.WeaponInfo(weaponId, "centre_torso",
-                MechModel.getSmurfyWeaponData(weaponId), mechInfo);
+        var weaponInfoTest = new MechModelWeapons.WeaponInfo(String(weaponId), "centre_torso",
+                MechModel.getSmurfyWeaponData(String(weaponId)), mechInfo);
         console.log("Weapon " + weaponInfoTest.translatedName +
             " minRange: " + weaponInfoTest.minRange +
             " optRange: " + weaponInfoTest.optRange +
@@ -179,14 +192,14 @@ return {
         let testRanges = [0, 90, 180, 270, 300, 500, 540, 810, 1080, 2000];
         const stepDuration = 50;
         for (let range of testRanges) {
-          let damage = weaponInfoTest.damageAtRange(range, stepDuration);
+          let damage = weaponInfoTest.damageAtRange(range);
           console.log("range: " + range + " damage: " + damage);
         }
       }
-    },
+    }
 
-    testSpreadAdjacentDamage : function() {
-      var printTestDamageTransform = function (testDamage, accuracyPattern) {
+    export var testSpreadAdjacentDamage = function() {
+      var printTestDamageTransform = function (testDamage : DamageMap, accuracyPattern : AccuracyPattern) {
         let weaponDamage = new MechModel.WeaponDamage(testDamage);
         let transformedDamage = accuracyPattern(weaponDamage, 200);
         console.log("original damage: " + weaponDamage.toString());
@@ -194,7 +207,7 @@ return {
       }
       let accuracyPattern = MechAccuracyPattern.accuracySpreadToAdjacent(0.5, 0.5, 0);
       let accuracyPatternNext = MechAccuracyPattern.accuracySpreadToAdjacent(0.5, 0.3, 0.2);
-      let testDamage =
+      let testDamage : DamageMap =
         {"centre_torso": 10,
           "right_torso": 2.5,
           "left_torso": 2.5};
@@ -212,10 +225,10 @@ return {
       testDamage = {"left_arm" : 10, "left_torso" : 2.5};
       printTestDamageTransform(testDamage, accuracyPattern);
       printTestDamageTransform(testDamage, accuracyPatternNext);
-    },
+    }
 
-    testListQuirks : function() {
-      let quirkMap = {};
+    export var testListQuirks = function() {
+      let quirkMap : {[index:string] : boolean} = {};
       //mech quirks
       for (let mechIdx in DummyMechData) {
         let smurfyMech = DummyMechData[mechIdx];
@@ -249,11 +262,11 @@ return {
         numQuirks++;
       }
       console.log("numQuirks : " + numQuirks);
-    },
+    }
 
-    testSimulation : function() {
+    export var testSimulation = function() {
       //Use DummyData
-      // MechModel.initDummyModelData();
+      // initDummyModelData();
       // this.generateTestUI( );
 
       //Load data from smurfy
@@ -267,12 +280,12 @@ return {
         .catch(function() {
           console.log("Failed to load model init data");
         });
-    },
+    }
 
-    generateTestUI : function() {
+    export var generateTestUI = function() {
       MechView.hideLoadingScreen();
 
-      MechTest.initTestModelState();
+      initTestModelState();
       MechModelView.refreshView();
 
       $("#resetState").removeClass("debugButton").click(() => {
@@ -339,12 +352,12 @@ return {
           MechView.hideLoadingScreen();
         });
       });
-    },
+    }
 
-    testPersistence : function() {
+    export var testPersistence = function() {
       var statehash;
-      MechModel.initDummyModelData();
-      MechTest.initTestModelState();
+      initDummyModelData();
+      initTestModelState();
       MechView.initView();
 
       MechView.showLoadingScreen();
@@ -363,7 +376,7 @@ return {
         console.log("Done save app state. Data: " + data);
       });
 
-      var testGetAppState = function(statehash) {
+      var testGetAppState = function(statehash : string) {
         Promise.resolve(MechViewRouter.loadAppState(statehash)
           .then(function(data) {
             console.log("Success on load app state. Data: " + data);
@@ -418,9 +431,9 @@ return {
           MechView.hideLoadingScreen();
         });
       });
-    },
+    }
 
-    initTestModelState : function() {
+    var initTestModelState = function() {
       const DEFAULT_RANGE = 200;
 
       MechModel.addMech("testKodiakId1", MechModel.Team.BLUE, DummyKodiak);
@@ -445,31 +458,31 @@ return {
       MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
       MechModel.initMechTeamPatterns(MechModel.mechTeams[MechModel.Team.BLUE]);
       MechModel.initMechTeamPatterns(MechModel.mechTeams[MechModel.Team.RED]);
-    },
+    }
 
-    testLRMSpread : function() {
+    export var testLRMSpread = function() {
       var newTestDamage = () => {
         return new MechModel.WeaponDamage({"centre_torso" : 10});
       }
       let testDamage = newTestDamage();
 
       let lrmSpreadList = [
-        {name: "LRM5", spread: _LRM5Spread},
-        {name: "LRM10", spread: _LRM10Spread},
-        {name: "LRM15", spread: _LRM15Spread},
-        {name: "LRM20", spread: _LRM20Spread},
-        {name: "ALRM5", spread: _ALRM5Spread},
-        {name: "ALRM10", spread: _ALRM10Spread},
-        {name: "ALRM15", spread: _ALRM15Spread},
-        {name: "ALRM20", spread: _ALRM20Spread},
-        {name: "cLRM5", spread: _cLRM5Spread},
-        {name: "cLRM10", spread: _cLRM10Spread},
-        {name: "cLRM15", spread: _cLRM15Spread},
-        {name: "cLRM20", spread: _cLRM20Spread},
-        {name: "cALRM5", spread: _cALRM5Spread},
-        {name: "cALRM10", spread: _cALRM10Spread},
-        {name: "cALRM15", spread: _cALRM15Spread},
-        {name: "cALRM20", spread: _cALRM20Spread},
+        {name: "LRM5", spread: GlobalGameInfo._LRM5Spread},
+        {name: "LRM10", spread: GlobalGameInfo._LRM10Spread},
+        {name: "LRM15", spread: GlobalGameInfo._LRM15Spread},
+        {name: "LRM20", spread: GlobalGameInfo._LRM20Spread},
+        {name: "ALRM5", spread: GlobalGameInfo._ALRM5Spread},
+        {name: "ALRM10", spread: GlobalGameInfo._ALRM10Spread},
+        {name: "ALRM15", spread: GlobalGameInfo._ALRM15Spread},
+        {name: "ALRM20", spread: GlobalGameInfo._ALRM20Spread},
+        {name: "cLRM5", spread: GlobalGameInfo._cLRM5Spread},
+        {name: "cLRM10", spread: GlobalGameInfo._cLRM10Spread},
+        {name: "cLRM15", spread: GlobalGameInfo._cLRM15Spread},
+        {name: "cLRM20", spread: GlobalGameInfo._cLRM20Spread},
+        {name: "cALRM5", spread: GlobalGameInfo._cALRM5Spread},
+        {name: "cALRM10", spread: GlobalGameInfo._cALRM10Spread},
+        {name: "cALRM15", spread: GlobalGameInfo._cALRM15Spread},
+        {name: "cALRM20", spread: GlobalGameInfo._cALRM20Spread},
       ]
 
       for (let lrm of lrmSpreadList) {
@@ -485,10 +498,9 @@ return {
           console.log("Range: " + range + " " + transformedDamage.toString());
         }
       }
-    },
+    }
 
-    testScratch : function() {
-    },
-  } //end return publics
+    var testScratch = function() {
+    }
 
-})(); //end namespace exec
+}

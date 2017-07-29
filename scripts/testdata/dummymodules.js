@@ -1,5 +1,4 @@
-namespace DummyData {
-export var DummyModuleData = {
+var DummyModuleData = {
 	"1900": {
 		"id": "1900",
 		"type": "CInternalStats",
@@ -6316,5 +6315,3 @@ export var DummyModuleData = {
 		"pilot_module": true
 	}
 };
-
-}

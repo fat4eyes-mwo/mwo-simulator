@@ -1,6 +1,7 @@
 /// <reference path="simulator-view-router.ts" />
 /// <reference path="simulator-model.ts" />
 /// <reference path="simulator-modelview.ts" />
+/// <reference path="simulator-test.ts" />
 "use strict";
 
 namespace MechSimulator {

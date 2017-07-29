@@ -817,14 +817,13 @@ var MechModel;
             $.extend(weaponData, addedData);
         }
     };
-    //Load dummy data from javascript files in data folder
-    //TODO: Separate dummy test data from non-test code
-    MechModel.initDummyModelData = function () {
-        SmurfyWeaponData = DummyWeaponData;
-        SmurfyAmmoData = DummyAmmoData;
-        SmurfyMechData = DummyMechData;
-        SmurfyModuleData = DummyModuleData;
-        let flatData = flattenOmnipodData(_DummyOmnipods);
+    //Used by test
+    MechModel.setInitModelData = function (weaponData, ammoData, mechData, moduleData, omnipodData) {
+        SmurfyWeaponData = weaponData;
+        SmurfyAmmoData = ammoData;
+        SmurfyMechData = mechData;
+        SmurfyModuleData = moduleData;
+        let flatData = flattenOmnipodData(omnipodData);
         SmurfyOmnipodData = flatData.flatOmnipodData;
         SmurfyCTOmnipods = flatData.ctOmnipodMap;
         MechModel.initAddedData();
