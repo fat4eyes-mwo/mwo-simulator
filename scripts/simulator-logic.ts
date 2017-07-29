@@ -1,19 +1,30 @@
 "use strict";
+/// <reference path="simulator-model.ts" />
+
 //TODO: Start splitting things off from this file, it's getting too long
 //Candidates:
 //  move WeaponFire and weaponFire processing logic to separate file
 //  move SimulatorParameters to separate file
-var MechSimulatorLogic = MechSimulatorLogic || (function () {
-  var simulationInterval = null;
+namespace MechSimulatorLogic {
+  import Team = MechModel.Team;
+  import Mech = MechModel.Mech;
+  import WeaponInfo = MechModelWeapons.WeaponInfo;
+  import WeaponState = MechModelWeapons.WeaponState;
+  import WeaponDamage = MechModel.WeaponDamage;
+  import MechDamage = MechModel.MechDamage;
+  import DamageMap = MechModel.DamageMap;
+  import GhostHeatMap = MechModel.GhostHeatMap;
+
+  var simulationInterval : number = null;
   var simRunning = false;
   var simTime = 0;
-  var simulatorParameters;
-  var weaponFireQueue = [];
-  var willUpdateTeamStats = {};  //Format: {<team> : boolean}
+  var simulatorParameters : SimulatorParameters;
+  var weaponFireQueue : WeaponFire[] = [];
+  var willUpdateTeamStats : {[index:string] : boolean} = {};  //Format: {<team> : boolean}
 
   const simStepDuration = 50; //simulation tick length in ms
 
-  var getStepDuration = function() {
+  export var getStepDuration = function() : number {
     return simStepDuration;
   }
 
@@ -24,14 +35,33 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   //Interval when ghost heat applies for weapons. 500ms
   const ghostHeatInterval = 500;
 
-  const UACJamMethod = {
+  type UACJamMethod = string;
+  const UACJamMethod : {[index:string] : string}= {
     RANDOM : "random",
     EXPECTED_VALUE : "expected_value",
   };
 
+  export interface SimSetting {
+    property : string,
+    name : string,
+    values : SimSettingValue[],
+  }
+  export interface SimSettingValue {
+    id : string,
+    name : string,
+    value : any, //TODO : see if you can make this type tighter
+    description : string,
+    default: boolean,
+  }
   //Parameters of the simulation. Includes range
-  class SimulatorParameters {
-    constructor(range, speedFactor = 1,
+  export class SimulatorParameters {
+    range : number;
+    uiUpdateInterval : number;
+    uacJAMMethod : UACJamMethod;
+    useDoubleTap : boolean;
+
+    constructor(range : number,
+          speedFactor = 1,
           uacJamMethod = UACJamMethod.RANDOM,
           useDoubleTap = true) {
       this.range = range;
@@ -39,25 +69,14 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
       this.uacJAMMethod = uacJamMethod;
       this.useDoubleTap = useDoubleTap;
     }
-    setSpeedFactor(speedFactor) {
+    setSpeedFactor(speedFactor : number) : void {
       this.uiUpdateInterval = Math.floor(DEFAULT_UI_UPDATE_INTERVAL / Number(speedFactor));
     }
+
     //returns setting values and descriptions for the UI
-    //returns
-    //[{
-    //  property: <propertyName>
-    //  name: <readable name>
-    //  values: [{
-    //    id: <id>, must be unique
-    //    name: <display name>
-    //    value: <setting value>
-    //    description: <long description of value>
-    //    default : boolean
-    //  }, ...]
-    //}, ...]
     //TODO: This could potentially get too long. Find a more modular way of
     //defining property values
-    getSettings() {
+    getSettings() : SimSetting[] {
       return [
         {
           property: "useDoubleTap",
@@ -90,7 +109,27 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   //When the damage is completed, it is taken off the queue and its total
   //  damage done is added to the sourceMech's stats
   class WeaponFire {
-    constructor(sourceMech, targetMech, weaponState, range, createTime, ammoConsumed) {
+    sourceMech : Mech;
+    targetMech : Mech;
+    weaponState : WeaponState;
+    range : number;
+    createTime : number;
+    ammoConsumed : number;
+    weaponDamage : WeaponDamage;
+    tickWeaponDamage : WeaponDamage;
+    damageDone : MechDamage;
+    totalDuration : number;
+    totalTravel : number;
+    durationLeft : number;
+    travelLeft : number;
+    complete : boolean;
+
+    constructor(sourceMech : Mech,
+                targetMech : Mech,
+                weaponState : WeaponState,
+                range : number,
+                createTime : number,
+                ammoConsumed : number) {
       this.sourceMech = sourceMech;
       this.targetMech = targetMech;
       this.weaponState = weaponState;
@@ -114,12 +153,12 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
       this.initComputedValues(range);
     }
 
-    initComputedValues(range) {
+    initComputedValues(range : number) : void {
       let targetComponent = this.sourceMech.componentTargetPattern(this.sourceMech, this.targetMech);
       let weaponInfo = this.weaponState.weaponInfo;
       //baseWeaponDamage applies all damage to the target component
-      let baseWeaponDamageMap = {};
-      let baseDamage = weaponInfo.damageAtRange(range, getStepDuration());
+      let baseWeaponDamageMap : DamageMap = {};
+      let baseDamage = weaponInfo.damageAtRange(range);
       if (weaponInfo.requiresAmmo()) {
         baseDamage = Number(baseDamage) * this.ammoConsumed / weaponInfo.ammoPerShot;
       }
@@ -137,7 +176,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
       this.weaponDamage = transformedWeaponDamage;
 
       if (this.totalDuration >0) {
-        let tickDamageMap = {};
+        let tickDamageMap : DamageMap = {};
         for (let component in this.weaponDamage.damageMap) {
           tickDamageMap[component] = Number(this.weaponDamage.getDamage(component)) / Number(this.totalDuration) * Number(getStepDuration());
         }
@@ -147,11 +186,11 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
       }
     }
 
-    isComplete() {
+    isComplete() : boolean {
       return this.complete;
     }
 
-    step(stepDuration) {
+    step(stepDuration : number) : void {
       let weaponInfo = this.weaponState.weaponInfo;
       let sourceMechState = this.sourceMech.getMechState();
       let targetMechState = this.targetMech.getMechState();
@@ -193,7 +232,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
       }
     }
 
-    toString() {
+    toString() : string {
       let weaponInfo = this.weaponState.weaponInfo;
       return "WeaponFire" +
           " createTime: " + this.createTime +
@@ -208,7 +247,8 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     }
   }
 
-  var setSimulatorParameters = function(parameters) {
+  export var setSimulatorParameters =
+      function(parameters : SimulatorParameters) : void {
     simulatorParameters = parameters;
     //refresh simulationInterval if it is already present
     if (simulationInterval) {
@@ -217,41 +257,53 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     }
   }
 
-  var getSimulatorParameters = function() {
+  export var getSimulatorParameters = function() : SimulatorParameters {
     return simulatorParameters;
   }
 
-  var createSimulationInterval = function() {
-    var IntervalHandler = function(context) {
+  class IntervalHandler {
+    context : any;
+    constructor(context : any) {
       this.context = context;
-      return () => {
-        if (simRunning) {
-          this.context.step();
-        }
+    }
+    handler() {
+      if (simRunning) {
+        this.context.step();
       }
-    };
+    }
+  }
+  var createSimulationInterval = function() : void  {
+    // TODO: Old constructor, keep for comparison until commit
+    // var IntervalHandler = function(context : any) : () => void {
+    //   this.context = context;
+    //   return () => {
+    //     if (simRunning) {
+    //       this.context.step();
+    //     }
+    //   }
+    // };
     let intervalHandler = new IntervalHandler(this);
-    simulationInterval = window.setInterval(intervalHandler,
+    simulationInterval = window.setInterval(intervalHandler.handler,
                                         simulatorParameters.uiUpdateInterval);
   }
 
-  var runSimulation = function() {
+  export var runSimulation = function() : void {
     if (!simulationInterval) {
       createSimulationInterval.call(this);
     }
     simRunning = true;
   }
 
-  var pauseSimulation = function() {
+  export var pauseSimulation = function() : void {
     simRunning = false;
   }
 
-  var stepSimulation = function() {
+  export var stepSimulation = function() : void {
     pauseSimulation();
     step();
   }
 
-  var resetSimulation = function() {
+  export var resetSimulation = function() : void {
     simRunning = false;
     if (simulationInterval) {
       window.clearInterval(simulationInterval);
@@ -269,8 +321,8 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   }
 
   //Simulation step function. Called every tick
-  var step = function() {
-    let teams = [MechModel.Team.BLUE, MechModel.Team.RED];
+  export var step = function() : void {
+    let teams : Team[] = [MechModel.Team.BLUE, MechModel.Team.RED];
     willUpdateTeamStats = {};
     processWeaponFires();
 
@@ -326,10 +378,9 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
       }
       MechModelView.updateVictory(MechModelView.getVictorTeam());
     }
-
   }
 
-  var enemyTeam = function(myTeam) {
+  var enemyTeam = function(myTeam : Team) : Team {
     if (myTeam === MechModel.Team.BLUE) {
       return MechModel.Team.RED;
     } else if (myTeam === MechModel.Team.RED) {
@@ -341,10 +392,12 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   //Give a mech and a list of weaponStates
   //(which must be contained in mech.mechState.weaponStateList)
   //fire the weapons (i.e. update mech heat and weapon states)
-  var fireWeapons = function(mech, weaponStateList, targetMech) {
+  var fireWeapons = function(mech : Mech,
+                            weaponStateList : WeaponState[],
+                            targetMech : Mech) {
     let mechState = mech.getMechState();
 
-    let weaponsFired = []; //list of weapons that were actually fired.
+    let weaponsFired : WeaponState[] = []; //list of weapons that were actually fired.
     for (let weaponState of weaponStateList) {
       let weaponInfo = weaponState.weaponInfo;
 
@@ -369,15 +422,20 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     }
   }
 
-  var queueWeaponFire = function(sourceMech, targetMech, weaponState, ammoConsumed) {
+  var queueWeaponFire = function(sourceMech : Mech,
+                                targetMech : Mech,
+                                weaponState : WeaponState,
+                                ammoConsumed : number)
+                                : WeaponFire {
     let range = simulatorParameters.range;
     let weaponFire = new WeaponFire(sourceMech, targetMech,
                                     weaponState, range,
                                     simTime, ammoConsumed);
     weaponFireQueue.push(weaponFire);
+    return weaponFire;
   }
 
-  var dissipateHeat = function(mech) {
+  var dissipateHeat = function(mech : Mech) : void {
     let mechState = mech.getMechState();
     let heatState = mechState.heatState;
     //heat dissipated per step. Divide currHeatDissipation by 1000
@@ -390,9 +448,9 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     }
   }
 
-  var processCooldowns = function(mech, targetMech) {
+  var processCooldowns = function(mech : Mech, targetMech : Mech) : void {
     let mechState = mech.getMechState();
-    let weaponsFired = [];
+    let weaponsFired : WeaponState[] = [];
     for (let weaponState of mechState.weaponStateList) {
       let stepResult = weaponState.step(getStepDuration());
       if (stepResult.weaponFired) {
@@ -406,7 +464,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
         mechState.setUpdate(MechModel.UpdateType.COOLDOWN);
       }
     }
-    let totalHeat = computeHeat(mech, weaponsFired);
+    let totalHeat : number = computeHeat(mech, weaponsFired);
     if (totalHeat > 0) {
       mechState.heatState.currHeat += Number(totalHeat);
       mechState.setUpdate(MechModel.UpdateType.HEAT);
@@ -415,7 +473,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     }
   }
 
-  var processWeaponFires = function() {
+  var processWeaponFires = function() : void {
     if (weaponFireQueue.length == 0) {
       return;
     }
@@ -436,7 +494,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
 
   //log damage from any remaining entries in the weapon fire queue. Done when
   //one team dies
-  var flushWeaponFireQueue = function() {
+  var flushWeaponFireQueue = function() : void {
     for (let weaponFire of weaponFireQueue) {
       logDamage(weaponFire);
     }
@@ -445,7 +503,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
 
   //Update mechstats with the completed WeaponFire's damage, and log
   //results to console
-  var logDamage = function(weaponFire) {
+  var logDamage = function(weaponFire : WeaponFire) : void {
     let weaponInfo = weaponFire.weaponState.weaponInfo;
     let mechState = weaponFire.sourceMech.getMechState();
     let mechStats = mechState.mechStats;
@@ -462,8 +520,8 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
               " dest: " + weaponFire.targetMech.getName());
   }
 
-  var clearMechStats = function() {
-    let teams = [MechModel.Team.BLUE, MechModel.Team.RED];
+  var clearMechStats = function() : void {
+    let teams : Team[] = [MechModel.Team.BLUE, MechModel.Team.RED];
     for (let team of teams) {
       for (let mech of MechModel.mechTeams[team]) {
         mech.getMechState().clearMechStats();
@@ -474,18 +532,20 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   //TODO: Move computeHeat and computeGhostHeat into MechState
   //Compute the heat caused by firing a set of weapons
   //Ghost heat reference: http://mwomercs.com/forums/topic/127904-heat-scale-the-maths/
-  var computeHeat = function (mech, weaponsFired) {
+  var computeHeat = function (mech : Mech,
+                              weaponsFired : WeaponState[])
+                              : number {
     let totalHeat = 0;
 
     //sort weaponInfoList in increasing order of heat for ghost heat processing
-    var compareHeat = function(weaponInfo1, weaponInfo2) {
-      return Number(weaponInfo1.heat) - Number(weaponInfo2.heat);
+    var compareHeat = function(weapon1 : WeaponState, weapon2 : WeaponState) : number {
+      return Number(weapon1.computeHeat()) - Number(weapon1.computeHeat());
     }
     weaponsFired.sort(compareHeat);
 
     for (let weaponState of weaponsFired) {
       let weaponInfo = weaponState.weaponInfo;
-      totalHeat += Number(weaponState.computeHeat(mech.getMechState().mechInfo)); // base heat
+      totalHeat += Number(weaponState.computeHeat()); // base heat
       let ghostHeat = computeGhostHeat(mech, weaponState);
       totalHeat += ghostHeat;
     }
@@ -493,8 +553,11 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     return totalHeat;
   }
 
-  class GhostHeatEntry {
-    constructor(timeFired, weaponState) {
+  export class GhostHeatEntry {
+    timeFired : number;
+    weaponState : WeaponState;
+
+    constructor(timeFired : number, weaponState : WeaponState) {
       this.timeFired = timeFired;
       this.weaponState = weaponState;
     }
@@ -502,8 +565,10 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
   //Calculates the ghost heat incurred by a weapon
   //Note that this method has a side effect: it removes stale GhostHeatEntries
   //and adds a new GhostHeatEntry for the weapon
-  var computeGhostHeat = function (mech, weaponState) {
-    const HEATMULTIPLIER = [0, 0, 0.08, 0.18, 0.30, 0.45, 0.60, 0.80, 1.10, 1.50, 2.00, 3.00, 5.00];
+  var computeGhostHeat =
+      function (mech : Mech, weaponState : WeaponState) : number {
+    const HEATMULTIPLIER =
+      [0, 0, 0.08, 0.18, 0.30, 0.45, 0.60, 0.80, 1.10, 1.50, 2.00, 3.00, 5.00];
     let weaponInfo = weaponState.weaponInfo;
 
     let mechState = mech.getMechState();
@@ -531,7 +596,7 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
       if (ghostHeatEntry.weaponState === weaponState) {
         //update time, remove from array and put at the end of the queue
         ghostHeatEntry.timeFired = simTime;
-        ghostHeatWeapons.splice(ghostHeatIdx, 1);
+        ghostHeatWeapons.splice(Number(ghostHeatIdx), 1);
         ghostHeatWeapons.push(ghostHeatEntry);
         addNewEntry = false;
         break;
@@ -551,24 +616,25 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     return ghostHeat;
   }
 
-  var copyGhostHeatMap = function(ghostHeatMap) {
+  var copyGhostHeatMap = function(ghostHeatMap : GhostHeatMap) : GhostHeatMap  {
     if (!ghostHeatMap) {
       return ghostHeatMap;
     }
-    let ret = {};
+    let ret : GhostHeatMap = {};
     for (let key in ghostHeatMap) {
       ret[key] = Array.from(ghostHeatMap[key]);
     }
     return ret;
   }
 
-  var getSimTime = function() {
+  export var getSimTime = function() {
     return simTime;
   }
 
   //Computes total heat for the set of weapons fired, but restores the
   //ghost heat map to its previous state afterwards
-  var predictHeat = function (mech, weaponsFired) {
+  export var predictHeat =
+      function (mech : Mech, weaponsFired : WeaponState[]) : number {
     let mechState = mech.getMechState();
     let prevGhostHeatMap = mechState.ghostHeatMap;
     mechState.ghostHeatMap = copyGhostHeatMap(prevGhostHeatMap);
@@ -577,27 +643,12 @@ var MechSimulatorLogic = MechSimulatorLogic || (function () {
     return ret;
   }
 
-  var predictBaseHeat = function (mech, weaponsFired) {
+  export var predictBaseHeat =
+      function (mech : Mech, weaponsFired : WeaponState[]) : number {
     let ret = 0;
     for (let weaponState of weaponsFired) {
-      ret = ret + Number(weaponState.computeHeat(mech.getMechState().mechInfo));
+      ret = ret + Number(weaponState.computeHeat());
     }
     return ret;
   }
-
-  return {
-    SimulatorParameters : SimulatorParameters,
-    setSimulatorParameters : setSimulatorParameters,
-    getSimulatorParameters : getSimulatorParameters,
-    runSimulation : runSimulation,
-    pauseSimulation : pauseSimulation,
-    resetSimulation : resetSimulation,
-    stepSimulation : stepSimulation,
-    step : step,
-    getSimTime : getSimTime,
-    predictHeat : predictHeat,
-    predictBaseHeat : predictBaseHeat,
-    getStepDuration : getStepDuration,
-  }
-
-})(); //end namespace
+}

@@ -38,8 +38,8 @@ namespace MechTargetMech  {
 
   var targetHighestFirepower =
       function (mech : Mech, enemyMechList : Mech[]) : Mech {
-    let maxFirepower;
-    let maxFirepowerMech;
+    let maxFirepower : number;
+    let maxFirepowerMech : Mech;
     let range = MechSimulatorLogic.getSimulatorParameters().range;
     for (let enemyMech of enemyMechList) {
       if (enemyMech.getMechState().isAlive()) {

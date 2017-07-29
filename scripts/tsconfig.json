@@ -21,6 +21,7 @@
       "simulator-componenttarget.ts",
       "simulator-firepattern.ts",
       "simulator-mechtarget.ts",
+      "simulator-logic.ts",
       "data/quirkdata.ts",
       "data/globalgameinfo.ts",
       "data/basehealth.ts",

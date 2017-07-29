@@ -3,6 +3,7 @@
 /// <reference path="simulator-model-quirks.ts" />
 /// <reference path="simulator-model-weapons.ts" />
 /// <reference path="simulator-smurfytypes.ts" />
+/// <reference path="simulator-logic.ts" />
 /// <reference path="data/globalgameinfo.ts" />
 /// <reference path="data/basehealth.ts" />
 /// <reference path="data/addedheatsinkdata.ts" />
@@ -284,8 +285,7 @@ namespace MechModel  {
 
   //TODO : is actually UpdateTypes -> boolean, try to see if it can be made explicit
   export type UpdateSet = {[index:string] : boolean};
-  //TODO: is actually string -> GhostHeatEntry. Change when you get to simulator logic
-  type GhostHeatMap = {[index:string] : any}
+  export type GhostHeatMap = {[index:string] : MechSimulatorLogic.GhostHeatEntry[]}
   export class MechState {
     mechInfo : MechInfo;
     mechHealth : MechHealth;

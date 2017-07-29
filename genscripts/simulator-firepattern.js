@@ -94,12 +94,12 @@ var MechFirePattern;
         return (weaponA, weaponB) => {
             let weaponInfoA = weaponA.weaponInfo;
             let dmgPerHeatA = weaponInfoA.heat > 0 ?
-                weaponInfoA.damageAtRange(range, MechSimulatorLogic.getStepDuration())
+                weaponInfoA.damageAtRange(range)
                     / weaponInfoA.heat :
                 Number.MAX_VALUE;
             let weaponInfoB = weaponB.weaponInfo;
             let dmgPerHeatB = weaponInfoB.heat > 0 ?
-                weaponInfoB.damageAtRange(range, MechSimulatorLogic.getStepDuration())
+                weaponInfoB.damageAtRange(range)
                     / weaponInfoB.heat :
                 Number.MAX_VALUE;
             return dmgPerHeatB - dmgPerHeatA;
@@ -116,7 +116,7 @@ var MechFirePattern;
         return predictedHeat > baseHeat;
     };
     var willDoDamage = function (weaponState, range) {
-        return weaponState.weaponInfo.damageAtRange(range, MechSimulatorLogic.getStepDuration()) > 0;
+        return weaponState.weaponInfo.damageAtRange(range) > 0;
     };
     //Helper method for determining whether the firepattern can fire a weapon
     //Uses the useDoubleTap field of SimulatorParameters
