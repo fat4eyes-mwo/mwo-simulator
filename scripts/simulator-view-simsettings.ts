@@ -1,8 +1,13 @@
+/// <reference path="simulator-view-widgets.ts" />
+/// <reference path="simulator-modelview.ts" />
+/// <reference path="simulator-logic.ts" />
+
 "use strict";
 
-var MechViewSimSettings = MechViewSimSettings || (function() {
+namespace MechViewSimSettings {
+  type SimulatorParameters = MechSimulatorLogic.SimulatorParameters;
 
-  var initRangeInput = function() {
+  export var initRangeInput = function() : void {
     let rangeJQ = $("#rangeInput");
     let rangeButton = new MechViewWidgets.MechButton("setRangeButton", function() {
       let buttonMode = $(this).attr("data-button-mode");
@@ -27,7 +32,7 @@ var MechViewSimSettings = MechViewSimSettings || (function() {
     });
   };
 
-  var setRangeValue = function() {
+  export var setRangeValue = function() : void {
     let rangeJQ = $("#rangeInput");
     rangeJQ.addClass("disabled").attr("disabled", "true");
     let range = Number($("#rangeInput").val());
@@ -45,7 +50,8 @@ var MechViewSimSettings = MechViewSimSettings || (function() {
       .html("Change");
   };
 
-  var updateSimSettingsView = function(simulatorParameters) {
+  export var updateSimSettingsView =
+      function(simulatorParameters : SimulatorParameters) : void {
     if (simulatorParameters) {
       let range = simulatorParameters.range;
       $("#rangeInput").val(range);
@@ -55,12 +61,15 @@ var MechViewSimSettings = MechViewSimSettings || (function() {
   class SettingsDialog {
     //this.domElement : root element of the dialog
     //this.propertyMap: property->valueId->value
-    constructor(simParams) {
+    domElement : Element;
+    propertyMap : Map<string, Map<string, any>>;
+    //TODO: Proper type  for simParams
+    constructor(simSettings? : any) {
       let settingsDiv = MechViewWidgets.cloneTemplate("simSettings-template");
       this.domElement = settingsDiv;
       this.propertyMap = new Map();
 
-      this.populateSettings(simParams);
+      this.populateSettings(simSettings);
 
       let settingsJQ = $(settingsDiv);
       settingsJQ.find(".applyButton").click(() => {
@@ -72,13 +81,14 @@ var MechViewSimSettings = MechViewSimSettings || (function() {
       });
     }
 
-    settingEntryId(settingProperty) {
+    settingEntryId(settingProperty : string) : string {
       return settingProperty + "-value";
     }
-    getSettingValue(property, valueId) {
+    getSettingValue(property : string, valueId : string) {
       return this.propertyMap.get(property).get(valueId);
     }
-    populateSettings(simParams) {
+    //TODO: Correct type for simSettings
+    populateSettings(simSettings? : any) {
       let SimulatorParameters = MechSimulatorLogic.SimulatorParameters;
       let settingsList = SimulatorParameters.prototype.getSettings();
       let entryListJQ = $(this.domElement).find(".simSettingsList");
@@ -99,14 +109,14 @@ var MechViewSimSettings = MechViewSimSettings || (function() {
                               .text(value.name)
                               .appendTo(entrySelectJQ);
           this.propertyMap.get(entry.property).set(value.id, value);
-          //TODO: set value from simParams
+          //TODO: set value from simSettings
           if (value.default) {
             entrySelectJQ.val(value.id);
             entryJQ.find(".description").text(value.description);
           }
         }
         entryJQ.on('change', (data) => {
-          let selectedValue = entrySelectJQ.val();
+          let selectedValue = String(entrySelectJQ.val());
           let settingValue = this.getSettingValue(entry.property, selectedValue);
           entryJQ.find(".description").text(settingValue.description);
         })
@@ -114,22 +124,14 @@ var MechViewSimSettings = MechViewSimSettings || (function() {
     }
   }
 
-  var showSettingsDialog = function() {
+  export var showSettingsDialog = function() {
     let dialog = new SettingsDialog();
     MechViewWidgets.setModal(dialog.domElement, "simSettingsDialog");
 
     MechViewWidgets.showModal();
   }
 
-  var hideSettingsDialog = function() {
+  export var hideSettingsDialog = function() {
     MechViewWidgets.hideModal("simSettingsDialog");
   }
-
-  return {
-    initRangeInput: initRangeInput,
-    setRangeValue : setRangeValue,
-    updateSimSettingsView : updateSimSettingsView,
-    showSettingsDialog : showSettingsDialog,
-    hideSettingsDialog : hideSettingsDialog,
-  };
-})();
+}
