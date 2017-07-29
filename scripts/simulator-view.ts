@@ -1,37 +1,38 @@
 "use strict";
-
+/// <reference path="simulator-view-widgets.ts" />
 //UI methods
 
-var MechView = MechView || (function() {
-
-  var clearMechList = function(team) {
+namespace MechView {
+  type Team = string;
+  type Tooltip = MechViewWidgets.Tooltip;
+  export var clearMechList = function(team : Team) : void {
     let teamMechPanelId = team + "Team";
     $("#" + teamMechPanelId).empty();
   }
 
-  var clearMechStats = function(team) {
+  export var clearMechStats = function(team : Team) : void {
     MechViewTeamStats.clearTeamStats(team);
   }
 
-  var clear = function (team) {
+  export var clear = function (team : Team) : void {
     clearMechList(team);
     clearMechStats(team);
   }
 
-  var clearAll = function () {
+  export var clearAll = function () : void{
     clear("blue");
     clear("red");
   }
 
-  var updateSimTime = function(simTime) {
+  export var updateSimTime = function(simTime : number) : void{
     $("#simTime").html(simTime + "ms");
   }
 
-  var setDebugText = function(debugText) {
+  export var setDebugText = function(debugText : string) : void {
     $("#debugText").html(debugText);
   }
 
-  var initView = function() {
+  export var initView = function() : void {
     $("#nojavascript").remove();
     initControlPanel();
     MechViewTeamStats.initPatternTypes();
@@ -41,20 +42,20 @@ var MechView = MechView || (function() {
     initMiscControl();
   }
 
-  var initControlPanel = function() {
+  var initControlPanel = function() : void {
     let controlPanelDiv = MechViewWidgets.cloneTemplate("controlPanel-template");
     $(controlPanelDiv)
       .appendTo("#controlPanelContainer");
   }
 
-  var setSimulatorSpeedfactor = function(speedFactor) {
+  var setSimulatorSpeedfactor = function(speedFactor : number) : void {
     let simulatorParams = MechSimulatorLogic.getSimulatorParameters();
     simulatorParams.setSpeedFactor(speedFactor);
     MechSimulatorLogic.setSimulatorParameters(simulatorParams);
     $("#simSpeed").html(speedFactor + "x");
   }
 
-  var initSpeedControl = function() {
+  var initSpeedControl = function() : void {
     $("#startSimulationDivButton").click(() => {
       if (MechModelView.getVictorTeam()) {
         //if a team already won, reset the sim
@@ -85,13 +86,13 @@ var MechView = MechView || (function() {
     });
   }
 
-  var resetSimulation = function() {
+  export var resetSimulation = function() : void {
     MechModel.resetState();
     MechSimulatorLogic.resetSimulation();
     MechModelView.refreshView([]);
   }
 
-  var initStateControl = function() {
+  var initStateControl = function() : void {
     $("#resetSimulationDivButton").click(() => {
       resetSimulation();
     });
@@ -102,23 +103,23 @@ var MechView = MechView || (function() {
     });
   }
 
-  var permalinkTooltip;
-  var modifiedTooltip;
-  var loadErrorTooltip;
-  var initMiscControl = function() {
+  var permalinkTooltip : Tooltip;
+  var modifiedTooltip : Tooltip;
+  var loadErrorTooltip : Tooltip;
+  var initMiscControl = function() : void {
     $("#permalinkButton").click(() => {
       let saveAppStatePromise = MechViewRouter.saveAppState();
       saveAppStatePromise
-        .then(function(data) {
+        .then(function(data : any) {
           showPermalinkTooltip(location.href);
           console.log("Success on save app state. Data: " + data);
           return data;
         })
-        .catch(function(data) {
+        .catch(function(data : any) {
           console.error("Fail on save app state." + Error(data));
           return Error(data);
         })
-        .then(function(data) {
+        .then(function(data : any) {
           console.log("Done save app state. Data: " + data);
         });
     });
@@ -139,21 +140,21 @@ var MechView = MechView || (function() {
     });
   }
 
-  var showModifiedToolip = function() {
+  var showModifiedToolip = function() : void {
     permalinkTooltip.hideTooltip();
     loadErrorTooltip.hideTooltip();
     modifiedTooltip.showTooltip();
   }
 
-  var showPermalinkTooltip = function(link) {
+  var showPermalinkTooltip = function(link : string) : void {
     modifiedTooltip.hideTooltip();
     loadErrorTooltip.hideTooltip();
-    $("#" + permalinkGeneratedTooltip.id + " [class~=permaLink]")
+    $("#" + permalinkTooltip.id + " [class~=permaLink]")
       .attr("href", link);
     permalinkTooltip.showTooltip();
   }
 
-  var showLoadErrorTooltip = function() {
+  var showLoadErrorTooltip = function() : void {
     modifiedTooltip.hideTooltip();
     permalinkTooltip.hideTooltip();
     loadErrorTooltip.showTooltip();
@@ -161,33 +162,33 @@ var MechView = MechView || (function() {
 
   //TODO: You now have multiple entities acting on the same event. Think about
   //setting up an event scheduler/listeners
-  var updateOnModifyAppState = function() {
+  export var updateOnModifyAppState = function() : void {
     showModifiedToolip();
   }
 
-  var updateOnAppSaveState = function() {
+  export var updateOnAppSaveState = function() : void {
     //make the view consistent with the current state
   }
 
-  var updateOnLoadAppState = function() {
+  export var updateOnLoadAppState = function() : void {
     permalinkTooltip.hideTooltip();
     modifiedTooltip.hideTooltip();
     loadErrorTooltip.hideTooltip();
     doAutoRun();
   }
 
-  var updateOnLoadAppError = function() {
+  export var updateOnLoadAppError = function() : void {
     permalinkTooltip.hideTooltip();
     modifiedTooltip.hideTooltip();
     loadErrorTooltip.showTooltip();
   }
 
   //called when the app is completely loaded
-  var updateOnAppLoaded = function() {
+  export var updateOnAppLoaded = function() : void {
     doAutoRun();
   }
 
-  var doAutoRun = function() {
+  var doAutoRun = function() : void {
     //set sim speed and run sim if run and speed url params are set
     let runParam = MechViewRouter.getRunFromLocation();
     let speedParam = MechViewRouter.getSpeedFromLocation();
@@ -204,9 +205,9 @@ var MechView = MechView || (function() {
   }
 
   const LOADING_SCREEN_MECH_ID = "fakeLoadingScreenMechId";
-  var loadingScreenAnimateInterval;
+  var loadingScreenAnimateInterval : number;
   const LOADING_SCREEN_ANIMATE_INTERVAL = 200; //ms
-  var showLoadingScreen = function() {
+  export var showLoadingScreen = function() : void {
     let loadingScreenDiv =
         MechViewWidgets.cloneTemplate("loadingScreen-template");
     $(loadingScreenDiv)
@@ -240,39 +241,18 @@ var MechView = MechView || (function() {
     MechViewWidgets.showModal();
   }
 
-  var hideLoadingScreen = function() {
+  export var hideLoadingScreen = function() : void {
     MechViewWidgets.hideModal();
     window.clearInterval(loadingScreenAnimateInterval);
   }
 
-  var updateLoadingScreenProgress = function(percent) {
+  export var updateLoadingScreenProgress = function(percent : number) : void {
     let progressBar = document.getElementById("loadingScreenProgress");
     let textPercent = Math.floor(Number(percent) * 100) + "%";
     progressBar.style.width = textPercent;
   }
 
-  var updateTitle = function(title) {
+  export var updateTitle = function(title : string) : void {
     document.title = title;
   }
-
-  //public members
-  return {
-    initView : initView,
-    updateSimTime : updateSimTime,
-    resetSimulation : resetSimulation,
-    setDebugText : setDebugText,
-    clearMechList : clearMechList,
-    clearMechStats : clearMechStats,
-    clear : clear,
-    clearAll : clearAll,
-    showLoadingScreen : showLoadingScreen,
-    updateLoadingScreenProgress: updateLoadingScreenProgress,
-    hideLoadingScreen : hideLoadingScreen,
-    updateTitle: updateTitle,
-    updateOnModifyAppState: updateOnModifyAppState,
-    updateOnAppSaveState: updateOnAppSaveState,
-    updateOnLoadAppState: updateOnLoadAppState,
-    updateOnLoadAppError: updateOnLoadAppError,
-    updateOnAppLoaded: updateOnAppLoaded,
-  };
-})();//namespace
+}
