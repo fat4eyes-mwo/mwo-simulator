@@ -202,6 +202,7 @@ var MechModelView;
             this.isAlive = isAlive;
         }
     }
+    MechModelView.MechHealthToView = MechHealthToView;
     MechModelView.updateTeamStats = function (team) {
         let mechHealthList = [];
         let totalTeamDamage = 0;
