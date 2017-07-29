@@ -15,6 +15,7 @@
       "simulator-model.ts",
       "simulator-model-quirks.ts",
       "simulator-model-weapons.ts",
+      "simulator-modelview.ts",
       "simulator-smurfytypes.ts",
       "simulator-patterns.ts",
       "simulator-accuracypattern.ts",

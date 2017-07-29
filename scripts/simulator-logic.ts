@@ -108,7 +108,7 @@ namespace MechSimulatorLogic {
   //  by processWeaponFires().
   //When the damage is completed, it is taken off the queue and its total
   //  damage done is added to the sourceMech's stats
-  class WeaponFire {
+  export class WeaponFire {
     sourceMech : Mech;
     targetMech : Mech;
     weaponState : WeaponState;

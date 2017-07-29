@@ -347,6 +347,9 @@ namespace MechModelWeapons {
     hasJamBar() {
       return false;
     }
+    getJamProgress() : number {
+      throw "getJamProgress should only be called if hasJamBar() is true";
+    }
     //Computes the cooldown for this weapon on a mech, taking modifiers into account
     computeWeaponCooldown() {
       let weaponBonus = this.weaponInfo.weaponBonus;

@@ -820,7 +820,7 @@ namespace MechModel  {
   export class MechStats {
     totalDamage : number;
     totalHeat : number;
-    weaponFires : any[]; //TODO: Actually WeaponFires[], change when you get to simulator-logic
+    weaponFires : MechSimulatorLogic.WeaponFire[]; 
     timeOfDeath : number;
 
     constructor() {

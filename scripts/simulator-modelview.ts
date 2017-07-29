@@ -1,13 +1,34 @@
 "use strict";
+/// <reference path="simulator-model.ts" />
+/// <reference path="simulator-model-weapons.ts" />
+/// <reference path="simulator-accuracypattern.ts" />
+/// <reference path="simulator-componenttarget.ts" />
+/// <reference path="simulator-firepattern.ts" />
+/// <reference path="simulator-mechtarget.ts" />
+/// <reference path="simulator-patterns.ts" />
 
 //Methods that update the MechView from the MechModel, and vice versa
-var MechModelView = MechModelView || (function() {
+namespace MechModelView {
+  type Team = MechModel.Team;
+  type Mech = MechModel.Mech;
+  type WeaponState = MechModelWeapons.WeaponState;
+  type SimulatorParameters = MechSimulatorLogic.SimulatorParameters;
+  type FirePattern = MechFirePattern.FirePattern;
+  type AccuracyPattern = MechAccuracyPattern.AccuracyPattern;
+  type TargetComponentPattern = MechTargetComponent.TargetComponentPattern;
+  type TargetMechPattern = MechTargetMech.TargetMechPattern;
+  type MechStats = MechModel.MechStats;
+  type WeaponFire = MechSimulatorLogic.WeaponFire;
+
   //clears the view and recreates all UI elements
-  const ViewUpdate = Object.freeze({
+  export type ViewUpdate = string;
+  export const ViewUpdate : {[index:string] : ViewUpdate} = {
     TEAMSTATS : "teamstats",
     MECHLISTS : "mechlists",
-  });
-  var refreshView = function (updates = [ViewUpdate.TEAMSTATS, ViewUpdate.MECHLISTS]) {
+  };
+
+  export var refreshView =
+      function (updates : ViewUpdate[] = [ViewUpdate.TEAMSTATS, ViewUpdate.MECHLISTS]) : void {
     document.title = getPageTitle();
     let mechTeamList = [MechModel.Team.BLUE, MechModel.Team.RED];
     for (let team of mechTeamList) {
@@ -38,23 +59,23 @@ var MechModelView = MechModelView || (function() {
 
   const BASE_PAGE_TITLE = "MWO Loadout Simulator";
   const TITLE_MAX_MECHS = 2;
-  var getPageTitle = function() {
-    let mechTeamList = [MechModel.Team.BLUE, MechModel.Team.RED];
-    let teamTitle = {};
+  var getPageTitle = function() : string {
+    let mechTeamList : Team[] = [MechModel.Team.BLUE, MechModel.Team.RED];
+    let teamTitle : {[index:string] : Team} = {};
 
     for (let team of mechTeamList) {
       teamTitle[team] = "";
       let mechTeam = MechModel.mechTeams[team];
-      let idx = 0;
+      let idx :string = "0";
       for (idx in mechTeam) {
-        if (idx >= TITLE_MAX_MECHS) break;
+        if (Number(idx) >= TITLE_MAX_MECHS) break;
         let mech = mechTeam[idx];
-        if (idx > 0) {
+        if (Number(idx) > 0) {
           teamTitle[team] += ", ";
         }
         teamTitle[team] += mech.getTranslatedName();
       }
-      if (idx >= TITLE_MAX_MECHS) {
+      if (Number(idx) >= TITLE_MAX_MECHS) {
         teamTitle[team] += ", " + (mechTeam.length - Number(idx)) + " more";
       }
     }
@@ -63,13 +84,13 @@ var MechModelView = MechModelView || (function() {
             + teamTitle[MechModel.Team.RED];
   }
 
-  var updateHeat = function(mech) {
+  export var updateHeat = function(mech : Mech) : void {
     let heatState = mech.getMechState().heatState;
 
     MechViewMechPanel.updateHeat(mech.getMechId(), heatState.currHeat, heatState.currMaxHeat);
   }
 
-  var updateCooldown = function(mech) {
+  export var updateCooldown = function(mech : Mech) : void {
     let mechState = mech.getMechState();
     for (let weaponIndex in mechState.weaponStateList) {
       let type = "cooldown";
@@ -98,7 +119,7 @@ var MechModelView = MechModelView || (function() {
     }
   }
 
-  var updateWeaponStatus = function(mech) {
+  export var updateWeaponStatus = function(mech : Mech) : void {
     let mechState = mech.getMechState();
     for (let weaponIndex in mechState.weaponStateList) {
       let weaponState = mechState.weaponStateList[weaponIndex];
@@ -109,7 +130,7 @@ var MechModelView = MechModelView || (function() {
     }
   }
 
-  var updatePaperDoll = function(mech){
+  var updatePaperDoll = function(mech : Mech) : void {
     let mechId = mech.getMechId();
     let mechHealth = mech.getMechState().mechHealth;
     for (let mechComponentHealth of mechHealth.componentHealth) {
@@ -121,7 +142,7 @@ var MechModelView = MechModelView || (function() {
     }
   }
 
-  var updateMechHealthNumbers = function (mech) {
+  var updateMechHealthNumbers = function (mech : Mech) : void {
     let mechHealth = mech.getMechState().mechHealth;
     for (let mechComponentHealth of mechHealth.componentHealth) {
       MechViewMechPanel.updateMechHealthNumbers(mech.getMechId(),
@@ -135,7 +156,7 @@ var MechModelView = MechModelView || (function() {
     }
   }
 
-  var updateMechStatus = function (mech) {
+  var updateMechStatus = function (mech : Mech) : void {
     let mechName = mech.getTranslatedName();
     let mechHealth = mech.getMechState().mechHealth;
     let currTotalHealth = mechHealth.totalCurrHealth();
@@ -154,26 +175,26 @@ var MechModelView = MechModelView || (function() {
                           dps, burst, totalDmg);
   }
 
-  var updateMechTitle = function (mech) {
+  var updateMechTitle = function (mech : Mech) : void {
     let mechName = mech.getTranslatedName();
     let mechInfo = mech.getMechState().mechInfo;
     MechViewMechPanel.updateMechTitlePanel(mech.getMechId(), mechName,
             mechInfo.smurfyMechId, mechInfo.smurfyLoadoutId);
   }
 
-  var updateHealth = function(mech) {
+  export var updateHealth = function(mech : Mech) : void {
     updatePaperDoll(mech);
     updateMechHealthNumbers(mech);
     updateMechStatus(mech);
   }
 
-  var updateSimTime = function(simTime) {
+  export var updateSimTime = function(simTime : number) : void {
     MechView.updateSimTime(simTime);
   }
 
-  var updateMech = function(mech) {
+  export var updateMech = function(mech : Mech) : void {
     let mechState = mech.getMechState();
-    let updateFunctionMap = {};
+    let updateFunctionMap : {[index:string] : (mech : Mech) => void}= {};
     updateFunctionMap[MechModel.UpdateType.FULL] = updateAll;
     updateFunctionMap[MechModel.UpdateType.HEALTH] = updateHealth;
     updateFunctionMap[MechModel.UpdateType.HEAT] = updateHeat;
@@ -186,14 +207,14 @@ var MechModelView = MechModelView || (function() {
         updateFunctionMap[updateType](mech);
       }
     }
-    mechState.updateTypes = [];
+    mechState.updateTypes = {};
   }
 
-  var updateStats = function(mech) {
+  var updateStats = function(mech : Mech) : void {
     updateMechStatus(mech);
   }
 
-  var updateAll = function(mech) {
+  var updateAll = function(mech : Mech) : void {
     updateMechTitle(mech);
     updateHealth(mech);
     updateHeat(mech);
@@ -203,14 +224,22 @@ var MechModelView = MechModelView || (function() {
   }
 
   class MechHealthToView {
-    constructor(mechId, currHealth, maxHealth, isAlive) {
+    mechId : string;
+    currHealth : number;
+    maxHealth : number;
+    isAlive : boolean;
+
+    constructor(mechId : string,
+                currHealth : number,
+                maxHealth : number,
+                isAlive : boolean) {
       this.mechId = mechId;
       this.currHealth = currHealth;
       this.maxHealth = maxHealth;
       this.isAlive = isAlive;
     }
   }
-  var updateTeamStats = function(team) {
+  export var updateTeamStats = function(team : Team) : void {
     let mechHealthList = [];
     let totalTeamDamage = 0;
     let totalTeamBurstDamage = 0;
@@ -233,40 +262,50 @@ var MechModelView = MechModelView || (function() {
             Number(totalTeamDamage), dps, totalTeamBurstDamage);
   }
 
-  var updateDebugText = function (text) {
+  export var updateDebugText = function (text : string) : void {
     MechView.setDebugText(text);
   }
 
-  var getSimulatorParameters = function() {
+  export var getSimulatorParameters = function() : SimulatorParameters {
     return MechSimulatorLogic.getSimulatorParameters();
   }
 
-  var setSimulatorParameters = function(simulatorParameters) {
+  export var setSimulatorParameters =
+      function(simulatorParameters : SimulatorParameters) : void {
     MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
   }
 
-  var setTeamFirePattern = function(team, firePattern) {
+  export var setTeamFirePattern = function(team : Team, firePattern : FirePattern) : void {
     let mechList = MechModel.mechTeams[team];
     for (let mech of mechList) {
       mech.firePattern = firePattern;
     }
   }
 
-  var setTeamComponentTargetPattern = function(team, componentTargetPattern) {
+  export var setTeamComponentTargetPattern =
+      function(team : Team,
+              componentTargetPattern : TargetComponentPattern)
+              : void {
     let mechList = MechModel.mechTeams[team];
     for (let mech of mechList) {
       mech.componentTargetPattern = componentTargetPattern;
     }
   }
 
-  var setTeamAccuracyPattern = function(team, accuracyPattern) {
+  export var setTeamAccuracyPattern =
+      function(team : Team,
+              accuracyPattern : AccuracyPattern)
+              : void {
     let mechList = MechModel.mechTeams[team];
     for (let mech of mechList) {
       mech.accuracyPattern = accuracyPattern;
     }
   }
 
-  var setTeamMechTargetPattern = function(team, mechTargetPattern) {
+  export var setTeamMechTargetPattern =
+      function(team : Team,
+              mechTargetPattern : TargetMechPattern)
+              : void {
     let mechList = MechModel.mechTeams[team];
     for (let mech of mechList) {
       mech.mechTargetPattern = mechTargetPattern;
@@ -274,7 +313,10 @@ var MechModelView = MechModelView || (function() {
   }
 
   class TeamReport {
-    constructor(team) {
+    team : Team;
+    weaponStats : Map<string, WeaponStat>; //TODO Tighten type
+    mechReports : MechReport[];
+    constructor(team : Team) {
       this.team = team;
       this.weaponStats = new Map();
       this.mechReports = [];
@@ -314,47 +356,52 @@ var MechModelView = MechModelView || (function() {
     }
 
     //returns [{name: <weaponName>, damage: <weaponDamage>, dps: <weaponDPS>}]
-    getWeaponStats() {
+    getWeaponStats() : WeaponStat[] {
       let ret = [];
       for (let stats of this.weaponStats.values()) {
         ret.push(stats);
       }
       return ret;
     }
-    getTotalDamage() {
+    getTotalDamage() : number {
       let totalDamage = 0;
       for (let mechReport of this.mechReports) {
         totalDamage += mechReport.getTotalDamage();
       }
       return totalDamage;
     }
-    getDPS() {
+    getDPS() : number {
       let simTime = MechSimulatorLogic.getSimTime();
       return simTime > 0 ? this.getTotalDamage() / simTime * 1000 : 0;
     }
-    getMaxBurst() {
+    getMaxBurst() : number {
       let teamStats = MechModel.getTeamStats(this.team);
       return teamStats ? teamStats.maxBurstDamage : 0;
     }
   }
 
   class MechReport {
-    constructor(mechId, mechName, mechStats) {
+    mechId : string;
+    mechName : string;
+    private mechStats : MechStats;
+    weaponReport : WeaponReport;
+
+    constructor(mechId : string, mechName : string, mechStats : MechStats) {
       this.mechId = mechId;
       this.mechName = mechName;
       this.mechStats = mechStats; //DO NOT ACCESS DIRECTLY IN VIEW. Use the methods instead
       this.weaponReport = new WeaponReport(mechStats.weaponFires);
     }
-    getMaxBurstDamage() {
+    getMaxBurstDamage() : number {
       return this.weaponReport.getMaxBurstDamage();
     }
-    getTotalDamage() {
+    getTotalDamage() : number {
       return this.mechStats.totalDamage;
     }
-    getTimeOfDeath() {
+    getTimeOfDeath() : number {
       return this.mechStats.timeOfDeath;
     }
-    getDPS() {
+    getDPS() : number {
       let endTime = this.mechStats.timeOfDeath ?
                         this.mechStats.timeOfDeath
                         : MechSimulatorLogic.getSimTime();
@@ -365,14 +412,18 @@ var MechModelView = MechModelView || (function() {
   }
 
   class WeaponReport {
-    constructor(weaponFires) {
+    private weaponFires : WeaponFire[];
+    maxBurstDamage : number;
+    weaponStats : Map<string, WeaponStat>;
+
+    constructor(weaponFires : WeaponFire[]) {
       this.weaponFires = weaponFires; //DO NOT ACCESS THIS DIRECTLY IN VIEW. Use the methods instead
       this.maxBurstDamage = null; //will be filled in by computeWeaponStats
       this.weaponStats = new Map(); //weaponId -> {translatedName, count, damage, dps}
       this.computeWeaponStats();
     }
-    computeWeaponStats() {
-      let burstDamageStartIdx = null;
+    computeWeaponStats() : void {
+      let burstDamageStartIdx : number = null;
       for (let idx in this.weaponFires) {
         let weaponFire = this.weaponFires[idx];
         let weaponInfo = weaponFire.weaponState.weaponInfo;
@@ -400,7 +451,7 @@ var MechModelView = MechModelView || (function() {
         //Compute burst damage
         if (!burstDamageStartIdx) {
           this.maxBurstDamage = weaponFire.damageDone.totalDamage();
-          burstDamageStartIdx = idx;
+          burstDamageStartIdx = Number(idx);
         } else {
           let currTime = weaponFire.createTime;
           let burstInterval = MechModel.BURST_DAMAGE_INTERVAL;
@@ -408,7 +459,7 @@ var MechModelView = MechModelView || (function() {
             burstDamageStartIdx++;
           }
           let currBurstDamage = 0;
-          for (let burstIdx = burstDamageStartIdx; burstIdx <= idx; burstIdx++) {
+          for (let burstIdx = burstDamageStartIdx; burstIdx <= Number(idx); burstIdx++) {
             currBurstDamage += this.weaponFires[burstIdx].damageDone.totalDamage();
           }
           if (currBurstDamage > this.maxBurstDamage) {
@@ -418,12 +469,12 @@ var MechModelView = MechModelView || (function() {
       }
     }
 
-    getMaxBurstDamage() {
+    getMaxBurstDamage() : number {
       return this.maxBurstDamage;
     }
     //returns [{name: <weaponName>, damage: <weaponDamage>, dps: <weaponDPS>}]
-    getWeaponStats() {
-      let ret = [];
+    getWeaponStats() : WeaponStat[] {
+      let ret : WeaponStat[] = [];
       for (let stats of this.weaponStats.values()) {
         ret.push(stats);
       }
@@ -432,7 +483,11 @@ var MechModelView = MechModelView || (function() {
   }
 
   class WeaponStat {
-    constructor(name, count, damage, dps) {
+    name : string;
+    count : number;
+    damage : number;
+    dps : number;
+    constructor(name : string, count : number, damage : number, dps : number) {
       this.name = name;
       this.count = count;
       this.damage = damage;
@@ -440,16 +495,16 @@ var MechModelView = MechModelView || (function() {
     }
   }
 
-  var getTeamReport = function(team) {
+  export var getTeamReport = function(team : Team) : TeamReport {
     return new TeamReport(team);
   }
 
-  var updateVictory = function (team) {
+  export var updateVictory = function (team : Team) : void {
     MechViewReport.showVictoryReport();
     // MechModelView.updateDebugText("Team Victory: " + team);
   }
 
-  var getVictorTeam = function () {
+  export var getVictorTeam = function () {
     if (!MechModel.isTeamAlive(MechModel.Team.BLUE) &&
         MechModel.isTeamAlive(MechModel.Team.RED)) {
       return MechModel.Team.RED;
@@ -461,7 +516,7 @@ var MechModelView = MechModelView || (function() {
     return null;
   }
 
-  var getMechName = function(mechId, team) {
+  export var getMechName = function(mechId : string, team : Team) {
     let mech = MechModel.getMechFromId(mechId);
     if (mech) {
       return mech.getTranslatedName();
@@ -469,28 +524,4 @@ var MechModelView = MechModelView || (function() {
       return null;
     }
   }
-
-  return {
-    ViewUpdate : ViewUpdate,
-    refreshView : refreshView,
-    updateHealth : updateHealth,
-    updateHeat : updateHeat,
-    updateCooldown : updateCooldown,
-    updateWeaponStatus : updateWeaponStatus,
-    updateMech: updateMech,
-    updateSimTime: updateSimTime,
-    updateDebugText: updateDebugText,
-    updateTeamStats: updateTeamStats,
-    getSimulatorParameters: getSimulatorParameters,
-    setSimulatorParameters: setSimulatorParameters,
-    setTeamFirePattern: setTeamFirePattern,
-    setTeamComponentTargetPattern: setTeamComponentTargetPattern,
-    setTeamAccuracyPattern: setTeamAccuracyPattern,
-    setTeamMechTargetPattern: setTeamMechTargetPattern,
-    getTeamReport : getTeamReport,
-    updateVictory: updateVictory,
-    getVictorTeam : getVictorTeam,
-    getMechName: getMechName,
-  };
-
-})();
+}
