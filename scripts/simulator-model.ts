@@ -923,7 +923,7 @@ namespace MechModel  {
       SmurfyCTOmnipods = flatData.ctOmnipodMap;
     }
 
-    let initPromises = [];
+    let initPromises : Promise<string>[] = [];
     for (let path of dataPaths) {
       initPromises.push(initDataPromise(path));
     }
