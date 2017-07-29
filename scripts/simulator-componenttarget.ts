@@ -102,7 +102,7 @@ namespace MechTargetComponent {
   export var getDefault = function() : TargetComponentPattern {
     for (let patternEntry of getPatterns()) {
       if (patternEntry.default) {
-        return patternEntry.pattern;
+        return <TargetComponentPattern> patternEntry.pattern;
       }
     }
   }

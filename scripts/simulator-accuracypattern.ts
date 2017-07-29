@@ -326,7 +326,7 @@ namespace MechAccuracyPattern {
   export var getDefault = function() : AccuracyPattern {
     for (let patternEntry of getPatterns()) {
       if (patternEntry.default) {
-        return patternEntry.pattern;
+        return <AccuracyPattern> patternEntry.pattern;
       }
     }
   }

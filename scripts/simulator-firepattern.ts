@@ -152,7 +152,7 @@ namespace MechFirePattern {
   export var getDefault = function() : FirePattern {
     for (let patternEntry of getPatterns()) {
       if (patternEntry.default) {
-        return patternEntry.pattern;
+        return <FirePattern> patternEntry.pattern;
       }
     }
   }

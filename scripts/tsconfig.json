@@ -17,6 +17,7 @@
       "simulator-view.ts",
       "simulator-view-mechPanel.ts",
       "simulator-view-addmech.ts",
+      "simulator-view-teamstats.ts",
       "simulator-view-report.ts",
       "simulator-model.ts",
       "simulator-model-quirks.ts",

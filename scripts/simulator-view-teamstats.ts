@@ -1,45 +1,55 @@
+/// <reference path="simulator-view-widgets.ts" />
+/// <reference path="simulator-view-mechPanel.ts" />
+/// <reference path="simulator-view-addmech.ts" />
+/// <reference path="simulator-model.ts" />
+/// <reference path="simulator-patterns.ts" />
 "use strict";
 
 
-var MechViewTeamStats = MechViewTeamStats || (function() {
-  var teamStatsContainerId = function(team) {
+namespace MechViewTeamStats {
+  type Team = MechModel.Team;
+  type Pattern = ModelPatterns.Pattern;
+  type PatternFunction = ModelPatterns.PatternFunction;
+  type MechHealthToView = MechModelView.MechHealthToView;
+
+  var teamStatsContainerId = function(team : Team) : string {
     return team + "TeamStatsContainer";
   }
-  var teamStatsId = function(team) {
+  var teamStatsId = function(team : Team) : string {
     return team + "-teamStatsPanel";
   }
-  var teamDisplayName = function(team) {
-    let displayNameMap = {"blue" : "Blue team", "red" : "Red team"};
+  var teamDisplayName = function(team : Team) : string {
+    let displayNameMap : {[index:string] : string} = {"blue" : "Blue team", "red" : "Red team"};
     return displayNameMap[team];
   }
-  var teamMechPipsContainerId = function(team) {
+  var teamMechPipsContainerId = function(team : Team) : string {
     return team + "-mechPipsContainer";
   }
-  var teamMechPipId = function(mechId) {
+  var teamMechPipId = function(mechId : string) : string {
     return mechId + "-mechPip";
   }
-  var teamLiveMechsId = function(team) {
+  var teamLiveMechsId = function(team : Team) : string {
     return team + "-liveMechs";
   }
-  var teamHealthValueId = function(team) {
+  var teamHealthValueId = function(team : Team) : string {
     return team + "-teamHealthValue";
   }
-  var teamDamageId = function(team) {
+  var teamDamageId = function(team : Team) : string {
     return team + "-teamDamage";
   }
-  var teamDPSValueId = function(team) {
+  var teamDPSValueId = function(team : Team) : string {
     return team + "-teamDPSValue";
   }
-  var teamBurstDamageId = function(team) {
+  var teamBurstDamageId = function(team : Team) : string {
     return team + "-teamBurstDamage";
   }
-  var teamSettingsButtonId = function(team) {
+  var teamSettingsButtonId = function(team : Team) : string {
     return team + "-teamSettingsButton"
   }
-  var teamSettingsId = function(team) {
+  var teamSettingsId = function(team : Team) : string {
     return team + "-teamSettings";
   }
-  var addTeamStatsPanel = function(team, mechIds) {
+  export var addTeamStatsPanel = function(team : Team, mechIds : string[]) {
     let teamStatsContainerPanelId = teamStatsContainerId(team);
     let teamStatsDiv = MechViewWidgets.cloneTemplate("teamStats-template");
     $(teamStatsDiv)
@@ -97,16 +107,23 @@ var MechViewTeamStats = MechViewTeamStats || (function() {
       populateTeamPattern(team, patternType);
     }
   }
-  var mechPipClickHandler = function(data) {
+  var mechPipClickHandler = function(data : any) {
     let thisJQ = $(this);
     let mechId = thisJQ.attr("data-mech-id");
     MechViewMechPanel.highlightMechPanel(mechId);
   }
 
   //store selected value (since we do a lot of refreshViews which recreates this panel)
-  var patternTypes;
+  type GetPatternFunction = () => Pattern[];
+  interface PatternType {
+    id : string,
+    patternsFunction : GetPatternFunction,
+    classNamePrefix : string,
+    setTeamPatternFunction : MechModelView.SetTeamPatternFunction;
+  }
+  var patternTypes : PatternType[];
   //values used to initialize the contents of the team settings panel.
-  var initPatternTypes = function() {
+  export var initPatternTypes = function() : void {
     patternTypes = [
       {
         id : "teamTargetMechComponent",
@@ -138,10 +155,10 @@ var MechViewTeamStats = MechViewTeamStats || (function() {
     ];
   }
 
-  var selectedPatterns = {}; //format is {<team>: {<patternTypeId>: <pattern>, ...}}
-  var patternLists = {} //format is {<patternTypeId>: [patternList]}
+  var selectedPatterns : {[index:string] : {[index:string] : string}} = {}; //format is {<team>: {<patternTypeId>: <patternId>, ...}}
+  var patternLists : {[index:string] : Pattern[]}= {} //format is {<patternTypeId>: [patternList]}
 
-  var findPatternWithId = function(patternId, patternList) {
+  var findPatternWithId = function(patternId : string, patternList : Pattern[]) : PatternFunction {
     for (let entry of patternList) {
       if (entry.id === patternId) {
         return entry.pattern;
@@ -149,7 +166,7 @@ var MechViewTeamStats = MechViewTeamStats || (function() {
     }
     return null;
   }
-  var findPatternTypeWithId = function(patternTypeId) {
+  var findPatternTypeWithId = function(patternTypeId : string) : PatternType {
     for (let patternType of patternTypes) {
       if (patternType.id === patternTypeId) {
         return patternType;
@@ -157,7 +174,8 @@ var MechViewTeamStats = MechViewTeamStats || (function() {
     }
     return null;
   }
-  var populateTeamPattern = function(team, patternType) {
+  var populateTeamPattern =
+      function(team : Team, patternType : PatternType) : void {
     if (!patternLists[patternType.id]) {
       patternLists[patternType.id] = patternType.patternsFunction();
     }
@@ -193,7 +211,7 @@ var MechViewTeamStats = MechViewTeamStats || (function() {
     }
     //change handler
     teamPatternValueJQ.on('change', (data) => {
-      let selectedValue=teamPatternValueJQ.val();
+      let selectedValue : string = String(teamPatternValueJQ.val());
       let selectedOption = teamPatternValueJQ.find("[value='" + selectedValue + "']");
 
       teamPatternDescJQ.html(selectedOption.attr("data-description"));
@@ -205,7 +223,7 @@ var MechViewTeamStats = MechViewTeamStats || (function() {
   }
 
   //assigns the selected patterns for the given team
-  var setSelectedTeamPatterns = function(team) {
+  export var setSelectedTeamPatterns = function(team : Team) : void {
     let currSelectedPatterns = selectedPatterns[team];
     for (let patternTypeId in currSelectedPatterns) {
       let patternType = findPatternTypeWithId(patternTypeId);
@@ -215,7 +233,7 @@ var MechViewTeamStats = MechViewTeamStats || (function() {
     }
   }
 
-  var teamSettingsButtonHandler = function() {
+  var teamSettingsButtonHandler = function() : void {
     let team = $(this).attr("data-team");
     let teamStatsContainerPanelId = teamStatsContainerId(team);
     let teamSettingsJQ =
@@ -231,7 +249,14 @@ var MechViewTeamStats = MechViewTeamStats || (function() {
     }
   }
 
-  var updateTeamStats = function(team, mechHealthList, damage, dps, burstDamage) {
+  //TODO Wrap params in an object
+  export var updateTeamStats =
+      function(team : Team,
+              mechHealthList : MechHealthToView[],
+              damage : number,
+              dps : number,
+              burstDamage : number)
+              : void {
     let totalTeamCurrHealth = 0;
     let totalTeamMaxHealth = 0;
     let liveMechs = 0;
@@ -283,16 +308,8 @@ var MechViewTeamStats = MechViewTeamStats || (function() {
     teamBurstDamageDiv.textContent = Number(burstDamage).toFixed(1);
   }
 
-  var clearTeamStats = function(team) {
+  export var clearTeamStats = function(team : Team) {
     let teamStatsContainerPanelId = teamStatsContainerId(team);
     $("#" + teamStatsContainerPanelId).empty();
   }
-
-  return {
-    initPatternTypes: initPatternTypes,
-    addTeamStatsPanel: addTeamStatsPanel,
-    updateTeamStats : updateTeamStats,
-    setSelectedTeamPatterns: setSelectedTeamPatterns,
-    clearTeamStats: clearTeamStats,
-  }
-})();
+}

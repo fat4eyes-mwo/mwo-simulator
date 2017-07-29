@@ -224,7 +224,7 @@ namespace MechModelView {
     updateStats(mech);
   }
 
-  class MechHealthToView {
+  export class MechHealthToView {
     mechId : string;
     currHealth : number;
     maxHealth : number;
@@ -275,6 +275,9 @@ namespace MechModelView {
       function(simulatorParameters : SimulatorParameters) : void {
     MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
   }
+
+  export type SetTeamPatternFunction =
+      (team: Team, pattern : ModelPatterns.PatternFunction) => void;
 
   export var setTeamFirePattern = function(team : Team, firePattern : FirePattern) : void {
     let mechList = MechModel.mechTeams[team];
