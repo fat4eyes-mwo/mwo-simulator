@@ -58,6 +58,3 @@ namespace MechSimulator {
     init();
   }
 }
-
-//Entry point
-$(document).ready(MechSimulator.main);

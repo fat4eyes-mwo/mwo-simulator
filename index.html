@@ -13,38 +13,14 @@
     <link rel="apple-touch-icon" sizes="180x180" href="favicon-180x180.png">
     <script src="scripts/lib/jquery-3.2.1.min.js"></script>
 
-    <!-- TODO: Look for a module solution -->
-    <!-- TODO: Unify in one outfile -->
-    <!-- typescript migration: generated scripts -->
-    <script src="build/scripts/data/quirkdata.js"></script>
-    <script src="build/scripts/data/globalgameinfo.js"></script>
-    <script src="build/scripts/data/basehealth.js"></script>
-    <script src="build/scripts/data/addedheatsinkdata.js"></script>
-    <script src="build/scripts/data/addedweapondata.js"></script>
-    <script src="build/scripts/data/weaponspread.js"></script>
-    <script src="build/scripts/data/user-options.js"></script>
-
-    <script src="build/scripts/util.js"></script>
-    <script src="build/scripts/simulator-view-widgets.js"></script>
-    <script src="build/scripts/simulator-view.js"></script>
-    <script src="build/scripts/simulator-view-mechPanel.js"></script>
-    <script src="build/scripts/simulator-view-router.js"></script>
-    <script src="build/scripts/simulator-view-addmech.js"></script>
-    <script src="build/scripts/simulator-view-teamstats.js"></script>
-    <script src="build/scripts/simulator-view-simsettings.js"></script>
-    <script src="build/scripts/simulator-view-report.js"></script>
-    <script src="build/scripts/simulator-model.js"></script>
-    <script src="build/scripts/simulator-model-quirks.js"></script>
-    <script src="build/scripts/simulator-model-weapons.js"></script>
-    <script src="build/scripts/simulator-modelview.js"></script>
-    <script src="build/scripts/simulator-accuracypattern.js"></script>
-    <script src="build/scripts/simulator-componenttarget.js"></script>
-    <script src="build/scripts/simulator-firepattern.js"></script>
-    <script src="build/scripts/simulator-mechtarget.js"></script>
-    <script src="build/scripts/simulator-logic.js"></script>
-    <script src="build/scripts/simulator.js"></script>
+    <!-- Unify in one outfile -->
+    <script src="build/mwosim.js"></script>
   </head>
   <body>
+    <script>
+      //Entry point
+      $(document).ready(MechSimulator.main);
+    </script>
     <div id="nojavascript" class="nojavascript">
       This page requires Javascript. If you already have Javascript enabled,
       press Ctrl-F5 (on desktop) or clear your browser cache and reload the page

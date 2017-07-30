@@ -9,7 +9,7 @@
         "lib" : ["DOM","ES6","DOM.Iterable","ScriptHost","ES2016"],
         "strict": false,
         "forceConsistentCasingInFileNames": true,
-        "outDir" : "build/"
+        "outFile" : "build/mwosim.js"
     },
     "include" : [
       "scripts/lib/*.ts",

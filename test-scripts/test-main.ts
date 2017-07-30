@@ -64,5 +64,3 @@ namespace MechTest {
     });
   }
 }
-
-$(document).ready(MechTest.testMain);
