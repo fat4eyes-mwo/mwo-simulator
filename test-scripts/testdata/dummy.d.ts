@@ -1,4 +1,4 @@
-/// <reference path="../simulator-smurfytypes.ts" />
+/// <reference path="../../scripts/simulator-smurfytypes.ts" />
 
 declare const DummyAmmoData : SmurfyTypes.SmurfyAmmoDataList;
 declare const DummyMechData : SmurfyTypes.SmurfyMechDataList;
