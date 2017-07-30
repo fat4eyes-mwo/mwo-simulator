@@ -41,7 +41,7 @@ namespace MechTest {
     });
   }
 
-  function runTest() {
+  function runTest() : void {
     let hash = location.hash;
     hash = hash ? hash.substring(1) : null;
     if (hash) {
@@ -54,7 +54,7 @@ namespace MechTest {
     }
   }
 
-  export function testMain() {
+  export function testMain() : void {
     console.log("Hello from test main");
     replaceBody().then(function(data : any) {
       runTest();

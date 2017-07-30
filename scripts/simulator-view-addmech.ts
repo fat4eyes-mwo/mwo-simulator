@@ -20,7 +20,7 @@ namespace MechViewAddMech {
     if (!addMechButtonHandler) {
       addMechButtonHandler = createAddMechButtonHandler(this);
     }
-    $("#" + containerId + " [class~=addMechButton]")
+    $(`#${containerId} [class~=addMechButton]`)
         .attr("id", addMechButtonPanelId)
         .attr("data-team", team);
     addMechButtonMap[team] =
@@ -192,7 +192,7 @@ namespace MechViewAddMech {
     //Mech name and link
     let smurfyMechData = MechModel.getSmurfyMechData(smurfyMechId);
     let mechLinkJQ = $("<a></a>")
-                          .attr("href", SMURFY_BASE_URL + "i=" + smurfyMechId + "&l=" + smurfyLoadoutId)
+                          .attr("href", `${SMURFY_BASE_URL}i=${smurfyMechId}&l=${smurfyLoadoutId}`)
                           .attr("target", "_blank")
                           .attr("rel", "noopener")
                           .text(smurfyMechData.translated_name);
@@ -201,9 +201,9 @@ namespace MechViewAddMech {
 
     let mechStats = smurfyMechLoadout.stats;
     //Mech equipment
-    let mechSpeed : string = Number(mechStats.top_speed).toFixed(1) + "km/h";
-    let mechEngine : string = mechStats.engine_type + " " + mechStats.engine_rating;
-    let heatsink : string = mechStats.heatsinks + " HS";
+    let mechSpeed : string = `${Number(mechStats.top_speed).toFixed(1)} km/h`;
+    let mechEngine : string = `${mechStats.engine_type} ${mechStats.engine_rating}`;
+    let heatsink : string = `${mechStats.heatsinks} HS`;
     loadedMechJQ
         .find("[class~=mechEquipment]")
         .append(loadedMechSpan(mechSpeed, "equipment"))

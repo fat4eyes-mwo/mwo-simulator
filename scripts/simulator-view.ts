@@ -150,7 +150,7 @@ namespace MechView {
   var showPermalinkTooltip = function(link : string) : void {
     modifiedTooltip.hideTooltip();
     loadErrorTooltip.hideTooltip();
-    $("#" + permalinkTooltip.id + " [class~=permaLink]")
+    $(`#${permalinkTooltip.id} [class~=permaLink]`)
       .attr("href", link);
     permalinkTooltip.showTooltip();
   }

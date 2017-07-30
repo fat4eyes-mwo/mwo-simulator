@@ -7308,13 +7308,13 @@ var MechViewMechPanel;
     MechViewMechPanel.setPaperDollArmor = function (mechId, location, percent) {
         var color = MechViewWidgets.damageColor(percent, MechViewWidgets.paperDollDamageGradient);
         let paperDollDiv = document.getElementById(paperDollId(mechId));
-        $(paperDollDiv).find("> [data-location='" + location + "']")
+        $(paperDollDiv).find(`> [data-location='${location}']`)
             .css('border-color', color);
     };
     MechViewMechPanel.setPaperDollStructure = function (mechId, location, percent) {
         var color = MechViewWidgets.damageColor(percent, MechViewWidgets.paperDollDamageGradient);
         let paperDollDiv = document.getElementById(paperDollId(mechId));
-        $(paperDollDiv).find("> [data-location='" + location + "']")
+        $(paperDollDiv).find(`> [data-location='${location}']`)
             .css('background-color', color);
     };
     var mechHealthNumbersId = function (mechId) {
@@ -7337,12 +7337,12 @@ var MechViewMechPanel;
         for (let locationIdx in MechModel.Component) {
             if (MechModel.Component.hasOwnProperty(locationIdx)) {
                 let location = MechModel.Component[locationIdx];
-                $("#" + mechHealthNumbersDivId +
-                    " [data-location=" + location + "] " +
+                $(`#${mechHealthNumbersDivId}` +
+                    ` [data-location='${location}']` +
                     " [data-healthtype=armor]")
                     .attr("id", mechHealthNumbersArmorId(mechId, location));
-                $("#" + mechHealthNumbersDivId +
-                    " [data-location=" + location + "] " +
+                $(`#${mechHealthNumbersDivId}` +
+                    ` [data-location='${location}']` +
                     " [data-healthtype=structure]")
                     .attr("id", mechHealthNumbersStructureId(mechId, location));
             }
@@ -7410,7 +7410,13 @@ var MechViewMechPanel;
         heatNumberDiv.textContent = heatText;
     };
     var weaponRowId = function (mechId, idx) {
-        return mechId + "-" + idx + "-weaponrow";
+        return `${mechId}-${idx}-weaponrow`;
+    };
+    var weaponNameId = function (mechId, idx) {
+        return weaponRowId(mechId, idx) + "-weaponName";
+    };
+    var weaponLocationId = function (mechId, idx) {
+        return weaponRowId(mechId, idx) + "-weaponLocation";
     };
     var weaponCooldownBarId = function (mechId, idx) {
         return weaponRowId(mechId, idx) + "-weaponCooldownBar";
@@ -7439,10 +7445,10 @@ var MechViewMechPanel;
                 .attr("data-weapon-idx", idx)
                 .appendTo("#" + weaponPanel);
             $(weaponRowDiv).find(".weaponName")
-                .attr("id", weaponRowId(mechId, Number(idx)) + "-weaponName")
+                .attr("id", weaponNameId(mechId, Number(idx)))
                 .html(weaponState.weaponInfo.translatedName);
             $(weaponRowDiv).find(".weaponLocation")
-                .attr("id", weaponRowId(mechId, Number(idx)) + "-weaponLocation")
+                .attr("id", weaponLocationId(mechId, Number(idx)))
                 .html(weaponLocAbbr[weaponState.weaponInfo.location]);
             $(weaponRowDiv).find(".weaponCooldownBar")
                 .attr("id", weaponCooldownBarId(mechId, Number(idx)));
@@ -7767,11 +7773,10 @@ var MechViewMechPanel;
                 MechView.resetSimulation();
                 let status = MechModel.moveMech(srcMechId, mechId);
                 if (!status) {
-                    console.error("Error moving mech. src=" +
-                        srcMechId + " dest=" + mechId);
+                    console.error(`Error moving mech. src=${srcMechId} dest=${mechId}`);
                 }
                 else {
-                    console.log("Drop: src=" + srcMechId + " dest=" + mechId);
+                    console.log(`Drop: src=${srcMechId} dest=${mechId}`);
                     toggleMoveMech(srcMechId);
                     MechViewRouter.modifyAppState();
                     MechModelView.refreshView([MechModelView.ViewUpdate.TEAMSTATS]);
@@ -7803,7 +7808,7 @@ var MechViewAddMech;
         if (!addMechButtonHandler) {
             addMechButtonHandler = createAddMechButtonHandler(this);
         }
-        $("#" + containerId + " [class~=addMechButton]")
+        $(`#${containerId} [class~=addMechButton]`)
             .attr("id", addMechButtonPanelId)
             .attr("data-team", team);
         addMechButtonMap[team] =
@@ -7955,7 +7960,7 @@ var MechViewAddMech;
         //Mech name and link
         let smurfyMechData = MechModel.getSmurfyMechData(smurfyMechId);
         let mechLinkJQ = $("<a></a>")
-            .attr("href", SMURFY_BASE_URL + "i=" + smurfyMechId + "&l=" + smurfyLoadoutId)
+            .attr("href", `${SMURFY_BASE_URL}i=${smurfyMechId}&l=${smurfyLoadoutId}`)
             .attr("target", "_blank")
             .attr("rel", "noopener")
             .text(smurfyMechData.translated_name);
@@ -7963,9 +7968,9 @@ var MechViewAddMech;
             .append(mechLinkJQ);
         let mechStats = smurfyMechLoadout.stats;
         //Mech equipment
-        let mechSpeed = Number(mechStats.top_speed).toFixed(1) + "km/h";
-        let mechEngine = mechStats.engine_type + " " + mechStats.engine_rating;
-        let heatsink = mechStats.heatsinks + " HS";
+        let mechSpeed = `${Number(mechStats.top_speed).toFixed(1)} km/h`;
+        let mechEngine = `${mechStats.engine_type} ${mechStats.engine_rating}`;
+        let heatsink = `${mechStats.heatsinks} HS`;
         loadedMechJQ
             .find("[class~=mechEquipment]")
             .append(loadedMechSpan(mechSpeed, "equipment"))
@@ -8031,18 +8036,18 @@ var MechViewReport;
             if (victorTeam) {
                 reportJQ.find("[class~=victorTitle]")
                     .addClass(victorTeam)
-                    .html(TeamReport.prototype.translateTeamName(victorTeam) + " Victory");
+                    .text(`${TeamReport.prototype.translateTeamName(victorTeam)} Victory`);
             }
             else {
-                reportJQ.find("[class~=victorTitle]").html("Draw");
+                reportJQ.find("[class~=victorTitle]").text("Draw");
             }
             let simParams = MechModelView.getSimulatorParameters();
             reportJQ.find("[class~=rangeValue]")
-                .html(Number(simParams.range).toFixed(0) + "m");
+                .text(`${Number(simParams.range).toFixed(0)}m`);
             let teamList = [MechModel.Team.BLUE, MechModel.Team.RED];
             for (let team of teamList) {
                 let teamReport = new TeamReport(team);
-                reportJQ.find("[class~=" + this.teamReportPanelId(team) + "]")
+                reportJQ.find(`[class~=${this.teamReportPanelId(team)}]`)
                     .attr("id", this.teamReportPanelId(team))
                     .append(teamReport.domElement);
             }
@@ -8062,16 +8067,16 @@ var MechViewReport;
             this.domElement = teamReportDiv;
             let teamReportId = this.teamReportId(team);
             teamReportJQ.find("[class~=teamName]")
-                .html(this.translateTeamName(team) + " team");
+                .text(this.translateTeamName(team) + " team");
             let totalDamage = teamReport.getTotalDamage();
             let dps = teamReport.getDPS();
             let maxBurst = teamReport.getMaxBurst();
             teamReportJQ.find("[class~=damage]")
-                .html(Number(totalDamage).toFixed(1));
+                .text(Number(totalDamage).toFixed(1));
             teamReportJQ.find("[class~=dps]")
-                .html(Number(dps).toFixed(1));
+                .text(Number(dps).toFixed(1));
             teamReportJQ.find("[class~=maxBurst]")
-                .html(Number(maxBurst).toFixed(1));
+                .text(Number(maxBurst).toFixed(1));
             let mechBreakdown = new MechBreakdownTable(teamReport);
             let mechBreakdownDivId = this.mechBreakdownId(team);
             teamReportJQ.find("[class~=mechBreakdownContainer]")
@@ -8120,17 +8125,17 @@ var MechViewReport;
                     .removeAttr("id")
                     .appendTo(tableDiv);
                 rowJQ.find("[class~=name]")
-                    .html(mechReport.mechName);
+                    .text(mechReport.mechName);
                 rowJQ.find("[class~=damage]")
-                    .html(Number(mechReport.getTotalDamage()).toFixed(1));
+                    .text(Number(mechReport.getTotalDamage()).toFixed(1));
                 rowJQ.find("[class~=dps]")
-                    .html(Number(mechReport.getDPS()).toFixed(1));
+                    .text(Number(mechReport.getDPS()).toFixed(1));
                 rowJQ.find("[class~=burst]")
-                    .html(Number(mechReport.getMaxBurstDamage()).toFixed(1));
+                    .text(Number(mechReport.getMaxBurstDamage()).toFixed(1));
                 let timeAlive = mechReport.getTimeOfDeath();
                 timeAlive = timeAlive ? timeAlive : MechSimulatorLogic.getSimTime();
                 rowJQ.find("[class~=timeAlive]")
-                    .html(Number(timeAlive / 1000).toFixed(1) + "s");
+                    .text(`${Number(timeAlive / 1000).toFixed(1)}s`);
             }
         }
     }
@@ -8148,11 +8153,11 @@ var MechViewReport;
                 let rowJQ = $(weaponBreakdownRowDiv)
                     .removeAttr("id")
                     .appendTo(tableDiv);
-                rowJQ.find("[class~=name]").html(weaponStatEntry.name);
-                rowJQ.find("[class~=damage]").html(Number(weaponStatEntry.damage).toFixed(1));
+                rowJQ.find("[class~=name]").text(weaponStatEntry.name);
+                rowJQ.find("[class~=damage]").text(Number(weaponStatEntry.damage).toFixed(1));
                 //TODO: Fix DPS per weapon calculation
-                // rowJQ.find("[class~=dps]").html(Number(weaponStatEntry.dps).toFixed(1));
-                rowJQ.find("[class~=count]").html(Number(weaponStatEntry.count).toFixed(0));
+                // rowJQ.find("[class~=dps]").text(Number(weaponStatEntry.dps).toFixed(1));
+                rowJQ.find("[class~=count]").text(Number(weaponStatEntry.count).toFixed(0));
             }
         }
     }
@@ -8292,7 +8297,7 @@ var MechView;
     var showPermalinkTooltip = function (link) {
         modifiedTooltip.hideTooltip();
         loadErrorTooltip.hideTooltip();
-        $("#" + permalinkTooltip.id + " [class~=permaLink]")
+        $(`#${permalinkTooltip.id} [class~=permaLink]`)
             .attr("href", link);
         permalinkTooltip.showTooltip();
     };
@@ -8612,7 +8617,7 @@ var MechViewRouter;
             else {
                 first = false;
             }
-            newHashString += currParam + "=" + paramValues.get(currParam);
+            newHashString += `${currParam}=${paramValues.get(currParam)}`;
         }
         if (!replaceHistory) {
             location.hash = newHashString;
@@ -8662,7 +8667,7 @@ var MechViewRouter;
         console.log("Hash change: " + location.hash);
         if (isLoading) {
             //ignore hash change, change back to previous hash
-            let hash = "#" + HASH_STATE_FIELD + "=" + prevStateHash;
+            let hash = `#${HASH_STATE_FIELD}=${prevStateHash}`;
             setParamToLocationHash(HASH_STATE_FIELD, prevStateHash, true);
             return;
         }
@@ -8817,7 +8822,7 @@ var MechViewSimSettings;
 var MechViewTeamStats;
 (function (MechViewTeamStats) {
     var teamStatsContainerId = function (team) {
-        return team + "TeamStatsContainer";
+        return team + "-teamStatsContainer";
     };
     var teamStatsId = function (team) {
         return team + "-teamStatsPanel";
@@ -8862,13 +8867,14 @@ var MechViewTeamStats;
             .addClass(team)
             .appendTo("#" + teamStatsContainerPanelId);
         //Change team name
-        $("#" + teamStatsContainerPanelId + " [class~=teamName]")
-            .html(teamDisplayName(team));
+        let teamStatsContainerJQ = $(`#${teamStatsContainerPanelId}`);
+        teamStatsContainerJQ.find("[class~=teamName]")
+            .text(teamDisplayName(team));
         //Add mech button
         MechViewAddMech.createAddMechButton(team, teamStatsContainerPanelId);
         //mech pips
         let teamMechPipsContainerDivId = teamMechPipsContainerId(team);
-        $("#" + teamStatsContainerPanelId + " [class~=mechPipsContainer]")
+        let teamMechPipsJQ = teamStatsContainerJQ.find("[class~=mechPipsContainer]")
             .attr("id", teamMechPipsContainerDivId);
         for (let mechId of mechIds) {
             let mechName = MechModelView.getMechName(mechId, team);
@@ -8880,28 +8886,28 @@ var MechViewTeamStats;
                 .attr("data-mech-id", mechId)
                 .attr("title", mechName)
                 .click(mechPipClickHandler)
-                .appendTo("#" + teamMechPipsContainerDivId);
+                .appendTo(teamMechPipsJQ);
         }
         //Mech health (liveMechs and teamHealthValue)
-        $("#" + teamStatsContainerPanelId + " [class~=liveMechs]")
+        teamStatsContainerJQ.find("[class~=liveMechs]")
             .attr("id", teamLiveMechsId(team));
-        $("#" + teamStatsContainerPanelId + " [class~=teamHealthValue]")
+        teamStatsContainerJQ.find("[class~=teamHealthValue]")
             .attr("id", teamHealthValueId(team));
         //teamDMG
-        $("#" + teamStatsContainerPanelId + " [class~=teamDamageValue]")
+        teamStatsContainerJQ.find("[class~=teamDamageValue]")
             .attr("id", teamDamageId(team));
         //teamDPS
-        $("#" + teamStatsContainerPanelId + " [class~=teamDPSValue]")
+        teamStatsContainerJQ.find("[class~=teamDPSValue]")
             .attr("id", teamDPSValueId(team));
         //teamBurstDamage
-        $("#" + teamStatsContainerPanelId + " [class~=teamBurstDamageValue]")
+        teamStatsContainerJQ.find("[class~=teamBurstDamageValue]")
             .attr("id", teamBurstDamageId(team));
         //team settings
-        $("#" + teamStatsContainerPanelId + " [class~=teamSettingsButton]")
+        teamStatsContainerJQ.find("[class~=teamSettingsButton]")
             .attr("data-team", team)
             .attr("id", teamSettingsButtonId(team))
             .click(teamSettingsButtonHandler);
-        $("#" + teamStatsContainerPanelId + " [class~=teamSettings]")
+        teamStatsContainerJQ.find("[class~=teamSettings]")
             .attr("data-team", team)
             .attr("id", teamSettingsId(team));
         //Populate the team settings panel
@@ -8969,9 +8975,9 @@ var MechViewTeamStats;
         if (!patternLists[patternType.id]) {
             patternLists[patternType.id] = patternType.patternsFunction();
         }
-        let teamStatsContainerPanelId = teamStatsContainerId(team);
-        let teamPatternValueJQ = $("#" + teamStatsContainerPanelId + " [class~=" + patternType.classNamePrefix + "Value]");
-        let teamPatternDescJQ = $("#" + teamStatsContainerPanelId + " [class~=" + patternType.classNamePrefix + "Desc]");
+        let teamStatsContainerJQ = $(`#${teamStatsContainerId(team)}`);
+        let teamPatternValueJQ = teamStatsContainerJQ.find(`[class~=${patternType.classNamePrefix}Value]`);
+        let teamPatternDescJQ = teamStatsContainerJQ.find(`[class~=${patternType.classNamePrefix}Desc]`);
         teamPatternValueJQ.empty();
         selectedPatterns[team] = selectedPatterns[team] ? selectedPatterns[team] : {};
         let selectedPattern = selectedPatterns[team][patternType.id];
@@ -8996,7 +9002,7 @@ var MechViewTeamStats;
         //change handler
         teamPatternValueJQ.on('change', (data) => {
             let selectedValue = String(teamPatternValueJQ.val());
-            let selectedOption = teamPatternValueJQ.find("[value='" + selectedValue + "']");
+            let selectedOption = teamPatternValueJQ.find(`[value='${selectedValue}']`);
             teamPatternDescJQ.html(selectedOption.attr("data-description"));
             selectedPatterns[team][patternType.id] = selectedValue;
             let pattern = findPatternWithId(selectedValue, patternLists[patternType.id]);
@@ -9016,8 +9022,9 @@ var MechViewTeamStats;
     var teamSettingsButtonHandler = function () {
         let team = $(this).attr("data-team");
         let teamStatsContainerPanelId = teamStatsContainerId(team);
-        let teamSettingsJQ = $("#" + teamStatsContainerPanelId + " [class~=teamSettings]");
-        let teamSettingsArrowJQ = $("#" + teamStatsContainerPanelId + " [class~=teamSettingsButtonArrow]");
+        let teamStatsContainerJQ = $("#" + teamStatsContainerPanelId);
+        let teamSettingsJQ = teamStatsContainerJQ.find("[class~=teamSettings]");
+        let teamSettingsArrowJQ = teamStatsContainerJQ.find("[class~=teamSettingsButtonArrow]");
         if (teamSettingsJQ.hasClass("expanded")) {
             teamSettingsJQ.removeClass("expanded");
             teamSettingsArrowJQ.removeClass("expanded");
@@ -9064,7 +9071,8 @@ var MechViewTeamStats;
             totalTeamCurrHealth / totalTeamMaxHealth : 0;
         color = MechViewWidgets.damageColor(teamHealthPercent, MechViewWidgets.healthDamageGradient);
         healthValueDiv.style.color = color;
-        healthValueDiv.textContent = "(" + Number(teamHealthPercent * 100).toFixed(1) + "%)";
+        healthValueDiv.textContent =
+            `(${Number(teamHealthPercent * 100).toFixed(1)}%)`;
         //damage
         let teamDamageDiv = document.getElementById(teamDamageId(team));
         teamDamageDiv.textContent = Number(damage).toFixed(1);

@@ -278,7 +278,7 @@ namespace MechViewRouter {
       } else {
         first = false;
       }
-      newHashString += currParam + "=" + paramValues.get(currParam);
+      newHashString += `${currParam}=${paramValues.get(currParam)}`;
     }
     if (!replaceHistory) {
       location.hash = newHashString;
@@ -333,7 +333,7 @@ namespace MechViewRouter {
     console.log("Hash change: " + location.hash);
     if (isLoading) {
       //ignore hash change, change back to previous hash
-      let hash = "#" + HASH_STATE_FIELD + "=" + prevStateHash;
+      let hash = `#${HASH_STATE_FIELD}=${prevStateHash}`;
       setParamToLocationHash(HASH_STATE_FIELD, prevStateHash, true);
       return;
     }

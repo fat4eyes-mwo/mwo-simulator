@@ -24,19 +24,19 @@ namespace MechViewReport {
       if (victorTeam) {
         reportJQ.find("[class~=victorTitle]")
           .addClass(victorTeam)
-          .html(TeamReport.prototype.translateTeamName(victorTeam) + " Victory");
+          .text(`${TeamReport.prototype.translateTeamName(victorTeam)} Victory`);
       } else {
-        reportJQ.find("[class~=victorTitle]").html("Draw");
+        reportJQ.find("[class~=victorTitle]").text("Draw");
       }
 
       let simParams = MechModelView.getSimulatorParameters();
       reportJQ.find("[class~=rangeValue]")
-        .html(Number(simParams.range).toFixed(0) + "m");
+        .text(`${Number(simParams.range).toFixed(0)}m`);
 
       let teamList : Team[] = [MechModel.Team.BLUE, MechModel.Team.RED];
       for (let team of teamList) {
         let teamReport = new TeamReport(team);
-        reportJQ.find("[class~="+ this.teamReportPanelId(team) + "]")
+        reportJQ.find(`[class~=${this.teamReportPanelId(team)}]`)
           .attr("id", this.teamReportPanelId(team))
           .append(teamReport.domElement);
       }
@@ -60,17 +60,17 @@ namespace MechViewReport {
 
       let teamReportId = this.teamReportId(team);
       teamReportJQ.find("[class~=teamName]")
-        .html(this.translateTeamName(team) + " team");
+        .text(this.translateTeamName(team) + " team");
 
       let totalDamage = teamReport.getTotalDamage();
       let dps = teamReport.getDPS();
       let maxBurst = teamReport.getMaxBurst();
       teamReportJQ.find("[class~=damage]")
-        .html(Number(totalDamage).toFixed(1));
+        .text(Number(totalDamage).toFixed(1));
       teamReportJQ.find("[class~=dps]")
-        .html(Number(dps).toFixed(1))
+        .text(Number(dps).toFixed(1))
       teamReportJQ.find("[class~=maxBurst]")
-        .html(Number(maxBurst).toFixed(1));
+        .text(Number(maxBurst).toFixed(1));
 
       let mechBreakdown = new MechBreakdownTable(teamReport);
       let mechBreakdownDivId = this.mechBreakdownId(team);
@@ -127,17 +127,17 @@ namespace MechViewReport {
                       .removeAttr("id")
                       .appendTo(tableDiv);
         rowJQ.find("[class~=name]")
-          .html(mechReport.mechName);
+          .text(mechReport.mechName);
         rowJQ.find("[class~=damage]")
-          .html(Number(mechReport.getTotalDamage()).toFixed(1));
+          .text(Number(mechReport.getTotalDamage()).toFixed(1));
         rowJQ.find("[class~=dps]")
-          .html(Number(mechReport.getDPS()).toFixed(1));
+          .text(Number(mechReport.getDPS()).toFixed(1));
         rowJQ.find("[class~=burst]")
-          .html(Number(mechReport.getMaxBurstDamage()).toFixed(1));
+          .text(Number(mechReport.getMaxBurstDamage()).toFixed(1));
         let timeAlive = mechReport.getTimeOfDeath();
         timeAlive = timeAlive ? timeAlive : MechSimulatorLogic.getSimTime();
         rowJQ.find("[class~=timeAlive]")
-          .html(Number(timeAlive / 1000).toFixed(1) + "s");
+          .text(`${Number(timeAlive / 1000).toFixed(1)}s`);
       }
     }
   }
@@ -160,11 +160,11 @@ namespace MechViewReport {
         let rowJQ = $(weaponBreakdownRowDiv)
                       .removeAttr("id")
                       .appendTo(tableDiv);
-        rowJQ.find("[class~=name]").html(weaponStatEntry.name);
-        rowJQ.find("[class~=damage]").html(Number(weaponStatEntry.damage).toFixed(1));
+        rowJQ.find("[class~=name]").text(weaponStatEntry.name);
+        rowJQ.find("[class~=damage]").text(Number(weaponStatEntry.damage).toFixed(1));
         //TODO: Fix DPS per weapon calculation
-        // rowJQ.find("[class~=dps]").html(Number(weaponStatEntry.dps).toFixed(1));
-        rowJQ.find("[class~=count]").html(Number(weaponStatEntry.count).toFixed(0));
+        // rowJQ.find("[class~=dps]").text(Number(weaponStatEntry.dps).toFixed(1));
+        rowJQ.find("[class~=count]").text(Number(weaponStatEntry.count).toFixed(0));
       }
     }
   }

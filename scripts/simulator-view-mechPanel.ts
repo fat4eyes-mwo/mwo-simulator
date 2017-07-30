@@ -31,7 +31,7 @@ namespace MechViewMechPanel {
                 : void {
     var color = MechViewWidgets.damageColor(percent, MechViewWidgets.paperDollDamageGradient);
     let paperDollDiv = document.getElementById(paperDollId(mechId));
-    $(paperDollDiv).find("> [data-location='" + location + "']")
+    $(paperDollDiv).find(`> [data-location='${location}']`)
       .css('border-color', color);
   }
   export var setPaperDollStructure =
@@ -41,7 +41,7 @@ namespace MechViewMechPanel {
                 : void {
     var color = MechViewWidgets.damageColor(percent, MechViewWidgets.paperDollDamageGradient);
     let paperDollDiv = document.getElementById(paperDollId(mechId));
-    $(paperDollDiv).find("> [data-location='" + location + "']")
+    $(paperDollDiv).find(`> [data-location='${location}']`)
       .css('background-color', color);
   }
 
@@ -70,12 +70,12 @@ namespace MechViewMechPanel {
     for (let locationIdx in MechModel.Component) {
       if (MechModel.Component.hasOwnProperty(locationIdx)) {
         let location = MechModel.Component[locationIdx];
-        $("#" + mechHealthNumbersDivId +
-          " [data-location=" + location + "] " +
+        $(`#${mechHealthNumbersDivId}` +
+          ` [data-location='${location}']` +
           " [data-healthtype=armor]")
             .attr("id", mechHealthNumbersArmorId(mechId, location));
-        $("#" + mechHealthNumbersDivId +
-          " [data-location=" + location + "] " +
+        $(`#${mechHealthNumbersDivId}` +
+          ` [data-location='${location}']` +
           " [data-healthtype=structure]")
           .attr("id", mechHealthNumbersStructureId(mechId, location));
       }
@@ -166,7 +166,13 @@ namespace MechViewMechPanel {
   }
 
   var weaponRowId = function (mechId : string, idx : number) : string {
-    return mechId + "-" + idx + "-weaponrow";
+    return `${mechId}-${idx}-weaponrow`;
+  }
+  var weaponNameId = function (mechId : string, idx : number) : string {
+    return weaponRowId(mechId, idx) + "-weaponName";
+  }
+  var weaponLocationId = function (mechId : string, idx : number) : string {
+    return weaponRowId(mechId, idx) + "-weaponLocation";
   }
   var weaponCooldownBarId = function (mechId : string, idx : number) : string {
     return weaponRowId(mechId, idx) + "-weaponCooldownBar";
@@ -200,10 +206,10 @@ namespace MechViewMechPanel {
         .attr("data-weapon-idx", idx)
         .appendTo("#" + weaponPanel);
       $(weaponRowDiv).find(".weaponName")
-        .attr("id", weaponRowId(mechId, Number(idx)) + "-weaponName")
+        .attr("id", weaponNameId(mechId, Number(idx)))
         .html(weaponState.weaponInfo.translatedName);
       $(weaponRowDiv).find(".weaponLocation")
-        .attr("id", weaponRowId(mechId, Number(idx)) + "-weaponLocation")
+        .attr("id", weaponLocationId(mechId, Number(idx)))
         .html(weaponLocAbbr[weaponState.weaponInfo.location]);
       $(weaponRowDiv).find(".weaponCooldownBar")
         .attr("id", weaponCooldownBarId(mechId, Number(idx)));
@@ -609,10 +615,9 @@ namespace MechViewMechPanel {
         MechView.resetSimulation();
         let status = MechModel.moveMech(srcMechId, mechId);
         if (!status) {
-          console.error("Error moving mech. src=" +
-                          srcMechId + " dest=" + mechId);
+          console.error(`Error moving mech. src=${srcMechId} dest=${mechId}`);
         } else {
-          console.log("Drop: src=" + srcMechId + " dest=" + mechId);
+          console.log(`Drop: src=${srcMechId} dest=${mechId}`);
           toggleMoveMech(srcMechId);
           MechViewRouter.modifyAppState();
           MechModelView.refreshView([MechModelView.ViewUpdate.TEAMSTATS]);

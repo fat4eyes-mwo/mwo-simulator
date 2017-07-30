@@ -13,7 +13,7 @@ namespace MechViewTeamStats {
   type MechHealthToView = MechModelView.MechHealthToView;
 
   var teamStatsContainerId = function(team : Team) : string {
-    return team + "TeamStatsContainer";
+    return team + "-teamStatsContainer";
   }
   var teamStatsId = function(team : Team) : string {
     return team + "-teamStatsPanel";
@@ -58,15 +58,17 @@ namespace MechViewTeamStats {
       .addClass(team)
       .appendTo("#" + teamStatsContainerPanelId);
     //Change team name
-    $("#" + teamStatsContainerPanelId + " [class~=teamName]")
-            .html(teamDisplayName(team));
+    let teamStatsContainerJQ = $(`#${teamStatsContainerPanelId}`);
+    teamStatsContainerJQ.find("[class~=teamName]")
+      .text(teamDisplayName(team));
 
     //Add mech button
     MechViewAddMech.createAddMechButton(team, teamStatsContainerPanelId);
 
     //mech pips
     let teamMechPipsContainerDivId = teamMechPipsContainerId(team);
-    $("#" + teamStatsContainerPanelId + " [class~=mechPipsContainer]")
+    let teamMechPipsJQ =
+      teamStatsContainerJQ.find("[class~=mechPipsContainer]")
         .attr("id", teamMechPipsContainerDivId);
     for (let mechId of mechIds) {
       let mechName = MechModelView.getMechName(mechId, team);
@@ -78,28 +80,28 @@ namespace MechViewTeamStats {
         .attr("data-mech-id", mechId)
         .attr("title", mechName)
         .click(mechPipClickHandler)
-        .appendTo("#" + teamMechPipsContainerDivId);
+        .appendTo(teamMechPipsJQ);
     }
     //Mech health (liveMechs and teamHealthValue)
-    $("#" + teamStatsContainerPanelId + " [class~=liveMechs]")
+    teamStatsContainerJQ.find("[class~=liveMechs]")
       .attr("id", teamLiveMechsId(team));
-    $("#" + teamStatsContainerPanelId + " [class~=teamHealthValue]")
+    teamStatsContainerJQ.find("[class~=teamHealthValue]")
       .attr("id", teamHealthValueId(team));
     //teamDMG
-    $("#" + teamStatsContainerPanelId + " [class~=teamDamageValue]")
+    teamStatsContainerJQ.find("[class~=teamDamageValue]")
       .attr("id", teamDamageId(team));
     //teamDPS
-    $("#" + teamStatsContainerPanelId + " [class~=teamDPSValue]")
+    teamStatsContainerJQ.find("[class~=teamDPSValue]")
       .attr("id", teamDPSValueId(team));
     //teamBurstDamage
-    $("#" + teamStatsContainerPanelId + " [class~=teamBurstDamageValue]")
+    teamStatsContainerJQ.find("[class~=teamBurstDamageValue]")
       .attr("id", teamBurstDamageId(team));
     //team settings
-    $("#" + teamStatsContainerPanelId + " [class~=teamSettingsButton]")
+    teamStatsContainerJQ.find("[class~=teamSettingsButton]")
       .attr("data-team", team)
       .attr("id", teamSettingsButtonId(team))
       .click(teamSettingsButtonHandler);
-    $("#" + teamStatsContainerPanelId + " [class~=teamSettings]")
+    teamStatsContainerJQ.find("[class~=teamSettings]")
       .attr("data-team", team)
       .attr("id", teamSettingsId(team));
     //Populate the team settings panel
@@ -180,12 +182,12 @@ namespace MechViewTeamStats {
       patternLists[patternType.id] = patternType.patternsFunction();
     }
 
-    let teamStatsContainerPanelId = teamStatsContainerId(team);
+    let teamStatsContainerJQ = $(`#${teamStatsContainerId(team)}`);
     let teamPatternValueJQ =
-      $("#" + teamStatsContainerPanelId + " [class~=" + patternType.classNamePrefix + "Value]");
+      teamStatsContainerJQ.find(`[class~=${patternType.classNamePrefix}Value]`);
 
     let teamPatternDescJQ =
-      $("#" + teamStatsContainerPanelId + " [class~=" + patternType.classNamePrefix + "Desc]")
+      teamStatsContainerJQ.find(`[class~=${patternType.classNamePrefix}Desc]`)
 
     teamPatternValueJQ.empty();
     selectedPatterns[team] = selectedPatterns[team] ? selectedPatterns[team] : {};
@@ -212,7 +214,7 @@ namespace MechViewTeamStats {
     //change handler
     teamPatternValueJQ.on('change', (data) => {
       let selectedValue : string = String(teamPatternValueJQ.val());
-      let selectedOption = teamPatternValueJQ.find("[value='" + selectedValue + "']");
+      let selectedOption = teamPatternValueJQ.find(`[value='${selectedValue}']`);
 
       teamPatternDescJQ.html(selectedOption.attr("data-description"));
       selectedPatterns[team][patternType.id] = selectedValue;
@@ -236,10 +238,11 @@ namespace MechViewTeamStats {
   var teamSettingsButtonHandler = function() : void {
     let team = $(this).attr("data-team");
     let teamStatsContainerPanelId = teamStatsContainerId(team);
+    let teamStatsContainerJQ = $("#" + teamStatsContainerPanelId);
     let teamSettingsJQ =
-      $("#" + teamStatsContainerPanelId + " [class~=teamSettings]");
+      teamStatsContainerJQ.find("[class~=teamSettings]");
     let teamSettingsArrowJQ =
-      $("#" + teamStatsContainerPanelId + " [class~=teamSettingsButtonArrow]");
+      teamStatsContainerJQ.find("[class~=teamSettingsButtonArrow]");
     if (teamSettingsJQ.hasClass("expanded")) {
       teamSettingsJQ.removeClass("expanded");
       teamSettingsArrowJQ.removeClass("expanded");
@@ -295,7 +298,8 @@ namespace MechViewTeamStats {
             totalTeamCurrHealth / totalTeamMaxHealth : 0;
     color = MechViewWidgets.damageColor(teamHealthPercent, MechViewWidgets.healthDamageGradient);
     healthValueDiv.style.color = color;
-    healthValueDiv.textContent = "(" + Number(teamHealthPercent * 100).toFixed(1) + "%)";
+    healthValueDiv.textContent =
+        `(${Number(teamHealthPercent * 100).toFixed(1)}%)`;
 
     //damage
     let teamDamageDiv = document.getElementById(teamDamageId(team));
