@@ -1,7 +1,5 @@
 - AUTOMATED UNIT TESTS!!!!!!
 
-- Migrate to Typescript
-
 - drag on mobile
 - slow performance on dragover when there are many mechs (too much layouting, see what causes it)
 - add maxDPS firing pattern
