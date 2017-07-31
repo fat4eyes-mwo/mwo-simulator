@@ -1181,7 +1181,7 @@ namespace MechModel  {
     });
   }
 
-  export var initAddedData = function() {
+  export var initAddedData = function() : void {
     initHeatsinkIds();
     initAddedHeatsinkData();
     initAddedWeaponData();
