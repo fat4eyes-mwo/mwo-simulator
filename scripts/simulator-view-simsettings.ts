@@ -91,7 +91,7 @@ namespace MechViewSimSettings {
 
     populateSettings(simSettings : SimParamUserSettings) {
       let SimulatorParameters = MechSimulatorLogic.SimulatorParameters;
-      let settingsList = SimulatorParameters.prototype.getSettings();
+      let settingsList = SimulatorParameters.getUserSettings();
       let entryListJQ = $(this.domElement).find(".simSettingsList");
       for (let entry of settingsList) {
         let entryDiv = MechViewWidgets.cloneTemplate("simSettingsEntry-template");

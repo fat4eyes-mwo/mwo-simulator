@@ -64,7 +64,7 @@ namespace MechSimulatorLogic {
     }
 
     //returns setting values and descriptions for the UI
-    getSettings() : SimUserSetting[] {
+    static getUserSettings() : SimUserSetting[] {
       return [
         UAC_DOUBLE_TAP_SETTING,
         UAC_JAM_SETTING

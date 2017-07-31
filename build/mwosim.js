@@ -3987,7 +3987,7 @@ var MechSimulatorLogic;
             this.uiUpdateInterval = Math.floor(DEFAULT_UI_UPDATE_INTERVAL / Number(speedFactor));
         }
         //returns setting values and descriptions for the UI
-        getSettings() {
+        static getUserSettings() {
             return [
                 MechSimulatorLogic.UAC_DOUBLE_TAP_SETTING,
                 MechSimulatorLogic.UAC_JAM_SETTING
@@ -8819,7 +8819,7 @@ var MechViewSimSettings;
         }
         populateSettings(simSettings) {
             let SimulatorParameters = MechSimulatorLogic.SimulatorParameters;
-            let settingsList = SimulatorParameters.prototype.getSettings();
+            let settingsList = SimulatorParameters.getUserSettings();
             let entryListJQ = $(this.domElement).find(".simSettingsList");
             for (let entry of settingsList) {
                 let entryDiv = MechViewWidgets.cloneTemplate("simSettingsEntry-template");
