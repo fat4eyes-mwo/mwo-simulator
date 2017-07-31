@@ -23,7 +23,7 @@ namespace MechSimulatorLogic {
   var simRunning = false;
   var simTime = 0;
   var simulatorParameters : SimulatorParameters;
-  var weaponFireQueue : WeaponFire[] = [];
+  var weaponFireQueue : MechModel.WeaponFire[] = [];
   var willUpdateTeamStats : {[index:string] : boolean} = {};  //Format: {<team> : boolean}
 
   const simStepDuration = 50; //simulation tick length in ms
@@ -69,151 +69,6 @@ namespace MechSimulatorLogic {
         UAC_DOUBLE_TAP_SETTING,
         UAC_JAM_SETTING
       ];
-    }
-  }
-
-  //Represents damage currently being done by a weapon. This gets put in the
-  //  weaponFireQueue every time a weapon is fired and its values
-  //  (durationLeft or travelLeft as the case may be) are updated every step
-  //  by processWeaponFires().
-  //When the damage is completed, it is taken off the queue and its total
-  //  damage done is added to the sourceMech's stats
-  export class WeaponFire {
-    sourceMech : Mech;
-    targetMech : Mech;
-    weaponState : WeaponState;
-    range : number;
-    createTime : number;
-    ammoConsumed : number;
-    weaponDamage : WeaponDamage;
-    tickWeaponDamage : WeaponDamage;
-    damageDone : MechDamage;
-    totalDuration : number;
-    totalTravel : number;
-    durationLeft : number;
-    travelLeft : number;
-    complete : boolean;
-
-    constructor(sourceMech : Mech,
-                targetMech : Mech,
-                weaponState : WeaponState,
-                range : number,
-                createTime : number,
-                ammoConsumed : number) {
-      this.sourceMech = sourceMech;
-      this.targetMech = targetMech;
-      this.weaponState = weaponState;
-      this.weaponDamage = null; //full weapon damage
-      this.tickWeaponDamage = null; //WeaponDamage done per tick for duration weapons
-      this.range = range;
-      this.createTime = createTime;
-      this.damageDone = new MechModel.MechDamage();
-      this.ammoConsumed = ammoConsumed;
-      let weaponInfo = weaponState.weaponInfo;
-
-      this.totalDuration = weaponInfo.hasDuration() ?
-          Number(weaponInfo.duration) : 0;
-      this.totalTravel = weaponInfo.hasTravelTime() ?
-          Number(range) / Number(weaponInfo.speed) * 1000 : 0; //travel time in milliseconds
-
-      this.durationLeft = this.totalDuration;
-      this.travelLeft = this.totalTravel;
-      this.complete = false;
-
-      this.initComputedValues(range);
-    }
-
-    initComputedValues(range : number) : void {
-      let targetComponent = this.sourceMech.componentTargetPattern(this.sourceMech, this.targetMech);
-      let weaponInfo = this.weaponState.weaponInfo;
-      //baseWeaponDamage applies all damage to the target component
-      let baseWeaponDamageMap : DamageMap = {};
-      let baseDamage = weaponInfo.damageAtRange(range);
-      if (weaponInfo.requiresAmmo()) {
-        baseDamage = Number(baseDamage) * this.ammoConsumed / weaponInfo.ammoPerShot;
-      }
-      baseWeaponDamageMap[targetComponent] = baseDamage;
-      let baseWeaponDamage = new MechModel.WeaponDamage(baseWeaponDamageMap);
-
-      let weaponAccuracyPattern =
-          MechAccuracyPattern.getWeaponAccuracyPattern(weaponInfo);
-      if (weaponAccuracyPattern) {
-        let transformedWeaponDamage = weaponAccuracyPattern(baseWeaponDamage, range);
-        baseWeaponDamage = transformedWeaponDamage;
-      }
-      //transform the baseWeaponDamage using the mech's accuracy pattern
-      let transformedWeaponDamage = this.sourceMech.accuracyPattern(baseWeaponDamage, range);
-      this.weaponDamage = transformedWeaponDamage;
-
-      if (this.totalDuration >0) {
-        let tickDamageMap : DamageMap = {};
-        for (let component in this.weaponDamage.damageMap) {
-          tickDamageMap[component] = Number(this.weaponDamage.getDamage(component)) / Number(this.totalDuration) * Number(getStepDuration());
-        }
-        this.tickWeaponDamage = new MechModel.WeaponDamage(tickDamageMap);
-      } else {
-        this.tickWeaponDamage = this.weaponDamage.clone();
-      }
-    }
-
-    isComplete() : boolean {
-      return this.complete;
-    }
-
-    step(stepDuration : number) : void {
-      let weaponInfo = this.weaponState.weaponInfo;
-      let sourceMechState = this.sourceMech.getMechState();
-      let targetMechState = this.targetMech.getMechState();
-      if (weaponInfo.hasDuration()) {
-        this.durationLeft = Number(this.durationLeft) - stepDuration;
-        if (this.weaponState.active && sourceMechState.isAlive()) {
-          let tickDamageDone;
-          if (this.durationLeft <=0) {
-            let lastTickDamage = this.tickWeaponDamage.clone();
-            let damageFraction = (stepDuration + this.durationLeft) / stepDuration;
-            lastTickDamage.multiply(damageFraction);
-            tickDamageDone = targetMechState.takeDamage(lastTickDamage);
-            this.damageDone.add(tickDamageDone);
-            this.complete = true;
-          } else {
-            tickDamageDone = targetMechState.takeDamage(this.tickWeaponDamage);
-            this.damageDone.add(tickDamageDone)
-          }
-          targetMechState.setUpdate(UpdateType.HEALTH);
-        } else {
-          //Weapon disabled before end of burn
-          //add weaponFire.damageDone to mech stats
-          this.complete = true;
-        }
-      } else if (weaponInfo.hasTravelTime()) {
-        this.travelLeft = Number(this.travelLeft) - stepDuration;
-        if (this.travelLeft <= 0) {
-          let damageDone = targetMechState.takeDamage(this.weaponDamage);
-          this.damageDone.add(damageDone);
-          targetMechState.setUpdate(UpdateType.HEALTH);
-          //add weaponFire.damageDone to mechStats
-          this.complete = true;
-        } else {
-          //still has travel time
-        }
-      } else {
-        //should not happen
-        throw "Unexpected WeaponFire type";
-      }
-    }
-
-    toString() : string {
-      let weaponInfo = this.weaponState.weaponInfo;
-      return "WeaponFire" +
-          " createTime: " + this.createTime +
-          (weaponInfo.hasDuration() ? " durationLeft : " + this.durationLeft : "") +
-          (weaponInfo.hasTravelTime() ? " travelLeft: " + this.travelLeft : "") +
-          " source: " + this.sourceMech.getMechInfo().mechTranslatedName +
-          " target: " + this.targetMech.getMechInfo().mechTranslatedName +
-          " weapon: " + this.weaponState.weaponInfo.name +
-          " weaponDamage: " + this.weaponDamage.toString() +
-          " tickWeaponDamage: " + this.tickWeaponDamage.toString() +
-          " damageDone: " + this.damageDone.toString();
     }
   }
 
@@ -383,9 +238,9 @@ namespace MechSimulatorLogic {
                                 targetMech : Mech,
                                 weaponState : WeaponState,
                                 ammoConsumed : number)
-                                : WeaponFire {
+                                : MechModel.WeaponFire {
     let range = simulatorParameters.range;
-    let weaponFire = new WeaponFire(sourceMech, targetMech,
+    let weaponFire = new MechModel.WeaponFire(sourceMech, targetMech,
                                     weaponState, range,
                                     simTime, ammoConsumed);
     weaponFireQueue.push(weaponFire);
@@ -460,7 +315,7 @@ namespace MechSimulatorLogic {
 
   //Update mechstats with the completed WeaponFire's damage, and log
   //results to console
-  var logDamage = function(weaponFire : WeaponFire) : void {
+  var logDamage = function(weaponFire : MechModel.WeaponFire) : void {
     let weaponInfo = weaponFire.weaponState.weaponInfo;
     let mechState = weaponFire.sourceMech.getMechState();
     let mechStats = mechState.mechStats;

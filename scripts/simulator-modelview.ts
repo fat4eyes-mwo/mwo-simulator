@@ -24,7 +24,7 @@ namespace MechModelView {
   type TargetComponentPattern = MechTargetComponent.TargetComponentPattern;
   type TargetMechPattern = MechTargetMech.TargetMechPattern;
   type MechStats = MechModel.MechStats;
-  type WeaponFire = MechSimulatorLogic.WeaponFire;
+  type WeaponFire = MechModel.WeaponFire;
   type SmurfyMechLoadout = SmurfyTypes.SmurfyMechLoadout;
 
   //clears the view and recreates all UI elements
