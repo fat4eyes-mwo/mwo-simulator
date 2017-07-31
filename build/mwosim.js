@@ -3765,39 +3765,61 @@ var MechFirePattern;
             return null;
         }
     };
-    //Will always try to fire the weapons with the highest damage to heat ratio
-    //If not possible will wait until enough heat is available
-    //Avoids ghost heat
-    MechFirePattern.maximumDmgPerHeat = function (mech, range) {
-        let mechState = mech.getMechState();
-        let sortedByDmgPerHeat = Array.from(mechState.weaponStateList);
-        //sort weaponsToFire by damage/heat at the given range in decreasing order
-        sortedByDmgPerHeat.sort(damagePerHeatComparator(range));
-        let weaponsToFire = [];
-        for (let weaponState of sortedByDmgPerHeat) {
-            let weaponInfo = weaponState.weaponInfo;
-            if (!canFire(weaponState) //not ready to fire
-                || !willDoDamage(weaponState, range) //will not do damage
-                || (weaponInfo.requiresAmmo() && weaponState.getAvailableAmmo() <= 0)) {
-                continue; //skip weapon
-            }
-            //fit as many ready weapons as possible into the available heat
-            //starting with those with the best damage:heat ratio
-            weaponsToFire.push(weaponState);
-            let overheat = willOverheat(mech, weaponsToFire);
-            let ghostheat = willGhostHeat(mech, weaponsToFire);
-            if (overheat || ghostheat) {
-                weaponsToFire.pop();
-                if (ghostheat) {
-                    continue;
+    MechFirePattern.maximizeWeapon = function (sortAtRangeFunction) {
+        return function (mech, range) {
+            let mechState = mech.getMechState();
+            let sortedWeapons = Array.from(mechState.weaponStateList);
+            //sort weaponsToFire by damage/heat at the given range in decreasing order
+            let sortFunction = sortAtRangeFunction(range);
+            sortedWeapons.sort(sortFunction);
+            let weaponsToFire = [];
+            for (let weaponState of sortedWeapons) {
+                let weaponInfo = weaponState.weaponInfo;
+                if (!canFire(weaponState) //not ready to fire
+                    || !willDoDamage(weaponState, range) //will not do damage
+                    || (weaponInfo.requiresAmmo() && weaponState.getAvailableAmmo() <= 0)) {
+                    continue; //skip weapon
                 }
-                else if (overheat) {
-                    break; //if near heatcap, wait for the better heat/dmg weapon
+                //fit as many ready weapons as possible into the available heat
+                //starting with those at the start of the sorted list
+                weaponsToFire.push(weaponState);
+                let overheat = willOverheat(mech, weaponsToFire);
+                let ghostheat = willGhostHeat(mech, weaponsToFire);
+                if (overheat || ghostheat) {
+                    weaponsToFire.pop();
+                    if (ghostheat) {
+                        continue;
+                    }
+                    else if (overheat) {
+                        break; //if near heatcap, wait for the better heat/dmg weapon
+                    }
                 }
             }
-        }
-        return weaponsToFire;
+            return weaponsToFire;
+        };
     };
+    //Maximize damage per heat
+    var damagePerHeatComparator = function (range) {
+        return (weaponA, weaponB) => {
+            let dmgPerHeatA = weaponA.computeHeat() > 0 ?
+                weaponA.weaponInfo.damageAtRange(range)
+                    / weaponA.computeHeat()
+                : Number.MAX_VALUE;
+            let dmgPerHeatB = weaponB.computeHeat() > 0 ?
+                weaponB.weaponInfo.damageAtRange(range)
+                    / weaponB.computeHeat()
+                : Number.MAX_VALUE;
+            return dmgPerHeatB - dmgPerHeatA;
+        };
+    };
+    MechFirePattern.maximumDmgPerHeat = MechFirePattern.maximizeWeapon(damagePerHeatComparator);
+    //Maximize raw dps
+    var maxDPSComparator = function (range) {
+        return (weaponA, weaponB) => {
+            return weaponB.computeMaxDPS(range) - weaponA.computeMaxDPS(range);
+        };
+    };
+    MechFirePattern.maxDPS = MechFirePattern.maximizeWeapon(maxDPSComparator);
     //Always alpha, as long as it does not cause an overheat
     MechFirePattern.alphaNoOverheat = function (mech, range) {
         let mechState = mech.getMechState();
@@ -3842,21 +3864,6 @@ var MechFirePattern;
         return weaponsToFire;
     };
     //Util functions
-    var damagePerHeatComparator = function (range) {
-        return (weaponA, weaponB) => {
-            let weaponInfoA = weaponA.weaponInfo;
-            let dmgPerHeatA = weaponInfoA.heat > 0 ?
-                weaponInfoA.damageAtRange(range)
-                    / weaponInfoA.heat :
-                Number.MAX_VALUE;
-            let weaponInfoB = weaponB.weaponInfo;
-            let dmgPerHeatB = weaponInfoB.heat > 0 ?
-                weaponInfoB.damageAtRange(range)
-                    / weaponInfoB.heat :
-                Number.MAX_VALUE;
-            return dmgPerHeatB - dmgPerHeatA;
-        };
-    };
     var willOverheat = function (mech, weaponsToFire) {
         let simTime = MechSimulatorLogic.getSimTime();
         let mechState = mech.getMechState();
@@ -3900,6 +3907,12 @@ var MechFirePattern;
                 pattern: MechFirePattern.maximumDmgPerHeat,
                 description: "Maximize damage per heat.",
                 default: true,
+            },
+            { id: "maxDPS",
+                name: "Max DPS",
+                pattern: MechFirePattern.maxDPS,
+                description: "Maximize raw DPS at the given range while still avoiding ghost heat.",
+                default: false,
             },
             { id: "alphaNoOverheat",
                 name: "Alpha, no Overheat",
@@ -4478,6 +4491,8 @@ var MechModelWeapons;
                 Number(smurfyWeaponData.jammed_time) * 1000 : 0; //convert to milliseconds
             this.shotsDuringCooldown = smurfyWeaponData.shots_during_cooldown ?
                 Number(smurfyWeaponData.shots_during_cooldown) : 0;
+            this.volleyDelay = Number(smurfyWeaponData.volleyDelay) * 1000;
+            //Continuous fire weapon fields
             //time between shots on automatic fire for continuous fire weapons (flamers, MGs, RACs);
             this.timeBetweenAutoShots = smurfyWeaponData.rof ?
                 1000 / Number(smurfyWeaponData.rof) : 0; //rof is in shots per second
@@ -4489,8 +4504,9 @@ var MechModelWeapons;
                 Number(smurfyWeaponData.jamRampUpTime) * 1000 : 0;
             this.jamRampDownTime = smurfyWeaponData.jamRampDownTime ?
                 Number(smurfyWeaponData.jamRampDownTime) * 1000 : 0;
+            //One shot weapon fields
             this.isOneShot = smurfyWeaponData.isOneShot ? true : false;
-            this.volleyDelay = Number(smurfyWeaponData.volleyDelay) * 1000;
+            //Computed fields
             this.weaponBonus = MechModelQuirks.getWeaponBonus(this);
             //recompute heat to be heat per SHOT for continuous fire weapons
             //(in smurfy heat is heat per second, not per shot)
@@ -4749,6 +4765,9 @@ var MechModelWeapons;
             //TODO: See if any quirks affect jam time
             return Number(this.weaponInfo.jamTime);
         }
+        computeTimeBetweenAutoShots() {
+            return Number(this.weaponInfo.timeBetweenAutoShots);
+        }
     }
     MechModelWeapons.WeaponState = WeaponState;
     //state for duration fire weapons (e.g. lasers)
@@ -4795,6 +4814,12 @@ var MechModelWeapons;
         }
         canFire() {
             return this.weaponCycle === WeaponCycle.READY;
+        }
+        computeMaxDPS(range) {
+            let weaponInfo = this.weaponInfo;
+            let baseDamage = weaponInfo.damageAtRange(range);
+            return baseDamage
+                / (this.computeWeaponCooldown() + this.computeWeaponDuration());
         }
     }
     MechModelWeapons.WeaponStateDurationFire = WeaponStateDurationFire;
@@ -4923,6 +4948,15 @@ var MechModelWeapons;
                 (this.weaponCycle === WeaponCycle.COOLDOWN &&
                     this.currShotsDuringCooldown > 0 &&
                     this.volleyDelayLeft <= 0);
+        }
+        computeMaxDPS(range) {
+            let weaponInfo = this.weaponInfo;
+            let baseDamage = weaponInfo.damageAtRange(range);
+            //Double tap
+            if (weaponInfo.shotsDuringCooldown) {
+                baseDamage += weaponInfo.shotsDuringCooldown * baseDamage;
+            }
+            return baseDamage / (this.computeWeaponCooldown());
         }
     }
     MechModelWeapons.WeaponStateSingleFire = WeaponStateSingleFire;
@@ -5061,7 +5095,7 @@ var MechModelWeapons;
                     //decrease time to next auto shot with newTimetoAutoShot if the shot
                     //occurs in the middle of the tick
                     this.timeToNextAutoShot =
-                        this.weaponInfo.timeBetweenAutoShots + newTimeToAutoShot;
+                        this.computeTimeBetweenAutoShots() + newTimeToAutoShot;
                     weaponFired = true;
                     //set new state just so the view gets an update to the weapon status (which includes ammo)
                     newState = WeaponCycle.FIRING;
@@ -5088,6 +5122,13 @@ var MechModelWeapons;
                 (this.weaponCycle === WeaponCycle.FIRING &&
                     this.weaponInfo.isContinuousFire());
         }
+        computeMaxDPS(range) {
+            let weaponInfo = this.weaponInfo;
+            let baseDamage = weaponInfo.damageAtRange(range);
+            //number of autoshots per second
+            let rof = 1000 / this.computeTimeBetweenAutoShots();
+            return baseDamage * rof;
+        }
     }
     MechModelWeapons.WeaponStateContinuousFire = WeaponStateContinuousFire;
     class WeaponStateOneShot extends WeaponStateSingleFire {
@@ -5107,6 +5148,11 @@ var MechModelWeapons;
             let ret = this.ammoRemaining;
             this.ammoRemaining = 0;
             return ret;
+        }
+        computeMaxDPS(range) {
+            let weaponInfo = this.weaponInfo;
+            let baseDamage = weaponInfo.damageAtRange(range);
+            return baseDamage;
         }
     }
     MechModelWeapons.WeaponStateOneShot = WeaponStateOneShot;

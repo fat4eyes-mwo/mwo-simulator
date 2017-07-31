@@ -24,41 +24,73 @@ namespace MechFirePattern {
     }
   }
 
-  //Will always try to fire the weapons with the highest damage to heat ratio
+  //Will always try to fire the weapons with the highest selected parameter
   //If not possible will wait until enough heat is available
   //Avoids ghost heat
-  export var maximumDmgPerHeat =
-      function (mech : Mech, range : number) : WeaponState[] {
-    let mechState = mech.getMechState();
-    let sortedByDmgPerHeat = Array.from(mechState.weaponStateList);
-    //sort weaponsToFire by damage/heat at the given range in decreasing order
-    sortedByDmgPerHeat.sort(damagePerHeatComparator(range));
-    let weaponsToFire = [];
-    for (let weaponState of sortedByDmgPerHeat) {
-      let weaponInfo = weaponState.weaponInfo;
-      if (!canFire(weaponState)  //not ready to fire
-          || !willDoDamage(weaponState, range) //will not do damage
-          //No ammo
-          || (weaponInfo.requiresAmmo() && weaponState.getAvailableAmmo() <= 0)
-        ) {
-        continue; //skip weapon
-      }
-      //fit as many ready weapons as possible into the available heat
-      //starting with those with the best damage:heat ratio
-      weaponsToFire.push(weaponState);
-      let overheat = willOverheat(mech, weaponsToFire);
-      let ghostheat = willGhostHeat(mech, weaponsToFire);
-      if (overheat || ghostheat) {
-        weaponsToFire.pop();
-        if (ghostheat) {
-          continue;
-        } else if (overheat) {
-          break; //if near heatcap, wait for the better heat/dmg weapon
+  type WeaponSortFunction = (weapon1 : WeaponState, weapon2 : WeaponState) => number;
+  type WeaponSortAtRangeFunction = (range : number) => WeaponSortFunction;
+  export var maximizeWeapon = function (sortAtRangeFunction : WeaponSortAtRangeFunction) : FirePattern {
+    return function (mech : Mech, range : number) : WeaponState[] {
+      let mechState = mech.getMechState();
+      let sortedWeapons = Array.from(mechState.weaponStateList);
+      //sort weaponsToFire by damage/heat at the given range in decreasing order
+      let sortFunction = sortAtRangeFunction(range);
+      sortedWeapons.sort(sortFunction);
+      let weaponsToFire = [];
+      for (let weaponState of sortedWeapons) {
+        let weaponInfo = weaponState.weaponInfo;
+        if (!canFire(weaponState)  //not ready to fire
+            || !willDoDamage(weaponState, range) //will not do damage
+            //No ammo
+            || (weaponInfo.requiresAmmo() && weaponState.getAvailableAmmo() <= 0)
+          ) {
+          continue; //skip weapon
+        }
+        //fit as many ready weapons as possible into the available heat
+        //starting with those at the start of the sorted list
+        weaponsToFire.push(weaponState);
+        let overheat = willOverheat(mech, weaponsToFire);
+        let ghostheat = willGhostHeat(mech, weaponsToFire);
+        if (overheat || ghostheat) {
+          weaponsToFire.pop();
+          if (ghostheat) {
+            continue;
+          } else if (overheat) {
+            break; //if near heatcap, wait for the better heat/dmg weapon
+          }
         }
       }
+      return weaponsToFire;
     }
-    return weaponsToFire;
   }
+
+  //Maximize damage per heat
+  var damagePerHeatComparator =
+      function(range : number)
+              : (weaponA : WeaponState, weaponB : WeaponState) => number {
+    return (weaponA : WeaponState, weaponB : WeaponState) => {
+      let dmgPerHeatA = weaponA.computeHeat() > 0 ?
+              weaponA.weaponInfo.damageAtRange(range)
+                / weaponA.computeHeat()
+              : Number.MAX_VALUE;
+      let dmgPerHeatB = weaponB.computeHeat() > 0 ?
+              weaponB.weaponInfo.damageAtRange(range)
+                / weaponB.computeHeat()
+              : Number.MAX_VALUE;
+      return dmgPerHeatB - dmgPerHeatA;
+    };
+  }
+  export var maximumDmgPerHeat = maximizeWeapon(damagePerHeatComparator);
+
+  //Maximize raw dps
+  var maxDPSComparator =
+    function(range: number)
+      : (weaponA: WeaponState, weaponB: WeaponState) => number {
+      return (weaponA: WeaponState, weaponB: WeaponState) => {
+        return weaponB.computeMaxDPS(range) - weaponA.computeMaxDPS(range);
+      };
+  }
+  export var maxDPS = maximizeWeapon(maxDPSComparator);
 
   //Always alpha, as long as it does not cause an overheat
   export var alphaNoOverheat =
@@ -108,24 +140,6 @@ namespace MechFirePattern {
   }
 
   //Util functions
-  var damagePerHeatComparator =
-      function(range : number)
-              : (weaponA : WeaponState, weaponB : WeaponState) => number {
-    return (weaponA : WeaponState, weaponB : WeaponState) => {
-      let weaponInfoA = weaponA.weaponInfo;
-      let dmgPerHeatA = weaponInfoA.heat > 0 ?
-              weaponInfoA.damageAtRange(range)
-                / weaponInfoA.heat :
-              Number.MAX_VALUE;
-      let weaponInfoB = weaponB.weaponInfo;
-      let dmgPerHeatB = weaponInfoB.heat > 0 ?
-              weaponInfoB.damageAtRange(range)
-                / weaponInfoB.heat :
-              Number.MAX_VALUE;
-      return dmgPerHeatB - dmgPerHeatA;
-    };
-  }
-
   var willOverheat =
       function(mech : Mech, weaponsToFire : WeaponState[]) : boolean {
     let simTime = MechSimulatorLogic.getSimTime();
@@ -176,6 +190,12 @@ namespace MechFirePattern {
         pattern: maximumDmgPerHeat,
         description: "Maximize damage per heat.",
         default: true,
+      },
+      { id: "maxDPS",
+        name: "Max DPS",
+        pattern: maxDPS,
+        description: "Maximize raw DPS at the given range while still avoiding ghost heat.",
+        default: false,
       },
       { id: "alphaNoOverheat",
         name: "Alpha, no Overheat",

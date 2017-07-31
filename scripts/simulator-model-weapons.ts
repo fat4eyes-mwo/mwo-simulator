@@ -80,6 +80,9 @@ namespace MechModelWeapons {
                       Number(smurfyWeaponData.jammed_time) * 1000 : 0; //convert to milliseconds
         this.shotsDuringCooldown = smurfyWeaponData.shots_during_cooldown ?
                       Number(smurfyWeaponData.shots_during_cooldown) : 0;
+        this.volleyDelay = Number(smurfyWeaponData.volleyDelay) * 1000;
+
+        //Continuous fire weapon fields
         //time between shots on automatic fire for continuous fire weapons (flamers, MGs, RACs);
         this.timeBetweenAutoShots = smurfyWeaponData.rof ?
                       1000 / Number(smurfyWeaponData.rof): 0; //rof is in shots per second
@@ -91,8 +94,11 @@ namespace MechModelWeapons {
                       Number(smurfyWeaponData.jamRampUpTime) * 1000 : 0;
         this.jamRampDownTime = smurfyWeaponData.jamRampDownTime ?
                       Number(smurfyWeaponData.jamRampDownTime) * 1000 : 0;
+
+        //One shot weapon fields
         this.isOneShot = smurfyWeaponData.isOneShot ? true : false;
-        this.volleyDelay = Number(smurfyWeaponData.volleyDelay) * 1000;
+
+        //Computed fields
         this.weaponBonus = MechModelQuirks.getWeaponBonus(this);
         //recompute heat to be heat per SHOT for continuous fire weapons
         //(in smurfy heat is heat per second, not per shot)
@@ -220,6 +226,9 @@ namespace MechModelWeapons {
 
     //processes cooldowns on the weapon, making state changes as necessary
     abstract step(stepDuration : number) : WeaponStateChange;
+
+    //Computes the maximum DPS a weapon can deliver at the given range
+    abstract computeMaxDPS(range : number) : number;
 
     stepPrechecks(stepDuration : number) : WeaponStateChange {
       let newState = null;
@@ -386,6 +395,10 @@ namespace MechModelWeapons {
       //TODO: See if any quirks affect jam time
       return Number(this.weaponInfo.jamTime);
     }
+
+    computeTimeBetweenAutoShots() {
+      return Number(this.weaponInfo.timeBetweenAutoShots);
+    }
   }
 
   //state for duration fire weapons (e.g. lasers)
@@ -434,6 +447,13 @@ namespace MechModelWeapons {
 
     canFire() {
       return this.weaponCycle === WeaponCycle.READY;
+    }
+
+    computeMaxDPS(range : number) : number {
+      let weaponInfo = this.weaponInfo;
+      let baseDamage = weaponInfo.damageAtRange(range);
+      return baseDamage
+          / (this.computeWeaponCooldown() + this.computeWeaponDuration());
     }
   }
 
@@ -558,6 +578,16 @@ namespace MechModelWeapons {
             (this.weaponCycle === WeaponCycle.COOLDOWN &&
              this.currShotsDuringCooldown > 0 &&
              this.volleyDelayLeft <= 0);
+    }
+
+    computeMaxDPS(range : number) : number {
+      let weaponInfo = this.weaponInfo;
+      let baseDamage = weaponInfo.damageAtRange(range);
+      //Double tap
+      if (weaponInfo.shotsDuringCooldown) {
+        baseDamage += weaponInfo.shotsDuringCooldown * baseDamage;
+      }
+      return baseDamage / (this.computeWeaponCooldown());
     }
   }
 
@@ -705,7 +735,7 @@ namespace MechModelWeapons {
           //decrease time to next auto shot with newTimetoAutoShot if the shot
           //occurs in the middle of the tick
           this.timeToNextAutoShot =
-                  this.weaponInfo.timeBetweenAutoShots + newTimeToAutoShot;
+                  this.computeTimeBetweenAutoShots() + newTimeToAutoShot;
           weaponFired = true;
           //set new state just so the view gets an update to the weapon status (which includes ammo)
           newState = WeaponCycle.FIRING;
@@ -732,6 +762,15 @@ namespace MechModelWeapons {
             (this.weaponCycle === WeaponCycle.FIRING &&
             this.weaponInfo.isContinuousFire());
     }
+
+    computeMaxDPS(range : number) : number {
+      let weaponInfo = this.weaponInfo;
+      let baseDamage = weaponInfo.damageAtRange(range);
+
+      //number of autoshots per second
+      let rof = 1000 / this.computeTimeBetweenAutoShots();
+      return baseDamage * rof;
+    }
   }
 
   export class WeaponStateOneShot extends WeaponStateSingleFire {
@@ -754,6 +793,12 @@ namespace MechModelWeapons {
       let ret = this.ammoRemaining;
       this.ammoRemaining = 0;
       return ret;
+    }
+
+    computeMaxDPS(range : number) : number {
+      let weaponInfo = this.weaponInfo;
+      let baseDamage = weaponInfo.damageAtRange(range);
+      return baseDamage;
     }
   }
 };
