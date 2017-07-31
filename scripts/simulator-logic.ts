@@ -195,7 +195,7 @@ namespace MechSimulatorLogic {
     } else if (myTeam === Team.RED) {
       return Team.BLUE;
     }
-    throw "Unable to find enemy team";
+    throw Error("Unable to find enemy team");
   }
 
   //Give a mech and a list of weaponStates
@@ -252,7 +252,7 @@ namespace MechSimulatorLogic {
     let stepHeatDissipation = getStepDuration() * heatState.currHeatDissipation / 1000;
     let prevHeat = heatState.currHeat;
     heatState.currHeat = Math.max(0, heatState.currHeat - Number(stepHeatDissipation));
-    if (heatState.currHeat != prevHeat) {
+    if (heatState.currHeat !== prevHeat) {
       mechState.setUpdate(UpdateType.HEAT);
     }
   }
@@ -283,7 +283,7 @@ namespace MechSimulatorLogic {
   }
 
   var processWeaponFires = function() : void {
-    if (weaponFireQueue.length == 0) {
+    if (weaponFireQueue.length === 0) {
       return;
     }
     //Go through each entry in the current queue. Need to keep the start length

@@ -47,10 +47,10 @@ namespace MechViewRouter {
     //if no parameters, from current app state
     //else read the contents of loadedAppState into the object
     constructor(loadedAppState? : RemotePersistedState) {
-      if (arguments.length == 1) {
+      if (arguments.length === 1) {
         this.range = loadedAppState.state.range;
         this.teams = loadedAppState.state.teams;
-      } else if (arguments.length == 0) {
+      } else if (arguments.length === 0) {
         //current app state
         this.range = MechSimulatorLogic.getSimulatorParameters().range;
         this.teams = {};
@@ -144,8 +144,8 @@ namespace MechViewRouter {
 
     //load mechs from the state
     let loadStateThenMechsPromise = loadStatePromise
-      .then(function(data) {
-          let newAppState = new AppState(<RemotePersistedState> data);
+      .then(function(stateData) {
+          let newAppState = new AppState(stateData as RemotePersistedState);
           //set current app state
           let simulatorParameters = MechSimulatorLogic.getSimulatorParameters();
           if (!simulatorParameters) {
@@ -155,10 +155,10 @@ namespace MechViewRouter {
           simulatorParameters.range = newAppState.range;
           MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
           let loadMechPromise = loadMechsFromSmurfy(newAppState);
-          return loadMechPromise.then(function(data) {
+          return loadMechPromise.then(function(mechLoadoutData) {
             isAppStateModified = false;
             MechView.updateOnLoadAppState();
-            return data;
+            return mechLoadoutData;
           });
       });
 
@@ -239,8 +239,8 @@ namespace MechViewRouter {
             let combinedTeamEntry = promiseToEntryMap.get(currPromise);
             let team = combinedTeamEntry.team;
             let mechIdx = combinedTeamEntry.index;
-            let mech_id = MechModel.generateMechId(smurfyLoadout);
-            MechModel.addMechAtIndex(mech_id, team, smurfyLoadout, mechIdx);
+            let mechId = MechModel.generateMechId(smurfyLoadout);
+            MechModel.addMechAtIndex(mechId, team, smurfyLoadout, mechIdx);
             currMechsLoaded++;
             MechView.updateLoadingScreenProgress(currMechsLoaded / totalMechsToLoad);
             return data;
@@ -264,7 +264,9 @@ namespace MechViewRouter {
     let paramValues = new Map<string, string>();
     for (let currParam of HASH_FIELDS) {
       let currValue = getParamFromLocationHash(currParam);
-      if (!currValue && param !== currParam) continue;
+      if (!currValue && param !== currParam) {
+        continue;
+      }
       if (param === currParam) {
         paramValues.set(currParam, value);
       } else {

@@ -75,7 +75,9 @@ namespace MechModelView {
       let mechTeam = MechModel.getMechTeam(team);
       let idx :string = "0";
       for (idx in mechTeam) {
-        if (Number(idx) >= TITLE_MAX_MECHS) break;
+        if (Number(idx) >= TITLE_MAX_MECHS) {
+          break;
+        }
         let mech = mechTeam[idx];
         if (Number(idx) > 0) {
           teamTitle[team] += ", ";

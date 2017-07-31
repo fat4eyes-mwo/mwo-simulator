@@ -18,9 +18,9 @@ namespace Util {
       mid = Math.floor(low + ((high - low) / 2));
       midVal = array[mid];
 
-      if (keyCompare(key, midVal) < 0){
+      if (keyCompare(key, midVal) < 0) {
         high = mid - 1;
-      } else if (keyCompare(key, midVal) > 0){
+      } else if (keyCompare(key, midVal) > 0) {
         low = mid + 1;
       } else {
         return mid;

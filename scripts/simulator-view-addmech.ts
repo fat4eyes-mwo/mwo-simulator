@@ -59,24 +59,24 @@ namespace MechViewAddMech {
             resultPanelJQ.removeClass("error");
           });
 
-    if (!addMechDialog_OK_Handler) {
-      addMechDialog_OK_Handler = createAddMechDialog_OK();
+    if (!addMechDialogOKHandler) {
+      addMechDialogOKHandler = createAddMechDialogOKHandler();
     }
-    if (!addMechDialog_Cancel_Handler) {
-      addMechDialog_Cancel_Handler = createAddMechDialog_Cancel();
+    if (!addMechDialogCancelHandler) {
+      addMechDialogCancelHandler = createAddMechDialogCancelHandler();
     }
-    if (!addMechDialog_Load_Handler) {
-      addMechDialog_Load_Handler = createAddMechDialog_Load();
+    if (!addMechDialogLoadHandler) {
+      addMechDialogLoadHandler = createAddMechDialogLoadHandler();
     }
     $("#addMechDialog-ok").attr("data-team", team);
     addMechOKButton =
-        new MechViewWidgets.MechButton("addMechDialog-ok", addMechDialog_OK_Handler);
+        new MechViewWidgets.MechButton("addMechDialog-ok", addMechDialogOKHandler);
     $("#addMechDialog-cancel").attr("data-team", team);
     addMechCancelButton =
-        new MechViewWidgets.MechButton("addMechDialog-cancel", addMechDialog_Cancel_Handler);
+        new MechViewWidgets.MechButton("addMechDialog-cancel", addMechDialogCancelHandler);
     $("#addMechDialog-load").attr("data-team", team);
     addMechLoadButton =
-        new MechViewWidgets.MechButton("addMechDialog-load", addMechDialog_Load_Handler);
+        new MechViewWidgets.MechButton("addMechDialog-load", addMechDialogLoadHandler);
 
     addMechOKButton.disable();
 
@@ -90,7 +90,7 @@ namespace MechViewAddMech {
   }
 
   var loadedSmurfyLoadout : SmurfyMechLoadout = null;
-  var createAddMechDialog_OK = function() : ClickHandler {
+  var createAddMechDialogOKHandler = function() : ClickHandler {
     return function(this : Element) {
       let team = $(this).data('team');
       let url = $("#addMechDialog-text").val()
@@ -109,18 +109,18 @@ namespace MechViewAddMech {
       MechViewAddMech.hideAddMechDialog(team);
     }
   };
-  var addMechDialog_OK_Handler : ClickHandler; //set on dialog creation, singleton
+  var addMechDialogOKHandler : ClickHandler; //set on dialog creation, singleton
 
-  var createAddMechDialog_Cancel = function() : ClickHandler {
+  var createAddMechDialogCancelHandler = function() : ClickHandler {
     return function(this : Element) {
       let team = $(this).data('team');
       MechViewAddMech.hideAddMechDialog(team);
     }
   };
-  var addMechDialog_Cancel_Handler : ClickHandler; //set on dialog creation, singleton
+  var addMechDialogCancelHandler : ClickHandler; //set on dialog creation, singleton
 
   const SMURFY_PROXY_URL = "./php/smurfyproxy.php?path=";
-  var createAddMechDialog_Load = function() : ClickHandler {
+  var createAddMechDialogLoadHandler = function() : ClickHandler {
 
     return function(this : Element) {
       let team = $(this).data('team');
@@ -171,7 +171,7 @@ namespace MechViewAddMech {
       }
     }
   }
-  var addMechDialog_Load_Handler : ClickHandler; //set on dialog creation, singleton
+  var addMechDialogLoadHandler : ClickHandler; //set on dialog creation, singleton
 
   let SMURFY_BASE_URL = "http://mwo.smurfy-net.de/mechlab#";
   var createLoadedMechPanel =
@@ -224,7 +224,7 @@ namespace MechViewAddMech {
   }
 
   var loadedMechWeaponSpan =
-      function(name : string, number : number, type : string) : JQuery {
+      function(name : string, count : number, type : string) : JQuery {
     let numberClass = loadedMechWeaponClass(type);
     let weaponSpan = MechViewWidgets.cloneTemplate("loadedMechWeapon-template");
     let ret = $(weaponSpan);
@@ -232,7 +232,7 @@ namespace MechViewAddMech {
       .text(name);
     ret.find(".count")
       .addClass(numberClass)
-      .text(number);
+      .text(count);
     return ret;
   }
 

@@ -59,7 +59,7 @@ namespace MechAccuracyPattern {
         let perAdjacentComponentDamage = totalAdjacentDamage / 2;
         let adjacentComponents = MechModel.getAdjacentComponents(component);
         for (let adjacentComponent of adjacentComponents) {
-          let currentDamage = transformedDamage.damageMap[adjacentComponent];
+          currentDamage = transformedDamage.damageMap[adjacentComponent];
           transformedDamage.damageMap[adjacentComponent] = currentDamage ?
                                     currentDamage + perAdjacentComponentDamage
                                     : perAdjacentComponentDamage;
@@ -88,7 +88,7 @@ namespace MechAccuracyPattern {
         //the connectivity graph
         let perNextAdjacentComponentDamage = totalNextToAdjacentDamage / 2;
         for (let nextComponent of nextToAdjacentComponents) {
-          let currentDamage = transformedDamage.damageMap[nextComponent];
+          currentDamage = transformedDamage.damageMap[nextComponent];
           transformedDamage.damageMap[nextComponent] = currentDamage ?
                                   currentDamage + perNextAdjacentComponentDamage
                                   : perNextAdjacentComponentDamage;
@@ -329,7 +329,7 @@ namespace MechAccuracyPattern {
   export var getDefault = function() : AccuracyPattern {
     for (let patternEntry of getPatterns()) {
       if (patternEntry.default) {
-        return <AccuracyPattern> patternEntry.pattern;
+        return patternEntry.pattern as AccuracyPattern;
       }
     }
   }
@@ -391,6 +391,6 @@ namespace MechAccuracyPattern {
   }
 
   export var reset = function() {
-
+    //Used to reset any state used by accuracy pattern
   }
 }

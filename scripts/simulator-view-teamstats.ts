@@ -156,8 +156,10 @@ namespace MechViewTeamStats {
     ];
   }
 
-  var selectedPatterns : {[index:string] : {[index:string] : string}} = {}; //format is {<team>: {<patternTypeId>: <patternId>, ...}}
-  var patternLists : {[index:string] : Pattern[]}= {} //format is {<patternTypeId>: [patternList]}
+  //format is {<team>: {<patternTypeId>: <patternId>, ...}}
+  var selectedPatterns : {[index:string] : {[index:string] : string}} = {};
+  //format is {<patternTypeId>: [patternList]}
+  var patternLists : {[index:string] : Pattern[]}= {}
 
   var findPatternWithId = function(patternId : string, patternList : Pattern[]) : PatternFunction {
     for (let entry of patternList) {
@@ -271,8 +273,8 @@ namespace MechViewTeamStats {
       let mechPipDiv = document.getElementById(teamMechPipId(mechId));
       let percentHealth = Number(currHealth) / Number(maxHealth);
 
-      let color = MechViewWidgets.damageColor(percentHealth, MechViewWidgets.healthDamageGradient);
-      mechPipDiv.style.color = color;
+      let pipColor = MechViewWidgets.damageColor(percentHealth, MechViewWidgets.healthDamageGradient);
+      mechPipDiv.style.color = pipColor;
       if (isAlive) {
         mechPipDiv.textContent = "\u25A0"; //solid box
       } else {

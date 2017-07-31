@@ -103,7 +103,7 @@ namespace MechTargetComponent {
   export var getDefault = function() : TargetComponentPattern {
     for (let patternEntry of getPatterns()) {
       if (patternEntry.default) {
-        return <TargetComponentPattern> patternEntry.pattern;
+        return patternEntry.pattern as TargetComponentPattern;
       }
     }
   }
@@ -163,6 +163,6 @@ namespace MechTargetComponent {
   }
 
   export var reset = function() {
-
+    //Used to reset any state used by the pattern.
   }
 }

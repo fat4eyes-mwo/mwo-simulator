@@ -94,7 +94,8 @@ namespace MechModelWeapons {
         this.isOneShot = smurfyWeaponData.isOneShot ? true : false;
         this.volleyDelay = Number(smurfyWeaponData.volleyDelay) * 1000;
         this.weaponBonus = MechModelQuirks.getWeaponBonus(this);
-        //recompute heat to be heat per SHOT for continuous fire weapons (in smurfy heat is heat per second, not per shot)
+        //recompute heat to be heat per SHOT for continuous fire weapons
+        //(in smurfy heat is heat per second, not per shot)
         if (this.isContinuousFire()) {
           this.heat = this.heat / Number(smurfyWeaponData.rof);
         }
@@ -104,28 +105,28 @@ namespace MechModelWeapons {
         return this.baseSpeed * speedMultiplier;
       }
       set speed(data) {
-        throw "speed cannot be set.";
+        throw Error("speed cannot be set.");
       }
       get minRange() {
         //min range not affected by multiplier
         return this.baseMinRange;
       }
       set minRange(value) {
-        throw "minRange cannot be set."
+        throw Error("minRange cannot be set.");
       }
       get optRange() {
         let rangeMultiplier = 1 + Number(this.weaponBonus.range_multiplier);
         return this.baseOptRange * rangeMultiplier;
       }
       set optRange(value) {
-        throw "optRange cannot be set."
+        throw Error("optRange cannot be set.");
       }
       get maxRange() {
         let rangeMultiplier = 1 + Number(this.weaponBonus.range_multiplier);
         return this.baseMaxRange * rangeMultiplier;
       }
       set maxRange(value) {
-        throw "maxRange cannot be set."
+        throw Error("maxRange cannot be set.");
       }
       isContinuousFire() {
         return Number(this.duration) < 0;
@@ -158,13 +159,15 @@ namespace MechModelWeapons {
                       Number(rangeEntry.start) :
                       Number(rangeEntry.start) * rangeMultiplier;
           let upperBound = nextEntry.start * rangeMultiplier;
-          if (upperBound - lowerBound <= 0) continue; //no difference, continue to next
+          if (upperBound - lowerBound <= 0) {
+            continue; //no difference, continue to next
+          }
           if (range >= lowerBound && range <= upperBound) {
             if (rangeEntry.interpolationToNextRange === "linear") {
               let fraction = (range - lowerBound) / (upperBound - lowerBound);
               let currDamage = totalDamage * rangeEntry.damageModifier;
               let nextDamage = totalDamage * nextEntry.damageModifier;
-              let ret = currDamage - (currDamage - nextDamage) * fraction;
+              ret = currDamage - (currDamage - nextDamage) * fraction;
               return ret;
             } else if (rangeEntry.interpolationToNextRange === "exponential") {
               //TODO: Implement exponential damage interpolation
@@ -350,7 +353,7 @@ namespace MechModelWeapons {
       return false;
     }
     getJamProgress() : number {
-      throw "getJamProgress should only be called if hasJamBar() is true";
+      throw Error("getJamProgress should only be called if hasJamBar() is true");
     }
     //Computes the cooldown for this weapon on a mech, taking modifiers into account
     computeWeaponCooldown() {
@@ -666,8 +669,7 @@ namespace MechModelWeapons {
             cooldownChanged = cooldownChanged || autoFireStatus.cooldownChanged;
           }
         }
-      }
-      else{
+      } else {
         this.decrementJamBar(stepDuration);
         this.resetRampup();
         if (this.weaponCycle === WeaponCycle.COOLDOWN) {
@@ -744,7 +746,7 @@ namespace MechModelWeapons {
       if (this.weaponInfo.requiresAmmo()) {
         return this.ammoRemaining;
       } else {
-        throw "Unexpected: single shot weapon that does not require ammo";
+        throw Error("Unexpected: single shot weapon that does not require ammo");
       }
     }
 

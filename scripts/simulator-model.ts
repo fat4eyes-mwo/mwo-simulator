@@ -248,8 +248,12 @@ namespace MechModel  {
   }
 
   //TODO : is actually UpdateTypes -> boolean, try to see if it can be made explicit
-  export type UpdateSet = {[index:string] : boolean};
-  export type GhostHeatMap = {[index:string] : GhostHeatEntry[]}
+  export interface UpdateSet {
+    [index:string] : boolean
+  };
+  export interface GhostHeatMap {
+    [index:string] : GhostHeatEntry[]
+  }
   export class MechState {
     mechInfo : MechInfo;
     mechHealth : MechHealth;
@@ -498,7 +502,9 @@ namespace MechModel  {
         //calcluate ghost heat
         let ghostHeat = 0;
         if (ghostHeatWeapons.length >= weaponInfo.minHeatPenaltyLevel) {
-          ghostHeat = HEATMULTIPLIER[ghostHeatWeapons.length] * Number(weaponInfo.heatPenalty) * Number(weaponInfo.heat);
+          ghostHeat = HEATMULTIPLIER[ghostHeatWeapons.length]
+                      * Number(weaponInfo.heatPenalty)
+                      * Number(weaponInfo.heat);
         }
 
         return ghostHeat;
@@ -569,7 +575,9 @@ namespace MechModel  {
     }
   }
 
-  type AmmoCountMap = {[index : string] : AmmoCount};
+  interface AmmoCountMap {
+    [index : string] : AmmoCount
+  };
   export class AmmoState {
     ammoCounts : AmmoCountMap;
     ammoBoxList : AmmoBox[];
@@ -585,11 +593,14 @@ namespace MechModel  {
 
       //sort ammoBoxList in ammo consumption order so the lists in the ammoCounts
       //are also sorted in consumption order
-      //reference: https://mwomercs.com/forums/topic/65553-guide-ammo-depleting-priorities-or-in-what-order-is-your-ammo-being-used/
+      //reference:
+      //https://mwomercs.com/forums/topic/
+      //65553-guide-ammo-depleting-priorities-or-in-what-order-is-your-ammo-being-used/
       let ammoLocationOrderIndex = function(location : string) {
         const locationOrder =
-          [Component.HEAD, Component.CENTRE_TORSO, Component.RIGHT_TORSO, Component.LEFT_TORSO,
-            Component.LEFT_ARM, Component.RIGHT_ARM, Component.LEFT_LEG, Component.RIGHT_LEG];
+          [Component.HEAD, Component.CENTRE_TORSO, Component.RIGHT_TORSO,
+            Component.LEFT_TORSO, Component.LEFT_ARM, Component.RIGHT_ARM,
+            Component.LEFT_LEG, Component.RIGHT_LEG];
         let idx = 0;
         for (idx = 0; idx < locationOrder.length; idx++) {
           if (location === locationOrder[idx]) {
@@ -765,7 +776,7 @@ namespace MechModel  {
           return engineMap[enginePrefix];
         }
       }
-      throw "Unknown engine type. Name: " + name;
+      throw Error("Unknown engine type. Name: " + name);
     }
   }
 
@@ -840,8 +851,8 @@ namespace MechModel  {
       let weaponAccuracyPattern =
           MechAccuracyPattern.getWeaponAccuracyPattern(weaponInfo);
       if (weaponAccuracyPattern) {
-        let transformedWeaponDamage = weaponAccuracyPattern(baseWeaponDamage, range);
-        baseWeaponDamage = transformedWeaponDamage;
+        let weaponAccuracyDamage = weaponAccuracyPattern(baseWeaponDamage, range);
+        baseWeaponDamage = weaponAccuracyDamage;
       }
       //transform the baseWeaponDamage using the mech's accuracy pattern
       let transformedWeaponDamage = this.sourceMech.accuracyPattern(baseWeaponDamage, range);
@@ -902,7 +913,7 @@ namespace MechModel  {
         }
       } else {
         //should not happen
-        throw "Unexpected WeaponFire type";
+        throw Error("Unexpected WeaponFire type");
       }
     }
 
@@ -1002,7 +1013,9 @@ namespace MechModel  {
 
   //Damage dealt by a weapon.
   //Component -> Number
-  export type DamageMap = {[index:string] : number};
+  export interface DamageMap {
+    [index:string] : number
+  };
   export class WeaponDamage {
     damageMap : DamageMap;
 
@@ -1114,8 +1127,12 @@ namespace MechModel  {
   //NOTE: Process the omnipod data so the omnipod ID is the
   //main index (instead of the chassis name)
   //also finds the CT omnipods and puts them in a set->omnipod map
-  type FlatOmnipodData = {[index:string] : SmurfyOmnipod};
-  type CTOmnipodMap = {[index:string] : SmurfyOmnipod};
+  interface FlatOmnipodData {
+    [index:string] : SmurfyOmnipod
+  };
+  interface CTOmnipodMap {
+    [index:string] : SmurfyOmnipod
+  };
   var flattenOmnipodData = function(smurfyOmnipodData : SmurfyOmnipodData) {
     let flatOmnipodData : FlatOmnipodData = {};
     let ctOmnipodMap : CTOmnipodMap = {};
@@ -1150,7 +1167,7 @@ namespace MechModel  {
       SmurfyCTOmnipods = flatData.ctOmnipodMap;
     }
 
-    let initPromises : Promise<string>[] = [];
+    let initPromises : Array<Promise<string>> = [];
     for (let path of dataPaths) {
       initPromises.push(initDataPromise(path));
     }
@@ -1523,7 +1540,9 @@ namespace MechModel  {
 
     //non-fixed heatsinks
     for (let heatsink of heatsinkInfoList) {
-      if (!heatsink.active) continue;
+      if (!heatsink.active) {
+        continue;
+      }
       if (heatsink.location === Component.CENTRE_TORSO) {
       //NOTE: internal non-fixed heatsinks are included in the engine heatsink count
         // heatCapacity += Number(heatsink.internalHeatCapacity);
@@ -1590,24 +1609,24 @@ namespace MechModel  {
     componentTargetPattern : MechTargetComponent.TargetComponentPattern; //Set after initialization
     mechTargetPattern : MechTargetMech.TargetMechPattern; //set after initialization
     accuracyPattern : MechAccuracyPattern.AccuracyPattern; //set after initialization
-    private smurfy_mech_id : string;
+    private smurfyMechId : string;
     private smurfyMechData : SmurfyMechData;
-    private mech_id : string;
+    private mechId : string;
     private mechInfo : MechInfo;
     private mechState : MechState;
     private mechTeam : string;
     private targetMech : Mech;
 
-    constructor(new_mech_id : string,
+    constructor(newMechId : string,
                 team : string,
                 smurfyMechLoadout : SmurfyMechLoadout) {
-      this.smurfy_mech_id = smurfyMechLoadout.mech_id;
-      this.smurfyMechData = getSmurfyMechData(this.smurfy_mech_id);
-      this.mech_id = new_mech_id;
-      this.mechInfo = new MechInfo(new_mech_id, smurfyMechLoadout);
+      this.smurfyMechId = smurfyMechLoadout.mech_id;
+      this.smurfyMechData = getSmurfyMechData(this.smurfyMechId);
+      this.mechId = newMechId;
+      this.mechInfo = new MechInfo(newMechId, smurfyMechLoadout);
       this.mechState = new MechState(this.mechInfo);
       this.mechTeam = team;
-      this.targetMech; //set by simulation
+      this.targetMech = null; //set by simulation
     }
 
     getName() {
@@ -1617,7 +1636,7 @@ namespace MechModel  {
       return this.smurfyMechData.translated_name;
     }
     getMechId() {
-      return this.mech_id;
+      return this.mechId;
     }
     getMechInfo()  {
       return this.mechInfo;
@@ -1646,26 +1665,26 @@ namespace MechModel  {
     return mechTeams[team];
   }
 
-  export var addMech = function(mech_id : string,
+  export var addMech = function(mechId : string,
                                 team : string,
                                 smurfyMechLoadout : SmurfyMechLoadout)
                                 : Mech {
-    var newMech = new Mech(mech_id, team, smurfyMechLoadout);
+    var newMech = new Mech(mechId, team, smurfyMechLoadout);
     mechTeams[team].push(newMech);
-    console.log("Added mech mech_id: " + mech_id +
+    console.log("Added mech mech_id: " + mechId +
       " translated_mech_name: " + newMech.getTranslatedName());
     initMechPatterns(newMech);
     return newMech;
   };
 
-  export var addMechAtIndex = function(mech_id : string,
+  export var addMechAtIndex = function(mechId : string,
                                   team : string,
                                   smurfyMechLoadout : SmurfyMechLoadout,
                                   index : number)
                                   : Mech {
-    var newMech = new Mech(mech_id, team, smurfyMechLoadout);
+    var newMech = new Mech(mechId, team, smurfyMechLoadout);
     mechTeams[team][index] = newMech;
-    console.log("Added mech mech_id: " + mech_id
+    console.log("Added mech mech_id: " + mechId
       + " translated_mech_name: " + newMech.getTranslatedName()
       + " at index " + index);
     initMechPatterns(newMech);
@@ -1677,13 +1696,13 @@ namespace MechModel  {
     team : string;
     index : number;
   }
-  var getMechPosFromId = function(mech_id : string) : MechPos {
+  var getMechPosFromId = function(mechId : string) : MechPos {
     let teamList = [Team.BLUE, Team.RED];
     for (let team of teamList) {
       let mechList = mechTeams[team];
       for (let mechIdx in mechList) {
         let mech = mechList[mechIdx];
-        if (mech.getMechId() === mech_id) {
+        if (mech.getMechId() === mechId) {
           return {team: team, index: Number(mechIdx)};
         }
       }
@@ -1695,9 +1714,11 @@ namespace MechModel  {
     return mechTeams[mechPos.team][mechPos.index];
   }
 
-  export var deleteMech = function(mech_id : string) : boolean {
-    let mechPos = getMechPosFromId(mech_id);
-    if (!mechPos) return false;
+  export var deleteMech = function(mechId : string) : boolean {
+    let mechPos = getMechPosFromId(mechId);
+    if (!mechPos) {
+      return false;
+    }
     let mechList = mechTeams[mechPos.team];
     mechList.splice(mechPos.index, 1);
     return true;
@@ -1707,12 +1728,16 @@ namespace MechModel  {
   export var moveMech =
       function(srcMechId : string, destMechId : string) : boolean {
     let srcMechPos = getMechPosFromId(srcMechId);
-    if (!srcMechPos) return false;
+    if (!srcMechPos) {
+      return false;
+    }
 
     let srcMech = getMechFromPos(srcMechPos);
 
     let status = deleteMech(srcMechId);
-    if (!status) return false;
+    if (!status) {
+      return false;
+    }
 
     //get dest pos AFTER delete to keep indices straight when moving in the same list
     let destMechPos = getMechPosFromId(destMechId);
@@ -1894,7 +1919,9 @@ namespace MechModel  {
 
   export var getMechFromId = function(mechId : string) : Mech {
     let mechPos = getMechPosFromId(mechId);
-    if (!mechPos) return null;
+    if (!mechPos) {
+      return null;
+    }
 
     return mechTeams[mechPos.team][mechPos.index];
   }

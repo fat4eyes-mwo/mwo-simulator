@@ -104,7 +104,7 @@ namespace MechViewReport {
       } else if (team === "red") {
         return "Red";
       } else {
-        throw "Unexpected team: " + team;
+        throw Error("Unexpected team: " + team);
       }
     }
   }

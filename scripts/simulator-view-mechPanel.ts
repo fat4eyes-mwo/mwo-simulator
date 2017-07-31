@@ -245,7 +245,7 @@ namespace MechViewMechPanel {
                 ammo : number)
                 : void {
     let weaponAmmoDiv : Node = document.getElementById(weaponAmmoId(mechId, weaponIdx));
-    weaponAmmoDiv.textContent = ammo != -1 ? String(ammo) : "\u221e"; //infinity symbol
+    weaponAmmoDiv.textContent = ammo !== -1 ? String(ammo) : "\u221e"; //infinity symbol
   }
 
   export var setWeaponState =
@@ -465,8 +465,8 @@ namespace MechViewMechPanel {
               team : Team,
               mechPanelJQ : JQuery)
               : void {
-    if (!deleteMechButton_Handler) {
-      deleteMechButton_Handler = createDeleteMechButtonHandler();
+    if (!deleteMechButtonHandler) {
+      deleteMechButtonHandler = createDeleteMechButtonHandler();
     }
     let deleteIconSVG = MechViewWidgets.cloneTemplate("delete-icon-template");
     let mechDeleteButtonDivId = mechDeleteButtonId(mechId);
@@ -474,7 +474,7 @@ namespace MechViewMechPanel {
       .attr("id", mechDeleteButtonDivId)
       .attr("data-mech-id", mechId)
       .append(deleteIconSVG)
-      .click(deleteMechButton_Handler);
+      .click(deleteMechButtonHandler);
   }
 
   var createDeleteMechButtonHandler = function() {
@@ -483,7 +483,7 @@ namespace MechViewMechPanel {
       console.log("Deleting " + mechId);
       let result = MechModel.deleteMech(mechId);
       if (!result) {
-        throw "Error deleting " + mechId;
+        throw Error("Error deleting " + mechId);
       }
       MechViewRouter.modifyAppState();
       let mechPanelDivId = mechPanelId(mechId);
@@ -493,7 +493,7 @@ namespace MechViewMechPanel {
       MechModelView.refreshView([MechModelView.ViewUpdate.TEAMSTATS]);
     };
   }
-  var deleteMechButton_Handler : () => void; //singleton
+  var deleteMechButtonHandler : () => void; //singleton
 
   var moveMechButtonId = function(mechId : string) : string {
     return mechId + "-moveButton";
@@ -505,15 +505,15 @@ namespace MechViewMechPanel {
               : void {
     let moveIconSVG = MechViewWidgets.cloneTemplate("move-icon-template");
     let mechMoveButtonDivId = moveMechButtonId(mechId);
-    if (!moveMechButton_handler) {
-      moveMechButton_handler = createMoveMechButtonHandler();
+    if (!moveMechButtonHandler) {
+      moveMechButtonHandler = createMoveMechButtonHandler();
     }
     mechPanelJQ.find("[class~='titlePanel'] [class~='moveMechButton']")
       .attr("id", mechMoveButtonDivId)
       .attr("data-mech-id", mechId)
       .attr("data-dragenabled", "false")
       .append(moveIconSVG)
-      .click(moveMechButton_handler);
+      .click(moveMechButtonHandler);
   }
 
   var toggleMoveMech = function(mechId : string) : void {
@@ -540,7 +540,7 @@ namespace MechViewMechPanel {
       toggleMoveMech(mechId);
     }
   }
-  var moveMechButton_handler : () => void; //initialized on first addMoveMechButton call
+  var moveMechButtonHandler : () => void; //initialized on first addMoveMechButton call
 
   var addDragAndDropHandlers =
       function(mechId : string, mechPanelJQ : JQuery) : void {
@@ -564,7 +564,7 @@ namespace MechViewMechPanel {
     return function(this : Element,
                     jqEvent : JQuery.Event) {
       let mechId = $(this).data("mech-id");
-      let origEvent = <DragEvent> jqEvent.originalEvent;
+      let origEvent = jqEvent.originalEvent as DragEvent;
       origEvent.dataTransfer.setData("text/plain", mechId);
       origEvent.dataTransfer.effectAllowed = "move";
       console.log("Drag start: " + mechId);
@@ -578,7 +578,7 @@ namespace MechViewMechPanel {
                     jqEvent : JQuery.Event) {
       let thisJQ = $(this);
       let mechId = thisJQ.data("mech-id");
-      let origEvent= <DragEvent> jqEvent.originalEvent;
+      let origEvent= jqEvent.originalEvent as DragEvent;
 
       jqEvent.preventDefault();
       //allow move on drop
@@ -600,7 +600,7 @@ namespace MechViewMechPanel {
                     jqEvent : JQuery.Event) : void {
       let thisJQ = $(this);
       let mechId = thisJQ.data("mech-id");
-      let origEvent= <DragEvent>jqEvent.originalEvent;
+      let origEvent= jqEvent.originalEvent as DragEvent;
       let srcMechId = origEvent.dataTransfer.getData("text/plain");
       jqEvent.preventDefault();
 

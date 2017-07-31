@@ -67,7 +67,9 @@ namespace MechFirePattern {
     let weaponsToFire = [];
     //check if all weapons are ready
     for (let weaponState of mechState.weaponStateList) {
-      if (!canFire(weaponState) && !weaponState.isJammed()) return [];
+      if (!canFire(weaponState) && !weaponState.isJammed()) {
+        return [];
+      }
     }
     weaponsToFire = Array.from(mechState.weaponStateList);
     if (!willOverheat(mech, weaponsToFire)) {
@@ -82,7 +84,9 @@ namespace MechFirePattern {
     let mechState = mech.getMechState();
     let weaponsToFire = [];
     for (let weaponState of mechState.weaponStateList) {
-      if (!canFire(weaponState) || !willDoDamage(weaponState, range)) continue;
+      if (!canFire(weaponState) || !willDoDamage(weaponState, range)) {
+        continue;
+      }
       weaponsToFire.push(weaponState);
       if (willGhostHeat(mech, weaponsToFire) || willOverheat(mech, weaponsToFire)) {
         weaponsToFire.pop();
@@ -159,7 +163,7 @@ namespace MechFirePattern {
   export var getDefault = function() : FirePattern {
     for (let patternEntry of getPatterns()) {
       if (patternEntry.default) {
-        return <FirePattern> patternEntry.pattern;
+        return patternEntry.pattern as FirePattern;
       }
     }
   }
@@ -196,6 +200,6 @@ namespace MechFirePattern {
   }
 
   export var reset = function() {
-
+    //Used to reset any state used by the pattern.
   }
 }

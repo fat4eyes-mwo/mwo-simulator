@@ -74,8 +74,10 @@ namespace MechTest {
       MechViewMechPanel.setHeatbarValue(mech.getMechId(), Math.random());
       for (var i = 0; i < mech.getMechInfo().weaponInfoList.length; i++) {
         MechViewMechPanel.setWeaponCooldown(mech.getMechId(), i, Math.random());
-        MechViewMechPanel.setWeaponAmmo(mech.getMechId(), i, Math.random() > 0.2 ? Math.floor(Math.random() * 100) : -1);
-        MechViewMechPanel.setWeaponState(mech.getMechId(), i, weaponStates[Math.floor(weaponStates.length * Math.random())]);
+        MechViewMechPanel.setWeaponAmmo(
+            mech.getMechId(), i, Math.random() > 0.2 ? Math.floor(Math.random() * 100) : -1);
+        MechViewMechPanel.setWeaponState(
+          mech.getMechId(), i, weaponStates[Math.floor(weaponStates.length * Math.random())]);
       }
     });
   }
@@ -105,7 +107,8 @@ namespace MechTest {
         if (Component.hasOwnProperty(property)) {
           var structure = MechModel.baseMechStructure(Component[property], tonnage);
           var armor = MechModel.baseMechArmor(Component[property], tonnage);
-          console.log("Tonnage: " + tonnage + " " + Component[property] + " structure:" + structure + " armor:" + armor);
+          console.log("Tonnage: " + tonnage + " " + Component[property] +
+                        " structure:" + structure + " armor:" + armor);
         }
       }
     }
@@ -203,16 +206,15 @@ namespace MechTest {
   }
 
   export var testSpreadAdjacentDamage = function() {
-    var printTestDamageTransform = function(testDamage: DamageMap, accuracyPattern: AccuracyPattern) {
-      let weaponDamage = new MechModel.WeaponDamage(testDamage);
+    var printTestDamageTransform = function(damage: DamageMap, pattern: AccuracyPattern) {
+      let weaponDamage = new MechModel.WeaponDamage(damage);
       let transformedDamage = accuracyPattern(weaponDamage, 200);
       console.log("original damage: " + weaponDamage.toString());
       console.log("transformedDamage: " + transformedDamage.toString());
     }
     let accuracyPattern = MechAccuracyPattern.accuracySpreadToAdjacent(0.5, 0.5, 0);
     let accuracyPatternNext = MechAccuracyPattern.accuracySpreadToAdjacent(0.5, 0.3, 0.2);
-    let testDamage: DamageMap =
-      {
+    let testDamage: DamageMap = {
         "centre_torso": 10,
         "right_torso": 2.5,
         "left_torso": 2.5
@@ -361,7 +363,7 @@ namespace MechTest {
   }
 
   export var testPersistence = function() {
-    var statehash;
+    var statehash : string;
     initDummyModelData();
     initTestModelState();
     MechView.initView();
@@ -382,7 +384,7 @@ namespace MechTest {
       console.log("Done save app state. Data: " + data);
     });
 
-    var testGetAppState = function(statehash: string) {
+    var testGetAppState = function(hash : string) {
       Promise.resolve(MechViewRouter.loadAppState(statehash)
         .then(function(data) {
           console.log("Success on load app state. Data: " + data);
@@ -499,14 +501,15 @@ namespace MechTest {
       let transformedDamage = lrmPattern(newTestDamage(), range);
       console.log("Range: " + range + " " + transformedDamage.toString());
 
-      for (let range = 200; range <= 1000; range += 100) {
-        let transformedDamage = lrmPattern(newTestDamage(), range);
+      for (range = 200; range <= 1000; range += 100) {
+        transformedDamage = lrmPattern(newTestDamage(), range);
         console.log("Range: " + range + " " + transformedDamage.toString());
       }
     }
   }
 
   var testScratch = function() {
+    //Scratch test
   }
 
 }

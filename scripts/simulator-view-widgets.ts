@@ -50,14 +50,14 @@ namespace MechViewWidgets {
             damageGradient, percent, (key, colorValue) => {
       return key - colorValue.value;
     });
-    if (damageIdx == -1) {
+    if (damageIdx === -1) {
       damageIdx = 0;
     }
     let nextIdx = damageIdx + 1;
     nextIdx = (nextIdx < damageGradient.length) ? nextIdx : damageIdx;
     let rgb = damageGradient[damageIdx].RGB;
     let nextRgb = damageGradient[nextIdx].RGB;
-    let percentDiff = (damageIdx != nextIdx) ?
+    let percentDiff = (damageIdx !== nextIdx) ?
         (percent - damageGradient[damageIdx].value) /
             (damageGradient[nextIdx].value - damageGradient[damageIdx].value)
         : 1;
@@ -144,7 +144,7 @@ namespace MechViewWidgets {
   //Clones a template and returns the first element of the template
   export var cloneTemplate = function(templateName : string) : Element {
     let template : HTMLTemplateElement =
-        <HTMLTemplateElement> document.querySelector("#" + templateName);
+        document.querySelector("#" + templateName) as HTMLTemplateElement;
     let templateElement = document.importNode(template.content, true);
     return templateElement.firstElementChild;
   }

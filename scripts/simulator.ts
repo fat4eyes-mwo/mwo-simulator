@@ -50,7 +50,7 @@ namespace MechSimulator {
       });
   }
 
-  function initUI() : void{
+  function initUI() : void {
     MechModelView.refreshView();
   }
 

@@ -3290,7 +3290,7 @@ var MechAccuracyPattern;
                 let perAdjacentComponentDamage = totalAdjacentDamage / 2;
                 let adjacentComponents = MechModel.getAdjacentComponents(component);
                 for (let adjacentComponent of adjacentComponents) {
-                    let currentDamage = transformedDamage.damageMap[adjacentComponent];
+                    currentDamage = transformedDamage.damageMap[adjacentComponent];
                     transformedDamage.damageMap[adjacentComponent] = currentDamage ?
                         currentDamage + perAdjacentComponentDamage
                         : perAdjacentComponentDamage;
@@ -3316,7 +3316,7 @@ var MechAccuracyPattern;
                 //the connectivity graph
                 let perNextAdjacentComponentDamage = totalNextToAdjacentDamage / 2;
                 for (let nextComponent of nextToAdjacentComponents) {
-                    let currentDamage = transformedDamage.damageMap[nextComponent];
+                    currentDamage = transformedDamage.damageMap[nextComponent];
                     transformedDamage.damageMap[nextComponent] = currentDamage ?
                         currentDamage + perNextAdjacentComponentDamage
                         : perNextAdjacentComponentDamage;
@@ -3592,6 +3592,7 @@ var MechAccuracyPattern;
         return patternList;
     };
     MechAccuracyPattern.reset = function () {
+        //Used to reset any state used by accuracy pattern
     };
 })(MechAccuracyPattern || (MechAccuracyPattern = {}));
 /// <reference path="common/simulator-model-common.ts" />
@@ -3742,6 +3743,7 @@ var MechTargetComponent;
         return patternList;
     };
     MechTargetComponent.reset = function () {
+        //Used to reset any state used by the pattern.
     };
 })(MechTargetComponent || (MechTargetComponent = {}));
 /// <reference path="common/simulator-model-common.ts" />
@@ -3802,8 +3804,9 @@ var MechFirePattern;
         let weaponsToFire = [];
         //check if all weapons are ready
         for (let weaponState of mechState.weaponStateList) {
-            if (!canFire(weaponState) && !weaponState.isJammed())
+            if (!canFire(weaponState) && !weaponState.isJammed()) {
                 return [];
+            }
         }
         weaponsToFire = Array.from(mechState.weaponStateList);
         if (!willOverheat(mech, weaponsToFire)) {
@@ -3817,8 +3820,9 @@ var MechFirePattern;
         let mechState = mech.getMechState();
         let weaponsToFire = [];
         for (let weaponState of mechState.weaponStateList) {
-            if (!canFire(weaponState) || !willDoDamage(weaponState, range))
+            if (!canFire(weaponState) || !willDoDamage(weaponState, range)) {
                 continue;
+            }
             weaponsToFire.push(weaponState);
             if (willGhostHeat(mech, weaponsToFire) || willOverheat(mech, weaponsToFire)) {
                 weaponsToFire.pop();
@@ -3919,6 +3923,7 @@ var MechFirePattern;
         return patternList;
     };
     MechFirePattern.reset = function () {
+        //Used to reset any state used by the pattern.
     };
 })(MechFirePattern || (MechFirePattern = {}));
 /// <reference path="common/simulator-model-common.ts" />
@@ -4079,7 +4084,7 @@ var MechSimulatorLogic;
         else if (myTeam === Team.RED) {
             return Team.BLUE;
         }
-        throw "Unable to find enemy team";
+        throw Error("Unable to find enemy team");
     };
     //Give a mech and a list of weaponStates
     //(which must be contained in mech.mechState.weaponStateList)
@@ -4122,7 +4127,7 @@ var MechSimulatorLogic;
         let stepHeatDissipation = MechSimulatorLogic.getStepDuration() * heatState.currHeatDissipation / 1000;
         let prevHeat = heatState.currHeat;
         heatState.currHeat = Math.max(0, heatState.currHeat - Number(stepHeatDissipation));
-        if (heatState.currHeat != prevHeat) {
+        if (heatState.currHeat !== prevHeat) {
             mechState.setUpdate(UpdateType.HEAT);
         }
     };
@@ -4151,7 +4156,7 @@ var MechSimulatorLogic;
         }
     };
     var processWeaponFires = function () {
-        if (weaponFireQueue.length == 0) {
+        if (weaponFireQueue.length === 0) {
             return;
         }
         //Go through each entry in the current queue. Need to keep the start length
@@ -4340,6 +4345,7 @@ var MechModelQuirks;
         }
         return ret;
     };
+    ;
     MechModelQuirks.getGeneralBonus = function (quirkList) {
         let ret = {};
         for (let quirk of quirkList) {
@@ -4359,22 +4365,27 @@ var MechModelQuirks;
         for (let quirk of quirkList) {
             if (quirk.name.startsWith(MechModelQuirks._quirkArmorPrefix)) {
                 let quirkComponent = quirk.name.split("_")[1];
-                if (MechModelQuirks._quirkComponentMap[component] !== quirkComponent)
+                if (MechModelQuirks._quirkComponentMap[component] !== quirkComponent) {
                     continue;
+                }
                 ret.armor += Number(quirk.value);
             }
             else if (quirk.name.startsWith(MechModelQuirks._quirkStructurePrefix)) {
                 let quirkComponent = quirk.name.split("_")[1];
-                if (MechModelQuirks._quirkComponentMap[component] !== quirkComponent)
+                if (MechModelQuirks._quirkComponentMap[component] !== quirkComponent) {
                     continue;
+                }
                 ret.structure += Number(quirk.value);
             }
         }
         return ret;
     };
+    ;
     class ReverseWeaponQuirkMap {
         constructor() {
             this.reversedWeaponNameMap = null;
+            //Do nothing, reverse map will be initialized the first time
+            //getReversedWeaponNameMap is called
         }
         getApplicableQuirks(weaponName) {
             return this.getReversedWeaponNameMap()[weaponName];
@@ -4402,6 +4413,7 @@ var MechModelQuirks;
         }
     }
     var reversedWeaponQuirkMap = new ReverseWeaponQuirkMap();
+    ;
     MechModelQuirks.getWeaponBonus = function (weaponInfo) {
         let quirkList = weaponInfo.mechInfo.quirks;
         let ret = { cooldown_multiplier: 0, duration_multiplier: 0,
@@ -4480,7 +4492,8 @@ var MechModelWeapons;
             this.isOneShot = smurfyWeaponData.isOneShot ? true : false;
             this.volleyDelay = Number(smurfyWeaponData.volleyDelay) * 1000;
             this.weaponBonus = MechModelQuirks.getWeaponBonus(this);
-            //recompute heat to be heat per SHOT for continuous fire weapons (in smurfy heat is heat per second, not per shot)
+            //recompute heat to be heat per SHOT for continuous fire weapons
+            //(in smurfy heat is heat per second, not per shot)
             if (this.isContinuousFire()) {
                 this.heat = this.heat / Number(smurfyWeaponData.rof);
             }
@@ -4490,28 +4503,28 @@ var MechModelWeapons;
             return this.baseSpeed * speedMultiplier;
         }
         set speed(data) {
-            throw "speed cannot be set.";
+            throw Error("speed cannot be set.");
         }
         get minRange() {
             //min range not affected by multiplier
             return this.baseMinRange;
         }
         set minRange(value) {
-            throw "minRange cannot be set.";
+            throw Error("minRange cannot be set.");
         }
         get optRange() {
             let rangeMultiplier = 1 + Number(this.weaponBonus.range_multiplier);
             return this.baseOptRange * rangeMultiplier;
         }
         set optRange(value) {
-            throw "optRange cannot be set.";
+            throw Error("optRange cannot be set.");
         }
         get maxRange() {
             let rangeMultiplier = 1 + Number(this.weaponBonus.range_multiplier);
             return this.baseMaxRange * rangeMultiplier;
         }
         set maxRange(value) {
-            throw "maxRange cannot be set.";
+            throw Error("maxRange cannot be set.");
         }
         isContinuousFire() {
             return Number(this.duration) < 0;
@@ -4543,14 +4556,15 @@ var MechModelWeapons;
                     Number(rangeEntry.start) :
                     Number(rangeEntry.start) * rangeMultiplier;
                 let upperBound = nextEntry.start * rangeMultiplier;
-                if (upperBound - lowerBound <= 0)
+                if (upperBound - lowerBound <= 0) {
                     continue; //no difference, continue to next
+                }
                 if (range >= lowerBound && range <= upperBound) {
                     if (rangeEntry.interpolationToNextRange === "linear") {
                         let fraction = (range - lowerBound) / (upperBound - lowerBound);
                         let currDamage = totalDamage * rangeEntry.damageModifier;
                         let nextDamage = totalDamage * nextEntry.damageModifier;
-                        let ret = currDamage - (currDamage - nextDamage) * fraction;
+                        ret = currDamage - (currDamage - nextDamage) * fraction;
                         return ret;
                     }
                     else if (rangeEntry.interpolationToNextRange === "exponential") {
@@ -4706,7 +4720,7 @@ var MechModelWeapons;
             return false;
         }
         getJamProgress() {
-            throw "getJamProgress should only be called if hasJamBar() is true";
+            throw Error("getJamProgress should only be called if hasJamBar() is true");
         }
         //Computes the cooldown for this weapon on a mech, taking modifiers into account
         computeWeaponCooldown() {
@@ -5086,7 +5100,7 @@ var MechModelWeapons;
                 return this.ammoRemaining;
             }
             else {
-                throw "Unexpected: single shot weapon that does not require ammo";
+                throw Error("Unexpected: single shot weapon that does not require ammo");
             }
         }
         consumeAmmo() {
@@ -5284,6 +5298,7 @@ var MechModel;
         }
     }
     MechModel.GhostHeatEntry = GhostHeatEntry;
+    ;
     class MechState {
         constructor(mechInfo) {
             //Calculates the ghost heat incurred by a weapon
@@ -5329,7 +5344,9 @@ var MechModel;
                 //calcluate ghost heat
                 let ghostHeat = 0;
                 if (ghostHeatWeapons.length >= weaponInfo.minHeatPenaltyLevel) {
-                    ghostHeat = HEATMULTIPLIER[ghostHeatWeapons.length] * Number(weaponInfo.heatPenalty) * Number(weaponInfo.heat);
+                    ghostHeat = HEATMULTIPLIER[ghostHeatWeapons.length]
+                        * Number(weaponInfo.heatPenalty)
+                        * Number(weaponInfo.heat);
                 }
                 return ghostHeat;
             };
@@ -5545,6 +5562,7 @@ var MechModel;
         }
     }
     MechModel.HeatState = HeatState;
+    ;
     class AmmoState {
         constructor(mechInfo) {
             let sourceAmmoBoxList = mechInfo.ammoBoxList;
@@ -5555,10 +5573,13 @@ var MechModel;
             }
             //sort ammoBoxList in ammo consumption order so the lists in the ammoCounts
             //are also sorted in consumption order
-            //reference: https://mwomercs.com/forums/topic/65553-guide-ammo-depleting-priorities-or-in-what-order-is-your-ammo-being-used/
+            //reference:
+            //https://mwomercs.com/forums/topic/
+            //65553-guide-ammo-depleting-priorities-or-in-what-order-is-your-ammo-being-used/
             let ammoLocationOrderIndex = function (location) {
-                const locationOrder = [Component.HEAD, Component.CENTRE_TORSO, Component.RIGHT_TORSO, Component.LEFT_TORSO,
-                    Component.LEFT_ARM, Component.RIGHT_ARM, Component.LEFT_LEG, Component.RIGHT_LEG];
+                const locationOrder = [Component.HEAD, Component.CENTRE_TORSO, Component.RIGHT_TORSO,
+                    Component.LEFT_TORSO, Component.LEFT_ARM, Component.RIGHT_ARM,
+                    Component.LEFT_LEG, Component.RIGHT_LEG];
                 let idx = 0;
                 for (idx = 0; idx < locationOrder.length; idx++) {
                     if (location === locationOrder[idx]) {
@@ -5706,7 +5727,7 @@ var MechModel;
                     return engineMap[enginePrefix];
                 }
             }
-            throw "Unknown engine type. Name: " + name;
+            throw Error("Unknown engine type. Name: " + name);
         }
     }
     MechModel.EngineInfo = EngineInfo;
@@ -5753,8 +5774,8 @@ var MechModel;
             let baseWeaponDamage = new WeaponDamage(baseWeaponDamageMap);
             let weaponAccuracyPattern = MechAccuracyPattern.getWeaponAccuracyPattern(weaponInfo);
             if (weaponAccuracyPattern) {
-                let transformedWeaponDamage = weaponAccuracyPattern(baseWeaponDamage, range);
-                baseWeaponDamage = transformedWeaponDamage;
+                let weaponAccuracyDamage = weaponAccuracyPattern(baseWeaponDamage, range);
+                baseWeaponDamage = weaponAccuracyDamage;
             }
             //transform the baseWeaponDamage using the mech's accuracy pattern
             let transformedWeaponDamage = this.sourceMech.accuracyPattern(baseWeaponDamage, range);
@@ -5818,7 +5839,7 @@ var MechModel;
             }
             else {
                 //should not happen
-                throw "Unexpected WeaponFire type";
+                throw Error("Unexpected WeaponFire type");
             }
         }
         toString() {
@@ -5911,6 +5932,7 @@ var MechModel;
         }
     }
     MechModel.ComponentDamage = ComponentDamage;
+    ;
     class WeaponDamage {
         constructor(damageMap) {
             this.damageMap = damageMap;
@@ -6008,6 +6030,8 @@ var MechModel;
             });
         });
     };
+    ;
+    ;
     var flattenOmnipodData = function (smurfyOmnipodData) {
         let flatOmnipodData = {};
         let ctOmnipodMap = {};
@@ -6331,8 +6355,9 @@ var MechModel;
         let heatDissipation = 0;
         //non-fixed heatsinks
         for (let heatsink of heatsinkInfoList) {
-            if (!heatsink.active)
+            if (!heatsink.active) {
                 continue;
+            }
             if (heatsink.location === Component.CENTRE_TORSO) {
                 //NOTE: internal non-fixed heatsinks are included in the engine heatsink count
                 // heatCapacity += Number(heatsink.internalHeatCapacity);
@@ -6396,14 +6421,14 @@ var MechModel;
     };
     //constructor
     class Mech {
-        constructor(new_mech_id, team, smurfyMechLoadout) {
-            this.smurfy_mech_id = smurfyMechLoadout.mech_id;
-            this.smurfyMechData = MechModel.getSmurfyMechData(this.smurfy_mech_id);
-            this.mech_id = new_mech_id;
-            this.mechInfo = new MechInfo(new_mech_id, smurfyMechLoadout);
+        constructor(newMechId, team, smurfyMechLoadout) {
+            this.smurfyMechId = smurfyMechLoadout.mech_id;
+            this.smurfyMechData = MechModel.getSmurfyMechData(this.smurfyMechId);
+            this.mechId = newMechId;
+            this.mechInfo = new MechInfo(newMechId, smurfyMechLoadout);
             this.mechState = new MechState(this.mechInfo);
             this.mechTeam = team;
-            this.targetMech; //set by simulation
+            this.targetMech = null; //set by simulation
         }
         getName() {
             return this.smurfyMechData.name;
@@ -6412,7 +6437,7 @@ var MechModel;
             return this.smurfyMechData.translated_name;
         }
         getMechId() {
-            return this.mech_id;
+            return this.mechId;
         }
         getMechInfo() {
             return this.mechInfo;
@@ -6440,30 +6465,30 @@ var MechModel;
     MechModel.getMechTeam = function (team) {
         return mechTeams[team];
     };
-    MechModel.addMech = function (mech_id, team, smurfyMechLoadout) {
-        var newMech = new Mech(mech_id, team, smurfyMechLoadout);
+    MechModel.addMech = function (mechId, team, smurfyMechLoadout) {
+        var newMech = new Mech(mechId, team, smurfyMechLoadout);
         mechTeams[team].push(newMech);
-        console.log("Added mech mech_id: " + mech_id +
+        console.log("Added mech mech_id: " + mechId +
             " translated_mech_name: " + newMech.getTranslatedName());
         MechModel.initMechPatterns(newMech);
         return newMech;
     };
-    MechModel.addMechAtIndex = function (mech_id, team, smurfyMechLoadout, index) {
-        var newMech = new Mech(mech_id, team, smurfyMechLoadout);
+    MechModel.addMechAtIndex = function (mechId, team, smurfyMechLoadout, index) {
+        var newMech = new Mech(mechId, team, smurfyMechLoadout);
         mechTeams[team][index] = newMech;
-        console.log("Added mech mech_id: " + mech_id
+        console.log("Added mech mech_id: " + mechId
             + " translated_mech_name: " + newMech.getTranslatedName()
             + " at index " + index);
         MechModel.initMechPatterns(newMech);
         return newMech;
     };
-    var getMechPosFromId = function (mech_id) {
+    var getMechPosFromId = function (mechId) {
         let teamList = [Team.BLUE, Team.RED];
         for (let team of teamList) {
             let mechList = mechTeams[team];
             for (let mechIdx in mechList) {
                 let mech = mechList[mechIdx];
-                if (mech.getMechId() === mech_id) {
+                if (mech.getMechId() === mechId) {
                     return { team: team, index: Number(mechIdx) };
                 }
             }
@@ -6473,10 +6498,11 @@ var MechModel;
     var getMechFromPos = function (mechPos) {
         return mechTeams[mechPos.team][mechPos.index];
     };
-    MechModel.deleteMech = function (mech_id) {
-        let mechPos = getMechPosFromId(mech_id);
-        if (!mechPos)
+    MechModel.deleteMech = function (mechId) {
+        let mechPos = getMechPosFromId(mechId);
+        if (!mechPos) {
             return false;
+        }
         let mechList = mechTeams[mechPos.team];
         mechList.splice(mechPos.index, 1);
         return true;
@@ -6484,12 +6510,14 @@ var MechModel;
     //removes src mech from its current position and inserts it before dest mech
     MechModel.moveMech = function (srcMechId, destMechId) {
         let srcMechPos = getMechPosFromId(srcMechId);
-        if (!srcMechPos)
+        if (!srcMechPos) {
             return false;
+        }
         let srcMech = getMechFromPos(srcMechPos);
         let status = MechModel.deleteMech(srcMechId);
-        if (!status)
+        if (!status) {
             return false;
+        }
         //get dest pos AFTER delete to keep indices straight when moving in the same list
         let destMechPos = getMechPosFromId(destMechId);
         let deletedMechList = mechTeams[srcMechPos.team];
@@ -6667,8 +6695,9 @@ var MechModel;
     };
     MechModel.getMechFromId = function (mechId) {
         let mechPos = getMechPosFromId(mechId);
-        if (!mechPos)
+        if (!mechPos) {
             return null;
+        }
         return mechTeams[mechPos.team][mechPos.index];
     };
     MechModel.clearModel = function () {
@@ -6735,8 +6764,9 @@ var MechModelView;
             let mechTeam = MechModel.getMechTeam(team);
             let idx = "0";
             for (idx in mechTeam) {
-                if (Number(idx) >= TITLE_MAX_MECHS)
+                if (Number(idx) >= TITLE_MAX_MECHS) {
                     break;
+                }
                 let mech = mechTeam[idx];
                 if (Number(idx) > 0) {
                     teamTitle[team] += ", ";
@@ -7125,6 +7155,14 @@ var MechModelView;
         return MechModel.addMech(newMechId, team, smurfyMechLoadout);
     };
 })(MechModelView || (MechModelView = {}));
+//Type definitions for smurfy types
+var SmurfyTypes;
+(function (SmurfyTypes) {
+    ;
+    ;
+    ;
+    ;
+})(SmurfyTypes || (SmurfyTypes = {}));
 /// <reference path="util.ts" />
 var MechViewWidgets;
 (function (MechViewWidgets) {
@@ -7162,14 +7200,14 @@ var MechViewWidgets;
         var damageIdx = Util.binarySearchClosest(damageGradient, percent, (key, colorValue) => {
             return key - colorValue.value;
         });
-        if (damageIdx == -1) {
+        if (damageIdx === -1) {
             damageIdx = 0;
         }
         let nextIdx = damageIdx + 1;
         nextIdx = (nextIdx < damageGradient.length) ? nextIdx : damageIdx;
         let rgb = damageGradient[damageIdx].RGB;
         let nextRgb = damageGradient[nextIdx].RGB;
-        let percentDiff = (damageIdx != nextIdx) ?
+        let percentDiff = (damageIdx !== nextIdx) ?
             (percent - damageGradient[damageIdx].value) /
                 (damageGradient[nextIdx].value - damageGradient[damageIdx].value)
             : 1;
@@ -7457,7 +7495,7 @@ var MechViewMechPanel;
     };
     MechViewMechPanel.setWeaponAmmo = function (mechId, weaponIdx, ammo) {
         let weaponAmmoDiv = document.getElementById(weaponAmmoId(mechId, weaponIdx));
-        weaponAmmoDiv.textContent = ammo != -1 ? String(ammo) : "\u221e"; //infinity symbol
+        weaponAmmoDiv.textContent = ammo !== -1 ? String(ammo) : "\u221e"; //infinity symbol
     };
     MechViewMechPanel.setWeaponState = function (mechId, weaponIdx, state) {
         //Note: the remove class string must include all the MechModel.WeaponCycle strings
@@ -7628,8 +7666,8 @@ var MechViewMechPanel;
         return mechId + "-deleteButton";
     };
     var addDeleteMechButton = function (mechId, team, mechPanelJQ) {
-        if (!deleteMechButton_Handler) {
-            deleteMechButton_Handler = createDeleteMechButtonHandler();
+        if (!deleteMechButtonHandler) {
+            deleteMechButtonHandler = createDeleteMechButtonHandler();
         }
         let deleteIconSVG = MechViewWidgets.cloneTemplate("delete-icon-template");
         let mechDeleteButtonDivId = mechDeleteButtonId(mechId);
@@ -7637,7 +7675,7 @@ var MechViewMechPanel;
             .attr("id", mechDeleteButtonDivId)
             .attr("data-mech-id", mechId)
             .append(deleteIconSVG)
-            .click(deleteMechButton_Handler);
+            .click(deleteMechButtonHandler);
     };
     var createDeleteMechButtonHandler = function () {
         return function () {
@@ -7645,7 +7683,7 @@ var MechViewMechPanel;
             console.log("Deleting " + mechId);
             let result = MechModel.deleteMech(mechId);
             if (!result) {
-                throw "Error deleting " + mechId;
+                throw Error("Error deleting " + mechId);
             }
             MechViewRouter.modifyAppState();
             let mechPanelDivId = mechPanelId(mechId);
@@ -7654,22 +7692,22 @@ var MechViewMechPanel;
             MechModelView.refreshView([MechModelView.ViewUpdate.TEAMSTATS]);
         };
     };
-    var deleteMechButton_Handler; //singleton
+    var deleteMechButtonHandler; //singleton
     var moveMechButtonId = function (mechId) {
         return mechId + "-moveButton";
     };
     var addMoveMechButton = function (mechId, team, mechPanelJQ) {
         let moveIconSVG = MechViewWidgets.cloneTemplate("move-icon-template");
         let mechMoveButtonDivId = moveMechButtonId(mechId);
-        if (!moveMechButton_handler) {
-            moveMechButton_handler = createMoveMechButtonHandler();
+        if (!moveMechButtonHandler) {
+            moveMechButtonHandler = createMoveMechButtonHandler();
         }
         mechPanelJQ.find("[class~='titlePanel'] [class~='moveMechButton']")
             .attr("id", mechMoveButtonDivId)
             .attr("data-mech-id", mechId)
             .attr("data-dragenabled", "false")
             .append(moveIconSVG)
-            .click(moveMechButton_handler);
+            .click(moveMechButtonHandler);
     };
     var toggleMoveMech = function (mechId) {
         let moveMechButtonJQ = $("#" + moveMechButtonId(mechId));
@@ -7695,7 +7733,7 @@ var MechViewMechPanel;
             toggleMoveMech(mechId);
         };
     };
-    var moveMechButton_handler; //initialized on first addMoveMechButton call
+    var moveMechButtonHandler; //initialized on first addMoveMechButton call
     var addDragAndDropHandlers = function (mechId, mechPanelJQ) {
         if (!mechOnDragHandler) {
             mechOnDragHandler = createMechOnDragHandler();
@@ -7823,24 +7861,24 @@ var MechViewAddMech;
             .on("animationend", function (data) {
             resultPanelJQ.removeClass("error");
         });
-        if (!addMechDialog_OK_Handler) {
-            addMechDialog_OK_Handler = createAddMechDialog_OK();
+        if (!addMechDialogOKHandler) {
+            addMechDialogOKHandler = createAddMechDialogOKHandler();
         }
-        if (!addMechDialog_Cancel_Handler) {
-            addMechDialog_Cancel_Handler = createAddMechDialog_Cancel();
+        if (!addMechDialogCancelHandler) {
+            addMechDialogCancelHandler = createAddMechDialogCancelHandler();
         }
-        if (!addMechDialog_Load_Handler) {
-            addMechDialog_Load_Handler = createAddMechDialog_Load();
+        if (!addMechDialogLoadHandler) {
+            addMechDialogLoadHandler = createAddMechDialogLoadHandler();
         }
         $("#addMechDialog-ok").attr("data-team", team);
         addMechOKButton =
-            new MechViewWidgets.MechButton("addMechDialog-ok", addMechDialog_OK_Handler);
+            new MechViewWidgets.MechButton("addMechDialog-ok", addMechDialogOKHandler);
         $("#addMechDialog-cancel").attr("data-team", team);
         addMechCancelButton =
-            new MechViewWidgets.MechButton("addMechDialog-cancel", addMechDialog_Cancel_Handler);
+            new MechViewWidgets.MechButton("addMechDialog-cancel", addMechDialogCancelHandler);
         $("#addMechDialog-load").attr("data-team", team);
         addMechLoadButton =
-            new MechViewWidgets.MechButton("addMechDialog-load", addMechDialog_Load_Handler);
+            new MechViewWidgets.MechButton("addMechDialog-load", addMechDialogLoadHandler);
         addMechOKButton.disable();
         MechViewWidgets.showModal();
         $("#addMechDialog-text").focus();
@@ -7849,7 +7887,7 @@ var MechViewAddMech;
         MechViewWidgets.hideModal("addMech");
     };
     var loadedSmurfyLoadout = null;
-    var createAddMechDialog_OK = function () {
+    var createAddMechDialogOKHandler = function () {
         return function () {
             let team = $(this).data('team');
             let url = $("#addMechDialog-text").val();
@@ -7868,16 +7906,16 @@ var MechViewAddMech;
             MechViewAddMech.hideAddMechDialog(team);
         };
     };
-    var addMechDialog_OK_Handler; //set on dialog creation, singleton
-    var createAddMechDialog_Cancel = function () {
+    var addMechDialogOKHandler; //set on dialog creation, singleton
+    var createAddMechDialogCancelHandler = function () {
         return function () {
             let team = $(this).data('team');
             MechViewAddMech.hideAddMechDialog(team);
         };
     };
-    var addMechDialog_Cancel_Handler; //set on dialog creation, singleton
+    var addMechDialogCancelHandler; //set on dialog creation, singleton
     const SMURFY_PROXY_URL = "./php/smurfyproxy.php?path=";
-    var createAddMechDialog_Load = function () {
+    var createAddMechDialogLoadHandler = function () {
         return function () {
             let team = $(this).data('team');
             let url = String($("#addMechDialog-text").val());
@@ -7927,7 +7965,7 @@ var MechViewAddMech;
             }
         };
     };
-    var addMechDialog_Load_Handler; //set on dialog creation, singleton
+    var addMechDialogLoadHandler; //set on dialog creation, singleton
     let SMURFY_BASE_URL = "http://mwo.smurfy-net.de/mechlab#";
     var createLoadedMechPanel = function (containerId, smurfyMechLoadout) {
         let loadedMechDiv = MechViewWidgets.cloneTemplate("loadedMech-template");
@@ -7970,7 +8008,7 @@ var MechViewAddMech;
             .addClass(spanClass)
             .text(text);
     };
-    var loadedMechWeaponSpan = function (name, number, type) {
+    var loadedMechWeaponSpan = function (name, count, type) {
         let numberClass = loadedMechWeaponClass(type);
         let weaponSpan = MechViewWidgets.cloneTemplate("loadedMechWeapon-template");
         let ret = $(weaponSpan);
@@ -7978,7 +8016,7 @@ var MechViewAddMech;
             .text(name);
         ret.find(".count")
             .addClass(numberClass)
-            .text(number);
+            .text(count);
         return ret;
     };
     var loadedMechWeaponClass = function (smurfyType) {
@@ -8085,7 +8123,7 @@ var MechViewReport;
                 return "Red";
             }
             else {
-                throw "Unexpected team: " + team;
+                throw Error("Unexpected team: " + team);
             }
         }
     }
@@ -8169,7 +8207,7 @@ var MechViewSimSettings;
                 MechViewSimSettings.setRangeValue();
             }
             else {
-                throw "Invalid button state";
+                throw Error("Invalid button state");
             }
         });
         rangeJQ.on("keydown", (event) => {
@@ -8224,8 +8262,7 @@ var MechViewSimSettings;
             return this.propertyMap.get(property).get(valueId);
         }
         populateSettings(simSettings) {
-            let SimulatorParameters = MechSimulatorLogic.SimulatorParameters;
-            let settingsList = SimulatorParameters.getUserSettings();
+            let settingsList = MechSimulatorLogic.SimulatorParameters.getUserSettings();
             let entryListJQ = $(this.domElement).find(".simSettingsList");
             for (let entry of settingsList) {
                 let entryDiv = MechViewWidgets.cloneTemplate("simSettingsEntry-template");
@@ -8498,11 +8535,11 @@ var MechViewRouter;
         //if no parameters, from current app state
         //else read the contents of loadedAppState into the object
         constructor(loadedAppState) {
-            if (arguments.length == 1) {
+            if (arguments.length === 1) {
                 this.range = loadedAppState.state.range;
                 this.teams = loadedAppState.state.teams;
             }
-            else if (arguments.length == 0) {
+            else if (arguments.length === 0) {
                 //current app state
                 this.range = MechSimulatorLogic.getSimulatorParameters().range;
                 this.teams = {};
@@ -8592,8 +8629,8 @@ var MechViewRouter;
         });
         //load mechs from the state
         let loadStateThenMechsPromise = loadStatePromise
-            .then(function (data) {
-            let newAppState = new AppState(data);
+            .then(function (stateData) {
+            let newAppState = new AppState(stateData);
             //set current app state
             let simulatorParameters = MechSimulatorLogic.getSimulatorParameters();
             if (!simulatorParameters) {
@@ -8603,10 +8640,10 @@ var MechViewRouter;
             simulatorParameters.range = newAppState.range;
             MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
             let loadMechPromise = loadMechsFromSmurfy(newAppState);
-            return loadMechPromise.then(function (data) {
+            return loadMechPromise.then(function (mechLoadoutData) {
                 isAppStateModified = false;
                 MechView.updateOnLoadAppState();
-                return data;
+                return mechLoadoutData;
             });
         });
         //TODO: See if the state bookkeeping (isLoading and prevstatehash) can be
@@ -8669,8 +8706,8 @@ var MechViewRouter;
                     let combinedTeamEntry = promiseToEntryMap.get(currPromise);
                     let team = combinedTeamEntry.team;
                     let mechIdx = combinedTeamEntry.index;
-                    let mech_id = MechModel.generateMechId(smurfyLoadout);
-                    MechModel.addMechAtIndex(mech_id, team, smurfyLoadout, mechIdx);
+                    let mechId = MechModel.generateMechId(smurfyLoadout);
+                    MechModel.addMechAtIndex(mechId, team, smurfyLoadout, mechIdx);
                     currMechsLoaded++;
                     MechView.updateLoadingScreenProgress(currMechsLoaded / totalMechsToLoad);
                     return data;
@@ -8690,8 +8727,9 @@ var MechViewRouter;
         let paramValues = new Map();
         for (let currParam of HASH_FIELDS) {
             let currValue = getParamFromLocationHash(currParam);
-            if (!currValue && param !== currParam)
+            if (!currValue && param !== currParam) {
                 continue;
+            }
             if (param === currParam) {
                 paramValues.set(currParam, value);
             }
@@ -8926,8 +8964,10 @@ var MechViewTeamStats;
             },
         ];
     };
-    var selectedPatterns = {}; //format is {<team>: {<patternTypeId>: <patternId>, ...}}
-    var patternLists = {}; //format is {<patternTypeId>: [patternList]}
+    //format is {<team>: {<patternTypeId>: <patternId>, ...}}
+    var selectedPatterns = {};
+    //format is {<patternTypeId>: [patternList]}
+    var patternLists = {};
     var findPatternWithId = function (patternId, patternList) {
         for (let entry of patternList) {
             if (entry.id === patternId) {
@@ -9019,8 +9059,8 @@ var MechViewTeamStats;
             let isAlive = mechHealth.isAlive;
             let mechPipDiv = document.getElementById(teamMechPipId(mechId));
             let percentHealth = Number(currHealth) / Number(maxHealth);
-            let color = MechViewWidgets.damageColor(percentHealth, MechViewWidgets.healthDamageGradient);
-            mechPipDiv.style.color = color;
+            let pipColor = MechViewWidgets.damageColor(percentHealth, MechViewWidgets.healthDamageGradient);
+            mechPipDiv.style.color = pipColor;
             if (isAlive) {
                 mechPipDiv.textContent = "\u25A0"; //solid box
             }
@@ -9228,7 +9268,8 @@ var MechTest;
                 if (Component.hasOwnProperty(property)) {
                     var structure = MechModel.baseMechStructure(Component[property], tonnage);
                     var armor = MechModel.baseMechArmor(Component[property], tonnage);
-                    console.log("Tonnage: " + tonnage + " " + Component[property] + " structure:" + structure + " armor:" + armor);
+                    console.log("Tonnage: " + tonnage + " " + Component[property] +
+                        " structure:" + structure + " armor:" + armor);
                 }
             }
         }
@@ -9313,8 +9354,8 @@ var MechTest;
         }
     };
     MechTest.testSpreadAdjacentDamage = function () {
-        var printTestDamageTransform = function (testDamage, accuracyPattern) {
-            let weaponDamage = new MechModel.WeaponDamage(testDamage);
+        var printTestDamageTransform = function (damage, pattern) {
+            let weaponDamage = new MechModel.WeaponDamage(damage);
             let transformedDamage = accuracyPattern(weaponDamage, 200);
             console.log("original damage: " + weaponDamage.toString());
             console.log("transformedDamage: " + transformedDamage.toString());
@@ -9469,7 +9510,7 @@ var MechTest;
         })).then(function (data) {
             console.log("Done save app state. Data: " + data);
         });
-        var testGetAppState = function (statehash) {
+        var testGetAppState = function (hash) {
             Promise.resolve(MechViewRouter.loadAppState(statehash)
                 .then(function (data) {
                 console.log("Success on load app state. Data: " + data);
@@ -9572,13 +9613,14 @@ var MechTest;
             let range = 180;
             let transformedDamage = lrmPattern(newTestDamage(), range);
             console.log("Range: " + range + " " + transformedDamage.toString());
-            for (let range = 200; range <= 1000; range += 100) {
-                let transformedDamage = lrmPattern(newTestDamage(), range);
+            for (range = 200; range <= 1000; range += 100) {
+                transformedDamage = lrmPattern(newTestDamage(), range);
                 console.log("Range: " + range + " " + transformedDamage.toString());
             }
         }
     };
     var testScratch = function () {
+        //Scratch test
     };
 })(MechTest || (MechTest = {}));
 /// <reference path="simulator-test.ts" />

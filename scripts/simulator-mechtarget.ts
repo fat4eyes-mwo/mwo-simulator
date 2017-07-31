@@ -73,7 +73,7 @@ namespace MechTargetMech  {
   export var getDefault = function() : TargetMechPattern {
     for (let patternEntry of getPatterns()) {
       if (patternEntry.default) {
-        return <TargetMechPattern> patternEntry.pattern;
+        return patternEntry.pattern as TargetMechPattern;
       }
     }
   }

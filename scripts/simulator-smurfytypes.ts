@@ -76,7 +76,9 @@ namespace SmurfyTypes {
   }
 
   //SmurfyMechData classes
-  export type SmurfyMechDataList = {[index:string] : SmurfyMechData};
+  export interface SmurfyMechDataList {
+    [index:string] : SmurfyMechData
+  };
   export interface SmurfyMechData {
     id: string,
     name: string,
@@ -121,7 +123,9 @@ namespace SmurfyTypes {
     value: number,
   }
 
-  export type SmurfyWeaponDataList = {[index: string] : SmurfyWeaponData};
+  export interface SmurfyWeaponDataList {
+    [index: string] : SmurfyWeaponData
+  };
   //SmurfyWeaponData Classes
   export interface SmurfyWeaponData {
     id: string,
@@ -178,7 +182,9 @@ namespace SmurfyTypes {
     dmg: number,
   }
 
-  export type SmurfyModuleDataList = {[index:string] : SmurfyModuleData};
+  export interface SmurfyModuleDataList {
+    [index:string] : SmurfyModuleData
+  };
 
   export interface SmurfyModuleData { //Common properties for SmurfyHeatsinkModuleData, SmurfyEngineModuleData
     id : string,
@@ -208,18 +214,24 @@ namespace SmurfyTypes {
     heatsinks : number,
   }
 
-  export type SmurfyAmmoDataList = {[index:string] : SmurfyAmmoData};
+  export interface SmurfyAmmoDataList {
+    [index:string] : SmurfyAmmoData
+  };
   export interface SmurfyAmmoData {
     id : string,
     type : string,
     name : string,
     num_shots : number,
-    weapons : string[], //[string] weapons that use this ammo
+    weapons : string[], //[string] weaponIds that use this ammo
   }
 
-  export type SmurfyOmnipodData = {[index:string] : SmurfyChassisOmnipods}
+  export interface SmurfyOmnipodData {
+    [index:string] : SmurfyChassisOmnipods
+  }
 
-  export type SmurfyChassisOmnipods = {[index:string] : SmurfyOmnipod}
+  export interface SmurfyChassisOmnipods {
+    [index:string] : SmurfyOmnipod
+  }
 
   export interface SmurfyOmnipod {
     details : OmnipodDetails,

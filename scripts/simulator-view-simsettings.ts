@@ -22,10 +22,10 @@ namespace MechViewSimSettings {
         $(this)
           .attr("data-button-mode", "editing")
           .html("Set Range");
-      } else if (buttonMode === "editing"){
+      } else if (buttonMode === "editing") {
         setRangeValue();
       } else {
-        throw "Invalid button state";
+        throw Error("Invalid button state");
       }
     });
     rangeJQ.on("keydown", (event) => {
@@ -92,8 +92,7 @@ namespace MechViewSimSettings {
     }
 
     populateSettings(simSettings : SimParamUserSettings) {
-      let SimulatorParameters = MechSimulatorLogic.SimulatorParameters;
-      let settingsList = SimulatorParameters.getUserSettings();
+      let settingsList = MechSimulatorLogic.SimulatorParameters.getUserSettings();
       let entryListJQ = $(this.domElement).find(".simSettingsList");
       for (let entry of settingsList) {
         let entryDiv = MechViewWidgets.cloneTemplate("simSettingsEntry-template");
