@@ -16,7 +16,7 @@ namespace MechSimulator {
       new MechSimulatorLogic.SimulatorParameters(DEFAULT_RANGE, DEFAULT_SPEED);
     MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
 
-    MechModel.initModelData()//foo
+    MechModel.initModelData()
       .then(function() {
         console.log("Successfully loaded model init data");
         //router should not be initialized before the smurfy data is

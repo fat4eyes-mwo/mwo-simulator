@@ -57,8 +57,8 @@ namespace MechViewRouter {
         let teamList = [Team.BLUE, Team.RED];
         for (let team of teamList) {
           this.teams[team] = [];
-          for (let mechIdx in MechModel.mechTeams[team]) {
-            let mech = MechModel.mechTeams[team][mechIdx];
+          for (let mechIdx in MechModel.getMechTeam(team)) {
+            let mech = MechModel.getMechTeam(team)[mechIdx];
             let mechInfo = mech.getMechState().mechInfo;
             let smurfyId = mechInfo.smurfyMechId;
             let smurfyLoadoutId = mechInfo.smurfyLoadoutId;

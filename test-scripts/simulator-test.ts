@@ -47,8 +47,8 @@ namespace MechTest {
       return () => {
         if (uiTestInterval == null) {
           uiTestInterval = window.setInterval(() => {
-            testUI(MechModel.mechTeams[Team.BLUE]);
-            testUI(MechModel.mechTeams[Team.RED]);
+            testUI(MechModel.getMechTeam(Team.BLUE));
+            testUI(MechModel.getMechTeam(Team.RED));
           }, testIntervalLength);
         } else {
           window.clearInterval(uiTestInterval);
@@ -134,7 +134,7 @@ namespace MechTest {
       //set mech healths to random numbers
       let teams = [Team.BLUE, Team.RED];
       for (let team of teams) {
-        for (let mech of MechModel.mechTeams[team]) {
+        for (let mech of MechModel.getMechTeam(team)) {
           let mechState = mech.getMechState();
           //random component health
           for (let mechComponentHealth of mechState.mechHealth.componentHealth) {
@@ -462,8 +462,8 @@ namespace MechTest {
       1 //speed factor
     );
     MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
-    MechModel.initMechTeamPatterns(MechModel.mechTeams[Team.BLUE]);
-    MechModel.initMechTeamPatterns(MechModel.mechTeams[Team.RED]);
+    MechModel.initMechTeamPatterns(MechModel.getMechTeam(Team.BLUE));
+    MechModel.initMechTeamPatterns(MechModel.getMechTeam(Team.RED));
   }
 
   export var testLRMSpread = function() {

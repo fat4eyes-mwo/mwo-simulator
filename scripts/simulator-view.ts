@@ -1,11 +1,9 @@
 /// <reference path="common/simulator-model-common.ts" />
 /// <reference path="simulator-view-widgets.ts" />
-/// <reference path="simulator-model.ts" />
 /// <reference path="simulator-view-simsettings.ts" />
 "use strict";
 
 //UI methods
-//TODO: Remove direct references to MechModel
 namespace MechView {
   import Component = MechModelCommon.Component;
 
@@ -94,7 +92,7 @@ namespace MechView {
   }
 
   export var resetSimulation = function() : void {
-    MechModel.resetState();
+    MechModelView.resetModel();
     MechSimulatorLogic.resetSimulation();
     MechModelView.refreshView([]);
   }
@@ -203,7 +201,7 @@ namespace MechView {
       setSimulatorSpeedfactor(speedParam);
     }
     if (runParam) {
-      MechModel.resetState();
+      MechModelView.resetModel();
       MechSimulatorLogic.resetSimulation();
       MechSimulatorLogic.runSimulation();
     }

@@ -46,13 +46,13 @@ namespace MechModelView {
         MechView.clearMechStats(team);
       }
       let mechIdList = [];
-      for (let mech of MechModel.mechTeams[team]) {
+      for (let mech of MechModel.getMechTeam(team)) {
         mechIdList.push(mech.getMechId());
       }
       if (updates.includes(ViewUpdate.TEAMSTATS)) {
         MechViewTeamStats.addTeamStatsPanel(team, mechIdList);
       }
-      for (let mech of MechModel.mechTeams[team]) {
+      for (let mech of MechModel.getMechTeam(team)) {
         if (updates.includes(ViewUpdate.MECHLISTS)) {
           MechViewMechPanel.addMechPanel(mech, team);
         }
@@ -72,7 +72,7 @@ namespace MechModelView {
 
     for (let team of mechTeamList) {
       teamTitle[team] = "";
-      let mechTeam = MechModel.mechTeams[team];
+      let mechTeam = MechModel.getMechTeam(team);
       let idx :string = "0";
       for (idx in mechTeam) {
         if (Number(idx) >= TITLE_MAX_MECHS) break;
@@ -250,7 +250,7 @@ namespace MechModelView {
     let mechHealthList = [];
     let totalTeamDamage = 0;
     let totalTeamBurstDamage = 0;
-    for (let mech of MechModel.mechTeams[team]) {
+    for (let mech of MechModel.getMechTeam(team)) {
       let mechStats = mech.getMechState().mechStats;
       totalTeamDamage += Number(mechStats.totalDamage);
       let burstDamage = mechStats.getBurstDamage(MechSimulatorLogic.getSimTime());
@@ -286,7 +286,7 @@ namespace MechModelView {
       (team: Team, pattern : ModelPatterns.PatternFunction) => void;
 
   export var setTeamFirePattern = function(team : Team, firePattern : FirePattern) : void {
-    let mechList = MechModel.mechTeams[team];
+    let mechList = MechModel.getMechTeam(team);
     for (let mech of mechList) {
       mech.firePattern = firePattern;
     }
@@ -296,7 +296,7 @@ namespace MechModelView {
       function(team : Team,
               componentTargetPattern : TargetComponentPattern)
               : void {
-    let mechList = MechModel.mechTeams[team];
+    let mechList = MechModel.getMechTeam(team);
     for (let mech of mechList) {
       mech.componentTargetPattern = componentTargetPattern;
     }
@@ -306,7 +306,7 @@ namespace MechModelView {
       function(team : Team,
               accuracyPattern : AccuracyPattern)
               : void {
-    let mechList = MechModel.mechTeams[team];
+    let mechList = MechModel.getMechTeam(team);
     for (let mech of mechList) {
       mech.accuracyPattern = accuracyPattern;
     }
@@ -316,7 +316,7 @@ namespace MechModelView {
       function(team : Team,
               mechTargetPattern : TargetMechPattern)
               : void {
-    let mechList = MechModel.mechTeams[team];
+    let mechList = MechModel.getMechTeam(team);
     for (let mech of mechList) {
       mech.mechTargetPattern = mechTargetPattern;
     }
@@ -330,7 +330,7 @@ namespace MechModelView {
       this.team = team;
       this.weaponStats = new Map();
       this.mechReports = [];
-      let mechTeam = MechModel.mechTeams[team];
+      let mechTeam = MechModel.getMechTeam(team);
       for (let mech of mechTeam) {
         let mechStats = mech.getMechState().mechStats;
         let mechReport = new MechReport(mech.getMechId(),
@@ -511,7 +511,6 @@ namespace MechModelView {
 
   export var updateVictory = function (team : Team) : void {
     MechViewReport.showVictoryReport();
-    // MechModelView.updateDebugText("Team Victory: " + team);
   }
 
   export var getVictorTeam = function () {
@@ -533,6 +532,10 @@ namespace MechModelView {
     } else {
       return null;
     }
+  }
+
+  export var resetModel = function() : void{
+    MechModel.resetState();
   }
 
   export var addMech = function(team : Team, smurfyMechLoadout : SmurfyMechLoadout) : Mech {

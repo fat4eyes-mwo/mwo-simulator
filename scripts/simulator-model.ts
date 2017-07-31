@@ -51,7 +51,7 @@ namespace MechModel  {
   var SmurfyMechData : SmurfyMechDataList = null;
   var SmurfyOmnipodData : FlatOmnipodData = {};
   var SmurfyCTOmnipods : CTOmnipodMap = {};
-  export var mechTeams : {[index:string] : Mech[]} = {};
+  var mechTeams : {[index:string] : Mech[]} = {};
   mechTeams[Team.BLUE] = [];
   mechTeams[Team.RED] = [];
   var teamStats : {[index:string] : TeamStats} = {}; //format is {<team> : <teamStats>}
@@ -1640,6 +1640,10 @@ namespace MechModel  {
     getTargetMech() {
       return this.targetMech;
     }
+  }
+
+  export var getMechTeam = function(team: Team) : Mech[] {
+    return mechTeams[team];
   }
 
   export var addMech = function(mech_id : string,

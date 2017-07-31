@@ -136,7 +136,7 @@ namespace MechSimulatorLogic {
     processWeaponFires();
 
     for (let team of teams) {
-      for (let mech of MechModel.mechTeams[team]) {
+      for (let mech of MechModel.getMechTeam(team)) {
         let mechState = mech.getMechState();
         if (mechState.isAlive()) {
           dissipateHeat(mech);
@@ -145,7 +145,7 @@ namespace MechSimulatorLogic {
 
           let weaponsToFire = mech.firePattern(mech, simulatorParameters.range);
           if (weaponsToFire) {
-            let targetMech = mech.mechTargetPattern(mech, MechModel.mechTeams[enemyTeam(team)]);
+            let targetMech = mech.mechTargetPattern(mech, MechModel.getMechTeam(enemyTeam(team)));
             if (targetMech !== mech.getTargetMech()) {
               mech.setTargetMech(targetMech);
               mechState.setUpdate(UpdateType.STATS);
@@ -332,7 +332,7 @@ namespace MechSimulatorLogic {
   var clearMechStats = function() : void {
     let teams : Team[] = [Team.BLUE, Team.RED];
     for (let team of teams) {
-      for (let mech of MechModel.mechTeams[team]) {
+      for (let mech of MechModel.getMechTeam(team)) {
         mech.getMechState().clearMechStats();
       }
     }
