@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "removeComments": false,
+        "preserveConstEnums": true,
+        "sourceMap": true,
+        "target": "es6",
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "outFile" : "./js/out.js"
+    },
+    "files": [
+      "main.ts"
+    ]
+}

@@ -4,3 +4,4 @@ php/cache
 backups
 nodejs/gamexmlparser/node_modules
 nodejs/**/*.bat
+tslint.out

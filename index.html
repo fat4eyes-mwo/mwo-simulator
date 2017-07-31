@@ -13,44 +13,14 @@
     <link rel="apple-touch-icon" sizes="180x180" href="favicon-180x180.png">
     <script src="scripts/lib/jquery-3.2.1.min.js"></script>
 
-    <!-- TODO: Look for a module solution -->
-    <!-- Dummy data files -->
-    <!-- <script src="scripts/testdata/dummyammo.js"></script>
-    <script src="scripts/testdata/dummymechdata.js"></script>
-    <script src="scripts/testdata/dummyweapons.js"></script>
-    <script src="scripts/testdata/dummyloadouts.js"></script>
-    <script src="scripts/testdata/dummymodules.js"></script>
-    <script src="scripts/testdata/dummyomnipods.js"></script> -->
-
-    <script src="scripts/data/globalgameinfo.js"></script>
-    <script src="scripts/data/basehealth.js"></script>
-    <script src="scripts/data/addedheatsinkdata.js"></script>
-    <script src="scripts/data/addedweapondata.js"></script>
-    <script src="scripts/data/weaponspread.js"></script>
-    <script src="scripts/data/quirkdata.js"></script>
-
-    <script src="scripts/simulator-view-widgets.js"></script>
-    <script src="scripts/util.js"></script>
-    <script src="scripts/simulator-view.js"></script>
-    <script src="scripts/simulator-view-mechPanel.js"></script>
-    <script src="scripts/simulator-view-router.js"></script>
-    <script src="scripts/simulator-view-report.js"></script>
-    <script src="scripts/simulator-view-addmech.js"></script>
-    <script src="scripts/simulator-view-teamstats.js"></script>
-    <script src="scripts/simulator-view-simsettings.js"></script>
-    <script src="scripts/simulator-model.js"></script>
-    <script src="scripts/simulator-model-weapons.js"></script>
-    <script src="scripts/simulator-model-quirks.js"></script>
-    <script src="scripts/simulator-modelview.js"></script>
-    <script src="scripts/simulator-firepattern.js"></script>
-    <script src="scripts/simulator-componenttarget.js"></script>
-    <script src="scripts/simulator-mechtarget.js"></script>
-    <script src="scripts/simulator-accuracypattern.js"></script>
-    <script src="scripts/simulator-logic.js"></script>
-    <script src="scripts/simulator-test.js"></script>
-    <script src="scripts/simulator.js"></script>
+    <!-- Unify in one outfile -->
+    <script src="build/mwosim.js"></script>
   </head>
   <body>
+    <script>
+      //Entry point
+      $(document).ready(MechSimulator.main);
+    </script>
     <div id="nojavascript" class="nojavascript">
       This page requires Javascript. If you already have Javascript enabled,
       press Ctrl-F5 (on desktop) or clear your browser cache and reload the page
@@ -62,10 +32,10 @@
       <div class="column column-10">
         <div class="row teamStatsNav">
           <div class="column column-6">
-            <div id="blueTeamStatsContainer" class="teamStats"></div>
+            <div id="blue-teamStatsContainer" class="teamStats"></div>
           </div>
           <div class="column column-6">
-            <div id="redTeamStatsContainer" class="teamStats"></div>
+            <div id="red-teamStatsContainer" class="teamStats"></div>
           </div>
         </div>
         <div class="row">
