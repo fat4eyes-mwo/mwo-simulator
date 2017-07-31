@@ -49,8 +49,8 @@ namespace MechModel  {
   var SmurfyAmmoData : SmurfyAmmoDataList = null;
   var SmurfyModuleData : SmurfyModuleDataList = null;
   var SmurfyMechData : SmurfyMechDataList = null;
-  var SmurfyOmnipodData : FlatOmnipodData = {};
-  var SmurfyCTOmnipods : CTOmnipodMap = {};
+  var SmurfyOmnipodData : FlatOmnipodData = null;
+  var SmurfyCTOmnipods : CTOmnipodMap = null;
   var mechTeams : {[index:string] : Mech[]} = {};
   mechTeams[Team.BLUE] = [];
   mechTeams[Team.RED] = [];
