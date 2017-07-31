@@ -75,7 +75,8 @@ The main entry point of the program is in `scripts/simulator.js`.
 
 # Update Info
 
-* 2017-07-27: Added drag and drop mech reordering (still has issues in Firefox. Works on webkit (Chrome, Opera)).
+* 2017-08-01: Added Maximize DPS firing pattern. Various internal implementation changes (changed over to Typescript, various refactorings).
+* 2017-07-27: Added drag and drop mech reordering.
 * 2017-07-24: Completed rocket launcher implementation.
 * 2017-07-23: Implemented RAC mechanics.
 * 2017-07-19: MRM spread. Priority changes to support most of new tech.
