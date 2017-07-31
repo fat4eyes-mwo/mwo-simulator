@@ -16,7 +16,7 @@ namespace SmurfyTypes {
   //a mech component (e.g. center torso)
   export interface SmurfyMechComponent {
     name: string, //values are from SmurfyMechModel.Component
-    armor: number, //is a string when loaded from JSON
+    armor: number,
     actuators: SmurfyMechComponentItem[], //[SmurfyMechComponentItem...]
     omni_pod: string,
     items: SmurfyMechComponentItem[], //[SmurfyMechComponentItem...]
@@ -58,7 +58,7 @@ namespace SmurfyTypes {
     id: string, //Refers to WeaponData.id
     type: string,
     name: string,
-    count: number, //is a string when read from JSON
+    count: number,
   }
 
   export interface SmurfyMechEquipmentEntry {
@@ -72,7 +72,7 @@ namespace SmurfyTypes {
     id: string, //Refers to AmmoData.id
     type: string,
     name: string,
-    count: number, //is a string when read from JSON
+    count: number,
   }
 
   //SmurfyMechData classes
