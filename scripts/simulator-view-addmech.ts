@@ -19,7 +19,7 @@ namespace MechViewAddMech {
   export var createAddMechButton = function(team : Team, containerId : string) : void {
     let addMechButtonPanelId = addMechButtonId(team);
     if (!addMechButtonHandler) {
-      addMechButtonHandler = createAddMechButtonHandler(this);
+      addMechButtonHandler = createAddMechButtonHandler();
     }
     $(`#${containerId} [class~=addMechButton]`)
         .attr("id", addMechButtonPanelId)
@@ -30,11 +30,10 @@ namespace MechViewAddMech {
   }
 
   type ClickHandler = () => void;
-  var createAddMechButtonHandler = function(clickContext : any) : ClickHandler {
-    var context = clickContext;
-    return function() {
+  var createAddMechButtonHandler = function() : ClickHandler {
+    return function(this : Element) {
       let team = $(this).data('team');
-      context.showAddMechDialog(team);
+      MechViewAddMech.showAddMechDialog(team);
     }
   }
   var addMechButtonHandler : ClickHandler;//set on click handler assignment
@@ -61,13 +60,13 @@ namespace MechViewAddMech {
           });
 
     if (!addMechDialog_OK_Handler) {
-      addMechDialog_OK_Handler = createAddMechDialog_OK(this);
+      addMechDialog_OK_Handler = createAddMechDialog_OK();
     }
     if (!addMechDialog_Cancel_Handler) {
-      addMechDialog_Cancel_Handler = createAddMechDialog_Cancel(this);
+      addMechDialog_Cancel_Handler = createAddMechDialog_Cancel();
     }
     if (!addMechDialog_Load_Handler) {
-      addMechDialog_Load_Handler = createAddMechDialog_Load(this);
+      addMechDialog_Load_Handler = createAddMechDialog_Load();
     }
     $("#addMechDialog-ok").attr("data-team", team);
     addMechOKButton =
@@ -91,9 +90,8 @@ namespace MechViewAddMech {
   }
 
   var loadedSmurfyLoadout : SmurfyMechLoadout = null;
-  var createAddMechDialog_OK = function(context : any) : ClickHandler {
-    var clickContext = context;
-    return function() {
+  var createAddMechDialog_OK = function() : ClickHandler {
+    return function(this : Element) {
       let team = $(this).data('team');
       let url = $("#addMechDialog-text").val()
       console.log("Mech loaded. team: " + team + " URL: " + url);
@@ -108,25 +106,23 @@ namespace MechViewAddMech {
       MechViewRouter.modifyAppState();
       MechViewMechPanel.addMechPanel(newMech, team);
       MechModelView.refreshView([MechModelView.ViewUpdate.TEAMSTATS]);
-      clickContext.hideAddMechDialog(team);
+      MechViewAddMech.hideAddMechDialog(team);
     }
   };
   var addMechDialog_OK_Handler : ClickHandler; //set on dialog creation, singleton
 
-  var createAddMechDialog_Cancel = function(context : any) : ClickHandler {
-    var clickContext = context;
-    return function() {
+  var createAddMechDialog_Cancel = function() : ClickHandler {
+    return function(this : Element) {
       let team = $(this).data('team');
-      clickContext.hideAddMechDialog(team);
+      MechViewAddMech.hideAddMechDialog(team);
     }
   };
   var addMechDialog_Cancel_Handler : ClickHandler; //set on dialog creation, singleton
 
   const SMURFY_PROXY_URL = "./php/smurfyproxy.php?path=";
-  var createAddMechDialog_Load = function(context : any) : ClickHandler {
-    var clickContext = context;
+  var createAddMechDialog_Load = function() : ClickHandler {
 
-    return function() {
+    return function(this : Element) {
       let team = $(this).data('team');
       let url : string = String($("#addMechDialog-text").val());
       console.log("Load. team: " + team + " URL: " + url);

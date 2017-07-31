@@ -223,7 +223,7 @@ namespace MechSimulatorLogic {
     //refresh simulationInterval if it is already present
     if (simulationInterval) {
       window.clearInterval(simulationInterval);
-      createSimulationInterval.call(this);
+      createSimulationInterval();
     }
   }
 
@@ -232,21 +232,21 @@ namespace MechSimulatorLogic {
   }
 
   var createSimulationInterval = function() : void  {
-    var createIntervalHandler = function(context : any) : () => void {
+    var createIntervalHandler = function() : () => void {
       return () => {
         if (simRunning) {
-          context.step();
+          MechSimulatorLogic.step();
         }
       }
     };
-    let intervalHandler = createIntervalHandler(this);
+    let intervalHandler = createIntervalHandler();
     simulationInterval = window.setInterval(intervalHandler,
                                         simulatorParameters.uiUpdateInterval);
   }
 
   export var runSimulation = function() : void {
     if (!simulationInterval) {
-      createSimulationInterval.call(this);
+      createSimulationInterval();
     }
     simRunning = true;
   }

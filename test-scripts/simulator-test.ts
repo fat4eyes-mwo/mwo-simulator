@@ -43,7 +43,7 @@ namespace MechTest {
 
     MechModelView.refreshView();
 
-    var createHandler = function(context: any) {
+    var createHandler = function() {
       return () => {
         if (uiTestInterval == null) {
           uiTestInterval = window.setInterval(() => {
@@ -56,7 +56,7 @@ namespace MechTest {
         }
       };
     };
-    var handler = createHandler(this);
+    var handler = createHandler();
     $("#testUI").removeClass("debugButton").click(handler);
   }
 

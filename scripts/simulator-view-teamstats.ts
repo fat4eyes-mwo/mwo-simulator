@@ -108,7 +108,7 @@ namespace MechViewTeamStats {
       populateTeamPattern(team, patternType);
     }
   }
-  var mechPipClickHandler = function(data : any) {
+  var mechPipClickHandler = function(this : Element, data : any) {
     let thisJQ = $(this);
     let mechId = thisJQ.attr("data-mech-id");
     MechViewMechPanel.highlightMechPanel(mechId);
@@ -234,7 +234,7 @@ namespace MechViewTeamStats {
     }
   }
 
-  var teamSettingsButtonHandler = function() : void {
+  var teamSettingsButtonHandler = function(this : Element) : void {
     let team = $(this).attr("data-team");
     let teamStatsContainerPanelId = teamStatsContainerId(team);
     let teamStatsContainerJQ = $("#" + teamStatsContainerPanelId);

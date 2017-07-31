@@ -10,7 +10,9 @@ namespace MechViewSimSettings {
 
   export var initRangeInput = function() : void {
     let rangeJQ = $("#rangeInput");
-    let rangeButton = new MechViewWidgets.MechButton("setRangeButton", function() {
+    let rangeButton =
+      new MechViewWidgets.MechButton("setRangeButton",
+                                      function(this : Element) {
       let buttonMode = $(this).attr("data-button-mode");
       if (buttonMode === "not-editing") {
         rangeJQ

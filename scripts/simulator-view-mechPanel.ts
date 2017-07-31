@@ -466,7 +466,7 @@ namespace MechViewMechPanel {
               mechPanelJQ : JQuery)
               : void {
     if (!deleteMechButton_Handler) {
-      deleteMechButton_Handler = createDeleteMechButtonHandler(this);
+      deleteMechButton_Handler = createDeleteMechButtonHandler();
     }
     let deleteIconSVG = MechViewWidgets.cloneTemplate("delete-icon-template");
     let mechDeleteButtonDivId = mechDeleteButtonId(mechId);
@@ -477,10 +477,8 @@ namespace MechViewMechPanel {
       .click(deleteMechButton_Handler);
   }
 
-  var createDeleteMechButtonHandler = function(context : any) {
-    var clickContext = context;
-
-    return function() {
+  var createDeleteMechButtonHandler = function() {
+    return function(this : Element) {
       let mechId = $(this).data("mech-id");
       console.log("Deleting " + mechId);
       let result = MechModel.deleteMech(mechId);
@@ -508,7 +506,7 @@ namespace MechViewMechPanel {
     let moveIconSVG = MechViewWidgets.cloneTemplate("move-icon-template");
     let mechMoveButtonDivId = moveMechButtonId(mechId);
     if (!moveMechButton_handler) {
-      moveMechButton_handler = createMoveMechButtonHandler(this);
+      moveMechButton_handler = createMoveMechButtonHandler();
     }
     mechPanelJQ.find("[class~='titlePanel'] [class~='moveMechButton']")
       .attr("id", mechMoveButtonDivId)
@@ -535,10 +533,9 @@ namespace MechViewMechPanel {
         .removeClass("dragging");
     }
   }
-  var createMoveMechButtonHandler = function(context : any) : () => void {
-    let clickContext = context;
+  var createMoveMechButtonHandler = function() : () => void {
 
-    return function() {
+    return function(this: Element) {
       let mechId = $(this).data("mech-id");
       toggleMoveMech(mechId);
     }
@@ -548,23 +545,24 @@ namespace MechViewMechPanel {
   var addDragAndDropHandlers =
       function(mechId : string, mechPanelJQ : JQuery) : void {
     if (!mechOnDragHandler) {
-      mechOnDragHandler = createMechOnDragHandler(this);
+      mechOnDragHandler = createMechOnDragHandler();
     }
     mechPanelJQ.on("dragstart", mechOnDragHandler);
 
     if (!mechOnDragOverHandler) {
-      mechOnDragOverHandler = createMechOnDragOverHandler(this);
+      mechOnDragOverHandler = createMechOnDragOverHandler();
     }
     mechPanelJQ.on("dragover", mechOnDragOverHandler);
 
     if (!mechOnDropHandler) {
-      mechOnDropHandler = createMechOnDropHandler(this);
+      mechOnDropHandler = createMechOnDropHandler();
     }
     mechPanelJQ.on("drop", mechOnDropHandler);
   }
   type JQEventHandler = (ev : JQuery.Event) => void;
-  var createMechOnDragHandler = function(context : any) : JQEventHandler {
-    return function(jqEvent : JQuery.Event) {
+  var createMechOnDragHandler = function() : JQEventHandler {
+    return function(this : Element,
+                    jqEvent : JQuery.Event) {
       let mechId = $(this).data("mech-id");
       let origEvent = <DragEvent> jqEvent.originalEvent;
       origEvent.dataTransfer.setData("text/plain", mechId);
@@ -575,9 +573,9 @@ namespace MechViewMechPanel {
   var mechOnDragHandler : JQEventHandler = null;
 
   let prevDropTarget : string = null;
-  var createMechOnDragOverHandler =
-      function(context : any) : JQEventHandler {
-    return function(jqEvent : JQuery.Event) {
+  var createMechOnDragOverHandler = function() : JQEventHandler {
+    return function(this : Element,
+                    jqEvent : JQuery.Event) {
       let thisJQ = $(this);
       let mechId = thisJQ.data("mech-id");
       let origEvent= <DragEvent> jqEvent.originalEvent;
@@ -597,9 +595,9 @@ namespace MechViewMechPanel {
   }
   var mechOnDragOverHandler : JQEventHandler = null;
 
-  var createMechOnDropHandler =
-      function(context : any) : JQEventHandler {
-    return function(jqEvent : JQuery.Event) : void {
+  var createMechOnDropHandler = function() : JQEventHandler {
+    return function(this : Element,
+                    jqEvent : JQuery.Event) : void {
       let thisJQ = $(this);
       let mechId = thisJQ.data("mech-id");
       let origEvent= <DragEvent>jqEvent.originalEvent;
