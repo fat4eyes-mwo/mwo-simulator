@@ -1,10 +1,12 @@
 "use strict";
+/// <reference path="common/simulator-model-common.ts" />
 /// <reference path="simulator-smurfytypes.ts" />
 /// <reference path="simulator-model.ts" />
 
 //Weapon state classes
 namespace MechModelWeapons {
-  type WeaponCycle = MechModel.WeaponCycle;
+  import WeaponCycle = MechModelCommon.WeaponCycle;
+
   type MechInfo = MechModel.MechInfo;
   type MechState = MechModel.MechState;
 
@@ -201,7 +203,7 @@ namespace MechModelWeapons {
       this.mechState = mechState;
       this.weaponInfo = weaponInfo;
       this.active = true;
-      this.weaponCycle = MechModel.WeaponCycle.READY;
+      this.weaponCycle = WeaponCycle.READY;
       this.cooldownLeft = 0;
       this.resetVolleyDelay();
     }
@@ -227,7 +229,7 @@ namespace MechModelWeapons {
                 ammoConsumed: ammoConsumed,
                 cooldownChanged: cooldownChanged};
       }
-      if (this.weaponCycle !== MechModel.WeaponCycle.FIRING) {
+      if (this.weaponCycle !== WeaponCycle.FIRING) {
         this.volleyDelayLeft = Math.max(0, this.volleyDelayLeft - stepDuration);
       }
       return null;
@@ -240,7 +242,7 @@ namespace MechModelWeapons {
       let newDurationLeft = Number(this.durationLeft) - stepDuration;
       this.durationLeft = Math.max(newDurationLeft, 0);
       if (this.durationLeft <= 0) {
-        newState = MechModel.WeaponCycle.COOLDOWN;
+        newState = WeaponCycle.COOLDOWN;
         this.gotoState(newState);
         //if duration ended in the middle of the tick, subtract the
         //extra time from the cooldown
@@ -259,7 +261,7 @@ namespace MechModelWeapons {
       let newCooldownLeft = Number(this.cooldownLeft) - stepDuration;
       this.cooldownLeft = Math.max(newCooldownLeft, 0);
       if (this.cooldownLeft <= 0) {
-        newState = MechModel.WeaponCycle.READY;
+        newState = WeaponCycle.READY;
         this.gotoState(newState);
       }
       cooldownChanged = true;
@@ -272,7 +274,7 @@ namespace MechModelWeapons {
       let newJamLeft = Number(this.jamLeft) - stepDuration;
       this.jamLeft = Math.max(newJamLeft, 0);
       if (this.jamLeft <= 0) {
-        newState = MechModel.WeaponCycle.COOLDOWN;
+        newState = WeaponCycle.COOLDOWN;
         this.gotoState(newState);
         this.cooldownLeft += newJamLeft;
         cooldownChanged = true;
@@ -287,22 +289,22 @@ namespace MechModelWeapons {
         this.cooldownLeft = 0;
         this.spoolupLeft = 0;
         this.durationLeft = 0;
-        if (weaponCycle === MechModel.WeaponCycle.READY) {
+        if (weaponCycle === WeaponCycle.READY) {
           this.currShotsDuringCooldown = this.weaponInfo.shotsDuringCooldown;
-        } else if (weaponCycle === MechModel.WeaponCycle.FIRING) {
+        } else if (weaponCycle === WeaponCycle.FIRING) {
           this.durationLeft = this.computeWeaponDuration();
           this.resetVolleyDelay();
-        } else if (weaponCycle === MechModel.WeaponCycle.COOLDOWN) {
+        } else if (weaponCycle === WeaponCycle.COOLDOWN) {
           this.cooldownLeft = this.computeWeaponCooldown();
-        } else if (weaponCycle === MechModel.WeaponCycle.COOLDOWN_FIRING) {
+        } else if (weaponCycle === WeaponCycle.COOLDOWN_FIRING) {
           this.cooldownLeft = prevCooldownLeft;
-        } else if (weaponCycle === MechModel.WeaponCycle.SPOOLING) {
+        } else if (weaponCycle === WeaponCycle.SPOOLING) {
           this.spoolupLeft = Number(this.weaponInfo.spinup);
-        } else if (weaponCycle === MechModel.WeaponCycle.DISABLED) {
+        } else if (weaponCycle === WeaponCycle.DISABLED) {
           //set cooldown to max so it displays properly in the view
           this.cooldownLeft = this.computeWeaponCooldown();
           this.active = false;
-        } else if (weaponCycle === MechModel.WeaponCycle.JAMMED) {
+        } else if (weaponCycle === WeaponCycle.JAMMED) {
           this.cooldownLeft = this.computeWeaponCooldown();
           //TODO Check uacJamMethod to compute jam time
           this.jamLeft = this.computeJamTime();
@@ -336,13 +338,13 @@ namespace MechModelWeapons {
     abstract canFire() : boolean;
 
     isReady() {
-      return this.weaponCycle === MechModel.WeaponCycle.READY;
+      return this.weaponCycle === WeaponCycle.READY;
     }
     isOnCooldown() {
-      return this.weaponCycle === MechModel.WeaponCycle.COOLDOWN;
+      return this.weaponCycle === WeaponCycle.COOLDOWN;
     }
     isJammed() {
-      return this.weaponCycle === MechModel.WeaponCycle.JAMMED;
+      return this.weaponCycle === WeaponCycle.JAMMED;
     }
     hasJamBar() {
       return false;
@@ -396,7 +398,7 @@ namespace MechModelWeapons {
       if (!this.active || !this.canFire()) {
         return {weaponFired: false, ammoConsumed: 0};
       }
-      newState = MechModel.WeaponCycle.FIRING;
+      newState = WeaponCycle.FIRING;
       this.gotoState(newState);
       //assumes duration weapons don't consume ammo
       return {newState: newState, weaponFired: true, ammoConsumed: 0};
@@ -412,11 +414,11 @@ namespace MechModelWeapons {
       if (precheckStatus) {
         return precheckStatus;
       }
-      if (this.weaponCycle === MechModel.WeaponCycle.FIRING) {
+      if (this.weaponCycle === WeaponCycle.FIRING) {
         let fireStatus = this.stepStandardFire(stepDuration);
         newState = fireStatus.newState;
         cooldownChanged = fireStatus.cooldownChanged;
-      } else if (this.weaponCycle === MechModel.WeaponCycle.COOLDOWN) {
+      } else if (this.weaponCycle === WeaponCycle.COOLDOWN) {
         let cooldownStatus = this.stepCooldown(stepDuration);
         newState = cooldownStatus.newState;
         cooldownChanged = cooldownStatus.cooldownChanged;
@@ -428,7 +430,7 @@ namespace MechModelWeapons {
     }
 
     canFire() {
-      return this.weaponCycle === MechModel.WeaponCycle.READY;
+      return this.weaponCycle === WeaponCycle.READY;
     }
   }
 
@@ -456,29 +458,29 @@ namespace MechModelWeapons {
       }
       if (weaponInfo.spinup > 0) {
         //if weapon has spoolup, set state to SPOOLING and set value of spoolupLeft
-        newState = MechModel.WeaponCycle.SPOOLING;
+        newState = WeaponCycle.SPOOLING;
         this.gotoState(newState);
         return {newState: newState, weaponFired: false, ammoConsumed: 0};
       } else {
         let weaponFired = false;
         let ammoConsumed = 0;
-        if (this.weaponCycle === MechModel.WeaponCycle.READY) {
-          newState = MechModel.WeaponCycle.FIRING;
+        if (this.weaponCycle === WeaponCycle.READY) {
+          newState = WeaponCycle.FIRING;
           this.gotoState(newState);
           weaponFired = true;
-        } else if (this.weaponCycle === MechModel.WeaponCycle.COOLDOWN) {
+        } else if (this.weaponCycle === WeaponCycle.COOLDOWN) {
           //check jam chance
           let rand = Math.random();
           if (rand <= this.computeJamChance()) {
           // if (true) {
             //JAM
             console.log("Jam: " + this.weaponInfo.name);
-            newState = MechModel.WeaponCycle.JAMMED;
+            newState = WeaponCycle.JAMMED;
             this.gotoState(newState);
             weaponFired = false;
           } else {
             console.log("Double tap: " + this.weaponInfo.name);
-            newState = MechModel.WeaponCycle.COOLDOWN_FIRING;
+            newState = WeaponCycle.COOLDOWN_FIRING;
             this.gotoState(newState);
             this.currShotsDuringCooldown -= 1;
             weaponFired = true;
@@ -507,11 +509,11 @@ namespace MechModelWeapons {
       //if spoolLeft <=0, change state to COOLDOWN
       //(assumes all spoolup weapons have no duration,
       //otherwise next state would be FIRING)
-      if (this.weaponCycle === MechModel.WeaponCycle.SPOOLING) {
+      if (this.weaponCycle === WeaponCycle.SPOOLING) {
         let newSpoolLeft = Number(this.spoolupLeft) - stepDuration;
         this.spoolupLeft = Math.max(newSpoolLeft, 0);
         if (this.spoolupLeft <= 0) {
-          newState = MechModel.WeaponCycle.COOLDOWN;
+          newState = WeaponCycle.COOLDOWN;
           this.gotoState(newState);
 
           //if the spooling ended in the middle of the tick, subtract the
@@ -524,20 +526,20 @@ namespace MechModelWeapons {
           weaponFired = true;
         }
         cooldownChanged = true;
-      } else if (this.weaponCycle === MechModel.WeaponCycle.FIRING) {
+      } else if (this.weaponCycle === WeaponCycle.FIRING) {
         let fireStatus = this.stepStandardFire(stepDuration);
         newState = fireStatus.newState;
         cooldownChanged = fireStatus.cooldownChanged;
-      } else if (this.weaponCycle === MechModel.WeaponCycle.COOLDOWN ||
-                  this.weaponCycle === MechModel.WeaponCycle.COOLDOWN_FIRING) {
-        if (this.weaponCycle === MechModel.WeaponCycle.COOLDOWN_FIRING) {
-          newState = MechModel.WeaponCycle.COOLDOWN;
+      } else if (this.weaponCycle === WeaponCycle.COOLDOWN ||
+                  this.weaponCycle === WeaponCycle.COOLDOWN_FIRING) {
+        if (this.weaponCycle === WeaponCycle.COOLDOWN_FIRING) {
+          newState = WeaponCycle.COOLDOWN;
           this.gotoState(newState, false);
         }
         let cooldownStatus = this.stepCooldown(stepDuration);
         newState = newState || cooldownStatus.newState;
         cooldownChanged = cooldownStatus.cooldownChanged;
-      } else if (this.weaponCycle === MechModel.WeaponCycle.JAMMED) {
+      } else if (this.weaponCycle === WeaponCycle.JAMMED) {
         let jamStatus = this.stepJammed(stepDuration);
         newState = jamStatus.newState;
         cooldownChanged = jamStatus.cooldownChanged;
@@ -549,8 +551,8 @@ namespace MechModelWeapons {
     }
 
     canFire() {
-      return this.weaponCycle === MechModel.WeaponCycle.READY ||
-            (this.weaponCycle === MechModel.WeaponCycle.COOLDOWN &&
+      return this.weaponCycle === WeaponCycle.READY ||
+            (this.weaponCycle === WeaponCycle.COOLDOWN &&
              this.currShotsDuringCooldown > 0 &&
              this.volleyDelayLeft <= 0);
     }
@@ -613,12 +615,12 @@ namespace MechModelWeapons {
       //if weapon has no duration, set state to FIRING, will go to cooldown on the next step
       let weaponFired = false;
       let ammoConsumed = 0;
-      if (this.weaponCycle === MechModel.WeaponCycle.READY) {
-        newState = MechModel.WeaponCycle.FIRING;
+      if (this.weaponCycle === WeaponCycle.READY) {
+        newState = WeaponCycle.FIRING;
         this.gotoState(newState);
         this.isOnAutoFire = true;
         //weapon not fired here, will be handled by step()
-      } else if (this.weaponCycle === MechModel.WeaponCycle.FIRING) {
+      } else if (this.weaponCycle === WeaponCycle.FIRING) {
         //auto fire, step() will handle the actual firing of the weapon
         this.isOnAutoFire = true;
       }
@@ -641,7 +643,7 @@ namespace MechModelWeapons {
         return precheckStatus;
       }
 
-      if (this.weaponCycle === MechModel.WeaponCycle.FIRING) {
+      if (this.weaponCycle === WeaponCycle.FIRING) {
         this.incrementJamBar(stepDuration);
         cooldownChanged = true;
         this.rampUpLeft = Math.max(0, this.rampUpLeft - stepDuration);
@@ -651,12 +653,12 @@ namespace MechModelWeapons {
             let rand = Math.random();
             if (rand <= this.computeJamChance()) {
               console.log("Jam: " + this.weaponInfo.name);
-              newState = MechModel.WeaponCycle.JAMMED;
+              newState = WeaponCycle.JAMMED;
               this.gotoState(newState);
               weaponFired = false;
             }
           }
-          if (this.weaponCycle !== MechModel.WeaponCycle.JAMMED) {
+          if (this.weaponCycle !== WeaponCycle.JAMMED) {
             let autoFireStatus = this.stepAutoFire(stepDuration);
             newState = autoFireStatus.newState;
             weaponFired = autoFireStatus.weaponFired;
@@ -668,11 +670,11 @@ namespace MechModelWeapons {
       else{
         this.decrementJamBar(stepDuration);
         this.resetRampup();
-        if (this.weaponCycle === MechModel.WeaponCycle.COOLDOWN) {
+        if (this.weaponCycle === WeaponCycle.COOLDOWN) {
           let cooldownStatus = this.stepCooldown(stepDuration);
           newState = cooldownStatus.newState;
           cooldownChanged = cooldownStatus.cooldownChanged;
-        } else if (this.weaponCycle === MechModel.WeaponCycle.JAMMED) {
+        } else if (this.weaponCycle === WeaponCycle.JAMMED) {
           let jamStatus = this.stepJammed(stepDuration);
           newState = jamStatus.newState;
           cooldownChanged = jamStatus.cooldownChanged;
@@ -704,10 +706,10 @@ namespace MechModelWeapons {
                   this.weaponInfo.timeBetweenAutoShots + newTimeToAutoShot;
           weaponFired = true;
           //set new state just so the view gets an update to the weapon status (which includes ammo)
-          newState = MechModel.WeaponCycle.FIRING;
+          newState = WeaponCycle.FIRING;
         }
       } else {
-        newState = MechModel.WeaponCycle.COOLDOWN;
+        newState = WeaponCycle.COOLDOWN;
         this.gotoState(newState);
         //TODO: not strictly correct, should count down whenever the weapon is
         //not firing. However since rampup times are larger than autoshot times,
@@ -724,8 +726,8 @@ namespace MechModelWeapons {
     }
 
     canFire() {
-      return this.weaponCycle === MechModel.WeaponCycle.READY ||
-            (this.weaponCycle === MechModel.WeaponCycle.FIRING &&
+      return this.weaponCycle === WeaponCycle.READY ||
+            (this.weaponCycle === WeaponCycle.FIRING &&
             this.weaponInfo.isContinuousFire());
     }
   }

@@ -1,5 +1,6 @@
 "use strict";
 /// <reference path="lib/jquery-3.2.d.ts" />
+/// <reference path="common/simulator-model-common.ts" />
 /// <reference path="simulator-model-quirks.ts" />
 /// <reference path="simulator-model-weapons.ts" />
 /// <reference path="simulator-smurfytypes.ts" />
@@ -12,6 +13,13 @@
 //Classes that represent the states of the mechs in the simulation,
 //and methos to populate them from smurfy data
 namespace MechModel  {
+  import Team = MechModelCommon.Team;
+  import Component = MechModelCommon.Component;
+  import WeaponCycle = MechModelCommon.WeaponCycle;
+  import Faction = MechModelCommon.Faction;
+  import UpdateType = MechModelCommon.UpdateType;
+  import EngineType = MechModelCommon.EngineType;
+
   type WeaponInfo = MechModelWeapons.WeaponInfo;
   type WeaponState = MechModelWeapons.WeaponState;
   type SmurfyMechLoadout = SmurfyTypes.SmurfyMechLoadout;
@@ -30,26 +38,6 @@ namespace MechModel  {
   type SmurfyOmnipodData = SmurfyTypes.SmurfyOmnipodData;
   //TODO: See if you can get a tighter type for enums. Try aliasing.
   //Also check when string enums get put into Typescript
-  export type Team = string;
-  export const Team  : {[index:string] : Team} = {
-    BLUE : "blue",
-    RED : "red"
-  };
-
-  export type Component = string;
-  export const Component : {[index:string] : string} = {
-    HEAD : "head",
-    RIGHT_ARM :"right_arm",
-    RIGHT_TORSO : "right_torso",
-    CENTRE_TORSO : "centre_torso",
-    LEFT_ARM : "left_arm",
-    LEFT_TORSO : "left_torso",
-    RIGHT_LEG : "right_leg",
-    LEFT_LEG : "left_leg",
-    LEFT_TORSO_REAR : "left_torso_rear",
-    CENTRE_TORSO_REAR : "centre_torso_rear",
-    RIGHT_TORSO_REAR : "right_torso_rear"
-  };
 
   export var isRearComponent = function(component : string) : boolean {
     return component === Component.LEFT_TORSO_REAR ||
@@ -57,40 +45,6 @@ namespace MechModel  {
         component === Component.RIGHT_TORSO_REAR;
   };
 
-  export type WeaponCycle = string;
-  export const WeaponCycle : {[index:string] : WeaponCycle}  = {
-    READY : "Ready",
-    FIRING : "Firing",
-    DISABLED : "Disabled",
-    COOLDOWN : "Cooldown",
-    COOLDOWN_FIRING : "CooldownFiring", //Double tap while on cooldown
-    SPOOLING : "Spooling",
-    JAMMED : "Jammed",
-  };
-
-  export type Faction = string;
-  export const Faction : {[index:string] : Faction}  = {
-    INNER_SPHERE : "InnerSphere",
-    CLAN : "Clan"
-  };
-
-  export type UpdateType = string;
-  export const UpdateType : {[index:string] : UpdateType}  = {
-    FULL : "full",
-    HEALTH : "health",
-    HEAT : "heat",
-    COOLDOWN : "cooldown",
-    WEAPONSTATE : "weaponstate",
-    STATS : "stats"
-  };
-
-  export type EngineType = string;
-  export const EngineType : {[index:string] : EngineType}  = {
-    STD : "std",
-    XL : "xl",
-    CLAN_XL : "clan_xl",
-    LIGHT : "light",
-  };
 
   var SmurfyWeaponData : SmurfyWeaponDataList = null;
   var SmurfyAmmoData : SmurfyAmmoDataList = null;
@@ -816,7 +770,7 @@ namespace MechModel  {
 
   //TODO: Try to move this out of model due to its dependence on WeaponFire
   //Or move WeaponFire here
-  export const BURST_DAMAGE_INTERVAL = 2000; //Interval considered for burst damage calculation
+
   export class MechStats {
     totalDamage : number;
     totalHeat : number;
@@ -836,7 +790,7 @@ namespace MechModel  {
       let burstDamage = 0;
       for (let idx = this.weaponFires.length - 1; idx > 0; idx--) {
         let weaponFire = this.weaponFires[idx];
-        if (simTime - weaponFire.createTime < BURST_DAMAGE_INTERVAL) {
+        if (simTime - weaponFire.createTime < MechModelCommon.BURST_DAMAGE_INTERVAL) {
           burstDamage += weaponFire.damageDone.totalDamage();
         } else {
           break;

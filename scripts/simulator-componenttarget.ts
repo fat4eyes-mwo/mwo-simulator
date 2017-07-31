@@ -1,11 +1,14 @@
 "use strict";
+/// <reference path="common/simulator-model-common.ts" />
 /// <reference path="simulator-model.ts" />
 /// <reference path="simulator-model-weapons.ts" />
 /// <reference path="simulator-patterns.ts" />
 
 namespace MechTargetComponent {
+  import Component = MechModelCommon.Component;
+  import EngineType = MechModelCommon.EngineType;
+
   type Mech = MechModel.Mech;
-  type Component = MechModel.Component;
   type Pattern = ModelPatterns.Pattern;
 
   export type TargetComponentPattern = (sourceMech : Mech, targetMech : Mech) => Component;
@@ -13,33 +16,32 @@ namespace MechTargetComponent {
   //function(sourceMech, targetMech) -> MechModel.Component
   export var aimForCenterTorso =
       function(sourceMech : Mech, targetMech : Mech) : string {
-    return MechModel.Component.CENTRE_TORSO;
+    return Component.CENTRE_TORSO;
   }
 
   export var aimForXLSideTorso =
       function(sourceMech : Mech, targetMech : Mech) : Component {
     let mechInfo = targetMech.getMechInfo();
-    if (mechInfo.engineInfo.getEngineType() === MechModel.EngineType.XL) {
-      return MechModel.Component.RIGHT_TORSO;
+    if (mechInfo.engineInfo.getEngineType() === EngineType.XL) {
+      return Component.RIGHT_TORSO;
     } else {
-      return MechModel.Component.CENTRE_TORSO;
+      return Component.CENTRE_TORSO;
     }
   }
 
   export var aimForLegs =
       function(sourceMech : Mech, targetMech : Mech) : Component {
     let mechState = targetMech.getMechState();
-    if (mechState.mechHealth.isIntact(MechModel.Component.LEFT_LEG)) {
-      return MechModel.Component.LEFT_LEG;
+    if (mechState.mechHealth.isIntact(Component.LEFT_LEG)) {
+      return Component.LEFT_LEG;
     } else {
-      return MechModel.Component.RIGHT_LEG;
+      return Component.RIGHT_LEG;
     }
   }
 
   export var aimSideTorsoThenCenterTorso =
       function(sourceMech : Mech, targetMech : Mech) : Component {
     let targetMechHealth = targetMech.getMechState().mechHealth;
-    let Component = MechModel.Component;
     if (targetMechHealth.isIntact(Component.RIGHT_TORSO)) {
       return Component.RIGHT_TORSO;
     } else if (targetMechHealth.isIntact(Component.LEFT_TORSO)) {
@@ -50,7 +52,6 @@ namespace MechTargetComponent {
   }
 
   export var randomAim = function(sourceMech : Mech, targetMech : Mech) : Component {
-    let Component = MechModel.Component;
     let componentList = [
       Component.RIGHT_ARM,
       Component.RIGHT_TORSO,

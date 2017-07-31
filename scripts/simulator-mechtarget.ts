@@ -9,8 +9,7 @@ namespace MechTargetMech  {
 
   export type TargetMechPattern = (mech : Mech, enemyMechList : Mech[]) => Mech;
   //These functions return which enemy mech to target
-  //function(MechModel.Mech, [MechModel.Mech])-> MechModel.Mech
-  export var targetMechsInOrder =
+  export var targetMechsInOrder : TargetMechPattern =
       function (mech : Mech, enemyMechList : Mech[]) : Mech {
     for (let enemyMech of enemyMechList) {
       if (enemyMech.getMechState().isAlive()) {
@@ -21,7 +20,8 @@ namespace MechTargetMech  {
   }
 
   var targetMap = new Map<Mech, Mech>();
-  export var targetRandomMech = function (mech : Mech, enemyMechList : Mech[]) : Mech {
+  export var targetRandomMech : TargetMechPattern =
+      function (mech : Mech, enemyMechList : Mech[]) : Mech {
     let targetMech = targetMap.get(mech);
     if (!targetMech || !targetMech.getMechState().isAlive()) {
       let liveEnemyMechs = [];
@@ -36,7 +36,7 @@ namespace MechTargetMech  {
     return targetMech;
   }
 
-  var targetHighestFirepower =
+  var targetHighestFirepower : TargetMechPattern =
       function (mech : Mech, enemyMechList : Mech[]) : Mech {
     let maxFirepower : number;
     let maxFirepowerMech : Mech;
@@ -53,7 +53,8 @@ namespace MechTargetMech  {
     return maxFirepowerMech;
   }
 
-  var targetHeaviest = function (mech : Mech, enemyMechList : Mech[]) : Mech {
+  var targetHeaviest : TargetMechPattern =
+      function (mech : Mech, enemyMechList : Mech[]) : Mech {
     let maxWeight : number;
     let maxWeightMech : Mech;
     for (let enemyMech of enemyMechList) {

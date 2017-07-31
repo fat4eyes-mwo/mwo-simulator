@@ -1,10 +1,11 @@
+/// <reference path="common/simulator-model-common.ts" />
+/// <reference path="simulator-modelview.ts" />
 /// <reference path="simulator-view-widgets.ts" />
-/// <reference path="simulator-model.ts" />
 
 "use strict";
 
 namespace MechViewReport {
-  type Team = MechModel.Team;
+  import Team = MechModelCommon.Team;
 
   export class VictoryReport {
     domElement : Element;
@@ -33,7 +34,7 @@ namespace MechViewReport {
       reportJQ.find("[class~=rangeValue]")
         .text(`${Number(simParams.range).toFixed(0)}m`);
 
-      let teamList : Team[] = [MechModel.Team.BLUE, MechModel.Team.RED];
+      let teamList : Team[] = [Team.BLUE, Team.RED];
       for (let team of teamList) {
         let teamReport = new TeamReport(team);
         reportJQ.find(`[class~=${this.teamReportPanelId(team)}]`)

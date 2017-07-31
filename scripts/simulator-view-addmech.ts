@@ -1,4 +1,4 @@
-/// <reference path="simulator-model.ts" />
+/// <reference path="common/simulator-model-common.ts" />
 /// <reference path="simulator-view-widgets.ts" />
 /// <reference path="simulator-view-mechPanel.ts" />
 /// <reference path="simulator-smurfytypes.ts" />
@@ -6,7 +6,8 @@
 "use strict";
 
 namespace MechViewAddMech {
-  type Team = MechModel.Team;
+  import Team = MechModelCommon.Team;
+
   type MechButton = MechViewWidgets.MechButton;
   type SmurfyMechLoadout = SmurfyTypes.SmurfyMechLoadout;
 
@@ -101,8 +102,7 @@ namespace MechViewAddMech {
       let smurfyMechData = MechModel.getSmurfyMechData(smurfyMechLoadout.mech_id);
       let mechTranslatedName = smurfyMechData.translated_name;
       let mechName = smurfyMechData.name;
-      let newMechId = MechModel.generateMechId(loadedSmurfyLoadout);
-      let newMech = MechModel.addMech(newMechId, team, smurfyMechLoadout);
+      let newMech = MechModelView.addMech(team, smurfyMechLoadout);
       //set patterns of added mech to selected team patterns
       MechViewTeamStats.setSelectedTeamPatterns(team);
       MechViewRouter.modifyAppState();

@@ -1,14 +1,17 @@
 "use strict";
+/// <reference path="common/simulator-model-common.ts" />
 /// <reference path="simulator-model.ts" />
 /// <reference path="simulator-view-widgets.ts" />
 
 namespace MechViewMechPanel {
-  type Component = string;
+  import WeaponCycle = MechModelCommon.WeaponCycle;
+  import Component = MechModelCommon.Component;
+  import Team = MechModelCommon.Team;
+
   type Mech = MechModel.Mech;
   type WeaponState = MechModelWeapons.WeaponState;
   type AmmoState = MechModel.AmmoState;
-  type WeaponCycle = MechModel.WeaponCycle;
-  type Team = MechModel.Team;
+
   //Add a paper doll with the given mechId to the element with the id
   //paperDollContainer uses the template paperDoll-template from the main HTML file
   var paperDollId =function (mechId : string) : string {
@@ -67,9 +70,9 @@ namespace MechViewMechPanel {
       .attr("data-mech-id", mechId)
       .appendTo(mechHealthNumbersContainer);
 
-    for (let locationIdx in MechModel.Component) {
-      if (MechModel.Component.hasOwnProperty(locationIdx)) {
-        let location = MechModel.Component[locationIdx];
+    for (let locationIdx in Component) {
+      if (Component.hasOwnProperty(locationIdx)) {
+        let location = Component[locationIdx];
         $(`#${mechHealthNumbersDivId}` +
           ` [data-location='${location}']` +
           " [data-healthtype=armor]")
@@ -252,9 +255,9 @@ namespace MechViewMechPanel {
                 : void {
     //Note: the remove class string must include all the MechModel.WeaponCycle strings
     let removeClassString = "";
-    for (let weaponCycle in MechModel.WeaponCycle) {
-      if (MechModel.WeaponCycle.hasOwnProperty(weaponCycle)) {
-        removeClassString += MechModel.WeaponCycle[weaponCycle] + " ";
+    for (let weaponCycle in WeaponCycle) {
+      if (WeaponCycle.hasOwnProperty(weaponCycle)) {
+        removeClassString += WeaponCycle[weaponCycle] + " ";
       }
     }
     let weaponRowDiv = document.getElementById(weaponRowId(mechId, weaponIdx));

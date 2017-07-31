@@ -1,4 +1,5 @@
 "use strict";
+/// <reference path="common/simulator-model-common.ts" />
 /// <reference path="simulator-model.ts" />
 /// <reference path="simulator-model-weapons.ts" />
 /// <reference path="simulator-patterns.ts" />
@@ -6,6 +7,7 @@
 //Fire patterns are functions that take a mech and return a list of weaponstates
 //which represent the weapons to fire
 namespace MechFirePattern {
+  import WeaponCycle =MechModelCommon.WeaponCycle;
   type Mech = MechModel.Mech;
   type Pattern = ModelPatterns.Pattern;
   type WeaponState = MechModelWeapons.WeaponState;
@@ -93,7 +95,7 @@ namespace MechFirePattern {
     let mechState = mech.getMechState();
     let weaponsToFire = [];
     for (let weaponState of mechState.weaponStateList) {
-      if (weaponState.weaponCycle === MechModel.WeaponCycle.READY) {
+      if (weaponState.weaponCycle === WeaponCycle.READY) {
         weaponsToFire.push(weaponState);
       }
     }

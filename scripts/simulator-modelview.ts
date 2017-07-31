@@ -1,5 +1,7 @@
 "use strict";
+/// <reference path="common/simulator-model-common.ts" />
 /// <reference path="simulator-model.ts" />
+/// <reference path="simulator-smurfytypes.ts" />
 /// <reference path="simulator-model-weapons.ts" />
 /// <reference path="simulator-accuracypattern.ts" />
 /// <reference path="simulator-componenttarget.ts" />
@@ -10,7 +12,10 @@
 
 //Methods that update the MechView from the MechModel, and vice versa
 namespace MechModelView {
-  type Team = MechModel.Team;
+  import Team = MechModelCommon.Team;
+  import WeaponCycle = MechModelCommon.WeaponCycle;
+  import UpdateType = MechModelCommon.UpdateType;
+
   type Mech = MechModel.Mech;
   type WeaponState = MechModelWeapons.WeaponState;
   type SimulatorParameters = MechSimulatorLogic.SimulatorParameters;
@@ -20,6 +25,7 @@ namespace MechModelView {
   type TargetMechPattern = MechTargetMech.TargetMechPattern;
   type MechStats = MechModel.MechStats;
   type WeaponFire = MechSimulatorLogic.WeaponFire;
+  type SmurfyMechLoadout = SmurfyTypes.SmurfyMechLoadout;
 
   //clears the view and recreates all UI elements
   export type ViewUpdate = string;
@@ -31,7 +37,7 @@ namespace MechModelView {
   export var refreshView =
       function (updates : ViewUpdate[] = [ViewUpdate.TEAMSTATS, ViewUpdate.MECHLISTS]) : void {
     document.title = getPageTitle();
-    let mechTeamList = [MechModel.Team.BLUE, MechModel.Team.RED];
+    let mechTeamList = [Team.BLUE, Team.RED];
     for (let team of mechTeamList) {
       if (updates.includes(ViewUpdate.MECHLISTS)) {
         MechView.clearMechList(team);
@@ -61,7 +67,7 @@ namespace MechModelView {
   const BASE_PAGE_TITLE = "MWO Loadout Simulator";
   const TITLE_MAX_MECHS = 2;
   var getPageTitle = function() : string {
-    let mechTeamList : Team[] = [MechModel.Team.BLUE, MechModel.Team.RED];
+    let mechTeamList : Team[] = [Team.BLUE, Team.RED];
     let teamTitle : {[index:string] : Team} = {};
 
     for (let team of mechTeamList) {
@@ -81,8 +87,8 @@ namespace MechModelView {
       }
     }
     return BASE_PAGE_TITLE + " : " +
-            teamTitle[MechModel.Team.BLUE] + " VS "
-            + teamTitle[MechModel.Team.RED];
+            teamTitle[Team.BLUE] + " VS "
+            + teamTitle[Team.RED];
   }
 
   export var updateHeat = function(mech : Mech) : void {
@@ -98,22 +104,22 @@ namespace MechModelView {
       let weaponState = mechState.weaponStateList[weaponIndex];
       let weaponInfo = weaponState.weaponInfo;
       let cooldownPercent = 0;
-      if (weaponState.weaponCycle === MechModel.WeaponCycle.READY) {
+      if (weaponState.weaponCycle === WeaponCycle.READY) {
         cooldownPercent = 0;
-      } else if (weaponState.weaponCycle === MechModel.WeaponCycle.FIRING) {
+      } else if (weaponState.weaponCycle === WeaponCycle.FIRING) {
         if (weaponState.hasJamBar()) {
           cooldownPercent = weaponState.getJamProgress();
           type = "jamBar";
         } else {
           cooldownPercent = 1;
         }
-      } else if (weaponState.weaponCycle === MechModel.WeaponCycle.DISABLED) {
+      } else if (weaponState.weaponCycle === WeaponCycle.DISABLED) {
         cooldownPercent = 1;
-      } else if (weaponState.weaponCycle === MechModel.WeaponCycle.COOLDOWN) {
+      } else if (weaponState.weaponCycle === WeaponCycle.COOLDOWN) {
         cooldownPercent = Number(weaponState.cooldownLeft) / Number(weaponState.computeWeaponCooldown());
-      } else if (weaponState.weaponCycle === MechModel.WeaponCycle.SPOOLING) {
+      } else if (weaponState.weaponCycle === WeaponCycle.SPOOLING) {
         cooldownPercent = 1 - (Number(weaponState.spoolupLeft) / Number(weaponInfo.spinup));
-      } else if (weaponState.weaponCycle === MechModel.WeaponCycle.JAMMED) {
+      } else if (weaponState.weaponCycle === WeaponCycle.JAMMED) {
         cooldownPercent = 1;
       }
       MechViewMechPanel.setWeaponCooldown(mech.getMechId(), Number(weaponIndex), cooldownPercent, type);
@@ -196,12 +202,12 @@ namespace MechModelView {
   export var updateMech = function(mech : Mech) : void {
     let mechState = mech.getMechState();
     let updateFunctionMap : {[index:string] : (mech : Mech) => void}= {};
-    updateFunctionMap[MechModel.UpdateType.FULL] = updateAll;
-    updateFunctionMap[MechModel.UpdateType.HEALTH] = updateHealth;
-    updateFunctionMap[MechModel.UpdateType.HEAT] = updateHeat;
-    updateFunctionMap[MechModel.UpdateType.COOLDOWN] = updateCooldown;
-    updateFunctionMap[MechModel.UpdateType.WEAPONSTATE] = updateWeaponStatus;
-    updateFunctionMap[MechModel.UpdateType.STATS] = updateStats;
+    updateFunctionMap[UpdateType.FULL] = updateAll;
+    updateFunctionMap[UpdateType.HEALTH] = updateHealth;
+    updateFunctionMap[UpdateType.HEAT] = updateHeat;
+    updateFunctionMap[UpdateType.COOLDOWN] = updateCooldown;
+    updateFunctionMap[UpdateType.WEAPONSTATE] = updateWeaponStatus;
+    updateFunctionMap[UpdateType.STATS] = updateStats;
 
     for (let updateType in mechState.updateTypes) {
       if (mechState.updateTypes[updateType]) {
@@ -318,7 +324,7 @@ namespace MechModelView {
 
   export class TeamReport {
     team : Team;
-    weaponStats : Map<string, WeaponStat>; 
+    weaponStats : Map<string, WeaponStat>;
     mechReports : MechReport[];
     constructor(team : Team) {
       this.team = team;
@@ -458,7 +464,7 @@ namespace MechModelView {
           burstDamageStartIdx = Number(idx);
         } else {
           let currTime = weaponFire.createTime;
-          let burstInterval = MechModel.BURST_DAMAGE_INTERVAL;
+          let burstInterval = MechModelCommon.BURST_DAMAGE_INTERVAL;
           while ((currTime - this.weaponFires[burstDamageStartIdx].createTime) > burstInterval) {
             burstDamageStartIdx++;
           }
@@ -509,13 +515,13 @@ namespace MechModelView {
   }
 
   export var getVictorTeam = function () {
-    if (!MechModel.isTeamAlive(MechModel.Team.BLUE) &&
-        MechModel.isTeamAlive(MechModel.Team.RED)) {
-      return MechModel.Team.RED;
+    if (!MechModel.isTeamAlive(Team.BLUE) &&
+        MechModel.isTeamAlive(Team.RED)) {
+      return Team.RED;
     }
-    if (!MechModel.isTeamAlive(MechModel.Team.RED) &&
-        MechModel.isTeamAlive(MechModel.Team.BLUE)) {
-      return MechModel.Team.BLUE;
+    if (!MechModel.isTeamAlive(Team.RED) &&
+        MechModel.isTeamAlive(Team.BLUE)) {
+      return Team.BLUE;
     }
     return null;
   }
@@ -527,5 +533,10 @@ namespace MechModelView {
     } else {
       return null;
     }
+  }
+
+  export var addMech = function(team : Team, smurfyMechLoadout : SmurfyMechLoadout) : Mech {
+    let newMechId = MechModel.generateMechId(smurfyMechLoadout);
+    return MechModel.addMech(newMechId, team, smurfyMechLoadout);
   }
 }

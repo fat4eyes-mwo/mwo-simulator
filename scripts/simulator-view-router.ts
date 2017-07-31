@@ -1,3 +1,4 @@
+/// <reference path="common/simulator-model-common.ts" />
 /// <reference path="simulator-model.ts" />
 /// <reference path="simulator-view.ts" />
 /// <reference path="simulator-logic.ts" />
@@ -6,7 +7,7 @@
 //Router. Deals with interactions of the application state and the url hash fragment
 //Uses the ./php/simulator-persistence.php for storing application state to server
 namespace MechViewRouter {
-  type Team = MechModel.Team;
+  import Team = MechModelCommon.Team;
 
   const PERSISTENCE_URL = "./php/simulator-persistence.php";
   const PERSISTENCE_STATE_FIELD = "state";
@@ -53,7 +54,7 @@ namespace MechViewRouter {
         //current app state
         this.range = MechSimulatorLogic.getSimulatorParameters().range;
         this.teams = {};
-        let teamList = [MechModel.Team.BLUE, MechModel.Team.RED];
+        let teamList = [Team.BLUE, Team.RED];
         for (let team of teamList) {
           this.teams[team] = [];
           for (let mechIdx in MechModel.mechTeams[team]) {
@@ -82,7 +83,7 @@ namespace MechViewRouter {
       let ret : PersistedState = {range : null, teams : {}};
       ret.range = this.range;
       ret.teams = {};
-      let teamList = [MechModel.Team.BLUE, MechModel.Team.RED];
+      let teamList = [Team.BLUE, Team.RED];
       for (let team of teamList) {
         ret.teams[team] = [];
         for (let teamEntry of this.teams[team]) {
@@ -178,7 +179,7 @@ namespace MechViewRouter {
 
   //Loads the smurfy mechs from the appState into the model.
   var loadMechsFromSmurfy = function(newAppState : AppState) : Promise<any> {
-    let teamList = [MechModel.Team.BLUE, MechModel.Team.RED];
+    let teamList = [Team.BLUE, Team.RED];
     let totalMechsToLoad : number; //total number of mechs to load
     let currMechsLoaded : number; //current number of mechs loaded
     if (!newAppState.teams) {

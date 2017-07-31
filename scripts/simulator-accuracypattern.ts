@@ -1,10 +1,13 @@
 "use strict";
+/// <reference path="common/simulator-model-common.ts" />
 /// <reference path="simulator-model.ts" />
 /// <reference path="simulator-model-weapons.ts" />
 /// <reference path="simulator-patterns.ts" />
 /// <reference path="data/weaponspread.ts" />
 
 namespace MechAccuracyPattern {
+  import Component = MechModelCommon.Component;
+
   type WeaponDamage = MechModel.WeaponDamage;
   type WeaponInfo = MechModelWeapons.WeaponInfo;
   type WeaponSpread = GlobalGameInfo.WeaponSpread;
@@ -184,9 +187,9 @@ namespace MechAccuracyPattern {
     constructor(range : number, spread : WeaponSpreadAtRange) {
       this.range = Number(range);
       this.spread = {}
-      for (let component in MechModel.Component) {
-        let componentVal = MechModel.Component[component]
-        if (MechModel.Component.hasOwnProperty(component)) {
+      for (let component in Component) {
+        let componentVal = Component[component]
+        if (Component.hasOwnProperty(component)) {
           let percentDamage = spread[componentVal] ? Number(spread[componentVal]) : 0;
           if (percentDamage) {
             this.spread[componentVal] = percentDamage;
@@ -235,9 +238,9 @@ namespace MechAccuracyPattern {
       let rangeDiff = range - baseEntry.range;
 
       let computedSpread : WeaponSpreadAtRange = {};
-      for (let component in MechModel.Component) {
-        let componentVal = MechModel.Component[component];
-        if (MechModel.Component.hasOwnProperty(component)) {
+      for (let component in Component) {
+        let componentVal = Component[component];
+        if (Component.hasOwnProperty(component)) {
           let slope =
             (Number(nextEntry.spread[componentVal]) - Number(baseEntry.spread[componentVal])) /
             (Number(nextEntry.range) - Number(baseEntry.range));

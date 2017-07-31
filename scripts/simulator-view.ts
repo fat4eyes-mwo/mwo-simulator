@@ -1,11 +1,16 @@
-"use strict";
+/// <reference path="common/simulator-model-common.ts" />
 /// <reference path="simulator-view-widgets.ts" />
 /// <reference path="simulator-model.ts" />
+"use strict";
+
 //UI methods
 //TODO: Remove direct references to MechModel
 namespace MechView {
-  type Team = MechModel.Team;
+  import Component = MechModelCommon.Component;
+
+  type Team = MechModelCommon.Team;
   type Tooltip = MechViewWidgets.Tooltip;
+
   export var clearMechList = function(team : Team) : void {
     let teamMechPanelId = team + "Team";
     $("#" + teamMechPanelId).empty();
@@ -214,9 +219,9 @@ namespace MechView {
     MechViewWidgets.setModal(loadingScreenDiv);
 
     MechViewMechPanel.addPaperDoll(LOADING_SCREEN_MECH_ID, "loadingScreenPaperDollContainer");
-    for (let componentIdx in MechModel.Component) {
-      if (MechModel.Component.hasOwnProperty(componentIdx)) {
-        let component = MechModel.Component[componentIdx];
+    for (let componentIdx in Component) {
+      if (Component.hasOwnProperty(componentIdx)) {
+        let component = Component[componentIdx];
         MechViewMechPanel.setPaperDollArmor(LOADING_SCREEN_MECH_ID, component, 1);
         MechViewMechPanel.setPaperDollStructure(LOADING_SCREEN_MECH_ID, component, 1);
       }
@@ -226,9 +231,9 @@ namespace MechView {
     }
     loadingScreenAnimateInterval = window.setInterval(
       function () {
-        for (let componentIdx in MechModel.Component) {
-          if (MechModel.Component.hasOwnProperty(componentIdx)) {
-            let component = MechModel.Component[componentIdx];
+        for (let componentIdx in Component) {
+          if (Component.hasOwnProperty(componentIdx)) {
+            let component = Component[componentIdx];
             MechViewMechPanel.setPaperDollArmor(LOADING_SCREEN_MECH_ID, component, Math.random());
             MechViewMechPanel.setPaperDollStructure(LOADING_SCREEN_MECH_ID, component, Math.random());
           }

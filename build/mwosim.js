@@ -1,4 +1,56 @@
 "use strict";
+//NOTE: Common ts files must be put before all other files in the build order in
+//tsconfig.json
+var MechModelCommon;
+//NOTE: Common ts files must be put before all other files in the build order in
+//tsconfig.json
+(function (MechModelCommon) {
+    MechModelCommon.Team = {
+        BLUE: "blue",
+        RED: "red"
+    };
+    MechModelCommon.Component = {
+        HEAD: "head",
+        RIGHT_ARM: "right_arm",
+        RIGHT_TORSO: "right_torso",
+        CENTRE_TORSO: "centre_torso",
+        LEFT_ARM: "left_arm",
+        LEFT_TORSO: "left_torso",
+        RIGHT_LEG: "right_leg",
+        LEFT_LEG: "left_leg",
+        LEFT_TORSO_REAR: "left_torso_rear",
+        CENTRE_TORSO_REAR: "centre_torso_rear",
+        RIGHT_TORSO_REAR: "right_torso_rear"
+    };
+    MechModelCommon.WeaponCycle = {
+        READY: "Ready",
+        FIRING: "Firing",
+        DISABLED: "Disabled",
+        COOLDOWN: "Cooldown",
+        COOLDOWN_FIRING: "CooldownFiring",
+        SPOOLING: "Spooling",
+        JAMMED: "Jammed",
+    };
+    MechModelCommon.Faction = {
+        INNER_SPHERE: "InnerSphere",
+        CLAN: "Clan"
+    };
+    MechModelCommon.UpdateType = {
+        FULL: "full",
+        HEALTH: "health",
+        HEAT: "heat",
+        COOLDOWN: "cooldown",
+        WEAPONSTATE: "weaponstate",
+        STATS: "stats"
+    };
+    MechModelCommon.EngineType = {
+        STD: "std",
+        XL: "xl",
+        CLAN_XL: "clan_xl",
+        LIGHT: "light",
+    };
+    MechModelCommon.BURST_DAMAGE_INTERVAL = 2000; //Interval considered for burst damage calculation
+})(MechModelCommon || (MechModelCommon = {}));
 //Additional heatsink data to account for info not in smurfy
 //Reference: http://steamcommunity.com/sharedfiles/filedetails/?id=686548357
 var AddedData;
@@ -3208,16 +3260,19 @@ var GlobalGameInfo;
             "left_arm": 0.00, "right_arm": 0.00, },
     };
 })(GlobalGameInfo || (GlobalGameInfo = {}));
+/// <reference path="common/simulator-model-common.ts" />
 /// <reference path="simulator-model.ts" />
 /// <reference path="simulator-model-weapons.ts" />
 /// <reference path="simulator-patterns.ts" />
 /// <reference path="data/weaponspread.ts" />
 var MechAccuracyPattern;
+/// <reference path="common/simulator-model-common.ts" />
 /// <reference path="simulator-model.ts" />
 /// <reference path="simulator-model-weapons.ts" />
 /// <reference path="simulator-patterns.ts" />
 /// <reference path="data/weaponspread.ts" />
 (function (MechAccuracyPattern) {
+    var Component = MechModelCommon.Component;
     //Functions that determine how damage from a weapon is spread
     //type is function(MechModel.WeaponDamage, range) -> MechModel.WeaponDamage
     MechAccuracyPattern.fullAccuracyPattern = function (weaponDamage, range) {
@@ -3367,9 +3422,9 @@ var MechAccuracyPattern;
         constructor(range, spread) {
             this.range = Number(range);
             this.spread = {};
-            for (let component in MechModel.Component) {
-                let componentVal = MechModel.Component[component];
-                if (MechModel.Component.hasOwnProperty(component)) {
+            for (let component in Component) {
+                let componentVal = Component[component];
+                if (Component.hasOwnProperty(component)) {
                     let percentDamage = spread[componentVal] ? Number(spread[componentVal]) : 0;
                     if (percentDamage) {
                         this.spread[componentVal] = percentDamage;
@@ -3415,9 +3470,9 @@ var MechAccuracyPattern;
             let nextEntry = seekerSpreadList[nextIdx];
             let rangeDiff = range - baseEntry.range;
             let computedSpread = {};
-            for (let component in MechModel.Component) {
-                let componentVal = MechModel.Component[component];
-                if (MechModel.Component.hasOwnProperty(component)) {
+            for (let component in Component) {
+                let componentVal = Component[component];
+                if (Component.hasOwnProperty(component)) {
                     let slope = (Number(nextEntry.spread[componentVal]) - Number(baseEntry.spread[componentVal])) /
                         (Number(nextEntry.range) - Number(baseEntry.range));
                     let computedPercent = baseEntry.spread[componentVal] + rangeDiff * slope;
@@ -3555,40 +3610,43 @@ var MechAccuracyPattern;
     MechAccuracyPattern.reset = function () {
     };
 })(MechAccuracyPattern || (MechAccuracyPattern = {}));
+/// <reference path="common/simulator-model-common.ts" />
 /// <reference path="simulator-model.ts" />
 /// <reference path="simulator-model-weapons.ts" />
 /// <reference path="simulator-patterns.ts" />
 var MechTargetComponent;
+/// <reference path="common/simulator-model-common.ts" />
 /// <reference path="simulator-model.ts" />
 /// <reference path="simulator-model-weapons.ts" />
 /// <reference path="simulator-patterns.ts" />
 (function (MechTargetComponent) {
+    var Component = MechModelCommon.Component;
+    var EngineType = MechModelCommon.EngineType;
     //These functions return which component of a mech should be targeted
     //function(sourceMech, targetMech) -> MechModel.Component
     MechTargetComponent.aimForCenterTorso = function (sourceMech, targetMech) {
-        return MechModel.Component.CENTRE_TORSO;
+        return Component.CENTRE_TORSO;
     };
     MechTargetComponent.aimForXLSideTorso = function (sourceMech, targetMech) {
         let mechInfo = targetMech.getMechInfo();
-        if (mechInfo.engineInfo.getEngineType() === MechModel.EngineType.XL) {
-            return MechModel.Component.RIGHT_TORSO;
+        if (mechInfo.engineInfo.getEngineType() === EngineType.XL) {
+            return Component.RIGHT_TORSO;
         }
         else {
-            return MechModel.Component.CENTRE_TORSO;
+            return Component.CENTRE_TORSO;
         }
     };
     MechTargetComponent.aimForLegs = function (sourceMech, targetMech) {
         let mechState = targetMech.getMechState();
-        if (mechState.mechHealth.isIntact(MechModel.Component.LEFT_LEG)) {
-            return MechModel.Component.LEFT_LEG;
+        if (mechState.mechHealth.isIntact(Component.LEFT_LEG)) {
+            return Component.LEFT_LEG;
         }
         else {
-            return MechModel.Component.RIGHT_LEG;
+            return Component.RIGHT_LEG;
         }
     };
     MechTargetComponent.aimSideTorsoThenCenterTorso = function (sourceMech, targetMech) {
         let targetMechHealth = targetMech.getMechState().mechHealth;
-        let Component = MechModel.Component;
         if (targetMechHealth.isIntact(Component.RIGHT_TORSO)) {
             return Component.RIGHT_TORSO;
         }
@@ -3600,7 +3658,6 @@ var MechTargetComponent;
         }
     };
     MechTargetComponent.randomAim = function (sourceMech, targetMech) {
-        let Component = MechModel.Component;
         let componentList = [
             Component.RIGHT_ARM,
             Component.RIGHT_TORSO,
@@ -3707,18 +3764,21 @@ var MechTargetComponent;
     MechTargetComponent.reset = function () {
     };
 })(MechTargetComponent || (MechTargetComponent = {}));
+/// <reference path="common/simulator-model-common.ts" />
 /// <reference path="simulator-model.ts" />
 /// <reference path="simulator-model-weapons.ts" />
 /// <reference path="simulator-patterns.ts" />
 //Fire patterns are functions that take a mech and return a list of weaponstates
 //which represent the weapons to fire
 var MechFirePattern;
+/// <reference path="common/simulator-model-common.ts" />
 /// <reference path="simulator-model.ts" />
 /// <reference path="simulator-model-weapons.ts" />
 /// <reference path="simulator-patterns.ts" />
 //Fire patterns are functions that take a mech and return a list of weaponstates
 //which represent the weapons to fire
 (function (MechFirePattern) {
+    var WeaponCycle = MechModelCommon.WeaponCycle;
     MechFirePattern.alphaAtZeroHeat = function (mech, range) {
         let mechState = mech.getMechState();
         if (mechState.heatState.currHeat <= 0) {
@@ -3796,7 +3856,7 @@ var MechFirePattern;
         let mechState = mech.getMechState();
         let weaponsToFire = [];
         for (let weaponState of mechState.weaponStateList) {
-            if (weaponState.weaponCycle === MechModel.WeaponCycle.READY) {
+            if (weaponState.weaponCycle === WeaponCycle.READY) {
                 weaponsToFire.push(weaponState);
             }
         }
@@ -3882,6 +3942,7 @@ var MechFirePattern;
     MechFirePattern.reset = function () {
     };
 })(MechFirePattern || (MechFirePattern = {}));
+/// <reference path="common/simulator-model-common.ts" />
 /// <reference path="simulator-model.ts" />
 /// <reference path="data/user-options.ts" />
 //TODO: Start splitting things off from this file, it's getting too long
@@ -3889,6 +3950,7 @@ var MechFirePattern;
 //  move WeaponFire and weaponFire processing logic to separate file
 //  move SimulatorParameters to separate file
 var MechSimulatorLogic;
+/// <reference path="common/simulator-model-common.ts" />
 /// <reference path="simulator-model.ts" />
 /// <reference path="data/user-options.ts" />
 //TODO: Start splitting things off from this file, it's getting too long
@@ -3896,6 +3958,8 @@ var MechSimulatorLogic;
 //  move WeaponFire and weaponFire processing logic to separate file
 //  move SimulatorParameters to separate file
 (function (MechSimulatorLogic) {
+    var UpdateType = MechModelCommon.UpdateType;
+    var Team = MechModelCommon.Team;
     var simulationInterval = null;
     var simRunning = false;
     var simTime = 0;
@@ -4011,7 +4075,7 @@ var MechSimulatorLogic;
                         tickDamageDone = targetMechState.takeDamage(this.tickWeaponDamage);
                         this.damageDone.add(tickDamageDone);
                     }
-                    targetMechState.setUpdate(MechModel.UpdateType.HEALTH);
+                    targetMechState.setUpdate(UpdateType.HEALTH);
                 }
                 else {
                     //Weapon disabled before end of burn
@@ -4024,7 +4088,7 @@ var MechSimulatorLogic;
                 if (this.travelLeft <= 0) {
                     let damageDone = targetMechState.takeDamage(this.weaponDamage);
                     this.damageDone.add(damageDone);
-                    targetMechState.setUpdate(MechModel.UpdateType.HEALTH);
+                    targetMechState.setUpdate(UpdateType.HEALTH);
                     //add weaponFire.damageDone to mechStats
                     this.complete = true;
                 }
@@ -4105,7 +4169,7 @@ var MechSimulatorLogic;
     };
     //Simulation step function. Called every tick
     MechSimulatorLogic.step = function () {
-        let teams = [MechModel.Team.BLUE, MechModel.Team.RED];
+        let teams = [Team.BLUE, Team.RED];
         willUpdateTeamStats = {};
         processWeaponFires();
         for (let team of teams) {
@@ -4119,7 +4183,7 @@ var MechSimulatorLogic;
                         let targetMech = mech.mechTargetPattern(mech, MechModel.mechTeams[enemyTeam(team)]);
                         if (targetMech !== mech.getTargetMech()) {
                             mech.setTargetMech(targetMech);
-                            mechState.setUpdate(MechModel.UpdateType.STATS);
+                            mechState.setUpdate(UpdateType.STATS);
                         }
                         if (targetMech) {
                             fireWeapons(mech, weaponsToFire, targetMech);
@@ -4134,7 +4198,7 @@ var MechSimulatorLogic;
                     let mechStats = mechState.mechStats;
                     if (mechStats.timeOfDeath === null) {
                         mechStats.timeOfDeath = simTime;
-                        mechState.setUpdate(MechModel.UpdateType.STATS);
+                        mechState.setUpdate(UpdateType.STATS);
                     }
                 }
                 MechModelView.updateMech(mech);
@@ -4148,8 +4212,8 @@ var MechSimulatorLogic;
         MechModelView.updateSimTime(simTime);
         //if one team is dead, stop simulation, compute stats for the current step
         //and inform ModelView of victory
-        if (!MechModel.isTeamAlive(MechModel.Team.BLUE) ||
-            !MechModel.isTeamAlive(MechModel.Team.RED)) {
+        if (!MechModel.isTeamAlive(Team.BLUE) ||
+            !MechModel.isTeamAlive(Team.RED)) {
             MechSimulatorLogic.pauseSimulation();
             flushWeaponFireQueue();
             for (let team of teams) {
@@ -4160,11 +4224,11 @@ var MechSimulatorLogic;
         }
     };
     var enemyTeam = function (myTeam) {
-        if (myTeam === MechModel.Team.BLUE) {
-            return MechModel.Team.RED;
+        if (myTeam === Team.BLUE) {
+            return Team.RED;
         }
-        else if (myTeam === MechModel.Team.RED) {
-            return MechModel.Team.BLUE;
+        else if (myTeam === Team.RED) {
+            return Team.BLUE;
         }
         throw "Unable to find enemy team";
     };
@@ -4178,19 +4242,19 @@ var MechSimulatorLogic;
             let weaponInfo = weaponState.weaponInfo;
             let fireStatus = weaponState.fireWeapon();
             if (fireStatus.newState) {
-                mechState.setUpdate(MechModel.UpdateType.WEAPONSTATE);
+                mechState.setUpdate(UpdateType.WEAPONSTATE);
             }
             if (fireStatus.weaponFired) {
                 weaponsFired.push(weaponState);
                 queueWeaponFire(mech, targetMech, weaponState, fireStatus.ammoConsumed);
-                mechState.setUpdate(MechModel.UpdateType.COOLDOWN);
+                mechState.setUpdate(UpdateType.COOLDOWN);
             }
         }
         //update mech heat
         let totalHeat = computeHeat(mech, weaponsFired);
         if (totalHeat > 0) {
             mechState.heatState.currHeat += Number(totalHeat);
-            mechState.setUpdate(MechModel.UpdateType.HEAT);
+            mechState.setUpdate(UpdateType.HEAT);
             let mechStats = mechState.mechStats;
             mechStats.totalHeat += Number(totalHeat);
         }
@@ -4210,7 +4274,7 @@ var MechSimulatorLogic;
         let prevHeat = heatState.currHeat;
         heatState.currHeat = Math.max(0, heatState.currHeat - Number(stepHeatDissipation));
         if (heatState.currHeat != prevHeat) {
-            mechState.setUpdate(MechModel.UpdateType.HEAT);
+            mechState.setUpdate(UpdateType.HEAT);
         }
     };
     var processCooldowns = function (mech, targetMech) {
@@ -4223,16 +4287,16 @@ var MechSimulatorLogic;
                 queueWeaponFire(mech, targetMech, weaponState, stepResult.ammoConsumed);
             }
             if (stepResult.newState) {
-                mechState.setUpdate(MechModel.UpdateType.WEAPONSTATE);
+                mechState.setUpdate(UpdateType.WEAPONSTATE);
             }
             if (stepResult.cooldownChanged) {
-                mechState.setUpdate(MechModel.UpdateType.COOLDOWN);
+                mechState.setUpdate(UpdateType.COOLDOWN);
             }
         }
         let totalHeat = computeHeat(mech, weaponsFired);
         if (totalHeat > 0) {
             mechState.heatState.currHeat += Number(totalHeat);
-            mechState.setUpdate(MechModel.UpdateType.HEAT);
+            mechState.setUpdate(UpdateType.HEAT);
             let mechStats = mechState.mechStats;
             mechStats.totalHeat += Number(totalHeat);
         }
@@ -4272,7 +4336,7 @@ var MechSimulatorLogic;
         let mechStats = mechState.mechStats;
         mechStats.totalDamage += weaponFire.damageDone.totalDamage();
         mechStats.weaponFires.push(weaponFire);
-        mechState.setUpdate(MechModel.UpdateType.STATS);
+        mechState.setUpdate(UpdateType.STATS);
         willUpdateTeamStats[weaponFire.sourceMech.getMechTeam()] = true;
         willUpdateTeamStats[weaponFire.targetMech.getMechTeam()] = true;
         console.log(weaponInfo.name + " completed. Total damage: "
@@ -4282,7 +4346,7 @@ var MechSimulatorLogic;
             " dest: " + weaponFire.targetMech.getName());
     };
     var clearMechStats = function () {
-        let teams = [MechModel.Team.BLUE, MechModel.Team.RED];
+        let teams = [Team.BLUE, Team.RED];
         for (let team of teams) {
             for (let mech of MechModel.mechTeams[team]) {
                 mech.getMechState().clearMechStats();
@@ -4401,7 +4465,6 @@ var MechTargetMech;
 /// <reference path="simulator-patterns.ts" />
 (function (MechTargetMech) {
     //These functions return which enemy mech to target
-    //function(MechModel.Mech, [MechModel.Mech])-> MechModel.Mech
     MechTargetMech.targetMechsInOrder = function (mech, enemyMechList) {
         for (let enemyMech of enemyMechList) {
             if (enemyMech.getMechState().isAlive()) {
@@ -4620,14 +4683,17 @@ var MechModelQuirks;
         return ret;
     };
 })(MechModelQuirks || (MechModelQuirks = {}));
+/// <reference path="common/simulator-model-common.ts" />
 /// <reference path="simulator-smurfytypes.ts" />
 /// <reference path="simulator-model.ts" />
 //Weapon state classes
 var MechModelWeapons;
+/// <reference path="common/simulator-model-common.ts" />
 /// <reference path="simulator-smurfytypes.ts" />
 /// <reference path="simulator-model.ts" />
 //Weapon state classes
 (function (MechModelWeapons) {
+    var WeaponCycle = MechModelCommon.WeaponCycle;
     class WeaponInfo {
         constructor(weaponId, location, smurfyWeaponData, mechInfo) {
             this.weaponId = weaponId; //smurfy weapon id
@@ -4766,7 +4832,7 @@ var MechModelWeapons;
             this.mechState = mechState;
             this.weaponInfo = weaponInfo;
             this.active = true;
-            this.weaponCycle = MechModel.WeaponCycle.READY;
+            this.weaponCycle = WeaponCycle.READY;
             this.cooldownLeft = 0;
             this.resetVolleyDelay();
         }
@@ -4784,7 +4850,7 @@ var MechModelWeapons;
                     ammoConsumed: ammoConsumed,
                     cooldownChanged: cooldownChanged };
             }
-            if (this.weaponCycle !== MechModel.WeaponCycle.FIRING) {
+            if (this.weaponCycle !== WeaponCycle.FIRING) {
                 this.volleyDelayLeft = Math.max(0, this.volleyDelayLeft - stepDuration);
             }
             return null;
@@ -4796,7 +4862,7 @@ var MechModelWeapons;
             let newDurationLeft = Number(this.durationLeft) - stepDuration;
             this.durationLeft = Math.max(newDurationLeft, 0);
             if (this.durationLeft <= 0) {
-                newState = MechModel.WeaponCycle.COOLDOWN;
+                newState = WeaponCycle.COOLDOWN;
                 this.gotoState(newState);
                 //if duration ended in the middle of the tick, subtract the
                 //extra time from the cooldown
@@ -4813,7 +4879,7 @@ var MechModelWeapons;
             let newCooldownLeft = Number(this.cooldownLeft) - stepDuration;
             this.cooldownLeft = Math.max(newCooldownLeft, 0);
             if (this.cooldownLeft <= 0) {
-                newState = MechModel.WeaponCycle.READY;
+                newState = WeaponCycle.READY;
                 this.gotoState(newState);
             }
             cooldownChanged = true;
@@ -4825,7 +4891,7 @@ var MechModelWeapons;
             let newJamLeft = Number(this.jamLeft) - stepDuration;
             this.jamLeft = Math.max(newJamLeft, 0);
             if (this.jamLeft <= 0) {
-                newState = MechModel.WeaponCycle.COOLDOWN;
+                newState = WeaponCycle.COOLDOWN;
                 this.gotoState(newState);
                 this.cooldownLeft += newJamLeft;
                 cooldownChanged = true;
@@ -4839,28 +4905,28 @@ var MechModelWeapons;
                 this.cooldownLeft = 0;
                 this.spoolupLeft = 0;
                 this.durationLeft = 0;
-                if (weaponCycle === MechModel.WeaponCycle.READY) {
+                if (weaponCycle === WeaponCycle.READY) {
                     this.currShotsDuringCooldown = this.weaponInfo.shotsDuringCooldown;
                 }
-                else if (weaponCycle === MechModel.WeaponCycle.FIRING) {
+                else if (weaponCycle === WeaponCycle.FIRING) {
                     this.durationLeft = this.computeWeaponDuration();
                     this.resetVolleyDelay();
                 }
-                else if (weaponCycle === MechModel.WeaponCycle.COOLDOWN) {
+                else if (weaponCycle === WeaponCycle.COOLDOWN) {
                     this.cooldownLeft = this.computeWeaponCooldown();
                 }
-                else if (weaponCycle === MechModel.WeaponCycle.COOLDOWN_FIRING) {
+                else if (weaponCycle === WeaponCycle.COOLDOWN_FIRING) {
                     this.cooldownLeft = prevCooldownLeft;
                 }
-                else if (weaponCycle === MechModel.WeaponCycle.SPOOLING) {
+                else if (weaponCycle === WeaponCycle.SPOOLING) {
                     this.spoolupLeft = Number(this.weaponInfo.spinup);
                 }
-                else if (weaponCycle === MechModel.WeaponCycle.DISABLED) {
+                else if (weaponCycle === WeaponCycle.DISABLED) {
                     //set cooldown to max so it displays properly in the view
                     this.cooldownLeft = this.computeWeaponCooldown();
                     this.active = false;
                 }
-                else if (weaponCycle === MechModel.WeaponCycle.JAMMED) {
+                else if (weaponCycle === WeaponCycle.JAMMED) {
                     this.cooldownLeft = this.computeWeaponCooldown();
                     //TODO Check uacJamMethod to compute jam time
                     this.jamLeft = this.computeJamTime();
@@ -4889,13 +4955,13 @@ var MechModelWeapons;
             return ammoConsumed;
         }
         isReady() {
-            return this.weaponCycle === MechModel.WeaponCycle.READY;
+            return this.weaponCycle === WeaponCycle.READY;
         }
         isOnCooldown() {
-            return this.weaponCycle === MechModel.WeaponCycle.COOLDOWN;
+            return this.weaponCycle === WeaponCycle.COOLDOWN;
         }
         isJammed() {
-            return this.weaponCycle === MechModel.WeaponCycle.JAMMED;
+            return this.weaponCycle === WeaponCycle.JAMMED;
         }
         hasJamBar() {
             return false;
@@ -4944,7 +5010,7 @@ var MechModelWeapons;
             if (!this.active || !this.canFire()) {
                 return { weaponFired: false, ammoConsumed: 0 };
             }
-            newState = MechModel.WeaponCycle.FIRING;
+            newState = WeaponCycle.FIRING;
             this.gotoState(newState);
             //assumes duration weapons don't consume ammo
             return { newState: newState, weaponFired: true, ammoConsumed: 0 };
@@ -4959,12 +5025,12 @@ var MechModelWeapons;
             if (precheckStatus) {
                 return precheckStatus;
             }
-            if (this.weaponCycle === MechModel.WeaponCycle.FIRING) {
+            if (this.weaponCycle === WeaponCycle.FIRING) {
                 let fireStatus = this.stepStandardFire(stepDuration);
                 newState = fireStatus.newState;
                 cooldownChanged = fireStatus.cooldownChanged;
             }
-            else if (this.weaponCycle === MechModel.WeaponCycle.COOLDOWN) {
+            else if (this.weaponCycle === WeaponCycle.COOLDOWN) {
                 let cooldownStatus = this.stepCooldown(stepDuration);
                 newState = cooldownStatus.newState;
                 cooldownChanged = cooldownStatus.cooldownChanged;
@@ -4975,7 +5041,7 @@ var MechModelWeapons;
                 cooldownChanged: cooldownChanged };
         }
         canFire() {
-            return this.weaponCycle === MechModel.WeaponCycle.READY;
+            return this.weaponCycle === WeaponCycle.READY;
         }
     }
     MechModelWeapons.WeaponStateDurationFire = WeaponStateDurationFire;
@@ -5002,32 +5068,32 @@ var MechModelWeapons;
             }
             if (weaponInfo.spinup > 0) {
                 //if weapon has spoolup, set state to SPOOLING and set value of spoolupLeft
-                newState = MechModel.WeaponCycle.SPOOLING;
+                newState = WeaponCycle.SPOOLING;
                 this.gotoState(newState);
                 return { newState: newState, weaponFired: false, ammoConsumed: 0 };
             }
             else {
                 let weaponFired = false;
                 let ammoConsumed = 0;
-                if (this.weaponCycle === MechModel.WeaponCycle.READY) {
-                    newState = MechModel.WeaponCycle.FIRING;
+                if (this.weaponCycle === WeaponCycle.READY) {
+                    newState = WeaponCycle.FIRING;
                     this.gotoState(newState);
                     weaponFired = true;
                 }
-                else if (this.weaponCycle === MechModel.WeaponCycle.COOLDOWN) {
+                else if (this.weaponCycle === WeaponCycle.COOLDOWN) {
                     //check jam chance
                     let rand = Math.random();
                     if (rand <= this.computeJamChance()) {
                         // if (true) {
                         //JAM
                         console.log("Jam: " + this.weaponInfo.name);
-                        newState = MechModel.WeaponCycle.JAMMED;
+                        newState = WeaponCycle.JAMMED;
                         this.gotoState(newState);
                         weaponFired = false;
                     }
                     else {
                         console.log("Double tap: " + this.weaponInfo.name);
-                        newState = MechModel.WeaponCycle.COOLDOWN_FIRING;
+                        newState = WeaponCycle.COOLDOWN_FIRING;
                         this.gotoState(newState);
                         this.currShotsDuringCooldown -= 1;
                         weaponFired = true;
@@ -5056,11 +5122,11 @@ var MechModelWeapons;
             //if spoolLeft <=0, change state to COOLDOWN
             //(assumes all spoolup weapons have no duration,
             //otherwise next state would be FIRING)
-            if (this.weaponCycle === MechModel.WeaponCycle.SPOOLING) {
+            if (this.weaponCycle === WeaponCycle.SPOOLING) {
                 let newSpoolLeft = Number(this.spoolupLeft) - stepDuration;
                 this.spoolupLeft = Math.max(newSpoolLeft, 0);
                 if (this.spoolupLeft <= 0) {
-                    newState = MechModel.WeaponCycle.COOLDOWN;
+                    newState = WeaponCycle.COOLDOWN;
                     this.gotoState(newState);
                     //if the spooling ended in the middle of the tick, subtract the
                     //extra time from the cooldown
@@ -5074,22 +5140,22 @@ var MechModelWeapons;
                 }
                 cooldownChanged = true;
             }
-            else if (this.weaponCycle === MechModel.WeaponCycle.FIRING) {
+            else if (this.weaponCycle === WeaponCycle.FIRING) {
                 let fireStatus = this.stepStandardFire(stepDuration);
                 newState = fireStatus.newState;
                 cooldownChanged = fireStatus.cooldownChanged;
             }
-            else if (this.weaponCycle === MechModel.WeaponCycle.COOLDOWN ||
-                this.weaponCycle === MechModel.WeaponCycle.COOLDOWN_FIRING) {
-                if (this.weaponCycle === MechModel.WeaponCycle.COOLDOWN_FIRING) {
-                    newState = MechModel.WeaponCycle.COOLDOWN;
+            else if (this.weaponCycle === WeaponCycle.COOLDOWN ||
+                this.weaponCycle === WeaponCycle.COOLDOWN_FIRING) {
+                if (this.weaponCycle === WeaponCycle.COOLDOWN_FIRING) {
+                    newState = WeaponCycle.COOLDOWN;
                     this.gotoState(newState, false);
                 }
                 let cooldownStatus = this.stepCooldown(stepDuration);
                 newState = newState || cooldownStatus.newState;
                 cooldownChanged = cooldownStatus.cooldownChanged;
             }
-            else if (this.weaponCycle === MechModel.WeaponCycle.JAMMED) {
+            else if (this.weaponCycle === WeaponCycle.JAMMED) {
                 let jamStatus = this.stepJammed(stepDuration);
                 newState = jamStatus.newState;
                 cooldownChanged = jamStatus.cooldownChanged;
@@ -5100,8 +5166,8 @@ var MechModelWeapons;
                 cooldownChanged: cooldownChanged };
         }
         canFire() {
-            return this.weaponCycle === MechModel.WeaponCycle.READY ||
-                (this.weaponCycle === MechModel.WeaponCycle.COOLDOWN &&
+            return this.weaponCycle === WeaponCycle.READY ||
+                (this.weaponCycle === WeaponCycle.COOLDOWN &&
                     this.currShotsDuringCooldown > 0 &&
                     this.volleyDelayLeft <= 0);
         }
@@ -5153,13 +5219,13 @@ var MechModelWeapons;
             //if weapon has no duration, set state to FIRING, will go to cooldown on the next step
             let weaponFired = false;
             let ammoConsumed = 0;
-            if (this.weaponCycle === MechModel.WeaponCycle.READY) {
-                newState = MechModel.WeaponCycle.FIRING;
+            if (this.weaponCycle === WeaponCycle.READY) {
+                newState = WeaponCycle.FIRING;
                 this.gotoState(newState);
                 this.isOnAutoFire = true;
                 //weapon not fired here, will be handled by step()
             }
-            else if (this.weaponCycle === MechModel.WeaponCycle.FIRING) {
+            else if (this.weaponCycle === WeaponCycle.FIRING) {
                 //auto fire, step() will handle the actual firing of the weapon
                 this.isOnAutoFire = true;
             }
@@ -5181,7 +5247,7 @@ var MechModelWeapons;
             if (precheckStatus) {
                 return precheckStatus;
             }
-            if (this.weaponCycle === MechModel.WeaponCycle.FIRING) {
+            if (this.weaponCycle === WeaponCycle.FIRING) {
                 this.incrementJamBar(stepDuration);
                 cooldownChanged = true;
                 this.rampUpLeft = Math.max(0, this.rampUpLeft - stepDuration);
@@ -5191,12 +5257,12 @@ var MechModelWeapons;
                         let rand = Math.random();
                         if (rand <= this.computeJamChance()) {
                             console.log("Jam: " + this.weaponInfo.name);
-                            newState = MechModel.WeaponCycle.JAMMED;
+                            newState = WeaponCycle.JAMMED;
                             this.gotoState(newState);
                             weaponFired = false;
                         }
                     }
-                    if (this.weaponCycle !== MechModel.WeaponCycle.JAMMED) {
+                    if (this.weaponCycle !== WeaponCycle.JAMMED) {
                         let autoFireStatus = this.stepAutoFire(stepDuration);
                         newState = autoFireStatus.newState;
                         weaponFired = autoFireStatus.weaponFired;
@@ -5208,12 +5274,12 @@ var MechModelWeapons;
             else {
                 this.decrementJamBar(stepDuration);
                 this.resetRampup();
-                if (this.weaponCycle === MechModel.WeaponCycle.COOLDOWN) {
+                if (this.weaponCycle === WeaponCycle.COOLDOWN) {
                     let cooldownStatus = this.stepCooldown(stepDuration);
                     newState = cooldownStatus.newState;
                     cooldownChanged = cooldownStatus.cooldownChanged;
                 }
-                else if (this.weaponCycle === MechModel.WeaponCycle.JAMMED) {
+                else if (this.weaponCycle === WeaponCycle.JAMMED) {
                     let jamStatus = this.stepJammed(stepDuration);
                     newState = jamStatus.newState;
                     cooldownChanged = jamStatus.cooldownChanged;
@@ -5245,11 +5311,11 @@ var MechModelWeapons;
                         this.weaponInfo.timeBetweenAutoShots + newTimeToAutoShot;
                     weaponFired = true;
                     //set new state just so the view gets an update to the weapon status (which includes ammo)
-                    newState = MechModel.WeaponCycle.FIRING;
+                    newState = WeaponCycle.FIRING;
                 }
             }
             else {
-                newState = MechModel.WeaponCycle.COOLDOWN;
+                newState = WeaponCycle.COOLDOWN;
                 this.gotoState(newState);
                 //TODO: not strictly correct, should count down whenever the weapon is
                 //not firing. However since rampup times are larger than autoshot times,
@@ -5265,8 +5331,8 @@ var MechModelWeapons;
                 cooldownChanged: cooldownChanged };
         }
         canFire() {
-            return this.weaponCycle === MechModel.WeaponCycle.READY ||
-                (this.weaponCycle === MechModel.WeaponCycle.FIRING &&
+            return this.weaponCycle === WeaponCycle.READY ||
+                (this.weaponCycle === WeaponCycle.FIRING &&
                     this.weaponInfo.isContinuousFire());
         }
     }
@@ -5294,6 +5360,7 @@ var MechModelWeapons;
 })(MechModelWeapons || (MechModelWeapons = {}));
 ;
 /// <reference path="lib/jquery-3.2.d.ts" />
+/// <reference path="common/simulator-model-common.ts" />
 /// <reference path="simulator-model-quirks.ts" />
 /// <reference path="simulator-model-weapons.ts" />
 /// <reference path="simulator-smurfytypes.ts" />
@@ -5306,6 +5373,7 @@ var MechModelWeapons;
 //and methos to populate them from smurfy data
 var MechModel;
 /// <reference path="lib/jquery-3.2.d.ts" />
+/// <reference path="common/simulator-model-common.ts" />
 /// <reference path="simulator-model-quirks.ts" />
 /// <reference path="simulator-model-weapons.ts" />
 /// <reference path="simulator-smurfytypes.ts" />
@@ -5317,54 +5385,17 @@ var MechModel;
 //Classes that represent the states of the mechs in the simulation,
 //and methos to populate them from smurfy data
 (function (MechModel) {
-    MechModel.Team = {
-        BLUE: "blue",
-        RED: "red"
-    };
-    MechModel.Component = {
-        HEAD: "head",
-        RIGHT_ARM: "right_arm",
-        RIGHT_TORSO: "right_torso",
-        CENTRE_TORSO: "centre_torso",
-        LEFT_ARM: "left_arm",
-        LEFT_TORSO: "left_torso",
-        RIGHT_LEG: "right_leg",
-        LEFT_LEG: "left_leg",
-        LEFT_TORSO_REAR: "left_torso_rear",
-        CENTRE_TORSO_REAR: "centre_torso_rear",
-        RIGHT_TORSO_REAR: "right_torso_rear"
-    };
+    var Team = MechModelCommon.Team;
+    var Component = MechModelCommon.Component;
+    var WeaponCycle = MechModelCommon.WeaponCycle;
+    var UpdateType = MechModelCommon.UpdateType;
+    var EngineType = MechModelCommon.EngineType;
+    //TODO: See if you can get a tighter type for enums. Try aliasing.
+    //Also check when string enums get put into Typescript
     MechModel.isRearComponent = function (component) {
-        return component === MechModel.Component.LEFT_TORSO_REAR ||
-            component === MechModel.Component.CENTRE_TORSO_REAR ||
-            component === MechModel.Component.RIGHT_TORSO_REAR;
-    };
-    MechModel.WeaponCycle = {
-        READY: "Ready",
-        FIRING: "Firing",
-        DISABLED: "Disabled",
-        COOLDOWN: "Cooldown",
-        COOLDOWN_FIRING: "CooldownFiring",
-        SPOOLING: "Spooling",
-        JAMMED: "Jammed",
-    };
-    MechModel.Faction = {
-        INNER_SPHERE: "InnerSphere",
-        CLAN: "Clan"
-    };
-    MechModel.UpdateType = {
-        FULL: "full",
-        HEALTH: "health",
-        HEAT: "heat",
-        COOLDOWN: "cooldown",
-        WEAPONSTATE: "weaponstate",
-        STATS: "stats"
-    };
-    MechModel.EngineType = {
-        STD: "std",
-        XL: "xl",
-        CLAN_XL: "clan_xl",
-        LIGHT: "light",
+        return component === Component.LEFT_TORSO_REAR ||
+            component === Component.CENTRE_TORSO_REAR ||
+            component === Component.RIGHT_TORSO_REAR;
     };
     var SmurfyWeaponData = null;
     var SmurfyAmmoData = null;
@@ -5373,8 +5404,8 @@ var MechModel;
     var SmurfyOmnipodData = {};
     var SmurfyCTOmnipods = {};
     MechModel.mechTeams = {};
-    MechModel.mechTeams[MechModel.Team.BLUE] = [];
-    MechModel.mechTeams[MechModel.Team.RED] = [];
+    MechModel.mechTeams[Team.BLUE] = [];
+    MechModel.mechTeams[Team.RED] = [];
     var teamStats = {}; //format is {<team> : <teamStats>}
     var mechIdMap = {};
     class MechInfo {
@@ -5537,19 +5568,19 @@ var MechModel;
         isAlive() {
             let mechHealth = this.mechHealth;
             let engineInfo = this.mechInfo.engineInfo;
-            return mechHealth.isIntact(MechModel.Component.HEAD) &&
-                mechHealth.isIntact(MechModel.Component.CENTRE_TORSO) &&
-                (mechHealth.isIntact(MechModel.Component.LEFT_LEG)
-                    || mechHealth.isIntact(MechModel.Component.RIGHT_LEG)) &&
+            return mechHealth.isIntact(Component.HEAD) &&
+                mechHealth.isIntact(Component.CENTRE_TORSO) &&
+                (mechHealth.isIntact(Component.LEFT_LEG)
+                    || mechHealth.isIntact(Component.RIGHT_LEG)) &&
                 //xl engine implies both torsos still intact
-                (!(engineInfo.getEngineType() === MechModel.EngineType.XL) ||
-                    (mechHealth.isIntact(MechModel.Component.LEFT_TORSO)
-                        && mechHealth.isIntact(MechModel.Component.RIGHT_TORSO))) &&
+                (!(engineInfo.getEngineType() === EngineType.XL) ||
+                    (mechHealth.isIntact(Component.LEFT_TORSO)
+                        && mechHealth.isIntact(Component.RIGHT_TORSO))) &&
                 //clan xl engine implies at least one side torso is intact
-                (!(engineInfo.getEngineType() === MechModel.EngineType.CLAN_XL ||
-                    engineInfo.getEngineType() === MechModel.EngineType.LIGHT) ||
-                    (mechHealth.isIntact(MechModel.Component.LEFT_TORSO)
-                        || mechHealth.isIntact(MechModel.Component.RIGHT_TORSO)));
+                (!(engineInfo.getEngineType() === EngineType.CLAN_XL ||
+                    engineInfo.getEngineType() === EngineType.LIGHT) ||
+                    (mechHealth.isIntact(Component.LEFT_TORSO)
+                        || mechHealth.isIntact(Component.RIGHT_TORSO)));
         }
         //Takes damage to components specified in weaponDamage.
         //Returns a MechDamage object that describes how much damage the mech took
@@ -5575,12 +5606,12 @@ var MechModel;
                     let destroyComponentDamage = this.destroyComponent(location, false);
                     totalDamage.add(destroyComponentDamage);
                     //destroy connected arms if torsos are destroyed
-                    if (location === MechModel.Component.LEFT_TORSO) {
-                        destroyComponentDamage = this.destroyComponent(MechModel.Component.LEFT_ARM, true);
+                    if (location === Component.LEFT_TORSO) {
+                        destroyComponentDamage = this.destroyComponent(Component.LEFT_ARM, true);
                         totalDamage.add(destroyComponentDamage);
                     }
-                    else if (location === MechModel.Component.RIGHT_TORSO) {
-                        destroyComponentDamage = this.destroyComponent(MechModel.Component.RIGHT_ARM, true);
+                    else if (location === Component.RIGHT_TORSO) {
+                        destroyComponentDamage = this.destroyComponent(Component.RIGHT_ARM, true);
                         totalDamage.add(destroyComponentDamage);
                     }
                     //update heatStat changes due to component destruction
@@ -5614,7 +5645,7 @@ var MechModel;
             //disable ammoboxes in the component
             let disabledAmmo = this.ammoState.disableAmmoBoxes(location);
             if (disabledAmmo.length > 0) {
-                this.setUpdate(MechModel.UpdateType.WEAPONSTATE);
+                this.setUpdate(UpdateType.WEAPONSTATE);
             }
             return destructionDamage;
         }
@@ -5622,8 +5653,8 @@ var MechModel;
             for (let weaponState of this.weaponStateList) {
                 let weaponInfo = weaponState.weaponInfo;
                 if (weaponInfo.location === location) {
-                    weaponState.gotoState(MechModel.WeaponCycle.DISABLED);
-                    this.setUpdate(MechModel.UpdateType.WEAPONSTATE);
+                    weaponState.gotoState(WeaponCycle.DISABLED);
+                    this.setUpdate(UpdateType.WEAPONSTATE);
                 }
             }
         }
@@ -5631,7 +5662,7 @@ var MechModel;
             for (let heatsink of this.heatState.currHeatsinkList) {
                 if (heatsink.location === location) {
                     heatsink.active = false;
-                    this.setUpdate(MechModel.UpdateType.HEAT);
+                    this.setUpdate(UpdateType.HEAT);
                 }
             }
         }
@@ -5640,10 +5671,10 @@ var MechModel;
             //reduce engine heat efficiency if clan xl engine
             let engineInfo = this.heatState.engineInfo;
             let heatState = this.heatState;
-            if (engineInfo.getEngineType() === MechModel.EngineType.CLAN_XL ||
-                engineInfo.getEngineType() === MechModel.EngineType.LIGHT) {
-                if (location === MechModel.Component.LEFT_TORSO ||
-                    location === MechModel.Component.RIGHT_TORSO) {
+            if (engineInfo.getEngineType() === EngineType.CLAN_XL ||
+                engineInfo.getEngineType() === EngineType.LIGHT) {
+                if (location === Component.LEFT_TORSO ||
+                    location === Component.RIGHT_TORSO) {
                     heatState.engineHeatEfficiency =
                         Number(GlobalGameInfo._MechGlobalGameInfo.clan_reduced_xl_heat_efficiency);
                 }
@@ -5652,7 +5683,7 @@ var MechModel;
             let heatStats = calculateHeatStats(heatState.currHeatsinkList, heatState.engineInfo, heatState.engineHeatEfficiency, this.mechInfo.generalQuirkBonus);
             heatState.currHeatDissipation = heatStats.heatDissipation;
             heatState.currMaxHeat = heatStats.heatCapacity;
-            this.setUpdate(MechModel.UpdateType.HEAT);
+            this.setUpdate(UpdateType.HEAT);
         }
         clearMechStats() {
             this.mechStats = new MechStats();
@@ -5701,8 +5732,8 @@ var MechModel;
             //are also sorted in consumption order
             //reference: https://mwomercs.com/forums/topic/65553-guide-ammo-depleting-priorities-or-in-what-order-is-your-ammo-being-used/
             let ammoLocationOrderIndex = function (location) {
-                const locationOrder = [MechModel.Component.HEAD, MechModel.Component.CENTRE_TORSO, MechModel.Component.RIGHT_TORSO, MechModel.Component.LEFT_TORSO,
-                    MechModel.Component.LEFT_ARM, MechModel.Component.RIGHT_ARM, MechModel.Component.LEFT_LEG, MechModel.Component.RIGHT_LEG];
+                const locationOrder = [Component.HEAD, Component.CENTRE_TORSO, Component.RIGHT_TORSO, Component.LEFT_TORSO,
+                    Component.LEFT_ARM, Component.RIGHT_ARM, Component.LEFT_LEG, Component.RIGHT_LEG];
                 let idx = 0;
                 for (idx = 0; idx < locationOrder.length; idx++) {
                     if (location === locationOrder[idx]) {
@@ -5840,10 +5871,10 @@ var MechModel;
         getEngineType() {
             let engineType;
             let engineMap = {
-                "Engine_Std": MechModel.EngineType.STD,
-                "Engine_XL": MechModel.EngineType.XL,
-                "Engine_Clan_XL": MechModel.EngineType.CLAN_XL,
-                "Engine_Light": MechModel.EngineType.LIGHT,
+                "Engine_Std": EngineType.STD,
+                "Engine_XL": EngineType.XL,
+                "Engine_Clan_XL": EngineType.CLAN_XL,
+                "Engine_Light": EngineType.LIGHT,
             };
             for (let enginePrefix in engineMap) {
                 if (this.name.startsWith(enginePrefix)) {
@@ -5967,7 +5998,6 @@ var MechModel;
     MechModel.WeaponDamage = WeaponDamage;
     //TODO: Try to move this out of model due to its dependence on WeaponFire
     //Or move WeaponFire here
-    MechModel.BURST_DAMAGE_INTERVAL = 2000; //Interval considered for burst damage calculation
     class MechStats {
         constructor() {
             this.totalDamage = 0;
@@ -5982,7 +6012,7 @@ var MechModel;
             let burstDamage = 0;
             for (let idx = this.weaponFires.length - 1; idx > 0; idx--) {
                 let weaponFire = this.weaponFires[idx];
-                if (simTime - weaponFire.createTime < MechModel.BURST_DAMAGE_INTERVAL) {
+                if (simTime - weaponFire.createTime < MechModelCommon.BURST_DAMAGE_INTERVAL) {
                     burstDamage += weaponFire.damageDone.totalDamage();
                 }
                 else {
@@ -6178,7 +6208,7 @@ var MechModel;
         return GlobalGameInfo._MechBaseStructure[tonnage][location];
     };
     MechModel.baseMechArmor = function (location, tonnage) {
-        if (location === MechModel.Component.HEAD) {
+        if (location === Component.HEAD) {
             return MechModel.baseMechStructure(location, tonnage);
         }
         else {
@@ -6319,7 +6349,7 @@ var MechModel;
         let externalHeatsinkCount = numExternalHeatsinks(smurfyMechLoadout);
         let smurfyHeatsinkCount = Number(smurfyMechLoadout.stats.heatsinks);
         let heatsinkCount = smurfyHeatsinkCount - externalHeatsinkCount;
-        let heatsink = new Heatsink(MechModel.Component.CENTRE_TORSO, MechModel.getSmurfyModuleData(engineHeatsinkId));
+        let heatsink = new Heatsink(Component.CENTRE_TORSO, MechModel.getSmurfyModuleData(engineHeatsinkId));
         let engineInfo = new EngineInfo(engineId, name, heatsink, heatsinkCount);
         return engineInfo;
     };
@@ -6334,7 +6364,7 @@ var MechModel;
     var numExternalHeatsinks = function (smurfyMechLoadout) {
         let heatsinkList = collectFromSmurfyConfiguration(smurfyMechLoadout.configuration, function (location, smurfyMechComponentItem) {
             let itemId = smurfyMechComponentItem.id;
-            if (isHeatsinkModule(itemId) && location !== MechModel.Component.CENTRE_TORSO) {
+            if (isHeatsinkModule(itemId) && location !== Component.CENTRE_TORSO) {
                 let heatsink = heatsinkFromSmurfyMechComponentItem(location, smurfyMechComponentItem);
                 return heatsink;
             }
@@ -6352,7 +6382,7 @@ var MechModel;
         for (let heatsink of heatsinkInfoList) {
             if (!heatsink.active)
                 continue;
-            if (heatsink.location === MechModel.Component.CENTRE_TORSO) {
+            if (heatsink.location === Component.CENTRE_TORSO) {
                 //NOTE: internal non-fixed heatsinks are included in the engine heatsink count
                 // heatCapacity += Number(heatsink.internalHeatCapacity);
                 // heatDissipation += Number(heatsink.engineCooling);
@@ -6474,7 +6504,7 @@ var MechModel;
         return newMech;
     };
     var getMechPosFromId = function (mech_id) {
-        let teamList = [MechModel.Team.BLUE, MechModel.Team.RED];
+        let teamList = [Team.BLUE, Team.RED];
         for (let team of teamList) {
             let mechList = MechModel.mechTeams[team];
             for (let mechIdx in mechList) {
@@ -6548,7 +6578,7 @@ var MechModel;
     };
     //Resets the MechStates of all mechs to their fresh value
     MechModel.resetState = function () {
-        let teams = [MechModel.Team.BLUE, MechModel.Team.RED];
+        let teams = [Team.BLUE, Team.RED];
         for (let team of teams) {
             let mechTeam = MechModel.mechTeams[team];
             for (let mech of mechTeam) {
@@ -6629,56 +6659,56 @@ var MechModel;
     //returns a list of adjacent components
     //MechModel.Component -> [MechModel.Component...]
     MechModel.getAdjacentComponents = function (component) {
-        if (component === MechModel.Component.HEAD) {
+        if (component === Component.HEAD) {
             return [];
         }
-        else if (component === MechModel.Component.CENTRE_TORSO) {
-            return [MechModel.Component.LEFT_TORSO, MechModel.Component.RIGHT_TORSO];
+        else if (component === Component.CENTRE_TORSO) {
+            return [Component.LEFT_TORSO, Component.RIGHT_TORSO];
         }
-        else if (component === MechModel.Component.LEFT_TORSO) {
-            return [MechModel.Component.CENTRE_TORSO, MechModel.Component.LEFT_ARM];
+        else if (component === Component.LEFT_TORSO) {
+            return [Component.CENTRE_TORSO, Component.LEFT_ARM];
         }
-        else if (component === MechModel.Component.RIGHT_TORSO) {
-            return [MechModel.Component.CENTRE_TORSO, MechModel.Component.RIGHT_ARM];
+        else if (component === Component.RIGHT_TORSO) {
+            return [Component.CENTRE_TORSO, Component.RIGHT_ARM];
         }
-        else if (component === MechModel.Component.RIGHT_ARM) {
-            return [MechModel.Component.RIGHT_TORSO];
+        else if (component === Component.RIGHT_ARM) {
+            return [Component.RIGHT_TORSO];
         }
-        else if (component === MechModel.Component.LEFT_ARM) {
-            return [MechModel.Component.LEFT_TORSO];
+        else if (component === Component.LEFT_ARM) {
+            return [Component.LEFT_TORSO];
         }
-        else if (component === MechModel.Component.LEFT_LEG) {
-            return [MechModel.Component.LEFT_TORSO];
+        else if (component === Component.LEFT_LEG) {
+            return [Component.LEFT_TORSO];
         }
-        else if (component === MechModel.Component.RIGHT_LEG) {
-            return [MechModel.Component.RIGHT_TORSO];
+        else if (component === Component.RIGHT_LEG) {
+            return [Component.RIGHT_TORSO];
         }
         return [];
     };
     var getTransferDamageLocation = function (component) {
-        if (component === MechModel.Component.HEAD) {
+        if (component === Component.HEAD) {
             return null;
         }
-        else if (component === MechModel.Component.CENTRE_TORSO) {
+        else if (component === Component.CENTRE_TORSO) {
             return null;
         }
-        else if (component === MechModel.Component.LEFT_TORSO) {
-            return MechModel.Component.CENTRE_TORSO;
+        else if (component === Component.LEFT_TORSO) {
+            return Component.CENTRE_TORSO;
         }
-        else if (component === MechModel.Component.RIGHT_TORSO) {
-            return MechModel.Component.CENTRE_TORSO;
+        else if (component === Component.RIGHT_TORSO) {
+            return Component.CENTRE_TORSO;
         }
-        else if (component === MechModel.Component.RIGHT_ARM) {
-            return MechModel.Component.RIGHT_TORSO;
+        else if (component === Component.RIGHT_ARM) {
+            return Component.RIGHT_TORSO;
         }
-        else if (component === MechModel.Component.LEFT_ARM) {
-            return MechModel.Component.LEFT_TORSO;
+        else if (component === Component.LEFT_ARM) {
+            return Component.LEFT_TORSO;
         }
-        else if (component === MechModel.Component.LEFT_LEG) {
-            return MechModel.Component.LEFT_TORSO;
+        else if (component === Component.LEFT_LEG) {
+            return Component.LEFT_TORSO;
         }
-        else if (component === MechModel.Component.RIGHT_LEG) {
-            return MechModel.Component.RIGHT_TORSO;
+        else if (component === Component.RIGHT_LEG) {
+            return Component.RIGHT_TORSO;
         }
     };
     MechModel.getMechFromId = function (mechId) {
@@ -6688,12 +6718,14 @@ var MechModel;
         return MechModel.mechTeams[mechPos.team][mechPos.index];
     };
     MechModel.clearModel = function () {
-        MechModel.mechTeams[MechModel.Team.BLUE] = [];
-        MechModel.mechTeams[MechModel.Team.RED] = [];
+        MechModel.mechTeams[Team.BLUE] = [];
+        MechModel.mechTeams[Team.RED] = [];
         teamStats = {};
     };
 })(MechModel || (MechModel = {}));
+/// <reference path="common/simulator-model-common.ts" />
 /// <reference path="simulator-model.ts" />
+/// <reference path="simulator-smurfytypes.ts" />
 /// <reference path="simulator-model-weapons.ts" />
 /// <reference path="simulator-accuracypattern.ts" />
 /// <reference path="simulator-componenttarget.ts" />
@@ -6703,7 +6735,9 @@ var MechModel;
 /// <reference path="simulator-view-mechPanel.ts" />
 //Methods that update the MechView from the MechModel, and vice versa
 var MechModelView;
+/// <reference path="common/simulator-model-common.ts" />
 /// <reference path="simulator-model.ts" />
+/// <reference path="simulator-smurfytypes.ts" />
 /// <reference path="simulator-model-weapons.ts" />
 /// <reference path="simulator-accuracypattern.ts" />
 /// <reference path="simulator-componenttarget.ts" />
@@ -6713,13 +6747,16 @@ var MechModelView;
 /// <reference path="simulator-view-mechPanel.ts" />
 //Methods that update the MechView from the MechModel, and vice versa
 (function (MechModelView) {
+    var Team = MechModelCommon.Team;
+    var WeaponCycle = MechModelCommon.WeaponCycle;
+    var UpdateType = MechModelCommon.UpdateType;
     MechModelView.ViewUpdate = {
         TEAMSTATS: "teamstats",
         MECHLISTS: "mechlists",
     };
     MechModelView.refreshView = function (updates = [MechModelView.ViewUpdate.TEAMSTATS, MechModelView.ViewUpdate.MECHLISTS]) {
         document.title = getPageTitle();
-        let mechTeamList = [MechModel.Team.BLUE, MechModel.Team.RED];
+        let mechTeamList = [Team.BLUE, Team.RED];
         for (let team of mechTeamList) {
             if (updates.includes(MechModelView.ViewUpdate.MECHLISTS)) {
                 MechView.clearMechList(team);
@@ -6748,7 +6785,7 @@ var MechModelView;
     const BASE_PAGE_TITLE = "MWO Loadout Simulator";
     const TITLE_MAX_MECHS = 2;
     var getPageTitle = function () {
-        let mechTeamList = [MechModel.Team.BLUE, MechModel.Team.RED];
+        let mechTeamList = [Team.BLUE, Team.RED];
         let teamTitle = {};
         for (let team of mechTeamList) {
             teamTitle[team] = "";
@@ -6768,8 +6805,8 @@ var MechModelView;
             }
         }
         return BASE_PAGE_TITLE + " : " +
-            teamTitle[MechModel.Team.BLUE] + " VS "
-            + teamTitle[MechModel.Team.RED];
+            teamTitle[Team.BLUE] + " VS "
+            + teamTitle[Team.RED];
     };
     MechModelView.updateHeat = function (mech) {
         let heatState = mech.getMechState().heatState;
@@ -6782,10 +6819,10 @@ var MechModelView;
             let weaponState = mechState.weaponStateList[weaponIndex];
             let weaponInfo = weaponState.weaponInfo;
             let cooldownPercent = 0;
-            if (weaponState.weaponCycle === MechModel.WeaponCycle.READY) {
+            if (weaponState.weaponCycle === WeaponCycle.READY) {
                 cooldownPercent = 0;
             }
-            else if (weaponState.weaponCycle === MechModel.WeaponCycle.FIRING) {
+            else if (weaponState.weaponCycle === WeaponCycle.FIRING) {
                 if (weaponState.hasJamBar()) {
                     cooldownPercent = weaponState.getJamProgress();
                     type = "jamBar";
@@ -6794,16 +6831,16 @@ var MechModelView;
                     cooldownPercent = 1;
                 }
             }
-            else if (weaponState.weaponCycle === MechModel.WeaponCycle.DISABLED) {
+            else if (weaponState.weaponCycle === WeaponCycle.DISABLED) {
                 cooldownPercent = 1;
             }
-            else if (weaponState.weaponCycle === MechModel.WeaponCycle.COOLDOWN) {
+            else if (weaponState.weaponCycle === WeaponCycle.COOLDOWN) {
                 cooldownPercent = Number(weaponState.cooldownLeft) / Number(weaponState.computeWeaponCooldown());
             }
-            else if (weaponState.weaponCycle === MechModel.WeaponCycle.SPOOLING) {
+            else if (weaponState.weaponCycle === WeaponCycle.SPOOLING) {
                 cooldownPercent = 1 - (Number(weaponState.spoolupLeft) / Number(weaponInfo.spinup));
             }
-            else if (weaponState.weaponCycle === MechModel.WeaponCycle.JAMMED) {
+            else if (weaponState.weaponCycle === WeaponCycle.JAMMED) {
                 cooldownPercent = 1;
             }
             MechViewMechPanel.setWeaponCooldown(mech.getMechId(), Number(weaponIndex), cooldownPercent, type);
@@ -6873,12 +6910,12 @@ var MechModelView;
     MechModelView.updateMech = function (mech) {
         let mechState = mech.getMechState();
         let updateFunctionMap = {};
-        updateFunctionMap[MechModel.UpdateType.FULL] = updateAll;
-        updateFunctionMap[MechModel.UpdateType.HEALTH] = MechModelView.updateHealth;
-        updateFunctionMap[MechModel.UpdateType.HEAT] = MechModelView.updateHeat;
-        updateFunctionMap[MechModel.UpdateType.COOLDOWN] = MechModelView.updateCooldown;
-        updateFunctionMap[MechModel.UpdateType.WEAPONSTATE] = MechModelView.updateWeaponStatus;
-        updateFunctionMap[MechModel.UpdateType.STATS] = updateStats;
+        updateFunctionMap[UpdateType.FULL] = updateAll;
+        updateFunctionMap[UpdateType.HEALTH] = MechModelView.updateHealth;
+        updateFunctionMap[UpdateType.HEAT] = MechModelView.updateHeat;
+        updateFunctionMap[UpdateType.COOLDOWN] = MechModelView.updateCooldown;
+        updateFunctionMap[UpdateType.WEAPONSTATE] = MechModelView.updateWeaponStatus;
+        updateFunctionMap[UpdateType.STATS] = updateStats;
         for (let updateType in mechState.updateTypes) {
             if (mechState.updateTypes[updateType]) {
                 updateFunctionMap[updateType](mech);
@@ -7077,7 +7114,7 @@ var MechModelView;
                 }
                 else {
                     let currTime = weaponFire.createTime;
-                    let burstInterval = MechModel.BURST_DAMAGE_INTERVAL;
+                    let burstInterval = MechModelCommon.BURST_DAMAGE_INTERVAL;
                     while ((currTime - this.weaponFires[burstDamageStartIdx].createTime) > burstInterval) {
                         burstDamageStartIdx++;
                     }
@@ -7119,13 +7156,13 @@ var MechModelView;
         // MechModelView.updateDebugText("Team Victory: " + team);
     };
     MechModelView.getVictorTeam = function () {
-        if (!MechModel.isTeamAlive(MechModel.Team.BLUE) &&
-            MechModel.isTeamAlive(MechModel.Team.RED)) {
-            return MechModel.Team.RED;
+        if (!MechModel.isTeamAlive(Team.BLUE) &&
+            MechModel.isTeamAlive(Team.RED)) {
+            return Team.RED;
         }
-        if (!MechModel.isTeamAlive(MechModel.Team.RED) &&
-            MechModel.isTeamAlive(MechModel.Team.BLUE)) {
-            return MechModel.Team.BLUE;
+        if (!MechModel.isTeamAlive(Team.RED) &&
+            MechModel.isTeamAlive(Team.BLUE)) {
+            return Team.BLUE;
         }
         return null;
     };
@@ -7137,6 +7174,10 @@ var MechModelView;
         else {
             return null;
         }
+    };
+    MechModelView.addMech = function (team, smurfyMechLoadout) {
+        let newMechId = MechModel.generateMechId(smurfyMechLoadout);
+        return MechModel.addMech(newMechId, team, smurfyMechLoadout);
     };
 })(MechModelView || (MechModelView = {}));
 /// <reference path="util.ts" />
@@ -7286,12 +7327,16 @@ var MechViewWidgets;
         }
     };
 })(MechViewWidgets || (MechViewWidgets = {}));
+/// <reference path="common/simulator-model-common.ts" />
 /// <reference path="simulator-model.ts" />
 /// <reference path="simulator-view-widgets.ts" />
 var MechViewMechPanel;
+/// <reference path="common/simulator-model-common.ts" />
 /// <reference path="simulator-model.ts" />
 /// <reference path="simulator-view-widgets.ts" />
 (function (MechViewMechPanel) {
+    var WeaponCycle = MechModelCommon.WeaponCycle;
+    var Component = MechModelCommon.Component;
     //Add a paper doll with the given mechId to the element with the id
     //paperDollContainer uses the template paperDoll-template from the main HTML file
     var paperDollId = function (mechId) {
@@ -7334,9 +7379,9 @@ var MechViewMechPanel;
             .attr("id", mechHealthNumbersDivId)
             .attr("data-mech-id", mechId)
             .appendTo(mechHealthNumbersContainer);
-        for (let locationIdx in MechModel.Component) {
-            if (MechModel.Component.hasOwnProperty(locationIdx)) {
-                let location = MechModel.Component[locationIdx];
+        for (let locationIdx in Component) {
+            if (Component.hasOwnProperty(locationIdx)) {
+                let location = Component[locationIdx];
                 $(`#${mechHealthNumbersDivId}` +
                     ` [data-location='${location}']` +
                     " [data-healthtype=armor]")
@@ -7476,9 +7521,9 @@ var MechViewMechPanel;
     MechViewMechPanel.setWeaponState = function (mechId, weaponIdx, state) {
         //Note: the remove class string must include all the MechModel.WeaponCycle strings
         let removeClassString = "";
-        for (let weaponCycle in MechModel.WeaponCycle) {
-            if (MechModel.WeaponCycle.hasOwnProperty(weaponCycle)) {
-                removeClassString += MechModel.WeaponCycle[weaponCycle] + " ";
+        for (let weaponCycle in WeaponCycle) {
+            if (WeaponCycle.hasOwnProperty(weaponCycle)) {
+                removeClassString += WeaponCycle[weaponCycle] + " ";
             }
         }
         let weaponRowDiv = document.getElementById(weaponRowId(mechId, weaponIdx));
@@ -7877,8 +7922,7 @@ var MechViewAddMech;
             let smurfyMechData = MechModel.getSmurfyMechData(smurfyMechLoadout.mech_id);
             let mechTranslatedName = smurfyMechData.translated_name;
             let mechName = smurfyMechData.name;
-            let newMechId = MechModel.generateMechId(loadedSmurfyLoadout);
-            let newMech = MechModel.addMech(newMechId, team, smurfyMechLoadout);
+            let newMech = MechModelView.addMech(team, smurfyMechLoadout);
             //set patterns of added mech to selected team patterns
             MechViewTeamStats.setSelectedTeamPatterns(team);
             MechViewRouter.modifyAppState();
@@ -8023,6 +8067,7 @@ var MechViewAddMech;
 })(MechViewAddMech || (MechViewAddMech = {}));
 var MechViewReport;
 (function (MechViewReport) {
+    var Team = MechModelCommon.Team;
     class VictoryReport {
         constructor() {
             let victoryReportDiv = MechViewWidgets.cloneTemplate("victoryReport-template");
@@ -8044,7 +8089,7 @@ var MechViewReport;
             let simParams = MechModelView.getSimulatorParameters();
             reportJQ.find("[class~=rangeValue]")
                 .text(`${Number(simParams.range).toFixed(0)}m`);
-            let teamList = [MechModel.Team.BLUE, MechModel.Team.RED];
+            let teamList = [Team.BLUE, Team.RED];
             for (let team of teamList) {
                 let teamReport = new TeamReport(team);
                 reportJQ.find(`[class~=${this.teamReportPanelId(team)}]`)
@@ -8170,16 +8215,13 @@ var MechViewReport;
         MechViewWidgets.hideModal("wide");
     };
 })(MechViewReport || (MechViewReport = {}));
-/// <reference path="simulator-view-widgets.ts" />
-/// <reference path="simulator-model.ts" />
 //UI methods
 //TODO: Remove direct references to MechModel
 var MechView;
-/// <reference path="simulator-view-widgets.ts" />
-/// <reference path="simulator-model.ts" />
 //UI methods
 //TODO: Remove direct references to MechModel
 (function (MechView) {
+    var Component = MechModelCommon.Component;
     MechView.clearMechList = function (team) {
         let teamMechPanelId = team + "Team";
         $("#" + teamMechPanelId).empty();
@@ -8351,9 +8393,9 @@ var MechView;
             .attr("id", "loadingScreenContainer");
         MechViewWidgets.setModal(loadingScreenDiv);
         MechViewMechPanel.addPaperDoll(LOADING_SCREEN_MECH_ID, "loadingScreenPaperDollContainer");
-        for (let componentIdx in MechModel.Component) {
-            if (MechModel.Component.hasOwnProperty(componentIdx)) {
-                let component = MechModel.Component[componentIdx];
+        for (let componentIdx in Component) {
+            if (Component.hasOwnProperty(componentIdx)) {
+                let component = Component[componentIdx];
                 MechViewMechPanel.setPaperDollArmor(LOADING_SCREEN_MECH_ID, component, 1);
                 MechViewMechPanel.setPaperDollStructure(LOADING_SCREEN_MECH_ID, component, 1);
             }
@@ -8362,9 +8404,9 @@ var MechView;
             window.clearInterval(loadingScreenAnimateInterval);
         }
         loadingScreenAnimateInterval = window.setInterval(function () {
-            for (let componentIdx in MechModel.Component) {
-                if (MechModel.Component.hasOwnProperty(componentIdx)) {
-                    let component = MechModel.Component[componentIdx];
+            for (let componentIdx in Component) {
+                if (Component.hasOwnProperty(componentIdx)) {
+                    let component = Component[componentIdx];
                     MechViewMechPanel.setPaperDollArmor(LOADING_SCREEN_MECH_ID, component, Math.random());
                     MechViewMechPanel.setPaperDollStructure(LOADING_SCREEN_MECH_ID, component, Math.random());
                 }
@@ -8392,6 +8434,7 @@ var MechViewRouter;
 //Router. Deals with interactions of the application state and the url hash fragment
 //Uses the ./php/simulator-persistence.php for storing application state to server
 (function (MechViewRouter) {
+    var Team = MechModelCommon.Team;
     const PERSISTENCE_URL = "./php/simulator-persistence.php";
     const PERSISTENCE_STATE_FIELD = "state";
     const HASH_STATE_FIELD = "s";
@@ -8415,7 +8458,7 @@ var MechViewRouter;
                 //current app state
                 this.range = MechSimulatorLogic.getSimulatorParameters().range;
                 this.teams = {};
-                let teamList = [MechModel.Team.BLUE, MechModel.Team.RED];
+                let teamList = [Team.BLUE, Team.RED];
                 for (let team of teamList) {
                     this.teams[team] = [];
                     for (let mechIdx in MechModel.mechTeams[team]) {
@@ -8443,7 +8486,7 @@ var MechViewRouter;
             let ret = { range: null, teams: {} };
             ret.range = this.range;
             ret.teams = {};
-            let teamList = [MechModel.Team.BLUE, MechModel.Team.RED];
+            let teamList = [Team.BLUE, Team.RED];
             for (let team of teamList) {
                 ret.teams[team] = [];
                 for (let teamEntry of this.teams[team]) {
@@ -8534,7 +8577,7 @@ var MechViewRouter;
     };
     //Loads the smurfy mechs from the appState into the model.
     var loadMechsFromSmurfy = function (newAppState) {
-        let teamList = [MechModel.Team.BLUE, MechModel.Team.RED];
+        let teamList = [Team.BLUE, Team.RED];
         let totalMechsToLoad; //total number of mechs to load
         let currMechsLoaded; //current number of mechs loaded
         if (!newAppState.teams) {
@@ -9181,6 +9224,9 @@ var MechTest;
 //TODO: Move simulator-test and dummydata into a separate project
 //Test code.
 (function (MechTest) {
+    var Team = MechModelCommon.Team;
+    var WeaponCycle = MechModelCommon.WeaponCycle;
+    var Component = MechModelCommon.Component;
     var uiTestInterval = null;
     var testIntervalLength = 100;
     var mechIdWeaponCount = []; //number of weapons set for a given mechid
@@ -9191,20 +9237,20 @@ var MechTest;
     MechTest.testUIWidgets = function () {
         MechView.initView();
         initDummyModelData();
-        MechModel.addMech("testCheetahId", MechModel.Team.BLUE, DummyArcticCheetah);
-        MechModel.addMech("testExecutionerId", MechModel.Team.BLUE, DummyExecutioner);
-        MechModel.addMech("testStormcrowId", MechModel.Team.BLUE, DummyStormcrow);
-        MechModel.addMech("testMaulerId", MechModel.Team.RED, DummyMauler);
-        MechModel.addMech("testFirestarterId", MechModel.Team.RED, DummyFireStarter);
-        MechModel.addMech("testBattlemasterId", MechModel.Team.RED, DummyBattleMaster);
-        MechModel.addMech("testShadowhawkId", MechModel.Team.RED, DummyShadowhawk);
+        MechModel.addMech("testCheetahId", Team.BLUE, DummyArcticCheetah);
+        MechModel.addMech("testExecutionerId", Team.BLUE, DummyExecutioner);
+        MechModel.addMech("testStormcrowId", Team.BLUE, DummyStormcrow);
+        MechModel.addMech("testMaulerId", Team.RED, DummyMauler);
+        MechModel.addMech("testFirestarterId", Team.RED, DummyFireStarter);
+        MechModel.addMech("testBattlemasterId", Team.RED, DummyBattleMaster);
+        MechModel.addMech("testShadowhawkId", Team.RED, DummyShadowhawk);
         MechModelView.refreshView();
         var createHandler = function (context) {
             return () => {
                 if (uiTestInterval == null) {
                     uiTestInterval = window.setInterval(() => {
-                        testUI(MechModel.mechTeams[MechModel.Team.BLUE]);
-                        testUI(MechModel.mechTeams[MechModel.Team.RED]);
+                        testUI(MechModel.mechTeams[Team.BLUE]);
+                        testUI(MechModel.mechTeams[Team.RED]);
                     }, testIntervalLength);
                 }
                 else {
@@ -9217,14 +9263,14 @@ var MechTest;
         $("#testUI").removeClass("debugButton").click(handler);
     };
     var testUI = function (mechTeam) {
-        var weaponStates = [MechModel.WeaponCycle.READY,
-            MechModel.WeaponCycle.FIRING,
-            MechModel.WeaponCycle.DISABLED];
+        var weaponStates = [WeaponCycle.READY,
+            WeaponCycle.FIRING,
+            WeaponCycle.DISABLED];
         $.each(mechTeam, (index, mech) => {
-            for (var property in MechModel.Component) {
-                if (MechModel.Component.hasOwnProperty(property)) {
-                    MechViewMechPanel.setPaperDollArmor(mech.getMechId(), MechModel.Component[property], Math.random());
-                    MechViewMechPanel.setPaperDollStructure(mech.getMechId(), MechModel.Component[property], Math.random());
+            for (var property in Component) {
+                if (Component.hasOwnProperty(property)) {
+                    MechViewMechPanel.setPaperDollArmor(mech.getMechId(), Component[property], Math.random());
+                    MechViewMechPanel.setPaperDollStructure(mech.getMechId(), Component[property], Math.random());
                 }
             }
             MechViewMechPanel.setHeatbarValue(mech.getMechId(), Math.random());
@@ -9246,19 +9292,19 @@ var MechTest;
     };
     MechTest.testModelOps = function () {
         initDummyModelData();
-        // MechModel.addMech("testCheetahId", MechModel.Team.BLUE, DummyArcticCheetah);
-        // MechModel.addMech("testExecutionerId", MechModel.Team.BLUE, DummyExecutioner);
-        MechModel.addMech("testMaulerId", MechModel.Team.RED, DummyMauler);
-        // MechModel.addMech("testFirestarterId", MechModel.Team.RED, DummyFireStarter);
-        MechModel.addMech("testBattlemasterId", MechModel.Team.RED, DummyBattleMaster);
+        // MechModel.addMech("testCheetahId", Team.BLUE, DummyArcticCheetah);
+        // MechModel.addMech("testExecutionerId", Team.BLUE, DummyExecutioner);
+        MechModel.addMech("testMaulerId", Team.RED, DummyMauler);
+        // MechModel.addMech("testFirestarterId", Team.RED, DummyFireStarter);
+        MechModel.addMech("testBattlemasterId", Team.RED, DummyBattleMaster);
     };
     MechTest.testModelBaseHealth = function () {
         for (var tonnage = 20; tonnage <= 100; tonnage += 5) {
-            for (var property in MechModel.Component) {
-                if (MechModel.Component.hasOwnProperty(property)) {
-                    var structure = MechModel.baseMechStructure(MechModel.Component[property], tonnage);
-                    var armor = MechModel.baseMechArmor(MechModel.Component[property], tonnage);
-                    console.log("Tonnage: " + tonnage + " " + MechModel.Component[property] + " structure:" + structure + " armor:" + armor);
+            for (var property in Component) {
+                if (Component.hasOwnProperty(property)) {
+                    var structure = MechModel.baseMechStructure(Component[property], tonnage);
+                    var armor = MechModel.baseMechArmor(Component[property], tonnage);
+                    console.log("Tonnage: " + tonnage + " " + Component[property] + " structure:" + structure + " armor:" + armor);
                 }
             }
         }
@@ -9266,13 +9312,13 @@ var MechTest;
     MechTest.testModelView = function () {
         MechView.initView();
         initDummyModelData();
-        MechModel.addMech("testCheetahId", MechModel.Team.BLUE, DummyArcticCheetah);
-        MechModel.addMech("testExecutionerId", MechModel.Team.BLUE, DummyExecutioner);
-        MechModel.addMech("testStormcrowId", MechModel.Team.BLUE, DummyStormcrow);
-        MechModel.addMech("testMaulerId", MechModel.Team.RED, DummyMauler);
-        MechModel.addMech("testFirestarterId", MechModel.Team.RED, DummyFireStarter);
-        MechModel.addMech("testBattlemasterId", MechModel.Team.RED, DummyBattleMaster);
-        MechModel.addMech("testShadowhawkId", MechModel.Team.RED, DummyShadowhawk);
+        MechModel.addMech("testCheetahId", Team.BLUE, DummyArcticCheetah);
+        MechModel.addMech("testExecutionerId", Team.BLUE, DummyExecutioner);
+        MechModel.addMech("testStormcrowId", Team.BLUE, DummyStormcrow);
+        MechModel.addMech("testMaulerId", Team.RED, DummyMauler);
+        MechModel.addMech("testFirestarterId", Team.RED, DummyFireStarter);
+        MechModel.addMech("testBattlemasterId", Team.RED, DummyBattleMaster);
+        MechModel.addMech("testShadowhawkId", Team.RED, DummyShadowhawk);
         MechModelView.refreshView();
         $("#resetState").removeClass("debugButton").click(() => {
             MechModel.resetState();
@@ -9280,7 +9326,7 @@ var MechTest;
         });
         $("#testModelView").removeClass("debugButton").click(() => {
             //set mech healths to random numbers
-            let teams = [MechModel.Team.BLUE, MechModel.Team.RED];
+            let teams = [Team.BLUE, Team.RED];
             for (let team of teams) {
                 for (let mech of MechModel.mechTeams[team]) {
                     let mechState = mech.getMechState();
@@ -9296,9 +9342,9 @@ var MechTest;
                     for (let weaponIndex in mechState.weaponStateList) {
                         let weaponState = mechState.weaponStateList[weaponIndex];
                         let WEAPON_CYCLES = [];
-                        for (let weaponCycle in MechModel.WeaponCycle) {
-                            if (MechModel.WeaponCycle.hasOwnProperty(weaponCycle)) {
-                                WEAPON_CYCLES.push(MechModel.WeaponCycle[weaponCycle]);
+                        for (let weaponCycle in WeaponCycle) {
+                            if (WeaponCycle.hasOwnProperty(weaponCycle)) {
+                                WEAPON_CYCLES.push(WeaponCycle[weaponCycle]);
                             }
                         }
                         weaponState.weaponCycle = WEAPON_CYCLES[Math.floor(Math.random() * WEAPON_CYCLES.length)];
@@ -9552,25 +9598,25 @@ var MechTest;
     };
     var initTestModelState = function () {
         const DEFAULT_RANGE = 200;
-        MechModel.addMech("testKodiakId1", MechModel.Team.BLUE, DummyKodiak);
-        MechModel.addMech("testExecutionerId", MechModel.Team.BLUE, DummyExecutioner);
-        MechModel.addMech("testTimberwolfId", MechModel.Team.BLUE, DummyTimberwolf);
-        MechModel.addMech("testStormcrowId", MechModel.Team.BLUE, DummyStormcrow);
-        MechModel.addMech("testCheetahId", MechModel.Team.BLUE, DummyArcticCheetah);
-        MechModel.addMech("testMadDogId", MechModel.Team.BLUE, DummyMadDog);
-        MechModel.addMech("testMaulerId", MechModel.Team.RED, DummyMauler);
-        MechModel.addMech("testBattlemasterId", MechModel.Team.RED, DummyBattleMaster);
-        MechModel.addMech("testWarhammerId", MechModel.Team.RED, DummyWarHammer);
-        MechModel.addMech("testShadowhawkId", MechModel.Team.RED, DummyShadowhawk);
-        MechModel.addMech("testFirestarterId", MechModel.Team.RED, DummyFireStarter);
-        MechModel.addMech("testCatapultId", MechModel.Team.RED, DummyCatapult);
-        MechModel.addMech("testUrbanmechId1", MechModel.Team.RED, DummyUrbanmech);
+        MechModel.addMech("testKodiakId1", Team.BLUE, DummyKodiak);
+        MechModel.addMech("testExecutionerId", Team.BLUE, DummyExecutioner);
+        MechModel.addMech("testTimberwolfId", Team.BLUE, DummyTimberwolf);
+        MechModel.addMech("testStormcrowId", Team.BLUE, DummyStormcrow);
+        MechModel.addMech("testCheetahId", Team.BLUE, DummyArcticCheetah);
+        MechModel.addMech("testMadDogId", Team.BLUE, DummyMadDog);
+        MechModel.addMech("testMaulerId", Team.RED, DummyMauler);
+        MechModel.addMech("testBattlemasterId", Team.RED, DummyBattleMaster);
+        MechModel.addMech("testWarhammerId", Team.RED, DummyWarHammer);
+        MechModel.addMech("testShadowhawkId", Team.RED, DummyShadowhawk);
+        MechModel.addMech("testFirestarterId", Team.RED, DummyFireStarter);
+        MechModel.addMech("testCatapultId", Team.RED, DummyCatapult);
+        MechModel.addMech("testUrbanmechId1", Team.RED, DummyUrbanmech);
         let simulatorParameters = new MechSimulatorLogic.SimulatorParameters(DEFAULT_RANGE, //range
         1 //speed factor
         );
         MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
-        MechModel.initMechTeamPatterns(MechModel.mechTeams[MechModel.Team.BLUE]);
-        MechModel.initMechTeamPatterns(MechModel.mechTeams[MechModel.Team.RED]);
+        MechModel.initMechTeamPatterns(MechModel.mechTeams[Team.BLUE]);
+        MechModel.initMechTeamPatterns(MechModel.mechTeams[Team.RED]);
     };
     MechTest.testLRMSpread = function () {
         var newTestDamage = () => {

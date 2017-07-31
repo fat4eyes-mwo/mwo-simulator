@@ -1,3 +1,4 @@
+/// <reference path="../scripts/common/simulator-model-common.ts" />
 "use strict";
 //NOTE:Most tests require dummy data, so make sure to change index.html to
 //include the data/dummyXXX.js files when using these functions
@@ -5,7 +6,10 @@
 
 //Test code.
 namespace MechTest {
-  type Team = MechModel.Team;
+  import Team = MechModelCommon.Team;
+  import WeaponCycle = MechModelCommon.WeaponCycle;
+  import Component = MechModelCommon.Component;
+
   type Mech = MechModel.Mech;
   type WeaponDamage = MechModel.WeaponDamage;
   type DamageMap = MechModel.DamageMap;
@@ -29,13 +33,13 @@ namespace MechTest {
     MechView.initView();
     initDummyModelData();
 
-    MechModel.addMech("testCheetahId", MechModel.Team.BLUE, DummyArcticCheetah);
-    MechModel.addMech("testExecutionerId", MechModel.Team.BLUE, DummyExecutioner);
-    MechModel.addMech("testStormcrowId", MechModel.Team.BLUE, DummyStormcrow);
-    MechModel.addMech("testMaulerId", MechModel.Team.RED, DummyMauler);
-    MechModel.addMech("testFirestarterId", MechModel.Team.RED, DummyFireStarter);
-    MechModel.addMech("testBattlemasterId", MechModel.Team.RED, DummyBattleMaster);
-    MechModel.addMech("testShadowhawkId", MechModel.Team.RED, DummyShadowhawk);
+    MechModel.addMech("testCheetahId", Team.BLUE, DummyArcticCheetah);
+    MechModel.addMech("testExecutionerId", Team.BLUE, DummyExecutioner);
+    MechModel.addMech("testStormcrowId", Team.BLUE, DummyStormcrow);
+    MechModel.addMech("testMaulerId", Team.RED, DummyMauler);
+    MechModel.addMech("testFirestarterId", Team.RED, DummyFireStarter);
+    MechModel.addMech("testBattlemasterId", Team.RED, DummyBattleMaster);
+    MechModel.addMech("testShadowhawkId", Team.RED, DummyShadowhawk);
 
     MechModelView.refreshView();
 
@@ -43,8 +47,8 @@ namespace MechTest {
       return () => {
         if (uiTestInterval == null) {
           uiTestInterval = window.setInterval(() => {
-            testUI(MechModel.mechTeams[MechModel.Team.BLUE]);
-            testUI(MechModel.mechTeams[MechModel.Team.RED]);
+            testUI(MechModel.mechTeams[Team.BLUE]);
+            testUI(MechModel.mechTeams[Team.RED]);
           }, testIntervalLength);
         } else {
           window.clearInterval(uiTestInterval);
@@ -57,14 +61,14 @@ namespace MechTest {
   }
 
   var testUI = function(mechTeam: Mech[]) {
-    var weaponStates = [MechModel.WeaponCycle.READY,
-    MechModel.WeaponCycle.FIRING,
-    MechModel.WeaponCycle.DISABLED];
+    var weaponStates = [WeaponCycle.READY,
+                        WeaponCycle.FIRING,
+                        WeaponCycle.DISABLED];
     $.each(mechTeam, (index, mech) => {
-      for (var property in MechModel.Component) {
-        if (MechModel.Component.hasOwnProperty(property)) {
-          MechViewMechPanel.setPaperDollArmor(mech.getMechId(), MechModel.Component[property], Math.random());
-          MechViewMechPanel.setPaperDollStructure(mech.getMechId(), MechModel.Component[property], Math.random());
+      for (var property in Component) {
+        if (Component.hasOwnProperty(property)) {
+          MechViewMechPanel.setPaperDollArmor(mech.getMechId(), Component[property], Math.random());
+          MechViewMechPanel.setPaperDollStructure(mech.getMechId(), Component[property], Math.random());
         }
       }
       MechViewMechPanel.setHeatbarValue(mech.getMechId(), Math.random());
@@ -88,20 +92,20 @@ namespace MechTest {
 
   export var testModelOps = function() {
     initDummyModelData();
-    // MechModel.addMech("testCheetahId", MechModel.Team.BLUE, DummyArcticCheetah);
-    // MechModel.addMech("testExecutionerId", MechModel.Team.BLUE, DummyExecutioner);
-    MechModel.addMech("testMaulerId", MechModel.Team.RED, DummyMauler);
-    // MechModel.addMech("testFirestarterId", MechModel.Team.RED, DummyFireStarter);
-    MechModel.addMech("testBattlemasterId", MechModel.Team.RED, DummyBattleMaster);
+    // MechModel.addMech("testCheetahId", Team.BLUE, DummyArcticCheetah);
+    // MechModel.addMech("testExecutionerId", Team.BLUE, DummyExecutioner);
+    MechModel.addMech("testMaulerId", Team.RED, DummyMauler);
+    // MechModel.addMech("testFirestarterId", Team.RED, DummyFireStarter);
+    MechModel.addMech("testBattlemasterId", Team.RED, DummyBattleMaster);
   }
 
   export var testModelBaseHealth = function() {
     for (var tonnage = 20; tonnage <= 100; tonnage += 5) {
-      for (var property in MechModel.Component) {
-        if (MechModel.Component.hasOwnProperty(property)) {
-          var structure = MechModel.baseMechStructure(MechModel.Component[property], tonnage);
-          var armor = MechModel.baseMechArmor(MechModel.Component[property], tonnage);
-          console.log("Tonnage: " + tonnage + " " + MechModel.Component[property] + " structure:" + structure + " armor:" + armor);
+      for (var property in Component) {
+        if (Component.hasOwnProperty(property)) {
+          var structure = MechModel.baseMechStructure(Component[property], tonnage);
+          var armor = MechModel.baseMechArmor(Component[property], tonnage);
+          console.log("Tonnage: " + tonnage + " " + Component[property] + " structure:" + structure + " armor:" + armor);
         }
       }
     }
@@ -111,13 +115,13 @@ namespace MechTest {
     MechView.initView();
     initDummyModelData();
 
-    MechModel.addMech("testCheetahId", MechModel.Team.BLUE, DummyArcticCheetah);
-    MechModel.addMech("testExecutionerId", MechModel.Team.BLUE, DummyExecutioner);
-    MechModel.addMech("testStormcrowId", MechModel.Team.BLUE, DummyStormcrow);
-    MechModel.addMech("testMaulerId", MechModel.Team.RED, DummyMauler);
-    MechModel.addMech("testFirestarterId", MechModel.Team.RED, DummyFireStarter);
-    MechModel.addMech("testBattlemasterId", MechModel.Team.RED, DummyBattleMaster);
-    MechModel.addMech("testShadowhawkId", MechModel.Team.RED, DummyShadowhawk);
+    MechModel.addMech("testCheetahId", Team.BLUE, DummyArcticCheetah);
+    MechModel.addMech("testExecutionerId", Team.BLUE, DummyExecutioner);
+    MechModel.addMech("testStormcrowId", Team.BLUE, DummyStormcrow);
+    MechModel.addMech("testMaulerId", Team.RED, DummyMauler);
+    MechModel.addMech("testFirestarterId", Team.RED, DummyFireStarter);
+    MechModel.addMech("testBattlemasterId", Team.RED, DummyBattleMaster);
+    MechModel.addMech("testShadowhawkId", Team.RED, DummyShadowhawk);
 
     MechModelView.refreshView();
 
@@ -128,7 +132,7 @@ namespace MechTest {
 
     $("#testModelView").removeClass("debugButton").click(() => {
       //set mech healths to random numbers
-      let teams = [MechModel.Team.BLUE, MechModel.Team.RED];
+      let teams = [Team.BLUE, Team.RED];
       for (let team of teams) {
         for (let mech of MechModel.mechTeams[team]) {
           let mechState = mech.getMechState();
@@ -146,9 +150,9 @@ namespace MechTest {
           for (let weaponIndex in mechState.weaponStateList) {
             let weaponState = mechState.weaponStateList[weaponIndex];
             let WEAPON_CYCLES = [];
-            for (let weaponCycle in MechModel.WeaponCycle) {
-              if (MechModel.WeaponCycle.hasOwnProperty(weaponCycle)) {
-                WEAPON_CYCLES.push(MechModel.WeaponCycle[weaponCycle]);
+            for (let weaponCycle in WeaponCycle) {
+              if (WeaponCycle.hasOwnProperty(weaponCycle)) {
+                WEAPON_CYCLES.push(WeaponCycle[weaponCycle]);
               }
             }
 
@@ -438,28 +442,28 @@ namespace MechTest {
   var initTestModelState = function() {
     const DEFAULT_RANGE = 200;
 
-    MechModel.addMech("testKodiakId1", MechModel.Team.BLUE, DummyKodiak);
-    MechModel.addMech("testExecutionerId", MechModel.Team.BLUE, DummyExecutioner);
-    MechModel.addMech("testTimberwolfId", MechModel.Team.BLUE, DummyTimberwolf);
-    MechModel.addMech("testStormcrowId", MechModel.Team.BLUE, DummyStormcrow);
-    MechModel.addMech("testCheetahId", MechModel.Team.BLUE, DummyArcticCheetah);
-    MechModel.addMech("testMadDogId", MechModel.Team.BLUE, DummyMadDog);
+    MechModel.addMech("testKodiakId1", Team.BLUE, DummyKodiak);
+    MechModel.addMech("testExecutionerId", Team.BLUE, DummyExecutioner);
+    MechModel.addMech("testTimberwolfId", Team.BLUE, DummyTimberwolf);
+    MechModel.addMech("testStormcrowId", Team.BLUE, DummyStormcrow);
+    MechModel.addMech("testCheetahId", Team.BLUE, DummyArcticCheetah);
+    MechModel.addMech("testMadDogId", Team.BLUE, DummyMadDog);
 
-    MechModel.addMech("testMaulerId", MechModel.Team.RED, DummyMauler);
-    MechModel.addMech("testBattlemasterId", MechModel.Team.RED, DummyBattleMaster);
-    MechModel.addMech("testWarhammerId", MechModel.Team.RED, DummyWarHammer);
-    MechModel.addMech("testShadowhawkId", MechModel.Team.RED, DummyShadowhawk);
-    MechModel.addMech("testFirestarterId", MechModel.Team.RED, DummyFireStarter);
-    MechModel.addMech("testCatapultId", MechModel.Team.RED, DummyCatapult);
-    MechModel.addMech("testUrbanmechId1", MechModel.Team.RED, DummyUrbanmech);
+    MechModel.addMech("testMaulerId", Team.RED, DummyMauler);
+    MechModel.addMech("testBattlemasterId", Team.RED, DummyBattleMaster);
+    MechModel.addMech("testWarhammerId", Team.RED, DummyWarHammer);
+    MechModel.addMech("testShadowhawkId", Team.RED, DummyShadowhawk);
+    MechModel.addMech("testFirestarterId", Team.RED, DummyFireStarter);
+    MechModel.addMech("testCatapultId", Team.RED, DummyCatapult);
+    MechModel.addMech("testUrbanmechId1", Team.RED, DummyUrbanmech);
 
     let simulatorParameters = new MechSimulatorLogic.SimulatorParameters(
       DEFAULT_RANGE, //range
       1 //speed factor
     );
     MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
-    MechModel.initMechTeamPatterns(MechModel.mechTeams[MechModel.Team.BLUE]);
-    MechModel.initMechTeamPatterns(MechModel.mechTeams[MechModel.Team.RED]);
+    MechModel.initMechTeamPatterns(MechModel.mechTeams[Team.BLUE]);
+    MechModel.initMechTeamPatterns(MechModel.mechTeams[Team.RED]);
   }
 
   export var testLRMSpread = function() {

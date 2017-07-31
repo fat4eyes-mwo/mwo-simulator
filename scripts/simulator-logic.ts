@@ -1,4 +1,5 @@
 "use strict";
+/// <reference path="common/simulator-model-common.ts" />
 /// <reference path="simulator-model.ts" />
 /// <reference path="data/user-options.ts" />
 
@@ -7,7 +8,9 @@
 //  move WeaponFire and weaponFire processing logic to separate file
 //  move SimulatorParameters to separate file
 namespace MechSimulatorLogic {
-  type Team = MechModel.Team;
+  import UpdateType = MechModelCommon.UpdateType;
+  import Team = MechModelCommon.Team;
+
   type Mech = MechModel.Mech;
   type WeaponInfo = MechModelWeapons.WeaponInfo;
   type WeaponState = MechModelWeapons.WeaponState;
@@ -176,7 +179,7 @@ namespace MechSimulatorLogic {
             tickDamageDone = targetMechState.takeDamage(this.tickWeaponDamage);
             this.damageDone.add(tickDamageDone)
           }
-          targetMechState.setUpdate(MechModel.UpdateType.HEALTH);
+          targetMechState.setUpdate(UpdateType.HEALTH);
         } else {
           //Weapon disabled before end of burn
           //add weaponFire.damageDone to mech stats
@@ -187,7 +190,7 @@ namespace MechSimulatorLogic {
         if (this.travelLeft <= 0) {
           let damageDone = targetMechState.takeDamage(this.weaponDamage);
           this.damageDone.add(damageDone);
-          targetMechState.setUpdate(MechModel.UpdateType.HEALTH);
+          targetMechState.setUpdate(UpdateType.HEALTH);
           //add weaponFire.damageDone to mechStats
           this.complete = true;
         } else {
@@ -276,7 +279,7 @@ namespace MechSimulatorLogic {
 
   //Simulation step function. Called every tick
   export var step = function() : void {
-    let teams : Team[] = [MechModel.Team.BLUE, MechModel.Team.RED];
+    let teams : Team[] = [Team.BLUE, Team.RED];
     willUpdateTeamStats = {};
     processWeaponFires();
 
@@ -293,7 +296,7 @@ namespace MechSimulatorLogic {
             let targetMech = mech.mechTargetPattern(mech, MechModel.mechTeams[enemyTeam(team)]);
             if (targetMech !== mech.getTargetMech()) {
               mech.setTargetMech(targetMech);
-              mechState.setUpdate(MechModel.UpdateType.STATS);
+              mechState.setUpdate(UpdateType.STATS);
             }
             if (targetMech) {
               fireWeapons(mech, weaponsToFire, targetMech);
@@ -306,7 +309,7 @@ namespace MechSimulatorLogic {
           let mechStats = mechState.mechStats;
           if (mechStats.timeOfDeath === null) {
             mechStats.timeOfDeath = simTime;
-            mechState.setUpdate(MechModel.UpdateType.STATS);
+            mechState.setUpdate(UpdateType.STATS);
           }
         }
         MechModelView.updateMech(mech);
@@ -322,8 +325,8 @@ namespace MechSimulatorLogic {
 
     //if one team is dead, stop simulation, compute stats for the current step
     //and inform ModelView of victory
-    if (!MechModel.isTeamAlive(MechModel.Team.BLUE) ||
-        !MechModel.isTeamAlive(MechModel.Team.RED)) {
+    if (!MechModel.isTeamAlive(Team.BLUE) ||
+        !MechModel.isTeamAlive(Team.RED)) {
       pauseSimulation();
       flushWeaponFireQueue();
       for (let team of teams) {
@@ -335,10 +338,10 @@ namespace MechSimulatorLogic {
   }
 
   var enemyTeam = function(myTeam : Team) : Team {
-    if (myTeam === MechModel.Team.BLUE) {
-      return MechModel.Team.RED;
-    } else if (myTeam === MechModel.Team.RED) {
-      return MechModel.Team.BLUE;
+    if (myTeam === Team.BLUE) {
+      return Team.RED;
+    } else if (myTeam === Team.RED) {
+      return Team.BLUE;
     }
     throw "Unable to find enemy team";
   }
@@ -357,12 +360,12 @@ namespace MechSimulatorLogic {
 
       let fireStatus = weaponState.fireWeapon();
       if (fireStatus.newState) {
-        mechState.setUpdate(MechModel.UpdateType.WEAPONSTATE);
+        mechState.setUpdate(UpdateType.WEAPONSTATE);
       }
       if (fireStatus.weaponFired) {
         weaponsFired.push(weaponState);
         queueWeaponFire(mech, targetMech, weaponState, fireStatus.ammoConsumed);
-        mechState.setUpdate(MechModel.UpdateType.COOLDOWN);
+        mechState.setUpdate(UpdateType.COOLDOWN);
       }
     }
 
@@ -370,7 +373,7 @@ namespace MechSimulatorLogic {
     let totalHeat = computeHeat(mech, weaponsFired);
     if (totalHeat > 0) {
       mechState.heatState.currHeat += Number(totalHeat);
-      mechState.setUpdate(MechModel.UpdateType.HEAT);
+      mechState.setUpdate(UpdateType.HEAT);
       let mechStats = mechState.mechStats;
       mechStats.totalHeat += Number(totalHeat);
     }
@@ -398,7 +401,7 @@ namespace MechSimulatorLogic {
     let prevHeat = heatState.currHeat;
     heatState.currHeat = Math.max(0, heatState.currHeat - Number(stepHeatDissipation));
     if (heatState.currHeat != prevHeat) {
-      mechState.setUpdate(MechModel.UpdateType.HEAT);
+      mechState.setUpdate(UpdateType.HEAT);
     }
   }
 
@@ -412,16 +415,16 @@ namespace MechSimulatorLogic {
         queueWeaponFire(mech, targetMech, weaponState, stepResult.ammoConsumed);
       }
       if (stepResult.newState) {
-        mechState.setUpdate(MechModel.UpdateType.WEAPONSTATE);
+        mechState.setUpdate(UpdateType.WEAPONSTATE);
       }
       if (stepResult.cooldownChanged) {
-        mechState.setUpdate(MechModel.UpdateType.COOLDOWN);
+        mechState.setUpdate(UpdateType.COOLDOWN);
       }
     }
     let totalHeat : number = computeHeat(mech, weaponsFired);
     if (totalHeat > 0) {
       mechState.heatState.currHeat += Number(totalHeat);
-      mechState.setUpdate(MechModel.UpdateType.HEAT);
+      mechState.setUpdate(UpdateType.HEAT);
       let mechStats = mechState.mechStats;
       mechStats.totalHeat += Number(totalHeat);
     }
@@ -463,7 +466,7 @@ namespace MechSimulatorLogic {
     let mechStats = mechState.mechStats;
     mechStats.totalDamage += weaponFire.damageDone.totalDamage();
     mechStats.weaponFires.push(weaponFire);
-    mechState.setUpdate(MechModel.UpdateType.STATS);
+    mechState.setUpdate(UpdateType.STATS);
     willUpdateTeamStats[weaponFire.sourceMech.getMechTeam()] = true;
     willUpdateTeamStats[weaponFire.targetMech.getMechTeam()] = true;
 
@@ -475,7 +478,7 @@ namespace MechSimulatorLogic {
   }
 
   var clearMechStats = function() : void {
-    let teams : Team[] = [MechModel.Team.BLUE, MechModel.Team.RED];
+    let teams : Team[] = [Team.BLUE, Team.RED];
     for (let team of teams) {
       for (let mech of MechModel.mechTeams[team]) {
         mech.getMechState().clearMechStats();
