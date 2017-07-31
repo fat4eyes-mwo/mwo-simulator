@@ -1,6 +1,7 @@
 "use strict";
 /// <reference path="common/simulator-model-common.ts" />
 /// <reference path="simulator-model.ts" />
+/// <reference path="simulator-logic.ts" />
 /// <reference path="simulator-model-weapons.ts" />
 /// <reference path="simulator-patterns.ts" />
 
@@ -123,15 +124,19 @@ namespace MechFirePattern {
 
   var willOverheat =
       function(mech : Mech, weaponsToFire : WeaponState[]) : boolean {
-    let predictedHeat = MechSimulatorLogic.predictHeat(mech, weaponsToFire);
+    let simTime = MechSimulatorLogic.getSimTime();
+    let mechState = mech.getMechState();
+    let predictedHeat = mechState.predictHeat(weaponsToFire, simTime);
     let heatState = mech.getMechState().heatState;
     return heatState.currHeat + predictedHeat > heatState.currMaxHeat;
   }
 
   var willGhostHeat =
       function(mech : Mech, weaponsToFire : WeaponState[]) : boolean {
-    let predictedHeat = MechSimulatorLogic.predictHeat(mech, weaponsToFire);
-    let baseHeat = MechSimulatorLogic.predictBaseHeat(mech, weaponsToFire);
+    let simTime = MechSimulatorLogic.getSimTime();
+    let mechState = mech.getMechState();
+    let predictedHeat = mechState.predictHeat(weaponsToFire, simTime);
+    let baseHeat = mechState.predictBaseHeat(weaponsToFire);
     return predictedHeat > baseHeat;
   }
 

@@ -36,9 +36,6 @@ namespace MechSimulatorLogic {
   // simulation faster, but not too small as to lock the browser
   const DEFAULT_UI_UPDATE_INTERVAL = 50;
 
-  //Interval when ghost heat applies for weapons. 500ms
-  const ghostHeatInterval = 500;
-
   export interface SimParamUserSettings {
     uacJAMMethod : UACJamMethod;
     useDoubleTap : boolean;
@@ -225,7 +222,7 @@ namespace MechSimulatorLogic {
     }
 
     //update mech heat
-    let totalHeat = computeHeat(mech, weaponsFired);
+    let totalHeat = mechState.computeHeat(weaponsFired, getSimTime());
     if (totalHeat > 0) {
       mechState.heatState.currHeat += Number(totalHeat);
       mechState.setUpdate(UpdateType.HEAT);
@@ -276,7 +273,7 @@ namespace MechSimulatorLogic {
         mechState.setUpdate(UpdateType.COOLDOWN);
       }
     }
-    let totalHeat : number = computeHeat(mech, weaponsFired);
+    let totalHeat : number = mechState.computeHeat(weaponsFired, getSimTime());
     if (totalHeat > 0) {
       mechState.heatState.currHeat += Number(totalHeat);
       mechState.setUpdate(UpdateType.HEAT);
@@ -341,126 +338,9 @@ namespace MechSimulatorLogic {
     }
   }
 
-  //TODO: Move computeHeat and computeGhostHeat into MechState
-  //Compute the heat caused by firing a set of weapons
-  //Ghost heat reference: http://mwomercs.com/forums/topic/127904-heat-scale-the-maths/
-  var computeHeat = function (mech : Mech,
-                              weaponsFired : WeaponState[])
-                              : number {
-    let totalHeat = 0;
-
-    //sort weaponInfoList in increasing order of heat for ghost heat processing
-    var compareHeat = function(weapon1 : WeaponState, weapon2 : WeaponState) : number {
-      return Number(weapon1.computeHeat()) - Number(weapon1.computeHeat());
-    }
-    weaponsFired.sort(compareHeat);
-
-    for (let weaponState of weaponsFired) {
-      let weaponInfo = weaponState.weaponInfo;
-      totalHeat += Number(weaponState.computeHeat()); // base heat
-      let ghostHeat = computeGhostHeat(mech, weaponState);
-      totalHeat += ghostHeat;
-    }
-
-    return totalHeat;
-  }
-
-  export class GhostHeatEntry {
-    timeFired : number;
-    weaponState : WeaponState;
-
-    constructor(timeFired : number, weaponState : WeaponState) {
-      this.timeFired = timeFired;
-      this.weaponState = weaponState;
-    }
-  }
-  //Calculates the ghost heat incurred by a weapon
-  //Note that this method has a side effect: it removes stale GhostHeatEntries
-  //and adds a new GhostHeatEntry for the weapon
-  var computeGhostHeat =
-      function (mech : Mech, weaponState : WeaponState) : number {
-    const HEATMULTIPLIER =
-      [0, 0, 0.08, 0.18, 0.30, 0.45, 0.60, 0.80, 1.10, 1.50, 2.00, 3.00, 5.00];
-    let weaponInfo = weaponState.weaponInfo;
-
-    let mechState = mech.getMechState();
-
-    //Get the list of ghost heat weapons of the same heatPenaltyId fired from the mech
-    if (!mechState.ghostHeatMap) {
-      mechState.ghostHeatMap = {};
-    }
-    let ghostHeatWeapons = mechState.ghostHeatMap[weaponInfo.heatPenaltyId];
-    if (!ghostHeatWeapons) {
-      ghostHeatWeapons = [];
-      mechState.ghostHeatMap[weaponInfo.heatPenaltyId] = ghostHeatWeapons;
-    }
-    //Go through the list of ghost heat weapons and remove those that have been
-    //fired outside the ghost heat interval
-    while (ghostHeatWeapons.length > 0
-      && (simTime - ghostHeatWeapons[0].timeFired > ghostHeatInterval)) {
-      ghostHeatWeapons.shift();
-    }
-    //see if any of the remaining entries are from the same weapon. In that case
-    //just update the time fired field instead of adding a new entry
-    let addNewEntry = true;
-    for (let ghostHeatIdx in ghostHeatWeapons) {
-      let ghostHeatEntry = ghostHeatWeapons[ghostHeatIdx];
-      if (ghostHeatEntry.weaponState === weaponState) {
-        //update time, remove from array and put at the end of the queue
-        ghostHeatEntry.timeFired = simTime;
-        ghostHeatWeapons.splice(Number(ghostHeatIdx), 1);
-        ghostHeatWeapons.push(ghostHeatEntry);
-        addNewEntry = false;
-        break;
-      }
-    }
-    if (addNewEntry) {
-      let ghostHeatEntry = new GhostHeatEntry(simTime, weaponState);
-      ghostHeatWeapons.push(ghostHeatEntry);
-    }
-
-    //calcluate ghost heat
-    let ghostHeat = 0;
-    if (ghostHeatWeapons.length >= weaponInfo.minHeatPenaltyLevel) {
-      ghostHeat = HEATMULTIPLIER[ghostHeatWeapons.length] * Number(weaponInfo.heatPenalty) * Number(weaponInfo.heat);
-    }
-
-    return ghostHeat;
-  }
-
-  var copyGhostHeatMap = function(ghostHeatMap : GhostHeatMap) : GhostHeatMap  {
-    if (!ghostHeatMap) {
-      return ghostHeatMap;
-    }
-    let ret : GhostHeatMap = {};
-    for (let key in ghostHeatMap) {
-      ret[key] = Array.from(ghostHeatMap[key]);
-    }
-    return ret;
-  }
-
   export var getSimTime = function() {
     return simTime;
   }
 
-  //Computes total heat for the set of weapons fired, but restores the
-  //ghost heat map to its previous state afterwards
-  export var predictHeat =
-      function (mech : Mech, weaponsFired : WeaponState[]) : number {
-    let mechState = mech.getMechState();
-    let prevGhostHeatMap = mechState.ghostHeatMap;
-    mechState.ghostHeatMap = copyGhostHeatMap(prevGhostHeatMap);
-    let ret = computeHeat(mech, weaponsFired);
-    mechState.ghostHeatMap = prevGhostHeatMap;
-    return ret;
-  }
 
-  export var predictBaseHeat =
-      function (mech : Mech, weaponsFired : WeaponState[]) : number {
-    let ret = 0;
-    for (let weaponState of weaponsFired) {
-      ret = ret + Number(weaponState.computeHeat());
-    }
-    return ret;
-  }
 }

@@ -4,7 +4,6 @@
 /// <reference path="simulator-model-quirks.ts" />
 /// <reference path="simulator-model-weapons.ts" />
 /// <reference path="simulator-smurfytypes.ts" />
-/// <reference path="simulator-logic.ts" />
 /// <reference path="data/globalgameinfo.ts" />
 /// <reference path="data/basehealth.ts" />
 /// <reference path="data/addedheatsinkdata.ts" />
@@ -238,9 +237,19 @@ namespace MechModel  {
     }
   }
 
+  export class GhostHeatEntry {
+    timeFired : number;
+    weaponState : WeaponState;
+
+    constructor(timeFired : number, weaponState : WeaponState) {
+      this.timeFired = timeFired;
+      this.weaponState = weaponState;
+    }
+  }
+
   //TODO : is actually UpdateTypes -> boolean, try to see if it can be made explicit
   export type UpdateSet = {[index:string] : boolean};
-  export type GhostHeatMap = {[index:string] : MechSimulatorLogic.GhostHeatEntry[]}
+  export type GhostHeatMap = {[index:string] : GhostHeatEntry[]}
   export class MechState {
     mechInfo : MechInfo;
     mechHealth : MechHealth;
@@ -416,6 +425,117 @@ namespace MechModel  {
       }
       return totalDamage;
     }
+
+
+      //TODO: Move computeHeat and computeGhostHeat into MechState
+      //Compute the heat caused by firing a set of weapons
+      //Ghost heat reference: http://mwomercs.com/forums/topic/127904-heat-scale-the-maths/
+      computeHeat (weaponsFired : WeaponState[], simTime: number) : number {
+        let totalHeat = 0;
+
+        //sort weaponInfoList in increasing order of heat for ghost heat processing
+        var compareHeat = function(weapon1 : WeaponState, weapon2 : WeaponState) : number {
+          return Number(weapon1.computeHeat()) - Number(weapon1.computeHeat());
+        }
+        weaponsFired.sort(compareHeat);
+
+        for (let weaponState of weaponsFired) {
+          let weaponInfo = weaponState.weaponInfo;
+          totalHeat += Number(weaponState.computeHeat()); // base heat
+          let ghostHeat = this.computeGhostHeat(weaponState, simTime);
+          totalHeat += ghostHeat;
+        }
+
+        return totalHeat;
+      }
+
+      //Calculates the ghost heat incurred by a weapon
+      //Note that this method has a side effect: it removes stale GhostHeatEntries
+      //and adds a new GhostHeatEntry for the weapon
+      computeGhostHeat = function (this : MechState,
+                                  weaponState : WeaponState,
+                                  simTime: number) : number {
+        const HEATMULTIPLIER =
+          [0, 0, 0.08, 0.18, 0.30, 0.45, 0.60, 0.80, 1.10, 1.50, 2.00, 3.00, 5.00];
+        let weaponInfo = weaponState.weaponInfo;
+
+        let mechState = this;
+
+        //Get the list of ghost heat weapons of the same heatPenaltyId fired from the mech
+        if (!mechState.ghostHeatMap) {
+          mechState.ghostHeatMap = {};
+        }
+        let ghostHeatWeapons = mechState.ghostHeatMap[weaponInfo.heatPenaltyId];
+        if (!ghostHeatWeapons) {
+          ghostHeatWeapons = [];
+          mechState.ghostHeatMap[weaponInfo.heatPenaltyId] = ghostHeatWeapons;
+        }
+        //Go through the list of ghost heat weapons and remove those that have been
+        //fired outside the ghost heat interval
+        while (ghostHeatWeapons.length > 0
+          && (simTime - ghostHeatWeapons[0].timeFired > GlobalGameInfo.GHOST_HEAT_INTERVAL)) {
+          ghostHeatWeapons.shift();
+        }
+        //see if any of the remaining entries are from the same weapon. In that case
+        //just update the time fired field instead of adding a new entry
+        let addNewEntry = true;
+        for (let ghostHeatIdx in ghostHeatWeapons) {
+          let ghostHeatEntry = ghostHeatWeapons[ghostHeatIdx];
+          if (ghostHeatEntry.weaponState === weaponState) {
+            //update time, remove from array and put at the end of the queue
+            ghostHeatEntry.timeFired = simTime;
+            ghostHeatWeapons.splice(Number(ghostHeatIdx), 1);
+            ghostHeatWeapons.push(ghostHeatEntry);
+            addNewEntry = false;
+            break;
+          }
+        }
+        if (addNewEntry) {
+          let ghostHeatEntry = new GhostHeatEntry(simTime, weaponState);
+          ghostHeatWeapons.push(ghostHeatEntry);
+        }
+
+        //calcluate ghost heat
+        let ghostHeat = 0;
+        if (ghostHeatWeapons.length >= weaponInfo.minHeatPenaltyLevel) {
+          ghostHeat = HEATMULTIPLIER[ghostHeatWeapons.length] * Number(weaponInfo.heatPenalty) * Number(weaponInfo.heat);
+        }
+
+        return ghostHeat;
+      }
+
+      private copyGhostHeatMap (ghostHeatMap : GhostHeatMap) : GhostHeatMap  {
+        if (!ghostHeatMap) {
+          return ghostHeatMap;
+        }
+        let ret : GhostHeatMap = {};
+        for (let key in ghostHeatMap) {
+          ret[key] = Array.from(ghostHeatMap[key]);
+        }
+        return ret;
+      }
+
+      //Computes total heat for the set of weapons fired, but restores the
+      //ghost heat map to its previous state afterwards
+      predictHeat (this: MechState,
+                  weaponsFired : WeaponState[],
+                  simTime : number)
+                  : number {
+        let mechState = this;
+        let prevGhostHeatMap = mechState.ghostHeatMap;
+        mechState.ghostHeatMap = this.copyGhostHeatMap(prevGhostHeatMap);
+        let ret = this.computeHeat(weaponsFired, simTime);
+        mechState.ghostHeatMap = prevGhostHeatMap;
+        return ret;
+      }
+
+       predictBaseHeat(weaponsFired : WeaponState[]) : number {
+        let ret = 0;
+        for (let weaponState of weaponsFired) {
+          ret = ret + Number(weaponState.computeHeat());
+        }
+        return ret;
+      }
   }
 
   export class HeatState {
@@ -688,7 +808,7 @@ namespace MechModel  {
       this.tickWeaponDamage = null; //WeaponDamage done per tick for duration weapons
       this.range = range;
       this.createTime = createTime;
-      this.damageDone = new MechModel.MechDamage();
+      this.damageDone = new MechDamage();
       this.ammoConsumed = ammoConsumed;
       this.stepDurationFunction = stepDurationFunction;
       let weaponInfo = weaponState.weaponInfo;
@@ -715,7 +835,7 @@ namespace MechModel  {
         baseDamage = Number(baseDamage) * this.ammoConsumed / weaponInfo.ammoPerShot;
       }
       baseWeaponDamageMap[targetComponent] = baseDamage;
-      let baseWeaponDamage = new MechModel.WeaponDamage(baseWeaponDamageMap);
+      let baseWeaponDamage = new WeaponDamage(baseWeaponDamageMap);
 
       let weaponAccuracyPattern =
           MechAccuracyPattern.getWeaponAccuracyPattern(weaponInfo);
@@ -734,7 +854,7 @@ namespace MechModel  {
               Number(this.weaponDamage.getDamage(component))
               / Number(this.totalDuration) * stepDurationFunction();
         }
-        this.tickWeaponDamage = new MechModel.WeaponDamage(tickDamageMap);
+        this.tickWeaponDamage = new WeaponDamage(tickDamageMap);
       } else {
         this.tickWeaponDamage = this.weaponDamage.clone();
       }
@@ -802,7 +922,7 @@ namespace MechModel  {
   }
 
   //represents damage done to a mech
-  //A map from MechModel.Components -> ComponentDamage
+  //A map from Components -> ComponentDamage
   export class MechDamage {
     componentDamage : {[index:string] : ComponentDamage};
     constructor() {
@@ -881,12 +1001,13 @@ namespace MechModel  {
   }
 
   //Damage dealt by a weapon.
+  //Component -> Number
   export type DamageMap = {[index:string] : number};
   export class WeaponDamage {
     damageMap : DamageMap;
 
     constructor(damageMap : DamageMap) {
-      this.damageMap = damageMap; //MechModel.Component -> Number
+      this.damageMap = damageMap;
     }
     getDamage(component : string) : number {
       return this.damageMap[component];
@@ -1618,8 +1739,7 @@ namespace MechModel  {
   }
 
   export var generateMechId = function(smurfyMechLoadout : SmurfyMechLoadout) {
-    let smurfyMechData =
-      MechModel.getSmurfyMechData(smurfyMechLoadout.mech_id);
+    let smurfyMechData = getSmurfyMechData(smurfyMechLoadout.mech_id);
     let mechName = smurfyMechData.name;
     let rand = function() {
       return Math.floor(Math.random() * 0x10000).toString(16);
@@ -1726,7 +1846,7 @@ namespace MechModel  {
   }
 
   //returns a list of adjacent components
-  //MechModel.Component -> [MechModel.Component...]
+  //Component -> [Component...]
   export var getAdjacentComponents = function(component : string) : string[] {
     if (component === Component.HEAD) {
       return [];
