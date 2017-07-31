@@ -2,8 +2,6 @@
 //NOTE: Common ts files must be put before all other files in the build order in
 //tsconfig.json
 var MechModelCommon;
-//NOTE: Common ts files must be put before all other files in the build order in
-//tsconfig.json
 (function (MechModelCommon) {
     MechModelCommon.Team = {
         BLUE: "blue",
@@ -54,8 +52,6 @@ var MechModelCommon;
 //Additional heatsink data to account for info not in smurfy
 //Reference: http://steamcommunity.com/sharedfiles/filedetails/?id=686548357
 var AddedData;
-//Additional heatsink data to account for info not in smurfy
-//Reference: http://steamcommunity.com/sharedfiles/filedetails/?id=686548357
 (function (AddedData) {
     AddedData._AddedHeatsinkData = {
         "HeatSink_MkI": {
@@ -74,7 +70,6 @@ var AddedData;
 })(AddedData || (AddedData = {}));
 //Generated from GameData.pak Fri, 28 Jul 2017 08:32:32 GMT
 var AddedData;
-//Generated from GameData.pak Fri, 28 Jul 2017 08:32:32 GMT
 (function (AddedData) {
     AddedData._AddedWeaponData = {
         "AutoCannon20": {
@@ -2609,7 +2604,6 @@ var AddedData;
 })(AddedData || (AddedData = {}));
 //base mech structure. Reference: http://mwo.gamepedia.com/Internal_Structure
 var GlobalGameInfo;
-//base mech structure. Reference: http://mwo.gamepedia.com/Internal_Structure
 (function (GlobalGameInfo) {
     GlobalGameInfo._MechBaseStructure = {
         "20": {
@@ -2796,8 +2790,6 @@ var GlobalGameInfo;
 //Constants used by simulator-model-quirks.js to compute quirk bonuses
 //quirks that apply to the mech, not a component or weapon
 var MechModelQuirks;
-//Constants used by simulator-model-quirks.js to compute quirk bonuses
-//quirks that apply to the mech, not a component or weapon
 (function (MechModelQuirks) {
     MechModelQuirks._quirkGeneral = {
         "heatloss_multiplier": true,
@@ -2895,8 +2887,6 @@ var MechModelQuirks;
 //User-changable options in SimulatorParameters. Used in
 //simulator-view-simsettings to populate the settings dialog
 var MechSimulatorLogic;
-//User-changable options in SimulatorParameters. Used in
-//simulator-view-simsettings to populate the settings dialog
 (function (MechSimulatorLogic) {
     MechSimulatorLogic.UACJamMethod = {
         RANDOM: "random",
@@ -2947,9 +2937,6 @@ var MechSimulatorLogic;
 //Non-ct damage are eyeball estimates
 ////////////////////////////////////////////////////////////////////////////////
 var GlobalGameInfo;
-//Reference: https://mwomercs.com/forums/topic/254199-lrm-spread-experiments/
-//Non-ct damage are eyeball estimates
-////////////////////////////////////////////////////////////////////////////////
 (function (GlobalGameInfo) {
     //Seeker damage spread
     //each spread should have at least 2 entries for extrapolation
@@ -3268,11 +3255,6 @@ var GlobalGameInfo;
 /// <reference path="simulator-patterns.ts" />
 /// <reference path="data/weaponspread.ts" />
 var MechAccuracyPattern;
-/// <reference path="common/simulator-model-common.ts" />
-/// <reference path="simulator-model.ts" />
-/// <reference path="simulator-model-weapons.ts" />
-/// <reference path="simulator-patterns.ts" />
-/// <reference path="data/weaponspread.ts" />
 (function (MechAccuracyPattern) {
     var Component = MechModelCommon.Component;
     //Functions that determine how damage from a weapon is spread
@@ -3617,10 +3599,6 @@ var MechAccuracyPattern;
 /// <reference path="simulator-model-weapons.ts" />
 /// <reference path="simulator-patterns.ts" />
 var MechTargetComponent;
-/// <reference path="common/simulator-model-common.ts" />
-/// <reference path="simulator-model.ts" />
-/// <reference path="simulator-model-weapons.ts" />
-/// <reference path="simulator-patterns.ts" />
 (function (MechTargetComponent) {
     var Component = MechModelCommon.Component;
     var EngineType = MechModelCommon.EngineType;
@@ -3774,13 +3752,6 @@ var MechTargetComponent;
 //Fire patterns are functions that take a mech and return a list of weaponstates
 //which represent the weapons to fire
 var MechFirePattern;
-/// <reference path="common/simulator-model-common.ts" />
-/// <reference path="simulator-model.ts" />
-/// <reference path="simulator-logic.ts" />
-/// <reference path="simulator-model-weapons.ts" />
-/// <reference path="simulator-patterns.ts" />
-//Fire patterns are functions that take a mech and return a list of weaponstates
-//which represent the weapons to fire
 (function (MechFirePattern) {
     var WeaponCycle = MechModelCommon.WeaponCycle;
     MechFirePattern.alphaAtZeroHeat = function (mech, range) {
@@ -3958,13 +3929,6 @@ var MechFirePattern;
 //  move WeaponFire and weaponFire processing logic to separate file
 //  move SimulatorParameters to separate file
 var MechSimulatorLogic;
-/// <reference path="common/simulator-model-common.ts" />
-/// <reference path="simulator-model.ts" />
-/// <reference path="data/user-options.ts" />
-//TODO: Start splitting things off from this file, it's getting too long
-//Candidates:
-//  move WeaponFire and weaponFire processing logic to separate file
-//  move SimulatorParameters to separate file
 (function (MechSimulatorLogic) {
     var UpdateType = MechModelCommon.UpdateType;
     var Team = MechModelCommon.Team;
@@ -4246,9 +4210,6 @@ var MechSimulatorLogic;
 /// <reference path="simulator-model-weapons.ts" />
 /// <reference path="simulator-patterns.ts" />
 var MechTargetMech;
-/// <reference path="simulator-model.ts" />
-/// <reference path="simulator-model-weapons.ts" />
-/// <reference path="simulator-patterns.ts" />
 (function (MechTargetMech) {
     //These functions return which enemy mech to target
     MechTargetMech.targetMechsInOrder = function (mech, enemyMechList) {
@@ -4354,10 +4315,6 @@ var MechTargetMech;
 /// <reference path="simulator-model-weapons.ts" />
 /// <reference path="simulator-smurfytypes.ts" />
 var MechModelQuirks;
-/// <reference path="data/quirkdata.ts" />
-/// <reference path="simulator-model.ts" />
-/// <reference path="simulator-model-weapons.ts" />
-/// <reference path="simulator-smurfytypes.ts" />
 (function (MechModelQuirks) {
     MechModelQuirks.collectOmnipodQuirks = function (smurfyMechLoadout) {
         let ret = [];
@@ -4474,10 +4431,6 @@ var MechModelQuirks;
 /// <reference path="simulator-model.ts" />
 //Weapon state classes
 var MechModelWeapons;
-/// <reference path="common/simulator-model-common.ts" />
-/// <reference path="simulator-smurfytypes.ts" />
-/// <reference path="simulator-model.ts" />
-//Weapon state classes
 (function (MechModelWeapons) {
     var WeaponCycle = MechModelCommon.WeaponCycle;
     class WeaponInfo {
@@ -5157,17 +5110,6 @@ var MechModelWeapons;
 //Classes that represent the states of the mechs in the simulation,
 //and methos to populate them from smurfy data
 var MechModel;
-/// <reference path="lib/jquery-3.2.d.ts" />
-/// <reference path="common/simulator-model-common.ts" />
-/// <reference path="simulator-model-quirks.ts" />
-/// <reference path="simulator-model-weapons.ts" />
-/// <reference path="simulator-smurfytypes.ts" />
-/// <reference path="data/globalgameinfo.ts" />
-/// <reference path="data/basehealth.ts" />
-/// <reference path="data/addedheatsinkdata.ts" />
-/// <reference path="data/addedweapondata.ts" />
-//Classes that represent the states of the mechs in the simulation,
-//and methos to populate them from smurfy data
 (function (MechModel) {
     var Team = MechModelCommon.Team;
     var Component = MechModelCommon.Component;
@@ -6747,17 +6689,6 @@ var MechModel;
 /// <reference path="simulator-view-mechPanel.ts" />
 //Methods that update the MechView from the MechModel, and vice versa
 var MechModelView;
-/// <reference path="common/simulator-model-common.ts" />
-/// <reference path="simulator-model.ts" />
-/// <reference path="simulator-smurfytypes.ts" />
-/// <reference path="simulator-model-weapons.ts" />
-/// <reference path="simulator-accuracypattern.ts" />
-/// <reference path="simulator-componenttarget.ts" />
-/// <reference path="simulator-firepattern.ts" />
-/// <reference path="simulator-mechtarget.ts" />
-/// <reference path="simulator-patterns.ts" />
-/// <reference path="simulator-view-mechPanel.ts" />
-//Methods that update the MechView from the MechModel, and vice versa
 (function (MechModelView) {
     var Team = MechModelCommon.Team;
     var WeaponCycle = MechModelCommon.WeaponCycle;
@@ -7196,7 +7127,6 @@ var MechModelView;
 })(MechModelView || (MechModelView = {}));
 /// <reference path="util.ts" />
 var MechViewWidgets;
-/// <reference path="util.ts" />
 (function (MechViewWidgets) {
     MechViewWidgets.paperDollDamageGradient = [
         { value: 0.0, RGB: { r: 28, g: 22, b: 6 } },
@@ -7345,9 +7275,6 @@ var MechViewWidgets;
 /// <reference path="simulator-model.ts" />
 /// <reference path="simulator-view-widgets.ts" />
 var MechViewMechPanel;
-/// <reference path="common/simulator-model-common.ts" />
-/// <reference path="simulator-model.ts" />
-/// <reference path="simulator-view-widgets.ts" />
 (function (MechViewMechPanel) {
     var WeaponCycle = MechModelCommon.WeaponCycle;
     var Component = MechModelCommon.Component;
@@ -8343,7 +8270,6 @@ var MechViewSimSettings;
 })(MechViewSimSettings || (MechViewSimSettings = {}));
 //UI methods
 var MechView;
-//UI methods
 (function (MechView) {
     var Component = MechModelCommon.Component;
     MechView.clearMechList = function (team) {
@@ -8555,8 +8481,6 @@ var MechView;
 //Router. Deals with interactions of the application state and the url hash fragment
 //Uses the ./php/simulator-persistence.php for storing application state to server
 var MechViewRouter;
-//Router. Deals with interactions of the application state and the url hash fragment
-//Uses the ./php/simulator-persistence.php for storing application state to server
 (function (MechViewRouter) {
     var Team = MechModelCommon.Team;
     const PERSISTENCE_URL = "./php/simulator-persistence.php";
@@ -9189,8 +9113,6 @@ var MechSimulator;
 //returns index of matching entry, otherwise returns the closest lower entry in
 //the array
 var Util;
-//returns index of matching entry, otherwise returns the closest lower entry in
-//the array
 (function (Util) {
     //TODO: See if this method is still worth it
     function binarySearchClosest(array, key, keyCompare) {
@@ -9225,10 +9147,6 @@ var Util;
 //TODO: Move simulator-test and dummydata into a separate project
 //Test code.
 var MechTest;
-//NOTE:Most tests require dummy data, so make sure to change index.html to
-//include the data/dummyXXX.js files when using these functions
-//TODO: Move simulator-test and dummydata into a separate project
-//Test code.
 (function (MechTest) {
     var Team = MechModelCommon.Team;
     var WeaponCycle = MechModelCommon.WeaponCycle;
@@ -9667,9 +9585,6 @@ var MechTest;
 /// <reference path="../scripts/lib/jquery-3.2.d.ts" />
 //TODO: See why rootdirs aren't working in tsconfig.json
 var MechTest;
-/// <reference path="simulator-test.ts" />
-/// <reference path="../scripts/lib/jquery-3.2.d.ts" />
-//TODO: See why rootdirs aren't working in tsconfig.json
 (function (MechTest) {
     const INDEX_HTML_URL = "index.html";
     function loadAppHTMLPromise() {
