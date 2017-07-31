@@ -4140,7 +4140,7 @@ var MechSimulatorLogic;
     };
     var queueWeaponFire = function (sourceMech, targetMech, weaponState, ammoConsumed) {
         let range = simulatorParameters.range;
-        let weaponFire = new MechModel.WeaponFire(sourceMech, targetMech, weaponState, range, simTime, ammoConsumed);
+        let weaponFire = new MechModel.WeaponFire(sourceMech, targetMech, weaponState, range, simTime, ammoConsumed, MechSimulatorLogic.getStepDuration);
         weaponFireQueue.push(weaponFire);
         return weaponFire;
     };
@@ -5771,7 +5771,9 @@ var MechModel;
     //When the damage is completed, it is taken off the queue and its total
     //  damage done is added to the sourceMech's stats
     class WeaponFire {
-        constructor(sourceMech, targetMech, weaponState, range, createTime, ammoConsumed) {
+        //may be used later when changing duration length
+        //for smoother animation
+        constructor(sourceMech, targetMech, weaponState, range, createTime, ammoConsumed, stepDurationFunction) {
             this.sourceMech = sourceMech;
             this.targetMech = targetMech;
             this.weaponState = weaponState;
@@ -5781,6 +5783,7 @@ var MechModel;
             this.createTime = createTime;
             this.damageDone = new MechModel.MechDamage();
             this.ammoConsumed = ammoConsumed;
+            this.stepDurationFunction = stepDurationFunction;
             let weaponInfo = weaponState.weaponInfo;
             this.totalDuration = weaponInfo.hasDuration() ?
                 Number(weaponInfo.duration) : 0;
@@ -5789,9 +5792,9 @@ var MechModel;
             this.durationLeft = this.totalDuration;
             this.travelLeft = this.totalTravel;
             this.complete = false;
-            this.initComputedValues(range);
+            this.initComputedValues(range, stepDurationFunction);
         }
-        initComputedValues(range) {
+        initComputedValues(range, stepDurationFunction) {
             let targetComponent = this.sourceMech.componentTargetPattern(this.sourceMech, this.targetMech);
             let weaponInfo = this.weaponState.weaponInfo;
             //baseWeaponDamage applies all damage to the target component
@@ -5815,7 +5818,7 @@ var MechModel;
                 for (let component in this.weaponDamage.damageMap) {
                     tickDamageMap[component] =
                         Number(this.weaponDamage.getDamage(component))
-                            / Number(this.totalDuration) * Number(MechSimulatorLogic.getStepDuration());
+                            / Number(this.totalDuration) * stepDurationFunction();
                 }
                 this.tickWeaponDamage = new MechModel.WeaponDamage(tickDamageMap);
             }

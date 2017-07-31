@@ -171,7 +171,7 @@ namespace MechSimulatorLogic {
       }
       if (willUpdateTeamStats[team]) {
         MechModelView.updateTeamStats(team);
-        MechModel.updateModelTeamStats(team);
+        MechModel.updateModelTeamStats(team, getSimTime());
       }
     }
 
@@ -186,7 +186,7 @@ namespace MechSimulatorLogic {
       flushWeaponFireQueue();
       for (let team of teams) {
         MechModelView.updateTeamStats(team);
-        MechModel.updateModelTeamStats(team);
+        MechModel.updateModelTeamStats(team, getSimTime());
       }
       MechModelView.updateVictory(MechModelView.getVictorTeam());
     }
@@ -242,7 +242,7 @@ namespace MechSimulatorLogic {
     let range = simulatorParameters.range;
     let weaponFire = new MechModel.WeaponFire(sourceMech, targetMech,
                                     weaponState, range,
-                                    simTime, ammoConsumed);
+                                    simTime, ammoConsumed, getStepDuration);
     weaponFireQueue.push(weaponFire);
     return weaponFire;
   }
