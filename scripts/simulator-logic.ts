@@ -5,8 +5,7 @@
 
 //TODO: Start splitting things off from this file, it's getting too long
 //Candidates:
-//  move WeaponFire and weaponFire processing logic to separate file
-//  move SimulatorParameters to separate file
+//  move SimulatorParameters (and related methods) to common
 namespace MechSimulatorLogic {
   import UpdateType = MechModelCommon.UpdateType;
   import Team = MechModelCommon.Team;
