@@ -2927,7 +2927,7 @@ var MechSimulatorLogic;
                 id: "expected_value",
                 name: "Expected Value",
                 value: MechSimulatorLogic.UACJamMethod.EXPECTED_VALUE,
-                description: "Simulates UAC jams by adding (jamTime * jamChange) to the weapon cooldown.",
+                description: "Simulates UAC jams by adding (jamTime * jamChance) to the weapon cooldown.",
                 default: false,
             },
         ],
@@ -3967,12 +3967,18 @@ var MechSimulatorLogic;
     class SimulatorParameters {
         constructor(range, speedFactor = 1, uacJamMethod = MechSimulatorLogic.UACJamMethod.RANDOM, useDoubleTap = true) {
             this.range = range;
-            this.uiUpdateInterval = Math.floor(DEFAULT_UI_UPDATE_INTERVAL / Number(speedFactor));
+            this.speedFactor = speedFactor;
             this.uacJAMMethod = uacJamMethod;
             this.useDoubleTap = useDoubleTap;
         }
+        get uiUpdateInterval() {
+            return Math.floor(DEFAULT_UI_UPDATE_INTERVAL / Number(this.speedFactor));
+        }
         setSpeedFactor(speedFactor) {
-            this.uiUpdateInterval = Math.floor(DEFAULT_UI_UPDATE_INTERVAL / Number(speedFactor));
+            this.speedFactor = speedFactor;
+        }
+        clone() {
+            return new SimulatorParameters(this.range, this.speedFactor, this.uacJAMMethod, this.useDoubleTap);
         }
         //returns setting values and descriptions for the UI
         static getUserSettings() {
@@ -3992,7 +3998,7 @@ var MechSimulatorLogic;
         }
     };
     MechSimulatorLogic.getSimulatorParameters = function () {
-        return simulatorParameters;
+        return simulatorParameters.clone();
     };
     var createSimulationInterval = function () {
         var createIntervalHandler = function () {
@@ -8285,15 +8291,16 @@ var MechViewSimSettings;
         }
     };
     class SettingsDialog {
-        //TODO: Proper type  for simParams
         constructor(simSettings) {
+            this.simSettings = simSettings;
             let settingsDiv = MechViewWidgets.cloneTemplate("simSettings-template");
             this.domElement = settingsDiv;
             this.propertyMap = new Map();
             this.populateSettings(simSettings);
             let settingsJQ = $(settingsDiv);
             settingsJQ.find(".applyButton").click(() => {
-                //TODO: set simulation settings
+                //set simulation parameters from values selected in the dialog
+                MechSimulatorLogic.setSimulatorParameters(simSettings);
                 MechViewSimSettings.hideSettingsDialog();
             });
             settingsJQ.find(".cancelButton").click(() => {
@@ -8305,6 +8312,9 @@ var MechViewSimSettings;
         }
         getSettingValue(property, valueId) {
             return this.propertyMap.get(property).get(valueId);
+        }
+        setSettingValue(property, valueId, value) {
+            this.propertyMap.get(property).set(valueId, value);
         }
         populateSettings(simSettings) {
             let settingsList = MechSimulatorLogic.SimulatorParameters.getUserSettings();
@@ -8322,12 +8332,13 @@ var MechViewSimSettings;
                 for (let value of entry.values) {
                     let valueJQ = $("<option></option>")
                         .attr("value", value.id)
+                        .attr("data-value", value.value)
                         .attr("data-description", value.description)
                         .text(value.name)
                         .appendTo(entrySelectJQ);
-                    this.propertyMap.get(entry.property).set(value.id, value);
-                    //TODO: set value from simSettings
-                    if (value.default) {
+                    this.setSettingValue(entry.property, value.id, value);
+                    //set selected value from simSettings
+                    if (value.value === simSettings[entry.property]) {
                         entrySelectJQ.val(value.id);
                         entryJQ.find(".description").text(value.description);
                     }
@@ -8335,6 +8346,8 @@ var MechViewSimSettings;
                 entryJQ.on('change', (data) => {
                     let selectedValue = String(entrySelectJQ.val());
                     let settingValue = this.getSettingValue(entry.property, selectedValue);
+                    let currSetting = this.simSettings;
+                    currSetting[entry.property] = settingValue.value;
                     entryJQ.find(".description").text(settingValue.description);
                 });
             }
@@ -8460,6 +8473,7 @@ var MechView;
         permalinkTooltip = new MechViewWidgets.Tooltip("permalinkGeneratedTooltip-template", "permalinkGeneratedTooltip", "permalinkButton");
         loadErrorTooltip = new MechViewWidgets.Tooltip("loadErrorTooltip-template", "loadErrorTooltip", "miscControl");
         $("#settingsButton").click(() => {
+            MechSimulatorLogic.pauseSimulation();
             MechViewSimSettings.showSettingsDialog();
         });
     };

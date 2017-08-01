@@ -43,7 +43,7 @@ namespace MechSimulatorLogic {
   //Parameters of the simulation. Includes range
   export class SimulatorParameters {
     range : number;
-    uiUpdateInterval : number;
+    speedFactor : number;
     uacJAMMethod : UACJamMethod;
     useDoubleTap : boolean;
 
@@ -52,12 +52,23 @@ namespace MechSimulatorLogic {
           uacJamMethod = UACJamMethod.RANDOM,
           useDoubleTap = true) {
       this.range = range;
-      this.uiUpdateInterval = Math.floor(DEFAULT_UI_UPDATE_INTERVAL / Number(speedFactor));
+      this.speedFactor = speedFactor;
       this.uacJAMMethod = uacJamMethod;
       this.useDoubleTap = useDoubleTap;
+
     }
+    get uiUpdateInterval() : number {
+      return Math.floor(DEFAULT_UI_UPDATE_INTERVAL / Number(this.speedFactor));
+    }
+
     setSpeedFactor(speedFactor : number) : void {
-      this.uiUpdateInterval = Math.floor(DEFAULT_UI_UPDATE_INTERVAL / Number(speedFactor));
+      this.speedFactor = speedFactor;
+    }
+    clone() {
+      return new SimulatorParameters(this.range,
+                                    this.speedFactor,
+                                    this.uacJAMMethod,
+                                    this.useDoubleTap);
     }
 
     //returns setting values and descriptions for the UI
@@ -80,7 +91,7 @@ namespace MechSimulatorLogic {
   }
 
   export var getSimulatorParameters = function() : SimulatorParameters {
-    return simulatorParameters;
+    return simulatorParameters.clone();
   }
 
   var createSimulationInterval = function() : void  {

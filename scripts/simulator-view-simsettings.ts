@@ -6,7 +6,9 @@
 
 namespace MechViewSimSettings {
   type SimulatorParameters = MechSimulatorLogic.SimulatorParameters;
+  //Union type with string-indexed object since we use a variable to access its fields
   type SimParamUserSettings = MechSimulatorLogic.SimParamUserSettings;
+  type SimUserSettingValue = MechSimulatorLogic.SimUserSettingValue;
 
   export var initRangeInput = function() : void {
     let rangeJQ = $("#rangeInput");
@@ -66,8 +68,12 @@ namespace MechViewSimSettings {
     //this.propertyMap: property->valueId->value
     domElement : Element;
     propertyMap : Map<string, Map<string, any>>;
-    //TODO: Proper type  for simParams
-    constructor(simSettings : SimParamUserSettings) {
+    //settings that reflect the values selected in the dialog
+    simSettings : SimulatorParameters;
+
+    constructor(simSettings : SimulatorParameters) {
+      this.simSettings = simSettings;
+
       let settingsDiv = MechViewWidgets.cloneTemplate("simSettings-template");
       this.domElement = settingsDiv;
       this.propertyMap = new Map();
@@ -76,7 +82,8 @@ namespace MechViewSimSettings {
 
       let settingsJQ = $(settingsDiv);
       settingsJQ.find(".applyButton").click(() => {
-        //TODO: set simulation settings
+        //set simulation parameters from values selected in the dialog
+        MechSimulatorLogic.setSimulatorParameters(simSettings);
         hideSettingsDialog();
       });
       settingsJQ.find(".cancelButton").click(() => {
@@ -87,8 +94,11 @@ namespace MechViewSimSettings {
     settingEntryId(settingProperty : string) : string {
       return settingProperty + "-value";
     }
-    getSettingValue(property : string, valueId : string) {
+    getSettingValue(property : string, valueId : string) : SimUserSettingValue {
       return this.propertyMap.get(property).get(valueId);
+    }
+    setSettingValue(property: string, valueId:string, value : SimUserSettingValue) : void {
+      this.propertyMap.get(property).set(valueId, value);
     }
 
     populateSettings(simSettings : SimParamUserSettings) {
@@ -107,19 +117,22 @@ namespace MechViewSimSettings {
         for (let value of entry.values) {
           let valueJQ = $("<option></option>")
                               .attr("value", value.id)
+                              .attr("data-value", value.value)
                               .attr("data-description", value.description)
                               .text(value.name)
                               .appendTo(entrySelectJQ);
-          this.propertyMap.get(entry.property).set(value.id, value);
-          //TODO: set value from simSettings
-          if (value.default) {
+          this.setSettingValue(entry.property, value.id, value);
+          //set selected value from simSettings
+          if (value.value === (simSettings as {[index:string] : any})[entry.property] ) {
             entrySelectJQ.val(value.id);
             entryJQ.find(".description").text(value.description);
           }
         }
-        entryJQ.on('change', (data) => {
+        entryJQ.on('change', (data : any) => {
           let selectedValue = String(entrySelectJQ.val());
           let settingValue = this.getSettingValue(entry.property, selectedValue);
+          let currSetting = this.simSettings as {[index:string] : any};
+          currSetting[entry.property] = settingValue.value;
           entryJQ.find(".description").text(settingValue.description);
         })
       }

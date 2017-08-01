@@ -141,6 +141,7 @@ namespace MechView {
                                 "loadErrorTooltip",
                                 "miscControl");
     $("#settingsButton").click(() => {
+      MechSimulatorLogic.pauseSimulation();
       MechViewSimSettings.showSettingsDialog();
     });
   }

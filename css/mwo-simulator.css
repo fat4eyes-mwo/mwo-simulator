@@ -1179,10 +1179,6 @@ a:hover {
   width: 50%;
 }
 
-#settingsButton {
-  display: none;
-}
-
 .simSettings .title {
   color: gold;
 }
@@ -1202,6 +1198,19 @@ a:hover {
 
 .simSettings .label {
   color: gold;
+}
+
+.simSettingsEntry {
+  margin-top: 5px;
+}
+
+.simSettingsEntry .description {
+  height: 2.5em;
+  overflow: auto;
+}
+
+.simSettingsOKCancel {
+  margin-top: 5px;
 }
 
 .linkPanel {

@@ -1272,9 +1272,7 @@ $loaded-mech-highlight-border-radius: 4px;
   width: 50%;
 }
 
-//Debug, do not show settings button yet
 #settingsButton {
-  display: none;
 }
 
 .simSettings .title {
@@ -1296,6 +1294,20 @@ $loaded-mech-highlight-border-radius: 4px;
 
 .simSettings .label {
   color: $emphasis-color;
+}
+
+.simSettingsEntry {
+  margin-top: 5px;
+
+}
+
+.simSettingsEntry .description {
+  height: 2.5em;
+  overflow: auto;
+}
+
+.simSettingsOKCancel {
+  margin-top: 5px;
 }
 
 .linkPanel {

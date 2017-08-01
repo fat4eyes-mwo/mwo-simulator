@@ -56,7 +56,7 @@ namespace MechSimulatorLogic {
         id: "expected_value",
         name: "Expected Value",
         value: UACJamMethod.EXPECTED_VALUE,
-        description: "Simulates UAC jams by adding (jamTime * jamChange) to the weapon cooldown.",
+        description: "Simulates UAC jams by adding (jamTime * jamChance) to the weapon cooldown.",
         default: false,
       },
     ],
