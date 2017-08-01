@@ -1,5 +1,6 @@
 "use strict";
 /// <reference path="common/simulator-model-common.ts" />
+/// <reference path="common/simulator-settings.ts" />
 /// <reference path="simulator-model.ts" />
 /// <reference path="simulator-smurfytypes.ts" />
 /// <reference path="simulator-model-weapons.ts" />
@@ -18,7 +19,7 @@ namespace MechModelView {
 
   type Mech = MechModel.Mech;
   type WeaponState = MechModelWeapons.WeaponState;
-  type SimulatorParameters = MechSimulatorLogic.SimulatorParameters;
+  type SimulatorParameters = SimulatorSettings.SimulatorParameters;
   type FirePattern = MechFirePattern.FirePattern;
   type AccuracyPattern = MechAccuracyPattern.AccuracyPattern;
   type TargetComponentPattern = MechTargetComponent.TargetComponentPattern;
@@ -60,7 +61,7 @@ namespace MechModelView {
       }
       updateTeamStats(team);
     }
-    let simulatorParameters = MechSimulatorLogic.getSimulatorParameters();
+    let simulatorParameters = SimulatorSettings.getSimulatorParameters();
     MechViewSimSettings.updateSimSettingsView(simulatorParameters);
   }
 
@@ -276,7 +277,7 @@ namespace MechModelView {
   }
 
   export var getSimulatorParameters = function() : SimulatorParameters {
-    return MechSimulatorLogic.getSimulatorParameters();
+    return SimulatorSettings.getSimulatorParameters();
   }
 
   export var setSimulatorParameters =

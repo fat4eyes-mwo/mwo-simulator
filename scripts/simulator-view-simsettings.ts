@@ -5,10 +5,10 @@
 "use strict";
 
 namespace MechViewSimSettings {
-  type SimulatorParameters = MechSimulatorLogic.SimulatorParameters;
+  import SimulatorParameters = SimulatorSettings.SimulatorParameters;
   //Union type with string-indexed object since we use a variable to access its fields
-  type SimParamUserSettings = MechSimulatorLogic.SimParamUserSettings;
-  type SimUserSettingValue = MechSimulatorLogic.SimUserSettingValue;
+  type SimParamUserSettings = SimulatorSettings.SimParamUserSettings;
+  type SimUserSettingValue = SimulatorSettings.SimUserSettingValue;
 
   export var initRangeInput = function() : void {
     let rangeJQ = $("#rangeInput");
@@ -102,7 +102,7 @@ namespace MechViewSimSettings {
     }
 
     populateSettings(simSettings : SimParamUserSettings) {
-      let settingsList = MechSimulatorLogic.SimulatorParameters.getUserSettings();
+      let settingsList = SimulatorParameters.getUserSettings();
       let entryListJQ = $(this.domElement).find(".simSettingsList");
       for (let entry of settingsList) {
         let entryDiv = MechViewWidgets.cloneTemplate("simSettingsEntry-template");
@@ -140,7 +140,7 @@ namespace MechViewSimSettings {
   }
 
   export var showSettingsDialog = function() {
-    let simulatorParameters = MechSimulatorLogic.getSimulatorParameters();
+    let simulatorParameters = SimulatorSettings.getSimulatorParameters();
 
     let dialog = new SettingsDialog(simulatorParameters);
     MechViewWidgets.setModal(dialog.domElement, "simSettingsDialog");

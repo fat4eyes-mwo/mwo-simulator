@@ -1,4 +1,5 @@
 "use strict";
+/// <reference path="common/simulator-settings.ts" />
 /// <reference path="simulator-model.ts" />
 /// <reference path="simulator-model-weapons.ts" />
 /// <reference path="simulator-patterns.ts" />
@@ -40,7 +41,7 @@ namespace MechTargetMech  {
       function (mech : Mech, enemyMechList : Mech[]) : Mech {
     let maxFirepower : number;
     let maxFirepowerMech : Mech;
-    let range = MechSimulatorLogic.getSimulatorParameters().range;
+    let range = SimulatorSettings.getSimulatorParameters().range;
     for (let enemyMech of enemyMechList) {
       if (enemyMech.getMechState().isAlive()) {
         let firepower = enemyMech.getMechState().getTotalDamageAtRange(range);

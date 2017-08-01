@@ -1,54 +1,4 @@
 "use strict";
-//NOTE: Common ts files must be put before all other files in the build order in
-//tsconfig.json
-var MechModelCommon;
-(function (MechModelCommon) {
-    MechModelCommon.Team = {
-        BLUE: "blue",
-        RED: "red"
-    };
-    MechModelCommon.Component = {
-        HEAD: "head",
-        RIGHT_ARM: "right_arm",
-        RIGHT_TORSO: "right_torso",
-        CENTRE_TORSO: "centre_torso",
-        LEFT_ARM: "left_arm",
-        LEFT_TORSO: "left_torso",
-        RIGHT_LEG: "right_leg",
-        LEFT_LEG: "left_leg",
-        LEFT_TORSO_REAR: "left_torso_rear",
-        CENTRE_TORSO_REAR: "centre_torso_rear",
-        RIGHT_TORSO_REAR: "right_torso_rear"
-    };
-    MechModelCommon.WeaponCycle = {
-        READY: "Ready",
-        FIRING: "Firing",
-        DISABLED: "Disabled",
-        COOLDOWN: "Cooldown",
-        COOLDOWN_FIRING: "CooldownFiring",
-        SPOOLING: "Spooling",
-        JAMMED: "Jammed",
-    };
-    MechModelCommon.Faction = {
-        INNER_SPHERE: "InnerSphere",
-        CLAN: "Clan"
-    };
-    MechModelCommon.UpdateType = {
-        FULL: "full",
-        HEALTH: "health",
-        HEAT: "heat",
-        COOLDOWN: "cooldown",
-        WEAPONSTATE: "weaponstate",
-        STATS: "stats"
-    };
-    MechModelCommon.EngineType = {
-        STD: "std",
-        XL: "xl",
-        CLAN_XL: "clan_xl",
-        LIGHT: "light",
-    };
-    MechModelCommon.BURST_DAMAGE_INTERVAL = 2000; //Interval considered for burst damage calculation
-})(MechModelCommon || (MechModelCommon = {}));
 //Additional heatsink data to account for info not in smurfy
 //Reference: http://steamcommunity.com/sharedfiles/filedetails/?id=686548357
 var AddedData;
@@ -2886,13 +2836,13 @@ var MechModelQuirks;
 })(MechModelQuirks || (MechModelQuirks = {}));
 //User-changable options in SimulatorParameters. Used in
 //simulator-view-simsettings to populate the settings dialog
-var MechSimulatorLogic;
-(function (MechSimulatorLogic) {
-    MechSimulatorLogic.UACJamMethod = {
+var SimulatorSettings;
+(function (SimulatorSettings) {
+    SimulatorSettings.UACJamMethod = {
         RANDOM: "random",
         EXPECTED_VALUE: "expected_value",
     };
-    MechSimulatorLogic.UAC_DOUBLE_TAP_SETTING = {
+    SimulatorSettings.UAC_DOUBLE_TAP_SETTING = {
         property: "useDoubleTap",
         name: "Use UAC Double Tap",
         values: [
@@ -2912,27 +2862,27 @@ var MechSimulatorLogic;
             },
         ],
     };
-    MechSimulatorLogic.UAC_JAM_SETTING = {
+    SimulatorSettings.UAC_JAM_SETTING = {
         property: "uacJAMMethod",
         name: "UAC Jam Method",
         values: [
             {
                 id: "random",
                 name: "Random",
-                value: MechSimulatorLogic.UACJamMethod.RANDOM,
+                value: SimulatorSettings.UACJamMethod.RANDOM,
                 description: "UACs jam at random, same as in game.",
                 default: true,
             },
             {
                 id: "expected_value",
                 name: "Expected Value",
-                value: MechSimulatorLogic.UACJamMethod.EXPECTED_VALUE,
+                value: SimulatorSettings.UACJamMethod.EXPECTED_VALUE,
                 description: "Simulates UAC jams by adding (jamTime * jamChance) to the weapon cooldown.",
                 default: false,
             },
         ],
     };
-})(MechSimulatorLogic || (MechSimulatorLogic = {}));
+})(SimulatorSettings || (SimulatorSettings = {}));
 //Reference: https://mwomercs.com/forums/topic/254199-lrm-spread-experiments/
 //Non-ct damage are eyeball estimates
 ////////////////////////////////////////////////////////////////////////////////
@@ -3249,6 +3199,97 @@ var GlobalGameInfo;
             "left_arm": 0.00, "right_arm": 0.00, },
     };
 })(GlobalGameInfo || (GlobalGameInfo = {}));
+//NOTE: Common ts files must be put before all other files in the build order in
+//tsconfig.json
+var MechModelCommon;
+(function (MechModelCommon) {
+    MechModelCommon.Team = {
+        BLUE: "blue",
+        RED: "red"
+    };
+    MechModelCommon.Component = {
+        HEAD: "head",
+        RIGHT_ARM: "right_arm",
+        RIGHT_TORSO: "right_torso",
+        CENTRE_TORSO: "centre_torso",
+        LEFT_ARM: "left_arm",
+        LEFT_TORSO: "left_torso",
+        RIGHT_LEG: "right_leg",
+        LEFT_LEG: "left_leg",
+        LEFT_TORSO_REAR: "left_torso_rear",
+        CENTRE_TORSO_REAR: "centre_torso_rear",
+        RIGHT_TORSO_REAR: "right_torso_rear"
+    };
+    MechModelCommon.WeaponCycle = {
+        READY: "Ready",
+        FIRING: "Firing",
+        DISABLED: "Disabled",
+        COOLDOWN: "Cooldown",
+        COOLDOWN_FIRING: "CooldownFiring",
+        SPOOLING: "Spooling",
+        JAMMED: "Jammed",
+    };
+    MechModelCommon.Faction = {
+        INNER_SPHERE: "InnerSphere",
+        CLAN: "Clan"
+    };
+    MechModelCommon.UpdateType = {
+        FULL: "full",
+        HEALTH: "health",
+        HEAT: "heat",
+        COOLDOWN: "cooldown",
+        WEAPONSTATE: "weaponstate",
+        STATS: "stats"
+    };
+    MechModelCommon.EngineType = {
+        STD: "std",
+        XL: "xl",
+        CLAN_XL: "clan_xl",
+        LIGHT: "light",
+    };
+    MechModelCommon.BURST_DAMAGE_INTERVAL = 2000; //Interval considered for burst damage calculation
+})(MechModelCommon || (MechModelCommon = {}));
+var SimulatorSettings;
+(function (SimulatorSettings) {
+    var simulatorParameters;
+    //interval between UI updates. Set smaller than step duration to run the
+    // simulation faster, but not too small as to lock the browser
+    const DEFAULT_UI_UPDATE_INTERVAL = 50;
+    //Parameters of the simulation. Includes range
+    class SimulatorParameters {
+        constructor(range, speedFactor = 1, uacJamMethod = SimulatorSettings.UACJamMethod.RANDOM, useDoubleTap = true) {
+            this.range = range;
+            this.speedFactor = speedFactor;
+            this.uacJAMMethod = uacJamMethod;
+            this.useDoubleTap = useDoubleTap;
+        }
+        get uiUpdateInterval() {
+            return Math.floor(DEFAULT_UI_UPDATE_INTERVAL / Number(this.speedFactor));
+        }
+        setSpeedFactor(speedFactor) {
+            this.speedFactor = speedFactor;
+        }
+        clone() {
+            return new SimulatorParameters(this.range, this.speedFactor, this.uacJAMMethod, this.useDoubleTap);
+        }
+        //returns setting values and descriptions for the UI
+        static getUserSettings() {
+            return [
+                SimulatorSettings.UAC_DOUBLE_TAP_SETTING,
+                SimulatorSettings.UAC_JAM_SETTING
+            ];
+        }
+    }
+    SimulatorSettings.SimulatorParameters = SimulatorParameters;
+    //NOTE: This should only be called by MechSimulatorLogic.setSimulatorParameters,
+    //but since I can't selectively export to particular namespaces, it's exposed to all
+    SimulatorSettings.setSimulatorParameters = function (parameters) {
+        simulatorParameters = parameters;
+    };
+    SimulatorSettings.getSimulatorParameters = function () {
+        return simulatorParameters.clone();
+    };
+})(SimulatorSettings || (SimulatorSettings = {}));
 /// <reference path="common/simulator-model-common.ts" />
 /// <reference path="simulator-model.ts" />
 /// <reference path="simulator-model-weapons.ts" />
@@ -3747,6 +3788,7 @@ var MechTargetComponent;
     };
 })(MechTargetComponent || (MechTargetComponent = {}));
 /// <reference path="common/simulator-model-common.ts" />
+/// <reference path="common/simulator-settings.ts" />
 /// <reference path="simulator-model.ts" />
 /// <reference path="simulator-logic.ts" />
 /// <reference path="simulator-model-weapons.ts" />
@@ -3884,7 +3926,7 @@ var MechFirePattern;
     //Helper method for determining whether the firepattern can fire a weapon
     //Uses the useDoubleTap field of SimulatorParameters
     var canFire = function (weaponState) {
-        let simParams = MechSimulatorLogic.getSimulatorParameters();
+        let simParams = SimulatorSettings.getSimulatorParameters();
         if (simParams.useDoubleTap) {
             return weaponState.canFire();
         }
@@ -3940,12 +3982,12 @@ var MechFirePattern;
     };
 })(MechFirePattern || (MechFirePattern = {}));
 /// <reference path="common/simulator-model-common.ts" />
+/// <reference path="common/simulator-settings.ts" />
 /// <reference path="simulator-model.ts" />
 /// <reference path="data/user-options.ts" />
 //TODO: Start splitting things off from this file, it's getting too long
 //Candidates:
-//  move WeaponFire and weaponFire processing logic to separate file
-//  move SimulatorParameters to separate file
+//  move SimulatorParameters (and related methods) to common
 var MechSimulatorLogic;
 (function (MechSimulatorLogic) {
     var UpdateType = MechModelCommon.UpdateType;
@@ -3953,52 +3995,22 @@ var MechSimulatorLogic;
     var simulationInterval = null;
     var simRunning = false;
     var simTime = 0;
-    var simulatorParameters;
     var weaponFireQueue = [];
     var willUpdateTeamStats = {}; //Format: {<team> : boolean}
     const simStepDuration = 50; //simulation tick length in ms
     MechSimulatorLogic.getStepDuration = function () {
         return simStepDuration;
     };
-    //interval between UI updates. Set smaller than step duration to run the
-    // simulation faster, but not too small as to lock the browser
-    const DEFAULT_UI_UPDATE_INTERVAL = 50;
-    //Parameters of the simulation. Includes range
-    class SimulatorParameters {
-        constructor(range, speedFactor = 1, uacJamMethod = MechSimulatorLogic.UACJamMethod.RANDOM, useDoubleTap = true) {
-            this.range = range;
-            this.speedFactor = speedFactor;
-            this.uacJAMMethod = uacJamMethod;
-            this.useDoubleTap = useDoubleTap;
-        }
-        get uiUpdateInterval() {
-            return Math.floor(DEFAULT_UI_UPDATE_INTERVAL / Number(this.speedFactor));
-        }
-        setSpeedFactor(speedFactor) {
-            this.speedFactor = speedFactor;
-        }
-        clone() {
-            return new SimulatorParameters(this.range, this.speedFactor, this.uacJAMMethod, this.useDoubleTap);
-        }
-        //returns setting values and descriptions for the UI
-        static getUserSettings() {
-            return [
-                MechSimulatorLogic.UAC_DOUBLE_TAP_SETTING,
-                MechSimulatorLogic.UAC_JAM_SETTING
-            ];
-        }
-    }
-    MechSimulatorLogic.SimulatorParameters = SimulatorParameters;
+    //NOTE: In almost all cases this method should be be called instead of
+    //SimulatorSettings.setSimulatorParameters. This method resets the timer
+    //interval object so any parameter changes to the simulation speed apply
     MechSimulatorLogic.setSimulatorParameters = function (parameters) {
-        simulatorParameters = parameters;
+        SimulatorSettings.setSimulatorParameters(parameters);
         //refresh simulationInterval if it is already present
         if (simulationInterval) {
             window.clearInterval(simulationInterval);
             createSimulationInterval();
         }
-    };
-    MechSimulatorLogic.getSimulatorParameters = function () {
-        return simulatorParameters.clone();
     };
     var createSimulationInterval = function () {
         var createIntervalHandler = function () {
@@ -4009,6 +4021,7 @@ var MechSimulatorLogic;
             };
         };
         let intervalHandler = createIntervalHandler();
+        let simulatorParameters = SimulatorSettings.getSimulatorParameters();
         simulationInterval = window.setInterval(intervalHandler, simulatorParameters.uiUpdateInterval);
     };
     MechSimulatorLogic.runSimulation = function () {
@@ -4051,6 +4064,7 @@ var MechSimulatorLogic;
                 if (mechState.isAlive()) {
                     dissipateHeat(mech);
                     processCooldowns(mech, mech.getTargetMech());
+                    let simulatorParameters = SimulatorSettings.getSimulatorParameters();
                     let weaponsToFire = mech.firePattern(mech, simulatorParameters.range);
                     if (weaponsToFire) {
                         let targetMech = mech.mechTargetPattern(mech, MechModel.getMechTeam(enemyTeam(team)));
@@ -4133,6 +4147,7 @@ var MechSimulatorLogic;
         }
     };
     var queueWeaponFire = function (sourceMech, targetMech, weaponState, ammoConsumed) {
+        let simulatorParameters = SimulatorSettings.getSimulatorParameters();
         let range = simulatorParameters.range;
         let weaponFire = new MechModel.WeaponFire(sourceMech, targetMech, weaponState, range, simTime, ammoConsumed, MechSimulatorLogic.getStepDuration);
         weaponFireQueue.push(weaponFire);
@@ -4230,6 +4245,7 @@ var MechSimulatorLogic;
         return simTime;
     };
 })(MechSimulatorLogic || (MechSimulatorLogic = {}));
+/// <reference path="common/simulator-settings.ts" />
 /// <reference path="simulator-model.ts" />
 /// <reference path="simulator-model-weapons.ts" />
 /// <reference path="simulator-patterns.ts" />
@@ -4262,7 +4278,7 @@ var MechTargetMech;
     var targetHighestFirepower = function (mech, enemyMechList) {
         let maxFirepower;
         let maxFirepowerMech;
-        let range = MechSimulatorLogic.getSimulatorParameters().range;
+        let range = SimulatorSettings.getSimulatorParameters().range;
         for (let enemyMech of enemyMechList) {
             if (enemyMech.getMechState().isAlive()) {
                 let firepower = enemyMech.getMechState().getTotalDamageAtRange(range);
@@ -6758,6 +6774,7 @@ var MechModel;
     };
 })(MechModel || (MechModel = {}));
 /// <reference path="common/simulator-model-common.ts" />
+/// <reference path="common/simulator-settings.ts" />
 /// <reference path="simulator-model.ts" />
 /// <reference path="simulator-smurfytypes.ts" />
 /// <reference path="simulator-model-weapons.ts" />
@@ -6802,7 +6819,7 @@ var MechModelView;
             }
             MechModelView.updateTeamStats(team);
         }
-        let simulatorParameters = MechSimulatorLogic.getSimulatorParameters();
+        let simulatorParameters = SimulatorSettings.getSimulatorParameters();
         MechViewSimSettings.updateSimSettingsView(simulatorParameters);
     };
     const BASE_PAGE_TITLE = "MWO Loadout Simulator";
@@ -6988,7 +7005,7 @@ var MechModelView;
         MechView.setDebugText(text);
     };
     MechModelView.getSimulatorParameters = function () {
-        return MechSimulatorLogic.getSimulatorParameters();
+        return SimulatorSettings.getSimulatorParameters();
     };
     MechModelView.setSimulatorParameters = function (simulatorParameters) {
         MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
@@ -8241,6 +8258,7 @@ var MechViewReport;
 })(MechViewReport || (MechViewReport = {}));
 var MechViewSimSettings;
 (function (MechViewSimSettings) {
+    var SimulatorParameters = SimulatorSettings.SimulatorParameters;
     MechViewSimSettings.initRangeInput = function () {
         let rangeJQ = $("#rangeInput");
         let rangeButton = new MechViewWidgets.MechButton("setRangeButton", function () {
@@ -8317,7 +8335,7 @@ var MechViewSimSettings;
             this.propertyMap.get(property).set(valueId, value);
         }
         populateSettings(simSettings) {
-            let settingsList = MechSimulatorLogic.SimulatorParameters.getUserSettings();
+            let settingsList = SimulatorParameters.getUserSettings();
             let entryListJQ = $(this.domElement).find(".simSettingsList");
             for (let entry of settingsList) {
                 let entryDiv = MechViewWidgets.cloneTemplate("simSettingsEntry-template");
@@ -8354,7 +8372,7 @@ var MechViewSimSettings;
         }
     }
     MechViewSimSettings.showSettingsDialog = function () {
-        let simulatorParameters = MechSimulatorLogic.getSimulatorParameters();
+        let simulatorParameters = SimulatorSettings.getSimulatorParameters();
         let dialog = new SettingsDialog(simulatorParameters);
         MechViewWidgets.setModal(dialog.domElement, "simSettingsDialog");
         MechViewWidgets.showModal();
@@ -8403,7 +8421,7 @@ var MechView;
             .appendTo("#controlPanelContainer");
     };
     var setSimulatorSpeedfactor = function (speedFactor) {
-        let simulatorParams = MechSimulatorLogic.getSimulatorParameters();
+        let simulatorParams = SimulatorSettings.getSimulatorParameters();
         simulatorParams.setSpeedFactor(speedFactor);
         MechSimulatorLogic.setSimulatorParameters(simulatorParams);
         $("#simSpeed").html(speedFactor + "x");
@@ -8579,6 +8597,7 @@ var MechView;
 var MechViewRouter;
 (function (MechViewRouter) {
     var Team = MechModelCommon.Team;
+    var SimulatorParameters = SimulatorSettings.SimulatorParameters;
     const PERSISTENCE_URL = "./php/simulator-persistence.php";
     const PERSISTENCE_STATE_FIELD = "state";
     const HASH_STATE_FIELD = "s";
@@ -8600,7 +8619,7 @@ var MechViewRouter;
             }
             else if (arguments.length === 0) {
                 //current app state
-                this.range = MechSimulatorLogic.getSimulatorParameters().range;
+                this.range = SimulatorSettings.getSimulatorParameters().range;
                 this.teams = {};
                 let teamList = [Team.BLUE, Team.RED];
                 for (let team of teamList) {
@@ -8691,10 +8710,10 @@ var MechViewRouter;
             .then(function (stateData) {
             let newAppState = new AppState(stateData);
             //set current app state
-            let simulatorParameters = MechSimulatorLogic.getSimulatorParameters();
+            let simulatorParameters = SimulatorSettings.getSimulatorParameters();
             if (!simulatorParameters) {
                 simulatorParameters =
-                    new MechSimulatorLogic.SimulatorParameters(newAppState.range);
+                    new SimulatorParameters(newAppState.range);
             }
             simulatorParameters.range = newAppState.range;
             MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
@@ -9162,12 +9181,13 @@ var MechViewTeamStats;
 })(MechViewTeamStats || (MechViewTeamStats = {}));
 var MechSimulator;
 (function (MechSimulator) {
+    var SimulatorParameters = SimulatorSettings.SimulatorParameters;
     const DEFAULT_RANGE = 200;
     const DEFAULT_SPEED = 1;
     function init() {
         MechView.initView();
         MechView.showLoadingScreen();
-        let simulatorParameters = new MechSimulatorLogic.SimulatorParameters(DEFAULT_RANGE, DEFAULT_SPEED);
+        let simulatorParameters = new SimulatorParameters(DEFAULT_RANGE, DEFAULT_SPEED);
         MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
         MechModel.initModelData()
             .then(function () {
@@ -9241,15 +9261,13 @@ var Util;
     }
     Util.binarySearchClosest = binarySearchClosest;
 })(Util || (Util = {}));
-//NOTE:Most tests require dummy data, so make sure to change index.html to
-//include the data/dummyXXX.js files when using these functions
-//TODO: Move simulator-test and dummydata into a separate project
 //Test code.
 var MechTest;
 (function (MechTest) {
     var Team = MechModelCommon.Team;
     var WeaponCycle = MechModelCommon.WeaponCycle;
     var Component = MechModelCommon.Component;
+    var SimulatorParameters = SimulatorSettings.SimulatorParameters;
     var uiTestInterval = null;
     var testIntervalLength = 100;
     var mechIdWeaponCount = []; //number of weapons set for a given mechid
@@ -9635,7 +9653,7 @@ var MechTest;
         MechModel.addMech("testFirestarterId", Team.RED, DummyFireStarter);
         MechModel.addMech("testCatapultId", Team.RED, DummyCatapult);
         MechModel.addMech("testUrbanmechId1", Team.RED, DummyUrbanmech);
-        let simulatorParameters = new MechSimulatorLogic.SimulatorParameters(DEFAULT_RANGE, //range
+        let simulatorParameters = new SimulatorParameters(DEFAULT_RANGE, //range
         1 //speed factor
         );
         MechSimulatorLogic.setSimulatorParameters(simulatorParameters);

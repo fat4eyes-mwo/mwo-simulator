@@ -1,5 +1,6 @@
 "use strict";
 /// <reference path="common/simulator-model-common.ts" />
+/// <reference path="common/simulator-settings.ts" />
 /// <reference path="simulator-model.ts" />
 /// <reference path="simulator-logic.ts" />
 /// <reference path="simulator-model-weapons.ts" />
@@ -166,7 +167,7 @@ namespace MechFirePattern {
   //Helper method for determining whether the firepattern can fire a weapon
   //Uses the useDoubleTap field of SimulatorParameters
   var canFire = function(weaponState : WeaponState) : boolean {
-    let simParams = MechSimulatorLogic.getSimulatorParameters();
+    let simParams = SimulatorSettings.getSimulatorParameters();
     if (simParams.useDoubleTap) {
       return weaponState.canFire();
     } else {

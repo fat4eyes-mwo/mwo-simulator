@@ -1,4 +1,5 @@
 /// <reference path="common/simulator-model-common.ts" />
+/// <reference path="common/simulator-settings.ts" />
 /// <reference path="simulator-view-widgets.ts" />
 /// <reference path="simulator-view-simsettings.ts" />
 "use strict";
@@ -54,7 +55,7 @@ namespace MechView {
   }
 
   var setSimulatorSpeedfactor = function(speedFactor : number) : void {
-    let simulatorParams = MechSimulatorLogic.getSimulatorParameters();
+    let simulatorParams = SimulatorSettings.getSimulatorParameters();
     simulatorParams.setSpeedFactor(speedFactor);
     MechSimulatorLogic.setSimulatorParameters(simulatorParams);
     $("#simSpeed").html(speedFactor + "x");

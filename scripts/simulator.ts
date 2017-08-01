@@ -4,7 +4,7 @@
 "use strict";
 
 namespace MechSimulator {
-
+  import SimulatorParameters = SimulatorSettings.SimulatorParameters;
   const DEFAULT_RANGE = 200;
   const DEFAULT_SPEED = 1;
 
@@ -13,7 +13,7 @@ namespace MechSimulator {
     MechView.showLoadingScreen();
 
     let simulatorParameters =
-      new MechSimulatorLogic.SimulatorParameters(DEFAULT_RANGE, DEFAULT_SPEED);
+      new SimulatorParameters(DEFAULT_RANGE, DEFAULT_SPEED);
     MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
 
     MechModel.initModelData()

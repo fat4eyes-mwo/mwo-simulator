@@ -16,8 +16,8 @@
     },
     "include" : [
       "scripts/lib/*.ts",
-      "scripts/common/*.ts",
       "scripts/data/*.ts",
+      "scripts/common/*.ts",
       "scripts/*.ts",
       "test-scripts/**/*.ts"
     ]

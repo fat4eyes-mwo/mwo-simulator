@@ -1,4 +1,5 @@
 /// <reference path="common/simulator-model-common.ts" />
+/// <reference path="common/simulator-settings.ts" />
 /// <reference path="simulator-model.ts" />
 /// <reference path="simulator-view.ts" />
 /// <reference path="simulator-logic.ts" />
@@ -8,6 +9,7 @@
 //Uses the ./php/simulator-persistence.php for storing application state to server
 namespace MechViewRouter {
   import Team = MechModelCommon.Team;
+  import SimulatorParameters = SimulatorSettings.SimulatorParameters;
 
   const PERSISTENCE_URL = "./php/simulator-persistence.php";
   const PERSISTENCE_STATE_FIELD = "state";
@@ -52,7 +54,7 @@ namespace MechViewRouter {
         this.teams = loadedAppState.state.teams;
       } else if (arguments.length === 0) {
         //current app state
-        this.range = MechSimulatorLogic.getSimulatorParameters().range;
+        this.range = SimulatorSettings.getSimulatorParameters().range;
         this.teams = {};
         let teamList = [Team.BLUE, Team.RED];
         for (let team of teamList) {
@@ -147,10 +149,10 @@ namespace MechViewRouter {
       .then(function(stateData) {
           let newAppState = new AppState(stateData as RemotePersistedState);
           //set current app state
-          let simulatorParameters = MechSimulatorLogic.getSimulatorParameters();
+          let simulatorParameters = SimulatorSettings.getSimulatorParameters();
           if (!simulatorParameters) {
             simulatorParameters =
-                new MechSimulatorLogic.SimulatorParameters(newAppState.range);
+                new SimulatorParameters(newAppState.range);
           }
           simulatorParameters.range = newAppState.range;
           MechSimulatorLogic.setSimulatorParameters(simulatorParameters);

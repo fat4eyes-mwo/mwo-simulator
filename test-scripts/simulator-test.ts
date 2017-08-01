@@ -1,14 +1,13 @@
 /// <reference path="../scripts/common/simulator-model-common.ts" />
+/// <reference path="../scripts/common/simulator-settings.ts" />
 "use strict";
-//NOTE:Most tests require dummy data, so make sure to change index.html to
-//include the data/dummyXXX.js files when using these functions
-//TODO: Move simulator-test and dummydata into a separate project
 
 //Test code.
 namespace MechTest {
   import Team = MechModelCommon.Team;
   import WeaponCycle = MechModelCommon.WeaponCycle;
   import Component = MechModelCommon.Component;
+  import SimulatorParameters = SimulatorSettings.SimulatorParameters;
 
   type Mech = MechModel.Mech;
   type WeaponDamage = MechModel.WeaponDamage;
@@ -459,7 +458,7 @@ namespace MechTest {
     MechModel.addMech("testCatapultId", Team.RED, DummyCatapult);
     MechModel.addMech("testUrbanmechId1", Team.RED, DummyUrbanmech);
 
-    let simulatorParameters = new MechSimulatorLogic.SimulatorParameters(
+    let simulatorParameters = new SimulatorParameters(
       DEFAULT_RANGE, //range
       1 //speed factor
     );

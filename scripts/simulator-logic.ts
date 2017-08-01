@@ -1,15 +1,14 @@
 "use strict";
 /// <reference path="common/simulator-model-common.ts" />
+/// <reference path="common/simulator-settings.ts" />
 /// <reference path="simulator-model.ts" />
 /// <reference path="data/user-options.ts" />
 
-//TODO: Start splitting things off from this file, it's getting too long
-//Candidates:
-//  move SimulatorParameters (and related methods) to common
 namespace MechSimulatorLogic {
   import UpdateType = MechModelCommon.UpdateType;
   import Team = MechModelCommon.Team;
 
+  type SimulatorParameters = SimulatorSettings.SimulatorParameters;
   type Mech = MechModel.Mech;
   type WeaponInfo = MechModelWeapons.WeaponInfo;
   type WeaponState = MechModelWeapons.WeaponState;
@@ -21,7 +20,6 @@ namespace MechSimulatorLogic {
   var simulationInterval : number = null;
   var simRunning = false;
   var simTime = 0;
-  var simulatorParameters : SimulatorParameters;
   var weaponFireQueue : MechModel.WeaponFire[] = [];
   var willUpdateTeamStats : {[index:string] : boolean} = {};  //Format: {<team> : boolean}
 
@@ -31,66 +29,17 @@ namespace MechSimulatorLogic {
     return simStepDuration;
   }
 
-  //interval between UI updates. Set smaller than step duration to run the
-  // simulation faster, but not too small as to lock the browser
-  const DEFAULT_UI_UPDATE_INTERVAL = 50;
-
-  export interface SimParamUserSettings {
-    uacJAMMethod : UACJamMethod;
-    useDoubleTap : boolean;
-  }
-  //Parameters of the simulation. Includes range
-  export class SimulatorParameters {
-    range : number;
-    speedFactor : number;
-    uacJAMMethod : UACJamMethod;
-    useDoubleTap : boolean;
-
-    constructor(range : number,
-          speedFactor = 1,
-          uacJamMethod = UACJamMethod.RANDOM,
-          useDoubleTap = true) {
-      this.range = range;
-      this.speedFactor = speedFactor;
-      this.uacJAMMethod = uacJamMethod;
-      this.useDoubleTap = useDoubleTap;
-
-    }
-    get uiUpdateInterval() : number {
-      return Math.floor(DEFAULT_UI_UPDATE_INTERVAL / Number(this.speedFactor));
-    }
-
-    setSpeedFactor(speedFactor : number) : void {
-      this.speedFactor = speedFactor;
-    }
-    clone() {
-      return new SimulatorParameters(this.range,
-                                    this.speedFactor,
-                                    this.uacJAMMethod,
-                                    this.useDoubleTap);
-    }
-
-    //returns setting values and descriptions for the UI
-    static getUserSettings() : SimUserSetting[] {
-      return [
-        UAC_DOUBLE_TAP_SETTING,
-        UAC_JAM_SETTING
-      ];
-    }
-  }
-
+  //NOTE: In almost all cases this method should be be called instead of
+  //SimulatorSettings.setSimulatorParameters. This method resets the timer
+  //interval object so any parameter changes to the simulation speed apply
   export var setSimulatorParameters =
-      function(parameters : SimulatorParameters) : void {
-    simulatorParameters = parameters;
+      function(parameters : SimulatorSettings.SimulatorParameters) : void {
+    SimulatorSettings.setSimulatorParameters(parameters);
     //refresh simulationInterval if it is already present
     if (simulationInterval) {
       window.clearInterval(simulationInterval);
       createSimulationInterval();
     }
-  }
-
-  export var getSimulatorParameters = function() : SimulatorParameters {
-    return simulatorParameters.clone();
   }
 
   var createSimulationInterval = function() : void  {
@@ -102,6 +51,7 @@ namespace MechSimulatorLogic {
       }
     };
     let intervalHandler = createIntervalHandler();
+    let simulatorParameters = SimulatorSettings.getSimulatorParameters();
     simulationInterval = window.setInterval(intervalHandler,
                                         simulatorParameters.uiUpdateInterval);
   }
@@ -152,7 +102,7 @@ namespace MechSimulatorLogic {
           dissipateHeat(mech);
 
           processCooldowns(mech, mech.getTargetMech());
-
+          let simulatorParameters = SimulatorSettings.getSimulatorParameters();
           let weaponsToFire = mech.firePattern(mech, simulatorParameters.range);
           if (weaponsToFire) {
             let targetMech = mech.mechTargetPattern(mech, MechModel.getMechTeam(enemyTeam(team)));
@@ -246,6 +196,7 @@ namespace MechSimulatorLogic {
                                 weaponState : WeaponState,
                                 ammoConsumed : number)
                                 : MechModel.WeaponFire {
+    let simulatorParameters = SimulatorSettings.getSimulatorParameters();
     let range = simulatorParameters.range;
     let weaponFire = new MechModel.WeaponFire(sourceMech, targetMech,
                                     weaponState, range,
