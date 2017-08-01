@@ -13,7 +13,7 @@
 
 1. Click 'Add Mech'.
 2. Paste [Smurfy](http://mwo.smurfy-net.de/) URL.
-3. Click 'Load'
+3. Click 'Load'.
 4. Click OK once mech is loaded from smurfy.
 5. Add more mechs if you want. Click the 'Range' Button if you want to change the engagement range.
 6. Click 'Run'.
@@ -22,7 +22,7 @@
 
 # Slightly Less Quick Start Guide
 
-1-5. Same as above
+1-5. Same as above.
 
 6. Click 'Settings' to view and set various Team Settings.
 7. Click Speed setting (1x to 8x) to set simulation speed.
@@ -38,7 +38,7 @@
 4. Go to the project [issue tracker](https://github.com/fat4eyes-mwo/mwo-simulator/issues) to report the issue. Make sure to include the console log and the URL where the simulator failed.
 5. If you are using Edge or Internet Explorer, contact your local exorcist and have these hellspawn banished back to the pit from which they came. (Edge and IE are not supported).
 
-# Current features
+# Current Features
 
 * Uses current mech, weapon and heatsink data from smurfy's.
 * Most of the heat and damage mechanics (see exceptions below).
@@ -49,7 +49,7 @@
 * Supports heat, cooldown, duration, velocity and range multipliers for IS and clan mechs.
 * Simulates effects of mech quirks (see exceptions below).
 
-# Currently Unsimulated mechanics
+# Currently Unsimulated Mechanics
 
 * Damage spread for LBX (high priority)
 * Omnipod full set quirks.
@@ -63,15 +63,17 @@
 
 # Code Guide
 
-For those interested in looking at the code, the most interesting stuff can be found in `scripts/simulator-logic.js`. It contains the simulation loop and most of the mechanics of the simulation. The main loop function is `step()`.
+The project uses Typescript, and the project build configuration `tsconfig.json` is in the root project directory. The transpiled `.js` file is outputted in `build/`.
 
-The definition of the data structures used by the simulation are in `scripts/simulator-model*.js`. The important bits are in `class` declarations, most of the other code there is just data conversion from smurfy format to the one used by the simulation.
+For those interested in looking at the code, the most interesting stuff can be found in `scripts/simulator-logic.ts`. It contains the simulation loop and most of the mechanics of the simulation. The main loop function is `step()`.
 
-The weapon fire patterns (which determine how mechs choose what weapons to fire) are in `scripts/simulator-firepattern.js`. Target component patterns (which determine what components a mech targets) are in `scripts/simulator-componenttarget.js`. Target mech patterns (which enemy mech to target) are in `scripts/simulator-mechtarget.js`. And weapon accuracy patterns (which determine how a weapon or mech spreads damage) are in `scripts/simulator-accuracypattern.js`. Read the comments in those files if you want to try adding your own patterns and have them appear in the UI.
+The definition of the data structures used by the simulation are in `scripts/simulator-model*.ts`. The important bits are in `class` declarations, most of the other code there is just data conversion from smurfy format to the one used by the simulation.
 
-The UI code can be found in the files `scripts/simulator-view*.js`. At the moment I woudn't suggest looking at these as they're a bit of a mess, and a big refactoring is coming soon.
+The weapon fire patterns (which determine how mechs choose what weapons to fire) are in `scripts/simulator-firepattern.ts`. Target component patterns (which determine what components a mech targets) are in `scripts/simulator-componenttarget.ts`. Target mech patterns (which enemy mech to target) are in `scripts/simulator-mechtarget.ts`. And weapon accuracy patterns (which determine how a weapon or mech spreads damage) are in `scripts/simulator-accuracypattern.ts`. Read the comments in those files if you want to try adding your own patterns and have them appear in the UI.
 
-The main entry point of the program is in `scripts/simulator.js`.
+The UI code can be found in the files `scripts/simulator-view*.ts`. At the moment I woudn't suggest looking at these as they're a bit of a mess, and a big refactoring is coming soon.
+
+The main entry point of the program is in `scripts/simulator.ts`.
 
 # Update Info
 
