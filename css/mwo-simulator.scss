@@ -336,11 +336,13 @@ div {
 
 .mechPanel {
   position: relative;
-  transition: margin 0.5s ease;
+  // max-height: 200px;
+  //Expensive when animating 2 panels at a time (when switching from 1 team to another)
+  // transition: margin 0.5s ease;
 }
 .mechPanel.droptarget {
   background-color: $off-background-color;
-  margin-top: 20px; //TODO: expensive when there are many mechs
+  // margin-top: 20px; //TODO: expensive when there are many mechs
 }
 
 .mechPanel.droptarget::before {

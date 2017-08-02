@@ -1,13 +1,16 @@
 - AUTOMATED UNIT TESTS!!!!!!
 
 - drag on mobile
-- slow performance on dragover when there are many mechs (too much layouting, see what causes it)
+- slow performance on dragover when there are many mechs (too much hit test and layouting, see what causes it)
+    Appears to be a known bug (https://bugs.chromium.org/p/chromium/issues/detail?id=358218). Still,
+    minimize paints and animations by avoiding huge paints in droptarget styles 
+- Mech details display (quirks)
 - save team settings?
 - some omnimechs have no CT omnipod entry (HBR-F). See where to find this info.
 - LBX damage spread
 - Omnipod set quirks
 - MG/HMG/LMG extra struct damage computation
-- Mech details display (quirks, weapon damage summary)
+- Mech details display (weapon damage summary)
 - Ambient heat effects
 - LBX crit effects (just the added damage)
 - Flamer heat effects

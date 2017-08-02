@@ -291,12 +291,10 @@ a:hover {
 
 .mechPanel {
   position: relative;
-  transition: margin 0.5s ease;
 }
 
 .mechPanel.droptarget {
   background-color: #404040;
-  margin-top: 20px;
 }
 
 .mechPanel.droptarget::before {
