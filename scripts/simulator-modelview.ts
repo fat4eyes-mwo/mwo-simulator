@@ -76,6 +76,9 @@ namespace MechModelView {
       let mechTeam = MechModel.getMechTeam(team);
       let idx :string = "0";
       for (idx in mechTeam) {
+        if (!mechTeam.hasOwnProperty(idx)) {
+          continue;
+        }
         if (Number(idx) >= TITLE_MAX_MECHS) {
           break;
         }
@@ -103,6 +106,9 @@ namespace MechModelView {
   export var updateCooldown = function(mech : Mech) : void {
     let mechState = mech.getMechState();
     for (let weaponIndex in mechState.weaponStateList) {
+      if (!mechState.weaponStateList.hasOwnProperty(weaponIndex)) {
+        continue;
+      }
       let type = "cooldown";
       let weaponState = mechState.weaponStateList[weaponIndex];
       let weaponInfo = weaponState.weaponInfo;
@@ -132,6 +138,9 @@ namespace MechModelView {
   export var updateWeaponStatus = function(mech : Mech) : void {
     let mechState = mech.getMechState();
     for (let weaponIndex in mechState.weaponStateList) {
+      if (!mechState.weaponStateList.hasOwnProperty(weaponIndex)) {
+        continue;
+      }
       let weaponState = mechState.weaponStateList[weaponIndex];
       MechViewMechPanel.setWeaponState(mech.getMechId(), Number(weaponIndex), weaponState.weaponCycle);
       let ammoState = mech.getMechState().ammoState;
@@ -213,6 +222,9 @@ namespace MechModelView {
     updateFunctionMap[UpdateType.STATS] = updateStats;
 
     for (let updateType in mechState.updateTypes) {
+      if (!mechState.updateTypes.hasOwnProperty(updateType)) {
+        continue;
+      }
       if (mechState.updateTypes[updateType]) {
         updateFunctionMap[updateType](mech);
       }
@@ -438,6 +450,9 @@ namespace MechModelView {
     computeWeaponStats() : void {
       let burstDamageStartIdx : number = null;
       for (let idx in this.weaponFires) {
+        if (!this.weaponFires.hasOwnProperty(idx)) {
+          continue;
+        }
         let weaponFire = this.weaponFires[idx];
         let weaponInfo = weaponFire.weaponState.weaponInfo;
         let weaponStat = this.weaponStats.get(weaponInfo.weaponId);

@@ -59,7 +59,11 @@ namespace MechViewRouter {
         let teamList = [Team.BLUE, Team.RED];
         for (let team of teamList) {
           this.teams[team] = [];
-          for (let mechIdx in MechModel.getMechTeam(team)) {
+          let mechTeam = MechModel.getMechTeam(team);
+          for (let mechIdx in mechTeam) {
+            if (!mechTeam.hasOwnProperty(mechIdx)) {
+              continue;
+            }
             let mech = MechModel.getMechTeam(team)[mechIdx];
             let mechInfo = mech.getMechState().mechInfo;
             let smurfyId = mechInfo.smurfyMechId;
@@ -214,7 +218,11 @@ namespace MechViewRouter {
 
     let combinedTeamList : CombinedListEntry[] = [];
     for (let team of teamList) {
-      for (let mechIdx in newAppState.teams[team]) {
+      let newStateTeams = newAppState.teams[team];
+      for (let mechIdx in newStateTeams) {
+        if (!newStateTeams.hasOwnProperty(mechIdx)) {
+          continue;
+        }
         let mechEntry = newAppState.teams[team][mechIdx];
         combinedTeamList.push(createCombinedListEntry(team, Number(mechIdx), mechEntry));
       }

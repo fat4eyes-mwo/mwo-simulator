@@ -150,6 +150,9 @@ namespace MechTest {
 
           //random weapon state
           for (let weaponIndex in mechState.weaponStateList) {
+            if (!mechState.weaponStateList.hasOwnProperty(weaponIndex)) {
+              continue;
+            }
             let weaponState = mechState.weaponStateList[weaponIndex];
             let WEAPON_CYCLES = [];
             for (let weaponCycle in WeaponCycle) {
@@ -238,6 +241,9 @@ namespace MechTest {
     let quirkMap: { [index: string]: boolean } = {};
     //mech quirks
     for (let mechIdx in DummyMechData) {
+      if (!DummyMechData.hasOwnProperty(mechIdx)) {
+        continue;
+      }
       let smurfyMech = DummyMechData[mechIdx];
       let quirks = smurfyMech.details.quirks;
       if (quirks) {
@@ -248,7 +254,14 @@ namespace MechTest {
     }
     //omnipod quirks
     for (let chassis in _DummyOmnipods) {
-      for (let omnipodId in _DummyOmnipods[chassis]) {
+      if (!_DummyOmnipods.hasOwnProperty(chassis)) {
+        continue;
+      }
+      let chassisOmnipods = _DummyOmnipods[chassis];
+      for (let omnipodId in chassisOmnipods) {
+        if (!chassisOmnipods.hasOwnProperty(omnipodId)) {
+          continue;
+        }
         let omnipodData = _DummyOmnipods[chassis][omnipodId];
         let quirks = omnipodData.configuration.quirks;
         if (quirks) {
@@ -261,6 +274,9 @@ namespace MechTest {
     let numQuirks = 0;
     let sortedQuirkNames = [];
     for (let quirkName in quirkMap) {
+      if (!quirkMap.hasOwnProperty(quirkName)) {
+        continue;
+      }
       sortedQuirkNames.push(quirkName);
     }
     sortedQuirkNames.sort();

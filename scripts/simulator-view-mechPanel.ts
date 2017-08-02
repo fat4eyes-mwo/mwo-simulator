@@ -201,6 +201,9 @@ namespace MechViewMechPanel {
                 weaponPanel : string)
                 : void {
     for (var idx in weaponStateList) {
+      if (!weaponStateList.hasOwnProperty(idx)) {
+        continue;
+      }
       var weaponState = weaponStateList[idx];
       let weaponRowDiv = MechViewWidgets.cloneTemplate("weaponRow-template");
       $(weaponRowDiv)

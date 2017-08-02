@@ -106,6 +106,9 @@ namespace MechModelQuirks {
     private initReversedWeaponNameMap() : ReversedNameMap {
       let ret : ReversedNameMap = {};
       for (let quirkName in _weaponNameMap) {
+        if (!_weaponNameMap.hasOwnProperty(quirkName)) {
+          continue;
+        }
         for (let weaponName of _weaponNameMap[quirkName]) {
           let reverseEntry = ret[weaponName];
           if (!reverseEntry) {

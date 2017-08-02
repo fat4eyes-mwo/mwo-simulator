@@ -79,6 +79,9 @@ namespace MechTargetComponent {
     let cumulativePercentMap = new Map();
     let prevComponent;
     for (let component in componentWeights) {
+      if (!componentWeights.hasOwnProperty(component)) {
+        continue;
+      }
       let weight = componentWeights[component];
       if (!prevComponent) {
         cumulativePercentMap.set(component, Number(weight));

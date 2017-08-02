@@ -229,6 +229,9 @@ namespace MechViewTeamStats {
   export var setSelectedTeamPatterns = function(team : Team) : void {
     let currSelectedPatterns = selectedPatterns[team];
     for (let patternTypeId in currSelectedPatterns) {
+      if (!currSelectedPatterns.hasOwnProperty(patternTypeId)) {
+        continue;
+      }
       let patternType = findPatternTypeWithId(patternTypeId);
       let patternId = currSelectedPatterns[patternTypeId];
       let pattern = findPatternWithId(patternId, patternLists[patternType.id]);

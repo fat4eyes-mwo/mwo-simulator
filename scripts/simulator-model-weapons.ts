@@ -158,6 +158,9 @@ namespace MechModelWeapons {
           return 0;
         }
         for (let rangeIdx in this.ranges) {
+          if (!this.ranges.hasOwnProperty(rangeIdx)) {
+            continue;
+          }
           let rangeEntry = this.ranges[rangeIdx];
           let nextEntry = Number(rangeIdx) < this.ranges.length - 1 ?
                             this.ranges[Number(rangeIdx) + 1] :

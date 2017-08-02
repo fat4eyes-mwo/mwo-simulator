@@ -297,6 +297,9 @@ namespace MechModel  {
     takeDamage(weaponDamage : WeaponDamage) : MechDamage {
       let totalDamage = new MechDamage();
       for (let location in weaponDamage.damageMap) {
+        if (!weaponDamage.damageMap.hasOwnProperty(location)) {
+          continue;
+        }
         let numDamage = weaponDamage.getDamage(location);
         //apply damage to location
         let componentDamage = this.mechHealth.takeDamage(location, numDamage);
@@ -477,6 +480,9 @@ namespace MechModel  {
       //just update the time fired field instead of adding a new entry
       let addNewEntry = true;
       for (let ghostHeatIdx in ghostHeatWeapons) {
+        if (!ghostHeatWeapons.hasOwnProperty(ghostHeatIdx)) {
+          continue;
+        }
         let ghostHeatEntry = ghostHeatWeapons[ghostHeatIdx];
         if (ghostHeatEntry.weaponState === weaponState) {
           //update time, remove from array and put at the end of the queue
@@ -509,6 +515,9 @@ namespace MechModel  {
       }
       let ret : GhostHeatMap = {};
       for (let key in ghostHeatMap) {
+        if (!ghostHeatMap.hasOwnProperty(key)) {
+          continue;
+        }
         ret[key] = Array.from(ghostHeatMap[key]);
       }
       return ret;
@@ -608,6 +617,9 @@ namespace MechModel  {
       });
 
       for (let idx in this.ammoBoxList) {
+        if (!this.ammoBoxList.hasOwnProperty(idx)) {
+          continue;
+        }
         let ammoBox = this.ammoBoxList[idx];
         let firstWeaponId = ammoBox.weaponIds[0];
         //Create an ammocount for the weapon if it is not yet in the map
@@ -766,6 +778,9 @@ namespace MechModel  {
         "Engine_Light" : EngineType.LIGHT,
       }
       for (let enginePrefix in engineMap) {
+        if (!engineMap.hasOwnProperty(enginePrefix)) {
+          continue;
+        }
         if (this.name.startsWith(enginePrefix)) {
           return engineMap[enginePrefix];
         }
@@ -855,6 +870,9 @@ namespace MechModel  {
       if (this.totalDuration >0) {
         let tickDamageMap : DamageMap = {};
         for (let component in this.weaponDamage.damageMap) {
+          if (!this.weaponDamage.damageMap.hasOwnProperty(component)) {
+            continue;
+          }
           tickDamageMap[component] =
               Number(this.weaponDamage.getDamage(component))
               / Number(this.totalDuration) * stepDurationFunction();
@@ -937,6 +955,9 @@ namespace MechModel  {
 
     add(mechDamage : MechDamage) : void {
       for (let location in mechDamage.componentDamage) {
+        if (!mechDamage.componentDamage.hasOwnProperty(location)) {
+          continue;
+        }
         if (!this.componentDamage[location]) {
           this.componentDamage[location] = new ComponentDamage(location, 0, 0);
         }
@@ -956,6 +977,9 @@ namespace MechModel  {
     totalDamage() : number {
       let ret = 0;
       for (let component in this.componentDamage) {
+        if (!this.componentDamage.hasOwnProperty(component)) {
+          continue;
+        }
         ret = Number(ret) + this.componentDamage[component].totalDamage();
       }
       return ret;
@@ -963,6 +987,9 @@ namespace MechModel  {
     toString() : string {
       let ret = "";
       for (let location in this.componentDamage) {
+        if (!this.componentDamage.hasOwnProperty(location)) {
+          continue;
+        }
         ret = ret + " " + this.componentDamage[location].toString();
       }
       return ret;
@@ -1022,6 +1049,9 @@ namespace MechModel  {
     }
     multiply(multiplier : number) : void {
       for (var location in this.damageMap) {
+        if (!this.damageMap.hasOwnProperty(location)) {
+          continue;
+        }
         this.damageMap[location] =
             Number(this.damageMap[location]) * Number(multiplier);
       }
@@ -1029,6 +1059,9 @@ namespace MechModel  {
     getTotalDamage() : number {
       let totalDamage = 0;
       for (let component in this.damageMap) {
+        if (!this.damageMap.hasOwnProperty(component)) {
+          continue;
+        }
         totalDamage += this.damageMap[component];
       }
       return totalDamage;
@@ -1036,6 +1069,9 @@ namespace MechModel  {
     toString() : string {
       let ret = "totalDamage: " + this.getTotalDamage();
       for (let component in this.damageMap) {
+        if (!this.damageMap.hasOwnProperty(component)) {
+          continue;
+        }
         ret = ret + " " + component + "=" + this.damageMap[component];
       }
       return ret;
@@ -1043,6 +1079,9 @@ namespace MechModel  {
     clone() : WeaponDamage {
       var newDamageMap : DamageMap = {};
       for (let component in this.damageMap) {
+        if (!this.damageMap.hasOwnProperty(component)) {
+          continue;
+        }
         newDamageMap[component] = this.damageMap[component];
       }
       return new WeaponDamage(newDamageMap);
@@ -1133,7 +1172,13 @@ namespace MechModel  {
     let flatOmnipodData : FlatOmnipodData = {};
     let ctOmnipodMap : CTOmnipodMap = {};
     for (let chassis in smurfyOmnipodData) {
+      if (!smurfyOmnipodData.hasOwnProperty(chassis)) {
+        continue;
+      }
       for (let omnipodId in smurfyOmnipodData[chassis]) {
+        if (!smurfyOmnipodData[chassis].hasOwnProperty(omnipodId)) {
+          continue;
+        }
         let omnipodEntry = smurfyOmnipodData[chassis][omnipodId];
         flatOmnipodData[omnipodId] = omnipodEntry;
         if (omnipodEntry.details.component === "centre_torso") {
@@ -1171,6 +1216,9 @@ namespace MechModel  {
     let loadAllInitData = Promise.all(initPromises);
     return loadAllInitData.then(function(dataArray) {
       for (let idx in dataArray) {
+        if (!dataArray.hasOwnProperty(idx)) {
+          continue;
+        }
         let path = dataPaths[idx];
         dataPathAssigns[path](dataArray[idx]);
       }
@@ -1193,6 +1241,9 @@ namespace MechModel  {
   const heatsinkType = "CHeatSinkStats";
   var initHeatsinkIds = function() : void {
     for (let moduleId in SmurfyModuleData) {
+      if (!SmurfyModuleData.hasOwnProperty(moduleId)) {
+        continue;
+      }
       let moduleData = SmurfyModuleData[moduleId];
       if (moduleData.type === heatsinkType) {
         if (moduleData.name === ISHeatsinkName) {
@@ -1210,6 +1261,9 @@ namespace MechModel  {
   //Addditional data can be found in data/addedheatsinkdata.js
   var initAddedHeatsinkData = function() {
     for (let idx in SmurfyModuleData) {
+      if (!SmurfyModuleData.hasOwnProperty(idx)) {
+        continue;
+      }
       let moduleData = SmurfyModuleData[idx];
       if (moduleData.type === "CHeatSinkStats") {
         let addedData = AddedData._AddedHeatsinkData[moduleData.name];
@@ -1222,6 +1276,9 @@ namespace MechModel  {
   //additional data can be found in data/addedweapondata.js
   var initAddedWeaponData = function() {
     for (let idx in SmurfyWeaponData) {
+      if (!SmurfyWeaponData.hasOwnProperty(idx)) {
+        continue;
+      }
       let weaponData = SmurfyWeaponData[idx];
       let addedData = AddedData._AddedWeaponData[weaponData.name];
       $.extend(weaponData, addedData);
@@ -1263,6 +1320,9 @@ namespace MechModel  {
       return smurfyWeaponNameMap[smurfyName];
     }
     for (let id in SmurfyWeaponData) {
+      if (!SmurfyWeaponData.hasOwnProperty(id)) {
+        continue;
+      }
       let smurfyWeapon = SmurfyWeaponData[id];
       if (smurfyName === smurfyWeapon.name) {
         smurfyWeaponNameMap[smurfyName] = smurfyWeapon;
@@ -1698,6 +1758,9 @@ namespace MechModel  {
     for (let team of teamList) {
       let mechList = mechTeams[team];
       for (let mechIdx in mechList) {
+        if (!mechList.hasOwnProperty(mechIdx)) {
+          continue;
+        }
         let mech = mechList[mechIdx];
         if (mech.getMechId() === mechId) {
           return {team: team, index: Number(mechIdx)};

@@ -3321,6 +3321,9 @@ var MechAccuracyPattern;
         return function (weaponDamage, range) {
             let transformedDamage = new MechModel.WeaponDamage({});
             for (let component in weaponDamage.damageMap) {
+                if (!weaponDamage.damageMap.hasOwnProperty(component)) {
+                    continue;
+                }
                 let newComponentDamage = Number(weaponDamage.damageMap[component]) *
                     Number(percentOnTarget);
                 let totalAdjacentDamage = Number(weaponDamage.damageMap[component]) *
@@ -3432,6 +3435,9 @@ var MechAccuracyPattern;
             let baseRangeDamage;
             let targetLocation;
             for (targetLocation in weaponDamage.damageMap) {
+                if (!weaponDamage.damageMap.hasOwnProperty(targetLocation)) {
+                    continue;
+                }
                 baseRangeDamage = weaponDamage.damageMap[targetLocation];
                 break;
             }
@@ -3453,6 +3459,9 @@ var MechAccuracyPattern;
             this.range = Number(range);
             this.spread = {};
             for (let component in Component) {
+                if (!Component.hasOwnProperty(component)) {
+                    continue;
+                }
                 let componentVal = Component[component];
                 if (Component.hasOwnProperty(component)) {
                     let percentDamage = spread[componentVal] ? Number(spread[componentVal]) : 0;
@@ -3468,6 +3477,9 @@ var MechAccuracyPattern;
         toString() {
             let ret = "range : " + this.range;
             for (let component in this.spread) {
+                if (!this.spread.hasOwnProperty(component)) {
+                    continue;
+                }
                 ret += " " + component + ":" + this.spread[component];
             }
         }
@@ -3487,6 +3499,9 @@ var MechAccuracyPattern;
     MechAccuracyPattern.seekerPattern = function (seekerSpreadData) {
         let seekerSpreadList = [];
         for (let range in seekerSpreadData) {
+            if (!seekerSpreadData.hasOwnProperty(range)) {
+                continue;
+            }
             seekerSpreadList.push(new SeekerSpread(Number(range), seekerSpreadData[range]));
         }
         seekerSpreadList.sort((entry1, entry2) => {
@@ -3501,6 +3516,9 @@ var MechAccuracyPattern;
             let rangeDiff = range - baseEntry.range;
             let computedSpread = {};
             for (let component in Component) {
+                if (!Component.hasOwnProperty(component)) {
+                    continue;
+                }
                 let componentVal = Component[component];
                 if (Component.hasOwnProperty(component)) {
                     let slope = (Number(nextEntry.spread[componentVal]) - Number(baseEntry.spread[componentVal])) /
@@ -3520,6 +3538,9 @@ var MechAccuracyPattern;
             //sanity check on computed spread
             let totalPercent = 0;
             for (let component in computedSeekerSpread.spread) {
+                if (!computedSeekerSpread.spread.hasOwnProperty(component)) {
+                    continue;
+                }
                 totalPercent += computedSeekerSpread.spread[component];
             }
             if (totalPercent > 1) {
@@ -3529,6 +3550,9 @@ var MechAccuracyPattern;
             //transform totalDamage
             let transformedDamage = weaponDamage.clone();
             for (let component in computedSeekerSpread.spread) {
+                if (!computedSeekerSpread.spread.hasOwnProperty(component)) {
+                    continue;
+                }
                 transformedDamage.damageMap[component] =
                     totalDamage * computedSeekerSpread.spread[component];
             }
@@ -3544,6 +3568,9 @@ var MechAccuracyPattern;
     MechAccuracyPattern.directFireSpreadPattern = function (spreadData) {
         let spreadList = [];
         for (let spreadRange in spreadData) {
+            if (!spreadData.hasOwnProperty(spreadRange)) {
+                continue;
+            }
             let directFireSpread = new DirectFireSpread(Number(spreadRange), spreadData[spreadRange]);
             spreadList.push(directFireSpread);
         }
@@ -3558,6 +3585,9 @@ var MechAccuracyPattern;
             let nextRange = Number(spreadList[nextIdx].range);
             let computedSpread = {};
             for (let field in spreadList[baseIdx].spread) {
+                if (!spreadList[baseIdx].spread.hasOwnProperty(field)) {
+                    continue;
+                }
                 let basePercent = spreadList[baseIdx].spread[field];
                 let nextPercent = spreadList[nextIdx].spread[field];
                 let slope = (Number(nextPercent) - Number(basePercent)) / (nextRange - baseRange);
@@ -3567,6 +3597,9 @@ var MechAccuracyPattern;
             //sanity check on computed spread
             let totalPercent = 0;
             for (let field in computedSpread) {
+                if (!computedSpread.hasOwnProperty(field)) {
+                    continue;
+                }
                 totalPercent += Number(computedSpread[field]);
             }
             if (totalPercent > 1) {
@@ -3709,6 +3742,9 @@ var MechTargetComponent;
         let cumulativePercentMap = new Map();
         let prevComponent;
         for (let component in componentWeights) {
+            if (!componentWeights.hasOwnProperty(component)) {
+                continue;
+            }
             let weight = componentWeights[component];
             if (!prevComponent) {
                 cumulativePercentMap.set(component, Number(weight));
@@ -4437,6 +4473,9 @@ var MechModelQuirks;
         initReversedWeaponNameMap() {
             let ret = {};
             for (let quirkName in MechModelQuirks._weaponNameMap) {
+                if (!MechModelQuirks._weaponNameMap.hasOwnProperty(quirkName)) {
+                    continue;
+                }
                 for (let weaponName of MechModelQuirks._weaponNameMap[quirkName]) {
                     let reverseEntry = ret[weaponName];
                     if (!reverseEntry) {
@@ -4589,6 +4628,9 @@ var MechModelWeapons;
                 return 0;
             }
             for (let rangeIdx in this.ranges) {
+                if (!this.ranges.hasOwnProperty(rangeIdx)) {
+                    continue;
+                }
                 let rangeEntry = this.ranges[rangeIdx];
                 let nextEntry = Number(rangeIdx) < this.ranges.length - 1 ?
                     this.ranges[Number(rangeIdx) + 1] :
@@ -5416,6 +5458,9 @@ var MechModel;
                 //just update the time fired field instead of adding a new entry
                 let addNewEntry = true;
                 for (let ghostHeatIdx in ghostHeatWeapons) {
+                    if (!ghostHeatWeapons.hasOwnProperty(ghostHeatIdx)) {
+                        continue;
+                    }
                     let ghostHeatEntry = ghostHeatWeapons[ghostHeatIdx];
                     if (ghostHeatEntry.weaponState === weaponState) {
                         //update time, remove from array and put at the end of the queue
@@ -5475,6 +5520,9 @@ var MechModel;
         takeDamage(weaponDamage) {
             let totalDamage = new MechDamage();
             for (let location in weaponDamage.damageMap) {
+                if (!weaponDamage.damageMap.hasOwnProperty(location)) {
+                    continue;
+                }
                 let numDamage = weaponDamage.getDamage(location);
                 //apply damage to location
                 let componentDamage = this.mechHealth.takeDamage(location, numDamage);
@@ -5607,6 +5655,9 @@ var MechModel;
             }
             let ret = {};
             for (let key in ghostHeatMap) {
+                if (!ghostHeatMap.hasOwnProperty(key)) {
+                    continue;
+                }
                 ret[key] = Array.from(ghostHeatMap[key]);
             }
             return ret;
@@ -5680,6 +5731,9 @@ var MechModel;
                     ammoLocationOrderIndex(y.location);
             });
             for (let idx in this.ammoBoxList) {
+                if (!this.ammoBoxList.hasOwnProperty(idx)) {
+                    continue;
+                }
                 let ammoBox = this.ammoBoxList[idx];
                 let firstWeaponId = ammoBox.weaponIds[0];
                 //Create an ammocount for the weapon if it is not yet in the map
@@ -5811,6 +5865,9 @@ var MechModel;
                 "Engine_Light": EngineType.LIGHT,
             };
             for (let enginePrefix in engineMap) {
+                if (!engineMap.hasOwnProperty(enginePrefix)) {
+                    continue;
+                }
                 if (this.name.startsWith(enginePrefix)) {
                     return engineMap[enginePrefix];
                 }
@@ -5871,6 +5928,9 @@ var MechModel;
             if (this.totalDuration > 0) {
                 let tickDamageMap = {};
                 for (let component in this.weaponDamage.damageMap) {
+                    if (!this.weaponDamage.damageMap.hasOwnProperty(component)) {
+                        continue;
+                    }
                     tickDamageMap[component] =
                         Number(this.weaponDamage.getDamage(component))
                             / Number(this.totalDuration) * stepDurationFunction();
@@ -5953,6 +6013,9 @@ var MechModel;
         }
         add(mechDamage) {
             for (let location in mechDamage.componentDamage) {
+                if (!mechDamage.componentDamage.hasOwnProperty(location)) {
+                    continue;
+                }
                 if (!this.componentDamage[location]) {
                     this.componentDamage[location] = new ComponentDamage(location, 0, 0);
                 }
@@ -5972,6 +6035,9 @@ var MechModel;
         totalDamage() {
             let ret = 0;
             for (let component in this.componentDamage) {
+                if (!this.componentDamage.hasOwnProperty(component)) {
+                    continue;
+                }
                 ret = Number(ret) + this.componentDamage[component].totalDamage();
             }
             return ret;
@@ -5979,6 +6045,9 @@ var MechModel;
         toString() {
             let ret = "";
             for (let location in this.componentDamage) {
+                if (!this.componentDamage.hasOwnProperty(location)) {
+                    continue;
+                }
                 ret = ret + " " + this.componentDamage[location].toString();
             }
             return ret;
@@ -6030,6 +6099,9 @@ var MechModel;
         }
         multiply(multiplier) {
             for (var location in this.damageMap) {
+                if (!this.damageMap.hasOwnProperty(location)) {
+                    continue;
+                }
                 this.damageMap[location] =
                     Number(this.damageMap[location]) * Number(multiplier);
             }
@@ -6037,6 +6109,9 @@ var MechModel;
         getTotalDamage() {
             let totalDamage = 0;
             for (let component in this.damageMap) {
+                if (!this.damageMap.hasOwnProperty(component)) {
+                    continue;
+                }
                 totalDamage += this.damageMap[component];
             }
             return totalDamage;
@@ -6044,6 +6119,9 @@ var MechModel;
         toString() {
             let ret = "totalDamage: " + this.getTotalDamage();
             for (let component in this.damageMap) {
+                if (!this.damageMap.hasOwnProperty(component)) {
+                    continue;
+                }
                 ret = ret + " " + component + "=" + this.damageMap[component];
             }
             return ret;
@@ -6051,6 +6129,9 @@ var MechModel;
         clone() {
             var newDamageMap = {};
             for (let component in this.damageMap) {
+                if (!this.damageMap.hasOwnProperty(component)) {
+                    continue;
+                }
                 newDamageMap[component] = this.damageMap[component];
             }
             return new WeaponDamage(newDamageMap);
@@ -6123,7 +6204,13 @@ var MechModel;
         let flatOmnipodData = {};
         let ctOmnipodMap = {};
         for (let chassis in smurfyOmnipodData) {
+            if (!smurfyOmnipodData.hasOwnProperty(chassis)) {
+                continue;
+            }
             for (let omnipodId in smurfyOmnipodData[chassis]) {
+                if (!smurfyOmnipodData[chassis].hasOwnProperty(omnipodId)) {
+                    continue;
+                }
                 let omnipodEntry = smurfyOmnipodData[chassis][omnipodId];
                 flatOmnipodData[omnipodId] = omnipodEntry;
                 if (omnipodEntry.details.component === "centre_torso") {
@@ -6159,6 +6246,9 @@ var MechModel;
         let loadAllInitData = Promise.all(initPromises);
         return loadAllInitData.then(function (dataArray) {
             for (let idx in dataArray) {
+                if (!dataArray.hasOwnProperty(idx)) {
+                    continue;
+                }
                 let path = dataPaths[idx];
                 dataPathAssigns[path](dataArray[idx]);
             }
@@ -6179,6 +6269,9 @@ var MechModel;
     const heatsinkType = "CHeatSinkStats";
     var initHeatsinkIds = function () {
         for (let moduleId in SmurfyModuleData) {
+            if (!SmurfyModuleData.hasOwnProperty(moduleId)) {
+                continue;
+            }
             let moduleData = SmurfyModuleData[moduleId];
             if (moduleData.type === heatsinkType) {
                 if (moduleData.name === ISHeatsinkName) {
@@ -6197,6 +6290,9 @@ var MechModel;
     //Addditional data can be found in data/addedheatsinkdata.js
     var initAddedHeatsinkData = function () {
         for (let idx in SmurfyModuleData) {
+            if (!SmurfyModuleData.hasOwnProperty(idx)) {
+                continue;
+            }
             let moduleData = SmurfyModuleData[idx];
             if (moduleData.type === "CHeatSinkStats") {
                 let addedData = AddedData._AddedHeatsinkData[moduleData.name];
@@ -6208,6 +6304,9 @@ var MechModel;
     //additional data can be found in data/addedweapondata.js
     var initAddedWeaponData = function () {
         for (let idx in SmurfyWeaponData) {
+            if (!SmurfyWeaponData.hasOwnProperty(idx)) {
+                continue;
+            }
             let weaponData = SmurfyWeaponData[idx];
             let addedData = AddedData._AddedWeaponData[weaponData.name];
             $.extend(weaponData, addedData);
@@ -6237,6 +6336,9 @@ var MechModel;
             return smurfyWeaponNameMap[smurfyName];
         }
         for (let id in SmurfyWeaponData) {
+            if (!SmurfyWeaponData.hasOwnProperty(id)) {
+                continue;
+            }
             let smurfyWeapon = SmurfyWeaponData[id];
             if (smurfyName === smurfyWeapon.name) {
                 smurfyWeaponNameMap[smurfyName] = smurfyWeapon;
@@ -6575,6 +6677,9 @@ var MechModel;
         for (let team of teamList) {
             let mechList = mechTeams[team];
             for (let mechIdx in mechList) {
+                if (!mechList.hasOwnProperty(mechIdx)) {
+                    continue;
+                }
                 let mech = mechList[mechIdx];
                 if (mech.getMechId() === mechId) {
                     return { team: team, index: Number(mechIdx) };
@@ -6857,6 +6962,9 @@ var MechModelView;
             let mechTeam = MechModel.getMechTeam(team);
             let idx = "0";
             for (idx in mechTeam) {
+                if (!mechTeam.hasOwnProperty(idx)) {
+                    continue;
+                }
                 if (Number(idx) >= TITLE_MAX_MECHS) {
                     break;
                 }
@@ -6881,6 +6989,9 @@ var MechModelView;
     MechModelView.updateCooldown = function (mech) {
         let mechState = mech.getMechState();
         for (let weaponIndex in mechState.weaponStateList) {
+            if (!mechState.weaponStateList.hasOwnProperty(weaponIndex)) {
+                continue;
+            }
             let type = "cooldown";
             let weaponState = mechState.weaponStateList[weaponIndex];
             let weaponInfo = weaponState.weaponInfo;
@@ -6915,6 +7026,9 @@ var MechModelView;
     MechModelView.updateWeaponStatus = function (mech) {
         let mechState = mech.getMechState();
         for (let weaponIndex in mechState.weaponStateList) {
+            if (!mechState.weaponStateList.hasOwnProperty(weaponIndex)) {
+                continue;
+            }
             let weaponState = mechState.weaponStateList[weaponIndex];
             MechViewMechPanel.setWeaponState(mech.getMechId(), Number(weaponIndex), weaponState.weaponCycle);
             let ammoState = mech.getMechState().ammoState;
@@ -6983,6 +7097,9 @@ var MechModelView;
         updateFunctionMap[UpdateType.WEAPONSTATE] = MechModelView.updateWeaponStatus;
         updateFunctionMap[UpdateType.STATS] = updateStats;
         for (let updateType in mechState.updateTypes) {
+            if (!mechState.updateTypes.hasOwnProperty(updateType)) {
+                continue;
+            }
             if (mechState.updateTypes[updateType]) {
                 updateFunctionMap[updateType](mech);
             }
@@ -7154,6 +7271,9 @@ var MechModelView;
         computeWeaponStats() {
             let burstDamageStartIdx = null;
             for (let idx in this.weaponFires) {
+                if (!this.weaponFires.hasOwnProperty(idx)) {
+                    continue;
+                }
                 let weaponFire = this.weaponFires[idx];
                 let weaponInfo = weaponFire.weaponState.weaponInfo;
                 let weaponStat = this.weaponStats.get(weaponInfo.weaponId);
@@ -7554,6 +7674,9 @@ var MechViewMechPanel;
     //TODO: Do not directly access WeaponState and AmmoState here
     var addWeaponPanel = function (mechId, weaponStateList, ammoState, weaponPanel) {
         for (var idx in weaponStateList) {
+            if (!weaponStateList.hasOwnProperty(idx)) {
+                continue;
+            }
             var weaponState = weaponStateList[idx];
             let weaponRowDiv = MechViewWidgets.cloneTemplate("weaponRow-template");
             $(weaponRowDiv)
@@ -8656,7 +8779,11 @@ var MechViewRouter;
                 let teamList = [Team.BLUE, Team.RED];
                 for (let team of teamList) {
                     this.teams[team] = [];
-                    for (let mechIdx in MechModel.getMechTeam(team)) {
+                    let mechTeam = MechModel.getMechTeam(team);
+                    for (let mechIdx in mechTeam) {
+                        if (!mechTeam.hasOwnProperty(mechIdx)) {
+                            continue;
+                        }
                         let mech = MechModel.getMechTeam(team)[mechIdx];
                         let mechInfo = mech.getMechState().mechInfo;
                         let smurfyId = mechInfo.smurfyMechId;
@@ -8794,7 +8921,11 @@ var MechViewRouter;
         };
         let combinedTeamList = [];
         for (let team of teamList) {
-            for (let mechIdx in newAppState.teams[team]) {
+            let newStateTeams = newAppState.teams[team];
+            for (let mechIdx in newStateTeams) {
+                if (!newStateTeams.hasOwnProperty(mechIdx)) {
+                    continue;
+                }
                 let mechEntry = newAppState.teams[team][mechIdx];
                 combinedTeamList.push(createCombinedListEntry(team, Number(mechIdx), mechEntry));
             }
@@ -9136,6 +9267,9 @@ var MechViewTeamStats;
     MechViewTeamStats.setSelectedTeamPatterns = function (team) {
         let currSelectedPatterns = selectedPatterns[team];
         for (let patternTypeId in currSelectedPatterns) {
+            if (!currSelectedPatterns.hasOwnProperty(patternTypeId)) {
+                continue;
+            }
             let patternType = findPatternTypeWithId(patternTypeId);
             let patternId = currSelectedPatterns[patternTypeId];
             let pattern = findPatternWithId(patternId, patternLists[patternType.id]);
@@ -9414,6 +9548,9 @@ var MechTest;
                     MechModelView.updateHeat(mech);
                     //random weapon state
                     for (let weaponIndex in mechState.weaponStateList) {
+                        if (!mechState.weaponStateList.hasOwnProperty(weaponIndex)) {
+                            continue;
+                        }
                         let weaponState = mechState.weaponStateList[weaponIndex];
                         let WEAPON_CYCLES = [];
                         for (let weaponCycle in WeaponCycle) {
@@ -9492,6 +9629,9 @@ var MechTest;
         let quirkMap = {};
         //mech quirks
         for (let mechIdx in DummyMechData) {
+            if (!DummyMechData.hasOwnProperty(mechIdx)) {
+                continue;
+            }
             let smurfyMech = DummyMechData[mechIdx];
             let quirks = smurfyMech.details.quirks;
             if (quirks) {
@@ -9502,7 +9642,14 @@ var MechTest;
         }
         //omnipod quirks
         for (let chassis in _DummyOmnipods) {
-            for (let omnipodId in _DummyOmnipods[chassis]) {
+            if (!_DummyOmnipods.hasOwnProperty(chassis)) {
+                continue;
+            }
+            let chassisOmnipods = _DummyOmnipods[chassis];
+            for (let omnipodId in chassisOmnipods) {
+                if (!chassisOmnipods.hasOwnProperty(omnipodId)) {
+                    continue;
+                }
                 let omnipodData = _DummyOmnipods[chassis][omnipodId];
                 let quirks = omnipodData.configuration.quirks;
                 if (quirks) {
@@ -9515,6 +9662,9 @@ var MechTest;
         let numQuirks = 0;
         let sortedQuirkNames = [];
         for (let quirkName in quirkMap) {
+            if (!quirkMap.hasOwnProperty(quirkName)) {
+                continue;
+            }
             sortedQuirkNames.push(quirkName);
         }
         sortedQuirkNames.sort();

@@ -15,7 +15,7 @@
 				"singleline": "never"
 			}
 		},
-		"forin": false,
+		"forin": true,
 		"max-classes-per-file": [true, 20],
 		"member-access": [false],
 		"member-ordering": [false, {"order": "fields-first"}],

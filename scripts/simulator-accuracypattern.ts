@@ -41,6 +41,9 @@ namespace MechAccuracyPattern {
       let transformedDamage = new MechModel.WeaponDamage({});
 
       for (let component in weaponDamage.damageMap) {
+        if (!weaponDamage.damageMap.hasOwnProperty(component)) {
+          continue;
+        }
         let newComponentDamage =
             Number(weaponDamage.damageMap[component]) *
             Number(percentOnTarget);
@@ -164,6 +167,9 @@ namespace MechAccuracyPattern {
       let baseRangeDamage;
       let targetLocation;
       for (targetLocation in weaponDamage.damageMap) {
+        if (!weaponDamage.damageMap.hasOwnProperty(targetLocation)) {
+          continue
+        }
         baseRangeDamage = weaponDamage.damageMap[targetLocation];
         break;
       }
@@ -188,6 +194,9 @@ namespace MechAccuracyPattern {
       this.range = Number(range);
       this.spread = {}
       for (let component in Component) {
+        if (!Component.hasOwnProperty(component)) {
+          continue;
+        }
         let componentVal = Component[component]
         if (Component.hasOwnProperty(component)) {
           let percentDamage = spread[componentVal] ? Number(spread[componentVal]) : 0;
@@ -202,6 +211,9 @@ namespace MechAccuracyPattern {
     toString() {
       let ret = "range : " + this.range;
       for (let component in this.spread) {
+        if (!this.spread.hasOwnProperty(component)) {
+          continue;
+        }
         ret+= " " + component + ":" + this.spread[component];
       }
     }
@@ -223,6 +235,9 @@ namespace MechAccuracyPattern {
   export var seekerPattern = function(seekerSpreadData : WeaponSpread) {
     let seekerSpreadList : SeekerSpread[] = [];
     for (let range in seekerSpreadData) {
+      if (!seekerSpreadData.hasOwnProperty(range)) {
+        continue;
+      }
       seekerSpreadList.push(new SeekerSpread(Number(range), seekerSpreadData[range]));
     }
     seekerSpreadList.sort((entry1, entry2) => {
@@ -239,6 +254,9 @@ namespace MechAccuracyPattern {
 
       let computedSpread : WeaponSpreadAtRange = {};
       for (let component in Component) {
+        if (!Component.hasOwnProperty(component)) {
+          continue;
+        }
         let componentVal = Component[component];
         if (Component.hasOwnProperty(component)) {
           let slope =
@@ -259,6 +277,9 @@ namespace MechAccuracyPattern {
       //sanity check on computed spread
       let totalPercent = 0;
       for (let component in computedSeekerSpread.spread) {
+        if (!computedSeekerSpread.spread.hasOwnProperty(component)) {
+          continue;
+        }
         totalPercent += computedSeekerSpread.spread[component];
       }
       if (totalPercent > 1) {
@@ -268,6 +289,9 @@ namespace MechAccuracyPattern {
       //transform totalDamage
       let transformedDamage = weaponDamage.clone();
       for (let component in computedSeekerSpread.spread) {
+        if (!computedSeekerSpread.spread.hasOwnProperty(component)) {
+          continue;
+        }
         transformedDamage.damageMap[component] =
             totalDamage * computedSeekerSpread.spread[component];
       }
@@ -287,6 +311,9 @@ namespace MechAccuracyPattern {
       function(spreadData : WeaponSpread) : AccuracyPattern {
     let spreadList : DirectFireSpread[] = [];
     for (let spreadRange in spreadData) {
+      if (!spreadData.hasOwnProperty(spreadRange)) {
+         continue;
+      }
       let directFireSpread = new DirectFireSpread(Number(spreadRange), spreadData[spreadRange]);
       spreadList.push(directFireSpread);
     }
@@ -303,6 +330,9 @@ namespace MechAccuracyPattern {
       let nextRange = Number(spreadList[nextIdx].range);
       let computedSpread : WeaponSpreadAtRange = {};
       for (let field in spreadList[baseIdx].spread) {
+        if (!spreadList[baseIdx].spread.hasOwnProperty(field)) {
+          continue;
+        }
         let basePercent = spreadList[baseIdx].spread[field];
         let nextPercent = spreadList[nextIdx].spread[field];
         let slope = (Number(nextPercent) - Number(basePercent)) / (nextRange - baseRange);
@@ -313,6 +343,9 @@ namespace MechAccuracyPattern {
       //sanity check on computed spread
       let totalPercent = 0;
       for (let field in computedSpread) {
+        if (!computedSpread.hasOwnProperty(field)) {
+          continue;
+        }
         totalPercent += Number(computedSpread[field]);
       }
       if (totalPercent > 1) {
