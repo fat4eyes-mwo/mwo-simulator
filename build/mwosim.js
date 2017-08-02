@@ -3220,6 +3220,11 @@ var MechModelCommon;
         CENTRE_TORSO_REAR: "centre_torso_rear",
         RIGHT_TORSO_REAR: "right_torso_rear"
     };
+    MechModelCommon.isRearComponent = function (component) {
+        return component === MechModelCommon.Component.LEFT_TORSO_REAR ||
+            component === MechModelCommon.Component.CENTRE_TORSO_REAR ||
+            component === MechModelCommon.Component.RIGHT_TORSO_REAR;
+    };
     MechModelCommon.WeaponCycle = {
         READY: "Ready",
         FIRING: "Firing",
@@ -3985,9 +3990,6 @@ var MechFirePattern;
 /// <reference path="common/simulator-settings.ts" />
 /// <reference path="simulator-model.ts" />
 /// <reference path="data/user-options.ts" />
-//TODO: Start splitting things off from this file, it's getting too long
-//Candidates:
-//  move SimulatorParameters (and related methods) to common
 var MechSimulatorLogic;
 (function (MechSimulatorLogic) {
     var UpdateType = MechModelCommon.UpdateType;
@@ -5200,11 +5202,6 @@ var MechModel;
     var EngineType = MechModelCommon.EngineType;
     //TODO: See if you can get a tighter type for enums. Try aliasing.
     //Also check when string enums get put into Typescript
-    MechModel.isRearComponent = function (component) {
-        return component === Component.LEFT_TORSO_REAR ||
-            component === Component.CENTRE_TORSO_REAR ||
-            component === Component.RIGHT_TORSO_REAR;
-    };
     var SmurfyWeaponData = null;
     var SmurfyAmmoData = null;
     var SmurfyModuleData = null;
@@ -5329,7 +5326,7 @@ var MechModel;
                 ret.addArmorDamage(this.armor);
                 this.armor = 0;
             }
-            if (!MechModel.isRearComponent(this.location)) {
+            if (!MechModelCommon.isRearComponent(this.location)) {
                 if (numDamage <= this.structure) {
                     ret.addStructureDamage(numDamage);
                     this.structure = Number(this.structure) - numDamage;
@@ -6036,8 +6033,6 @@ var MechModel;
         }
     }
     MechModel.WeaponDamage = WeaponDamage;
-    //TODO: Try to move this out of model due to its dependence on WeaponFire
-    //Or move WeaponFire here
     class MechStats {
         constructor() {
             this.totalDamage = 0;

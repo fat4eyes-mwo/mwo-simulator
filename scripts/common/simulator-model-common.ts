@@ -22,6 +22,12 @@ namespace MechModelCommon {
     RIGHT_TORSO_REAR : "right_torso_rear"
   };
 
+  export var isRearComponent = function(component : string) : boolean {
+    return component === Component.LEFT_TORSO_REAR ||
+        component === Component.CENTRE_TORSO_REAR ||
+        component === Component.RIGHT_TORSO_REAR;
+  };
+
   export type WeaponCycle = string;
   export const WeaponCycle : {[index:string] : WeaponCycle}  = {
     READY : "Ready",

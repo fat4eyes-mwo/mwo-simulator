@@ -38,13 +38,6 @@ namespace MechModel  {
   //TODO: See if you can get a tighter type for enums. Try aliasing.
   //Also check when string enums get put into Typescript
 
-  export var isRearComponent = function(component : string) : boolean {
-    return component === Component.LEFT_TORSO_REAR ||
-        component === Component.CENTRE_TORSO_REAR ||
-        component === Component.RIGHT_TORSO_REAR;
-  };
-
-
   var SmurfyWeaponData : SmurfyWeaponDataList = null;
   var SmurfyAmmoData : SmurfyAmmoDataList = null;
   var SmurfyModuleData : SmurfyModuleDataList = null;
@@ -205,7 +198,7 @@ namespace MechModel  {
         ret.addArmorDamage(this.armor);
         this.armor = 0;
       }
-      if (!isRearComponent(this.location)) {
+      if (!MechModelCommon.isRearComponent(this.location)) {
         if (numDamage <= this.structure) {
           ret.addStructureDamage(numDamage);
           this.structure = Number(this.structure) - numDamage;
@@ -1052,9 +1045,6 @@ namespace MechModel  {
       return new WeaponDamage(newDamageMap);
     }
   }
-
-  //TODO: Try to move this out of model due to its dependence on WeaponFire
-  //Or move WeaponFire here
 
   export class MechStats {
     totalDamage : number;
