@@ -6,6 +6,7 @@
 //Weapon state classes
 namespace MechModelWeapons {
   import WeaponCycle = MechModelCommon.WeaponCycle;
+  import UACJamMethod = SimulatorSettings.UACJamMethod;
 
   type MechInfo = MechModel.MechInfo;
   type MechState = MechModel.MechState;
