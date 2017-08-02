@@ -5208,11 +5208,11 @@ var MechModel;
     var SmurfyMechData = null;
     var SmurfyOmnipodData = null;
     var SmurfyCTOmnipods = null;
-    var mechTeams = {};
+    var mechTeams = {}; //Team -> Mech[]
     mechTeams[Team.BLUE] = [];
     mechTeams[Team.RED] = [];
     var teamStats = {}; //format is {<team> : <teamStats>}
-    var mechIdMap = {};
+    var mechIdMap = {}; //mechId -> boolean
     class MechInfo {
         constructor(mechId, smurfyMechLoadout) {
             this.mechId = mechId;
@@ -6073,6 +6073,7 @@ var MechModel;
     const OMNIPOD_DATA_PATH = 'data/omnipods.json';
     var dataPaths = [WEAPON_DATA_PATH, AMMO_DATA_PATH, MODULE_DATA_PATH,
         MECH_DATA_PATH, OMNIPOD_DATA_PATH];
+    //dataPath -> DataPathAssignFunction
     var dataPathAssigns = {};
     //TODO: See what the right generic type for the promise is here
     var initDataPromise = function (path) {
@@ -6205,6 +6206,7 @@ var MechModel;
     MechModel.getSmurfyWeaponData = function (smurfyItemId) {
         return SmurfyWeaponData[smurfyItemId];
     };
+    //weaponName -> SmurfyWeaponData
     var smurfyWeaponNameMap = {};
     MechModel.getSmurfyWeaponDataByName = function (smurfyName) {
         if (smurfyWeaponNameMap[smurfyName]) {
@@ -6567,6 +6569,7 @@ var MechModel;
         }
         let mechList = mechTeams[mechPos.team];
         mechList.splice(mechPos.index, 1);
+        releaseMechId(mechId);
         return true;
     };
     //removes src mech from its current position and inserts it before dest mech
@@ -6619,6 +6622,9 @@ var MechModel;
         }
         mechIdMap[newMechId] = true;
         return newMechId;
+    };
+    var releaseMechId = function (mechId) {
+        mechIdMap[mechId] = false;
     };
     //Resets the MechStates of all mechs to their fresh value
     MechModel.resetState = function () {

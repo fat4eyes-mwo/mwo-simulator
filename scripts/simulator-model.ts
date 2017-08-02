@@ -44,11 +44,11 @@ namespace MechModel  {
   var SmurfyMechData : SmurfyMechDataList = null;
   var SmurfyOmnipodData : FlatOmnipodData = null;
   var SmurfyCTOmnipods : CTOmnipodMap = null;
-  var mechTeams : {[index:string] : Mech[]} = {};
+  var mechTeams : {[index:string] : Mech[]} = {}; //Team -> Mech[]
   mechTeams[Team.BLUE] = [];
   mechTeams[Team.RED] = [];
   var teamStats : {[index:string] : TeamStats} = {}; //format is {<team> : <teamStats>}
-  var mechIdMap : {[index:string] : boolean}= {};
+  var mechIdMap : {[index:string] : boolean}= {}; //mechId -> boolean
 
   export class MechInfo {
     mechId : string;
@@ -125,6 +125,7 @@ namespace MechModel  {
   //TODO: Find a non-random way to simulate critical hits
   class MechHealth {
     componentHealth : ComponentHealth[];
+    //Component -> ComponentHealth
     componentHealthMap : {[index : string] : ComponentHealth};
     constructor(componentHealth : ComponentHealth[]) {
       //TODO: try to get rid of this componentHealth list
@@ -245,7 +246,7 @@ namespace MechModel  {
     [index:string] : boolean
   };
   export interface GhostHeatMap {
-    [index:string] : GhostHeatEntry[]
+    [index:string] : GhostHeatEntry[] //heatPenaltyId -> GhostHeatEntry[]
   }
   export class MechState {
     mechInfo : MechInfo;
@@ -568,6 +569,7 @@ namespace MechModel  {
   }
 
   interface AmmoCountMap {
+    //weaponId -> AmmoCount
     [index : string] : AmmoCount
   };
   export class AmmoState {
@@ -927,6 +929,7 @@ namespace MechModel  {
   //represents damage done to a mech
   //A map from Components -> ComponentDamage
   export class MechDamage {
+    //Component -> ComponentDamage
     componentDamage : {[index:string] : ComponentDamage};
     constructor() {
       this.componentDamage = {}; //Component->ComponentDamage
@@ -1092,7 +1095,9 @@ namespace MechModel  {
   const OMNIPOD_DATA_PATH = 'data/omnipods.json';
   var dataPaths = [WEAPON_DATA_PATH , AMMO_DATA_PATH, MODULE_DATA_PATH,
                     MECH_DATA_PATH, OMNIPOD_DATA_PATH];
-  var dataPathAssigns : {[index:string] : (data: any) => void} = {};
+  type DataPathAssignFunction = (data: any) => void;
+  //dataPath -> DataPathAssignFunction
+  var dataPathAssigns : {[index:string] : DataPathAssignFunction} = {};
 
   //TODO: See what the right generic type for the promise is here
   var initDataPromise = function(path : string) : Promise<any> {
@@ -1117,9 +1122,11 @@ namespace MechModel  {
   //main index (instead of the chassis name)
   //also finds the CT omnipods and puts them in a set->omnipod map
   interface FlatOmnipodData {
+    //OmnipodId -> SmurfyOmnipod
     [index:string] : SmurfyOmnipod
   };
   interface CTOmnipodMap {
+    //OmnipodSetName -> SmurfyOmnipod
     [index:string] : SmurfyOmnipod
   };
   var flattenOmnipodData = function(smurfyOmnipodData : SmurfyOmnipodData) {
@@ -1249,6 +1256,7 @@ namespace MechModel  {
     return SmurfyWeaponData[smurfyItemId];
   }
 
+  //weaponName -> SmurfyWeaponData
   var smurfyWeaponNameMap : {[index:string] : SmurfyWeaponData} = {};
   export var getSmurfyWeaponDataByName = function(smurfyName : string) : SmurfyWeaponData {
     if (smurfyWeaponNameMap[smurfyName]) {
@@ -1710,6 +1718,7 @@ namespace MechModel  {
     }
     let mechList = mechTeams[mechPos.team];
     mechList.splice(mechPos.index, 1);
+    releaseMechId(mechId);
     return true;
   }
 
@@ -1770,6 +1779,10 @@ namespace MechModel  {
     }
     mechIdMap[newMechId] = true;
     return newMechId;
+  }
+
+  var releaseMechId = function(mechId : string) {
+    mechIdMap[mechId] = false;
   }
 
   //Resets the MechStates of all mechs to their fresh value
