@@ -232,6 +232,12 @@ namespace MechViewMechPanel {
                 type : WeaponBarType ="cooldown")
                 : void{
     let cooldownDiv = document.getElementById(weaponCooldownBarId(mechId, weaponIdx));
+    if (percent > 1) {
+      cooldownDiv.classList.add("over100");
+    } else {
+      cooldownDiv.classList.remove("over100");
+    }
+    percent = Math.min(1, percent);
     cooldownDiv.style.width = (100*percent) + "%";
     if (type === "cooldown") {
       cooldownDiv.classList.remove("jamBar");

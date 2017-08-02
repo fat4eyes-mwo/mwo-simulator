@@ -534,6 +534,10 @@ div {
   left: 0%;
 }
 
+.weaponCooldownBar.over100 {
+  background-color: $jammed-color;
+}
+
 .weaponCooldownBar.jamBar {
   background-color: $jam-bar-color;
 }
@@ -1308,6 +1312,10 @@ $loaded-mech-highlight-border-radius: 4px;
 
 .simSettingsOKCancel {
   margin-top: 5px;
+}
+
+.okCancelButtons .button {
+  margin-left: 5px;
 }
 
 .linkPanel {

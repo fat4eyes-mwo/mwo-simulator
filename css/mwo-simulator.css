@@ -478,6 +478,10 @@ a:hover {
   left: 0%;
 }
 
+.weaponCooldownBar.over100 {
+  background-color: maroon;
+}
+
 .weaponCooldownBar.jamBar {
   background-color: yellow;
 }
@@ -1211,6 +1215,10 @@ a:hover {
 
 .simSettingsOKCancel {
   margin-top: 5px;
+}
+
+.okCancelButtons .button {
+  margin-left: 5px;
 }
 
 .linkPanel {

@@ -493,22 +493,10 @@ namespace MechModelWeapons {
           this.gotoState(newState);
           weaponFired = true;
         } else if (this.weaponCycle === WeaponCycle.COOLDOWN) {
-          //check jam chance
-          let rand = Math.random();
-          if (rand <= this.computeJamChance()) {
-          // if (true) {
-            //JAM
-            console.log("Jam: " + this.weaponInfo.name);
-            newState = WeaponCycle.JAMMED;
-            this.gotoState(newState);
-            weaponFired = false;
-          } else {
-            console.log("Double tap: " + this.weaponInfo.name);
-            newState = WeaponCycle.COOLDOWN_FIRING;
-            this.gotoState(newState);
-            this.currShotsDuringCooldown -= 1;
-            weaponFired = true;
-          }
+          //try double tap
+          let stateChange = this.tryDoubletap();
+          newState = stateChange.newState;
+          weaponFired = stateChange.weaponFired;
         }
         if (weaponFired) {
           if (weaponInfo.requiresAmmo()) {
@@ -517,6 +505,43 @@ namespace MechModelWeapons {
         }
         return {newState : newState, weaponFired : weaponFired, ammoConsumed: ammoConsumed};
       }
+    }
+
+    private tryDoubletap() : WeaponStateChange {
+      let simSettings = SimulatorSettings.getSimulatorParameters();
+      if (simSettings.uacJAMMethod === UACJamMethod.RANDOM) {
+        let rand = Math.random();
+        if (rand <= this.computeJamChance()) {
+          //JAM
+          return this.weaponJam();
+        } else {
+          return this.doubleTap();
+        }
+      } else if (simSettings.uacJAMMethod === UACJamMethod.EXPECTED_VALUE) {
+        //add expected jam time to cooldown
+        this.cooldownLeft += this.computeJamTime() * this.computeJamChance();
+        return this.doubleTap();
+      } else {
+        throw Error("Unexpected UACJamMethod : " + simSettings.uacJAMMethod);
+      }
+    }
+
+    private weaponJam() : WeaponStateChange {
+      console.log("Jam: " + this.weaponInfo.name);
+      let newState = WeaponCycle.JAMMED;
+      this.gotoState(newState);
+      let weaponFired = false;
+
+      return {newState, weaponFired};
+    }
+
+    private doubleTap() : WeaponStateChange {
+      console.log("Double tap: " + this.weaponInfo.name);
+      let newState = WeaponCycle.COOLDOWN_FIRING;
+      this.gotoState(newState);
+      this.currShotsDuringCooldown -= 1;
+      let weaponFired = true;
+      return  {newState, weaponFired};
     }
 
     step(stepDuration : number) : WeaponStateChange {

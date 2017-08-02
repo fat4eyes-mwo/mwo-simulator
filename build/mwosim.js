@@ -4482,6 +4482,7 @@ var MechModelQuirks;
 var MechModelWeapons;
 (function (MechModelWeapons) {
     var WeaponCycle = MechModelCommon.WeaponCycle;
+    var UACJamMethod = SimulatorSettings.UACJamMethod;
     class WeaponInfo {
         constructor(weaponId, location, smurfyWeaponData, mechInfo) {
             this.weaponId = weaponId; //smurfy weapon id
@@ -4883,23 +4884,10 @@ var MechModelWeapons;
                     weaponFired = true;
                 }
                 else if (this.weaponCycle === WeaponCycle.COOLDOWN) {
-                    //check jam chance
-                    let rand = Math.random();
-                    if (rand <= this.computeJamChance()) {
-                        // if (true) {
-                        //JAM
-                        console.log("Jam: " + this.weaponInfo.name);
-                        newState = WeaponCycle.JAMMED;
-                        this.gotoState(newState);
-                        weaponFired = false;
-                    }
-                    else {
-                        console.log("Double tap: " + this.weaponInfo.name);
-                        newState = WeaponCycle.COOLDOWN_FIRING;
-                        this.gotoState(newState);
-                        this.currShotsDuringCooldown -= 1;
-                        weaponFired = true;
-                    }
+                    //try double tap
+                    let stateChange = this.tryDoubletap();
+                    newState = stateChange.newState;
+                    weaponFired = stateChange.weaponFired;
                 }
                 if (weaponFired) {
                     if (weaponInfo.requiresAmmo()) {
@@ -4909,6 +4897,42 @@ var MechModelWeapons;
                 }
                 return { newState: newState, weaponFired: weaponFired, ammoConsumed: ammoConsumed };
             }
+        }
+        tryDoubletap() {
+            let simSettings = SimulatorSettings.getSimulatorParameters();
+            if (simSettings.uacJAMMethod === UACJamMethod.RANDOM) {
+                let rand = Math.random();
+                if (rand <= this.computeJamChance()) {
+                    //JAM
+                    return this.weaponJam();
+                }
+                else {
+                    return this.doubleTap();
+                }
+            }
+            else if (simSettings.uacJAMMethod === UACJamMethod.EXPECTED_VALUE) {
+                //add expected jam time to cooldown
+                this.cooldownLeft += this.computeJamTime() * this.computeJamChance();
+                return this.doubleTap();
+            }
+            else {
+                throw Error("Unexpected UACJamMethod : " + simSettings.uacJAMMethod);
+            }
+        }
+        weaponJam() {
+            console.log("Jam: " + this.weaponInfo.name);
+            let newState = WeaponCycle.JAMMED;
+            this.gotoState(newState);
+            let weaponFired = false;
+            return { newState, weaponFired };
+        }
+        doubleTap() {
+            console.log("Double tap: " + this.weaponInfo.name);
+            let newState = WeaponCycle.COOLDOWN_FIRING;
+            this.gotoState(newState);
+            this.currShotsDuringCooldown -= 1;
+            let weaponFired = true;
+            return { newState, weaponFired };
         }
         step(stepDuration) {
             let ammoConsumed = 0;
@@ -7554,6 +7578,13 @@ var MechViewMechPanel;
     };
     MechViewMechPanel.setWeaponCooldown = function (mechId, weaponIdx, percent, type = "cooldown") {
         let cooldownDiv = document.getElementById(weaponCooldownBarId(mechId, weaponIdx));
+        if (percent > 1) {
+            cooldownDiv.classList.add("over100");
+        }
+        else {
+            cooldownDiv.classList.remove("over100");
+        }
+        percent = Math.min(1, percent);
         cooldownDiv.style.width = (100 * percent) + "%";
         if (type === "cooldown") {
             cooldownDiv.classList.remove("jamBar");

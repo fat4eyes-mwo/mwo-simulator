@@ -5,7 +5,6 @@
 - save team settings?
 - some omnimechs have no CT omnipod entry (HBR-F). See where to find this info.
 - LBX damage spread
-- UAC double tap (expected value and setting to allow user to enable/disable)
 - Omnipod set quirks
 - MG/HMG/LMG extra struct damage computation
 - Mech details display (quirks, weapon damage summary)
