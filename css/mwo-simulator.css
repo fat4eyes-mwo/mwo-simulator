@@ -850,7 +850,7 @@ a:hover {
   color: #c83232;
 }
 
-#addMechDialog-text {
+.addMechDialog-text {
   border-radius: 3px;
   border: solid thin gold;
   padding: 3px;
@@ -858,7 +858,7 @@ a:hover {
   float: none;
 }
 
-#addMechDialog-result {
+.addMechDialog-result {
   margin: 3px;
 }
 
@@ -905,11 +905,11 @@ a:hover {
   }
 }
 
-#addMechDialog-load {
+.addMechDialog-load {
   float: right;
 }
 
-#addMechDialog-load.loading {
+.addMechDialog-load.loading {
   cursor: none;
   animation-duration: 1s;
   animation-name: buttonglow;
@@ -917,15 +917,15 @@ a:hover {
   opacity: 1;
 }
 
-#addMechDialog-ok, #addMechDialog-cancel {
+.addMechDialog-ok, .addMechDialog-cancel {
   float: right;
 }
 
-#addMechDialog-result {
+.addMechDialog-result {
   word-wrap: break-word;
 }
 
-#addMechDialog-result.error {
+.addMechDialog-result.error {
   animation-duration: 0.5s;
   animation-name: errorblink;
   animation-iteration-count: 1;

@@ -68,11 +68,11 @@ namespace MechViewWidgets {
   }
 
   export class MechButton {
-    id : string;
+    domElement : Element;
     clickHandler : Util.AnyFunction;
     enabled : boolean;
-    constructor(id : string, clickHandler : Util.AnyFunction) {
-      this.id = id;
+    constructor(domElement : Element, clickHandler : Util.AnyFunction) {
+      this.domElement = domElement;
       this.clickHandler = (function(context) {
           var clickContext = context;
           return function(event : any) {
@@ -82,31 +82,31 @@ namespace MechViewWidgets {
           }
       })(this);
       this.enabled = true;
-      $("#" + this.id).click(this.clickHandler);
+      $(this.domElement).click(this.clickHandler);
     }
 
     setHtml(html : string) : void {
-      $("#" + this.id).html(html);
+      $(this.domElement).html(html);
     }
 
     addClass(className : string) : void {
-      $("#" + this.id).addClass(className)
+      $(this.domElement).addClass(className)
     }
 
     removeClass(className : string) : void {
-      $("#" + this.id).removeClass(className);
+      $(this.domElement).removeClass(className);
     }
 
     disable() : void {
       if (this.enabled) {
-        $("#" + this.id).addClass("disabled");
+        $(this.domElement).addClass("disabled");
         this.enabled = false;
       }
     }
 
     enable() : void {
       if (!this.enabled) {
-        $("#" + this.id).removeClass("disabled");
+        $(this.domElement).removeClass("disabled");
         this.enabled = true;
       }
     }

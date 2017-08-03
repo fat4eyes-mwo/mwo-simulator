@@ -322,7 +322,6 @@ namespace MechModelWeapons {
           this.active = false;
         } else if (weaponCycle === WeaponCycle.JAMMED) {
           this.cooldownLeft = this.computeWeaponCooldown();
-          //TODO Check uacJamMethod to compute jam time
           this.jamLeft = this.computeJamTime();
           this.currShotsDuringCooldown = 0;
         }
@@ -397,6 +396,7 @@ namespace MechModelWeapons {
 
     computeJamTime() {
       //TODO: See if any quirks affect jam time
+      //NOTE: Skills affect jam time
       return Number(this.weaponInfo.jamTime);
     }
 

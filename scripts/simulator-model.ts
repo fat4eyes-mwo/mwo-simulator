@@ -35,8 +35,6 @@ namespace MechModel  {
   type SmurfyHeatsinkModuleData = SmurfyTypes.SmurfyHeatsinkModuleData;
   type SmurfyOmnipod = SmurfyTypes.SmurfyOmnipod;
   type SmurfyOmnipodData = SmurfyTypes.SmurfyOmnipodData;
-  //TODO: See if you can get a tighter type for enums. Try aliasing.
-  //Also check when string enums get put into Typescript
 
   var SmurfyWeaponData : SmurfyWeaponDataList = null;
   var SmurfyAmmoData : SmurfyAmmoDataList = null;

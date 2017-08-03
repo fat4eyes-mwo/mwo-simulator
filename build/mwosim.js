@@ -3216,6 +3216,8 @@ var MechModelCommon;
 //NOTE: Common ts files must be put before all other files in the build order in
 //tsconfig.json
 (function (MechModelCommon) {
+    //TODO: See if you can get a tighter type for enums. Try aliasing.
+    //Also check when string enums get put into Typescript
     MechModelCommon.Team = {
         BLUE: "blue",
         RED: "red"
@@ -4810,7 +4812,6 @@ var MechModelWeapons;
                 }
                 else if (weaponCycle === WeaponCycle.JAMMED) {
                     this.cooldownLeft = this.computeWeaponCooldown();
-                    //TODO Check uacJamMethod to compute jam time
                     this.jamLeft = this.computeJamTime();
                     this.currShotsDuringCooldown = 0;
                 }
@@ -4876,6 +4877,7 @@ var MechModelWeapons;
         }
         computeJamTime() {
             //TODO: See if any quirks affect jam time
+            //NOTE: Skills affect jam time
             return Number(this.weaponInfo.jamTime);
         }
         computeTimeBetweenAutoShots() {
@@ -5323,8 +5325,6 @@ var MechModel;
     var WeaponCycle = MechModelCommon.WeaponCycle;
     var UpdateType = MechModelCommon.UpdateType;
     var EngineType = MechModelCommon.EngineType;
-    //TODO: See if you can get a tighter type for enums. Try aliasing.
-    //Also check when string enums get put into Typescript
     var SmurfyWeaponData = null;
     var SmurfyAmmoData = null;
     var SmurfyModuleData = null;
@@ -7501,8 +7501,8 @@ var MechViewWidgets;
         return "rgb(" + red + "," + green + "," + blue + ")";
     };
     class MechButton {
-        constructor(id, clickHandler) {
-            this.id = id;
+        constructor(domElement, clickHandler) {
+            this.domElement = domElement;
             this.clickHandler = (function (context) {
                 var clickContext = context;
                 return function (event) {
@@ -7512,26 +7512,26 @@ var MechViewWidgets;
                 };
             })(this);
             this.enabled = true;
-            $("#" + this.id).click(this.clickHandler);
+            $(this.domElement).click(this.clickHandler);
         }
         setHtml(html) {
-            $("#" + this.id).html(html);
+            $(this.domElement).html(html);
         }
         addClass(className) {
-            $("#" + this.id).addClass(className);
+            $(this.domElement).addClass(className);
         }
         removeClass(className) {
-            $("#" + this.id).removeClass(className);
+            $(this.domElement).removeClass(className);
         }
         disable() {
             if (this.enabled) {
-                $("#" + this.id).addClass("disabled");
+                $(this.domElement).addClass("disabled");
                 this.enabled = false;
             }
         }
         enable() {
             if (!this.enabled) {
-                $("#" + this.id).removeClass("disabled");
+                $(this.domElement).removeClass("disabled");
                 this.enabled = true;
             }
         }
@@ -8127,11 +8127,11 @@ var MechViewAddMech;
         if (!addMechButtonHandler) {
             addMechButtonHandler = createAddMechButtonHandler();
         }
-        $(`#${containerId} [class~=addMechButton]`)
+        let addMechButtonJQ = $(`#${containerId} [class~=addMechButton]`)
             .attr("id", addMechButtonPanelId)
             .attr("data-team", team);
         addMechButtonMap[team] =
-            new MechViewWidgets.MechButton(addMechButtonPanelId, addMechButtonHandler);
+            new MechViewWidgets.MechButton(addMechButtonJQ[0], addMechButtonHandler);
     };
     var createAddMechButtonHandler = function () {
         return function () {
@@ -8143,15 +8143,16 @@ var MechViewAddMech;
     var addMechOKButton;
     var addMechCancelButton;
     var addMechLoadButton;
+    var addMechDialogJQ;
     MechViewAddMech.showAddMechDialog = function (team) {
         //TODO: this code possibly accumulates handlers on the dialog buttons
         //due to the use of ids in the template. See what can be done.
         let addMechDialogDiv = MechViewWidgets.cloneTemplate("addMechDialog-template");
-        $(addMechDialogDiv)
+        addMechDialogJQ = $(addMechDialogDiv)
             .attr("id", "addMechDialogContainer")
             .addClass(team);
         MechViewWidgets.setModal(addMechDialogDiv, "addMech");
-        let resultPanelJQ = $("#addMechDialog-result");
+        let resultPanelJQ = addMechDialogJQ.find(".addMechDialog-result");
         resultPanelJQ
             .removeClass("error")
             .empty()
@@ -8167,27 +8168,28 @@ var MechViewAddMech;
         if (!addMechDialogLoadHandler) {
             addMechDialogLoadHandler = createAddMechDialogLoadHandler();
         }
-        $("#addMechDialog-ok").attr("data-team", team);
+        let okButtonJQ = addMechDialogJQ.find(".addMechDialog-ok").attr("data-team", team);
         addMechOKButton =
-            new MechViewWidgets.MechButton("addMechDialog-ok", addMechDialogOKHandler);
-        $("#addMechDialog-cancel").attr("data-team", team);
+            new MechViewWidgets.MechButton(okButtonJQ[0], addMechDialogOKHandler);
+        let cancelButtonJQ = addMechDialogJQ.find(".addMechDialog-cancel").attr("data-team", team);
         addMechCancelButton =
-            new MechViewWidgets.MechButton("addMechDialog-cancel", addMechDialogCancelHandler);
-        $("#addMechDialog-load").attr("data-team", team);
+            new MechViewWidgets.MechButton(cancelButtonJQ[0], addMechDialogCancelHandler);
+        let loadButtonJQ = addMechDialogJQ.find(".addMechDialog-load").attr("data-team", team);
         addMechLoadButton =
-            new MechViewWidgets.MechButton("addMechDialog-load", addMechDialogLoadHandler);
+            new MechViewWidgets.MechButton(loadButtonJQ[0], addMechDialogLoadHandler);
         addMechOKButton.disable();
         MechViewWidgets.showModal();
-        $("#addMechDialog-text").focus();
+        addMechDialogJQ.find(".addMechDialog-text").focus();
     };
     MechViewAddMech.hideAddMechDialog = function (team) {
         MechViewWidgets.hideModal("addMech");
+        addMechDialogJQ = undefined;
     };
     var loadedSmurfyLoadout = null;
     var createAddMechDialogOKHandler = function () {
         return function () {
             let team = $(this).data('team');
-            let url = $("#addMechDialog-text").val();
+            let url = addMechDialogJQ.find(".addMechDialog-text").val();
             console.log("Mech loaded. team: " + team + " URL: " + url);
             //TODO: Avoid accessing MechModel directly here. Create a method in ModelView to do this
             let smurfyMechLoadout = loadedSmurfyLoadout;
@@ -8215,21 +8217,21 @@ var MechViewAddMech;
     var createAddMechDialogLoadHandler = function () {
         return function () {
             let team = $(this).data('team');
-            let url = String($("#addMechDialog-text").val());
+            let url = String(addMechDialogJQ.find(".addMechDialog-text").val());
             console.log("Load. team: " + team + " URL: " + url);
             let doneHandler = function (data) {
                 loadedSmurfyLoadout = data;
                 let smurfyMechData = MechModel.getSmurfyMechData(loadedSmurfyLoadout.mech_id);
                 let mechTranslatedName = smurfyMechData.translated_name;
                 let mechName = smurfyMechData.name;
-                $("#addMechDialog-result")
+                let resultJQ = addMechDialogJQ.find(".addMechDialog-result")
                     .removeClass("error")
                     .empty();
-                createLoadedMechPanel("addMechDialog-result", loadedSmurfyLoadout);
+                createLoadedMechPanel(resultJQ[0], loadedSmurfyLoadout);
                 addMechOKButton.enable();
             };
             let failHandler = function () {
-                $("#addMechDialog-result")
+                addMechDialogJQ.find(".addMechDialog-result")
                     .addClass("error")
                     .html("Failed to load " + url);
             };
@@ -8240,7 +8242,7 @@ var MechViewAddMech;
             };
             let loadMechPromise = MechModel.loadSmurfyMechLoadoutFromURL(url);
             if (loadMechPromise) {
-                $("#addMechDialog-result")
+                addMechDialogJQ.find(".addMechDialog-result")
                     .removeClass("error")
                     .html("Loading url : " + url);
                 addMechLoadButton.disable();
@@ -8252,7 +8254,7 @@ var MechViewAddMech;
                     .then(alwaysHandler);
             }
             else {
-                $("#addMechDialog-result")
+                addMechDialogJQ.find(".addMechDialog-result")
                     .addClass("error")
                     .html("Invalid smurfy URL. Expected format is 'http://mwo.smurfy-net.de/mechlab#i=mechid&l=loadoutid'");
                 addMechLoadButton.enable();
@@ -8264,11 +8266,11 @@ var MechViewAddMech;
     };
     var addMechDialogLoadHandler; //set on dialog creation, singleton
     let SMURFY_BASE_URL = "http://mwo.smurfy-net.de/mechlab#";
-    var createLoadedMechPanel = function (containerId, smurfyMechLoadout) {
+    var createLoadedMechPanel = function (containerElem, smurfyMechLoadout) {
         let loadedMechDiv = MechViewWidgets.cloneTemplate("loadedMech-template");
         let loadedMechJQ = $(loadedMechDiv)
             .removeAttr("id")
-            .appendTo("#" + containerId);
+            .appendTo(containerElem);
         let smurfyMechId = smurfyMechLoadout.mech_id;
         let smurfyLoadoutId = smurfyMechLoadout.id;
         //Mech name and link
@@ -8490,7 +8492,8 @@ var MechViewSimSettings;
     var SimulatorParameters = SimulatorSettings.SimulatorParameters;
     MechViewSimSettings.initRangeInput = function () {
         let rangeJQ = $("#rangeInput");
-        let rangeButton = new MechViewWidgets.MechButton("setRangeButton", function () {
+        let rangeButtonElem = document.getElementById("setRangeButton");
+        let rangeButton = new MechViewWidgets.MechButton(rangeButtonElem, function () {
             let buttonMode = $(this).attr("data-button-mode");
             if (buttonMode === "not-editing") {
                 rangeJQ

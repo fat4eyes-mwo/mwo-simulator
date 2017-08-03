@@ -945,7 +945,7 @@ $team_settings_transition : 0.5s;
   color: $red-team-color;
 }
 
-#addMechDialog-text {
+.addMechDialog-text {
   border-radius: 3px;
   border: solid thin gold;
   padding: 3px;
@@ -953,7 +953,7 @@ $team_settings_transition : 0.5s;
   float:none;
 }
 
-#addMechDialog-result {
+.addMechDialog-result {
   margin: 3px;
 }
 
@@ -980,11 +980,11 @@ $team_settings_transition : 0.5s;
   50% {background-color: rgb(255, 0, 0); color: white;}
 }
 
-#addMechDialog-load {
+.addMechDialog-load {
   float:right;
 }
 
-#addMechDialog-load.loading {
+.addMechDialog-load.loading {
   cursor:none;
   animation-duration: 1s;
   animation-name: buttonglow;
@@ -992,15 +992,15 @@ $team_settings_transition : 0.5s;
   opacity: 1;
 }
 
-#addMechDialog-ok, #addMechDialog-cancel {
+.addMechDialog-ok, .addMechDialog-cancel {
   float: right;
 }
 
-#addMechDialog-result {
+.addMechDialog-result {
   word-wrap: break-word;
 }
 
-#addMechDialog-result.error {
+.addMechDialog-result.error {
   animation-duration: 0.5s;
   animation-name: errorblink;
   animation-iteration-count: 1;

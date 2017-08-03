@@ -1,6 +1,9 @@
 //NOTE: Common ts files must be put before all other files in the build order in
 //tsconfig.json
 namespace MechModelCommon {
+  //TODO: See if you can get a tighter type for enums. Try aliasing.
+  //Also check when string enums get put into Typescript
+
   export type Team = string;
   export const Team  : {[index:string] : Team} = {
     BLUE : "blue",
