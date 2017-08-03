@@ -62,13 +62,18 @@ System.register("libtest/moduleC", [], function (exports_3, context_3) {
         }
     };
 });
-/// <reference path="../scripts/lib/jquery-3.2.d.ts" />
-/// <reference path="moduleA.ts" />
-/// <reference path="moduleB.ts" />
 System.register("main", ["moduleA", "moduleB", "libtest/moduleC"], function (exports_4, context_4) {
     "use strict";
     var __moduleName = context_4 && context_4.id;
-    var ModuleA, ModuleA2, ModuleB, ModuleC, Main;
+    function main() {
+        ModuleA.setA("a1");
+        ModuleA2.setA("a2"); //Should set the same variable a in moduleA.js
+        ModuleC.funcC("foo");
+        $("#debugText").text("Hello again from typescript" + ModuleA.funcA("Foo") + ModuleB.bfunc("Bar") +
+            ` ModuleA.a=${ModuleA.getA()}` + ` ModuleA2.a=${ModuleA2.getA()}` + ` ModuleB.getAFromB()=${ModuleB.getAfromB()}`);
+    }
+    exports_4("main", main);
+    var ModuleA, ModuleA2, ModuleB, ModuleC, foo;
     return {
         setters: [
             function (ModuleA_2) {
@@ -83,18 +88,7 @@ System.register("main", ["moduleA", "moduleB", "libtest/moduleC"], function (exp
             }
         ],
         execute: function () {
-            (function (Main) {
-                let foo;
-                function main() {
-                    ModuleA.setA("a1");
-                    ModuleA2.setA("a2"); //Should set the same variable a in moduleA.js
-                    ModuleC.funcC("foo");
-                    $("#debugText").text("Hello again from typescript" + ModuleA.funcA("Foo") + ModuleB.bfunc("Bar") +
-                        ` ModuleA.a=${ModuleA.getA()}` + ` ModuleA2.a=${ModuleA2.getA()}` + ` ModuleB.getAFromB()=${ModuleB.getAfromB()}`);
-                }
-                Main.main = main;
-            })(Main || (Main = {}));
-            $(document).ready(Main.main);
+            $(document).ready(main);
         }
     };
 });

@@ -1,6 +1,8 @@
 {
     "compilerOptions": {
         "module": "System",
+        "allowSyntheticDefaultImports" : true,
+        "allowJs" : true,
         "noImplicitAny": true,
         "removeComments": false,
         "preserveConstEnums": true,
