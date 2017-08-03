@@ -1,7 +1,4 @@
 "use strict";
-/// <reference path="common/simulator-model-common.ts" />
-/// <reference path="simulator-model.ts" />
-/// <reference path="simulator-view-widgets.ts" />
 
 namespace MechViewMechPanel {
   import WeaponCycle = MechModelCommon.WeaponCycle;

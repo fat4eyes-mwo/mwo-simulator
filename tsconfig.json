@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "baseUrl" : "./scripts/",
         "module": "System",
         "alwaysStrict" : true,
         "noImplicitAny": true,
@@ -16,9 +17,9 @@
     },
     "include" : [
       "scripts/lib/*.ts",
-      "scripts/data/*.ts",
-      "scripts/common/*.ts",
-      "scripts/*.ts",
-      "test-scripts/**/*.ts"
+      "scripts/mwosim/data/*.ts",
+      "scripts/msosim/common/*.ts",
+      "scripts/mwosim/**/*.ts",
+      "scripts/mwosim-test/**/*.ts"
     ]
 }

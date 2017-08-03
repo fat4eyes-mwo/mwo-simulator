@@ -1,8 +1,4 @@
 "use strict";
-/// <reference path="common/simulator-model-common.ts" />
-/// <reference path="common/simulator-settings.ts" />
-/// <reference path="simulator-model.ts" />
-/// <reference path="data/user-options.ts" />
 
 namespace MechSimulatorLogic {
   import UpdateType = MechModelCommon.UpdateType;

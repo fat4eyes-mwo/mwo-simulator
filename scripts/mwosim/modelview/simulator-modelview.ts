@@ -1,15 +1,4 @@
 "use strict";
-/// <reference path="common/simulator-model-common.ts" />
-/// <reference path="common/simulator-settings.ts" />
-/// <reference path="simulator-model.ts" />
-/// <reference path="simulator-smurfytypes.ts" />
-/// <reference path="simulator-model-weapons.ts" />
-/// <reference path="simulator-accuracypattern.ts" />
-/// <reference path="simulator-componenttarget.ts" />
-/// <reference path="simulator-firepattern.ts" />
-/// <reference path="simulator-mechtarget.ts" />
-/// <reference path="simulator-patterns.ts" />
-/// <reference path="simulator-view-mechPanel.ts" />
 
 //Methods that update the MechView from the MechModel, and vice versa
 namespace MechModelView {

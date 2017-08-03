@@ -1,8 +1,4 @@
 "use strict";
-/// <reference path="common/simulator-model-common.ts" />
-/// <reference path="simulator-model.ts" />
-/// <reference path="simulator-model-weapons.ts" />
-/// <reference path="simulator-patterns.ts" />
 
 namespace MechTargetComponent {
   import Component = MechModelCommon.Component;

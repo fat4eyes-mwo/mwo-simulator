@@ -1,7 +1,3 @@
-/// <reference path="common/simulator-model-common.ts" />
-/// <reference path="common/simulator-settings.ts" />
-/// <reference path="simulator-view-widgets.ts" />
-/// <reference path="simulator-view-simsettings.ts" />
 "use strict";
 
 //UI methods

@@ -1,13 +1,4 @@
 "use strict";
-/// <reference path="lib/jquery-3.2.d.ts" />
-/// <reference path="common/simulator-model-common.ts" />
-/// <reference path="simulator-model-quirks.ts" />
-/// <reference path="simulator-model-weapons.ts" />
-/// <reference path="simulator-smurfytypes.ts" />
-/// <reference path="data/globalgameinfo.ts" />
-/// <reference path="data/basehealth.ts" />
-/// <reference path="data/addedheatsinkdata.ts" />
-/// <reference path="data/addedweapondata.ts" />
 
 //Classes that represent the states of the mechs in the simulation,
 //and methos to populate them from smurfy data

@@ -1,5 +1,3 @@
-/// <reference path="simulator-test.ts" />
-/// <reference path="../scripts/lib/jquery-3.2.d.ts" />
 
 //TODO: See why rootdirs aren't working in tsconfig.json
 namespace MechTest {
@@ -50,7 +48,7 @@ namespace MechTest {
         testFunc();
       }
     } else {
-      console.error("No test specified");
+      console.error(Error("No test specified"));
     }
   }
 
@@ -60,7 +58,7 @@ namespace MechTest {
       runTest();
     })
     .catch(function(data : any) {
-      console.log("Error running test");
+      console.error(Error("Error running test: " + data));
     });
   }
 }

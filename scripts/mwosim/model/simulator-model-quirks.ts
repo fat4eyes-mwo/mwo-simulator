@@ -1,8 +1,4 @@
 "use strict";
-/// <reference path="data/quirkdata.ts" />
-/// <reference path="simulator-model.ts" />
-/// <reference path="simulator-model-weapons.ts" />
-/// <reference path="simulator-smurfytypes.ts" />
 
 namespace MechModelQuirks {
   type WeaponInfo = MechModelWeapons.WeaponInfo;

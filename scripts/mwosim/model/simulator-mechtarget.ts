@@ -1,8 +1,4 @@
 "use strict";
-/// <reference path="common/simulator-settings.ts" />
-/// <reference path="simulator-model.ts" />
-/// <reference path="simulator-model-weapons.ts" />
-/// <reference path="simulator-patterns.ts" />
 
 namespace MechTargetMech  {
   type Mech = MechModel.Mech;

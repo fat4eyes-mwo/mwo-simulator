@@ -1,10 +1,4 @@
 "use strict";
-/// <reference path="common/simulator-model-common.ts" />
-/// <reference path="common/simulator-settings.ts" />
-/// <reference path="simulator-model.ts" />
-/// <reference path="simulator-logic.ts" />
-/// <reference path="simulator-model-weapons.ts" />
-/// <reference path="simulator-patterns.ts" />
 
 //Fire patterns are functions that take a mech and return a list of weaponstates
 //which represent the weapons to fire

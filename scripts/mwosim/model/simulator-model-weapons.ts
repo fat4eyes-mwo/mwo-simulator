@@ -1,7 +1,4 @@
 "use strict";
-/// <reference path="common/simulator-model-common.ts" />
-/// <reference path="simulator-smurfytypes.ts" />
-/// <reference path="simulator-model.ts" />
 
 //Weapon state classes
 namespace MechModelWeapons {

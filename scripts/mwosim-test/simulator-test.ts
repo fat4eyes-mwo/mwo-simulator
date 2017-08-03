@@ -1,5 +1,3 @@
-/// <reference path="../scripts/common/simulator-model-common.ts" />
-/// <reference path="../scripts/common/simulator-settings.ts" />
 "use strict";
 
 //Test code.
@@ -31,15 +29,7 @@ namespace MechTest {
   export var testUIWidgets = function() {
     MechView.initView();
     initDummyModelData();
-
-    MechModel.addMech("testCheetahId", Team.BLUE, DummyArcticCheetah);
-    MechModel.addMech("testExecutionerId", Team.BLUE, DummyExecutioner);
-    MechModel.addMech("testStormcrowId", Team.BLUE, DummyStormcrow);
-    MechModel.addMech("testMaulerId", Team.RED, DummyMauler);
-    MechModel.addMech("testFirestarterId", Team.RED, DummyFireStarter);
-    MechModel.addMech("testBattlemasterId", Team.RED, DummyBattleMaster);
-    MechModel.addMech("testShadowhawkId", Team.RED, DummyShadowhawk);
-
+    initTestModelState();
     MechModelView.refreshView();
 
     var createHandler = function() {
@@ -116,14 +106,7 @@ namespace MechTest {
   export var testModelView = function() {
     MechView.initView();
     initDummyModelData();
-
-    MechModel.addMech("testCheetahId", Team.BLUE, DummyArcticCheetah);
-    MechModel.addMech("testExecutionerId", Team.BLUE, DummyExecutioner);
-    MechModel.addMech("testStormcrowId", Team.BLUE, DummyStormcrow);
-    MechModel.addMech("testMaulerId", Team.RED, DummyMauler);
-    MechModel.addMech("testFirestarterId", Team.RED, DummyFireStarter);
-    MechModel.addMech("testBattlemasterId", Team.RED, DummyBattleMaster);
-    MechModel.addMech("testShadowhawkId", Team.RED, DummyShadowhawk);
+    initTestModelState();
 
     MechModelView.refreshView();
 

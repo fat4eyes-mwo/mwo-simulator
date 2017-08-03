@@ -1,5 +1,4 @@
 "use strict";
-/// <reference path="util.ts" />
 
 namespace MechViewWidgets {
   // Paper doll UI functions

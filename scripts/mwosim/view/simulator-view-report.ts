@@ -1,6 +1,3 @@
-/// <reference path="common/simulator-model-common.ts" />
-/// <reference path="simulator-modelview.ts" />
-/// <reference path="simulator-view-widgets.ts" />
 
 "use strict";
 

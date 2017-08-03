@@ -1,7 +1,3 @@
-/// <reference path="common/simulator-model-common.ts" />
-/// <reference path="simulator-view-widgets.ts" />
-/// <reference path="simulator-view-mechPanel.ts" />
-/// <reference path="simulator-smurfytypes.ts" />
 
 "use strict";
 

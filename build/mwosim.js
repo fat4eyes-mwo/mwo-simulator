@@ -3310,17 +3310,57 @@ var SimulatorSettings;
         return simulatorParameters.clone();
     };
 })(SimulatorSettings || (SimulatorSettings = {}));
-/// <reference path="common/simulator-model-common.ts" />
-/// <reference path="simulator-model.ts" />
-/// <reference path="simulator-model-weapons.ts" />
-/// <reference path="simulator-patterns.ts" />
-/// <reference path="data/weaponspread.ts" />
+var MechSimulator;
+(function (MechSimulator) {
+    var SimulatorParameters = SimulatorSettings.SimulatorParameters;
+    const DEFAULT_RANGE = 200;
+    const DEFAULT_SPEED = 1;
+    function init() {
+        MechView.initView();
+        MechView.showLoadingScreen();
+        let simulatorParameters = new SimulatorParameters(DEFAULT_RANGE, DEFAULT_SPEED);
+        MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
+        MechModel.initModelData()
+            .then(function () {
+            console.log("Successfully loaded model init data");
+            //router should not be initialized before the smurfy data is
+            //loaded since the hash change listener can start pulling in smurfy
+            //loadout data
+            MechViewRouter.initViewRouter();
+            initMechs();
+        })
+            .catch(function () {
+            console.error("Failed to load model init data");
+            MechView.hideLoadingScreen();
+            MechView.updateOnLoadAppError();
+        });
+    }
+    function initMechs() {
+        MechViewRouter.loadStateFromLocationHash()
+            .then(function (data) {
+            initUI();
+            return data;
+        })
+            .catch(function (err) {
+            console.error("Error loading mech data: " + err);
+            MechModelView.refreshView();
+            MechView.updateOnLoadAppError();
+            location.hash = "";
+        })
+            .then(function (data) {
+            MechView.hideLoadingScreen();
+            MechView.updateOnAppLoaded();
+        });
+    }
+    function initUI() {
+        MechModelView.refreshView();
+    }
+    function main() {
+        init();
+    }
+    MechSimulator.main = main;
+})(MechSimulator || (MechSimulator = {}));
 var MechAccuracyPattern;
-/// <reference path="common/simulator-model-common.ts" />
-/// <reference path="simulator-model.ts" />
-/// <reference path="simulator-model-weapons.ts" />
-/// <reference path="simulator-patterns.ts" />
-/// <reference path="data/weaponspread.ts" />
 (function (MechAccuracyPattern) {
     var Component = MechModelCommon.Component;
     //Functions that determine how damage from a weapon is spread
@@ -3694,15 +3734,7 @@ var MechAccuracyPattern;
         //Used to reset any state used by accuracy pattern
     };
 })(MechAccuracyPattern || (MechAccuracyPattern = {}));
-/// <reference path="common/simulator-model-common.ts" />
-/// <reference path="simulator-model.ts" />
-/// <reference path="simulator-model-weapons.ts" />
-/// <reference path="simulator-patterns.ts" />
 var MechTargetComponent;
-/// <reference path="common/simulator-model-common.ts" />
-/// <reference path="simulator-model.ts" />
-/// <reference path="simulator-model-weapons.ts" />
-/// <reference path="simulator-patterns.ts" />
 (function (MechTargetComponent) {
     var Component = MechModelCommon.Component;
     var EngineType = MechModelCommon.EngineType;
@@ -3852,21 +3884,9 @@ var MechTargetComponent;
         //Used to reset any state used by the pattern.
     };
 })(MechTargetComponent || (MechTargetComponent = {}));
-/// <reference path="common/simulator-model-common.ts" />
-/// <reference path="common/simulator-settings.ts" />
-/// <reference path="simulator-model.ts" />
-/// <reference path="simulator-logic.ts" />
-/// <reference path="simulator-model-weapons.ts" />
-/// <reference path="simulator-patterns.ts" />
 //Fire patterns are functions that take a mech and return a list of weaponstates
 //which represent the weapons to fire
 var MechFirePattern;
-/// <reference path="common/simulator-model-common.ts" />
-/// <reference path="common/simulator-settings.ts" />
-/// <reference path="simulator-model.ts" />
-/// <reference path="simulator-logic.ts" />
-/// <reference path="simulator-model-weapons.ts" />
-/// <reference path="simulator-patterns.ts" />
 //Fire patterns are functions that take a mech and return a list of weaponstates
 //which represent the weapons to fire
 (function (MechFirePattern) {
@@ -4054,15 +4074,7 @@ var MechFirePattern;
         //Used to reset any state used by the pattern.
     };
 })(MechFirePattern || (MechFirePattern = {}));
-/// <reference path="common/simulator-model-common.ts" />
-/// <reference path="common/simulator-settings.ts" />
-/// <reference path="simulator-model.ts" />
-/// <reference path="data/user-options.ts" />
 var MechSimulatorLogic;
-/// <reference path="common/simulator-model-common.ts" />
-/// <reference path="common/simulator-settings.ts" />
-/// <reference path="simulator-model.ts" />
-/// <reference path="data/user-options.ts" />
 (function (MechSimulatorLogic) {
     var UpdateType = MechModelCommon.UpdateType;
     var Team = MechModelCommon.Team;
@@ -4319,15 +4331,7 @@ var MechSimulatorLogic;
         return simTime;
     };
 })(MechSimulatorLogic || (MechSimulatorLogic = {}));
-/// <reference path="common/simulator-settings.ts" />
-/// <reference path="simulator-model.ts" />
-/// <reference path="simulator-model-weapons.ts" />
-/// <reference path="simulator-patterns.ts" />
 var MechTargetMech;
-/// <reference path="common/simulator-settings.ts" />
-/// <reference path="simulator-model.ts" />
-/// <reference path="simulator-model-weapons.ts" />
-/// <reference path="simulator-patterns.ts" />
 (function (MechTargetMech) {
     //These functions return which enemy mech to target
     MechTargetMech.targetMechsInOrder = function (mech, enemyMechList) {
@@ -4428,15 +4432,7 @@ var MechTargetMech;
         return patternList;
     };
 })(MechTargetMech || (MechTargetMech = {}));
-/// <reference path="data/quirkdata.ts" />
-/// <reference path="simulator-model.ts" />
-/// <reference path="simulator-model-weapons.ts" />
-/// <reference path="simulator-smurfytypes.ts" />
 var MechModelQuirks;
-/// <reference path="data/quirkdata.ts" />
-/// <reference path="simulator-model.ts" />
-/// <reference path="simulator-model-weapons.ts" />
-/// <reference path="simulator-smurfytypes.ts" />
 (function (MechModelQuirks) {
     MechModelQuirks.collectOmnipodQuirks = function (smurfyMechLoadout) {
         let ret = [];
@@ -4558,14 +4554,8 @@ var MechModelQuirks;
         return ret;
     };
 })(MechModelQuirks || (MechModelQuirks = {}));
-/// <reference path="common/simulator-model-common.ts" />
-/// <reference path="simulator-smurfytypes.ts" />
-/// <reference path="simulator-model.ts" />
 //Weapon state classes
 var MechModelWeapons;
-/// <reference path="common/simulator-model-common.ts" />
-/// <reference path="simulator-smurfytypes.ts" />
-/// <reference path="simulator-model.ts" />
 //Weapon state classes
 (function (MechModelWeapons) {
     var WeaponCycle = MechModelCommon.WeaponCycle;
@@ -5296,27 +5286,9 @@ var MechModelWeapons;
     MechModelWeapons.WeaponStateOneShot = WeaponStateOneShot;
 })(MechModelWeapons || (MechModelWeapons = {}));
 ;
-/// <reference path="lib/jquery-3.2.d.ts" />
-/// <reference path="common/simulator-model-common.ts" />
-/// <reference path="simulator-model-quirks.ts" />
-/// <reference path="simulator-model-weapons.ts" />
-/// <reference path="simulator-smurfytypes.ts" />
-/// <reference path="data/globalgameinfo.ts" />
-/// <reference path="data/basehealth.ts" />
-/// <reference path="data/addedheatsinkdata.ts" />
-/// <reference path="data/addedweapondata.ts" />
 //Classes that represent the states of the mechs in the simulation,
 //and methos to populate them from smurfy data
 var MechModel;
-/// <reference path="lib/jquery-3.2.d.ts" />
-/// <reference path="common/simulator-model-common.ts" />
-/// <reference path="simulator-model-quirks.ts" />
-/// <reference path="simulator-model-weapons.ts" />
-/// <reference path="simulator-smurfytypes.ts" />
-/// <reference path="data/globalgameinfo.ts" />
-/// <reference path="data/basehealth.ts" />
-/// <reference path="data/addedheatsinkdata.ts" />
-/// <reference path="data/addedweapondata.ts" />
 //Classes that represent the states of the mechs in the simulation,
 //and methos to populate them from smurfy data
 (function (MechModel) {
@@ -6960,30 +6932,17 @@ var MechModel;
         teamStats = {};
     };
 })(MechModel || (MechModel = {}));
-/// <reference path="common/simulator-model-common.ts" />
-/// <reference path="common/simulator-settings.ts" />
-/// <reference path="simulator-model.ts" />
-/// <reference path="simulator-smurfytypes.ts" />
-/// <reference path="simulator-model-weapons.ts" />
-/// <reference path="simulator-accuracypattern.ts" />
-/// <reference path="simulator-componenttarget.ts" />
-/// <reference path="simulator-firepattern.ts" />
-/// <reference path="simulator-mechtarget.ts" />
-/// <reference path="simulator-patterns.ts" />
-/// <reference path="simulator-view-mechPanel.ts" />
+//Type definitions for smurfy types
+var SmurfyTypes;
+//Type definitions for smurfy types
+(function (SmurfyTypes) {
+    ;
+    ;
+    ;
+    ;
+})(SmurfyTypes || (SmurfyTypes = {}));
 //Methods that update the MechView from the MechModel, and vice versa
 var MechModelView;
-/// <reference path="common/simulator-model-common.ts" />
-/// <reference path="common/simulator-settings.ts" />
-/// <reference path="simulator-model.ts" />
-/// <reference path="simulator-smurfytypes.ts" />
-/// <reference path="simulator-model-weapons.ts" />
-/// <reference path="simulator-accuracypattern.ts" />
-/// <reference path="simulator-componenttarget.ts" />
-/// <reference path="simulator-firepattern.ts" />
-/// <reference path="simulator-mechtarget.ts" />
-/// <reference path="simulator-patterns.ts" />
-/// <reference path="simulator-view-mechPanel.ts" />
 //Methods that update the MechView from the MechModel, and vice versa
 (function (MechModelView) {
     var Team = MechModelCommon.Team;
@@ -7437,169 +7396,260 @@ var MechModelView;
         return MechModel.addMech(newMechId, team, smurfyMechLoadout);
     };
 })(MechModelView || (MechModelView = {}));
-//Type definitions for smurfy types
-var SmurfyTypes;
-//Type definitions for smurfy types
-(function (SmurfyTypes) {
-    ;
-    ;
-    ;
-    ;
-})(SmurfyTypes || (SmurfyTypes = {}));
-/// <reference path="util.ts" />
-var MechViewWidgets;
-/// <reference path="util.ts" />
-(function (MechViewWidgets) {
-    MechViewWidgets.paperDollDamageGradient = [
-        { value: 0.0, RGB: { r: 28, g: 22, b: 6 } },
-        { value: 0.1, RGB: { r: 255, g: 46, b: 16 } },
-        { value: 0.2, RGB: { r: 255, g: 73, b: 20 } },
-        { value: 0.3, RGB: { r: 255, g: 97, b: 12 } },
-        { value: 0.4, RGB: { r: 255, g: 164, b: 22 } },
-        { value: 0.5, RGB: { r: 255, g: 176, b: 18 } },
-        { value: 0.6, RGB: { r: 255, g: 198, b: 24 } },
-        { value: 0.7, RGB: { r: 255, g: 211, b: 23 } },
-        { value: 0.8, RGB: { r: 255, g: 224, b: 28 } },
-        { value: 0.9, RGB: { r: 255, g: 235, b: 24 } },
-        { value: 1, RGB: { r: 101, g: 79, b: 38 } }
-    ];
-    //Colors for health numbers
-    MechViewWidgets.healthDamageGradient = [
-        { value: 0.0, RGB: { r: 230, g: 20, b: 20 } },
-        { value: 0.7, RGB: { r: 230, g: 230, b: 20 } },
-        // {value : 0.9, RGB : {r:20, g:230, b:20}},
-        { value: 0.9, RGB: { r: 255, g: 235, b: 24 } },
-        { value: 1, RGB: { r: 170, g: 170, b: 170 } }
-    ];
-    //Colors for individual component health numbers
-    MechViewWidgets.componentHealthDamageGradient = [
-        { value: 0.0, RGB: { r: 255, g: 0, b: 0 } },
-        { value: 0.7, RGB: { r: 255, g: 255, b: 0 } },
-        // {value : 0.9, RGB : {r:0, g:255, b:0}},
-        { value: 0.9, RGB: { r: 255, g: 235, b: 24 } },
-        { value: 1, RGB: { r: 170, g: 170, b: 170 } }
-    ];
-    //gets the damage color for a given percentage of damage
-    MechViewWidgets.damageColor = function (percent, damageGradient) {
-        var damageIdx = Util.binarySearchClosest(damageGradient, percent, (key, colorValue) => {
-            return key - colorValue.value;
+//returns index of matching entry, otherwise returns the closest lower entry in
+//the array
+var Util;
+//returns index of matching entry, otherwise returns the closest lower entry in
+//the array
+(function (Util) {
+    //TODO: See if this method is still worth it
+    function binarySearchClosest(array, key, keyCompare) {
+        var low = 0;
+        var high = array.length - 1;
+        var mid = Math.floor(low + ((high - low) / 2));
+        var midVal = array[mid];
+        while (low <= high) {
+            mid = Math.floor(low + ((high - low) / 2));
+            midVal = array[mid];
+            if (keyCompare(key, midVal) < 0) {
+                high = mid - 1;
+            }
+            else if (keyCompare(key, midVal) > 0) {
+                low = mid + 1;
+            }
+            else {
+                return mid;
+            }
+        }
+        if (keyCompare(key, midVal) < 0) {
+            return Math.max(0, mid - 1);
+        }
+        else {
+            return mid;
+        }
+    }
+    Util.binarySearchClosest = binarySearchClosest;
+})(Util || (Util = {}));
+var MechViewAddMech;
+(function (MechViewAddMech) {
+    var addMechButtonId = function (team) {
+        return team + "-addMechButton";
+    };
+    var addMechButtonMap = {};
+    MechViewAddMech.createAddMechButton = function (team, containerId) {
+        let addMechButtonPanelId = addMechButtonId(team);
+        if (!addMechButtonHandler) {
+            addMechButtonHandler = createAddMechButtonHandler();
+        }
+        let addMechButtonJQ = $(`#${containerId} [class~=addMechButton]`)
+            .attr("id", addMechButtonPanelId)
+            .attr("data-team", team);
+        addMechButtonMap[team] =
+            new MechViewWidgets.MechButton(addMechButtonJQ[0], addMechButtonHandler);
+    };
+    var createAddMechButtonHandler = function () {
+        return function () {
+            let team = $(this).data('team');
+            MechViewAddMech.showAddMechDialog(team);
+        };
+    };
+    var addMechButtonHandler; //set on click handler assignment
+    var addMechOKButton;
+    var addMechCancelButton;
+    var addMechLoadButton;
+    var addMechDialogJQ;
+    MechViewAddMech.showAddMechDialog = function (team) {
+        let addMechDialogDiv = MechViewWidgets.cloneTemplate("addMechDialog-template");
+        addMechDialogJQ = $(addMechDialogDiv)
+            .attr("id", "addMechDialogContainer")
+            .addClass(team);
+        MechViewWidgets.setModal(addMechDialogDiv, "addMech");
+        let resultPanelJQ = addMechDialogJQ.find(".addMechDialog-result");
+        resultPanelJQ
+            .removeClass("error")
+            .empty()
+            .on("animationend", function (data) {
+            resultPanelJQ.removeClass("error");
         });
-        if (damageIdx === -1) {
-            damageIdx = 0;
+        if (!addMechDialogOKHandler) {
+            addMechDialogOKHandler = createAddMechDialogOKHandler();
         }
-        let nextIdx = damageIdx + 1;
-        nextIdx = (nextIdx < damageGradient.length) ? nextIdx : damageIdx;
-        let rgb = damageGradient[damageIdx].RGB;
-        let nextRgb = damageGradient[nextIdx].RGB;
-        let percentDiff = (damageIdx !== nextIdx) ?
-            (percent - damageGradient[damageIdx].value) /
-                (damageGradient[nextIdx].value - damageGradient[damageIdx].value)
-            : 1;
-        let red = Math.round(Number(rgb.r) + (Number(nextRgb.r) - Number(rgb.r)) * percentDiff);
-        let green = Math.round(Number(rgb.g) + (Number(nextRgb.g) - Number(rgb.g)) * percentDiff);
-        let blue = Math.round(Number(rgb.b) + (Number(nextRgb.b) - Number(rgb.b)) * percentDiff);
-        return "rgb(" + red + "," + green + "," + blue + ")";
+        if (!addMechDialogCancelHandler) {
+            addMechDialogCancelHandler = createAddMechDialogCancelHandler();
+        }
+        if (!addMechDialogLoadHandler) {
+            addMechDialogLoadHandler = createAddMechDialogLoadHandler();
+        }
+        let okButtonJQ = addMechDialogJQ.find(".addMechDialog-ok").attr("data-team", team);
+        addMechOKButton =
+            new MechViewWidgets.MechButton(okButtonJQ[0], addMechDialogOKHandler);
+        let cancelButtonJQ = addMechDialogJQ.find(".addMechDialog-cancel").attr("data-team", team);
+        addMechCancelButton =
+            new MechViewWidgets.MechButton(cancelButtonJQ[0], addMechDialogCancelHandler);
+        let loadButtonJQ = addMechDialogJQ.find(".addMechDialog-load").attr("data-team", team);
+        addMechLoadButton =
+            new MechViewWidgets.MechButton(loadButtonJQ[0], addMechDialogLoadHandler);
+        addMechOKButton.disable();
+        MechViewWidgets.showModal();
+        addMechDialogJQ.find(".addMechDialog-text").focus();
     };
-    class MechButton {
-        constructor(domElement, clickHandler) {
-            this.domElement = domElement;
-            this.clickHandler = (function (context) {
-                var clickContext = context;
-                return function (event) {
-                    if (clickContext.enabled) {
-                        clickHandler.call(event.currentTarget);
-                    }
-                };
-            })(this);
-            this.enabled = true;
-            $(this.domElement).click(this.clickHandler);
-        }
-        setHtml(html) {
-            $(this.domElement).html(html);
-        }
-        addClass(className) {
-            $(this.domElement).addClass(className);
-        }
-        removeClass(className) {
-            $(this.domElement).removeClass(className);
-        }
-        disable() {
-            if (this.enabled) {
-                $(this.domElement).addClass("disabled");
-                this.enabled = false;
+    MechViewAddMech.hideAddMechDialog = function (team) {
+        MechViewWidgets.hideModal("addMech");
+        addMechDialogJQ = undefined;
+    };
+    var loadedSmurfyLoadout = null;
+    var createAddMechDialogOKHandler = function () {
+        return function () {
+            let team = $(this).data('team');
+            let url = addMechDialogJQ.find(".addMechDialog-text").val();
+            console.log("Mech loaded. team: " + team + " URL: " + url);
+            //TODO: Avoid accessing MechModel directly here. Create a method in ModelView to do this
+            let smurfyMechLoadout = loadedSmurfyLoadout;
+            let smurfyMechData = MechModel.getSmurfyMechData(smurfyMechLoadout.mech_id);
+            let mechTranslatedName = smurfyMechData.translated_name;
+            let mechName = smurfyMechData.name;
+            let newMech = MechModelView.addMech(team, smurfyMechLoadout);
+            //set patterns of added mech to selected team patterns
+            MechViewTeamStats.setSelectedTeamPatterns(team);
+            MechViewRouter.modifyAppState();
+            MechViewMechPanel.addMechPanel(newMech, team);
+            MechModelView.refreshView([MechModelView.ViewUpdate.TEAMSTATS]);
+            MechViewAddMech.hideAddMechDialog(team);
+        };
+    };
+    var addMechDialogOKHandler; //set on dialog creation, singleton
+    var createAddMechDialogCancelHandler = function () {
+        return function () {
+            let team = $(this).data('team');
+            MechViewAddMech.hideAddMechDialog(team);
+        };
+    };
+    var addMechDialogCancelHandler; //set on dialog creation, singleton
+    const SMURFY_PROXY_URL = "./php/smurfyproxy.php?path=";
+    var createAddMechDialogLoadHandler = function () {
+        return function () {
+            let team = $(this).data('team');
+            let url = String(addMechDialogJQ.find(".addMechDialog-text").val());
+            console.log("Load. team: " + team + " URL: " + url);
+            let doneHandler = function (data) {
+                loadedSmurfyLoadout = data;
+                let smurfyMechData = MechModel.getSmurfyMechData(loadedSmurfyLoadout.mech_id);
+                let mechTranslatedName = smurfyMechData.translated_name;
+                let mechName = smurfyMechData.name;
+                let resultJQ = addMechDialogJQ.find(".addMechDialog-result")
+                    .removeClass("error")
+                    .empty();
+                createLoadedMechPanel(resultJQ[0], loadedSmurfyLoadout);
+                addMechOKButton.enable();
+            };
+            let failHandler = function () {
+                addMechDialogJQ.find(".addMechDialog-result")
+                    .addClass("error")
+                    .html("Failed to load " + url);
+            };
+            let alwaysHandler = function () {
+                addMechLoadButton.enable();
+                addMechLoadButton.removeClass("loading");
+                addMechLoadButton.setHtml("Load");
+            };
+            let loadMechPromise = MechModel.loadSmurfyMechLoadoutFromURL(url);
+            if (loadMechPromise) {
+                addMechDialogJQ.find(".addMechDialog-result")
+                    .removeClass("error")
+                    .html("Loading url : " + url);
+                addMechLoadButton.disable();
+                addMechLoadButton.addClass("loading");
+                addMechLoadButton.setHtml("Loading...");
+                loadMechPromise
+                    .then(doneHandler)
+                    .catch(failHandler)
+                    .then(alwaysHandler);
             }
-        }
-        enable() {
-            if (!this.enabled) {
-                $(this.domElement).removeClass("disabled");
-                this.enabled = true;
+            else {
+                addMechDialogJQ.find(".addMechDialog-result")
+                    .addClass("error")
+                    .html("Invalid smurfy URL. Expected format is 'http://mwo.smurfy-net.de/mechlab#i=mechid&l=loadoutid'");
+                addMechLoadButton.enable();
+                addMechLoadButton.removeClass("loading");
+                addMechLoadButton.setHtml("Load");
+                console.error("Invalid smurfy url");
             }
-        }
-    }
-    MechViewWidgets.MechButton = MechButton;
-    class Tooltip {
-        constructor(templateId, tooltipId, targetElementId) {
-            this.id = tooltipId;
-            let tooltipDiv = MechViewWidgets.cloneTemplate(templateId);
-            $(tooltipDiv)
-                .addClass("tooltip")
-                .addClass("hidden")
-                .attr("id", tooltipId)
-                .insertBefore("#" + targetElementId);
-            //TODO Fix absolutely positioned tooltip location
-            // let targetElement = $("#" + targetElementId)[0];
-            // let thisLeft = targetElement.offsetLeft;
-            // let thisTop = targetElement.offsetTop + targetElement.offsetHeight;
-            // $("#" + this.id)
-            //   .css({"left": thisLeft, "top" : thisTop});
-        }
-        showTooltip() {
-            $("#" + this.id).removeClass("hidden");
-        }
-        hideTooltip() {
-            $("#" + this.id).addClass("hidden");
-        }
-    }
-    MechViewWidgets.Tooltip = Tooltip;
-    //Clones a template and returns the first element of the template
-    MechViewWidgets.cloneTemplate = function (templateName) {
-        let template = document.querySelector("#" + templateName);
-        let templateElement = document.importNode(template.content, true);
-        return templateElement.firstElementChild;
+        };
     };
-    const MODAL_SCREEN_ID = "mechModalScreen";
-    const MODAL_DIALOG_ID = "mechModalDialog";
-    //sets the content of the modal dialog to element, while optionally adding
-    //a class to the dialog container
-    MechViewWidgets.setModal = function (element, dialogClass = null) {
-        let dialogJQ = $("#" + MODAL_DIALOG_ID);
-        dialogJQ.empty();
-        if (dialogClass) {
-            dialogJQ.addClass(dialogClass);
-        }
-        dialogJQ.append(element);
-    };
-    MechViewWidgets.showModal = function () {
-        $("#" + MODAL_SCREEN_ID).css("display", "block");
-    };
-    //hides the modal dialog, while optionally removing a class from the dialog
-    //container
-    MechViewWidgets.hideModal = function (dialogClass = null) {
-        $("#" + MODAL_SCREEN_ID).css("display", "none");
-        let dialogJQ = $("#" + MODAL_DIALOG_ID);
-        dialogJQ.empty();
-        if (dialogClass) {
-            dialogJQ.removeClass(dialogClass);
+    var addMechDialogLoadHandler; //set on dialog creation, singleton
+    let SMURFY_BASE_URL = "http://mwo.smurfy-net.de/mechlab#";
+    var createLoadedMechPanel = function (containerElem, smurfyMechLoadout) {
+        let loadedMechDiv = MechViewWidgets.cloneTemplate("loadedMech-template");
+        let loadedMechJQ = $(loadedMechDiv)
+            .removeAttr("id")
+            .appendTo(containerElem);
+        let smurfyMechId = smurfyMechLoadout.mech_id;
+        let smurfyLoadoutId = smurfyMechLoadout.id;
+        //Mech name and link
+        let smurfyMechData = MechModel.getSmurfyMechData(smurfyMechId);
+        let mechLinkJQ = $("<a></a>")
+            .attr("href", `${SMURFY_BASE_URL}i=${smurfyMechId}&l=${smurfyLoadoutId}`)
+            .attr("target", "_blank")
+            .attr("rel", "noopener")
+            .text(smurfyMechData.translated_name);
+        loadedMechJQ.find("[class~=mechName]")
+            .append(mechLinkJQ);
+        let mechStats = smurfyMechLoadout.stats;
+        //Mech equipment
+        let mechSpeed = `${Number(mechStats.top_speed).toFixed(1)} km/h`;
+        let mechEngine = `${mechStats.engine_type} ${mechStats.engine_rating}`;
+        let heatsink = `${mechStats.heatsinks} HS`;
+        loadedMechJQ
+            .find("[class~=mechEquipment]")
+            .append(loadedMechSpan(mechSpeed, "equipment"))
+            .append(loadedMechSpan(mechEngine, "equipment"))
+            .append(loadedMechSpan(heatsink, "equipment"));
+        //Mech armament
+        for (let weapon of smurfyMechLoadout.stats.armaments) {
+            let smurfyWeaponData = MechModel.getSmurfyWeaponData(weapon.id);
+            let weaponType = smurfyWeaponData.type;
+            loadedMechJQ
+                .find("[class~=mechArmament]")
+                .append(loadedMechWeaponSpan(weapon.name, weapon.count, weaponType));
         }
     };
-})(MechViewWidgets || (MechViewWidgets = {}));
-/// <reference path="common/simulator-model-common.ts" />
-/// <reference path="simulator-model.ts" />
-/// <reference path="simulator-view-widgets.ts" />
+    var loadedMechSpan = function (text, spanClass) {
+        let span = MechViewWidgets.cloneTemplate("loadedMechInfo-template");
+        return $(span)
+            .addClass(spanClass)
+            .text(text);
+    };
+    var loadedMechWeaponSpan = function (name, count, type) {
+        let numberClass = loadedMechWeaponClass(type);
+        let weaponSpan = MechViewWidgets.cloneTemplate("loadedMechWeapon-template");
+        let ret = $(weaponSpan);
+        ret.find(".weaponName")
+            .text(name);
+        ret.find(".count")
+            .addClass(numberClass)
+            .text(count);
+        return ret;
+    };
+    var loadedMechWeaponClass = function (smurfyType) {
+        if (smurfyType === "BALLISTIC") {
+            return "ballistic";
+        }
+        else if (smurfyType === "BEAM") {
+            return "beam";
+        }
+        else if (smurfyType === "MISSLE") {
+            return "missile";
+        }
+        else if (smurfyType === "AMS") {
+            return "ams";
+        }
+        else {
+            console.warn("Unexpected weapon type: " + smurfyType);
+            return "";
+        }
+    };
+})(MechViewAddMech || (MechViewAddMech = {}));
 var MechViewMechPanel;
-/// <reference path="common/simulator-model-common.ts" />
-/// <reference path="simulator-model.ts" />
-/// <reference path="simulator-view-widgets.ts" />
 (function (MechViewMechPanel) {
     var WeaponCycle = MechModelCommon.WeaponCycle;
     var Component = MechModelCommon.Component;
@@ -8116,227 +8166,6 @@ var MechViewMechPanel;
         });
     };
 })(MechViewMechPanel || (MechViewMechPanel = {}));
-var MechViewAddMech;
-(function (MechViewAddMech) {
-    var addMechButtonId = function (team) {
-        return team + "-addMechButton";
-    };
-    var addMechButtonMap = {};
-    MechViewAddMech.createAddMechButton = function (team, containerId) {
-        let addMechButtonPanelId = addMechButtonId(team);
-        if (!addMechButtonHandler) {
-            addMechButtonHandler = createAddMechButtonHandler();
-        }
-        let addMechButtonJQ = $(`#${containerId} [class~=addMechButton]`)
-            .attr("id", addMechButtonPanelId)
-            .attr("data-team", team);
-        addMechButtonMap[team] =
-            new MechViewWidgets.MechButton(addMechButtonJQ[0], addMechButtonHandler);
-    };
-    var createAddMechButtonHandler = function () {
-        return function () {
-            let team = $(this).data('team');
-            MechViewAddMech.showAddMechDialog(team);
-        };
-    };
-    var addMechButtonHandler; //set on click handler assignment
-    var addMechOKButton;
-    var addMechCancelButton;
-    var addMechLoadButton;
-    var addMechDialogJQ;
-    MechViewAddMech.showAddMechDialog = function (team) {
-        //TODO: this code possibly accumulates handlers on the dialog buttons
-        //due to the use of ids in the template. See what can be done.
-        let addMechDialogDiv = MechViewWidgets.cloneTemplate("addMechDialog-template");
-        addMechDialogJQ = $(addMechDialogDiv)
-            .attr("id", "addMechDialogContainer")
-            .addClass(team);
-        MechViewWidgets.setModal(addMechDialogDiv, "addMech");
-        let resultPanelJQ = addMechDialogJQ.find(".addMechDialog-result");
-        resultPanelJQ
-            .removeClass("error")
-            .empty()
-            .on("animationend", function (data) {
-            resultPanelJQ.removeClass("error");
-        });
-        if (!addMechDialogOKHandler) {
-            addMechDialogOKHandler = createAddMechDialogOKHandler();
-        }
-        if (!addMechDialogCancelHandler) {
-            addMechDialogCancelHandler = createAddMechDialogCancelHandler();
-        }
-        if (!addMechDialogLoadHandler) {
-            addMechDialogLoadHandler = createAddMechDialogLoadHandler();
-        }
-        let okButtonJQ = addMechDialogJQ.find(".addMechDialog-ok").attr("data-team", team);
-        addMechOKButton =
-            new MechViewWidgets.MechButton(okButtonJQ[0], addMechDialogOKHandler);
-        let cancelButtonJQ = addMechDialogJQ.find(".addMechDialog-cancel").attr("data-team", team);
-        addMechCancelButton =
-            new MechViewWidgets.MechButton(cancelButtonJQ[0], addMechDialogCancelHandler);
-        let loadButtonJQ = addMechDialogJQ.find(".addMechDialog-load").attr("data-team", team);
-        addMechLoadButton =
-            new MechViewWidgets.MechButton(loadButtonJQ[0], addMechDialogLoadHandler);
-        addMechOKButton.disable();
-        MechViewWidgets.showModal();
-        addMechDialogJQ.find(".addMechDialog-text").focus();
-    };
-    MechViewAddMech.hideAddMechDialog = function (team) {
-        MechViewWidgets.hideModal("addMech");
-        addMechDialogJQ = undefined;
-    };
-    var loadedSmurfyLoadout = null;
-    var createAddMechDialogOKHandler = function () {
-        return function () {
-            let team = $(this).data('team');
-            let url = addMechDialogJQ.find(".addMechDialog-text").val();
-            console.log("Mech loaded. team: " + team + " URL: " + url);
-            //TODO: Avoid accessing MechModel directly here. Create a method in ModelView to do this
-            let smurfyMechLoadout = loadedSmurfyLoadout;
-            let smurfyMechData = MechModel.getSmurfyMechData(smurfyMechLoadout.mech_id);
-            let mechTranslatedName = smurfyMechData.translated_name;
-            let mechName = smurfyMechData.name;
-            let newMech = MechModelView.addMech(team, smurfyMechLoadout);
-            //set patterns of added mech to selected team patterns
-            MechViewTeamStats.setSelectedTeamPatterns(team);
-            MechViewRouter.modifyAppState();
-            MechViewMechPanel.addMechPanel(newMech, team);
-            MechModelView.refreshView([MechModelView.ViewUpdate.TEAMSTATS]);
-            MechViewAddMech.hideAddMechDialog(team);
-        };
-    };
-    var addMechDialogOKHandler; //set on dialog creation, singleton
-    var createAddMechDialogCancelHandler = function () {
-        return function () {
-            let team = $(this).data('team');
-            MechViewAddMech.hideAddMechDialog(team);
-        };
-    };
-    var addMechDialogCancelHandler; //set on dialog creation, singleton
-    const SMURFY_PROXY_URL = "./php/smurfyproxy.php?path=";
-    var createAddMechDialogLoadHandler = function () {
-        return function () {
-            let team = $(this).data('team');
-            let url = String(addMechDialogJQ.find(".addMechDialog-text").val());
-            console.log("Load. team: " + team + " URL: " + url);
-            let doneHandler = function (data) {
-                loadedSmurfyLoadout = data;
-                let smurfyMechData = MechModel.getSmurfyMechData(loadedSmurfyLoadout.mech_id);
-                let mechTranslatedName = smurfyMechData.translated_name;
-                let mechName = smurfyMechData.name;
-                let resultJQ = addMechDialogJQ.find(".addMechDialog-result")
-                    .removeClass("error")
-                    .empty();
-                createLoadedMechPanel(resultJQ[0], loadedSmurfyLoadout);
-                addMechOKButton.enable();
-            };
-            let failHandler = function () {
-                addMechDialogJQ.find(".addMechDialog-result")
-                    .addClass("error")
-                    .html("Failed to load " + url);
-            };
-            let alwaysHandler = function () {
-                addMechLoadButton.enable();
-                addMechLoadButton.removeClass("loading");
-                addMechLoadButton.setHtml("Load");
-            };
-            let loadMechPromise = MechModel.loadSmurfyMechLoadoutFromURL(url);
-            if (loadMechPromise) {
-                addMechDialogJQ.find(".addMechDialog-result")
-                    .removeClass("error")
-                    .html("Loading url : " + url);
-                addMechLoadButton.disable();
-                addMechLoadButton.addClass("loading");
-                addMechLoadButton.setHtml("Loading...");
-                loadMechPromise
-                    .then(doneHandler)
-                    .catch(failHandler)
-                    .then(alwaysHandler);
-            }
-            else {
-                addMechDialogJQ.find(".addMechDialog-result")
-                    .addClass("error")
-                    .html("Invalid smurfy URL. Expected format is 'http://mwo.smurfy-net.de/mechlab#i=mechid&l=loadoutid'");
-                addMechLoadButton.enable();
-                addMechLoadButton.removeClass("loading");
-                addMechLoadButton.setHtml("Load");
-                console.error("Invalid smurfy url");
-            }
-        };
-    };
-    var addMechDialogLoadHandler; //set on dialog creation, singleton
-    let SMURFY_BASE_URL = "http://mwo.smurfy-net.de/mechlab#";
-    var createLoadedMechPanel = function (containerElem, smurfyMechLoadout) {
-        let loadedMechDiv = MechViewWidgets.cloneTemplate("loadedMech-template");
-        let loadedMechJQ = $(loadedMechDiv)
-            .removeAttr("id")
-            .appendTo(containerElem);
-        let smurfyMechId = smurfyMechLoadout.mech_id;
-        let smurfyLoadoutId = smurfyMechLoadout.id;
-        //Mech name and link
-        let smurfyMechData = MechModel.getSmurfyMechData(smurfyMechId);
-        let mechLinkJQ = $("<a></a>")
-            .attr("href", `${SMURFY_BASE_URL}i=${smurfyMechId}&l=${smurfyLoadoutId}`)
-            .attr("target", "_blank")
-            .attr("rel", "noopener")
-            .text(smurfyMechData.translated_name);
-        loadedMechJQ.find("[class~=mechName]")
-            .append(mechLinkJQ);
-        let mechStats = smurfyMechLoadout.stats;
-        //Mech equipment
-        let mechSpeed = `${Number(mechStats.top_speed).toFixed(1)} km/h`;
-        let mechEngine = `${mechStats.engine_type} ${mechStats.engine_rating}`;
-        let heatsink = `${mechStats.heatsinks} HS`;
-        loadedMechJQ
-            .find("[class~=mechEquipment]")
-            .append(loadedMechSpan(mechSpeed, "equipment"))
-            .append(loadedMechSpan(mechEngine, "equipment"))
-            .append(loadedMechSpan(heatsink, "equipment"));
-        //Mech armament
-        for (let weapon of smurfyMechLoadout.stats.armaments) {
-            let smurfyWeaponData = MechModel.getSmurfyWeaponData(weapon.id);
-            let weaponType = smurfyWeaponData.type;
-            loadedMechJQ
-                .find("[class~=mechArmament]")
-                .append(loadedMechWeaponSpan(weapon.name, weapon.count, weaponType));
-        }
-    };
-    var loadedMechSpan = function (text, spanClass) {
-        let span = MechViewWidgets.cloneTemplate("loadedMechInfo-template");
-        return $(span)
-            .addClass(spanClass)
-            .text(text);
-    };
-    var loadedMechWeaponSpan = function (name, count, type) {
-        let numberClass = loadedMechWeaponClass(type);
-        let weaponSpan = MechViewWidgets.cloneTemplate("loadedMechWeapon-template");
-        let ret = $(weaponSpan);
-        ret.find(".weaponName")
-            .text(name);
-        ret.find(".count")
-            .addClass(numberClass)
-            .text(count);
-        return ret;
-    };
-    var loadedMechWeaponClass = function (smurfyType) {
-        if (smurfyType === "BALLISTIC") {
-            return "ballistic";
-        }
-        else if (smurfyType === "BEAM") {
-            return "beam";
-        }
-        else if (smurfyType === "MISSLE") {
-            return "missile";
-        }
-        else if (smurfyType === "AMS") {
-            return "ams";
-        }
-        else {
-            console.warn("Unexpected weapon type: " + smurfyType);
-            return "";
-        }
-    };
-})(MechViewAddMech || (MechViewAddMech = {}));
 var MechViewReport;
 (function (MechViewReport) {
     var Team = MechModelCommon.Team;
@@ -8487,347 +8316,6 @@ var MechViewReport;
         MechViewWidgets.hideModal("wide");
     };
 })(MechViewReport || (MechViewReport = {}));
-var MechViewSimSettings;
-(function (MechViewSimSettings) {
-    var SimulatorParameters = SimulatorSettings.SimulatorParameters;
-    MechViewSimSettings.initRangeInput = function () {
-        let rangeJQ = $("#rangeInput");
-        let rangeButtonElem = document.getElementById("setRangeButton");
-        let rangeButton = new MechViewWidgets.MechButton(rangeButtonElem, function () {
-            let buttonMode = $(this).attr("data-button-mode");
-            if (buttonMode === "not-editing") {
-                rangeJQ
-                    .removeClass("disabled")
-                    .removeAttr("disabled")
-                    .focus();
-                $(this)
-                    .attr("data-button-mode", "editing")
-                    .html("Set Range");
-            }
-            else if (buttonMode === "editing") {
-                MechViewSimSettings.setRangeValue();
-            }
-            else {
-                throw Error("Invalid button state");
-            }
-        });
-        rangeJQ.on("keydown", (event) => {
-            if (event.which === 13) {
-                MechViewSimSettings.setRangeValue();
-            }
-        });
-    };
-    MechViewSimSettings.setRangeValue = function () {
-        let rangeJQ = $("#rangeInput");
-        rangeJQ.addClass("disabled").attr("disabled", "true");
-        let range = Number($("#rangeInput").val());
-        //set the range using the converted number value so user is sure it was parsed properly
-        rangeJQ.val(range);
-        let simulatorParameters = MechModelView.getSimulatorParameters();
-        simulatorParameters.range = range;
-        //not strictly necessary, but it makes it explicit that we're changing
-        //the simulator parameters. Handy when searching for code that changes
-        //app state
-        MechViewRouter.modifyAppState();
-        MechModelView.setSimulatorParameters(simulatorParameters);
-        $("#setRangeButton")
-            .attr("data-button-mode", "not-editing")
-            .html("Change");
-    };
-    MechViewSimSettings.updateSimSettingsView = function (simulatorParameters) {
-        if (simulatorParameters) {
-            let range = simulatorParameters.range;
-            $("#rangeInput").val(range);
-        }
-    };
-    class SettingsDialog {
-        constructor(simSettings) {
-            this.simSettings = simSettings;
-            let settingsDiv = MechViewWidgets.cloneTemplate("simSettings-template");
-            this.domElement = settingsDiv;
-            this.propertyMap = new Map();
-            this.populateSettings(simSettings);
-            let settingsJQ = $(settingsDiv);
-            settingsJQ.find(".applyButton").click(() => {
-                //set simulation parameters from values selected in the dialog
-                MechSimulatorLogic.setSimulatorParameters(simSettings);
-                MechViewSimSettings.hideSettingsDialog();
-            });
-            settingsJQ.find(".cancelButton").click(() => {
-                MechViewSimSettings.hideSettingsDialog();
-            });
-        }
-        settingEntryId(settingProperty) {
-            return settingProperty + "-value";
-        }
-        getSettingValue(property, valueId) {
-            return this.propertyMap.get(property).get(valueId);
-        }
-        setSettingValue(property, valueId, value) {
-            this.propertyMap.get(property).set(valueId, value);
-        }
-        populateSettings(simSettings) {
-            let settingsList = SimulatorParameters.getUserSettings();
-            let entryListJQ = $(this.domElement).find(".simSettingsList");
-            for (let entry of settingsList) {
-                let entryDiv = MechViewWidgets.cloneTemplate("simSettingsEntry-template");
-                let entryJQ = $(entryDiv)
-                    .attr("id", this.settingEntryId(entry.property))
-                    .attr("data-property", entry.property);
-                entryJQ.find(".label").text(entry.name);
-                let entrySelectJQ = entryJQ.find(".value");
-                entrySelectJQ.empty();
-                this.propertyMap.set(entry.property, new Map());
-                entryListJQ.append(entryJQ);
-                for (let value of entry.values) {
-                    let valueJQ = $("<option></option>")
-                        .attr("value", value.id)
-                        .attr("data-value", value.value)
-                        .attr("data-description", value.description)
-                        .text(value.name)
-                        .appendTo(entrySelectJQ);
-                    this.setSettingValue(entry.property, value.id, value);
-                    //set selected value from simSettings
-                    if (value.value === simSettings[entry.property]) {
-                        entrySelectJQ.val(value.id);
-                        entryJQ.find(".description").text(value.description);
-                    }
-                }
-                entryJQ.on('change', (data) => {
-                    let selectedValue = String(entrySelectJQ.val());
-                    let settingValue = this.getSettingValue(entry.property, selectedValue);
-                    let currSetting = this.simSettings;
-                    currSetting[entry.property] = settingValue.value;
-                    entryJQ.find(".description").text(settingValue.description);
-                });
-            }
-        }
-    }
-    MechViewSimSettings.showSettingsDialog = function () {
-        let simulatorParameters = SimulatorSettings.getSimulatorParameters();
-        let dialog = new SettingsDialog(simulatorParameters);
-        MechViewWidgets.setModal(dialog.domElement, "simSettingsDialog");
-        MechViewWidgets.showModal();
-    };
-    MechViewSimSettings.hideSettingsDialog = function () {
-        MechViewWidgets.hideModal("simSettingsDialog");
-    };
-})(MechViewSimSettings || (MechViewSimSettings = {}));
-//UI methods
-var MechView;
-//UI methods
-(function (MechView) {
-    var Component = MechModelCommon.Component;
-    var teamListPanel = function (team) {
-        return team + "Team";
-    };
-    MechView.clearMechList = function (team) {
-        let teamMechPanelId = teamListPanel(team);
-        $("#" + teamMechPanelId).empty();
-    };
-    MechView.clearMechStats = function (team) {
-        MechViewTeamStats.clearTeamStats(team);
-    };
-    MechView.clear = function (team) {
-        MechView.clearMechList(team);
-        MechView.clearMechStats(team);
-    };
-    MechView.clearAll = function () {
-        MechView.clear("blue");
-        MechView.clear("red");
-    };
-    MechView.updateSimTime = function (simTime) {
-        $("#simTime").html(simTime + "ms");
-    };
-    MechView.setDebugText = function (debugText) {
-        $("#debugText").html(debugText);
-    };
-    MechView.initView = function () {
-        $("#nojavascript").remove();
-        initControlPanel();
-        MechViewTeamStats.initPatternTypes();
-        MechViewSimSettings.initRangeInput();
-        initSpeedControl();
-        initStateControl();
-        initMiscControl();
-    };
-    var initControlPanel = function () {
-        let controlPanelDiv = MechViewWidgets.cloneTemplate("controlPanel-template");
-        $(controlPanelDiv)
-            .appendTo("#controlPanelContainer");
-    };
-    var setSimulatorSpeedfactor = function (speedFactor) {
-        let simulatorParams = SimulatorSettings.getSimulatorParameters();
-        simulatorParams.setSpeedFactor(speedFactor);
-        MechSimulatorLogic.setSimulatorParameters(simulatorParams);
-        $("#simSpeed").html(speedFactor + "x");
-    };
-    var initSpeedControl = function () {
-        $("#startSimulationDivButton").click(() => {
-            if (MechModelView.getVictorTeam()) {
-                //if a team already won, reset the sim
-                MechView.resetSimulation();
-            }
-            MechSimulatorLogic.runSimulation();
-        });
-        $("#pauseSimulationDivButton").click(() => {
-            MechSimulatorLogic.pauseSimulation();
-        });
-        $("#stepSimulationDivButton").click(() => {
-            MechSimulatorLogic.stepSimulation();
-        });
-        $("#speed1xbutton").click(() => {
-            setSimulatorSpeedfactor(1);
-        });
-        $("#speed2xbutton").click(() => {
-            setSimulatorSpeedfactor(2);
-        });
-        $("#speed4xbutton").click(() => {
-            setSimulatorSpeedfactor(4);
-        });
-        $("#speed8xbutton").click(() => {
-            setSimulatorSpeedfactor(8);
-        });
-    };
-    MechView.resetSimulation = function () {
-        MechModelView.resetModel();
-        MechSimulatorLogic.resetSimulation();
-        MechModelView.refreshView([]);
-    };
-    var initStateControl = function () {
-        $("#resetSimulationDivButton").click(() => {
-            MechView.resetSimulation();
-        });
-        $("#showReportDivButton").click(() => {
-            MechSimulatorLogic.pauseSimulation();
-            MechViewReport.showVictoryReport();
-        });
-    };
-    var permalinkTooltip;
-    var modifiedTooltip;
-    var loadErrorTooltip;
-    var initMiscControl = function () {
-        $("#permalinkButton").click(() => {
-            let saveAppStatePromise = MechViewRouter.saveAppState();
-            saveAppStatePromise
-                .then(function (data) {
-                showPermalinkTooltip(location.href);
-                console.log("Success on save app state. Data: " + data);
-                return data;
-            })
-                .catch(function (data) {
-                console.error("Fail on save app state." + Error(data));
-                return Error(data);
-            })
-                .then(function (data) {
-                console.log("Done save app state. Data: " + data);
-            });
-        });
-        modifiedTooltip = new MechViewWidgets.Tooltip("modifiedTooltip-template", "modifiedTooltip", "permalinkButton");
-        permalinkTooltip = new MechViewWidgets.Tooltip("permalinkGeneratedTooltip-template", "permalinkGeneratedTooltip", "permalinkButton");
-        loadErrorTooltip = new MechViewWidgets.Tooltip("loadErrorTooltip-template", "loadErrorTooltip", "miscControl");
-        $("#settingsButton").click(() => {
-            MechSimulatorLogic.pauseSimulation();
-            MechViewSimSettings.showSettingsDialog();
-        });
-    };
-    var showModifiedToolip = function () {
-        permalinkTooltip.hideTooltip();
-        loadErrorTooltip.hideTooltip();
-        modifiedTooltip.showTooltip();
-    };
-    var showPermalinkTooltip = function (link) {
-        modifiedTooltip.hideTooltip();
-        loadErrorTooltip.hideTooltip();
-        $(`#${permalinkTooltip.id} [class~=permaLink]`)
-            .attr("href", link);
-        permalinkTooltip.showTooltip();
-    };
-    var showLoadErrorTooltip = function () {
-        modifiedTooltip.hideTooltip();
-        permalinkTooltip.hideTooltip();
-        loadErrorTooltip.showTooltip();
-    };
-    //TODO: You now have multiple entities acting on the same event. Think about
-    //setting up an event scheduler/listeners
-    MechView.updateOnModifyAppState = function () {
-        showModifiedToolip();
-    };
-    MechView.updateOnAppSaveState = function () {
-        //make the view consistent with the current state
-    };
-    MechView.updateOnLoadAppState = function () {
-        permalinkTooltip.hideTooltip();
-        modifiedTooltip.hideTooltip();
-        loadErrorTooltip.hideTooltip();
-        doAutoRun();
-    };
-    MechView.updateOnLoadAppError = function () {
-        permalinkTooltip.hideTooltip();
-        modifiedTooltip.hideTooltip();
-        loadErrorTooltip.showTooltip();
-    };
-    //called when the app is completely loaded
-    MechView.updateOnAppLoaded = function () {
-        doAutoRun();
-    };
-    var doAutoRun = function () {
-        //set sim speed and run sim if run and speed url params are set
-        let runParam = MechViewRouter.getRunFromLocation() === "true";
-        let speedParam = Number(MechViewRouter.getSpeedFromLocation());
-        if (speedParam) {
-            setSimulatorSpeedfactor(speedParam);
-        }
-        if (runParam) {
-            MechModelView.resetModel();
-            MechSimulatorLogic.resetSimulation();
-            MechSimulatorLogic.runSimulation();
-        }
-    };
-    const LOADING_SCREEN_MECH_ID = "fakeLoadingScreenMechId";
-    var loadingScreenAnimateInterval;
-    const LOADING_SCREEN_ANIMATE_INTERVAL = 200; //ms
-    MechView.showLoadingScreen = function () {
-        let loadingScreenDiv = MechViewWidgets.cloneTemplate("loadingScreen-template");
-        $(loadingScreenDiv)
-            .attr("id", "loadingScreenContainer");
-        MechViewWidgets.setModal(loadingScreenDiv);
-        MechViewMechPanel.addPaperDoll(LOADING_SCREEN_MECH_ID, "loadingScreenPaperDollContainer");
-        for (let componentIdx in Component) {
-            if (Component.hasOwnProperty(componentIdx)) {
-                let component = Component[componentIdx];
-                MechViewMechPanel.setPaperDollArmor(LOADING_SCREEN_MECH_ID, component, 1);
-                MechViewMechPanel.setPaperDollStructure(LOADING_SCREEN_MECH_ID, component, 1);
-            }
-        }
-        if (loadingScreenAnimateInterval) {
-            window.clearInterval(loadingScreenAnimateInterval);
-        }
-        loadingScreenAnimateInterval = window.setInterval(function () {
-            for (let componentIdx in Component) {
-                if (Component.hasOwnProperty(componentIdx)) {
-                    let component = Component[componentIdx];
-                    MechViewMechPanel.setPaperDollArmor(LOADING_SCREEN_MECH_ID, component, Math.random());
-                    MechViewMechPanel.setPaperDollStructure(LOADING_SCREEN_MECH_ID, component, Math.random());
-                }
-            }
-        }, LOADING_SCREEN_ANIMATE_INTERVAL);
-        MechView.updateLoadingScreenProgress(0);
-        MechViewWidgets.showModal();
-    };
-    MechView.hideLoadingScreen = function () {
-        MechViewWidgets.hideModal();
-        window.clearInterval(loadingScreenAnimateInterval);
-    };
-    MechView.updateLoadingScreenProgress = function (percent) {
-        let progressBar = document.getElementById("loadingScreenProgress");
-        let textPercent = Math.floor(Number(percent) * 100) + "%";
-        progressBar.style.width = textPercent;
-    };
-    MechView.updateTitle = function (title) {
-        document.title = title;
-    };
-})(MechView || (MechView = {}));
 //Router. Deals with interactions of the application state and the url hash fragment
 //Uses the ./php/simulator-persistence.php for storing application state to server
 var MechViewRouter;
@@ -9154,6 +8642,132 @@ var MechViewRouter;
         }
     };
 })(MechViewRouter || (MechViewRouter = {}));
+var MechViewSimSettings;
+(function (MechViewSimSettings) {
+    var SimulatorParameters = SimulatorSettings.SimulatorParameters;
+    MechViewSimSettings.initRangeInput = function () {
+        let rangeJQ = $("#rangeInput");
+        let rangeButtonElem = document.getElementById("setRangeButton");
+        let rangeButton = new MechViewWidgets.MechButton(rangeButtonElem, function () {
+            let buttonMode = $(this).attr("data-button-mode");
+            if (buttonMode === "not-editing") {
+                rangeJQ
+                    .removeClass("disabled")
+                    .removeAttr("disabled")
+                    .focus();
+                $(this)
+                    .attr("data-button-mode", "editing")
+                    .html("Set Range");
+            }
+            else if (buttonMode === "editing") {
+                MechViewSimSettings.setRangeValue();
+            }
+            else {
+                throw Error("Invalid button state");
+            }
+        });
+        rangeJQ.on("keydown", (event) => {
+            if (event.which === 13) {
+                MechViewSimSettings.setRangeValue();
+            }
+        });
+    };
+    MechViewSimSettings.setRangeValue = function () {
+        let rangeJQ = $("#rangeInput");
+        rangeJQ.addClass("disabled").attr("disabled", "true");
+        let range = Number($("#rangeInput").val());
+        //set the range using the converted number value so user is sure it was parsed properly
+        rangeJQ.val(range);
+        let simulatorParameters = MechModelView.getSimulatorParameters();
+        simulatorParameters.range = range;
+        //not strictly necessary, but it makes it explicit that we're changing
+        //the simulator parameters. Handy when searching for code that changes
+        //app state
+        MechViewRouter.modifyAppState();
+        MechModelView.setSimulatorParameters(simulatorParameters);
+        $("#setRangeButton")
+            .attr("data-button-mode", "not-editing")
+            .html("Change");
+    };
+    MechViewSimSettings.updateSimSettingsView = function (simulatorParameters) {
+        if (simulatorParameters) {
+            let range = simulatorParameters.range;
+            $("#rangeInput").val(range);
+        }
+    };
+    class SettingsDialog {
+        constructor(simSettings) {
+            this.simSettings = simSettings;
+            let settingsDiv = MechViewWidgets.cloneTemplate("simSettings-template");
+            this.domElement = settingsDiv;
+            this.propertyMap = new Map();
+            this.populateSettings(simSettings);
+            let settingsJQ = $(settingsDiv);
+            settingsJQ.find(".applyButton").click(() => {
+                //set simulation parameters from values selected in the dialog
+                MechSimulatorLogic.setSimulatorParameters(simSettings);
+                MechViewSimSettings.hideSettingsDialog();
+            });
+            settingsJQ.find(".cancelButton").click(() => {
+                MechViewSimSettings.hideSettingsDialog();
+            });
+        }
+        settingEntryId(settingProperty) {
+            return settingProperty + "-value";
+        }
+        getSettingValue(property, valueId) {
+            return this.propertyMap.get(property).get(valueId);
+        }
+        setSettingValue(property, valueId, value) {
+            this.propertyMap.get(property).set(valueId, value);
+        }
+        populateSettings(simSettings) {
+            let settingsList = SimulatorParameters.getUserSettings();
+            let entryListJQ = $(this.domElement).find(".simSettingsList");
+            for (let entry of settingsList) {
+                let entryDiv = MechViewWidgets.cloneTemplate("simSettingsEntry-template");
+                let entryJQ = $(entryDiv)
+                    .attr("id", this.settingEntryId(entry.property))
+                    .attr("data-property", entry.property);
+                entryJQ.find(".label").text(entry.name);
+                let entrySelectJQ = entryJQ.find(".value");
+                entrySelectJQ.empty();
+                this.propertyMap.set(entry.property, new Map());
+                entryListJQ.append(entryJQ);
+                for (let value of entry.values) {
+                    let valueJQ = $("<option></option>")
+                        .attr("value", value.id)
+                        .attr("data-value", value.value)
+                        .attr("data-description", value.description)
+                        .text(value.name)
+                        .appendTo(entrySelectJQ);
+                    this.setSettingValue(entry.property, value.id, value);
+                    //set selected value from simSettings
+                    if (value.value === simSettings[entry.property]) {
+                        entrySelectJQ.val(value.id);
+                        entryJQ.find(".description").text(value.description);
+                    }
+                }
+                entryJQ.on('change', (data) => {
+                    let selectedValue = String(entrySelectJQ.val());
+                    let settingValue = this.getSettingValue(entry.property, selectedValue);
+                    let currSetting = this.simSettings;
+                    currSetting[entry.property] = settingValue.value;
+                    entryJQ.find(".description").text(settingValue.description);
+                });
+            }
+        }
+    }
+    MechViewSimSettings.showSettingsDialog = function () {
+        let simulatorParameters = SimulatorSettings.getSimulatorParameters();
+        let dialog = new SettingsDialog(simulatorParameters);
+        MechViewWidgets.setModal(dialog.domElement, "simSettingsDialog");
+        MechViewWidgets.showModal();
+    };
+    MechViewSimSettings.hideSettingsDialog = function () {
+        MechViewWidgets.hideModal("simSettingsDialog");
+    };
+})(MechViewSimSettings || (MechViewSimSettings = {}));
 var MechViewTeamStats;
 (function (MechViewTeamStats) {
     var teamStatsContainerId = function (team) {
@@ -9428,90 +9042,366 @@ var MechViewTeamStats;
         $("#" + teamStatsContainerPanelId).empty();
     };
 })(MechViewTeamStats || (MechViewTeamStats = {}));
-var MechSimulator;
-(function (MechSimulator) {
-    var SimulatorParameters = SimulatorSettings.SimulatorParameters;
-    const DEFAULT_RANGE = 200;
-    const DEFAULT_SPEED = 1;
-    function init() {
-        MechView.initView();
-        MechView.showLoadingScreen();
-        let simulatorParameters = new SimulatorParameters(DEFAULT_RANGE, DEFAULT_SPEED);
-        MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
-        MechModel.initModelData()
-            .then(function () {
-            console.log("Successfully loaded model init data");
-            //router should not be initialized before the smurfy data is
-            //loaded since the hash change listener can start pulling in smurfy
-            //loadout data
-            MechViewRouter.initViewRouter();
-            initMechs();
-        })
-            .catch(function () {
-            console.error("Failed to load model init data");
-            MechView.hideLoadingScreen();
-            MechView.updateOnLoadAppError();
+var MechViewWidgets;
+(function (MechViewWidgets) {
+    MechViewWidgets.paperDollDamageGradient = [
+        { value: 0.0, RGB: { r: 28, g: 22, b: 6 } },
+        { value: 0.1, RGB: { r: 255, g: 46, b: 16 } },
+        { value: 0.2, RGB: { r: 255, g: 73, b: 20 } },
+        { value: 0.3, RGB: { r: 255, g: 97, b: 12 } },
+        { value: 0.4, RGB: { r: 255, g: 164, b: 22 } },
+        { value: 0.5, RGB: { r: 255, g: 176, b: 18 } },
+        { value: 0.6, RGB: { r: 255, g: 198, b: 24 } },
+        { value: 0.7, RGB: { r: 255, g: 211, b: 23 } },
+        { value: 0.8, RGB: { r: 255, g: 224, b: 28 } },
+        { value: 0.9, RGB: { r: 255, g: 235, b: 24 } },
+        { value: 1, RGB: { r: 101, g: 79, b: 38 } }
+    ];
+    //Colors for health numbers
+    MechViewWidgets.healthDamageGradient = [
+        { value: 0.0, RGB: { r: 230, g: 20, b: 20 } },
+        { value: 0.7, RGB: { r: 230, g: 230, b: 20 } },
+        // {value : 0.9, RGB : {r:20, g:230, b:20}},
+        { value: 0.9, RGB: { r: 255, g: 235, b: 24 } },
+        { value: 1, RGB: { r: 170, g: 170, b: 170 } }
+    ];
+    //Colors for individual component health numbers
+    MechViewWidgets.componentHealthDamageGradient = [
+        { value: 0.0, RGB: { r: 255, g: 0, b: 0 } },
+        { value: 0.7, RGB: { r: 255, g: 255, b: 0 } },
+        // {value : 0.9, RGB : {r:0, g:255, b:0}},
+        { value: 0.9, RGB: { r: 255, g: 235, b: 24 } },
+        { value: 1, RGB: { r: 170, g: 170, b: 170 } }
+    ];
+    //gets the damage color for a given percentage of damage
+    MechViewWidgets.damageColor = function (percent, damageGradient) {
+        var damageIdx = Util.binarySearchClosest(damageGradient, percent, (key, colorValue) => {
+            return key - colorValue.value;
         });
+        if (damageIdx === -1) {
+            damageIdx = 0;
+        }
+        let nextIdx = damageIdx + 1;
+        nextIdx = (nextIdx < damageGradient.length) ? nextIdx : damageIdx;
+        let rgb = damageGradient[damageIdx].RGB;
+        let nextRgb = damageGradient[nextIdx].RGB;
+        let percentDiff = (damageIdx !== nextIdx) ?
+            (percent - damageGradient[damageIdx].value) /
+                (damageGradient[nextIdx].value - damageGradient[damageIdx].value)
+            : 1;
+        let red = Math.round(Number(rgb.r) + (Number(nextRgb.r) - Number(rgb.r)) * percentDiff);
+        let green = Math.round(Number(rgb.g) + (Number(nextRgb.g) - Number(rgb.g)) * percentDiff);
+        let blue = Math.round(Number(rgb.b) + (Number(nextRgb.b) - Number(rgb.b)) * percentDiff);
+        return "rgb(" + red + "," + green + "," + blue + ")";
+    };
+    class MechButton {
+        constructor(domElement, clickHandler) {
+            this.domElement = domElement;
+            this.clickHandler = (function (context) {
+                var clickContext = context;
+                return function (event) {
+                    if (clickContext.enabled) {
+                        clickHandler.call(event.currentTarget);
+                    }
+                };
+            })(this);
+            this.enabled = true;
+            $(this.domElement).click(this.clickHandler);
+        }
+        setHtml(html) {
+            $(this.domElement).html(html);
+        }
+        addClass(className) {
+            $(this.domElement).addClass(className);
+        }
+        removeClass(className) {
+            $(this.domElement).removeClass(className);
+        }
+        disable() {
+            if (this.enabled) {
+                $(this.domElement).addClass("disabled");
+                this.enabled = false;
+            }
+        }
+        enable() {
+            if (!this.enabled) {
+                $(this.domElement).removeClass("disabled");
+                this.enabled = true;
+            }
+        }
     }
-    function initMechs() {
-        MechViewRouter.loadStateFromLocationHash()
-            .then(function (data) {
-            initUI();
-            return data;
-        })
-            .catch(function (err) {
-            console.error("Error loading mech data: " + err);
-            MechModelView.refreshView();
-            MechView.updateOnLoadAppError();
-            location.hash = "";
-        })
-            .then(function (data) {
-            MechView.hideLoadingScreen();
-            MechView.updateOnAppLoaded();
+    MechViewWidgets.MechButton = MechButton;
+    class Tooltip {
+        constructor(templateId, tooltipId, targetElementId) {
+            this.id = tooltipId;
+            let tooltipDiv = MechViewWidgets.cloneTemplate(templateId);
+            $(tooltipDiv)
+                .addClass("tooltip")
+                .addClass("hidden")
+                .attr("id", tooltipId)
+                .insertBefore("#" + targetElementId);
+            //TODO Fix absolutely positioned tooltip location
+            // let targetElement = $("#" + targetElementId)[0];
+            // let thisLeft = targetElement.offsetLeft;
+            // let thisTop = targetElement.offsetTop + targetElement.offsetHeight;
+            // $("#" + this.id)
+            //   .css({"left": thisLeft, "top" : thisTop});
+        }
+        showTooltip() {
+            $("#" + this.id).removeClass("hidden");
+        }
+        hideTooltip() {
+            $("#" + this.id).addClass("hidden");
+        }
+    }
+    MechViewWidgets.Tooltip = Tooltip;
+    //Clones a template and returns the first element of the template
+    MechViewWidgets.cloneTemplate = function (templateName) {
+        let template = document.querySelector("#" + templateName);
+        let templateElement = document.importNode(template.content, true);
+        return templateElement.firstElementChild;
+    };
+    const MODAL_SCREEN_ID = "mechModalScreen";
+    const MODAL_DIALOG_ID = "mechModalDialog";
+    //sets the content of the modal dialog to element, while optionally adding
+    //a class to the dialog container
+    MechViewWidgets.setModal = function (element, dialogClass = null) {
+        let dialogJQ = $("#" + MODAL_DIALOG_ID);
+        dialogJQ.empty();
+        if (dialogClass) {
+            dialogJQ.addClass(dialogClass);
+        }
+        dialogJQ.append(element);
+    };
+    MechViewWidgets.showModal = function () {
+        $("#" + MODAL_SCREEN_ID).css("display", "block");
+    };
+    //hides the modal dialog, while optionally removing a class from the dialog
+    //container
+    MechViewWidgets.hideModal = function (dialogClass = null) {
+        $("#" + MODAL_SCREEN_ID).css("display", "none");
+        let dialogJQ = $("#" + MODAL_DIALOG_ID);
+        dialogJQ.empty();
+        if (dialogClass) {
+            dialogJQ.removeClass(dialogClass);
+        }
+    };
+})(MechViewWidgets || (MechViewWidgets = {}));
+//UI methods
+var MechView;
+//UI methods
+(function (MechView) {
+    var Component = MechModelCommon.Component;
+    var teamListPanel = function (team) {
+        return team + "Team";
+    };
+    MechView.clearMechList = function (team) {
+        let teamMechPanelId = teamListPanel(team);
+        $("#" + teamMechPanelId).empty();
+    };
+    MechView.clearMechStats = function (team) {
+        MechViewTeamStats.clearTeamStats(team);
+    };
+    MechView.clear = function (team) {
+        MechView.clearMechList(team);
+        MechView.clearMechStats(team);
+    };
+    MechView.clearAll = function () {
+        MechView.clear("blue");
+        MechView.clear("red");
+    };
+    MechView.updateSimTime = function (simTime) {
+        $("#simTime").html(simTime + "ms");
+    };
+    MechView.setDebugText = function (debugText) {
+        $("#debugText").html(debugText);
+    };
+    MechView.initView = function () {
+        $("#nojavascript").remove();
+        initControlPanel();
+        MechViewTeamStats.initPatternTypes();
+        MechViewSimSettings.initRangeInput();
+        initSpeedControl();
+        initStateControl();
+        initMiscControl();
+    };
+    var initControlPanel = function () {
+        let controlPanelDiv = MechViewWidgets.cloneTemplate("controlPanel-template");
+        $(controlPanelDiv)
+            .appendTo("#controlPanelContainer");
+    };
+    var setSimulatorSpeedfactor = function (speedFactor) {
+        let simulatorParams = SimulatorSettings.getSimulatorParameters();
+        simulatorParams.setSpeedFactor(speedFactor);
+        MechSimulatorLogic.setSimulatorParameters(simulatorParams);
+        $("#simSpeed").html(speedFactor + "x");
+    };
+    var initSpeedControl = function () {
+        $("#startSimulationDivButton").click(() => {
+            if (MechModelView.getVictorTeam()) {
+                //if a team already won, reset the sim
+                MechView.resetSimulation();
+            }
+            MechSimulatorLogic.runSimulation();
         });
-    }
-    function initUI() {
-        MechModelView.refreshView();
-    }
-    function main() {
-        init();
-    }
-    MechSimulator.main = main;
-})(MechSimulator || (MechSimulator = {}));
-//returns index of matching entry, otherwise returns the closest lower entry in
-//the array
-var Util;
-//returns index of matching entry, otherwise returns the closest lower entry in
-//the array
-(function (Util) {
-    //TODO: See if this method is still worth it
-    function binarySearchClosest(array, key, keyCompare) {
-        var low = 0;
-        var high = array.length - 1;
-        var mid = Math.floor(low + ((high - low) / 2));
-        var midVal = array[mid];
-        while (low <= high) {
-            mid = Math.floor(low + ((high - low) / 2));
-            midVal = array[mid];
-            if (keyCompare(key, midVal) < 0) {
-                high = mid - 1;
-            }
-            else if (keyCompare(key, midVal) > 0) {
-                low = mid + 1;
-            }
-            else {
-                return mid;
+        $("#pauseSimulationDivButton").click(() => {
+            MechSimulatorLogic.pauseSimulation();
+        });
+        $("#stepSimulationDivButton").click(() => {
+            MechSimulatorLogic.stepSimulation();
+        });
+        $("#speed1xbutton").click(() => {
+            setSimulatorSpeedfactor(1);
+        });
+        $("#speed2xbutton").click(() => {
+            setSimulatorSpeedfactor(2);
+        });
+        $("#speed4xbutton").click(() => {
+            setSimulatorSpeedfactor(4);
+        });
+        $("#speed8xbutton").click(() => {
+            setSimulatorSpeedfactor(8);
+        });
+    };
+    MechView.resetSimulation = function () {
+        MechModelView.resetModel();
+        MechSimulatorLogic.resetSimulation();
+        MechModelView.refreshView([]);
+    };
+    var initStateControl = function () {
+        $("#resetSimulationDivButton").click(() => {
+            MechView.resetSimulation();
+        });
+        $("#showReportDivButton").click(() => {
+            MechSimulatorLogic.pauseSimulation();
+            MechViewReport.showVictoryReport();
+        });
+    };
+    var permalinkTooltip;
+    var modifiedTooltip;
+    var loadErrorTooltip;
+    var initMiscControl = function () {
+        $("#permalinkButton").click(() => {
+            let saveAppStatePromise = MechViewRouter.saveAppState();
+            saveAppStatePromise
+                .then(function (data) {
+                showPermalinkTooltip(location.href);
+                console.log("Success on save app state. Data: " + data);
+                return data;
+            })
+                .catch(function (data) {
+                console.error("Fail on save app state." + Error(data));
+                return Error(data);
+            })
+                .then(function (data) {
+                console.log("Done save app state. Data: " + data);
+            });
+        });
+        modifiedTooltip = new MechViewWidgets.Tooltip("modifiedTooltip-template", "modifiedTooltip", "permalinkButton");
+        permalinkTooltip = new MechViewWidgets.Tooltip("permalinkGeneratedTooltip-template", "permalinkGeneratedTooltip", "permalinkButton");
+        loadErrorTooltip = new MechViewWidgets.Tooltip("loadErrorTooltip-template", "loadErrorTooltip", "miscControl");
+        $("#settingsButton").click(() => {
+            MechSimulatorLogic.pauseSimulation();
+            MechViewSimSettings.showSettingsDialog();
+        });
+    };
+    var showModifiedToolip = function () {
+        permalinkTooltip.hideTooltip();
+        loadErrorTooltip.hideTooltip();
+        modifiedTooltip.showTooltip();
+    };
+    var showPermalinkTooltip = function (link) {
+        modifiedTooltip.hideTooltip();
+        loadErrorTooltip.hideTooltip();
+        $(`#${permalinkTooltip.id} [class~=permaLink]`)
+            .attr("href", link);
+        permalinkTooltip.showTooltip();
+    };
+    var showLoadErrorTooltip = function () {
+        modifiedTooltip.hideTooltip();
+        permalinkTooltip.hideTooltip();
+        loadErrorTooltip.showTooltip();
+    };
+    //TODO: You now have multiple entities acting on the same event. Think about
+    //setting up an event scheduler/listeners
+    MechView.updateOnModifyAppState = function () {
+        showModifiedToolip();
+    };
+    MechView.updateOnAppSaveState = function () {
+        //make the view consistent with the current state
+    };
+    MechView.updateOnLoadAppState = function () {
+        permalinkTooltip.hideTooltip();
+        modifiedTooltip.hideTooltip();
+        loadErrorTooltip.hideTooltip();
+        doAutoRun();
+    };
+    MechView.updateOnLoadAppError = function () {
+        permalinkTooltip.hideTooltip();
+        modifiedTooltip.hideTooltip();
+        loadErrorTooltip.showTooltip();
+    };
+    //called when the app is completely loaded
+    MechView.updateOnAppLoaded = function () {
+        doAutoRun();
+    };
+    var doAutoRun = function () {
+        //set sim speed and run sim if run and speed url params are set
+        let runParam = MechViewRouter.getRunFromLocation() === "true";
+        let speedParam = Number(MechViewRouter.getSpeedFromLocation());
+        if (speedParam) {
+            setSimulatorSpeedfactor(speedParam);
+        }
+        if (runParam) {
+            MechModelView.resetModel();
+            MechSimulatorLogic.resetSimulation();
+            MechSimulatorLogic.runSimulation();
+        }
+    };
+    const LOADING_SCREEN_MECH_ID = "fakeLoadingScreenMechId";
+    var loadingScreenAnimateInterval;
+    const LOADING_SCREEN_ANIMATE_INTERVAL = 200; //ms
+    MechView.showLoadingScreen = function () {
+        let loadingScreenDiv = MechViewWidgets.cloneTemplate("loadingScreen-template");
+        $(loadingScreenDiv)
+            .attr("id", "loadingScreenContainer");
+        MechViewWidgets.setModal(loadingScreenDiv);
+        MechViewMechPanel.addPaperDoll(LOADING_SCREEN_MECH_ID, "loadingScreenPaperDollContainer");
+        for (let componentIdx in Component) {
+            if (Component.hasOwnProperty(componentIdx)) {
+                let component = Component[componentIdx];
+                MechViewMechPanel.setPaperDollArmor(LOADING_SCREEN_MECH_ID, component, 1);
+                MechViewMechPanel.setPaperDollStructure(LOADING_SCREEN_MECH_ID, component, 1);
             }
         }
-        if (keyCompare(key, midVal) < 0) {
-            return Math.max(0, mid - 1);
+        if (loadingScreenAnimateInterval) {
+            window.clearInterval(loadingScreenAnimateInterval);
         }
-        else {
-            return mid;
-        }
-    }
-    Util.binarySearchClosest = binarySearchClosest;
-})(Util || (Util = {}));
+        loadingScreenAnimateInterval = window.setInterval(function () {
+            for (let componentIdx in Component) {
+                if (Component.hasOwnProperty(componentIdx)) {
+                    let component = Component[componentIdx];
+                    MechViewMechPanel.setPaperDollArmor(LOADING_SCREEN_MECH_ID, component, Math.random());
+                    MechViewMechPanel.setPaperDollStructure(LOADING_SCREEN_MECH_ID, component, Math.random());
+                }
+            }
+        }, LOADING_SCREEN_ANIMATE_INTERVAL);
+        MechView.updateLoadingScreenProgress(0);
+        MechViewWidgets.showModal();
+    };
+    MechView.hideLoadingScreen = function () {
+        MechViewWidgets.hideModal();
+        window.clearInterval(loadingScreenAnimateInterval);
+    };
+    MechView.updateLoadingScreenProgress = function (percent) {
+        let progressBar = document.getElementById("loadingScreenProgress");
+        let textPercent = Math.floor(Number(percent) * 100) + "%";
+        progressBar.style.width = textPercent;
+    };
+    MechView.updateTitle = function (title) {
+        document.title = title;
+    };
+})(MechView || (MechView = {}));
 //Test code.
 var MechTest;
 //Test code.
@@ -9530,13 +9420,7 @@ var MechTest;
     MechTest.testUIWidgets = function () {
         MechView.initView();
         initDummyModelData();
-        MechModel.addMech("testCheetahId", Team.BLUE, DummyArcticCheetah);
-        MechModel.addMech("testExecutionerId", Team.BLUE, DummyExecutioner);
-        MechModel.addMech("testStormcrowId", Team.BLUE, DummyStormcrow);
-        MechModel.addMech("testMaulerId", Team.RED, DummyMauler);
-        MechModel.addMech("testFirestarterId", Team.RED, DummyFireStarter);
-        MechModel.addMech("testBattlemasterId", Team.RED, DummyBattleMaster);
-        MechModel.addMech("testShadowhawkId", Team.RED, DummyShadowhawk);
+        initTestModelState();
         MechModelView.refreshView();
         var createHandler = function () {
             return () => {
@@ -9606,13 +9490,7 @@ var MechTest;
     MechTest.testModelView = function () {
         MechView.initView();
         initDummyModelData();
-        MechModel.addMech("testCheetahId", Team.BLUE, DummyArcticCheetah);
-        MechModel.addMech("testExecutionerId", Team.BLUE, DummyExecutioner);
-        MechModel.addMech("testStormcrowId", Team.BLUE, DummyStormcrow);
-        MechModel.addMech("testMaulerId", Team.RED, DummyMauler);
-        MechModel.addMech("testFirestarterId", Team.RED, DummyFireStarter);
-        MechModel.addMech("testBattlemasterId", Team.RED, DummyBattleMaster);
-        MechModel.addMech("testShadowhawkId", Team.RED, DummyShadowhawk);
+        initTestModelState();
         MechModelView.refreshView();
         $("#resetState").removeClass("debugButton").click(() => {
             MechModel.resetState();
@@ -9968,12 +9846,8 @@ var MechTest;
         //Scratch test
     };
 })(MechTest || (MechTest = {}));
-/// <reference path="simulator-test.ts" />
-/// <reference path="../scripts/lib/jquery-3.2.d.ts" />
 //TODO: See why rootdirs aren't working in tsconfig.json
 var MechTest;
-/// <reference path="simulator-test.ts" />
-/// <reference path="../scripts/lib/jquery-3.2.d.ts" />
 //TODO: See why rootdirs aren't working in tsconfig.json
 (function (MechTest) {
     const INDEX_HTML_URL = "index.html";
@@ -10021,7 +9895,7 @@ var MechTest;
             }
         }
         else {
-            console.error("No test specified");
+            console.error(Error("No test specified"));
         }
     }
     function testMain() {
@@ -10030,7 +9904,7 @@ var MechTest;
             runTest();
         })
             .catch(function (data) {
-            console.log("Error running test");
+            console.error(Error("Error running test: " + data));
         });
     }
     MechTest.testMain = testMain;
