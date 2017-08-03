@@ -1,5 +1,7 @@
 
-//TODO: See why rootdirs aren't working in tsconfig.json
+//Creates the test harness for test-index.html. To run tests, go to url
+//    test-index.html#<testName>
+//where testName is a test method in simulator-test.ts
 namespace MechTest {
 
   const INDEX_HTML_URL = "index.html";
@@ -21,6 +23,7 @@ namespace MechTest {
     });
   }
 
+  //Loads the body of the main index.html into test-index.html.
   //NOTE: This relies on the body tags in the main index.html file to be in
   //lower case and have no spaces due to the string.search calls
   function replaceBody() : Promise<any> {
@@ -35,7 +38,7 @@ namespace MechTest {
       return data;
     })
     .catch(function(data : any) {
-      console.log("Error loading app HTML")
+      console.error(Error("Error loading app HTML"));
     });
   }
 
