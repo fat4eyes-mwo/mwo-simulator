@@ -1,7 +1,7 @@
 //Constants used by simulator-model-quirks.js to compute quirk bonuses
-//quirks that apply to the mech, not a component or weapon
-namespace MechModelQuirks {
 
+namespace MechModelQuirks {
+  //quirks that apply to the mech, not a component or weapon
   export const _quirkGeneral : {[index:string] : boolean} = {
     "heatloss_multiplier" : true,
     "heatdissipation_multiplier" : true,
