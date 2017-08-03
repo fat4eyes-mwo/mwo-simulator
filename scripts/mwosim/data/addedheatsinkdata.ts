@@ -7,6 +7,7 @@ namespace AddedData {
     external_heat_capacity : number,
   }
 
+  //HeatsinkName -> AddedHeatsinkData
   export var _AddedHeatsinkData : {[index:string] : AddedHeatsinkData} = {
     "HeatSink_MkI" : {
       internal_heat_capacity : 1.1,

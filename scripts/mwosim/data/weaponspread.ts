@@ -4,7 +4,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 namespace GlobalGameInfo {
 
+//Range -> WeaponSpreadAtRange
 export type WeaponSpread  = {[index : number] : WeaponSpreadAtRange};
+//Component -> percentDamage
 export type WeaponSpreadAtRange = {[index:string] : number};
 //Seeker damage spread
 //each spread should have at least 2 entries for extrapolation
