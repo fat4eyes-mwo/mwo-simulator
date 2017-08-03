@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "module": "AMD",
+        "module": "System",
         "alwaysStrict" : true,
         "noImplicitAny": true,
         "noImplicitThis" : true,

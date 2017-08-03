@@ -11,8 +11,11 @@ namespace MechView {
   type Team = MechModelCommon.Team;
   type Tooltip = MechViewWidgets.Tooltip;
 
+  var teamListPanel = function(team : Team) {
+    return  team + "Team";
+  }
   export var clearMechList = function(team : Team) : void {
-    let teamMechPanelId = team + "Team";
+    let teamMechPanelId = teamListPanel(team);
     $("#" + teamMechPanelId).empty();
   }
 
