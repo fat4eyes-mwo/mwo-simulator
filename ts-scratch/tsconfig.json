@@ -1,9 +1,10 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
+        "module": "System",
         "noImplicitAny": true,
         "removeComments": false,
         "preserveConstEnums": true,
+        "baseUrl" : "./",
         "sourceMap": true,
         "target": "es6",
         "strict": true,

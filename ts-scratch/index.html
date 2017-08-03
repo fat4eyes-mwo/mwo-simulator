@@ -5,7 +5,20 @@
     <meta charset="utf-8">
     <meta name="theme-color" content="#303030">
     <script src="../scripts/lib/jquery-3.2.1.min.js"></script>
-    <script src="js/out.js"></script>
+    <script src="../scripts/lib/system.js"></script>
+    <script>
+      System.config({
+        baseURL : "/"
+      });
+      System.import("./js/out.js")
+        .then(() => {
+          console.log("js loaded");
+          System.import("main");
+        })
+        .catch((err)=> {
+          console.error("Error: " + err);
+        });
+    </script>
   </head>
   <body>
     Hello world.

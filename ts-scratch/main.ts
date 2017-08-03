@@ -2,9 +2,19 @@
 /// <reference path="moduleA.ts" />
 /// <reference path="moduleB.ts" />
 
+import * as ModuleA from "moduleA";
+import * as ModuleA2 from "moduleA";
+import * as ModuleB from "moduleB";
+import * as ModuleC from "libtest/moduleC";
+
 namespace Main {
+  let foo : ModuleA.TypeA;
   export function main() {
-    $("#debugText").text("Hello again from typescript" + ModuleA.funcA("Foo") + ModuleB.bfunc("Bar"));
+    ModuleA.setA("a1");
+    ModuleA2.setA("a2"); //Should set the same variable a in moduleA.js
+    ModuleC.funcC("foo");
+    $("#debugText").text("Hello again from typescript" + ModuleA.funcA("Foo") + ModuleB.bfunc("Bar") +
+                ` ModuleA.a=${ModuleA.getA()}` + ` ModuleA2.a=${ModuleA2.getA()}` + ` ModuleB.getAFromB()=${ModuleB.getAfromB()}`);
   }
 }
 
