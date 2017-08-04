@@ -112,34 +112,36 @@ namespace MechView {
   var modifiedTooltip : Tooltip;
   var loadErrorTooltip : Tooltip;
   var initMiscControl = function() : void {
-    $("#permalinkButton").click(() => {
-      let saveAppStatePromise = MechViewRouter.saveAppState();
-      saveAppStatePromise
-        .then(function(data : any) {
-          showPermalinkTooltip(location.href);
-          console.log("Success on save app state. Data: " + data);
-          return data;
-        })
-        .catch(function(data : any) {
-          console.error("Fail on save app state." + Error(data));
-          return Error(data);
-        })
-        .then(function(data : any) {
-          console.log("Done save app state. Data: " + data);
-        });
-    });
+    let permalinkButtonJQ =
+      $("#permalinkButton").click(() => {
+        let saveAppStatePromise = MechViewRouter.saveAppState();
+        saveAppStatePromise
+          .then(function(data : any) {
+            showPermalinkTooltip(location.href);
+            console.log("Success on save app state. Data: " + data);
+            return data;
+          })
+          .catch(function(data : any) {
+            console.error("Fail on save app state." + Error(data));
+            return Error(data);
+          })
+          .then(function(data : any) {
+            console.log("Done save app state. Data: " + data);
+          });
+      });
     modifiedTooltip = new MechViewWidgets.Tooltip(
                                 "modifiedTooltip-template",
                                 "modifiedTooltip",
-                                "permalinkButton");
+                                permalinkButtonJQ.get(0));
     permalinkTooltip = new MechViewWidgets.Tooltip(
                                 "permalinkGeneratedTooltip-template",
                                 "permalinkGeneratedTooltip",
-                                "permalinkButton");
+                                permalinkButtonJQ.get(0));
+    let miscControlJQ = $("#" + "miscControl");
     loadErrorTooltip = new MechViewWidgets.Tooltip(
                                 "loadErrorTooltip-template",
                                 "loadErrorTooltip",
-                                "miscControl");
+                                miscControlJQ.get(0));
     $("#settingsButton").click(() => {
       MechSimulatorLogic.pauseSimulation();
       MechViewSimSettings.showSettingsDialog();

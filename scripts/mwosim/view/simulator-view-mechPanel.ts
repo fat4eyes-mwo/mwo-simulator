@@ -638,7 +638,7 @@ namespace MechViewMechPanel {
   export var highlightMechPanel = function(mechId : string) : void {
     let mechPanelDivId = mechPanelId(mechId);
     let mechPanelJQ = $("#" + mechPanelDivId);
-    mechPanelJQ[0].scrollIntoView(false);
+    mechPanelJQ.get(0).scrollIntoView(false);
     mechPanelJQ.addClass("flashSelected");
     mechPanelJQ.on("animationend", function(data) {
       mechPanelJQ.removeClass("flashSelected")

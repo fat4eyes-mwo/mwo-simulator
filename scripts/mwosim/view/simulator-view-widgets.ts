@@ -113,16 +113,17 @@ namespace MechViewWidgets {
 
   export class Tooltip {
     id : string;
+    domElement : Element;
     constructor(templateId : string,
                 tooltipId : string,
-                targetElementId : string) {
+                targetElement : Element) {
       this.id = tooltipId;
-      let tooltipDiv = MechViewWidgets.cloneTemplate(templateId);
-      $(tooltipDiv)
+      this.domElement = MechViewWidgets.cloneTemplate(templateId);
+      $(this.domElement)
         .addClass("tooltip")
         .addClass("hidden")
         .attr("id", tooltipId)
-        .insertBefore("#" + targetElementId);
+        .insertBefore(targetElement);
       //TODO Fix absolutely positioned tooltip location
       // let targetElement = $("#" + targetElementId)[0];
       // let thisLeft = targetElement.offsetLeft;

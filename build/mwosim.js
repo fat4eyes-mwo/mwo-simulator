@@ -5,6 +5,7 @@ var AddedData;
 //Additional heatsink data to account for info not in smurfy
 //Reference: http://steamcommunity.com/sharedfiles/filedetails/?id=686548357
 (function (AddedData) {
+    //HeatsinkName -> AddedHeatsinkData
     AddedData._AddedHeatsinkData = {
         "HeatSink_MkI": {
             internal_heat_capacity: 1.1,
@@ -2742,11 +2743,10 @@ var GlobalGameInfo;
     GlobalGameInfo.GHOST_HEAT_INTERVAL = 500;
 })(GlobalGameInfo || (GlobalGameInfo = {}));
 //Constants used by simulator-model-quirks.js to compute quirk bonuses
-//quirks that apply to the mech, not a component or weapon
 var MechModelQuirks;
 //Constants used by simulator-model-quirks.js to compute quirk bonuses
-//quirks that apply to the mech, not a component or weapon
 (function (MechModelQuirks) {
+    //quirks that apply to the mech, not a component or weapon
     MechModelQuirks._quirkGeneral = {
         "heatloss_multiplier": true,
         "heatdissipation_multiplier": true,
@@ -7445,7 +7445,7 @@ var MechViewAddMech;
             .attr("id", addMechButtonPanelId)
             .attr("data-team", team);
         addMechButtonMap[team] =
-            new MechViewWidgets.MechButton(addMechButtonJQ[0], addMechButtonHandler);
+            new MechViewWidgets.MechButton(addMechButtonJQ.get(0), addMechButtonHandler);
     };
     var createAddMechButtonHandler = function () {
         return function () {
@@ -7482,13 +7482,13 @@ var MechViewAddMech;
         }
         let okButtonJQ = addMechDialogJQ.find(".addMechDialog-ok").attr("data-team", team);
         addMechOKButton =
-            new MechViewWidgets.MechButton(okButtonJQ[0], addMechDialogOKHandler);
+            new MechViewWidgets.MechButton(okButtonJQ.get(0), addMechDialogOKHandler);
         let cancelButtonJQ = addMechDialogJQ.find(".addMechDialog-cancel").attr("data-team", team);
         addMechCancelButton =
-            new MechViewWidgets.MechButton(cancelButtonJQ[0], addMechDialogCancelHandler);
+            new MechViewWidgets.MechButton(cancelButtonJQ.get(0), addMechDialogCancelHandler);
         let loadButtonJQ = addMechDialogJQ.find(".addMechDialog-load").attr("data-team", team);
         addMechLoadButton =
-            new MechViewWidgets.MechButton(loadButtonJQ[0], addMechDialogLoadHandler);
+            new MechViewWidgets.MechButton(loadButtonJQ.get(0), addMechDialogLoadHandler);
         addMechOKButton.disable();
         MechViewWidgets.showModal();
         addMechDialogJQ.find(".addMechDialog-text").focus();
@@ -7539,7 +7539,7 @@ var MechViewAddMech;
                 let resultJQ = addMechDialogJQ.find(".addMechDialog-result")
                     .removeClass("error")
                     .empty();
-                createLoadedMechPanel(resultJQ[0], loadedSmurfyLoadout);
+                createLoadedMechPanel(resultJQ.get(0), loadedSmurfyLoadout);
                 addMechOKButton.enable();
             };
             let failHandler = function () {
@@ -8158,7 +8158,7 @@ var MechViewMechPanel;
     MechViewMechPanel.highlightMechPanel = function (mechId) {
         let mechPanelDivId = mechPanelId(mechId);
         let mechPanelJQ = $("#" + mechPanelDivId);
-        mechPanelJQ[0].scrollIntoView(false);
+        mechPanelJQ.get(0).scrollIntoView(false);
         mechPanelJQ.addClass("flashSelected");
         mechPanelJQ.on("animationend", function (data) {
             mechPanelJQ.removeClass("flashSelected");
@@ -9132,14 +9132,14 @@ var MechViewWidgets;
     }
     MechViewWidgets.MechButton = MechButton;
     class Tooltip {
-        constructor(templateId, tooltipId, targetElementId) {
+        constructor(templateId, tooltipId, targetElement) {
             this.id = tooltipId;
-            let tooltipDiv = MechViewWidgets.cloneTemplate(templateId);
-            $(tooltipDiv)
+            this.domElement = MechViewWidgets.cloneTemplate(templateId);
+            $(this.domElement)
                 .addClass("tooltip")
                 .addClass("hidden")
                 .attr("id", tooltipId)
-                .insertBefore("#" + targetElementId);
+                .insertBefore(targetElement);
             //TODO Fix absolutely positioned tooltip location
             // let targetElement = $("#" + targetElementId)[0];
             // let thisLeft = targetElement.offsetLeft;
@@ -9281,7 +9281,7 @@ var MechView;
     var modifiedTooltip;
     var loadErrorTooltip;
     var initMiscControl = function () {
-        $("#permalinkButton").click(() => {
+        let permalinkButtonJQ = $("#permalinkButton").click(() => {
             let saveAppStatePromise = MechViewRouter.saveAppState();
             saveAppStatePromise
                 .then(function (data) {
@@ -9297,9 +9297,10 @@ var MechView;
                 console.log("Done save app state. Data: " + data);
             });
         });
-        modifiedTooltip = new MechViewWidgets.Tooltip("modifiedTooltip-template", "modifiedTooltip", "permalinkButton");
-        permalinkTooltip = new MechViewWidgets.Tooltip("permalinkGeneratedTooltip-template", "permalinkGeneratedTooltip", "permalinkButton");
-        loadErrorTooltip = new MechViewWidgets.Tooltip("loadErrorTooltip-template", "loadErrorTooltip", "miscControl");
+        modifiedTooltip = new MechViewWidgets.Tooltip("modifiedTooltip-template", "modifiedTooltip", permalinkButtonJQ.get(0));
+        permalinkTooltip = new MechViewWidgets.Tooltip("permalinkGeneratedTooltip-template", "permalinkGeneratedTooltip", permalinkButtonJQ.get(0));
+        let miscControlJQ = $("#" + "miscControl");
+        loadErrorTooltip = new MechViewWidgets.Tooltip("loadErrorTooltip-template", "loadErrorTooltip", miscControlJQ.get(0));
         $("#settingsButton").click(() => {
             MechSimulatorLogic.pauseSimulation();
             MechViewSimSettings.showSettingsDialog();

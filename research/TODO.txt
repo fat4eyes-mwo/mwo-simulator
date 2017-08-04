@@ -1,8 +1,8 @@
 - AUTOMATED UNIT TESTS!!!!!!
 
-- drag on mobile
 - Mech details display (quirks)
-- save team settings?
+- drag on mobile
+- save team settings (on separate hash parameter)
 - some omnimechs have no CT omnipod entry (HBR-F). See where to find this info.
 - LBX damage spread
 - Omnipod set quirks

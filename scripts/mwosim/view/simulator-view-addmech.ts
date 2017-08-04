@@ -21,7 +21,7 @@ namespace MechViewAddMech {
                                   .attr("id", addMechButtonPanelId)
                                   .attr("data-team", team);
     addMechButtonMap[team] =
-        new MechViewWidgets.MechButton(addMechButtonJQ[0],
+        new MechViewWidgets.MechButton(addMechButtonJQ.get(0),
                                         addMechButtonHandler);
   }
 
@@ -65,15 +65,15 @@ namespace MechViewAddMech {
     }
     let okButtonJQ = addMechDialogJQ.find(".addMechDialog-ok").attr("data-team", team);
     addMechOKButton =
-        new MechViewWidgets.MechButton(okButtonJQ[0], addMechDialogOKHandler);
+        new MechViewWidgets.MechButton(okButtonJQ.get(0), addMechDialogOKHandler);
 
     let cancelButtonJQ = addMechDialogJQ.find(".addMechDialog-cancel").attr("data-team", team);
     addMechCancelButton =
-        new MechViewWidgets.MechButton(cancelButtonJQ[0], addMechDialogCancelHandler);
+        new MechViewWidgets.MechButton(cancelButtonJQ.get(0), addMechDialogCancelHandler);
 
     let loadButtonJQ = addMechDialogJQ.find(".addMechDialog-load").attr("data-team", team);
     addMechLoadButton =
-        new MechViewWidgets.MechButton(loadButtonJQ[0], addMechDialogLoadHandler);
+        new MechViewWidgets.MechButton(loadButtonJQ.get(0), addMechDialogLoadHandler);
 
     addMechOKButton.disable();
 
@@ -133,7 +133,7 @@ namespace MechViewAddMech {
         let resultJQ = addMechDialogJQ.find(".addMechDialog-result")
                                       .removeClass("error")
                                       .empty();
-        createLoadedMechPanel(resultJQ[0], loadedSmurfyLoadout);
+        createLoadedMechPanel(resultJQ.get(0), loadedSmurfyLoadout);
         addMechOKButton.enable();
       };
       let failHandler = function() {
