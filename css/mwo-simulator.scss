@@ -710,6 +710,33 @@ div {
   transform: rotate(180deg);
 }
 
+.statusPanel .mechDetailsContainer {
+  left: 100%;
+  top: -20px;
+  position: absolute;
+  height: 180px;
+  width: 0px;
+  border: none;
+  overflow: hidden;
+  content: " ";
+  z-index: 10;
+  background-color: $background-color;
+  margin-left: 5px;
+  transition: all 0.5s ease;
+}
+
+.statusPanel .mechDetailsContainer.expanded {
+  width: 400px;
+  border: thin solid $emphasis-color;
+}
+
+// #blueTeam .statusPanel .mechDetails.expanded {
+//   border-color: $blue-team-color;
+// }
+//
+// #redTeam .statusPanel .mechDetails.expanded {
+//   border-color: $red-team-color;
+// }
 
 .teamStatsNav {
   position: sticky;

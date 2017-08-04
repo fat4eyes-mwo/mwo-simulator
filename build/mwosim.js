@@ -8199,11 +8199,12 @@ var MechViewMechPanel;
     };
     var mechOnDropHandler = null;
     var addMechDetailsButton = function (mechId, mechPanelJQ) {
+        let mechDetailsJQ = mechPanelJQ.find(".mechDetailsContainer");
         let mechDetailsButtonJQ = mechPanelJQ.find(".mechDetailsButton")
             .attr("data-mech-id", mechId);
         let mechDetailsButtonArrowJQ = mechPanelJQ.find(".mechDetailsButtonArrow");
         let mechDetailsButton = new MechViewWidgets.ExpandButton(mechDetailsButtonJQ.get(0), undefined, //No click handler, just use the default expand behavior
-        mechDetailsButtonArrowJQ.get(0));
+        mechDetailsJQ.get(0), mechDetailsButtonArrowJQ.get(0));
     };
     //scrolls to and flashes the selected mech panel
     MechViewMechPanel.highlightMechPanel = function (mechId) {

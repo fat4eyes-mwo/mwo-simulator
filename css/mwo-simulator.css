@@ -634,6 +634,26 @@ a:hover {
   transform: rotate(180deg);
 }
 
+.statusPanel .mechDetailsContainer {
+  left: 100%;
+  top: -20px;
+  position: absolute;
+  height: 180px;
+  width: 0px;
+  border: none;
+  overflow: hidden;
+  content: " ";
+  z-index: 10;
+  background-color: #202020;
+  margin-left: 5px;
+  transition: all 0.5s ease;
+}
+
+.statusPanel .mechDetailsContainer.expanded {
+  width: 400px;
+  border: thin solid gold;
+}
+
 .teamStatsNav {
   position: sticky;
   top: 0px;
