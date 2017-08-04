@@ -77,6 +77,7 @@ The main entry point of the program is in `scripts/simulator.ts`.
 
 # Update Info
 
+* 2017-08-05: Added mech details popup. Currently contains list of mech's quirks.
 * 2017-08-02: Added 'Expected Value' setting for simulating UAC jams.
 * 2017-08-01: Added Maximize DPS firing pattern. Various internal implementation changes (changed over to Typescript, various refactorings).
 * 2017-07-27: Added drag and drop mech reordering.
