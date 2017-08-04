@@ -614,6 +614,26 @@ a:hover {
   color: goldenrod;
 }
 
+.statusPanel .mechDetailsButtonContainer {
+  font-size: 0.9em;
+  float: right;
+}
+
+.statusPanel .mechDetailsButton {
+  float: right;
+}
+
+.statusPanel .mechDetailsButtonArrow {
+  float: right;
+  margin-left: 2px;
+  color: gold;
+  transition: transform 0.5s ease;
+}
+
+.statusPanel .mechDetailsButtonArrow.expanded {
+  transform: rotate(180deg);
+}
+
 .teamStatsNav {
   position: sticky;
   top: 0px;
@@ -792,7 +812,6 @@ a:hover {
 }
 
 .textButton:hover {
-  font-weight: bold;
   text-decoration: underline;
 }
 

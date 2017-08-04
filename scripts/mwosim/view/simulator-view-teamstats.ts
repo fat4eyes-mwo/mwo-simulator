@@ -91,13 +91,23 @@ namespace MechViewTeamStats {
     teamStatsContainerJQ.find("[class~=teamBurstDamageValue]")
       .attr("id", teamBurstDamageId(team));
     //team settings
-    teamStatsContainerJQ.find("[class~=teamSettingsButton]")
-      .attr("data-team", team)
-      .attr("id", teamSettingsButtonId(team))
-      .click(teamSettingsButtonHandler);
-    teamStatsContainerJQ.find("[class~=teamSettings]")
-      .attr("data-team", team)
-      .attr("id", teamSettingsId(team));
+    let teamSettingsButtonJQ =
+      teamStatsContainerJQ.find("[class~=teamSettingsButton]")
+        .attr("data-team", team)
+        .attr("id", teamSettingsButtonId(team));
+    let teamSettingsJQ = teamStatsContainerJQ.find("[class~=teamSettings]")
+                            .attr("data-team", team)
+                            .attr("id", teamSettingsId(team));
+    let teamSettingsArrowJQ =
+      teamStatsContainerJQ.find("[class~=teamSettingsButtonArrow]");
+    let settingsExpandButton =
+      new MechViewWidgets.ExpandButton(
+          teamSettingsButtonJQ.get(0),
+          undefined, //No click handler, we only use the expand/contract functionality of the button
+          teamSettingsArrowJQ.get(0),
+          teamSettingsJQ.get(0),
+          );
+
     //Populate the team settings panel
     for (let patternType of patternTypes) {
       populateTeamPattern(team, patternType);
@@ -231,23 +241,6 @@ namespace MechViewTeamStats {
       let patternId = currSelectedPatterns[patternTypeId];
       let pattern = findPatternWithId(patternId, patternLists[patternType.id]);
       patternType.setTeamPatternFunction(team, pattern);
-    }
-  }
-
-  var teamSettingsButtonHandler = function(this : Element) : void {
-    let team = $(this).attr("data-team");
-    let teamStatsContainerPanelId = teamStatsContainerId(team);
-    let teamStatsContainerJQ = $("#" + teamStatsContainerPanelId);
-    let teamSettingsJQ =
-      teamStatsContainerJQ.find("[class~=teamSettings]");
-    let teamSettingsArrowJQ =
-      teamStatsContainerJQ.find("[class~=teamSettingsButtonArrow]");
-    if (teamSettingsJQ.hasClass("expanded")) {
-      teamSettingsJQ.removeClass("expanded");
-      teamSettingsArrowJQ.removeClass("expanded");
-    } else {
-      teamSettingsJQ.addClass("expanded");
-      teamSettingsArrowJQ.addClass("expanded");
     }
   }
 

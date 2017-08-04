@@ -1,5 +1,6 @@
 "use strict";
 
+//TODO: Wrap mechPanel in a class
 namespace MechViewMechPanel {
   import WeaponCycle = MechModelCommon.WeaponCycle;
   import Component = MechModelCommon.Component;
@@ -379,6 +380,8 @@ namespace MechViewMechPanel {
     mechPanelJQ.find("[class~='statusPanel'] [class~='mechTotalDamageText']")
       .attr("id", mechTotalDamageId)
       .html("");
+
+    addMechDetailsButton(mechId, mechPanelJQ);
   }
 
   const SMURFY_BASE_URL= "http://mwo.smurfy-net.de/mechlab#";
@@ -633,6 +636,17 @@ namespace MechViewMechPanel {
     }
   }
   var mechOnDropHandler : JQEventHandler = null;
+
+  var addMechDetailsButton =
+      function(mechId : string, mechPanelJQ : JQuery) : void {
+      let mechDetailsButtonJQ = mechPanelJQ.find(".mechDetailsButton")
+                                      .attr("data-mech-id", mechId);
+      let mechDetailsButtonArrowJQ = mechPanelJQ.find(".mechDetailsButtonArrow");
+      let mechDetailsButton =
+          new MechViewWidgets.ExpandButton(mechDetailsButtonJQ.get(0),
+                                            undefined, //No click handler, just use the default expand behavior
+                                            mechDetailsButtonArrowJQ.get(0));
+  }
 
   //scrolls to and flashes the selected mech panel
   export var highlightMechPanel = function(mechId : string) : void {

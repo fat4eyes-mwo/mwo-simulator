@@ -690,6 +690,26 @@ div {
   color: $low-emphasis-color;
 }
 
+.statusPanel .mechDetailsButtonContainer {
+  font-size: 0.9em;
+  float: right;
+}
+
+.statusPanel .mechDetailsButton {
+  float: right;
+}
+
+.statusPanel .mechDetailsButtonArrow {
+  float: right;
+  margin-left: 2px;
+  color: $button-bgcolor;
+  transition: transform 0.5s ease;
+}
+
+.statusPanel .mechDetailsButtonArrow.expanded {
+  transform: rotate(180deg);
+}
+
 
 .teamStatsNav {
   position: sticky;
@@ -875,13 +895,12 @@ $team_settings_transition : 0.5s;
 }
 
 .textButton {
-    color: gold;
+    color: $button-bgcolor;
     transition: color 0.4s ease;
     cursor: pointer;
 }
 
 .textButton:hover {
-  font-weight: bold;
   text-decoration: underline;
 }
 

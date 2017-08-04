@@ -7690,7 +7690,9 @@ var MechViewAddMech;
         }
     };
 })(MechViewAddMech || (MechViewAddMech = {}));
+//TODO: Wrap mechPanel in a class
 var MechViewMechPanel;
+//TODO: Wrap mechPanel in a class
 (function (MechViewMechPanel) {
     var WeaponCycle = MechModelCommon.WeaponCycle;
     var Component = MechModelCommon.Component;
@@ -7989,6 +7991,7 @@ var MechViewMechPanel;
         mechPanelJQ.find("[class~='statusPanel'] [class~='mechTotalDamageText']")
             .attr("id", mechTotalDamageId)
             .html("");
+        addMechDetailsButton(mechId, mechPanelJQ);
     };
     const SMURFY_BASE_URL = "http://mwo.smurfy-net.de/mechlab#";
     MechViewMechPanel.updateMechTitlePanel = function (mechId, mechName, smurfyMechId, smurfyLayoutId) {
@@ -8195,6 +8198,13 @@ var MechViewMechPanel;
         };
     };
     var mechOnDropHandler = null;
+    var addMechDetailsButton = function (mechId, mechPanelJQ) {
+        let mechDetailsButtonJQ = mechPanelJQ.find(".mechDetailsButton")
+            .attr("data-mech-id", mechId);
+        let mechDetailsButtonArrowJQ = mechPanelJQ.find(".mechDetailsButtonArrow");
+        let mechDetailsButton = new MechViewWidgets.ExpandButton(mechDetailsButtonJQ.get(0), undefined, //No click handler, just use the default expand behavior
+        mechDetailsButtonArrowJQ.get(0));
+    };
     //scrolls to and flashes the selected mech panel
     MechViewMechPanel.highlightMechPanel = function (mechId) {
         let mechPanelDivId = mechPanelId(mechId);
@@ -8893,13 +8903,15 @@ var MechViewTeamStats;
         teamStatsContainerJQ.find("[class~=teamBurstDamageValue]")
             .attr("id", teamBurstDamageId(team));
         //team settings
-        teamStatsContainerJQ.find("[class~=teamSettingsButton]")
+        let teamSettingsButtonJQ = teamStatsContainerJQ.find("[class~=teamSettingsButton]")
             .attr("data-team", team)
-            .attr("id", teamSettingsButtonId(team))
-            .click(teamSettingsButtonHandler);
-        teamStatsContainerJQ.find("[class~=teamSettings]")
+            .attr("id", teamSettingsButtonId(team));
+        let teamSettingsJQ = teamStatsContainerJQ.find("[class~=teamSettings]")
             .attr("data-team", team)
             .attr("id", teamSettingsId(team));
+        let teamSettingsArrowJQ = teamStatsContainerJQ.find("[class~=teamSettingsButtonArrow]");
+        let settingsExpandButton = new MechViewWidgets.ExpandButton(teamSettingsButtonJQ.get(0), undefined, //No click handler, we only use the expand/contract functionality of the button
+        teamSettingsArrowJQ.get(0), teamSettingsJQ.get(0));
         //Populate the team settings panel
         for (let patternType of patternTypes) {
             populateTeamPattern(team, patternType);
@@ -9012,21 +9024,6 @@ var MechViewTeamStats;
             let patternId = currSelectedPatterns[patternTypeId];
             let pattern = findPatternWithId(patternId, patternLists[patternType.id]);
             patternType.setTeamPatternFunction(team, pattern);
-        }
-    };
-    var teamSettingsButtonHandler = function () {
-        let team = $(this).attr("data-team");
-        let teamStatsContainerPanelId = teamStatsContainerId(team);
-        let teamStatsContainerJQ = $("#" + teamStatsContainerPanelId);
-        let teamSettingsJQ = teamStatsContainerJQ.find("[class~=teamSettings]");
-        let teamSettingsArrowJQ = teamStatsContainerJQ.find("[class~=teamSettingsButtonArrow]");
-        if (teamSettingsJQ.hasClass("expanded")) {
-            teamSettingsJQ.removeClass("expanded");
-            teamSettingsArrowJQ.removeClass("expanded");
-        }
-        else {
-            teamSettingsJQ.addClass("expanded");
-            teamSettingsArrowJQ.addClass("expanded");
         }
     };
     //TODO Wrap params in an object
@@ -9142,7 +9139,9 @@ var MechViewWidgets;
                 var clickContext = context;
                 return function (event) {
                     if (clickContext.enabled) {
-                        clickHandler.call(event.currentTarget);
+                        if (clickHandler) {
+                            clickHandler.call(event.currentTarget);
+                        }
                     }
                 };
             })(this);
@@ -9172,6 +9171,38 @@ var MechViewWidgets;
         }
     }
     MechViewWidgets.MechButton = MechButton;
+    class ExpandButton extends MechButton {
+        constructor(domElement, clickHandler, ...elementsToExpand) {
+            super(domElement, clickHandler);
+            if (elementsToExpand) {
+                this.elementsToExpand = elementsToExpand;
+            }
+            else {
+                this.elementsToExpand = [];
+            }
+            $(domElement).click(() => {
+                if (!this.enabled) {
+                    return;
+                }
+                if (!this.expanded) {
+                    this.domElement.classList.add("expanded");
+                    for (let elementToExpand of this.elementsToExpand) {
+                        elementToExpand.classList.add("expanded");
+                    }
+                }
+                else {
+                    this.domElement.classList.remove("expanded");
+                    for (let elementToExpand of this.elementsToExpand) {
+                        elementToExpand.classList.remove("expanded");
+                    }
+                }
+            });
+        }
+        get expanded() {
+            return this.domElement.classList.contains("expanded");
+        }
+    }
+    MechViewWidgets.ExpandButton = ExpandButton;
     class Tooltip {
         constructor(templateId, tooltipId, targetElement) {
             this.id = tooltipId;

@@ -76,7 +76,9 @@ namespace MechViewWidgets {
           var clickContext = context;
           return function(event : any) {
             if (clickContext.enabled) {
-              clickHandler.call(event.currentTarget);
+              if (clickHandler) {
+                clickHandler.call(event.currentTarget);
+              }
             }
           }
       })(this);
@@ -108,6 +110,39 @@ namespace MechViewWidgets {
         $(this.domElement).removeClass("disabled");
         this.enabled = true;
       }
+    }
+  }
+
+  export class ExpandButton extends MechButton {
+    elementsToExpand : Element[];
+    constructor(domElement : Element, clickHandler : Util.AnyFunction, ...elementsToExpand : Element[]) {
+      super(domElement, clickHandler);
+      if (elementsToExpand) {
+        this.elementsToExpand = elementsToExpand;
+      } else {
+        this.elementsToExpand = [];
+      }
+
+      $(domElement).click(() => {
+        if (!this.enabled) {
+          return;
+        }
+        if (!this.expanded) {
+          this.domElement.classList.add("expanded");
+          for (let elementToExpand of this.elementsToExpand) {
+            elementToExpand.classList.add("expanded");
+          }
+        } else {
+          this.domElement.classList.remove("expanded");
+          for (let elementToExpand of this.elementsToExpand) {
+            elementToExpand.classList.remove("expanded");
+          }
+        }
+      });
+    }
+
+    get expanded() {
+      return this.domElement.classList.contains("expanded");
     }
   }
 
