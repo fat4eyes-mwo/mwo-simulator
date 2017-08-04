@@ -541,6 +541,17 @@ namespace MechModelView {
     }
   }
 
+  //alias type in case we need to change the definition for the view later
+  export type MechViewQuirk = MechModelQuirks.MechQuirk;
+  export var getMechQuirks = function(mechId: string) : MechViewQuirk[] {
+    let mech = MechModel.getMechFromId(mechId);
+    if (mech) {
+      return mech.getMechInfo().quirks;
+    } else {
+      return null;
+    }
+  }
+
   export var resetModel = function() : void{
     MechModel.resetState();
   }

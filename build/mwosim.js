@@ -4455,12 +4455,35 @@ var MechModelQuirks;
                 return (100 * (1 + this.value)).toFixed(1) + "%";
             }
             else if (lastNameComponent === "additive") {
-                let prefix = this.value >= 0 ? "+" : "-";
+                let prefix = this.value >= 0 ? "+" : "";
                 return prefix + String(this.value);
             }
             else {
                 console.warn(Error("Unexpected quirk type: " + this.name));
                 return String(this.value);
+            }
+        }
+        isBonus() {
+            let quirkNameComponents = this.name.split("_");
+            let endIdx = quirkNameComponents.length - 1;
+            let lastNameComponent = quirkNameComponents[endIdx];
+            if (lastNameComponent === "additive") {
+                return this.value > 0;
+            }
+            const negativeExceptions = [
+                "spread",
+                "cooldown",
+                "heat",
+                "duration",
+                "jamchance",
+                "receiving",
+            ];
+            let quirkTypeNameComponent = quirkNameComponents[endIdx - 1];
+            if (negativeExceptions.includes(quirkTypeNameComponent)) {
+                return this.value < 0;
+            }
+            else {
+                return this.value > 0;
             }
         }
     }
@@ -7429,6 +7452,15 @@ var MechModelView;
             return null;
         }
     };
+    MechModelView.getMechQuirks = function (mechId) {
+        let mech = MechModel.getMechFromId(mechId);
+        if (mech) {
+            return mech.getMechInfo().quirks;
+        }
+        else {
+            return null;
+        }
+    };
     MechModelView.resetModel = function () {
         MechModel.resetState();
     };
@@ -8203,8 +8235,45 @@ var MechViewMechPanel;
         let mechDetailsButtonJQ = mechPanelJQ.find(".mechDetailsButton")
             .attr("data-mech-id", mechId);
         let mechDetailsButtonArrowJQ = mechPanelJQ.find(".mechDetailsButtonArrow");
-        let mechDetailsButton = new MechViewWidgets.ExpandButton(mechDetailsButtonJQ.get(0), undefined, //No click handler, just use the default expand behavior
-        mechDetailsJQ.get(0), mechDetailsButtonArrowJQ.get(0));
+        let mechDetailsTransitionEndHandler = function () {
+            mechDetailsButtonArrowJQ.off("transitionend", mechDetailsTransitionEndHandler);
+            if (!mechDetailsButton.expanded) {
+                mechDetailsJQ.empty();
+            }
+        };
+        let mechDetailsClickHandler = function () {
+            mechDetailsButtonArrowJQ.on("transitionend", mechDetailsTransitionEndHandler);
+            if (!mechDetailsButton.expanded) {
+                createMechDetails(mechId, mechDetailsJQ.get(0));
+            }
+        };
+        let mechDetailsButton = new MechViewWidgets.ExpandButton(mechDetailsButtonJQ.get(0), mechDetailsClickHandler, mechDetailsJQ.get(0), mechDetailsButtonArrowJQ.get(0));
+    };
+    var createMechDetails = function (mechId, mechDetailsContainer) {
+        let mechDetailsDiv = MechViewWidgets.cloneTemplate("mechDetails-template");
+        let mechDetailsJQ = $(mechDetailsDiv);
+        let mechQuirksJQ = mechDetailsJQ.find(".mechQuirks");
+        let mechQuirkList = MechModelView.getMechQuirks(mechId);
+        if (mechQuirkList.length === 0) {
+            let mechQuirkDiv = MechViewWidgets.cloneTemplate("mechDetailsQuirk-template");
+            let mechQuirkJQ = $(mechQuirkDiv);
+            mechQuirkJQ.find(".name").text("None");
+            mechQuirksJQ.append(mechQuirkJQ);
+        }
+        for (let mechQuirk of mechQuirkList) {
+            let mechQuirkDiv = MechViewWidgets.cloneTemplate("mechDetailsQuirk-template");
+            let mechQuirkJQ = $(mechQuirkDiv);
+            mechQuirkJQ.find(".name").text(mechQuirk.translated_name);
+            mechQuirkJQ.find(".value").text(mechQuirk.translated_value);
+            if (mechQuirk.isBonus()) {
+                mechQuirkJQ.addClass("bonus");
+            }
+            else {
+                mechQuirkJQ.addClass("malus");
+            }
+            mechQuirksJQ.append(mechQuirkJQ);
+        }
+        $(mechDetailsContainer).append(mechDetailsJQ);
     };
     //scrolls to and flashes the selected mech panel
     MechViewMechPanel.highlightMechPanel = function (mechId) {

@@ -13,6 +13,7 @@ namespace MechModelQuirks {
     translated_name: string,
     value: number,
     translated_value : string,
+    isBonus: () => boolean,
   }
   class MechQuirkInfo implements MechQuirk {
     smurfyQuirk : SmurfyQuirk;
@@ -35,11 +36,33 @@ namespace MechModelQuirks {
       if (lastNameComponent === "multiplier") {
         return (100 * (1 + this.value)).toFixed(1) + "%";
       } else if (lastNameComponent === "additive") {
-        let prefix = this.value >= 0 ? "+" : "-";
+        let prefix = this.value >= 0 ? "+" : "";
         return prefix + String(this.value);
       } else {
         console.warn(Error("Unexpected quirk type: " + this.name));
         return String(this.value);
+      }
+    }
+    isBonus() : boolean {
+      let quirkNameComponents = this.name.split("_");
+      let endIdx = quirkNameComponents.length - 1;
+      let lastNameComponent = quirkNameComponents[endIdx];
+      if (lastNameComponent === "additive") {
+        return this.value > 0;
+      }
+      const negativeExceptions = [
+        "spread",
+        "cooldown",
+        "heat",
+        "duration",
+        "jamchance",
+        "receiving", //TODO: for critchance_receiving. Works for now, may not later
+      ];
+      let quirkTypeNameComponent = quirkNameComponents[endIdx - 1];
+      if (negativeExceptions.includes(quirkTypeNameComponent)) {
+        return this.value < 0;
+      } else {
+        return this.value > 0;
       }
     }
   }

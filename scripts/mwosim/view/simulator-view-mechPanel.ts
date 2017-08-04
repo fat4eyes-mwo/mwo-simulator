@@ -643,11 +643,56 @@ namespace MechViewMechPanel {
       let mechDetailsButtonJQ = mechPanelJQ.find(".mechDetailsButton")
                                       .attr("data-mech-id", mechId);
       let mechDetailsButtonArrowJQ = mechPanelJQ.find(".mechDetailsButtonArrow");
+
+      let mechDetailsTransitionEndHandler = function() {
+        mechDetailsButtonArrowJQ.off("transitionend", mechDetailsTransitionEndHandler);
+        if (!mechDetailsButton.expanded) {
+            mechDetailsJQ.empty();
+        }
+      }
+
+      let mechDetailsClickHandler = function() {
+        mechDetailsButtonArrowJQ.on("transitionend", mechDetailsTransitionEndHandler);
+        if (!mechDetailsButton.expanded) {
+          createMechDetails(mechId, mechDetailsJQ.get(0));
+        }
+      }
+
       let mechDetailsButton =
           new MechViewWidgets.ExpandButton(mechDetailsButtonJQ.get(0),
-                                            undefined, //No click handler, just use the default expand behavior
+                                            mechDetailsClickHandler,
                                             mechDetailsJQ.get(0),
                                             mechDetailsButtonArrowJQ.get(0));
+  }
+
+  var createMechDetails =
+      function(mechId: string, mechDetailsContainer : Element) : void {
+    let mechDetailsDiv = MechViewWidgets.cloneTemplate("mechDetails-template");
+    let mechDetailsJQ = $(mechDetailsDiv);
+    let mechQuirksJQ = mechDetailsJQ.find(".mechQuirks");
+    let mechQuirkList = MechModelView.getMechQuirks(mechId);
+
+    if (mechQuirkList.length === 0) {
+      let mechQuirkDiv = MechViewWidgets.cloneTemplate("mechDetailsQuirk-template");
+      let mechQuirkJQ = $(mechQuirkDiv);
+      mechQuirkJQ.find(".name").text("None");
+      mechQuirksJQ.append(mechQuirkJQ);
+    }
+
+    for (let mechQuirk of mechQuirkList) {
+      let mechQuirkDiv = MechViewWidgets.cloneTemplate("mechDetailsQuirk-template");
+      let mechQuirkJQ = $(mechQuirkDiv);
+      mechQuirkJQ.find(".name").text(mechQuirk.translated_name);
+      mechQuirkJQ.find(".value").text(mechQuirk.translated_value);
+      if (mechQuirk.isBonus()) {
+        mechQuirkJQ.addClass("bonus");
+      } else {
+        mechQuirkJQ.addClass("malus");
+      }
+      mechQuirksJQ.append(mechQuirkJQ);
+    }
+
+    $(mechDetailsContainer).append(mechDetailsJQ);
   }
 
   //scrolls to and flashes the selected mech panel

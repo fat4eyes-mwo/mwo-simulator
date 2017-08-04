@@ -132,6 +132,14 @@ a:hover {
   /*font-family: sans-serif;;*/
 }
 
+.fillHeight {
+  height: 100%;
+}
+
+.fillWidth {
+  width: 100%;
+}
+
 .branding {
   position: relative;
 }
@@ -645,17 +653,41 @@ a:hover {
   content: " ";
   z-index: 10;
   background-color: #202020;
+  border-color: gold;
+  border-style: solid;
+  border-width: 0px;
   margin-left: 5px;
   transition: all 0.5s ease;
 }
 
 .statusPanel .mechDetailsContainer.expanded {
-  width: 400px;
-  border: thin solid gold;
+  width: 250%;
+  border-width: thin;
 }
 
-.statusPanel .mechDetailsContainer.hidden {
-  display: none;
+.statusPanel .mechDetails {
+  width: 400px;
+}
+
+.statusPanel .mechDetails .mechQuirks {
+  overflow: auto;
+}
+
+.statusPanel .mechDetails .mechQuirksTitle {
+  font-weight: bold;
+  color: gold;
+}
+
+.statusPanel .mechDetails .mechDetailsQuirk {
+  font-size: 0.9em;
+}
+
+.statusPanel .mechDetails .mechDetailsQuirk.bonus {
+  color: #329632;
+}
+
+.statusPanel .mechDetails .mechDetailsQuirk.malus {
+  color: #963232;
 }
 
 .teamStatsNav {
