@@ -302,7 +302,7 @@ a:hover {
   position: absolute;
   left: -20px;
   top: -10px;
-  z-index: 20;
+  z-index: 10;
   color: gold;
 }
 
@@ -654,10 +654,14 @@ a:hover {
   border: thin solid gold;
 }
 
+.statusPanel .mechDetailsContainer.hidden {
+  display: none;
+}
+
 .teamStatsNav {
   position: sticky;
   top: 0px;
-  z-index: 1;
+  z-index: 100;
 }
 
 .teamStats {
@@ -849,7 +853,7 @@ a:hover {
 .modalScreen {
   display: none;
   position: fixed;
-  z-index: 1;
+  z-index: 1000;
   left: 0;
   top: 0;
   width: 100%;
