@@ -2,11 +2,52 @@
 
 namespace MechModelQuirks {
   type WeaponInfo = MechModelWeapons.WeaponInfo;
+  type SmurfyMechLoadout = SmurfyTypes.SmurfyMechLoadout;
+  type SmurfyQuirk = SmurfyTypes.SmurfyQuirk;
+  type SmurfyMechData = SmurfyTypes.SmurfyMechData;
+
+  //Our version of smurfy quirks. Define our own type in case we need to add more
+  //properties later
+  export interface MechQuirk {
+    name: string,
+    translated_name: string,
+    value: number,
+    translated_value : string,
+  }
+  class MechQuirkInfo implements MechQuirk {
+    smurfyQuirk : SmurfyQuirk;
+    constructor(smurfyQuirk: SmurfyQuirk) {
+      this.smurfyQuirk = smurfyQuirk;
+    }
+    get name() : string {
+      return this.smurfyQuirk.name;
+    }
+    get translated_name() : string {
+      return this.smurfyQuirk.translated_name;
+    }
+    get value() : number {
+      return this.smurfyQuirk.value;
+    }
+    get translated_value() : string {
+      let quirkNameComponents = this.name.split("_");
+      let endIdx = quirkNameComponents.length - 1;
+      let lastNameComponent = quirkNameComponents[endIdx];
+      if (lastNameComponent === "multiplier") {
+        return (100 * (1 + this.value)).toFixed(1) + "%";
+      } else if (lastNameComponent === "additive") {
+        let prefix = this.value >= 0 ? "+" : "-";
+        return prefix + String(this.value);
+      } else {
+        console.warn(Error("Unexpected quirk type: " + this.name));
+        return String(this.value);
+      }
+    }
+  }
 
   export var collectOmnipodQuirks =
-    function(smurfyMechLoadout : SmurfyTypes.SmurfyMechLoadout)
-      : SmurfyTypes.SmurfyQuirk[] {
-    let ret : SmurfyTypes.SmurfyQuirk[] = [];
+    function(smurfyMechLoadout : SmurfyMechLoadout)
+      : MechQuirk[] {
+    let ret : MechQuirk[] = [];
     if (!MechModel.isOmnimech(smurfyMechLoadout)) {
       return ret;
     }
@@ -15,26 +56,39 @@ namespace MechModelQuirks {
       if (omnipodId) {
         let omnipodData = MechModel.getSmurfyOmnipodData(omnipodId);
         let omnipodQuirks = omnipodData.configuration.quirks;
-        ret = ret.concat(omnipodQuirks);
+        for (let smurfyQuirk of omnipodQuirks) {
+          ret.push(new MechQuirkInfo(smurfyQuirk));
+        }
       }
     }
     //add ct omnipod quirks (smurfy config does not put in omnipod ID for ct)
     let smurfyMechInfo = MechModel.getSmurfyMechData(smurfyMechLoadout.mech_id);
     let ctOmnipod = MechModel.getSmurfyCTOmnipod(smurfyMechInfo.name);
     if (ctOmnipod) {
-      ret = ret.concat(ctOmnipod.configuration.quirks);
+      for (let smurfyQuirk of ctOmnipod.configuration.quirks) {
+        ret.push(new MechQuirkInfo(smurfyQuirk));
+      }
     } else {
       console.warn("Unable to find CT omnipod for " + smurfyMechInfo.name);
     }
     return ret;
   }
 
+  export var collectMechQuirks =
+    function(smurfyMechData : SmurfyMechData) : MechQuirk[] {
+      let ret : MechQuirk[] = [];
+      for (let smurfyQuirk of smurfyMechData.details.quirks) {
+        ret.push(new MechQuirkInfo(smurfyQuirk));
+      }
+      return ret;
+    }
+
   //returns {<quirk_name>: <value>, ...} for general quirks
   export interface GeneralBonus {
     [index:string] : number
   };
   export var getGeneralBonus =
-    function(quirkList : SmurfyTypes.SmurfyQuirk[]) : GeneralBonus {
+    function(quirkList : MechQuirk[]) : GeneralBonus {
     let ret : {[index:string] : number} = {};
     for (let quirk of quirkList) {
       if (_quirkGeneral[quirk.name]) {
@@ -54,7 +108,7 @@ namespace MechModelQuirks {
     structure : number;
   }
   export var getArmorStructureBonus =
-    function(component : string, quirkList : SmurfyTypes.SmurfyQuirk[]) : HealthBonus {
+    function(component : string, quirkList : MechQuirk[]) : HealthBonus {
     let ret = {armor: 0, structure: 0};
 
     for (let quirk of quirkList) {

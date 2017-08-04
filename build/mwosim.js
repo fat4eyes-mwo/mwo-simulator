@@ -4434,6 +4434,36 @@ var MechTargetMech;
 })(MechTargetMech || (MechTargetMech = {}));
 var MechModelQuirks;
 (function (MechModelQuirks) {
+    class MechQuirkInfo {
+        constructor(smurfyQuirk) {
+            this.smurfyQuirk = smurfyQuirk;
+        }
+        get name() {
+            return this.smurfyQuirk.name;
+        }
+        get translated_name() {
+            return this.smurfyQuirk.translated_name;
+        }
+        get value() {
+            return this.smurfyQuirk.value;
+        }
+        get translated_value() {
+            let quirkNameComponents = this.name.split("_");
+            let endIdx = quirkNameComponents.length - 1;
+            let lastNameComponent = quirkNameComponents[endIdx];
+            if (lastNameComponent === "multiplier") {
+                return (100 * (1 + this.value)).toFixed(1) + "%";
+            }
+            else if (lastNameComponent === "additive") {
+                let prefix = this.value >= 0 ? "+" : "-";
+                return prefix + String(this.value);
+            }
+            else {
+                console.warn(Error("Unexpected quirk type: " + this.name));
+                return String(this.value);
+            }
+        }
+    }
     MechModelQuirks.collectOmnipodQuirks = function (smurfyMechLoadout) {
         let ret = [];
         if (!MechModel.isOmnimech(smurfyMechLoadout)) {
@@ -4444,17 +4474,28 @@ var MechModelQuirks;
             if (omnipodId) {
                 let omnipodData = MechModel.getSmurfyOmnipodData(omnipodId);
                 let omnipodQuirks = omnipodData.configuration.quirks;
-                ret = ret.concat(omnipodQuirks);
+                for (let smurfyQuirk of omnipodQuirks) {
+                    ret.push(new MechQuirkInfo(smurfyQuirk));
+                }
             }
         }
         //add ct omnipod quirks (smurfy config does not put in omnipod ID for ct)
         let smurfyMechInfo = MechModel.getSmurfyMechData(smurfyMechLoadout.mech_id);
         let ctOmnipod = MechModel.getSmurfyCTOmnipod(smurfyMechInfo.name);
         if (ctOmnipod) {
-            ret = ret.concat(ctOmnipod.configuration.quirks);
+            for (let smurfyQuirk of ctOmnipod.configuration.quirks) {
+                ret.push(new MechQuirkInfo(smurfyQuirk));
+            }
         }
         else {
             console.warn("Unable to find CT omnipod for " + smurfyMechInfo.name);
+        }
+        return ret;
+    };
+    MechModelQuirks.collectMechQuirks = function (smurfyMechData) {
+        let ret = [];
+        for (let smurfyQuirk of smurfyMechData.details.quirks) {
+            ret.push(new MechQuirkInfo(smurfyQuirk));
         }
         return ret;
     };
@@ -5322,7 +5363,7 @@ var MechModel;
                 this.quirks = MechModelQuirks.collectOmnipodQuirks(smurfyMechLoadout);
             }
             else {
-                this.quirks = smurfyMechData.details.quirks;
+                this.quirks = MechModelQuirks.collectMechQuirks(smurfyMechData);
             }
             //NOTE: General quirk bonus must be computed before collecting heatsinks
             //(bonus is used in computing heatdissipation)

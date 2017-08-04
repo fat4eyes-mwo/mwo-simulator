@@ -10,12 +10,14 @@ namespace MechModel  {
   import UpdateType = MechModelCommon.UpdateType;
   import EngineType = MechModelCommon.EngineType;
 
+  type MechQuirk = MechModelQuirks.MechQuirk;
+
   type WeaponInfo = MechModelWeapons.WeaponInfo;
   type WeaponState = MechModelWeapons.WeaponState;
   type SmurfyMechLoadout = SmurfyTypes.SmurfyMechLoadout;
   type SmurfyMechData = SmurfyTypes.SmurfyMechData;
-  type SmurfyWeaponData = SmurfyTypes.SmurfyWeaponData;
   type SmurfyQuirk = SmurfyTypes.SmurfyQuirk;
+  type SmurfyWeaponData = SmurfyTypes.SmurfyWeaponData;
   type SmurfyMechComponent = SmurfyTypes.SmurfyMechComponent;
   type SmurfyMechComponentItem = SmurfyTypes.SmurfyMechComponentItem;
   type SmurfyModuleData = SmurfyTypes.SmurfyModuleData;
@@ -46,7 +48,7 @@ namespace MechModel  {
     mechName : string;
     mechTranslatedName : string;
     tons : number;
-    quirks : SmurfyQuirk[];
+    quirks : MechQuirk[];
     generalQuirkBonus : MechModelQuirks.GeneralBonus;
     mechHealth : MechHealth;
     weaponInfoList : MechModelWeapons.WeaponInfo[];
@@ -66,7 +68,7 @@ namespace MechModel  {
       if (isOmnimech(smurfyMechLoadout)) {
         this.quirks = MechModelQuirks.collectOmnipodQuirks(smurfyMechLoadout);
       } else {
-        this.quirks = smurfyMechData.details.quirks;
+        this.quirks = MechModelQuirks.collectMechQuirks(smurfyMechData);
       }
       //NOTE: General quirk bonus must be computed before collecting heatsinks
       //(bonus is used in computing heatdissipation)
@@ -1365,7 +1367,7 @@ namespace MechModel  {
   //TODO: see if it's better to put these in the object constructors instead
   var mechHealthFromSmurfyMechLoadout =
       function (smurfyMechLoadout : SmurfyMechLoadout,
-                quirks : SmurfyQuirk[]) {
+                quirks : MechQuirk[]) {
     var mechHealth;
 
     var smurfyMechData = getSmurfyMechData(smurfyMechLoadout.mech_id);
@@ -1382,7 +1384,7 @@ namespace MechModel  {
 
   var componentHealthFromSmurfyMechComponent =
       function (smurfyMechComponent : SmurfyMechComponent,
-                smurfyMechQuirks : SmurfyQuirk[],
+                smurfyMechQuirks : MechQuirk[],
                 tonnage : number) {
     var componentHealth; //return value
 
