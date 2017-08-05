@@ -7733,25 +7733,39 @@ var MechViewMechPanel;
     var paperDollId = function (mechId) {
         return mechId + "-paperDoll";
     };
+    var paperDollComponentId = function (mechId, component) {
+        return `${mechId}-paperDoll-${component}`;
+    };
     MechViewMechPanel.addPaperDoll = function (mechId, paperDollContainer) {
         let paperDollDiv = MechViewWidgets.cloneTemplate("paperDoll-template");
-        $(paperDollDiv)
+        let paperDollJQ = $(paperDollDiv)
             .attr("id", paperDollId(mechId))
             .attr("data-mech-id", mechId)
-            .appendTo("#" + paperDollContainer);
+            .appendTo(paperDollContainer);
+        for (let componentField in Component) {
+            if (!Component.hasOwnProperty(componentField)) {
+                continue;
+            }
+            let component = Component[componentField];
+            let findStr = `> [data-location='${component}']`;
+            paperDollJQ.find(findStr)
+                .attr("id", paperDollComponentId(mechId, component));
+        }
     };
     //Percent values from 0 to 1
     MechViewMechPanel.setPaperDollArmor = function (mechId, location, percent) {
         var color = MechViewWidgets.damageColor(percent, MechViewWidgets.paperDollDamageGradient);
-        let paperDollDiv = document.getElementById(paperDollId(mechId));
-        $(paperDollDiv).find(`> [data-location='${location}']`)
-            .css('border-color', color);
+        let paperDollComponent = document.getElementById(paperDollComponentId(mechId, location));
+        if (paperDollComponent) {
+            paperDollComponent.style.borderColor = color;
+        }
     };
     MechViewMechPanel.setPaperDollStructure = function (mechId, location, percent) {
         var color = MechViewWidgets.damageColor(percent, MechViewWidgets.paperDollDamageGradient);
-        let paperDollDiv = document.getElementById(paperDollId(mechId));
-        $(paperDollDiv).find(`> [data-location='${location}']`)
-            .css('background-color', color);
+        let paperDollComponent = document.getElementById(paperDollComponentId(mechId, location));
+        if (paperDollComponent) {
+            paperDollComponent.style.backgroundColor = color;
+        }
     };
     var mechHealthNumbersId = function (mechId) {
         return mechId + "-mechHealthNumbers";
@@ -7976,9 +7990,9 @@ var MechViewMechPanel;
         mechPanelJQ.find("[class~=mechHealthAndWeapons]")
             .attr("id", mechHealthAndWeaponsDivId);
         var paperDollContainerId = mechId + "-paperDollContainer";
-        mechPanelJQ.find("[class~='paperDollContainer']")
+        let paperDollJQ = mechPanelJQ.find("[class~='paperDollContainer']")
             .attr("id", paperDollContainerId);
-        MechViewMechPanel.addPaperDoll(mechId, paperDollContainerId);
+        MechViewMechPanel.addPaperDoll(mechId, paperDollJQ.get(0));
         let mechHealthNumbersContainerJQ = mechPanelJQ.find("[class~='mechHealthNumbersContainer']");
         addMechHealthNumbers(mech, mechHealthNumbersContainerJQ);
         var heatbarContainerId = mechId + "-heatbarContainer";
@@ -9509,7 +9523,8 @@ var MechView;
         $(loadingScreenDiv)
             .attr("id", "loadingScreenContainer");
         MechViewWidgets.setModal(loadingScreenDiv);
-        MechViewMechPanel.addPaperDoll(LOADING_SCREEN_MECH_ID, "loadingScreenPaperDollContainer");
+        let loadingScreenPaperDollJQ = $("#loadingScreenPaperDollContainer");
+        MechViewMechPanel.addPaperDoll(LOADING_SCREEN_MECH_ID, loadingScreenPaperDollJQ.get(0));
         for (let componentIdx in Component) {
             if (Component.hasOwnProperty(componentIdx)) {
                 let component = Component[componentIdx];

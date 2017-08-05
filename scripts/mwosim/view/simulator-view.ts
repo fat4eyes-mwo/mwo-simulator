@@ -220,7 +220,8 @@ namespace MechView {
       .attr("id", "loadingScreenContainer");
     MechViewWidgets.setModal(loadingScreenDiv);
 
-    MechViewMechPanel.addPaperDoll(LOADING_SCREEN_MECH_ID, "loadingScreenPaperDollContainer");
+    let loadingScreenPaperDollJQ = $("#loadingScreenPaperDollContainer");
+    MechViewMechPanel.addPaperDoll(LOADING_SCREEN_MECH_ID, loadingScreenPaperDollJQ.get(0));
     for (let componentIdx in Component) {
       if (Component.hasOwnProperty(componentIdx)) {
         let component = Component[componentIdx];
