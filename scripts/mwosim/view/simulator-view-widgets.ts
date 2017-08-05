@@ -76,7 +76,7 @@ namespace MechViewWidgets {
       this.domElement = domElement;
       this.DomKey = DomKey;
       StoreValue.storeToElement(domElement, this.DomKey, this);
-      
+
       //marker attribute to make it visible in the element tree that there's an
       //object stored in the Element
       //NOTE: browsers automatically lowercase attribute names (at least chrome does)
@@ -97,7 +97,7 @@ namespace MechViewWidgets {
   }
 
   export class MechButton extends DomStoredWidget {
-    /*const*/ private static DomKey = "mwosim.MechButton.domElement";
+    private static readonly DomKey = "mwosim.MechButton.domElement";
     clickHandler : Util.AnyFunction;
     enabled : boolean;
     constructor(domElement : Element, clickHandler : Util.AnyFunction) {
