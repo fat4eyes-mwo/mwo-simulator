@@ -110,7 +110,7 @@ namespace MechViewMechPanel {
     let armor = updateParams.armor;
     let structure = updateParams.structure;
     let maxArmor = updateParams.maxArmor;
-    let maxStructure = updateParams.maxStructure
+    let maxStructure = updateParams.maxStructure;
 
     let mechHealthNumbersDivId = mechHealthNumbersId(mechId);
     let armorPercent = Number(armor) / Number(maxArmor);

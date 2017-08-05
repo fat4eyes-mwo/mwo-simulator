@@ -4451,11 +4451,11 @@ var MechModelQuirks;
             let quirkNameComponents = this.name.split("_");
             let endIdx = quirkNameComponents.length - 1;
             let lastNameComponent = quirkNameComponents[endIdx];
+            let prefix = this.value >= 0 ? "+" : "";
             if (lastNameComponent === "multiplier") {
-                return (100 * (1 + this.value)).toFixed(1) + "%";
+                return prefix + (100 * (this.value)).toFixed(1) + "%";
             }
             else if (lastNameComponent === "additive") {
-                let prefix = this.value >= 0 ? "+" : "";
                 return prefix + String(this.value);
             }
             else {
