@@ -66,12 +66,35 @@ namespace MechViewWidgets {
     return "rgb(" + red + ","  + green + "," + blue + ")";
   }
 
-  export class MechButton {
+  //Widgets that are stored in the dom using StoreValue.storeToElement
+  //Would be better as a mixin, but initializing mixin classes is still syntactically messy,
+  //so keep it a superclass
+  export abstract class DomStoredWidget {
     domElement : Element;
+    readonly DomKey : string;
+    constructor(domElement : Element, DomKey : string) {
+      this.domElement = domElement;
+      this.DomKey = DomKey;
+      StoreValue.storeToElement(domElement, this.DomKey, this);
+    }
+
+    //static abstract fromDom(domElement) : <T extends DomStoredWidget>
+    //Subclasses of DomStoredWidget are expected to have a static method fromDom
+    //that calls the static method below. Can't enforce it with the type system,
+    //therefore this comment.
+
+    static fromDom<T extends DomStoredWidget>(domElement : Element, DomKey : string) : T {
+      let ret : any = StoreValue.getFromElement(domElement, DomKey);
+      return ret as T; //NOTE: Would be better with an instanceof check, but since T isn't really a value can't do that here
+    }
+  }
+
+  export class MechButton extends DomStoredWidget {
+    /*const*/ private static DomKey = "mwosim.MechButton.domElement";
     clickHandler : Util.AnyFunction;
     enabled : boolean;
     constructor(domElement : Element, clickHandler : Util.AnyFunction) {
-      this.domElement = domElement;
+      super(domElement, MechButton.DomKey);
       this.clickHandler = (function(context) {
           var clickContext = context;
           return function(event : any) {
@@ -84,6 +107,10 @@ namespace MechViewWidgets {
       })(this);
       this.enabled = true;
       $(this.domElement).click(this.clickHandler);
+    }
+
+    static fromDom(domElement : Element) : MechButton {
+      return DomStoredWidget.fromDom<MechButton>(domElement, MechButton.DomKey);
     }
 
     setHtml(html : string) : void {
@@ -159,12 +186,6 @@ namespace MechViewWidgets {
         .addClass("hidden")
         .attr("id", tooltipId)
         .insertBefore(targetElement);
-      //TODO Fix absolutely positioned tooltip location
-      // let targetElement = $("#" + targetElementId)[0];
-      // let thisLeft = targetElement.offsetLeft;
-      // let thisTop = targetElement.offsetTop + targetElement.offsetHeight;
-      // $("#" + this.id)
-      //   .css({"left": thisLeft, "top" : thisTop});
     }
 
     showTooltip() {

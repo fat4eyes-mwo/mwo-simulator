@@ -1,4 +1,19 @@
 "use strict";
+var StoreValue;
+(function (StoreValue) {
+    StoreValue.storeToElement = function (elem, key, value) {
+        let symbolKey = Symbol.for(key);
+        let anyElem = elem;
+        let prevValue = anyElem[symbolKey];
+        anyElem[symbolKey] = value;
+        return prevValue;
+    };
+    StoreValue.getFromElement = function (elem, key) {
+        let symbolKey = Symbol.for(key);
+        let anyElem = elem;
+        return anyElem[symbolKey];
+    };
+})(StoreValue || (StoreValue = {}));
 //Additional heatsink data to account for info not in smurfy
 //Reference: http://steamcommunity.com/sharedfiles/filedetails/?id=686548357
 var AddedData;
@@ -7523,7 +7538,6 @@ var MechViewAddMech;
     var addMechButtonId = function (team) {
         return team + "-addMechButton";
     };
-    var addMechButtonMap = {};
     MechViewAddMech.createAddMechButton = function (team, containerId) {
         let addMechButtonPanelId = addMechButtonId(team);
         if (!addMechButtonHandler) {
@@ -7532,8 +7546,8 @@ var MechViewAddMech;
         let addMechButtonJQ = $(`#${containerId} [class~=addMechButton]`)
             .attr("id", addMechButtonPanelId)
             .attr("data-team", team);
-        addMechButtonMap[team] =
-            new MechViewWidgets.MechButton(addMechButtonJQ.get(0), addMechButtonHandler);
+        let addMechButtonElem = addMechButtonJQ.get(0);
+        let addMechButton = new MechViewWidgets.MechButton(addMechButtonElem, addMechButtonHandler);
     };
     var createAddMechButtonHandler = function () {
         return function () {
@@ -9234,6 +9248,7 @@ var MechViewWidgets;
     class MechButton {
         constructor(domElement, clickHandler) {
             this.domElement = domElement;
+            StoreValue.storeToElement(domElement, MechButton.DomKey, this);
             this.clickHandler = (function (context) {
                 var clickContext = context;
                 return function (event) {
@@ -9246,6 +9261,15 @@ var MechViewWidgets;
             })(this);
             this.enabled = true;
             $(this.domElement).click(this.clickHandler);
+        }
+        static fromDomElement(domElement) {
+            let ret = StoreValue.getFromElement(domElement, MechButton.DomKey);
+            if (ret instanceof MechButton) {
+                return ret;
+            }
+            else {
+                return undefined;
+            }
         }
         setHtml(html) {
             $(this.domElement).html(html);
@@ -9269,6 +9293,7 @@ var MechViewWidgets;
             }
         }
     }
+    /*const*/ MechButton.DomKey = "mwosim.MechButton.domElement";
     MechViewWidgets.MechButton = MechButton;
     class ExpandButton extends MechButton {
         constructor(domElement, clickHandler, ...elementsToExpand) {

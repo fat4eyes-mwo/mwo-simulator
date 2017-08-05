@@ -11,7 +11,6 @@ namespace MechViewAddMech {
     return team + "-addMechButton";
   }
 
-  var addMechButtonMap : {[index:string] : MechButton} = {};
   export var createAddMechButton = function(team : Team, containerId : string) : void {
     let addMechButtonPanelId = addMechButtonId(team);
     if (!addMechButtonHandler) {
@@ -20,9 +19,9 @@ namespace MechViewAddMech {
     let addMechButtonJQ = $(`#${containerId} [class~=addMechButton]`)
                                   .attr("id", addMechButtonPanelId)
                                   .attr("data-team", team);
-    addMechButtonMap[team] =
-        new MechViewWidgets.MechButton(addMechButtonJQ.get(0),
-                                        addMechButtonHandler);
+    let addMechButtonElem = addMechButtonJQ.get(0);
+    let addMechButton = new MechViewWidgets.MechButton(addMechButtonElem,
+                                                        addMechButtonHandler);
   }
 
   type ClickHandler = () => void;

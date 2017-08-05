@@ -3,7 +3,6 @@
 
 namespace MechViewSimSettings {
   import SimulatorParameters = SimulatorSettings.SimulatorParameters;
-  //Union type with string-indexed object since we use a variable to access its fields
   type SimParamUserSettings = SimulatorSettings.SimParamUserSettings;
   type SimUserSettingValue = SimulatorSettings.SimUserSettingValue;
 
