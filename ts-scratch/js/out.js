@@ -70,17 +70,17 @@ System.register("storevalue", [], function (exports_4, context_4) {
         setters: [],
         execute: function () {
             (function (StoreValue) {
-                //NOTE: elem should be an Element, but I can't get around the typescript errors
-                //(was not allowing use of symbol as an index)
                 StoreValue.storeToElement = function (elem, key, value) {
                     let symbolKey = Symbol.for(key);
-                    let prevValue = elem[symbolKey];
-                    elem[symbolKey] = value;
+                    let anyElem = elem;
+                    let prevValue = anyElem[symbolKey];
+                    anyElem[symbolKey] = value;
                     return prevValue;
                 };
                 StoreValue.getFromElement = function (elem, key) {
                     let symbolKey = Symbol.for(key);
-                    return elem[symbolKey];
+                    let anyElem = elem;
+                    return anyElem[symbolKey];
                 };
             })(StoreValue || (StoreValue = {}));
             exports_4("StoreValue", StoreValue);
