@@ -28,7 +28,7 @@ namespace MechViewAddMech {
   type ClickHandler = () => void;
   var createAddMechButtonHandler = function() : ClickHandler {
     return function(this : Element) {
-      let team = $(this).data('team');
+      let team = $(this).attr('data-team');
       MechViewAddMech.showAddMechDialog(team);
     }
   }
@@ -90,7 +90,7 @@ namespace MechViewAddMech {
   var loadedSmurfyLoadout : SmurfyMechLoadout = null;
   var createAddMechDialogOKHandler = function() : ClickHandler {
     return function(this : Element) {
-      let team = $(this).data('team');
+      let team = $(this).attr('data-team');
       let url = addMechDialogJQ.find(".addMechDialog-text").val()
       console.log("Mech loaded. team: " + team + " URL: " + url);
       //TODO: Avoid accessing MechModel directly here. Create a method in ModelView to do this
@@ -111,7 +111,7 @@ namespace MechViewAddMech {
 
   var createAddMechDialogCancelHandler = function() : ClickHandler {
     return function(this : Element) {
-      let team = $(this).data('team');
+      let team = $(this).attr('data-team');
       MechViewAddMech.hideAddMechDialog(team);
     }
   };
@@ -121,7 +121,7 @@ namespace MechViewAddMech {
   var createAddMechDialogLoadHandler = function() : ClickHandler {
 
     return function(this : Element) {
-      let team = $(this).data('team');
+      let team = $(this).attr('data-team');
       let url : string = String(addMechDialogJQ.find(".addMechDialog-text").val());
       console.log("Load. team: " + team + " URL: " + url);
 

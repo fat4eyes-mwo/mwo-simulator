@@ -7522,7 +7522,7 @@ var MechViewAddMech;
     };
     var createAddMechButtonHandler = function () {
         return function () {
-            let team = $(this).data('team');
+            let team = $(this).attr('data-team');
             MechViewAddMech.showAddMechDialog(team);
         };
     };
@@ -7573,7 +7573,7 @@ var MechViewAddMech;
     var loadedSmurfyLoadout = null;
     var createAddMechDialogOKHandler = function () {
         return function () {
-            let team = $(this).data('team');
+            let team = $(this).attr('data-team');
             let url = addMechDialogJQ.find(".addMechDialog-text").val();
             console.log("Mech loaded. team: " + team + " URL: " + url);
             //TODO: Avoid accessing MechModel directly here. Create a method in ModelView to do this
@@ -7593,7 +7593,7 @@ var MechViewAddMech;
     var addMechDialogOKHandler; //set on dialog creation, singleton
     var createAddMechDialogCancelHandler = function () {
         return function () {
-            let team = $(this).data('team');
+            let team = $(this).attr('data-team');
             MechViewAddMech.hideAddMechDialog(team);
         };
     };
@@ -7601,7 +7601,7 @@ var MechViewAddMech;
     const SMURFY_PROXY_URL = "./php/smurfyproxy.php?path=";
     var createAddMechDialogLoadHandler = function () {
         return function () {
-            let team = $(this).data('team');
+            let team = $(this).attr('data-team');
             let url = String(addMechDialogJQ.find(".addMechDialog-text").val());
             console.log("Load. team: " + team + " URL: " + url);
             let doneHandler = function (data) {
@@ -8116,7 +8116,7 @@ var MechViewMechPanel;
     };
     var createDeleteMechButtonHandler = function () {
         return function () {
-            let mechId = $(this).data("mech-id");
+            let mechId = $(this).attr("data-mech-id");
             console.log("Deleting " + mechId);
             let result = MechModel.deleteMech(mechId);
             if (!result) {
@@ -8166,7 +8166,7 @@ var MechViewMechPanel;
     };
     var createMoveMechButtonHandler = function () {
         return function () {
-            let mechId = $(this).data("mech-id");
+            let mechId = $(this).attr("data-mech-id");
             toggleMoveMech(mechId);
         };
     };
@@ -8187,7 +8187,7 @@ var MechViewMechPanel;
     };
     var createMechOnDragHandler = function () {
         return function (jqEvent) {
-            let mechId = $(this).data("mech-id");
+            let mechId = $(this).attr("data-mech-id");
             let origEvent = jqEvent.originalEvent;
             origEvent.dataTransfer.setData("text/plain", mechId);
             origEvent.dataTransfer.effectAllowed = "move";
@@ -8199,7 +8199,7 @@ var MechViewMechPanel;
     var createMechOnDragOverHandler = function () {
         return function (jqEvent) {
             let thisJQ = $(this);
-            let mechId = thisJQ.data("mech-id");
+            let mechId = thisJQ.attr("data-mech-id");
             let origEvent = jqEvent.originalEvent;
             jqEvent.preventDefault();
             //allow move on drop
@@ -8218,7 +8218,7 @@ var MechViewMechPanel;
     var createMechOnDropHandler = function () {
         return function (jqEvent) {
             let thisJQ = $(this);
-            let mechId = thisJQ.data("mech-id");
+            let mechId = thisJQ.attr("data-mech-id");
             let origEvent = jqEvent.originalEvent;
             let srcMechId = origEvent.dataTransfer.getData("text/plain");
             jqEvent.preventDefault();

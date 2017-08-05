@@ -502,7 +502,7 @@ namespace MechViewMechPanel {
 
   var createDeleteMechButtonHandler = function() {
     return function(this : Element) {
-      let mechId = $(this).data("mech-id");
+      let mechId = $(this).attr("data-mech-id");
       console.log("Deleting " + mechId);
       let result = MechModel.deleteMech(mechId);
       if (!result) {
@@ -559,7 +559,7 @@ namespace MechViewMechPanel {
   var createMoveMechButtonHandler = function() : () => void {
 
     return function(this: Element) {
-      let mechId = $(this).data("mech-id");
+      let mechId = $(this).attr("data-mech-id");
       toggleMoveMech(mechId);
     }
   }
@@ -586,7 +586,7 @@ namespace MechViewMechPanel {
   var createMechOnDragHandler = function() : JQEventHandler {
     return function(this : Element,
                     jqEvent : JQuery.Event) {
-      let mechId = $(this).data("mech-id");
+      let mechId = $(this).attr("data-mech-id");
       let origEvent = jqEvent.originalEvent as DragEvent;
       origEvent.dataTransfer.setData("text/plain", mechId);
       origEvent.dataTransfer.effectAllowed = "move";
@@ -600,7 +600,7 @@ namespace MechViewMechPanel {
     return function(this : Element,
                     jqEvent : JQuery.Event) {
       let thisJQ = $(this);
-      let mechId = thisJQ.data("mech-id");
+      let mechId = thisJQ.attr("data-mech-id");
       let origEvent= jqEvent.originalEvent as DragEvent;
 
       jqEvent.preventDefault();
@@ -622,7 +622,7 @@ namespace MechViewMechPanel {
     return function(this : Element,
                     jqEvent : JQuery.Event) : void {
       let thisJQ = $(this);
-      let mechId = thisJQ.data("mech-id");
+      let mechId = thisJQ.attr("data-mech-id");
       let origEvent= jqEvent.originalEvent as DragEvent;
       let srcMechId = origEvent.dataTransfer.getData("text/plain");
       jqEvent.preventDefault();
