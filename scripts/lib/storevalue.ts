@@ -1,5 +1,13 @@
 
 namespace StoreValue {
+  //Stores an arbitrary value as a symbol indexed property in Element
+  //Goal is to map DOM elements to the UI objects that represent them without
+  //overly complicated bookkeeping in the app. Garbage collection seems to handle
+  //circular references between an object and a deleted dom element well
+  //(at least for chrome and firefox)
+
+  //relies on the DOM being stable (e.g. the browser not replacing an Element with a copy,
+  //which would lose our mapping)
   export var storeToElement = function (elem : Element, key : string, value : any) : any {
     let symbolKey = Symbol.for(key);
     let anyElem = elem as any;
