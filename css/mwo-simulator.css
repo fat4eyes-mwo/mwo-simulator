@@ -677,6 +677,7 @@ a:hover {
 .statusPanel .mechDetails .mechQuirksTitle {
   font-weight: bold;
   color: gold;
+  margin-bottom: 5px;
 }
 
 .statusPanel .mechDetails .mechDetailsQuirk {

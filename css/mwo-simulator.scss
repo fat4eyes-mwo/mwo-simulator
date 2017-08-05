@@ -755,6 +755,7 @@ $malus-color : rgb(150, 50, 50);
 .statusPanel .mechDetails .mechQuirksTitle {
   font-weight: bold;
   color: $emphasis-color;
+  margin-bottom: 5px;
 }
 .statusPanel .mechDetails .mechDetailsQuirk {
   font-size: 0.9em;
