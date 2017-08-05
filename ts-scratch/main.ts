@@ -5,6 +5,7 @@ import * as ModuleA from "moduleA";
 import * as ModuleA2 from "moduleA";
 import * as ModuleB from "moduleB";
 import * as ModuleC from "libtest/moduleC";
+import * as StoreElemTest from "storedElemTest";
 
 let foo : ModuleA.TypeA;
 export function main() {
@@ -13,6 +14,7 @@ export function main() {
   ModuleC.funcC("foo");
   $("#debugText").text("Hello again from typescript" + ModuleA.funcA("Foo") + ModuleB.bfunc("Bar") +
               ` ModuleA.a=${ModuleA.getA()}` + ` ModuleA2.a=${ModuleA2.getA()}` + ` ModuleB.getAFromB()=${ModuleB.getAfromB()}`);
+  StoreElemTest.testStoredElem();
 }
 
 $(document).ready(main);

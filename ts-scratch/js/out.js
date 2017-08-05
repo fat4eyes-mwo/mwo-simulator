@@ -62,18 +62,101 @@ System.register("libtest/moduleC", [], function (exports_3, context_3) {
         }
     };
 });
-System.register("main", ["moduleA", "moduleB", "libtest/moduleC"], function (exports_4, context_4) {
+System.register("storevalue", [], function (exports_4, context_4) {
     "use strict";
     var __moduleName = context_4 && context_4.id;
+    var StoreValue;
+    return {
+        setters: [],
+        execute: function () {
+            (function (StoreValue) {
+                //NOTE: elem should be an Element, but I can't get around the typescript errors
+                //(was not allowing use of symbol as an index)
+                StoreValue.storeToElement = function (elem, key, value) {
+                    let symbolKey = Symbol.for(key);
+                    let prevValue = elem[symbolKey];
+                    elem[symbolKey] = value;
+                    return prevValue;
+                };
+                StoreValue.getFromElement = function (elem, key) {
+                    let symbolKey = Symbol.for(key);
+                    return elem[symbolKey];
+                };
+            })(StoreValue || (StoreValue = {}));
+            exports_4("StoreValue", StoreValue);
+        }
+    };
+});
+/// <reference path="../scripts/lib/jquery-3.2.d.ts" />
+System.register("storedElemTest", ["storevalue"], function (exports_5, context_5) {
+    "use strict";
+    var __moduleName = context_5 && context_5.id;
+    var storevalue_1, testInterval, testCtr, TestIntervalDuration, TestDiv, testRunning, testStoredElem, toggleTest, LargeClass;
+    return {
+        setters: [
+            function (storevalue_1_1) {
+                storevalue_1 = storevalue_1_1;
+            }
+        ],
+        execute: function () {
+            testCtr = 0;
+            TestIntervalDuration = 20;
+            TestDiv = "storedElemTest";
+            testRunning = false;
+            exports_5("testStoredElem", testStoredElem = function () {
+                let testJQ = $("#storedElemTest");
+                if (!testInterval) {
+                    testInterval = window.setInterval(function () {
+                        if (!testRunning) {
+                            return;
+                        }
+                        let newDivJQ = $("<span></span>").addClass("testSpan").text(testCtr);
+                        let newDiv = newDivJQ.get(0);
+                        storevalue_1.StoreValue.storeToElement(newDiv, "testKey", new LargeClass(testCtr, 10000));
+                        testJQ.append(newDiv);
+                        if (testCtr % 100 === 0) {
+                            testJQ.empty(); //clearing this should trigger garbage collection
+                        }
+                        let storedVal = storevalue_1.StoreValue.getFromElement(newDiv, "testKey");
+                        console.log(storedVal.getId());
+                        testCtr++;
+                    }, TestIntervalDuration);
+                    $("#storedElemTestButton").click(function () {
+                        toggleTest();
+                    });
+                }
+            });
+            toggleTest = function () {
+                testRunning = !testRunning;
+            };
+            LargeClass = class LargeClass {
+                constructor(id, size) {
+                    this.id = id;
+                    this.largeArray = new Array(size);
+                    for (let i = 0; i < size; i++) {
+                        this.largeArray[i] = i;
+                    }
+                }
+                getId() {
+                    return this.id;
+                }
+            };
+        }
+    };
+});
+System.register("main", ["moduleA", "moduleB", "libtest/moduleC", "storedElemTest"], function (exports_6, context_6) {
+    "use strict";
+    var __moduleName = context_6 && context_6.id;
     function main() {
         ModuleA.setA("a1");
         ModuleA2.setA("a2"); //Should set the same variable a in moduleA.js
         ModuleC.funcC("foo");
         $("#debugText").text("Hello again from typescript" + ModuleA.funcA("Foo") + ModuleB.bfunc("Bar") +
             ` ModuleA.a=${ModuleA.getA()}` + ` ModuleA2.a=${ModuleA2.getA()}` + ` ModuleB.getAFromB()=${ModuleB.getAfromB()}`);
+        StoreElemTest.testStoredElem();
     }
-    exports_4("main", main);
-    var ModuleA, ModuleA2, ModuleB, ModuleC, foo;
+    exports_6("main", main);
+    var ModuleA, ModuleA2, ModuleB, ModuleC, StoreElemTest, foo;
     return {
         setters: [
             function (ModuleA_2) {
@@ -85,6 +168,9 @@ System.register("main", ["moduleA", "moduleB", "libtest/moduleC"], function (exp
             },
             function (ModuleC_1) {
                 ModuleC = ModuleC_1;
+            },
+            function (StoreElemTest_1) {
+                StoreElemTest = StoreElemTest_1;
             }
         ],
         execute: function () {
