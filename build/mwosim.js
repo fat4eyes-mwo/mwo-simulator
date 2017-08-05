@@ -9245,10 +9245,34 @@ var MechViewWidgets;
         let blue = Math.round(Number(rgb.b) + (Number(nextRgb.b) - Number(rgb.b)) * percentDiff);
         return "rgb(" + red + "," + green + "," + blue + ")";
     };
-    class MechButton {
-        constructor(domElement, clickHandler) {
+    //Widgets that are stored in the dom using StoreValue.storeToElement
+    //Would be better as a mixin, but initializing mixin classes is still syntactically messy,
+    //so keep it a superclass
+    class DomStoredWidget {
+        constructor(domElement, DomKey) {
             this.domElement = domElement;
-            StoreValue.storeToElement(domElement, MechButton.DomKey, this);
+            this.DomKey = DomKey;
+            StoreValue.storeToElement(domElement, this.DomKey, this);
+            //marker attribute to make it visible in the element tree that there's an
+            //object stored in the Element
+            //NOTE: browsers automatically lowercase attribute names (at least chrome does)
+            //We explicitly lowercase DomKey here to make that obvious so we don't try to
+            //unset the attribute with a non-lowercase name
+            domElement.setAttribute("data-symbol-" + DomKey.toLowerCase(), this.toString());
+        }
+        //static abstract fromDom(domElement) : <T extends DomStoredWidget>
+        //Subclasses of DomStoredWidget are expected to have a static method fromDom
+        //that calls the static method below. Can't enforce it with the type system,
+        //therefore this comment.
+        static fromDomBase(domElement, DomKey) {
+            let ret = StoreValue.getFromElement(domElement, DomKey);
+            return ret; //NOTE: Would be better with an instanceof check, but since T isn't really a value can't do that here
+        }
+    }
+    MechViewWidgets.DomStoredWidget = DomStoredWidget;
+    class MechButton extends DomStoredWidget {
+        constructor(domElement, clickHandler) {
+            super(domElement, MechButton.DomKey);
             this.clickHandler = (function (context) {
                 var clickContext = context;
                 return function (event) {
@@ -9262,14 +9286,8 @@ var MechViewWidgets;
             this.enabled = true;
             $(this.domElement).click(this.clickHandler);
         }
-        static fromDomElement(domElement) {
-            let ret = StoreValue.getFromElement(domElement, MechButton.DomKey);
-            if (ret instanceof MechButton) {
-                return ret;
-            }
-            else {
-                return undefined;
-            }
+        static fromDom(domElement) {
+            return DomStoredWidget.fromDomBase(domElement, MechButton.DomKey);
         }
         setHtml(html) {
             $(this.domElement).html(html);
@@ -9336,12 +9354,6 @@ var MechViewWidgets;
                 .addClass("hidden")
                 .attr("id", tooltipId)
                 .insertBefore(targetElement);
-            //TODO Fix absolutely positioned tooltip location
-            // let targetElement = $("#" + targetElementId)[0];
-            // let thisLeft = targetElement.offsetLeft;
-            // let thisTop = targetElement.offsetTop + targetElement.offsetHeight;
-            // $("#" + this.id)
-            //   .css({"left": thisLeft, "top" : thisTop});
         }
         showTooltip() {
             $("#" + this.id).removeClass("hidden");

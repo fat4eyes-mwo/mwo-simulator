@@ -76,6 +76,13 @@ namespace MechViewWidgets {
       this.domElement = domElement;
       this.DomKey = DomKey;
       StoreValue.storeToElement(domElement, this.DomKey, this);
+      
+      //marker attribute to make it visible in the element tree that there's an
+      //object stored in the Element
+      //NOTE: browsers automatically lowercase attribute names (at least chrome does)
+      //We explicitly lowercase DomKey here to make that obvious so we don't try to
+      //unset the attribute with a non-lowercase name
+      domElement.setAttribute("data-symbol-" + DomKey.toLowerCase(), this.toString())
     }
 
     //static abstract fromDom(domElement) : <T extends DomStoredWidget>
@@ -83,9 +90,9 @@ namespace MechViewWidgets {
     //that calls the static method below. Can't enforce it with the type system,
     //therefore this comment.
 
-    static fromDom<T extends DomStoredWidget>(domElement : Element, DomKey : string) : T {
+    static fromDomBase<T extends DomStoredWidget>(domElement : Element, DomKey : string) : T {
       let ret : any = StoreValue.getFromElement(domElement, DomKey);
-      return ret as T; //NOTE: Would be better with an instanceof check, but since T isn't really a value can't do that here
+      return ret; //NOTE: Would be better with an instanceof check, but since T isn't really a value can't do that here
     }
   }
 
@@ -110,7 +117,7 @@ namespace MechViewWidgets {
     }
 
     static fromDom(domElement : Element) : MechButton {
-      return DomStoredWidget.fromDom<MechButton>(domElement, MechButton.DomKey);
+      return DomStoredWidget.fromDomBase(domElement, MechButton.DomKey) as MechButton;
     }
 
     setHtml(html : string) : void {
