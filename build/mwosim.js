@@ -4436,7 +4436,7 @@ var MechModelQuirks;
 (function (MechModelQuirks) {
     class MechQuirkInfo {
         constructor(smurfyQuirk) {
-            this.smurfyQuirk = smurfyQuirk;
+            this.smurfyQuirk = Object.assign({}, smurfyQuirk);
         }
         get name() {
             return this.smurfyQuirk.name;
@@ -4446,6 +4446,9 @@ var MechModelQuirks;
         }
         get value() {
             return this.smurfyQuirk.value;
+        }
+        set value(value) {
+            this.smurfyQuirk.value = value;
         }
         get translated_value() {
             let quirkNameComponents = this.name.split("_");
@@ -4489,16 +4492,28 @@ var MechModelQuirks;
     }
     MechModelQuirks.collectOmnipodQuirks = function (smurfyMechLoadout) {
         let ret = [];
+        let seenQuirkMap = new Map();
         if (!MechModel.isOmnimech(smurfyMechLoadout)) {
             return ret;
         }
+        var addQuirk = function (smurfyQuirk) {
+            let mechQuirk = seenQuirkMap.get(smurfyQuirk.name);
+            if (!mechQuirk) {
+                mechQuirk = new MechQuirkInfo(smurfyQuirk);
+                ret.push(mechQuirk);
+                seenQuirkMap.set(mechQuirk.name, mechQuirk);
+            }
+            else {
+                mechQuirk.value = mechQuirk.value + Number(smurfyQuirk.value);
+            }
+        };
         for (let component of smurfyMechLoadout.configuration) {
             let omnipodId = component.omni_pod;
             if (omnipodId) {
                 let omnipodData = MechModel.getSmurfyOmnipodData(omnipodId);
                 let omnipodQuirks = omnipodData.configuration.quirks;
                 for (let smurfyQuirk of omnipodQuirks) {
-                    ret.push(new MechQuirkInfo(smurfyQuirk));
+                    addQuirk(smurfyQuirk);
                 }
             }
         }
@@ -4507,7 +4522,7 @@ var MechModelQuirks;
         let ctOmnipod = MechModel.getSmurfyCTOmnipod(smurfyMechInfo.name);
         if (ctOmnipod) {
             for (let smurfyQuirk of ctOmnipod.configuration.quirks) {
-                ret.push(new MechQuirkInfo(smurfyQuirk));
+                addQuirk(smurfyQuirk);
             }
         }
         else {

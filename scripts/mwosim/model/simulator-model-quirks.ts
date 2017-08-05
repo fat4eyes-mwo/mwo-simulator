@@ -18,7 +18,7 @@ namespace MechModelQuirks {
   class MechQuirkInfo implements MechQuirk {
     smurfyQuirk : SmurfyQuirk;
     constructor(smurfyQuirk: SmurfyQuirk) {
-      this.smurfyQuirk = smurfyQuirk;
+      this.smurfyQuirk = Object.assign({}, smurfyQuirk);
     }
     get name() : string {
       return this.smurfyQuirk.name;
@@ -28,6 +28,9 @@ namespace MechModelQuirks {
     }
     get value() : number {
       return this.smurfyQuirk.value;
+    }
+    set value(value : number) {
+      this.smurfyQuirk.value = value;
     }
     get translated_value() : string {
       let quirkNameComponents = this.name.split("_");
@@ -71,8 +74,19 @@ namespace MechModelQuirks {
     function(smurfyMechLoadout : SmurfyMechLoadout)
       : MechQuirk[] {
     let ret : MechQuirk[] = [];
+    let seenQuirkMap = new Map<string, MechQuirk>();
     if (!MechModel.isOmnimech(smurfyMechLoadout)) {
       return ret;
+    }
+    var addQuirk = function(smurfyQuirk : SmurfyQuirk) : void {
+      let mechQuirk = seenQuirkMap.get(smurfyQuirk.name);
+      if (!mechQuirk) {
+        mechQuirk = new MechQuirkInfo(smurfyQuirk);
+        ret.push(mechQuirk);
+        seenQuirkMap.set(mechQuirk.name, mechQuirk);
+      } else {
+        mechQuirk.value = mechQuirk.value + Number(smurfyQuirk.value);
+      }
     }
     for (let component of smurfyMechLoadout.configuration) {
       let omnipodId = component.omni_pod;
@@ -80,7 +94,7 @@ namespace MechModelQuirks {
         let omnipodData = MechModel.getSmurfyOmnipodData(omnipodId);
         let omnipodQuirks = omnipodData.configuration.quirks;
         for (let smurfyQuirk of omnipodQuirks) {
-          ret.push(new MechQuirkInfo(smurfyQuirk));
+          addQuirk(smurfyQuirk);
         }
       }
     }
@@ -89,7 +103,7 @@ namespace MechModelQuirks {
     let ctOmnipod = MechModel.getSmurfyCTOmnipod(smurfyMechInfo.name);
     if (ctOmnipod) {
       for (let smurfyQuirk of ctOmnipod.configuration.quirks) {
-        ret.push(new MechQuirkInfo(smurfyQuirk));
+        addQuirk(smurfyQuirk);
       }
     } else {
       console.warn("Unable to find CT omnipod for " + smurfyMechInfo.name);

@@ -742,7 +742,8 @@ div {
 }
 
 .statusPanel .mechDetails {
-  width: 400px;
+  min-width: 250px;
+  width: 100%;
 }
 
 .statusPanel .mechDetails .mechQuirks {
