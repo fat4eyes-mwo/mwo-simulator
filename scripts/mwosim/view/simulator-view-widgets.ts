@@ -96,12 +96,12 @@ namespace MechViewWidgets {
     }
   }
 
-  export class MechButton extends DomStoredWidget {
+  export class Button extends DomStoredWidget {
     private static readonly DomKey = "mwosim.MechButton.domElement";
     clickHandler : Util.AnyFunction;
     enabled : boolean;
     constructor(domElement : Element, clickHandler : Util.AnyFunction) {
-      super(domElement, MechButton.DomKey);
+      super(domElement, Button.DomKey);
       this.clickHandler = (function(context) {
           var clickContext = context;
           return function(event : any) {
@@ -116,8 +116,8 @@ namespace MechViewWidgets {
       $(this.domElement).click(this.clickHandler);
     }
 
-    static fromDom(domElement : Element) : MechButton {
-      return DomStoredWidget.fromDomBase(domElement, MechButton.DomKey) as MechButton;
+    static fromDom(domElement : Element) : Button {
+      return DomStoredWidget.fromDomBase(domElement, Button.DomKey) as Button;
     }
 
     setHtml(html : string) : void {
@@ -147,7 +147,7 @@ namespace MechViewWidgets {
     }
   }
 
-  export class ExpandButton extends MechButton {
+  export class ExpandButton extends Button {
     elementsToExpand : Element[];
     constructor(domElement : Element, clickHandler : Util.AnyFunction, ...elementsToExpand : Element[]) {
       super(domElement, clickHandler);

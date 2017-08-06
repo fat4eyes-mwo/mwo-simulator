@@ -7554,7 +7554,7 @@ var MechViewAddMech;
             .attr("id", addMechButtonPanelId)
             .attr("data-team", team);
         let addMechButtonElem = addMechButtonJQ.get(0);
-        let addMechButton = new MechViewWidgets.MechButton(addMechButtonElem, addMechButtonHandler);
+        let addMechButton = new MechViewWidgets.Button(addMechButtonElem, addMechButtonHandler);
     };
     var createAddMechButtonHandler = function () {
         return function () {
@@ -7591,13 +7591,13 @@ var MechViewAddMech;
         }
         let okButtonJQ = addMechDialogJQ.find(".addMechDialog-ok").attr("data-team", team);
         addMechOKButton =
-            new MechViewWidgets.MechButton(okButtonJQ.get(0), addMechDialogOKHandler);
+            new MechViewWidgets.Button(okButtonJQ.get(0), addMechDialogOKHandler);
         let cancelButtonJQ = addMechDialogJQ.find(".addMechDialog-cancel").attr("data-team", team);
         addMechCancelButton =
-            new MechViewWidgets.MechButton(cancelButtonJQ.get(0), addMechDialogCancelHandler);
+            new MechViewWidgets.Button(cancelButtonJQ.get(0), addMechDialogCancelHandler);
         let loadButtonJQ = addMechDialogJQ.find(".addMechDialog-load").attr("data-team", team);
         addMechLoadButton =
-            new MechViewWidgets.MechButton(loadButtonJQ.get(0), addMechDialogLoadHandler);
+            new MechViewWidgets.Button(loadButtonJQ.get(0), addMechDialogLoadHandler);
         addMechOKButton.disable();
         MechViewWidgets.showModal();
         addMechDialogJQ.find(".addMechDialog-text").focus();
@@ -8819,7 +8819,7 @@ var MechViewSimSettings;
     MechViewSimSettings.initRangeInput = function () {
         let rangeJQ = $("#rangeInput");
         let rangeButtonElem = document.getElementById("setRangeButton");
-        let rangeButton = new MechViewWidgets.MechButton(rangeButtonElem, function () {
+        let rangeButton = new MechViewWidgets.Button(rangeButtonElem, function () {
             let buttonMode = $(this).attr("data-button-mode");
             if (buttonMode === "not-editing") {
                 rangeJQ
@@ -9277,9 +9277,9 @@ var MechViewWidgets;
         }
     }
     MechViewWidgets.DomStoredWidget = DomStoredWidget;
-    class MechButton extends DomStoredWidget {
+    class Button extends DomStoredWidget {
         constructor(domElement, clickHandler) {
-            super(domElement, MechButton.DomKey);
+            super(domElement, Button.DomKey);
             this.clickHandler = (function (context) {
                 var clickContext = context;
                 return function (event) {
@@ -9294,7 +9294,7 @@ var MechViewWidgets;
             $(this.domElement).click(this.clickHandler);
         }
         static fromDom(domElement) {
-            return DomStoredWidget.fromDomBase(domElement, MechButton.DomKey);
+            return DomStoredWidget.fromDomBase(domElement, Button.DomKey);
         }
         setHtml(html) {
             $(this.domElement).html(html);
@@ -9318,9 +9318,9 @@ var MechViewWidgets;
             }
         }
     }
-    MechButton.DomKey = "mwosim.MechButton.domElement";
-    MechViewWidgets.MechButton = MechButton;
-    class ExpandButton extends MechButton {
+    Button.DomKey = "mwosim.MechButton.domElement";
+    MechViewWidgets.Button = Button;
+    class ExpandButton extends Button {
         constructor(domElement, clickHandler, ...elementsToExpand) {
             super(domElement, clickHandler);
             if (elementsToExpand) {

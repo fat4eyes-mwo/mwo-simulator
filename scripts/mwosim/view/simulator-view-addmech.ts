@@ -4,7 +4,7 @@
 namespace MechViewAddMech {
   import Team = MechModelCommon.Team;
 
-  type MechButton = MechViewWidgets.MechButton;
+  type MechButton = MechViewWidgets.Button;
   type SmurfyMechLoadout = SmurfyTypes.SmurfyMechLoadout;
 
   var addMechButtonId = function(team : Team) : string {
@@ -20,7 +20,7 @@ namespace MechViewAddMech {
                                   .attr("id", addMechButtonPanelId)
                                   .attr("data-team", team);
     let addMechButtonElem = addMechButtonJQ.get(0);
-    let addMechButton = new MechViewWidgets.MechButton(addMechButtonElem,
+    let addMechButton = new MechViewWidgets.Button(addMechButtonElem,
                                                         addMechButtonHandler);
   }
 
@@ -64,15 +64,15 @@ namespace MechViewAddMech {
     }
     let okButtonJQ = addMechDialogJQ.find(".addMechDialog-ok").attr("data-team", team);
     addMechOKButton =
-        new MechViewWidgets.MechButton(okButtonJQ.get(0), addMechDialogOKHandler);
+        new MechViewWidgets.Button(okButtonJQ.get(0), addMechDialogOKHandler);
 
     let cancelButtonJQ = addMechDialogJQ.find(".addMechDialog-cancel").attr("data-team", team);
     addMechCancelButton =
-        new MechViewWidgets.MechButton(cancelButtonJQ.get(0), addMechDialogCancelHandler);
+        new MechViewWidgets.Button(cancelButtonJQ.get(0), addMechDialogCancelHandler);
 
     let loadButtonJQ = addMechDialogJQ.find(".addMechDialog-load").attr("data-team", team);
     addMechLoadButton =
-        new MechViewWidgets.MechButton(loadButtonJQ.get(0), addMechDialogLoadHandler);
+        new MechViewWidgets.Button(loadButtonJQ.get(0), addMechDialogLoadHandler);
 
     addMechOKButton.disable();
 
