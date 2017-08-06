@@ -683,7 +683,7 @@ namespace MechViewMechPanel {
       function(mechId: string, mechDetailsContainer : Element) : void {
     let mechDetailsDiv = MechViewWidgets.cloneTemplate("mechDetails-template");
     let mechDetailsJQ = $(mechDetailsDiv);
-    let mechQuirksJQ = mechDetailsJQ.find(".mechQuirks");
+    let mechQuirksJQ = mechDetailsJQ.find(".mechQuirkList");
     let mechQuirkList = MechModelView.getMechQuirks(mechId);
 
     if (mechQuirkList.length === 0) {

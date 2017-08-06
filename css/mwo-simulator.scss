@@ -737,7 +737,7 @@ div {
 }
 
 .statusPanel .mechDetailsContainer.expanded {
-  width: 250%; //percentage of the container (in this case statusPanel)
+  width: 315%; //percentage of the parent (in this case statusPanel)
   border-width: thin;
 }
 
@@ -746,13 +746,17 @@ div {
   width: 100%;
 }
 
-.statusPanel .mechDetails .mechQuirks {
+.statusPanel .mechDetails .mechQuirkList {
   overflow: auto;
 }
 
 $bonus-color : rgb(50, 150, 50);
 $malus-color : rgb(150, 50, 50);
-.statusPanel .mechDetails .mechQuirksTitle {
+.statusPanel .mechDetails .mechQuirkListTitle {
+  position: sticky;
+  top: 0px;
+  background: $background-color;
+  z-index: 20;
   font-weight: bold;
   color: $emphasis-color;
   margin-bottom: 5px;

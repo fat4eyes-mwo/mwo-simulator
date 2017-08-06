@@ -661,7 +661,7 @@ a:hover {
 }
 
 .statusPanel .mechDetailsContainer.expanded {
-  width: 250%;
+  width: 315%;
   border-width: thin;
 }
 
@@ -670,11 +670,15 @@ a:hover {
   width: 100%;
 }
 
-.statusPanel .mechDetails .mechQuirks {
+.statusPanel .mechDetails .mechQuirkList {
   overflow: auto;
 }
 
-.statusPanel .mechDetails .mechQuirksTitle {
+.statusPanel .mechDetails .mechQuirkListTitle {
+  position: sticky;
+  top: 0px;
+  background: #202020;
+  z-index: 20;
   font-weight: bold;
   color: gold;
   margin-bottom: 5px;

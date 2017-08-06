@@ -1,6 +1,13 @@
 "use strict";
 var StoreValue;
 (function (StoreValue) {
+    //Stores an arbitrary value as a symbol indexed property in Element
+    //Goal is to map DOM elements to the UI objects that represent them without
+    //overly complicated bookkeeping in the app. Garbage collection seems to handle
+    //circular references between an object and a deleted dom element well
+    //(at least for chrome and firefox)
+    //relies on the DOM being stable (e.g. the browser not replacing an Element with a copy,
+    //which would lose our mapping)
     StoreValue.storeToElement = function (elem, key, value) {
         let symbolKey = Symbol.for(key);
         let anyElem = elem;
@@ -8295,7 +8302,7 @@ var MechViewMechPanel;
     var createMechDetails = function (mechId, mechDetailsContainer) {
         let mechDetailsDiv = MechViewWidgets.cloneTemplate("mechDetails-template");
         let mechDetailsJQ = $(mechDetailsDiv);
-        let mechQuirksJQ = mechDetailsJQ.find(".mechQuirks");
+        let mechQuirksJQ = mechDetailsJQ.find(".mechQuirkList");
         let mechQuirkList = MechModelView.getMechQuirks(mechId);
         if (mechQuirkList.length === 0) {
             let mechQuirkDiv = MechViewWidgets.cloneTemplate("mechDetailsQuirk-template");
@@ -9311,7 +9318,7 @@ var MechViewWidgets;
             }
         }
     }
-    /*const*/ MechButton.DomKey = "mwosim.MechButton.domElement";
+    MechButton.DomKey = "mwosim.MechButton.domElement";
     MechViewWidgets.MechButton = MechButton;
     class ExpandButton extends MechButton {
         constructor(domElement, clickHandler, ...elementsToExpand) {
