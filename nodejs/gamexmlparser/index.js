@@ -15,7 +15,9 @@ var loadGameData = function (gameDataPakFile) {
     XML2js.parseString(weaponsXML, { attrkey: "attr" }, function (err, result) {
         parseResult = result;
     });
-    return parseResult;
+    return {
+        xmlWeaponData: parseResult
+    };
 };
 var weaponIdMap = new Map();
 class Weapon {
@@ -128,8 +130,8 @@ var main = function () {
         .action(function (mwoDir, scriptDataDir) {
         console.log("MWO base dir: " + mwoDir);
         console.log("Script data dir: " + scriptDataDir);
-        let parsedWeapons = loadGameData(mwoDir + "/Game/GameData.pak");
-        let addedWeaponData = generateAddedWeaponData(parsedWeapons);
+        let gameData = loadGameData(mwoDir + "/Game/GameData.pak");
+        let addedWeaponData = generateAddedWeaponData(gameData.xmlWeaponData);
         writeAddedWeaponData(addedWeaponData, scriptDataDir + "/addedweapondata.ts");
     })
         .parse(process.argv);

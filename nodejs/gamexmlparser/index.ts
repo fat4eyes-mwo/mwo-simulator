@@ -7,7 +7,10 @@ import XML2js = require('xml2js');
 import FS = require('fs');
 
 const WEAPONSPATH = "Libs/Items/Weapons/Weapons.xml";
-var loadGameData = function(gameDataPakFile : string) : XMLWeaponData {
+interface GameData {
+  xmlWeaponData : XMLWeaponData;
+}
+var loadGameData = function(gameDataPakFile : string) : GameData {
   var gameDataZip = new AdmZip(gameDataPakFile);
   var entries = gameDataZip.getEntries();
 
@@ -17,7 +20,9 @@ var loadGameData = function(gameDataPakFile : string) : XMLWeaponData {
     parseResult = result as XMLWeaponData;
   });
 
-  return parseResult;
+  return {
+    xmlWeaponData : parseResult
+  };
 }
 
 //TODO: Tighten these types
@@ -166,8 +171,8 @@ var main = function() {
     .action(function(mwoDir : string, scriptDataDir : string) {
       console.log("MWO base dir: " + mwoDir);
       console.log("Script data dir: " + scriptDataDir);
-      let parsedWeapons = loadGameData(mwoDir + "/Game/GameData.pak");
-      let addedWeaponData = generateAddedWeaponData(parsedWeapons);
+      let gameData = loadGameData(mwoDir + "/Game/GameData.pak");
+      let addedWeaponData = generateAddedWeaponData(gameData.xmlWeaponData);
       writeAddedWeaponData(addedWeaponData, scriptDataDir + "/addedweapondata.ts");
     })
     .parse(process.argv);
