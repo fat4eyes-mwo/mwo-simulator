@@ -3,7 +3,7 @@
 namespace MechViewMechDetails {
   export class MechDetails extends MechViewWidgets.DomStoredWidget
                           implements MechViewWidgets.RenderedWidget {
-    private static readonly DomKey = "mwosim.MechDetails.domElement";
+    private static readonly DomKey = "mwosim.MechDetails.uiObject";
     mechId : string;
     constructor(mechId : string) {
       let mechDetailsDiv = MechViewWidgets.cloneTemplate("mechDetails-template");
@@ -44,7 +44,7 @@ namespace MechViewMechDetails {
 
   class MechDetailsQuirks extends MechViewWidgets.DomStoredWidget
                           implements MechViewWidgets.RenderedWidget {
-    private static readonly DomKey = "mwosim.MechDetailsQuirks.domElement";
+    private static readonly DomKey = "mwosim.MechDetailsQuirks.uiObject";
     private mechId : string;
 
     constructor(mechId : string) {

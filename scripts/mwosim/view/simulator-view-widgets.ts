@@ -103,7 +103,7 @@ namespace MechViewWidgets {
   }
 
   export class Button extends DomStoredWidget {
-    private static readonly DomKey = "mwosim.MechButton.domElement";
+    private static readonly DomKey = "mwosim.MechButton.uiObject";
     clickHandler : Util.AnyFunction;
     enabled : boolean;
     constructor(domElement : Element, clickHandler : Util.AnyFunction) {
@@ -222,7 +222,7 @@ namespace MechViewWidgets {
   }
 
   export class TabPanel extends DomStoredWidget {
-    private static readonly DomKey = "mwosim.TabPanel.domElement";
+    private static readonly DomKey = "mwosim.TabPanel.uiObject";
     private tabList : Tab[];
     private selectedTab : Tab;
     //TODO: Try to see if it is possible to specify the layout of tab panels
@@ -284,7 +284,7 @@ namespace MechViewWidgets {
   }
 
   export class SimpleWidget extends DomStoredWidget implements RenderedWidget {
-    private static readonly DomKey = "mwosim.SimpleWidget.domElement";
+    private static readonly DomKey = "mwosim.SimpleWidget.uiObject";
     constructor(templateId : string) {
       let domElement = cloneTemplate(templateId);
       super(domElement, SimpleWidget.DomKey);
