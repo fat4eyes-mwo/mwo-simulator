@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "module": "CommonJS",
+        "allowSyntheticDefaultImports" : true,
+        "noImplicitAny": true,
+        "strictNullChecks" : false,
+        "removeComments": false,
+        "preserveConstEnums": true,
+        "baseUrl" : "./",
+        "sourceMap": true,
+        "target": "es6",
+        "strict": true,
+        "forceConsistentCasingInFileNames": true
+    },
+    "files": [
+      "index.ts"
+    ]
+}
