@@ -5,3 +5,4 @@ backups
 nodejs/gamexmlparser/node_modules
 nodejs/**/*.bat
 tslint.out
+*.bat

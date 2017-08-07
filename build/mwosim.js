@@ -7758,7 +7758,19 @@ var MechViewAddMech;
         }
     };
 })(MechViewAddMech || (MechViewAddMech = {}));
+//Widget design policy: No logic in HTML, no layout in Javascript.
+//Javascript only provides behavior, it does NOT generate HTML unless it's from a template.
+//On the converse side, HTML should not contain direct references to javascript entities
+//(e.g. class constructors, methods). Makes it possible to do cosmetic and layout
+//changes purely in HTML and CSS, and you keep out ugly unmaintainable HTML
+//text strings out of javascript.
 var MechViewWidgets;
+//Widget design policy: No logic in HTML, no layout in Javascript.
+//Javascript only provides behavior, it does NOT generate HTML unless it's from a template.
+//On the converse side, HTML should not contain direct references to javascript entities
+//(e.g. class constructors, methods). Makes it possible to do cosmetic and layout
+//changes purely in HTML and CSS, and you keep out ugly unmaintainable HTML
+//text strings out of javascript.
 (function (MechViewWidgets) {
     MechViewWidgets.paperDollDamageGradient = [
         { value: 0.0, RGB: { r: 28, g: 22, b: 6 } },

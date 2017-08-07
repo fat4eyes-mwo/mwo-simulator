@@ -43,7 +43,7 @@ namespace MechViewMechDetails {
   }
 
   class MechDetailsQuirks extends MechViewWidgets.DomStoredWidget
-                          implements MechViewWidgets.RenderedWidget{
+                          implements MechViewWidgets.RenderedWidget {
     private static readonly DomKey = "mwosim.MechDetailsQuirks.domElement";
     private mechId : string;
 
