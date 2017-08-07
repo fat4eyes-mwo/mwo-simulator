@@ -7,7 +7,8 @@ var DomStorage;
     //circular references between an object and a deleted dom element well
     //(at least for chrome and firefox)
     //relies on the DOM being stable (e.g. the browser not replacing an Element with a copy,
-    //which would lose our mapping)
+    //which would lose our mapping). If this doesn't turn out to be so, you can still simulate
+    //it using weakmaps.
     DomStorage.storeToElement = function (elem, key, value) {
         let symbolKey = Symbol.for(key);
         let anyElem = elem;
