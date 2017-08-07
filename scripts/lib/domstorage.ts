@@ -7,7 +7,8 @@ namespace DomStorage {
   //(at least for chrome and firefox)
 
   //relies on the DOM being stable (e.g. the browser not replacing an Element with a copy,
-  //which would lose our mapping)
+  //which would lose our mapping). If this doesn't turn out to be so, you can still simulate
+  //it using weakmaps.
   export var storeToElement = function (elem : Element, key : string, value : any) : any {
     let symbolKey = Symbol.for(key);
     let anyElem = elem as any;
