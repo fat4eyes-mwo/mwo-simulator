@@ -691,8 +691,7 @@ a:hover {
   font-weight: bold;
   color: gold;
   float: left;
-  margin-left: 5px;
-  padding: 3px;
+  padding: 3px 10px 3px 10px;
 }
 
 .statusPanel .mechDetails .mechDetailsQuirkRow {
