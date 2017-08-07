@@ -1,0 +1,10 @@
+Weapon data can be found at MWODIR/Game/GameData.pak/Libs/Items/Weapons/Weapons.xml
+
+Skill node data can be found at MWODIR/Game/GameData.pak/Libs/MechPilotTalents/MechSkillTreeNodes.xml
+
+Mech data reference: http://mwomercs.com/forums/topic/157516-notice-to-third-party-tool-developers-xml-data-changes/
+
+Mech data can be found at MWODIR/Game/mechs/<mechname.pak>/Objects/mechs/<mechname>/<mechvariantname>.mdf (this is actually just an xml file)
+
+Mech omnipod data can be found at MWODIR/Game/mechs/<mechname.pak>/Objects/mechs/<mechname>/<mechname>-omnipods.xml
+  -omnipod set bonuses can be found here
