@@ -108,9 +108,10 @@ namespace MechView {
     });
   }
 
-  var permalinkTooltip : Tooltip;
-  var modifiedTooltip : Tooltip;
-  var loadErrorTooltip : Tooltip;
+  const ModifiedTooltipId = "modifiedTooltip";
+  const PermalinkTooltipId = "permalinkGeneratedTooltip";
+  const LoadErrorTooltipId = "loadErrorTooltip";
+  const StatusTooltipIdList = [ModifiedTooltipId, PermalinkTooltipId, LoadErrorTooltipId];
   var initMiscControl = function() : void {
     let permalinkButtonJQ =
       $("#permalinkButton").click(() => {
@@ -129,17 +130,14 @@ namespace MechView {
             console.log("Done save app state. Data: " + data);
           });
       });
-    modifiedTooltip = new MechViewWidgets.Tooltip(
-                                "modifiedTooltip-template",
+    new MechViewWidgets.Tooltip("modifiedTooltip-template",
                                 "modifiedTooltip",
                                 permalinkButtonJQ.get(0));
-    permalinkTooltip = new MechViewWidgets.Tooltip(
-                                "permalinkGeneratedTooltip-template",
+    new MechViewWidgets.Tooltip("permalinkGeneratedTooltip-template",
                                 "permalinkGeneratedTooltip",
                                 permalinkButtonJQ.get(0));
     let miscControlJQ = $("#" + "miscControl");
-    loadErrorTooltip = new MechViewWidgets.Tooltip(
-                                "loadErrorTooltip-template",
+    new MechViewWidgets.Tooltip("loadErrorTooltip-template",
                                 "loadErrorTooltip",
                                 miscControlJQ.get(0));
     $("#settingsButton").click(() => {
@@ -148,24 +146,38 @@ namespace MechView {
     });
   }
 
+  var getStatusTooltip = function(tooltipId : string) : Tooltip {
+    let element = document.getElementById(tooltipId);
+    return MechViewWidgets.Tooltip.fromDom(element);
+  }
+
+  var showStatusTooltip = function(tooltipId : string) : void {
+    for (let currId of StatusTooltipIdList) {
+      let tooltip = getStatusTooltip(currId);
+      if (currId === tooltipId) {
+        tooltip.showTooltip();
+      } else {
+        tooltip.hideTooltip();
+      }
+    }
+  }
+
+  var hideStatusTooltips = function() : void {
+    showStatusTooltip(null);
+  }
+
   var showModifiedToolip = function() : void {
-    permalinkTooltip.hideTooltip();
-    loadErrorTooltip.hideTooltip();
-    modifiedTooltip.showTooltip();
+    showStatusTooltip(ModifiedTooltipId);
   }
 
   var showPermalinkTooltip = function(link : string) : void {
-    modifiedTooltip.hideTooltip();
-    loadErrorTooltip.hideTooltip();
-    $(`#${permalinkTooltip.id} [class~=permaLink]`)
+    $(`#${PermalinkTooltipId} [class~=permaLink]`)
       .attr("href", link);
-    permalinkTooltip.showTooltip();
+    showStatusTooltip(PermalinkTooltipId);
   }
 
   var showLoadErrorTooltip = function() : void {
-    modifiedTooltip.hideTooltip();
-    permalinkTooltip.hideTooltip();
-    loadErrorTooltip.showTooltip();
+    showStatusTooltip(LoadErrorTooltipId);
   }
 
   //TODO: You now have multiple entities acting on the same event. Think about
@@ -179,16 +191,12 @@ namespace MechView {
   }
 
   export var updateOnLoadAppState = function() : void {
-    permalinkTooltip.hideTooltip();
-    modifiedTooltip.hideTooltip();
-    loadErrorTooltip.hideTooltip();
+    hideStatusTooltips();
     doAutoRun();
   }
 
   export var updateOnLoadAppError = function() : void {
-    permalinkTooltip.hideTooltip();
-    modifiedTooltip.hideTooltip();
-    loadErrorTooltip.showTooltip();
+    showStatusTooltip(LoadErrorTooltipId);
   }
 
   //called when the app is completely loaded

@@ -81,7 +81,7 @@ namespace MechViewWidgets {
     constructor(domElement : Element, DomKey : string) {
       this.domElement = domElement;
       this.DomKey = DomKey;
-      StoreValue.storeToElement(domElement, this.DomKey, this);
+      DomStorage.storeToElement(domElement, this.DomKey, this);
 
       //marker attribute to make it visible in the element tree that there's an
       //object stored in the Element
@@ -97,7 +97,7 @@ namespace MechViewWidgets {
     //therefore this comment.
 
     static fromDomBase<T extends DomStoredWidget>(domElement : Element, DomKey : string) : T {
-      let ret : any = StoreValue.getFromElement(domElement, DomKey);
+      let ret : any = DomStorage.getFromElement(domElement, DomKey);
       return ret; //NOTE: Would be better with an instanceof check, but since T isn't really a value can't do that here
     }
   }
@@ -186,14 +186,16 @@ namespace MechViewWidgets {
     }
   }
 
-  export class Tooltip {
+  export class Tooltip extends DomStoredWidget {
+    private static readonly DomKey = "mwosim.Tooltip.uiObject";
     id : string;
     domElement : Element;
     constructor(templateId : string,
                 tooltipId : string,
                 targetElement : Element) {
+      let domElement = MechViewWidgets.cloneTemplate(templateId);
+      super(domElement, Tooltip.DomKey);
       this.id = tooltipId;
-      this.domElement = MechViewWidgets.cloneTemplate(templateId);
       $(this.domElement)
         .addClass("tooltip")
         .addClass("hidden")
@@ -207,6 +209,10 @@ namespace MechViewWidgets {
 
     hideTooltip() {
       $("#" + this.id).addClass("hidden");
+    }
+
+    static fromDom(element : Element) : Tooltip {
+      return DomStoredWidget.fromDomBase(element, Tooltip.DomKey) as Tooltip;
     }
   }
 

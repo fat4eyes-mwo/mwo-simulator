@@ -1,6 +1,6 @@
 "use strict";
-var StoreValue;
-(function (StoreValue) {
+var DomStorage;
+(function (DomStorage) {
     //Stores an arbitrary value as a symbol indexed property in Element
     //Goal is to map DOM elements to the UI objects that represent them without
     //overly complicated bookkeeping in the app. Garbage collection seems to handle
@@ -8,19 +8,22 @@ var StoreValue;
     //(at least for chrome and firefox)
     //relies on the DOM being stable (e.g. the browser not replacing an Element with a copy,
     //which would lose our mapping)
-    StoreValue.storeToElement = function (elem, key, value) {
+    DomStorage.storeToElement = function (elem, key, value) {
         let symbolKey = Symbol.for(key);
         let anyElem = elem;
         let prevValue = anyElem[symbolKey];
         anyElem[symbolKey] = value;
         return prevValue;
     };
-    StoreValue.getFromElement = function (elem, key) {
+    DomStorage.getFromElement = function (elem, key) {
+        if (!elem) {
+            return null;
+        }
         let symbolKey = Symbol.for(key);
         let anyElem = elem;
         return anyElem[symbolKey];
     };
-})(StoreValue || (StoreValue = {}));
+})(DomStorage || (DomStorage = {}));
 //Additional heatsink data to account for info not in smurfy
 //Reference: http://steamcommunity.com/sharedfiles/filedetails/?id=686548357
 var AddedData;
@@ -7829,7 +7832,7 @@ var MechViewWidgets;
         constructor(domElement, DomKey) {
             this.domElement = domElement;
             this.DomKey = DomKey;
-            StoreValue.storeToElement(domElement, this.DomKey, this);
+            DomStorage.storeToElement(domElement, this.DomKey, this);
             //marker attribute to make it visible in the element tree that there's an
             //object stored in the Element
             //NOTE: browsers automatically lowercase attribute names (at least chrome does)
@@ -7842,7 +7845,7 @@ var MechViewWidgets;
         //that calls the static method below. Can't enforce it with the type system,
         //therefore this comment.
         static fromDomBase(domElement, DomKey) {
-            let ret = StoreValue.getFromElement(domElement, DomKey);
+            let ret = DomStorage.getFromElement(domElement, DomKey);
             return ret; //NOTE: Would be better with an instanceof check, but since T isn't really a value can't do that here
         }
     }
@@ -7888,7 +7891,7 @@ var MechViewWidgets;
             }
         }
     }
-    Button.DomKey = "mwosim.MechButton.domElement";
+    Button.DomKey = "mwosim.MechButton.uiObject";
     MechViewWidgets.Button = Button;
     class ExpandButton extends Button {
         constructor(domElement, clickHandler, ...elementsToExpand) {
@@ -7922,10 +7925,11 @@ var MechViewWidgets;
         }
     }
     MechViewWidgets.ExpandButton = ExpandButton;
-    class Tooltip {
+    class Tooltip extends DomStoredWidget {
         constructor(templateId, tooltipId, targetElement) {
+            let domElement = MechViewWidgets.cloneTemplate(templateId);
+            super(domElement, Tooltip.DomKey);
             this.id = tooltipId;
-            this.domElement = MechViewWidgets.cloneTemplate(templateId);
             $(this.domElement)
                 .addClass("tooltip")
                 .addClass("hidden")
@@ -7938,7 +7942,11 @@ var MechViewWidgets;
         hideTooltip() {
             $("#" + this.id).addClass("hidden");
         }
+        static fromDom(element) {
+            return DomStoredWidget.fromDomBase(element, Tooltip.DomKey);
+        }
     }
+    Tooltip.DomKey = "mwosim.Tooltip.uiObject";
     MechViewWidgets.Tooltip = Tooltip;
     class TabPanel extends DomStoredWidget {
         //TODO: Try to see if it is possible to specify the layout of tab panels
@@ -7992,7 +8000,7 @@ var MechViewWidgets;
             tab.tabContent.domElement.classList.add("hidden");
         }
     }
-    TabPanel.DomKey = "mwosim.TabPanel.domElement";
+    TabPanel.DomKey = "mwosim.TabPanel.uiObject";
     MechViewWidgets.TabPanel = TabPanel;
     class SimpleWidget extends DomStoredWidget {
         constructor(templateId) {
@@ -8003,7 +8011,7 @@ var MechViewWidgets;
             //do nothing
         }
     }
-    SimpleWidget.DomKey = "mwosim.SimpleWidget.domElement";
+    SimpleWidget.DomKey = "mwosim.SimpleWidget.uiObject";
     MechViewWidgets.SimpleWidget = SimpleWidget;
     //Clones a template and returns the first element of the template
     MechViewWidgets.cloneTemplate = function (templateName) {
@@ -8064,7 +8072,7 @@ var MechViewMechDetails;
             mechDetailsTab.render();
         }
     }
-    MechDetails.DomKey = "mwosim.MechDetails.domElement";
+    MechDetails.DomKey = "mwosim.MechDetails.uiObject";
     MechViewMechDetails.MechDetails = MechDetails;
     class MechDetailsTabTitle extends MechViewWidgets.SimpleWidget {
         constructor(title) {
@@ -8106,7 +8114,7 @@ var MechViewMechDetails;
             }
         }
     }
-    MechDetailsQuirks.DomKey = "mwosim.MechDetailsQuirks.domElement";
+    MechDetailsQuirks.DomKey = "mwosim.MechDetailsQuirks.uiObject";
 })(MechViewMechDetails || (MechViewMechDetails = {}));
 //TODO: Wrap mechPanel in a class
 var MechViewMechPanel;
@@ -9619,9 +9627,10 @@ var MechView;
             MechViewReport.showVictoryReport();
         });
     };
-    var permalinkTooltip;
-    var modifiedTooltip;
-    var loadErrorTooltip;
+    const ModifiedTooltipId = "modifiedTooltip";
+    const PermalinkTooltipId = "permalinkGeneratedTooltip";
+    const LoadErrorTooltipId = "loadErrorTooltip";
+    const StatusTooltipIdList = [ModifiedTooltipId, PermalinkTooltipId, LoadErrorTooltipId];
     var initMiscControl = function () {
         let permalinkButtonJQ = $("#permalinkButton").click(() => {
             let saveAppStatePromise = MechViewRouter.saveAppState();
@@ -9639,31 +9648,43 @@ var MechView;
                 console.log("Done save app state. Data: " + data);
             });
         });
-        modifiedTooltip = new MechViewWidgets.Tooltip("modifiedTooltip-template", "modifiedTooltip", permalinkButtonJQ.get(0));
-        permalinkTooltip = new MechViewWidgets.Tooltip("permalinkGeneratedTooltip-template", "permalinkGeneratedTooltip", permalinkButtonJQ.get(0));
+        new MechViewWidgets.Tooltip("modifiedTooltip-template", "modifiedTooltip", permalinkButtonJQ.get(0));
+        new MechViewWidgets.Tooltip("permalinkGeneratedTooltip-template", "permalinkGeneratedTooltip", permalinkButtonJQ.get(0));
         let miscControlJQ = $("#" + "miscControl");
-        loadErrorTooltip = new MechViewWidgets.Tooltip("loadErrorTooltip-template", "loadErrorTooltip", miscControlJQ.get(0));
+        new MechViewWidgets.Tooltip("loadErrorTooltip-template", "loadErrorTooltip", miscControlJQ.get(0));
         $("#settingsButton").click(() => {
             MechSimulatorLogic.pauseSimulation();
             MechViewSimSettings.showSettingsDialog();
         });
     };
+    var getStatusTooltip = function (tooltipId) {
+        let element = document.getElementById(tooltipId);
+        return MechViewWidgets.Tooltip.fromDom(element);
+    };
+    var showStatusTooltip = function (tooltipId) {
+        for (let currId of StatusTooltipIdList) {
+            let tooltip = getStatusTooltip(currId);
+            if (currId === tooltipId) {
+                tooltip.showTooltip();
+            }
+            else {
+                tooltip.hideTooltip();
+            }
+        }
+    };
+    var hideStatusTooltips = function () {
+        showStatusTooltip(null);
+    };
     var showModifiedToolip = function () {
-        permalinkTooltip.hideTooltip();
-        loadErrorTooltip.hideTooltip();
-        modifiedTooltip.showTooltip();
+        showStatusTooltip(ModifiedTooltipId);
     };
     var showPermalinkTooltip = function (link) {
-        modifiedTooltip.hideTooltip();
-        loadErrorTooltip.hideTooltip();
-        $(`#${permalinkTooltip.id} [class~=permaLink]`)
+        $(`#${PermalinkTooltipId} [class~=permaLink]`)
             .attr("href", link);
-        permalinkTooltip.showTooltip();
+        showStatusTooltip(PermalinkTooltipId);
     };
     var showLoadErrorTooltip = function () {
-        modifiedTooltip.hideTooltip();
-        permalinkTooltip.hideTooltip();
-        loadErrorTooltip.showTooltip();
+        showStatusTooltip(LoadErrorTooltipId);
     };
     //TODO: You now have multiple entities acting on the same event. Think about
     //setting up an event scheduler/listeners
@@ -9674,15 +9695,11 @@ var MechView;
         //make the view consistent with the current state
     };
     MechView.updateOnLoadAppState = function () {
-        permalinkTooltip.hideTooltip();
-        modifiedTooltip.hideTooltip();
-        loadErrorTooltip.hideTooltip();
+        hideStatusTooltips();
         doAutoRun();
     };
     MechView.updateOnLoadAppError = function () {
-        permalinkTooltip.hideTooltip();
-        modifiedTooltip.hideTooltip();
-        loadErrorTooltip.showTooltip();
+        showStatusTooltip(LoadErrorTooltipId);
     };
     //called when the app is completely loaded
     MechView.updateOnAppLoaded = function () {

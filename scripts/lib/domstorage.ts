@@ -1,5 +1,5 @@
 
-namespace StoreValue {
+namespace DomStorage {
   //Stores an arbitrary value as a symbol indexed property in Element
   //Goal is to map DOM elements to the UI objects that represent them without
   //overly complicated bookkeeping in the app. Garbage collection seems to handle
@@ -17,6 +17,9 @@ namespace StoreValue {
   }
 
   export var getFromElement = function(elem : Element, key : string) : any {
+    if (!elem) {
+      return null;
+    }
     let symbolKey = Symbol.for(key);
     let anyElem = elem as any;
     return anyElem[symbolKey];
