@@ -76,8 +76,7 @@ class Weapon {
     inheritFrom(otherWeapon) {
         for (let attr in otherWeapon) {
             if (attr !== "id" && attr !== "name") {
-                let temp = this;
-                temp[attr] = otherWeapon[attr];
+                this[attr] = otherWeapon[attr];
             }
         }
     }

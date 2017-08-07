@@ -110,13 +110,12 @@ class Weapon {
   inheritFrom(otherWeapon : Weapon) {
     for (let attr in otherWeapon) {
       if (attr !== "id" && attr !== "name") {
-        let temp : StringIndexed = this;
-        temp[attr] = (otherWeapon as StringIndexed)[attr];
+        (this as StringIndexed)[attr] = (otherWeapon as StringIndexed)[attr];
       }
     }
   }
   serialize() {
-    let ret : {[index:string] : any} = {};
+    let ret : StringIndexed = {};
     for (let attr in this) {
       if (attr !== 'id' && attr !== 'name') {
         ret[attr] = this[attr];
