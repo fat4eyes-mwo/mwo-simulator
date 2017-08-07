@@ -69,7 +69,7 @@ namespace MechViewWidgets {
   //Widgets that are stored in the dom using StoreValue.storeToElement
   //Would be better as a mixin, but initializing mixin classes is still syntactically messy,
   //so keep it a superclass
-  export abstract class DomStoredWidget {
+  export abstract class DomStoredWidget implements DomElementWidget {
     domElement : Element;
     readonly DomKey : string;
     constructor(domElement : Element, DomKey : string) {
@@ -201,6 +201,91 @@ namespace MechViewWidgets {
 
     hideTooltip() {
       $("#" + this.id).addClass("hidden");
+    }
+  }
+
+  export interface RenderedWidget {
+    render : () => void;
+  }
+  export interface DomElementWidget {
+    domElement : Element;
+  }
+  export interface Tab {
+    tabTitle : RenderedWidget & DomElementWidget,
+    tabContent : RenderedWidget & DomElementWidget,
+  }
+
+  export class TabPanel extends DomStoredWidget {
+    private static readonly DomKey = "mwosim.TabPanel.domElement";
+    private tabList : Tab[];
+    private selectedTab : Tab;
+    //TODO: Try to see if it is possible to specify the layout of tab panels
+    //completely in HTML without code generation
+    constructor(tabList : Tab[]) {
+      let domElement = cloneTemplate("tabpanel-template");
+      super(domElement, TabPanel.DomKey);
+      this.tabList = tabList;
+
+      if (tabList.length > 0) {
+        this.selectedTab = this.tabList[0];
+      }
+    }
+
+    render() {
+      for (let tab of this.tabList) {
+        this.renderTab(tab);
+      }
+    }
+
+    private renderTab(tab : Tab) {
+      let tabTitlesJQ = $(this.domElement).find(".tabTitleContainer");
+      let tabContentsJQ = $(this.domElement).find(".tabContentContainer")
+      tab.tabTitle.render();
+      tab.tabTitle.domElement.classList.add("tabTitle");
+      tabTitlesJQ.append(tab.tabTitle.domElement);
+      tab.tabContent.render();
+      tab.tabContent.domElement.classList.add("tabContent");
+      if (this.selectedTab === tab) {
+        this.setSelected(tab, false);
+      } else {
+        this.unsetSelected(tab);
+      }
+
+      $(tab.tabTitle.domElement).click(() => {
+        this.setSelected(tab);
+      });
+
+      tabContentsJQ.append(tab.tabContent.domElement);
+    }
+
+    private setSelected(tab: Tab, deselectOthers = true) : void {
+      this.selectedTab = tab;
+      tab.tabTitle.domElement.classList.add("selected");
+      tab.tabContent.domElement.classList.remove("hidden");
+      if (deselectOthers) {
+        for (let currTab of this.tabList) {
+          if (currTab !== tab) {
+            this.unsetSelected(currTab);
+          }
+        }
+      }
+    }
+
+    private unsetSelected(tab: Tab) {
+      tab.tabTitle.domElement.classList.remove("selected");
+      tab.tabContent.domElement.classList.add("hidden");
+    }
+  }
+
+  export class SimpleWidget extends DomStoredWidget implements RenderedWidget {
+    private static readonly DomKey = "mwosim.SimpleWidget.domElement";
+    constructor(templateId : string) {
+      let domElement = cloneTemplate(templateId);
+      super(domElement, SimpleWidget.DomKey);
+    }
+
+    render() {
+      //do nothing
     }
   }
 

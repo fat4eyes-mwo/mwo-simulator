@@ -752,22 +752,33 @@ div {
 
 $bonus-color : rgb(50, 150, 50);
 $malus-color : rgb(150, 50, 50);
-.statusPanel .mechDetails .mechQuirkListTitle {
+
+.statusPanel .mechDetails .tabPanel {
+  height: 100%;
+  overflow: auto;
+}
+.statusPanel .mechDetails .tabPanel .tabTitleContainer {
   position: sticky;
   top: 0px;
   background: $background-color;
   z-index: 20;
-  font-weight: bold;
-  color: $emphasis-color;
   margin-bottom: 5px;
 }
-.statusPanel .mechDetails .mechDetailsQuirk {
+
+.statusPanel .mechDetails .tabTitle {
+  font-weight: bold;
+  color: $emphasis-color;
+  float: left;
+  margin-left: 5px;
+  padding: 3px;
+}
+.statusPanel .mechDetails .mechDetailsQuirkRow {
   font-size: 0.9em;
 }
-.statusPanel .mechDetails .mechDetailsQuirk.bonus {
+.statusPanel .mechDetails .mechDetailsQuirkRow.bonus {
   color: $bonus-color;
 }
-.statusPanel .mechDetails .mechDetailsQuirk.malus {
+.statusPanel .mechDetails .mechDetailsQuirkRow.malus {
   color: $malus-color;
 }
 
@@ -1404,4 +1415,28 @@ $loaded-mech-highlight-border-radius: 4px;
   width: 100%;
   text-align: center;
   font-size: 0.9em;
+}
+
+.tabPanel {
+
+}
+
+.tabPanel .tabTitleContainer {
+
+}
+
+.tabPanel .tabTitleContainer .tabTitle {
+  cursor: pointer;
+}
+
+.tabPanel .tabTitleContainer .tabTitle.selected {
+  background-color: $off-background-color;
+}
+
+.tabPanel .tabContentContainer .tabContent {
+
+}
+
+.tabPanel .hidden {
+  display: none;
 }

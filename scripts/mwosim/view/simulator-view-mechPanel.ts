@@ -681,32 +681,9 @@ namespace MechViewMechPanel {
 
   var createMechDetails =
       function(mechId: string, mechDetailsContainer : Element) : void {
-    let mechDetailsDiv = MechViewWidgets.cloneTemplate("mechDetails-template");
-    let mechDetailsJQ = $(mechDetailsDiv);
-    let mechQuirksJQ = mechDetailsJQ.find(".mechQuirkList");
-    let mechQuirkList = MechModelView.getMechQuirks(mechId);
-
-    if (mechQuirkList.length === 0) {
-      let mechQuirkDiv = MechViewWidgets.cloneTemplate("mechDetailsQuirk-template");
-      let mechQuirkJQ = $(mechQuirkDiv);
-      mechQuirkJQ.find(".name").text("None");
-      mechQuirksJQ.append(mechQuirkJQ);
-    }
-
-    for (let mechQuirk of mechQuirkList) {
-      let mechQuirkDiv = MechViewWidgets.cloneTemplate("mechDetailsQuirk-template");
-      let mechQuirkJQ = $(mechQuirkDiv);
-      mechQuirkJQ.find(".name").text(mechQuirk.translated_name);
-      mechQuirkJQ.find(".value").text(mechQuirk.translated_value);
-      if (mechQuirk.isBonus()) {
-        mechQuirkJQ.addClass("bonus");
-      } else {
-        mechQuirkJQ.addClass("malus");
-      }
-      mechQuirksJQ.append(mechQuirkJQ);
-    }
-
-    $(mechDetailsContainer).append(mechDetailsJQ);
+    let mechDetails = new MechViewMechDetails.MechDetails(mechId);
+    mechDetails.render();
+    $(mechDetailsContainer).append(mechDetails.domElement);
   }
 
   //scrolls to and flashes the selected mech panel

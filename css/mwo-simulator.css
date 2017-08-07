@@ -674,25 +674,36 @@ a:hover {
   overflow: auto;
 }
 
-.statusPanel .mechDetails .mechQuirkListTitle {
+.statusPanel .mechDetails .tabPanel {
+  height: 100%;
+  overflow: auto;
+}
+
+.statusPanel .mechDetails .tabPanel .tabTitleContainer {
   position: sticky;
   top: 0px;
   background: #202020;
   z-index: 20;
-  font-weight: bold;
-  color: gold;
   margin-bottom: 5px;
 }
 
-.statusPanel .mechDetails .mechDetailsQuirk {
+.statusPanel .mechDetails .tabTitle {
+  font-weight: bold;
+  color: gold;
+  float: left;
+  margin-left: 5px;
+  padding: 3px;
+}
+
+.statusPanel .mechDetails .mechDetailsQuirkRow {
   font-size: 0.9em;
 }
 
-.statusPanel .mechDetails .mechDetailsQuirk.bonus {
+.statusPanel .mechDetails .mechDetailsQuirkRow.bonus {
   color: #329632;
 }
 
-.statusPanel .mechDetails .mechDetailsQuirk.malus {
+.statusPanel .mechDetails .mechDetailsQuirkRow.malus {
   color: #963232;
 }
 
@@ -1305,4 +1316,16 @@ a:hover {
   width: 100%;
   text-align: center;
   font-size: 0.9em;
+}
+
+.tabPanel .tabTitleContainer .tabTitle {
+  cursor: pointer;
+}
+
+.tabPanel .tabTitleContainer .tabTitle.selected {
+  background-color: #404040;
+}
+
+.tabPanel .hidden {
+  display: none;
 }
