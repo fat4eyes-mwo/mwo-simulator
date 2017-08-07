@@ -6,13 +6,19 @@ import AdmZip = require('adm-zip');
 import XML2js = require('xml2js');
 import FS = require('fs');
 
+interface StringIndexed {
+  [index:string] : any;
+}
+interface NumberIndexed {
+  [index:number] : any;
+}
+
 const WEAPONSPATH = "Libs/Items/Weapons/Weapons.xml";
 interface GameData {
   xmlWeaponData : XMLWeaponData;
 }
 var loadGameData = function(gameDataPakFile : string) : GameData {
   var gameDataZip = new AdmZip(gameDataPakFile);
-  var entries = gameDataZip.getEntries();
 
   var parseResult : XMLWeaponData;
   let weaponsXML = gameDataZip.readAsText(WEAPONSPATH);
@@ -23,6 +29,37 @@ var loadGameData = function(gameDataPakFile : string) : GameData {
   return {
     xmlWeaponData : parseResult
   };
+}
+
+interface XMLMechData {
+  mechName : string;
+  xmlOmnipodData : XMLOmnipodData;
+}
+interface XMLOmnipodData {
+  attr : any;
+}
+var loadMechData = function (mechPakFile : string) : XMLMechData {
+  let mechNameRegex : RegExp = /^.*[\\\\\/]([A-Za-z]+)\.pak$/ //Regexes are still unreadable AF.
+  let matches : NumberIndexed = mechNameRegex.exec(mechPakFile);
+  let mechName = (matches as NumberIndexed)[1];
+  const MechPathInZip = `Objects/mechs/${mechName}/`;
+
+  let mechZip = new AdmZip(mechPakFile);
+  let xmlOmnipodData = parseMechOmnipods(mechZip, mechName, MechPathInZip);
+  return {
+    mechName,
+    xmlOmnipodData
+  }
+}
+
+var parseMechOmnipods = function(mechZip : AdmZip, mechName : string, mechPathInZip : string) : XMLOmnipodData {
+  const OmnipodPathInZip = mechPathInZip + `${mechName}-omnipods.xml`;
+  let omnipodXML = mechZip.readAsText(OmnipodPathInZip);
+  var parsedXML :XMLOmnipodData;
+  XML2js.parseString(omnipodXML, {attrkey:"attr"}, function(err: any, result: any) {
+    parsedXML = result as XMLOmnipodData;
+  });
+  return parsedXML;
 }
 
 //TODO: Tighten these types
@@ -37,9 +74,7 @@ interface XMLWeaponEntry {
 interface XMLRangeEntry {
   attr : any;
 }
-interface StringIndexed {
-  [index:string] : any;
-}
+
 var weaponIdMap = new Map();
 class Weapon {
   id : string;
@@ -171,9 +206,20 @@ var main = function() {
     .action(function(mwoDir : string, scriptDataDir : string) {
       console.log("MWO base dir: " + mwoDir);
       console.log("Script data dir: " + scriptDataDir);
+
+      //GameData.pak
       let gameData = loadGameData(mwoDir + "/Game/GameData.pak");
       let addedWeaponData = generateAddedWeaponData(gameData.xmlWeaponData);
       writeAddedWeaponData(addedWeaponData, scriptDataDir + "/addedweapondata.ts");
+
+      //Mech data
+      const MechDir = mwoDir + "/Game/mechs/";
+      let dirContents = FS.readdirSync(MechDir);
+      for (let mechFile of dirContents) {
+        let mechFilePath = MechDir + mechFile;
+        console.log("Processing " + mechFilePath);
+        let mechData = loadMechData(mechFilePath);
+      }
     })
     .parse(process.argv);
 }

@@ -9,7 +9,6 @@ const FS = require("fs");
 const WEAPONSPATH = "Libs/Items/Weapons/Weapons.xml";
 var loadGameData = function (gameDataPakFile) {
     var gameDataZip = new AdmZip(gameDataPakFile);
-    var entries = gameDataZip.getEntries();
     var parseResult;
     let weaponsXML = gameDataZip.readAsText(WEAPONSPATH);
     XML2js.parseString(weaponsXML, { attrkey: "attr" }, function (err, result) {
@@ -18,6 +17,27 @@ var loadGameData = function (gameDataPakFile) {
     return {
         xmlWeaponData: parseResult
     };
+};
+var loadMechData = function (mechPakFile) {
+    let mechNameRegex = /^.*[\\\\\/]([A-Za-z]+)\.pak$/; //Regexes are still unreadable AF.
+    let matches = mechNameRegex.exec(mechPakFile);
+    let mechName = matches[1];
+    const MechPathInZip = `Objects/mechs/${mechName}/`;
+    let mechZip = new AdmZip(mechPakFile);
+    let xmlOmnipodData = parseMechOmnipods(mechZip, mechName, MechPathInZip);
+    return {
+        mechName,
+        xmlOmnipodData
+    };
+};
+var parseMechOmnipods = function (mechZip, mechName, mechPathInZip) {
+    const OmnipodPathInZip = mechPathInZip + `${mechName}-omnipods.xml`;
+    let omnipodXML = mechZip.readAsText(OmnipodPathInZip);
+    var parsedXML;
+    XML2js.parseString(omnipodXML, { attrkey: "attr" }, function (err, result) {
+        parsedXML = result;
+    });
+    return parsedXML;
 };
 var weaponIdMap = new Map();
 class Weapon {
@@ -130,9 +150,18 @@ var main = function () {
         .action(function (mwoDir, scriptDataDir) {
         console.log("MWO base dir: " + mwoDir);
         console.log("Script data dir: " + scriptDataDir);
+        //GameData.pak
         let gameData = loadGameData(mwoDir + "/Game/GameData.pak");
         let addedWeaponData = generateAddedWeaponData(gameData.xmlWeaponData);
         writeAddedWeaponData(addedWeaponData, scriptDataDir + "/addedweapondata.ts");
+        //Mech data
+        const MechDir = mwoDir + "/Game/mechs/";
+        let dirContents = FS.readdirSync(MechDir);
+        for (let mechFile of dirContents) {
+            let mechFilePath = MechDir + mechFile;
+            console.log("Processing " + mechFilePath);
+            let mechData = loadMechData(mechFilePath);
+        }
     })
         .parse(process.argv);
 };
