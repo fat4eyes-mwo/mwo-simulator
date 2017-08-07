@@ -1,5 +1,11 @@
 "use strict";
 
+//Widget design policy: No logic in HTML, no layout in Javascript.
+//Javascript only provides behavior, it does NOT generate HTML unless it's from a template.
+//On the converse side, HTML should not contain direct references to javascript entities
+//(e.g. class constructors, methods). Makes it possible to do cosmetic and layout
+//changes purely in HTML and CSS, and you keep out ugly unmaintainable HTML
+//text strings out of javascript.
 namespace MechViewWidgets {
   // Paper doll UI functions
   //Color gradient for damage percentages. Must be in sorted ascending order
