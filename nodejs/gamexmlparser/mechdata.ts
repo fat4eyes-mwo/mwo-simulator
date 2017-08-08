@@ -1,4 +1,5 @@
 import {StringIndexed, NumberIndexed} from "./parser-common";
+import {MechDataQuirkData} from "./data/mechdata-quirks";
 import FS = require('fs');
 
 export namespace MechData {
@@ -38,7 +39,12 @@ export namespace MechData {
     }
     translateName() {
       //TODO: translate names
-      return this.name;
+      let nameEntry = MechDataQuirkData.QuirkTranslatedNameMap[this.name];
+      if (nameEntry) {
+        return nameEntry.translated_name;
+      } else {
+        return this.name;
+      }
     }
     toString() {
       return `{name: "${this.name}", value: "${this.value}"}`;

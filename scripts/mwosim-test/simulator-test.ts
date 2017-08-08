@@ -221,7 +221,7 @@ namespace MechTest {
   }
 
   export var testListQuirks = function() {
-    let quirkMap: { [index: string]: boolean } = {};
+    let quirkMap: { [index: string]: SmurfyTypes.SmurfyQuirk } = {};
     //mech quirks
     for (let mechIdx in DummyMechData) {
       if (!DummyMechData.hasOwnProperty(mechIdx)) {
@@ -231,7 +231,9 @@ namespace MechTest {
       let quirks = smurfyMech.details.quirks;
       if (quirks) {
         for (let quirkEntry of quirks) {
-          quirkMap[quirkEntry.name] = true;
+          if (!quirkMap[quirkEntry.name]) {
+              quirkMap[quirkEntry.name] = quirkEntry;
+          }
         }
       }
     }
@@ -249,7 +251,9 @@ namespace MechTest {
         let quirks = omnipodData.configuration.quirks;
         if (quirks) {
           for (let quirkEntry of quirks) {
-            quirkMap[quirkEntry.name] = true;
+            if (!quirkMap[quirkEntry.name]) {
+              quirkMap[quirkEntry.name] = quirkEntry;
+            }
           }
         }
       }
@@ -257,8 +261,10 @@ namespace MechTest {
     //omnipod set quirks
     for (let omnipodSetName in AddedData._AddedOmnipodData ) {
       let omnipodSet = AddedData._AddedOmnipodData[omnipodSetName] as SmurfyTypes.OmnipodSet;
-      for (let quirk of omnipodSet.setBonusQuirks) {
-        quirkMap[quirk.name] = true;
+      for (let quirkEntry of omnipodSet.setBonusQuirks) {
+        if (!quirkMap[quirkEntry.name]) {
+            quirkMap[quirkEntry.name] = quirkEntry;
+        }
       }
     }
     let numQuirks = 0;
@@ -271,7 +277,8 @@ namespace MechTest {
     }
     sortedQuirkNames.sort();
     for (let quirkName of sortedQuirkNames) {
-      console.log(quirkName);
+      let quirkEntry = quirkMap[quirkName];
+      console.log(`${quirkEntry.name}\t${quirkEntry.translated_name}`);
       numQuirks++;
     }
     console.log("numQuirks : " + numQuirks);

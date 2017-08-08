@@ -1,4 +1,4 @@
-//Generated from Game/mechs/*.pak on Tue, 08 Aug 2017 01:57:44 GMT
+//Generated from Game/mechs/*.pak on Tue, 08 Aug 2017 21:52:36 GMT
 namespace AddedData {
   export var _AddedOmnipodData : {[index:string] : any} = {
 	"adr-prime": {
@@ -7,17 +7,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "clanerppc_velocity_multiplier",
 				"value": 0.1,
-				"translated_name": "clanerppc_velocity_multiplier"
+				"translated_name": "CLAN ER PPC VELOCITY"
 			},
 			{
 				"name": "clanerppc_heat_multiplier",
 				"value": -0.05,
-				"translated_name": "clanerppc_heat_multiplier"
+				"translated_name": "ER PPC HEAT GENERATION"
 			}
 		]
 	},
@@ -27,22 +27,22 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "torso_yawangle_additive",
 				"value": 10,
-				"translated_name": "torso_yawangle_additive"
+				"translated_name": "Torso Yaw Angle"
 			},
 			{
 				"name": "missile_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "missile_cooldown_multiplier"
+				"translated_name": "MISSILE COOLDOWN"
 			},
 			{
 				"name": "laser_range_multiplier",
 				"value": 0.05,
-				"translated_name": "laser_range_multiplier"
+				"translated_name": "LASER RANGE"
 			}
 		]
 	},
@@ -52,17 +52,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "energy_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "energy_cooldown_multiplier"
+				"translated_name": "ENERGY COOLDOWN"
 			},
 			{
 				"name": "ballistic_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "ballistic_cooldown_multiplier"
+				"translated_name": "BALLISTIC COOLDOWN"
 			}
 		]
 	},
@@ -72,22 +72,22 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "turnlerp_all_multiplier",
 				"value": 0.1,
-				"translated_name": "turnlerp_all_multiplier"
+				"translated_name": "TURN RATE"
 			},
 			{
 				"name": "lbxautocannon_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "lbxautocannon_cooldown_multiplier"
+				"translated_name": "LB-X Autocannon Cooldown"
 			},
 			{
 				"name": "torso_yawangle_additive",
 				"value": 10,
-				"translated_name": "torso_yawangle_additive"
+				"translated_name": "Torso Yaw Angle"
 			}
 		]
 	},
@@ -97,17 +97,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "energy_range_multiplier",
 				"value": 0.05,
-				"translated_name": "energy_range_multiplier"
+				"translated_name": "ENERGY RANGE"
 			},
 			{
 				"name": "laser_duration_multiplier",
 				"value": -0.05,
-				"translated_name": "laser_duration_multiplier"
+				"translated_name": "LASER DURATION"
 			}
 		]
 	},
@@ -117,12 +117,12 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "turnlerp_all_multiplier",
 				"value": 0.025,
-				"translated_name": "turnlerp_all_multiplier"
+				"translated_name": "TURN RATE"
 			}
 		]
 	},
@@ -132,7 +132,7 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -142,12 +142,12 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "torso_yawspeed_multiplier",
 				"value": 0.03,
-				"translated_name": "torso_yawspeed_multiplier"
+				"translated_name": "Torso Yaw Speed"
 			}
 		]
 	},
@@ -157,17 +157,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "accellerp_all_multiplier",
 				"value": 0.025,
-				"translated_name": "accellerp_all_multiplier"
+				"translated_name": "ACCELERATION RATE"
 			},
 			{
 				"name": "decellerp_all_multiplier",
 				"value": 0.025,
-				"translated_name": "decellerp_all_multiplier"
+				"translated_name": "DECELERATION RATE"
 			}
 		]
 	},
@@ -177,17 +177,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "energy_heat_multiplier",
 				"value": -0.1,
-				"translated_name": "energy_heat_multiplier"
+				"translated_name": "Energy Heat"
 			},
 			{
 				"name": "missile_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "missile_cooldown_multiplier"
+				"translated_name": "MISSILE COOLDOWN"
 			}
 		]
 	},
@@ -197,17 +197,17 @@ namespace AddedData {
 			{
 				"name": "ballistic_cooldown_multiplier",
 				"value": -0.05,
-				"translated_name": "ballistic_cooldown_multiplier"
+				"translated_name": "BALLISTIC COOLDOWN"
 			},
 			{
 				"name": "clanerlaser_range_multiplier",
 				"value": 0.05,
-				"translated_name": "clanerlaser_range_multiplier"
+				"translated_name": "Clan ER Laser Range"
 			},
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -217,17 +217,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "ultraautocannon_jamchance_multiplier",
 				"value": -0.25,
-				"translated_name": "ultraautocannon_jamchance_multiplier"
+				"translated_name": "UAC JAM CHANCE"
 			},
 			{
 				"name": "energy_cooldown_multiplier",
 				"value": -0.15,
-				"translated_name": "energy_cooldown_multiplier"
+				"translated_name": "ENERGY COOLDOWN"
 			}
 		]
 	},
@@ -237,17 +237,17 @@ namespace AddedData {
 			{
 				"name": "all_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "all_cooldown_multiplier"
+				"translated_name": "COOLDOWN"
 			},
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "atm_spread_multiplier",
 				"value": -0.05,
-				"translated_name": "atm_spread_multiplier"
+				"translated_name": "ATM SPREAD"
 			}
 		]
 	},
@@ -257,22 +257,22 @@ namespace AddedData {
 			{
 				"name": "energy_heat_multiplier",
 				"value": -0.1,
-				"translated_name": "energy_heat_multiplier"
+				"translated_name": "Energy Heat"
 			},
 			{
 				"name": "ultraautocannon_jamchance_multiplier",
 				"value": -0.25,
-				"translated_name": "ultraautocannon_jamchance_multiplier"
+				"translated_name": "UAC JAM CHANCE"
 			},
 			{
 				"name": "all_cooldown_multiplier",
 				"value": 0.05,
-				"translated_name": "all_cooldown_multiplier"
+				"translated_name": "COOLDOWN"
 			},
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -282,17 +282,17 @@ namespace AddedData {
 			{
 				"name": "clanmachinegun_rof_multiplier",
 				"value": 0.2,
-				"translated_name": "clanmachinegun_rof_multiplier"
+				"translated_name": "MACHINE GUN ROF"
 			},
 			{
 				"name": "missile_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "missile_cooldown_multiplier"
+				"translated_name": "MISSILE COOLDOWN"
 			},
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -302,17 +302,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "ultraautocannon_jamchance_multiplier",
 				"value": -0.3,
-				"translated_name": "ultraautocannon_jamchance_multiplier"
+				"translated_name": "UAC JAM CHANCE"
 			},
 			{
 				"name": "missile_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "missile_cooldown_multiplier"
+				"translated_name": "MISSILE COOLDOWN"
 			}
 		]
 	},
@@ -322,17 +322,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "ballistic_cooldown_multiplier",
 				"value": -0.05,
-				"translated_name": "ballistic_cooldown_multiplier"
+				"translated_name": "BALLISTIC COOLDOWN"
 			},
 			{
 				"name": "missile_cooldown_multiplier",
 				"value": -0.05,
-				"translated_name": "missile_cooldown_multiplier"
+				"translated_name": "MISSILE COOLDOWN"
 			}
 		]
 	},
@@ -342,17 +342,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "clanultraautocannon2_heat_multiplier",
 				"value": -0.05,
-				"translated_name": "clanultraautocannon2_heat_multiplier"
+				"translated_name": "Clan UAC2 Heat"
 			},
 			{
 				"name": "energy_range_multiplier",
 				"value": 0.05,
-				"translated_name": "energy_range_multiplier"
+				"translated_name": "ENERGY RANGE"
 			}
 		]
 	},
@@ -362,17 +362,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "turnlerp_all_multiplier",
 				"value": 0.1,
-				"translated_name": "turnlerp_all_multiplier"
+				"translated_name": "TURN RATE"
 			},
 			{
 				"name": "missile_cooldown_multiplier",
 				"value": -0.05,
-				"translated_name": "missile_cooldown_multiplier"
+				"translated_name": "MISSILE COOLDOWN"
 			}
 		]
 	},
@@ -382,17 +382,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "missile_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "missile_cooldown_multiplier"
+				"translated_name": "MISSILE COOLDOWN"
 			},
 			{
 				"name": "torso_yawspeed_multiplier",
 				"value": 0.1,
-				"translated_name": "torso_yawspeed_multiplier"
+				"translated_name": "Torso Yaw Speed"
 			}
 		]
 	},
@@ -402,17 +402,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "clanultraautocannon2_heat_multiplier",
 				"value": -0.05,
-				"translated_name": "clanultraautocannon2_heat_multiplier"
+				"translated_name": "Clan UAC2 Heat"
 			},
 			{
 				"name": "missile_cooldown_multiplier",
 				"value": -0.15,
-				"translated_name": "missile_cooldown_multiplier"
+				"translated_name": "MISSILE COOLDOWN"
 			}
 		]
 	},
@@ -422,7 +422,7 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -432,7 +432,7 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -442,7 +442,7 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -452,7 +452,7 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -462,7 +462,7 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -472,7 +472,7 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -482,7 +482,7 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -492,7 +492,7 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -502,7 +502,7 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -512,12 +512,12 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "reversespeed_multiplier",
 				"value": 0.05,
-				"translated_name": "reversespeed_multiplier"
+				"translated_name": "REVERSE SPEED"
 			}
 		]
 	},
@@ -527,17 +527,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "torso_pitchangle_additive",
 				"value": 2,
-				"translated_name": "torso_pitchangle_additive"
+				"translated_name": "Torso Pitch Angle"
 			},
 			{
 				"name": "torso_yawspeed_multiplier",
 				"value": 0.025,
-				"translated_name": "torso_yawspeed_multiplier"
+				"translated_name": "Torso Yaw Speed"
 			}
 		]
 	},
@@ -547,12 +547,12 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "torso_yawspeed_multiplier",
 				"value": 0.05,
-				"translated_name": "torso_yawspeed_multiplier"
+				"translated_name": "Torso Yaw Speed"
 			}
 		]
 	},
@@ -562,12 +562,12 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "turnlerp_all_multiplier",
 				"value": 0.05,
-				"translated_name": "turnlerp_all_multiplier"
+				"translated_name": "TURN RATE"
 			}
 		]
 	},
@@ -577,17 +577,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "accellerp_all_multiplier",
 				"value": 0.025,
-				"translated_name": "accellerp_all_multiplier"
+				"translated_name": "ACCELERATION RATE"
 			},
 			{
 				"name": "decellerp_all_multiplier",
 				"value": 0.025,
-				"translated_name": "decellerp_all_multiplier"
+				"translated_name": "DECELERATION RATE"
 			}
 		]
 	},
@@ -597,7 +597,7 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -607,7 +607,7 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -617,7 +617,7 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -627,7 +627,7 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -637,17 +637,17 @@ namespace AddedData {
 			{
 				"name": "ballistic_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "ballistic_cooldown_multiplier"
+				"translated_name": "BALLISTIC COOLDOWN"
 			},
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "missile_heat_multiplier",
 				"value": -0.1,
-				"translated_name": "missile_heat_multiplier"
+				"translated_name": "MISSILE HEAT GENERATION"
 			}
 		]
 	},
@@ -657,17 +657,17 @@ namespace AddedData {
 			{
 				"name": "pulselaser_cooldown_multiplier",
 				"value": -0.05,
-				"translated_name": "pulselaser_cooldown_multiplier"
+				"translated_name": "PULSE LASER COOLDOWN"
 			},
 			{
 				"name": "pulselaser_range_multiplier",
 				"value": 0.1,
-				"translated_name": "pulselaser_range_multiplier"
+				"translated_name": "PULSE LASER RANGE"
 			},
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -677,17 +677,17 @@ namespace AddedData {
 			{
 				"name": "clanlbxautocannon10_cooldown_multiplier",
 				"value": -0.05,
-				"translated_name": "clanlbxautocannon10_cooldown_multiplier"
+				"translated_name": "Clan LB-X10 Cooldown"
 			},
 			{
 				"name": "ballistic_velocity_multiplier",
 				"value": 0.1,
-				"translated_name": "ballistic_velocity_multiplier"
+				"translated_name": "BALLISTIC VELOCITY"
 			},
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -697,17 +697,17 @@ namespace AddedData {
 			{
 				"name": "ultraautocannon_jamchance_multiplier",
 				"value": -0.15,
-				"translated_name": "ultraautocannon_jamchance_multiplier"
+				"translated_name": "UAC JAM CHANCE"
 			},
 			{
 				"name": "lrm_spread_multiplier",
 				"value": -0.1,
-				"translated_name": "lrm_spread_multiplier"
+				"translated_name": "LRM 5/10/15/20 SPREAD"
 			},
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -717,17 +717,17 @@ namespace AddedData {
 			{
 				"name": "erlaser_range_multiplier",
 				"value": 0.05,
-				"translated_name": "erlaser_range_multiplier"
+				"translated_name": "ER LASER RANGE"
 			},
 			{
 				"name": "streaksrm_cooldown_multiplier",
 				"value": -0.05,
-				"translated_name": "streaksrm_cooldown_multiplier"
+				"translated_name": "Streak 2/4/6 Cooldown"
 			},
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -737,17 +737,17 @@ namespace AddedData {
 			{
 				"name": "missile_velocity_multiplier",
 				"value": 0.1,
-				"translated_name": "missile_velocity_multiplier"
+				"translated_name": "MISSILE VELOCITY"
 			},
 			{
 				"name": "turnlerp_all_multiplier",
 				"value": 0.15,
-				"translated_name": "turnlerp_all_multiplier"
+				"translated_name": "TURN RATE"
 			},
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -757,17 +757,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "energy_range_multiplier",
 				"value": 0.1,
-				"translated_name": "energy_range_multiplier"
+				"translated_name": "ENERGY RANGE"
 			},
 			{
 				"name": "missile_cooldown_multiplier",
 				"value": -0.15,
-				"translated_name": "missile_cooldown_multiplier"
+				"translated_name": "MISSILE COOLDOWN"
 			}
 		]
 	},
@@ -777,22 +777,22 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "turnlerp_all_multiplier",
 				"value": 0.05,
-				"translated_name": "turnlerp_all_multiplier"
+				"translated_name": "TURN RATE"
 			},
 			{
 				"name": "missile_cooldown_multiplier",
 				"value": -0.05,
-				"translated_name": "missile_cooldown_multiplier"
+				"translated_name": "MISSILE COOLDOWN"
 			},
 			{
 				"name": "missile_heat_multiplier",
 				"value": -0.05,
-				"translated_name": "missile_heat_multiplier"
+				"translated_name": "MISSILE HEAT GENERATION"
 			}
 		]
 	},
@@ -802,17 +802,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "missile_cooldown_multiplier",
 				"value": -0.15,
-				"translated_name": "missile_cooldown_multiplier"
+				"translated_name": "MISSILE COOLDOWN"
 			},
 			{
 				"name": "energy_heat_multiplier",
 				"value": -0.1,
-				"translated_name": "energy_heat_multiplier"
+				"translated_name": "Energy Heat"
 			}
 		]
 	},
@@ -822,17 +822,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "energy_range_multiplier",
 				"value": 0.1,
-				"translated_name": "energy_range_multiplier"
+				"translated_name": "ENERGY RANGE"
 			},
 			{
 				"name": "energy_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "energy_cooldown_multiplier"
+				"translated_name": "ENERGY COOLDOWN"
 			}
 		]
 	},
@@ -842,17 +842,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "energy_range_multiplier",
 				"value": 0.1,
-				"translated_name": "energy_range_multiplier"
+				"translated_name": "ENERGY RANGE"
 			},
 			{
 				"name": "laser_duration_multiplier",
 				"value": -0.05,
-				"translated_name": "laser_duration_multiplier"
+				"translated_name": "LASER DURATION"
 			}
 		]
 	},
@@ -862,17 +862,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "clanerppc_velocity_multiplier",
 				"value": 0.1,
-				"translated_name": "clanerppc_velocity_multiplier"
+				"translated_name": "CLAN ER PPC VELOCITY"
 			},
 			{
 				"name": "missile_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "missile_cooldown_multiplier"
+				"translated_name": "MISSILE COOLDOWN"
 			}
 		]
 	},
@@ -882,17 +882,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "clanlrm_cooldown_multiplier",
 				"value": -0.15,
-				"translated_name": "clanlrm_cooldown_multiplier"
+				"translated_name": "Clan LRM Cooldown"
 			},
 			{
 				"name": "clanerlaser_duration_multiplier",
 				"value": -0.05,
-				"translated_name": "clanerlaser_duration_multiplier"
+				"translated_name": "Clan ER Laser Duration"
 			}
 		]
 	},
@@ -902,17 +902,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "clangaussrifle_cooldown_multiplier",
 				"value": -0.05,
-				"translated_name": "clangaussrifle_cooldown_multiplier"
+				"translated_name": "Clan Gauss Cooldown"
 			},
 			{
 				"name": "energy_heat_multiplier",
 				"value": -0.05,
-				"translated_name": "energy_heat_multiplier"
+				"translated_name": "Energy Heat"
 			}
 		]
 	},
@@ -922,22 +922,22 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "clanmachinegun_rof_multiplier",
 				"value": 0.2,
-				"translated_name": "clanmachinegun_rof_multiplier"
+				"translated_name": "MACHINE GUN ROF"
 			},
 			{
 				"name": "accellerp_all_multiplier",
 				"value": 0.1,
-				"translated_name": "accellerp_all_multiplier"
+				"translated_name": "ACCELERATION RATE"
 			},
 			{
 				"name": "decellerp_all_multiplier",
 				"value": 0.1,
-				"translated_name": "decellerp_all_multiplier"
+				"translated_name": "DECELERATION RATE"
 			}
 		]
 	},
@@ -947,17 +947,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "clanerlaser_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "clanerlaser_cooldown_multiplier"
+				"translated_name": "Clan ER Laser Cooldown"
 			},
 			{
 				"name": "clanstreaksrm_cooldown_multiplier",
 				"value": -0.05,
-				"translated_name": "clanstreaksrm_cooldown_multiplier"
+				"translated_name": "Clan Streak Cooldown"
 			}
 		]
 	},
@@ -967,17 +967,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "missile_cooldown_multiplier",
 				"value": -0.15,
-				"translated_name": "missile_cooldown_multiplier"
+				"translated_name": "MISSILE COOLDOWN"
 			},
 			{
 				"name": "ballistic_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "ballistic_cooldown_multiplier"
+				"translated_name": "BALLISTIC COOLDOWN"
 			}
 		]
 	},
@@ -987,7 +987,7 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -997,7 +997,7 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -1007,7 +1007,7 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -1017,7 +1017,7 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -1027,17 +1027,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "missile_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "missile_cooldown_multiplier"
+				"translated_name": "MISSILE COOLDOWN"
 			},
 			{
 				"name": "clanmachinegun_rof_multiplier",
 				"value": 0.1,
-				"translated_name": "clanmachinegun_rof_multiplier"
+				"translated_name": "MACHINE GUN ROF"
 			}
 		]
 	},
@@ -1047,22 +1047,22 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "accellerp_all_multiplier",
 				"value": 0.1,
-				"translated_name": "accellerp_all_multiplier"
+				"translated_name": "ACCELERATION RATE"
 			},
 			{
 				"name": "decellerp_all_multiplier",
 				"value": 0.1,
-				"translated_name": "decellerp_all_multiplier"
+				"translated_name": "DECELERATION RATE"
 			},
 			{
 				"name": "missile_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "missile_cooldown_multiplier"
+				"translated_name": "MISSILE COOLDOWN"
 			}
 		]
 	},
@@ -1072,17 +1072,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "clanerlaser_cooldown_multiplier",
 				"value": -0.2,
-				"translated_name": "clanerlaser_cooldown_multiplier"
+				"translated_name": "Clan ER Laser Cooldown"
 			},
 			{
 				"name": "clanerlaser_range_multiplier",
 				"value": 0.1,
-				"translated_name": "clanerlaser_range_multiplier"
+				"translated_name": "Clan ER Laser Range"
 			}
 		]
 	},
@@ -1092,17 +1092,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "energy_cooldown_multiplier",
 				"value": -0.15,
-				"translated_name": "energy_cooldown_multiplier"
+				"translated_name": "ENERGY COOLDOWN"
 			},
 			{
 				"name": "clanmachinegun_rof_multiplier",
 				"value": 0.1,
-				"translated_name": "clanmachinegun_rof_multiplier"
+				"translated_name": "MACHINE GUN ROF"
 			}
 		]
 	},
@@ -1112,17 +1112,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "ballistic_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "ballistic_cooldown_multiplier"
+				"translated_name": "BALLISTIC COOLDOWN"
 			},
 			{
 				"name": "energy_cooldown_multiplier",
 				"value": -0.15,
-				"translated_name": "energy_cooldown_multiplier"
+				"translated_name": "ENERGY COOLDOWN"
 			}
 		]
 	},
@@ -1132,17 +1132,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "ultraautocannon_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "ultraautocannon_cooldown_multiplier"
+				"translated_name": "UAC Cooldown"
 			},
 			{
 				"name": "energy_range_multiplier",
 				"value": 0.05,
-				"translated_name": "energy_range_multiplier"
+				"translated_name": "ENERGY RANGE"
 			}
 		]
 	},
@@ -1152,17 +1152,17 @@ namespace AddedData {
 			{
 				"name": "ballistic_velocity_multiplier",
 				"value": 0.1,
-				"translated_name": "ballistic_velocity_multiplier"
+				"translated_name": "BALLISTIC VELOCITY"
 			},
 			{
 				"name": "missile_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "missile_cooldown_multiplier"
+				"translated_name": "MISSILE COOLDOWN"
 			},
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -1172,17 +1172,17 @@ namespace AddedData {
 			{
 				"name": "clangaussrifle_cooldown_multiplier",
 				"value": -0.05,
-				"translated_name": "clangaussrifle_cooldown_multiplier"
+				"translated_name": "Clan Gauss Cooldown"
 			},
 			{
 				"name": "ballistic_cooldown_multiplier",
 				"value": -0.05,
-				"translated_name": "ballistic_cooldown_multiplier"
+				"translated_name": "BALLISTIC COOLDOWN"
 			},
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -1192,17 +1192,17 @@ namespace AddedData {
 			{
 				"name": "energy_range_multiplier",
 				"value": 0.1,
-				"translated_name": "energy_range_multiplier"
+				"translated_name": "ENERGY RANGE"
 			},
 			{
 				"name": "ballistic_velocity_multiplier",
 				"value": 0.2,
-				"translated_name": "ballistic_velocity_multiplier"
+				"translated_name": "BALLISTIC VELOCITY"
 			},
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -1212,17 +1212,17 @@ namespace AddedData {
 			{
 				"name": "energy_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "energy_cooldown_multiplier"
+				"translated_name": "ENERGY COOLDOWN"
 			},
 			{
 				"name": "energy_range_multiplier",
 				"value": 0.05,
-				"translated_name": "energy_range_multiplier"
+				"translated_name": "ENERGY RANGE"
 			},
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -1232,17 +1232,17 @@ namespace AddedData {
 			{
 				"name": "missile_velocity_multiplier",
 				"value": 0.1,
-				"translated_name": "missile_velocity_multiplier"
+				"translated_name": "MISSILE VELOCITY"
 			},
 			{
 				"name": "clanerppc_velocity_multiplier",
 				"value": 0.25,
-				"translated_name": "clanerppc_velocity_multiplier"
+				"translated_name": "CLAN ER PPC VELOCITY"
 			},
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -1252,17 +1252,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "overheatdamage_multiplier",
 				"value": -0.1,
-				"translated_name": "overheatdamage_multiplier"
+				"translated_name": "OVERHEAT DAMAGE"
 			},
 			{
 				"name": "clanermediumlaser_heat_multiplier",
 				"value": -0.05,
-				"translated_name": "clanermediumlaser_heat_multiplier"
+				"translated_name": "Clan ER Mediun Laser Heat"
 			}
 		]
 	},
@@ -1272,17 +1272,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "ballistic_cooldown_multiplier",
 				"value": -0.05,
-				"translated_name": "ballistic_cooldown_multiplier"
+				"translated_name": "BALLISTIC COOLDOWN"
 			},
 			{
 				"name": "laser_duration_multiplier",
 				"value": -0.04,
-				"translated_name": "laser_duration_multiplier"
+				"translated_name": "LASER DURATION"
 			}
 		]
 	},
@@ -1292,17 +1292,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "clanmediumpulselaser_heat_multiplier",
 				"value": -0.05,
-				"translated_name": "clanmediumpulselaser_heat_multiplier"
+				"translated_name": "Clan Medium Pulse Laser Heat"
 			},
 			{
 				"name": "clanmachinegun_rof_multiplier",
 				"value": 0.1,
-				"translated_name": "clanmachinegun_rof_multiplier"
+				"translated_name": "MACHINE GUN ROF"
 			}
 		]
 	},
@@ -1312,17 +1312,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "clanerppc_velocity_multiplier",
 				"value": 0.05,
-				"translated_name": "clanerppc_velocity_multiplier"
+				"translated_name": "CLAN ER PPC VELOCITY"
 			},
 			{
 				"name": "energy_heat_multiplier",
 				"value": -0.05,
-				"translated_name": "energy_heat_multiplier"
+				"translated_name": "Energy Heat"
 			}
 		]
 	},
@@ -1332,22 +1332,22 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "ballistic_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "ballistic_cooldown_multiplier"
+				"translated_name": "BALLISTIC COOLDOWN"
 			},
 			{
 				"name": "energy_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "energy_cooldown_multiplier"
+				"translated_name": "ENERGY COOLDOWN"
 			},
 			{
 				"name": "missile_cooldown_multiplier",
 				"value": -0.075,
-				"translated_name": "missile_cooldown_multiplier"
+				"translated_name": "MISSILE COOLDOWN"
 			}
 		]
 	},
@@ -1357,17 +1357,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "missile_cooldown_multiplier",
 				"value": -0.075,
-				"translated_name": "missile_cooldown_multiplier"
+				"translated_name": "MISSILE COOLDOWN"
 			},
 			{
 				"name": "ballistic_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "ballistic_cooldown_multiplier"
+				"translated_name": "BALLISTIC COOLDOWN"
 			}
 		]
 	},
@@ -1377,17 +1377,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "missile_cooldown_multiplier",
 				"value": -0.075,
-				"translated_name": "missile_cooldown_multiplier"
+				"translated_name": "MISSILE COOLDOWN"
 			},
 			{
 				"name": "clanmachinegun_rof_multiplier",
 				"value": 0.15,
-				"translated_name": "clanmachinegun_rof_multiplier"
+				"translated_name": "MACHINE GUN ROF"
 			}
 		]
 	},
@@ -1397,17 +1397,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "ballistic_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "ballistic_cooldown_multiplier"
+				"translated_name": "BALLISTIC COOLDOWN"
 			},
 			{
 				"name": "energy_cooldown_multiplier",
 				"value": -0.05,
-				"translated_name": "energy_cooldown_multiplier"
+				"translated_name": "ENERGY COOLDOWN"
 			}
 		]
 	},
@@ -1417,17 +1417,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "missile_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "missile_cooldown_multiplier"
+				"translated_name": "MISSILE COOLDOWN"
 			},
 			{
 				"name": "energy_heat_multiplier",
 				"value": -0.05,
-				"translated_name": "energy_heat_multiplier"
+				"translated_name": "Energy Heat"
 			}
 		]
 	},
@@ -1437,22 +1437,22 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "missile_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "missile_cooldown_multiplier"
+				"translated_name": "MISSILE COOLDOWN"
 			},
 			{
 				"name": "accellerp_all_multiplier",
 				"value": 0.1,
-				"translated_name": "accellerp_all_multiplier"
+				"translated_name": "ACCELERATION RATE"
 			},
 			{
 				"name": "decellerp_all_multiplier",
 				"value": 0.1,
-				"translated_name": "decellerp_all_multiplier"
+				"translated_name": "DECELERATION RATE"
 			}
 		]
 	},
@@ -1462,17 +1462,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "ballistic_cooldown_multiplier",
 				"value": -0.05,
-				"translated_name": "ballistic_cooldown_multiplier"
+				"translated_name": "BALLISTIC COOLDOWN"
 			},
 			{
 				"name": "ballistic_range_multiplier",
 				"value": 0.1,
-				"translated_name": "ballistic_range_multiplier"
+				"translated_name": "BALLISTIC RANGE"
 			}
 		]
 	},
@@ -1482,12 +1482,12 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "clanerlaser_duration_multiplier",
 				"value": -0.05,
-				"translated_name": "clanerlaser_duration_multiplier"
+				"translated_name": "Clan ER Laser Duration"
 			}
 		]
 	},
@@ -1497,17 +1497,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "lbxautocannon_cooldown_multiplier",
 				"value": -0.05,
-				"translated_name": "lbxautocannon_cooldown_multiplier"
+				"translated_name": "LB-X Autocannon Cooldown"
 			},
 			{
 				"name": "pulselaser_duration_multiplier",
 				"value": -0.05,
-				"translated_name": "pulselaser_duration_multiplier"
+				"translated_name": "PULSE LASER DURATION"
 			}
 		]
 	},
@@ -1517,17 +1517,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "clanlrm20_cooldown_multiplier",
 				"value": -0.05,
-				"translated_name": "clanlrm20_cooldown_multiplier"
+				"translated_name": "Clan LRM20 Cooldown"
 			},
 			{
 				"name": "clansrm2_heat_multiplier",
 				"value": -0.05,
-				"translated_name": "clansrm2_heat_multiplier"
+				"translated_name": "Clan SRM2 Heat"
 			}
 		]
 	},
@@ -1537,17 +1537,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "lrm_spread_multiplier",
 				"value": -0.1,
-				"translated_name": "lrm_spread_multiplier"
+				"translated_name": "LRM 5/10/15/20 SPREAD"
 			},
 			{
 				"name": "missile_velocity_multiplier",
 				"value": 0.05,
-				"translated_name": "missile_velocity_multiplier"
+				"translated_name": "MISSILE VELOCITY"
 			}
 		]
 	},
@@ -1557,17 +1557,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "ultraautocannon_jamchance_multiplier",
 				"value": -0.2,
-				"translated_name": "ultraautocannon_jamchance_multiplier"
+				"translated_name": "UAC JAM CHANCE"
 			},
 			{
 				"name": "clanermediumlaser_heat_multiplier",
 				"value": -0.05,
-				"translated_name": "clanermediumlaser_heat_multiplier"
+				"translated_name": "Clan ER Mediun Laser Heat"
 			}
 		]
 	},
@@ -1577,17 +1577,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "lbxautocannon_spread_multiplier",
 				"value": -0.05,
-				"translated_name": "lbxautocannon_spread_multiplier"
+				"translated_name": "LB-X SPREAD"
 			},
 			{
 				"name": "erlaser_cooldown_multiplier",
 				"value": -0.05,
-				"translated_name": "erlaser_cooldown_multiplier"
+				"translated_name": "ER LASER COOLDOWN"
 			}
 		]
 	},
@@ -1597,27 +1597,27 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "ballistic_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "ballistic_cooldown_multiplier"
+				"translated_name": "BALLISTIC COOLDOWN"
 			},
 			{
 				"name": "energy_heat_multiplier",
 				"value": -0.05,
-				"translated_name": "energy_heat_multiplier"
+				"translated_name": "Energy Heat"
 			},
 			{
 				"name": "missile_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "missile_cooldown_multiplier"
+				"translated_name": "MISSILE COOLDOWN"
 			},
 			{
 				"name": "clanerppc_velocity_multiplier",
 				"value": 0.1,
-				"translated_name": "clanerppc_velocity_multiplier"
+				"translated_name": "CLAN ER PPC VELOCITY"
 			}
 		]
 	},
@@ -1627,17 +1627,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "clanlrm20_spread_multiplier",
 				"value": -0.1,
-				"translated_name": "clanlrm20_spread_multiplier"
+				"translated_name": "Clan LRM20 Spread"
 			},
 			{
 				"name": "missile_heat_multiplier",
 				"value": -0.05,
-				"translated_name": "missile_heat_multiplier"
+				"translated_name": "MISSILE HEAT GENERATION"
 			}
 		]
 	},
@@ -1647,27 +1647,27 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "torso_yawangle_additive",
 				"value": 20,
-				"translated_name": "torso_yawangle_additive"
+				"translated_name": "Torso Yaw Angle"
 			},
 			{
 				"name": "torso_yawspeed_multiplier",
 				"value": 0.05,
-				"translated_name": "torso_yawspeed_multiplier"
+				"translated_name": "Torso Yaw Speed"
 			},
 			{
 				"name": "energy_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "energy_cooldown_multiplier"
+				"translated_name": "ENERGY COOLDOWN"
 			},
 			{
 				"name": "laser_duration_multiplier",
 				"value": -0.05,
-				"translated_name": "laser_duration_multiplier"
+				"translated_name": "LASER DURATION"
 			}
 		]
 	},
@@ -1677,27 +1677,27 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "turnlerp_all_multiplier",
 				"value": 0.1,
-				"translated_name": "turnlerp_all_multiplier"
+				"translated_name": "TURN RATE"
 			},
 			{
 				"name": "ballistic_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "ballistic_cooldown_multiplier"
+				"translated_name": "BALLISTIC COOLDOWN"
 			},
 			{
 				"name": "missile_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "missile_cooldown_multiplier"
+				"translated_name": "MISSILE COOLDOWN"
 			},
 			{
 				"name": "ultraautocannon_jamchance_multiplier",
 				"value": -0.1,
-				"translated_name": "ultraautocannon_jamchance_multiplier"
+				"translated_name": "UAC JAM CHANCE"
 			}
 		]
 	},
@@ -1707,27 +1707,27 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "turnlerp_all_multiplier",
 				"value": 0.05,
-				"translated_name": "turnlerp_all_multiplier"
+				"translated_name": "TURN RATE"
 			},
 			{
 				"name": "ballistic_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "ballistic_cooldown_multiplier"
+				"translated_name": "BALLISTIC COOLDOWN"
 			},
 			{
 				"name": "energy_heat_multiplier",
 				"value": -0.05,
-				"translated_name": "energy_heat_multiplier"
+				"translated_name": "Energy Heat"
 			},
 			{
 				"name": "missile_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "missile_cooldown_multiplier"
+				"translated_name": "MISSILE COOLDOWN"
 			}
 		]
 	},
@@ -1737,22 +1737,22 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "turnlerp_all_multiplier",
 				"value": 0.05,
-				"translated_name": "turnlerp_all_multiplier"
+				"translated_name": "TURN RATE"
 			},
 			{
 				"name": "ultraautocannon_jamchance_multiplier",
 				"value": -0.2,
-				"translated_name": "ultraautocannon_jamchance_multiplier"
+				"translated_name": "UAC JAM CHANCE"
 			},
 			{
 				"name": "missile_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "missile_cooldown_multiplier"
+				"translated_name": "MISSILE COOLDOWN"
 			}
 		]
 	},
@@ -1762,17 +1762,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "energy_cooldown_multiplier",
 				"value": -0.15,
-				"translated_name": "energy_cooldown_multiplier"
+				"translated_name": "ENERGY COOLDOWN"
 			},
 			{
 				"name": "ballistic_cooldown_multiplier",
 				"value": -0.05,
-				"translated_name": "ballistic_cooldown_multiplier"
+				"translated_name": "BALLISTIC COOLDOWN"
 			}
 		]
 	},
@@ -1782,27 +1782,27 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "missile_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "missile_cooldown_multiplier"
+				"translated_name": "MISSILE COOLDOWN"
 			},
 			{
 				"name": "clanmachinegun_rof_multiplier",
 				"value": 0.2,
-				"translated_name": "clanmachinegun_rof_multiplier"
+				"translated_name": "MACHINE GUN ROF"
 			},
 			{
 				"name": "accellerp_all_multiplier",
 				"value": 0.1,
-				"translated_name": "accellerp_all_multiplier"
+				"translated_name": "ACCELERATION RATE"
 			},
 			{
 				"name": "decellerp_all_multiplier",
 				"value": 0.1,
-				"translated_name": "decellerp_all_multiplier"
+				"translated_name": "DECELERATION RATE"
 			}
 		]
 	},
@@ -1812,17 +1812,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "ultraautocannon_jamchance_multiplier",
 				"value": -0.2,
-				"translated_name": "ultraautocannon_jamchance_multiplier"
+				"translated_name": "UAC JAM CHANCE"
 			},
 			{
 				"name": "missile_velocity_multiplier",
 				"value": 0.1,
-				"translated_name": "missile_velocity_multiplier"
+				"translated_name": "MISSILE VELOCITY"
 			}
 		]
 	},
@@ -1832,17 +1832,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "torso_yawspeed_multiplier",
 				"value": 0.3,
-				"translated_name": "torso_yawspeed_multiplier"
+				"translated_name": "Torso Yaw Speed"
 			},
 			{
 				"name": "turnlerp_all_multiplier",
 				"value": 0.1,
-				"translated_name": "turnlerp_all_multiplier"
+				"translated_name": "TURN RATE"
 			}
 		]
 	},
@@ -1852,17 +1852,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "clanerppc_velocity_multiplier",
 				"value": 0.2,
-				"translated_name": "clanerppc_velocity_multiplier"
+				"translated_name": "CLAN ER PPC VELOCITY"
 			},
 			{
 				"name": "clanerppc_heat_multiplier",
 				"value": -0.1,
-				"translated_name": "clanerppc_heat_multiplier"
+				"translated_name": "ER PPC HEAT GENERATION"
 			}
 		]
 	},
@@ -1872,27 +1872,27 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "torso_yawspeed_multiplier",
 				"value": 0.2,
-				"translated_name": "torso_yawspeed_multiplier"
+				"translated_name": "Torso Yaw Speed"
 			},
 			{
 				"name": "torso_yawangle_additive",
 				"value": 5,
-				"translated_name": "torso_yawangle_additive"
+				"translated_name": "Torso Yaw Angle"
 			},
 			{
 				"name": "missile_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "missile_cooldown_multiplier"
+				"translated_name": "MISSILE COOLDOWN"
 			},
 			{
 				"name": "clanmediumpulselaser_heat_multiplier",
 				"value": -0.05,
-				"translated_name": "clanmediumpulselaser_heat_multiplier"
+				"translated_name": "Clan Medium Pulse Laser Heat"
 			}
 		]
 	},
@@ -1902,27 +1902,27 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "ballistic_cooldown_multiplier",
 				"value": -0.05,
-				"translated_name": "ballistic_cooldown_multiplier"
+				"translated_name": "BALLISTIC COOLDOWN"
 			},
 			{
 				"name": "lbxautocannon_cooldown_multiplier",
 				"value": -0.05,
-				"translated_name": "lbxautocannon_cooldown_multiplier"
+				"translated_name": "LB-X Autocannon Cooldown"
 			},
 			{
 				"name": "missile_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "missile_cooldown_multiplier"
+				"translated_name": "MISSILE COOLDOWN"
 			},
 			{
 				"name": "turnlerp_all_multiplier",
 				"value": 0.1,
-				"translated_name": "turnlerp_all_multiplier"
+				"translated_name": "TURN RATE"
 			}
 		]
 	},
@@ -1932,17 +1932,17 @@ namespace AddedData {
 			{
 				"name": "energy_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "energy_cooldown_multiplier"
+				"translated_name": "ENERGY COOLDOWN"
 			},
 			{
 				"name": "missile_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "missile_cooldown_multiplier"
+				"translated_name": "MISSILE COOLDOWN"
 			},
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -1952,17 +1952,17 @@ namespace AddedData {
 			{
 				"name": "laser_heat_multiplier",
 				"value": -0.05,
-				"translated_name": "laser_heat_multiplier"
+				"translated_name": "LASER HEAT GENERATION"
 			},
 			{
 				"name": "accellerp_all_multiplier",
 				"value": 0.1,
-				"translated_name": "accellerp_all_multiplier"
+				"translated_name": "ACCELERATION RATE"
 			},
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -1972,17 +1972,17 @@ namespace AddedData {
 			{
 				"name": "clanerppc_velocity_multiplier",
 				"value": 0.3,
-				"translated_name": "clanerppc_velocity_multiplier"
+				"translated_name": "CLAN ER PPC VELOCITY"
 			},
 			{
 				"name": "laser_range_multiplier",
 				"value": 0.1,
-				"translated_name": "laser_range_multiplier"
+				"translated_name": "LASER RANGE"
 			},
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -1992,22 +1992,22 @@ namespace AddedData {
 			{
 				"name": "clanmachinegun_rof_multiplier",
 				"value": 0.05,
-				"translated_name": "clanmachinegun_rof_multiplier"
+				"translated_name": "MACHINE GUN ROF"
 			},
 			{
 				"name": "accellerp_all_multiplier",
 				"value": 0.1,
-				"translated_name": "accellerp_all_multiplier"
+				"translated_name": "ACCELERATION RATE"
 			},
 			{
 				"name": "decellerp_all_multiplier",
 				"value": 0.1,
-				"translated_name": "decellerp_all_multiplier"
+				"translated_name": "DECELERATION RATE"
 			},
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -2017,17 +2017,17 @@ namespace AddedData {
 			{
 				"name": "missile_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "missile_cooldown_multiplier"
+				"translated_name": "MISSILE COOLDOWN"
 			},
 			{
 				"name": "energy_cooldown_multiplier",
 				"value": -0.05,
-				"translated_name": "energy_cooldown_multiplier"
+				"translated_name": "ENERGY COOLDOWN"
 			},
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -2037,27 +2037,27 @@ namespace AddedData {
 			{
 				"name": "laser_heat_multiplier",
 				"value": -0.05,
-				"translated_name": "laser_heat_multiplier"
+				"translated_name": "LASER HEAT GENERATION"
 			},
 			{
 				"name": "laser_range_multiplier",
 				"value": 0.1,
-				"translated_name": "laser_range_multiplier"
+				"translated_name": "LASER RANGE"
 			},
 			{
 				"name": "accellerp_all_multiplier",
 				"value": 0.1,
-				"translated_name": "accellerp_all_multiplier"
+				"translated_name": "ACCELERATION RATE"
 			},
 			{
 				"name": "decellerp_all_multiplier",
 				"value": 0.1,
-				"translated_name": "decellerp_all_multiplier"
+				"translated_name": "DECELERATION RATE"
 			},
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -2067,17 +2067,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "missile_cooldown_multiplier",
 				"value": -0.15,
-				"translated_name": "missile_cooldown_multiplier"
+				"translated_name": "MISSILE COOLDOWN"
 			},
 			{
 				"name": "clanerppc_velocity_multiplier",
 				"value": 0.1,
-				"translated_name": "clanerppc_velocity_multiplier"
+				"translated_name": "CLAN ER PPC VELOCITY"
 			}
 		]
 	},
@@ -2087,17 +2087,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "energy_range_multiplier",
 				"value": 0.1,
-				"translated_name": "energy_range_multiplier"
+				"translated_name": "ENERGY RANGE"
 			},
 			{
 				"name": "ballistic_cooldown_multiplier",
 				"value": -0.05,
-				"translated_name": "ballistic_cooldown_multiplier"
+				"translated_name": "BALLISTIC COOLDOWN"
 			}
 		]
 	},
@@ -2107,17 +2107,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "ballistic_cooldown_multiplier",
 				"value": -0.05,
-				"translated_name": "ballistic_cooldown_multiplier"
+				"translated_name": "BALLISTIC COOLDOWN"
 			},
 			{
 				"name": "erlaser_heat_multiplier",
 				"value": -0.05,
-				"translated_name": "erlaser_heat_multiplier"
+				"translated_name": "ER LASER HEAT GENERATION"
 			}
 		]
 	},
@@ -2127,17 +2127,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "energy_heat_multiplier",
 				"value": -0.05,
-				"translated_name": "energy_heat_multiplier"
+				"translated_name": "Energy Heat"
 			},
 			{
 				"name": "clanerppc_velocity_multiplier",
 				"value": 0.05,
-				"translated_name": "clanerppc_velocity_multiplier"
+				"translated_name": "CLAN ER PPC VELOCITY"
 			}
 		]
 	},
@@ -2147,17 +2147,17 @@ namespace AddedData {
 			{
 				"name": "xpbonus_multiplier",
 				"value": 0.025,
-				"translated_name": "xpbonus_multiplier"
+				"translated_name": "XP Bonus"
 			},
 			{
 				"name": "ballistic_cooldown_multiplier",
 				"value": -0.05,
-				"translated_name": "ballistic_cooldown_multiplier"
+				"translated_name": "BALLISTIC COOLDOWN"
 			},
 			{
 				"name": "missile_cooldown_multiplier",
 				"value": -0.1,
-				"translated_name": "missile_cooldown_multiplier"
+				"translated_name": "MISSILE COOLDOWN"
 			}
 		]
 	}

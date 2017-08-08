@@ -1,4 +1,4 @@
-//Generated from GameData.pak Tue, 08 Aug 2017 01:57:30 GMT
+//Generated from GameData.pak Tue, 08 Aug 2017 21:51:50 GMT
 namespace AddedData {
 
 export var _AddedWeaponData : {[index:string] : any} = {

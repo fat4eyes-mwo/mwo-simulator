@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const mechdata_quirks_1 = require("./data/mechdata-quirks");
 const FS = require("fs");
 var MechData;
 (function (MechData) {
@@ -11,7 +12,13 @@ var MechData;
         }
         translateName() {
             //TODO: translate names
-            return this.name;
+            let nameEntry = mechdata_quirks_1.MechDataQuirkData.QuirkTranslatedNameMap[this.name];
+            if (nameEntry) {
+                return nameEntry.translated_name;
+            }
+            else {
+                return this.name;
+            }
         }
         toString() {
             return `{name: "${this.name}", value: "${this.value}"}`;
