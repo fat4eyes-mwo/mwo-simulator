@@ -52,7 +52,6 @@
 # Currently Unsimulated Mechanics
 
 * Damage spread for LBX (high priority)
-* Omnipod full set quirks.
 * Exponential dropoff for cLRMs below min range (right now they do 0 damage below min range)
 * Environmental heat effects
 * Targeting computer effects
@@ -77,6 +76,7 @@ The main entry point of the program is in `scripts/simulator.ts`.
 
 # Update Info
 
+* 2017-08-08: Omnipod full set bonuses.
 * 2017-08-05: Added mech details popup. Currently contains list of mech's quirks.
 * 2017-08-02: Added 'Expected Value' setting for simulating UAC jams.
 * 2017-08-01: Added Maximize DPS firing pattern. Various internal implementation changes (changed over to Typescript, various refactorings).
