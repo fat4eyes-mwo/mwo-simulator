@@ -351,7 +351,7 @@ div {
 }
 .mechPanel.droptarget {
   background-color: $off-background-color;
-  transform: scale(1, 0.95) translateY(10px);
+  transform: translateX(10px);
 }
 
 .mechPanel.droptarget::before {

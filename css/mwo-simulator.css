@@ -304,7 +304,7 @@ a:hover {
 
 .mechPanel.droptarget {
   background-color: #404040;
-  transform: scale(1, 0.95) translateY(10px);
+  transform: translateX(10px);
 }
 
 .mechPanel.droptarget::before {
