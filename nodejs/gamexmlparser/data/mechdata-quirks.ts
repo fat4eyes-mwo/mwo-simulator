@@ -1,11 +1,13 @@
 //Maps quirk names to translated quirk names
 //TODO: See if this can be mined directly from the game files
 
-export interface QuirkNameEntry {
-  name : string;
-  translated_name : string;
-}
+
 export namespace MechDataQuirkData {
+  export interface QuirkNameEntry {
+    name : string;
+    translated_name : string;
+  }
+  
   export var QuirkTranslatedNameMap : {[index:string] : QuirkNameEntry}= {
   "ac_velocity_multiplier" : { name : "ac_velocity_multiplier", translated_name : "AC VELOCITY" },
   "accellerp_all_multiplier" : { name : "accellerp_all_multiplier", translated_name : "ACCELERATION RATE" },

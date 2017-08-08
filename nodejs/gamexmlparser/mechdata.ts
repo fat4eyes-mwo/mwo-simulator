@@ -38,7 +38,6 @@ export namespace MechData {
       this.translated_name = this.translateName();
     }
     translateName() {
-      //TODO: translate names
       let nameEntry = MechDataQuirkData.QuirkTranslatedNameMap[this.name];
       if (nameEntry) {
         return nameEntry.translated_name;
