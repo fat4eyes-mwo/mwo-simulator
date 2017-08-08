@@ -1,9 +1,9 @@
 //Reads XML data from GameData.pak and generates javascript files
 //for use in mwo-simulator
 
-//NOTE: Nodejs module lookup is different for ./<file> and <file>
+//NOTE: Nodejs module lookup is different for "./<file>" and "<file>"
 //Whoever thought that was a good idea should be SHOT. GIVE MODULES CANONICAL NAMES MOTHERFUCKERS!
-import {NumberIndexed, StringIndexed} from "./common";
+import {NumberIndexed, StringIndexed} from "./parser-common";
 import {WeaponData} from  "./weapondata";
 import program = require('commander');
 import AdmZip = require('adm-zip');

@@ -1,4 +1,4 @@
-import {StringIndexed, NumberIndexed} from "./common";
+import {StringIndexed, NumberIndexed} from "./parser-common";
 import FS = require('fs');
 
 export namespace WeaponData {
