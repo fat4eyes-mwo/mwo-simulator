@@ -70,6 +70,7 @@ namespace MechModelQuirks {
     }
   }
 
+  const CompleteOmnipodSetCount = 8;
   export var collectOmnipodQuirks =
     function(smurfyMechLoadout : SmurfyMechLoadout)
       : MechQuirk[] {
@@ -88,6 +89,18 @@ namespace MechModelQuirks {
         mechQuirk.value = mechQuirk.value + Number(smurfyQuirk.value);
       }
     }
+
+    let omnipodSetCounts = new Map<string, number>(); //omnipodId -> count
+    var incrementOmnipodSet = function(setName : string) {
+      let setCount = omnipodSetCounts.get(setName);
+      if (!setCount) {
+        setCount = 1;
+      } else {
+        setCount = setCount + 1;
+      }
+      omnipodSetCounts.set(setName, setCount);
+    }
+
     for (let component of smurfyMechLoadout.configuration) {
       let omnipodId = component.omni_pod;
       if (omnipodId) {
@@ -96,6 +109,8 @@ namespace MechModelQuirks {
         for (let smurfyQuirk of omnipodQuirks) {
           addQuirk(smurfyQuirk);
         }
+        let setName = omnipodData.details.set;
+        incrementOmnipodSet(setName);
       }
     }
     //add ct omnipod quirks (smurfy config does not put in omnipod ID for ct)
@@ -104,6 +119,17 @@ namespace MechModelQuirks {
     if (ctOmnipod) {
       for (let smurfyQuirk of ctOmnipod.configuration.quirks) {
         addQuirk(smurfyQuirk);
+      }
+      let omnipodSetName = ctOmnipod.details.set;
+      incrementOmnipodSet(omnipodSetName);
+
+      //add set bonus
+      let setCount = omnipodSetCounts.get(omnipodSetName);
+      if (setCount >= CompleteOmnipodSetCount) {
+        let fullSetQuirks = AddedData._AddedOmnipodData[omnipodSetName].setBonusQuirks as SmurfyQuirk[];
+        for (let smurfyQuirk of fullSetQuirks) {
+          addQuirk(smurfyQuirk);
+        }
       }
     } else {
       console.warn("Unable to find CT omnipod for " + smurfyMechInfo.name);

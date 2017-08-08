@@ -254,4 +254,9 @@ namespace SmurfyTypes {
     quirks : SmurfyQuirk[],
     hardpoints : any[], //not used yet
   }
+
+  export interface OmnipodSet { //from AddedOmnipodData
+    name: string;
+    setBonusQuirks : SmurfyQuirk[];
+  }
 }

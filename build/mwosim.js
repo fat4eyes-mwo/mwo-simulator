@@ -4969,6 +4969,7 @@ var MechModelQuirks;
     };
     //Map from quirk weapon names to smurfy weapon names
     MechModelQuirks._weaponNameMap = {
+        "atm": ["ClanATM3", "ClanATM6", "ClanATM9", "ClanATM12"],
         "isautocannon10": ["AutoCannon10"],
         "isautocannon20": ["AutoCannon20"],
         "isautocannon2": ["AutoCannon2"],
@@ -4980,6 +4981,7 @@ var MechModelQuirks;
         "islargelaser": ["LargeLaser"],
         "islargepulselaser": ["LargePulseLaser"],
         "islbxautocannon10": ["LBXAutoCannon10"],
+        "islrm5": ["LRM5", "LRM5_Artemis"],
         "islrm10": ["LRM10", "LRM10_Artemis"],
         "islrm15": ["LRM15", "LRM15_Artemis"],
         "islrm20": ["LRM20", "LRM20_Artemis"],
@@ -5021,9 +5023,30 @@ var MechModelQuirks;
             "ClanAutoCannon2", "ClanAutoCannon5", "ClanAutoCannon10", "ClanAutoCannon20"],
         "clanantimissilesystem": ["ClanAntiMissileSystem"],
         "clanerlaser": ["ClanERSmallLaser", "ClanERMediumLaser", "ClanERLargeLaser"],
+        "clanermediumlaser": ["ClanERMediumLaser"],
+        "clanlbxautocannon10": ["ClanLBXAutoCannon10"],
         "clanerppc": ["ClanERPPC"],
         "clangaussrifle": ["ClanGaussRifle"],
+        "clanlrm": ["ClanLRM5", "ClanLRM10", "ClanLRM15", "ClanLRM20",
+            "ClanLRM5_Artemis", "ClanLRM10_Artemis", "ClanLRM15_Artemis", "ClanLRM20_Artemis"],
+        "clanlrm5": ["ClanLRM5", "ClanLRM5_Artemis"],
+        "clanlrm10": ["ClanLRM10", "ClanLRM10_Artemis"],
+        "clanlrm15": ["ClanLRM15", "ClanLRM15_Artemis"],
+        "clanlrm20": ["ClanLRM20", "ClanLRM20_Artemis"],
         "clanmachinegun": ["ClanMachineGun"],
+        "clanmediumpulselaser": ["ClanMediumPulseLaser"],
+        "clansrm2": ["ClanSRM2", "ClanSRM2_Artemis"],
+        "clansrm4": ["ClanSRM4", "ClanSRM4_Artemis"],
+        "clansrm6": ["ClanSRM6", "ClanSRM6_Artemis"],
+        "clansrm": ["ClanSRM2", "ClanSRM2_Artemis", "ClanSRM4", "ClanSRM4_Artemis", "ClanSRM6", "ClanSRM6_Artemis"],
+        "clanstreaksrm2": ["ClanStreakSRM2"],
+        "clanstreaksrm4": ["ClanStreakSRM4"],
+        "clanstreaksrm6": ["ClanStreakSRM6"],
+        "clanstreaksrm": ["ClanStreakSRM2", "ClanStreakSRM4", "ClanStreakSRM6"],
+        "clanultraautocannon2": ["ClanUltraAutoCannon2"],
+        "clanultraautocannon5": ["ClanUltraAutoCannon5"],
+        "clanultraautocannon10": ["ClanUltraAutoCannon10"],
+        "clanultraautocannon20": ["ClanUltraAutoCannon20"],
         "erlaser": ["ERLargeLaser", "ERMediumLaser", "ERSmallLaser",
             "ClanERMicroLaser", "ClanERSmallLaser", "ClanERMediumLaser", "ClanERLargeLaser"],
         "isantimissilesystem": ["AntiMissileSystem"],
@@ -5031,6 +5054,7 @@ var MechModelQuirks;
             "ClanLBXAutoCannon2", "ClanLBXAutoCannon5", "ClanLBXAutoCannon10", "ClanLBXAutoCannon20",],
         "srm": ["SRM2", "SRM2_Artemis", "SRM4", "SRM4_Artemis", "SRM6", "SRM6_Artemis",
             "ClanSRM2", "ClanSRM2_Artemis", "ClanSRM4", "ClanSRM4_Artemis", "ClanSRM6", "ClanSRM6_Artemis"],
+        "streaksrm": ["StreakSRM2", "StreakSRM4", "StreakSRM6", "ClanStreakSRM2", "ClanStreakSRM4", "ClanStreakSRM6"]
     };
 })(MechModelQuirks || (MechModelQuirks = {}));
 //User-changable options in SimulatorParameters. Used in
@@ -6683,6 +6707,7 @@ var MechModelQuirks;
             }
         }
     }
+    const CompleteOmnipodSetCount = 8;
     MechModelQuirks.collectOmnipodQuirks = function (smurfyMechLoadout) {
         let ret = [];
         let seenQuirkMap = new Map();
@@ -6700,6 +6725,17 @@ var MechModelQuirks;
                 mechQuirk.value = mechQuirk.value + Number(smurfyQuirk.value);
             }
         };
+        let omnipodSetCounts = new Map(); //omnipodId -> count
+        var incrementOmnipodSet = function (setName) {
+            let setCount = omnipodSetCounts.get(setName);
+            if (!setCount) {
+                setCount = 1;
+            }
+            else {
+                setCount = setCount + 1;
+            }
+            omnipodSetCounts.set(setName, setCount);
+        };
         for (let component of smurfyMechLoadout.configuration) {
             let omnipodId = component.omni_pod;
             if (omnipodId) {
@@ -6708,6 +6744,8 @@ var MechModelQuirks;
                 for (let smurfyQuirk of omnipodQuirks) {
                     addQuirk(smurfyQuirk);
                 }
+                let setName = omnipodData.details.set;
+                incrementOmnipodSet(setName);
             }
         }
         //add ct omnipod quirks (smurfy config does not put in omnipod ID for ct)
@@ -6716,6 +6754,16 @@ var MechModelQuirks;
         if (ctOmnipod) {
             for (let smurfyQuirk of ctOmnipod.configuration.quirks) {
                 addQuirk(smurfyQuirk);
+            }
+            let omnipodSetName = ctOmnipod.details.set;
+            incrementOmnipodSet(omnipodSetName);
+            //add set bonus
+            let setCount = omnipodSetCounts.get(omnipodSetName);
+            if (setCount >= CompleteOmnipodSetCount) {
+                let fullSetQuirks = AddedData._AddedOmnipodData[omnipodSetName].setBonusQuirks;
+                for (let smurfyQuirk of fullSetQuirks) {
+                    addQuirk(smurfyQuirk);
+                }
             }
         }
         else {
@@ -12150,6 +12198,13 @@ var MechTest;
                         quirkMap[quirkEntry.name] = true;
                     }
                 }
+            }
+        }
+        //omnipod set quirks
+        for (let omnipodSetName in AddedData._AddedOmnipodData) {
+            let omnipodSet = AddedData._AddedOmnipodData[omnipodSetName];
+            for (let quirk of omnipodSet.setBonusQuirks) {
+                quirkMap[quirk.name] = true;
             }
         }
         let numQuirks = 0;

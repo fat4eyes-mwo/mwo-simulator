@@ -254,6 +254,13 @@ namespace MechTest {
         }
       }
     }
+    //omnipod set quirks
+    for (let omnipodSetName in AddedData._AddedOmnipodData ) {
+      let omnipodSet = AddedData._AddedOmnipodData[omnipodSetName] as SmurfyTypes.OmnipodSet;
+      for (let quirk of omnipodSet.setBonusQuirks) {
+        quirkMap[quirk.name] = true;
+      }
+    }
     let numQuirks = 0;
     let sortedQuirkNames = [];
     for (let quirkName in quirkMap) {

@@ -47,6 +47,9 @@
 //rocket launcher test
 //http://localhost:8181/#s=a16536490c0dfbe32a8082720711b9c36be4d4511318f823e187398a0e48edd7
 
+//omnipod set bonus test
+//http://localhost:8181/#s=f43afc51cf91eb44108579030b98df7e67d1830ec2d4bf5eaf5f7baba513e675
+
 //20 vs 20
 //http://www.4eye-labs.net/mwo-simulator/#s=e1f4897ae14687dfaba82e457031e1aef7b08a03936770f59f498a1290baadf4
 
