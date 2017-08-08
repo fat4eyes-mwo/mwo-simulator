@@ -247,6 +247,7 @@ a:hover {
   border-top: thin solid;
   padding: 5px;
   padding-top: 5px;
+  transition: transform 0.5s ease;
 }
 
 #blueTeam .mechPanel {
@@ -303,6 +304,7 @@ a:hover {
 
 .mechPanel.droptarget {
   background-color: #404040;
+  transform: translateX(10px);
 }
 
 .mechPanel.droptarget::before {

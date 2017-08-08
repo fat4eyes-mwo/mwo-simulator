@@ -285,6 +285,7 @@ div {
   border-top: thin solid;
   padding: 5px;
   padding-top: 5px;
+  transition: transform 0.5s ease;
 }
 
 #blueTeam .mechPanel {
@@ -350,7 +351,7 @@ div {
 }
 .mechPanel.droptarget {
   background-color: $off-background-color;
-  // margin-top: 20px; //TODO: expensive when there are many mechs
+  transform: translateX(10px);
 }
 
 .mechPanel.droptarget::before {
