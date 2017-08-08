@@ -5,6 +5,7 @@
 //Whoever thought that was a good idea should be SHOT. GIVE MODULES CANONICAL NAMES MOTHERFUCKERS!
 import {NumberIndexed, StringIndexed} from "./parser-common";
 import {WeaponData} from  "./weapondata";
+import {MechData} from "./mechdata";
 import program = require('commander');
 import AdmZip = require('adm-zip');
 import XML2js = require('xml2js');
@@ -28,14 +29,7 @@ var loadGameData = function(gameDataPakFile : string) : GameData {
   };
 }
 
-interface XMLMechData {
-  mechName : string;
-  xmlOmnipodData : XMLOmnipodData;
-}
-interface XMLOmnipodData {
-  attr : any;
-}
-var loadMechData = function (mechPakFile : string) : XMLMechData {
+var loadMechData = function (mechPakFile : string) : MechData.XMLMechData {
   let mechNameRegex : RegExp = /^.*[\\\\\/]([A-Za-z]+)\.pak$/ //Regexes are still unreadable AF.
   let matches : NumberIndexed = mechNameRegex.exec(mechPakFile);
   let mechName = (matches as NumberIndexed)[1];
@@ -49,12 +43,12 @@ var loadMechData = function (mechPakFile : string) : XMLMechData {
   }
 }
 
-var parseMechOmnipods = function(mechZip : AdmZip, mechName : string, mechPathInZip : string) : XMLOmnipodData {
+var parseMechOmnipods = function(mechZip : AdmZip, mechName : string, mechPathInZip : string) : MechData.XMLOmnipodData {
   const OmnipodPathInZip = mechPathInZip + `${mechName}-omnipods.xml`;
   let omnipodXML = mechZip.readAsText(OmnipodPathInZip);
-  var parsedXML :XMLOmnipodData;
+  var parsedXML : MechData.XMLOmnipodData;
   XML2js.parseString(omnipodXML, {attrkey:"attr"}, function(err: any, result: any) {
-    parsedXML = result as XMLOmnipodData;
+    parsedXML = result as MechData.XMLOmnipodData;
   });
   return parsedXML;
 }
@@ -78,7 +72,9 @@ var main = function() {
         let mechFilePath = MechDir + mechFile;
         console.log("Processing " + mechFilePath);
         let mechData = loadMechData(mechFilePath);
+        MechData.collectOmnipodSets(mechData.xmlOmnipodData);
       }
+      MechData.writeOmnipodSets(scriptDataDir + "/addedomnipoddata.ts");
     })
     .parse(process.argv);
 }

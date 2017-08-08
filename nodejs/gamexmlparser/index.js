@@ -3,6 +3,7 @@
 //for use in mwo-simulator
 Object.defineProperty(exports, "__esModule", { value: true });
 const weapondata_1 = require("./weapondata");
+const mechdata_1 = require("./mechdata");
 const program = require("commander");
 const AdmZip = require("adm-zip");
 const XML2js = require("xml2js");
@@ -57,7 +58,9 @@ var main = function () {
             let mechFilePath = MechDir + mechFile;
             console.log("Processing " + mechFilePath);
             let mechData = loadMechData(mechFilePath);
+            mechdata_1.MechData.collectOmnipodSets(mechData.xmlOmnipodData);
         }
+        mechdata_1.MechData.writeOmnipodSets(scriptDataDir + "/addedomnipoddata.ts");
     })
         .parse(process.argv);
 };
