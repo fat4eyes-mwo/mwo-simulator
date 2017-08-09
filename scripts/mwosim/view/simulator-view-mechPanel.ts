@@ -322,11 +322,12 @@ namespace MechViewMechPanel {
     let ammoState = mechState.ammoState;
     let mechPanelContainer = "#" + team + "Team";
     let mechPanelDiv = MechViewWidgets.cloneTemplate("mechPanel-template");
+    let endPanelJQ = $("#" + mechPanelId(getEndMechId(team)));
     let mechPanelJQ = $(mechPanelDiv);
     mechPanelJQ
       .attr("id", mechPanelId(mechId))
       .attr("data-mech-id", mechId)
-      .appendTo(mechPanelContainer);
+      .insertBefore(endPanelJQ);
 
     var mechHealthAndWeaponsDivId = mechHealthAndWeaponsId(mechId);
     mechPanelJQ.find("[class~=mechHealthAndWeapons]")
@@ -431,9 +432,7 @@ namespace MechViewMechPanel {
     burst : number,
     totalDmg : number
   }
-  export var updateMechStatusPanel =
-      function(update : MechPanelStatusUpdate)
-              : void {
+  export var updateMechStatusPanel = function(update : MechPanelStatusUpdate) : void {
     let mechSummaryHealthId = mechSummaryHealthPanelId(update.mechId);
     let mechHealthAndWeaponsDivId = mechHealthAndWeaponsId(update.mechId);
     let mechHealthAndWeaponsDiv =
@@ -567,6 +566,32 @@ namespace MechViewMechPanel {
   }
   var moveMechButtonHandler : () => void; //initialized on first addMoveMechButton call
 
+  const EndMechIdPrefix = "end-mech-fake-id-";
+  var getEndMechId = function(team: Team) {
+    return EndMechIdPrefix + team;
+  }
+  var isEndMechId = function(mechId : string) {
+    return mechId.startsWith(EndMechIdPrefix);
+  }
+  var getEndMechIdTeam = function(mechId : string) : Team {
+    if (isEndMechId(mechId)) {
+      return mechId.substring(EndMechIdPrefix.length);
+    } else {
+      return null;
+    }
+  }
+  export var addEndMechPanel = function(team: Team) {
+    let mechPanelContainer = "#" + team + "Team";
+    let mechPanelDiv = MechViewWidgets.cloneTemplate("endMechPanel-template");
+    let mechPanelJQ = $(mechPanelDiv);
+    let mechId = getEndMechId(team);
+    mechPanelJQ
+      .attr("id", mechPanelId(mechId))
+      .attr("data-mech-id", mechId)
+      .appendTo(mechPanelContainer);
+    addDragAndDropHandlers(mechId, mechPanelJQ);
+  }
+
   var addDragAndDropHandlers =
       function(mechId : string, mechPanelJQ : JQuery) : void {
     if (!mechOnDragHandler) {
@@ -624,7 +649,7 @@ namespace MechViewMechPanel {
     return function(this : Element,
                     jqEvent : JQuery.Event) : void {
       let thisJQ = $(this);
-      let mechId = thisJQ.attr("data-mech-id");
+      let dropTargetMechId = thisJQ.attr("data-mech-id");
       let origEvent= jqEvent.originalEvent as DragEvent;
       let srcMechId = origEvent.dataTransfer.getData("text/plain");
       jqEvent.preventDefault();
@@ -632,18 +657,26 @@ namespace MechViewMechPanel {
       thisJQ.removeClass("droptarget");
       prevDropTarget = null;
 
-      if (mechId !== srcMechId) {
-        let srcMechJQ = $("#" + mechPanelId(srcMechId));
-        srcMechJQ
-          .detach()
-          .insertBefore(thisJQ);
-
+      if (dropTargetMechId !== srcMechId) {
         MechView.resetSimulation();
-        let status = MechModel.moveMech(srcMechId, mechId);
-        if (!status) {
-          console.error(`Error moving mech. src=${srcMechId} dest=${mechId}`);
+        let status = false;
+        if (!isEndMechId(dropTargetMechId)) {
+          status = MechModel.moveMech(srcMechId, dropTargetMechId);
         } else {
-          console.log(`Drop: src=${srcMechId} dest=${mechId}`);
+          let team = getEndMechIdTeam(dropTargetMechId);
+          status = MechModel.moveMechToEndOfList(srcMechId, team);
+          console.log("Insert at end: team=" + team);
+        }
+
+        if (!status) {
+          console.error(`Error moving mech. src=${srcMechId} dest=${dropTargetMechId}`);
+        } else {
+          console.log(`Drop: src=${srcMechId} dest=${dropTargetMechId}`);
+          let srcMechJQ = $("#" + mechPanelId(srcMechId));
+          srcMechJQ
+            .detach()
+            .insertBefore(thisJQ);
+
           toggleMoveMech(srcMechId);
           MechViewRouter.modifyAppState();
           MechModelView.refreshView([MechModelView.ViewUpdate.TEAMSTATS]);

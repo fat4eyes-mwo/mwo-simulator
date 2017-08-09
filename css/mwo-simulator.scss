@@ -346,18 +346,25 @@ div {
 .mechPanel {
   position: relative;
 }
-.mechPanel.droptarget {
+.mechPanel.droptarget,
+.endMechPanel.droptarget {
   background-color: $off-background-color;
   transform: translateX(10px);
 }
 
-.mechPanel.droptarget::before {
+.mechPanel.droptarget::before,
+.endMechPanel.droptarget::before {
   content: "\25BA";
   position:absolute;
   left: -20px;
   top: -10px;
   z-index: 10;
   color: $emphasis-color;
+}
+
+.endMechPanel {
+  min-height: 50px;
+  transition: transform 0.5s ease;
 }
 
 .template {

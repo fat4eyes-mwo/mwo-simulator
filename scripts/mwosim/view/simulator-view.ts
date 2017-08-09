@@ -13,6 +13,7 @@ namespace MechView {
   export var clearMechList = function(team : Team) : void {
     let teamMechPanelId = teamListPanel(team);
     $("#" + teamMechPanelId).empty();
+    MechViewMechPanel.addEndMechPanel(team);
   }
 
   export var clearMechStats = function(team : Team) : void {

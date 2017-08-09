@@ -1806,6 +1806,23 @@ namespace MechModel  {
     return true;
   }
 
+  export var moveMechToEndOfList = function(srcMechId : string, team : Team) : boolean {
+    let srcMechPos = getMechPosFromId(srcMechId);
+    if (!srcMechPos) {
+      return false;
+    }
+
+    let srcMech = getMechFromPos(srcMechPos);
+
+    let status = deleteMech(srcMechId);
+    if (!status) {
+      return false;
+    }
+    let insertMechList = mechTeams[team];
+    insertMechList.splice(insertMechList.length, 0, srcMech);
+    return true;
+  }
+
   //Debug, set default mech patterns
   export var initMechTeamPatterns = function(mechTeam : Mech[]) : void {
     for (let mech of mechTeam) {
