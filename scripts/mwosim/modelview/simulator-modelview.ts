@@ -178,9 +178,17 @@ namespace MechModelView {
     let dps = simTime > 0 ? Number(mechStats.totalDamage) / simTime * 1000: 0;
     let burst = mechStats.getBurstDamage(simTime);
 
-    MechViewMechPanel.updateMechStatusPanel(mech.getMechId(), isAlive,
-                          currTotalHealth, currMaxHealth, targetMechName,
-                          dps, burst, totalDmg);
+    let update : MechViewMechPanel.MechPanelStatusUpdate = {
+      mechId : mech.getMechId(),
+      mechIsAlive : isAlive,
+      mechCurrTotalHealth : currTotalHealth,
+      mechCurrMaxHealth : currMaxHealth,
+      targetMechName : targetMechName,
+      dps : dps,
+      burst : burst,
+      totalDmg : totalDmg
+    }
+    MechViewMechPanel.updateMechStatusPanel(update);
   }
 
   var updateMechTitle = function (mech : Mech) : void {

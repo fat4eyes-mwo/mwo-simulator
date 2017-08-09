@@ -421,26 +421,28 @@ namespace MechViewMechPanel {
       .append(mechLink);
   }
 
-  //TODO: Wrap these params in an object
+  export interface  MechPanelStatusUpdate {
+    mechId : string,
+    mechIsAlive : boolean,
+    mechCurrTotalHealth : number,
+    mechCurrMaxHealth : number,
+    targetMechName : string,
+    dps : number,
+    burst : number,
+    totalDmg : number
+  }
   export var updateMechStatusPanel =
-      function(mechId : string,
-              mechIsAlive : boolean,
-              mechCurrTotalHealth : number,
-              mechCurrMaxHealth : number,
-              targetMechName : string,
-              dps : number,
-              burst : number,
-              totalDmg : number)
+      function(update : MechPanelStatusUpdate)
               : void {
-    let mechSummaryHealthId = mechSummaryHealthPanelId(mechId);
-    let mechHealthAndWeaponsDivId = mechHealthAndWeaponsId(mechId);
+    let mechSummaryHealthId = mechSummaryHealthPanelId(update.mechId);
+    let mechHealthAndWeaponsDivId = mechHealthAndWeaponsId(update.mechId);
     let mechHealthAndWeaponsDiv =
           document.getElementById(mechHealthAndWeaponsDivId);
 
     //set mech summary health
     let mechSummaryHealthText = "";
-    let percentHealth = Number(mechCurrTotalHealth) / Number(mechCurrMaxHealth);
-    if (mechCurrTotalHealth > 0 && mechIsAlive) {
+    let percentHealth = Number(update.mechCurrTotalHealth) / Number(update.mechCurrMaxHealth);
+    if (update.mechCurrTotalHealth > 0 && update.mechIsAlive) {
       mechSummaryHealthText = ((percentHealth * 100).toFixed(0)) + "%";
       if (mechHealthAndWeaponsDiv.classList.contains("kia")) {
         mechHealthAndWeaponsDiv.classList.remove("kia");
@@ -459,24 +461,24 @@ namespace MechViewMechPanel {
     mechSummaryHealthDiv.textContent = mechSummaryHealthText;
 
     //update mech target
-    let mechTargetId = mechTargetPanelId(mechId);
+    let mechTargetId = mechTargetPanelId(update.mechId);
     let mechTargetDiv = document.getElementById(mechTargetId);
-    mechTargetDiv.textContent = targetMechName;
+    mechTargetDiv.textContent = update.targetMechName;
 
     //set mech total damage
-    let mechTotalDamageId = mechTotalDamagePanelId(mechId);
+    let mechTotalDamageId = mechTotalDamagePanelId(update.mechId);
     let mechTotalDamageDiv = document.getElementById(mechTotalDamageId);
-    mechTotalDamageDiv.textContent = Number(totalDmg).toFixed(1);
+    mechTotalDamageDiv.textContent = Number(update.totalDmg).toFixed(1);
 
     //set mech dps
-    let mechDPSId = mechDPSPanelId(mechId);
+    let mechDPSId = mechDPSPanelId(update.mechId);
     let mechDPSDiv = document.getElementById(mechDPSId);
-    mechDPSDiv.textContent = Number(dps).toFixed(1);
+    mechDPSDiv.textContent = Number(update.dps).toFixed(1);
 
     //set mech burst
-    let mechBurstId = mechBurstPanelId(mechId);
+    let mechBurstId = mechBurstPanelId(update.mechId);
     let mechBurstDiv = document.getElementById(mechBurstId);
-    mechBurstDiv.textContent = Number(burst).toFixed(1);
+    mechBurstDiv.textContent = Number(update.burst).toFixed(1);
   }
 
   //Delete button
