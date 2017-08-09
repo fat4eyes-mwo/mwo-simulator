@@ -47,9 +47,9 @@ var AddedData;
         }
     };
 })(AddedData || (AddedData = {}));
-//Generated from Game/mechs/*.pak on Wed, 09 Aug 2017 03:56:50 GMT
+//Generated from Game/mechs/*.pak on Wed, 09 Aug 2017 04:07:31 GMT
 var AddedData;
-//Generated from Game/mechs/*.pak on Wed, 09 Aug 2017 03:56:50 GMT
+//Generated from Game/mechs/*.pak on Wed, 09 Aug 2017 04:07:31 GMT
 (function (AddedData) {
     AddedData._AddedOmnipodData = {
         "adr-prime": {
@@ -2214,9 +2214,9 @@ var AddedData;
         }
     };
 })(AddedData || (AddedData = {}));
-//Generated from GameData.pak Wed, 09 Aug 2017 03:56:43 GMT
+//Generated from GameData.pak Wed, 09 Aug 2017 04:06:50 GMT
 var AddedData;
-//Generated from GameData.pak Wed, 09 Aug 2017 03:56:43 GMT
+//Generated from GameData.pak Wed, 09 Aug 2017 04:06:50 GMT
 (function (AddedData) {
     AddedData._AddedWeaponData = {
         "AutoCannon20": {
@@ -5112,29 +5112,12 @@ var SimulatorSettings;
         ],
     };
 })(SimulatorSettings || (SimulatorSettings = {}));
-//Generated from GameData.pak on Wed, 09 Aug 2017 03:56:43 GMT
+//Generated from GameData.pak on Wed, 09 Aug 2017 04:06:50 GMT
 var AddedData;
-//Generated from GameData.pak on Wed, 09 Aug 2017 03:56:43 GMT
+//Generated from GameData.pak on Wed, 09 Aug 2017 04:06:50 GMT
 (function (AddedData) {
     AddedData._SkillTreeData = {
         "Range": {
-            "names": [
-                "Range1",
-                "Range2",
-                "Range3",
-                "Range4",
-                "Range5",
-                "Range6",
-                "Range7",
-                "Range8",
-                "Range9",
-                "Range10",
-                "Range11",
-                "Range12",
-                "Range13",
-                "Range14",
-                "Range15"
-            ],
             "baseName": "Range",
             "effects": [
                 {
@@ -5153,13 +5136,6 @@ var AddedData;
             ]
         },
         "Velocity": {
-            "names": [
-                "Velocity1",
-                "Velocity2",
-                "Velocity3",
-                "Velocity4",
-                "Velocity5"
-            ],
             "baseName": "Velocity",
             "effects": [
                 {
@@ -5178,24 +5154,6 @@ var AddedData;
             ]
         },
         "Cooldown": {
-            "names": [
-                "Cooldown1",
-                "Cooldown2",
-                "Cooldown3",
-                "Cooldown4",
-                "Cooldown5",
-                "Cooldown6",
-                "Cooldown7",
-                "Cooldown8",
-                "Cooldown9",
-                "Cooldown10",
-                "Cooldown11",
-                "Cooldown12",
-                "Cooldown13",
-                "Cooldown14",
-                "Cooldown15",
-                "Cooldown16"
-            ],
             "baseName": "Cooldown",
             "effects": [
                 {
@@ -5214,22 +5172,6 @@ var AddedData;
             ]
         },
         "HeatGen": {
-            "names": [
-                "HeatGen1",
-                "HeatGen2",
-                "HeatGen3",
-                "HeatGen4",
-                "HeatGen5",
-                "HeatGen6",
-                "HeatGen7",
-                "HeatGen8",
-                "HeatGen9",
-                "HeatGen10",
-                "HeatGen11",
-                "HeatGen12",
-                "HeatGen13",
-                "HeatGen14"
-            ],
             "baseName": "HeatGen",
             "effects": [
                 {
@@ -5248,12 +5190,6 @@ var AddedData;
             ]
         },
         "LaserDuration": {
-            "names": [
-                "LaserDuration1",
-                "LaserDuration2",
-                "LaserDuration3",
-                "LaserDuration4"
-            ],
             "baseName": "LaserDuration",
             "effects": [
                 {
@@ -5272,10 +5208,6 @@ var AddedData;
             ]
         },
         "HighExplosive": {
-            "names": [
-                "HighExplosive1",
-                "HighExplosive2"
-            ],
             "baseName": "HighExplosive",
             "effects": [
                 {
@@ -5294,10 +5226,6 @@ var AddedData;
             ]
         },
         "MissileSpread": {
-            "names": [
-                "MissileSpread1",
-                "MissileSpread2"
-            ],
             "baseName": "MissileSpread",
             "effects": [
                 {
@@ -5316,10 +5244,6 @@ var AddedData;
             ]
         },
         "LBXSpread": {
-            "names": [
-                "LBXSpread1",
-                "LBXSpread2"
-            ],
             "baseName": "LBXSpread",
             "effects": [
                 {
@@ -5338,10 +5262,6 @@ var AddedData;
             ]
         },
         "GaussCharge": {
-            "names": [
-                "GaussCharge1",
-                "GaussCharge2"
-            ],
             "baseName": "GaussCharge",
             "effects": [
                 {
@@ -5360,10 +5280,6 @@ var AddedData;
             ]
         },
         "UACJamChance": {
-            "names": [
-                "UACJamChance1",
-                "UACJamChance2"
-            ],
             "baseName": "UACJamChance",
             "effects": [
                 {
@@ -5391,16 +5307,6 @@ var AddedData;
             ]
         },
         "ReinforcedCasing": {
-            "names": [
-                "ReinforcedCasing1",
-                "ReinforcedCasing2",
-                "ReinforcedCasing3",
-                "ReinforcedCasing4",
-                "ReinforcedCasing5",
-                "ReinforcedCasing6",
-                "ReinforcedCasing7",
-                "ReinforcedCasing8"
-            ],
             "baseName": "ReinforcedCasing",
             "effects": [
                 {
@@ -5419,10 +5325,6 @@ var AddedData;
             ]
         },
         "FlamerVentilation": {
-            "names": [
-                "FlamerVentilation1",
-                "FlamerVentilation2"
-            ],
             "baseName": "FlamerVentilation",
             "effects": [
                 {
@@ -5441,18 +5343,6 @@ var AddedData;
             ]
         },
         "ArmorHardening": {
-            "names": [
-                "ArmorHardening1",
-                "ArmorHardening2",
-                "ArmorHardening3",
-                "ArmorHardening4",
-                "ArmorHardening5",
-                "ArmorHardening6",
-                "ArmorHardening7",
-                "ArmorHardening8",
-                "ArmorHardening9",
-                "ArmorHardening10"
-            ],
             "baseName": "ArmorHardening",
             "effects": [
                 {
@@ -5633,18 +5523,6 @@ var AddedData;
             ]
         },
         "SkeletalDensity": {
-            "names": [
-                "SkeletalDensity1",
-                "SkeletalDensity2",
-                "SkeletalDensity3",
-                "SkeletalDensity4",
-                "SkeletalDensity5",
-                "SkeletalDensity6",
-                "SkeletalDensity7",
-                "SkeletalDensity8",
-                "SkeletalDensity9",
-                "SkeletalDensity10"
-            ],
             "baseName": "SkeletalDensity",
             "effects": [
                 {
@@ -5825,13 +5703,6 @@ var AddedData;
             ]
         },
         "ShockAbsorbance": {
-            "names": [
-                "ShockAbsorbance1",
-                "ShockAbsorbance2",
-                "ShockAbsorbance3",
-                "ShockAbsorbance4",
-                "ShockAbsorbance5"
-            ],
             "baseName": "ShockAbsorbance",
             "effects": [
                 {
@@ -5882,10 +5753,6 @@ var AddedData;
             ]
         },
         "AMSOverload": {
-            "names": [
-                "AMSOverload1",
-                "AMSOverload2"
-            ],
             "baseName": "AMSOverload",
             "effects": [
                 {
@@ -5899,10 +5766,6 @@ var AddedData;
             ]
         },
         "EnhancedNARC": {
-            "names": [
-                "EnhancedNARC1",
-                "EnhancedNARC2"
-            ],
             "baseName": "EnhancedNARC",
             "effects": [
                 {
@@ -5924,14 +5787,6 @@ var AddedData;
             ]
         },
         "TorsoSpeed": {
-            "names": [
-                "TorsoSpeed1",
-                "TorsoSpeed2",
-                "TorsoSpeed3",
-                "TorsoSpeed4",
-                "TorsoSpeed5",
-                "TorsoSpeed6"
-            ],
             "baseName": "TorsoSpeed",
             "effects": [
                 {
@@ -5982,13 +5837,6 @@ var AddedData;
             ]
         },
         "TorsoYaw": {
-            "names": [
-                "TorsoYaw1",
-                "TorsoYaw2",
-                "TorsoYaw3",
-                "TorsoYaw4",
-                "TorsoYaw5"
-            ],
             "baseName": "TorsoYaw",
             "effects": [
                 {
@@ -6039,13 +5887,6 @@ var AddedData;
             ]
         },
         "TorsoPitch": {
-            "names": [
-                "TorsoPitch1",
-                "TorsoPitch2",
-                "TorsoPitch3",
-                "TorsoPitch4",
-                "TorsoPitch5"
-            ],
             "baseName": "TorsoPitch",
             "effects": [
                 {
@@ -6059,15 +5900,6 @@ var AddedData;
             ]
         },
         "KineticBurst": {
-            "names": [
-                "KineticBurst1",
-                "KineticBurst2",
-                "KineticBurst3",
-                "KineticBurst4",
-                "KineticBurst5",
-                "KineticBurst6",
-                "KineticBurst7"
-            ],
             "baseName": "KineticBurst",
             "effects": [
                 {
@@ -6081,15 +5913,6 @@ var AddedData;
             ]
         },
         "HardBrake": {
-            "names": [
-                "HardBrake1",
-                "HardBrake2",
-                "HardBrake3",
-                "HardBrake4",
-                "HardBrake5",
-                "HardBrake6",
-                "HardBrake7"
-            ],
             "baseName": "HardBrake",
             "effects": [
                 {
@@ -6103,13 +5926,6 @@ var AddedData;
             ]
         },
         "AnchorTurn": {
-            "names": [
-                "AnchorTurn1",
-                "AnchorTurn2",
-                "AnchorTurn3",
-                "AnchorTurn4",
-                "AnchorTurn5"
-            ],
             "baseName": "AnchorTurn",
             "effects": [
                 {
@@ -6123,13 +5939,6 @@ var AddedData;
             ]
         },
         "SpeedTweak": {
-            "names": [
-                "SpeedTweak1",
-                "SpeedTweak2",
-                "SpeedTweak3",
-                "SpeedTweak4",
-                "SpeedTweak5"
-            ],
             "baseName": "SpeedTweak",
             "effects": [
                 {
@@ -6143,13 +5952,6 @@ var AddedData;
             ]
         },
         "LiftSpeed": {
-            "names": [
-                "LiftSpeed1",
-                "LiftSpeed2",
-                "LiftSpeed3",
-                "LiftSpeed4",
-                "LiftSpeed5"
-            ],
             "baseName": "LiftSpeed",
             "effects": [
                 {
@@ -6163,13 +5965,6 @@ var AddedData;
             ]
         },
         "Vectoring": {
-            "names": [
-                "Vectoring1",
-                "Vectoring2",
-                "Vectoring3",
-                "Vectoring4",
-                "Vectoring5"
-            ],
             "baseName": "Vectoring",
             "effects": [
                 {
@@ -6183,13 +5978,6 @@ var AddedData;
             ]
         },
         "VentCalibration": {
-            "names": [
-                "VentCalibration1",
-                "VentCalibration2",
-                "VentCalibration3",
-                "VentCalibration4",
-                "VentCalibration5"
-            ],
             "baseName": "VentCalibration",
             "effects": [
                 {
@@ -6203,13 +5991,6 @@ var AddedData;
             ]
         },
         "HeatShielding": {
-            "names": [
-                "HeatShielding1",
-                "HeatShielding2",
-                "HeatShielding3",
-                "HeatShielding4",
-                "HeatShielding5"
-            ],
             "baseName": "HeatShielding",
             "effects": [
                 {
@@ -6223,13 +6004,6 @@ var AddedData;
             ]
         },
         "QuickIgnition": {
-            "names": [
-                "QuickIgnition1",
-                "QuickIgnition2",
-                "QuickIgnition3",
-                "QuickIgnition4",
-                "QuickIgnition5"
-            ],
             "baseName": "QuickIgnition",
             "effects": [
                 {
@@ -6243,13 +6017,6 @@ var AddedData;
             ]
         },
         "HeatContainment": {
-            "names": [
-                "HeatContainment1",
-                "HeatContainment2",
-                "HeatContainment3",
-                "HeatContainment4",
-                "HeatContainment5"
-            ],
             "baseName": "HeatContainment",
             "effects": [
                 {
@@ -6263,13 +6030,6 @@ var AddedData;
             ]
         },
         "CoolRun": {
-            "names": [
-                "CoolRun1",
-                "CoolRun2",
-                "CoolRun3",
-                "CoolRun4",
-                "CoolRun5"
-            ],
             "baseName": "CoolRun",
             "effects": [
                 {
@@ -6283,11 +6043,6 @@ var AddedData;
             ]
         },
         "HillClimb": {
-            "names": [
-                "HillClimb1",
-                "HillClimb2",
-                "HillClimb3"
-            ],
             "baseName": "HillClimb",
             "effects": [
                 {
@@ -6301,12 +6056,6 @@ var AddedData;
             ]
         },
         "ImprovedGyros": {
-            "names": [
-                "ImprovedGyros1",
-                "ImprovedGyros2",
-                "ImprovedGyros3",
-                "ImprovedGyros4"
-            ],
             "baseName": "ImprovedGyros",
             "effects": [
                 {
@@ -6320,11 +6069,6 @@ var AddedData;
             ]
         },
         "SpeedRetention": {
-            "names": [
-                "SpeedRetention1",
-                "SpeedRetention2",
-                "SpeedRetention3"
-            ],
             "baseName": "SpeedRetention",
             "effects": [
                 {
@@ -6338,10 +6082,6 @@ var AddedData;
             ]
         },
         "MagazineCapacity": {
-            "names": [
-                "MagazineCapacity1",
-                "MagazineCapacity2"
-            ],
             "baseName": "MagazineCapacity",
             "effects": [
                 {
@@ -6671,10 +6411,6 @@ var AddedData;
             ]
         },
         "MissileRack": {
-            "names": [
-                "MissileRack1",
-                "MissileRack2"
-            ],
             "baseName": "MissileRack",
             "effects": [
                 {
@@ -6806,13 +6542,6 @@ var AddedData;
             ]
         },
         "SensorRange": {
-            "names": [
-                "SensorRange1",
-                "SensorRange2",
-                "SensorRange3",
-                "SensorRange4",
-                "SensorRange5"
-            ],
             "baseName": "SensorRange",
             "effects": [
                 {
@@ -6863,13 +6592,6 @@ var AddedData;
             ]
         },
         "TargetInfoGathering": {
-            "names": [
-                "TargetInfoGathering1",
-                "TargetInfoGathering2",
-                "TargetInfoGathering3",
-                "TargetInfoGathering4",
-                "TargetInfoGathering5"
-            ],
             "baseName": "TargetInfoGathering",
             "effects": [
                 {
@@ -6920,13 +6642,6 @@ var AddedData;
             ]
         },
         "TargetDecay": {
-            "names": [
-                "TargetDecay1",
-                "TargetDecay2",
-                "TargetDecay3",
-                "TargetDecay4",
-                "TargetDecay5"
-            ],
             "baseName": "TargetDecay",
             "effects": [
                 {
@@ -6940,13 +6655,6 @@ var AddedData;
             ]
         },
         "RadarDeprivation": {
-            "names": [
-                "RadarDeprivation1",
-                "RadarDeprivation2",
-                "RadarDeprivation3",
-                "RadarDeprivation4",
-                "RadarDeprivation5"
-            ],
             "baseName": "RadarDeprivation",
             "effects": [
                 {
@@ -6960,9 +6668,6 @@ var AddedData;
             ]
         },
         "AdvancedZoom": {
-            "names": [
-                "AdvancedZoom"
-            ],
             "baseName": "AdvancedZoom",
             "effects": [
                 {
@@ -6976,10 +6681,6 @@ var AddedData;
             ]
         },
         "SeismicSensor": {
-            "names": [
-                "SeismicSensor1",
-                "SeismicSensor2"
-            ],
             "baseName": "SeismicSensor",
             "effects": [
                 {
@@ -6993,10 +6694,6 @@ var AddedData;
             ]
         },
         "TargetRetention": {
-            "names": [
-                "TargetRetention1",
-                "TargetRetention2"
-            ],
             "baseName": "TargetRetention",
             "effects": [
                 {
@@ -7010,12 +6707,6 @@ var AddedData;
             ]
         },
         "ConsumableSlot": {
-            "names": [
-                "ConsumableSlot1",
-                "ConsumableSlot2",
-                "ConsumableSlot3",
-                "ConsumableSlot4"
-            ],
             "baseName": "ConsumableSlot",
             "effects": [
                 {
@@ -7029,9 +6720,6 @@ var AddedData;
             ]
         },
         "ExtraUAV": {
-            "names": [
-                "ExtraUAV"
-            ],
             "baseName": "ExtraUAV",
             "effects": [
                 {
@@ -7045,10 +6733,6 @@ var AddedData;
             ]
         },
         "UAVRange": {
-            "names": [
-                "UAVRange1",
-                "UAVRange2"
-            ],
             "baseName": "UAVRange",
             "effects": [
                 {
@@ -7062,9 +6746,6 @@ var AddedData;
             ]
         },
         "UAVTime": {
-            "names": [
-                "UAVTime"
-            ],
             "baseName": "UAVTime",
             "effects": [
                 {
@@ -7078,9 +6759,6 @@ var AddedData;
             ]
         },
         "CoolantReserves": {
-            "names": [
-                "CoolantReserves"
-            ],
             "baseName": "CoolantReserves",
             "effects": [
                 {
@@ -7094,10 +6772,6 @@ var AddedData;
             ]
         },
         "EnhancedCoolshot": {
-            "names": [
-                "EnhancedCoolshot1",
-                "EnhancedCoolshot2"
-            ],
             "baseName": "EnhancedCoolshot",
             "effects": [
                 {
@@ -7111,9 +6785,6 @@ var AddedData;
             ]
         },
         "CoolshotCooldown": {
-            "names": [
-                "CoolshotCooldown"
-            ],
             "baseName": "CoolshotCooldown",
             "effects": [
                 {
@@ -7127,9 +6798,6 @@ var AddedData;
             ]
         },
         "ExpandedReserves": {
-            "names": [
-                "ExpandedReserves"
-            ],
             "baseName": "ExpandedReserves",
             "effects": [
                 {
@@ -7143,10 +6811,6 @@ var AddedData;
             ]
         },
         "ExtendedBombardment": {
-            "names": [
-                "ExtendedBombardment1",
-                "ExtendedBombardment2"
-            ],
             "baseName": "ExtendedBombardment",
             "effects": [
                 {
@@ -7168,9 +6832,6 @@ var AddedData;
             ]
         },
         "EnhancedSpotting": {
-            "names": [
-                "EnhancedSpotting"
-            ],
             "baseName": "EnhancedSpotting",
             "effects": [
                 {
@@ -7184,12 +6845,6 @@ var AddedData;
             ]
         },
         "CaptureAssist": {
-            "names": [
-                "CaptureAssist1",
-                "CaptureAssist2",
-                "CaptureAssist3",
-                "CaptureAssist4"
-            ],
             "baseName": "CaptureAssist",
             "effects": [
                 {
@@ -7203,10 +6858,6 @@ var AddedData;
             ]
         },
         "EnhancedECM": {
-            "names": [
-                "EnhancedECM1",
-                "EnhancedECM2"
-            ],
             "baseName": "EnhancedECM",
             "effects": [
                 {
