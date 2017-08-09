@@ -8,3 +8,5 @@ Mech data can be found at MWODIR/Game/mechs/<mechname.pak>/Objects/mechs/<mechna
 
 Mech omnipod data can be found at MWODIR/Game/mechs/<mechname.pak>/Objects/mechs/<mechname>/<mechname>-omnipods.xml
   -omnipod set bonuses can be found here
+
+Targeting computer data can be found in Game/Gamedata.pak/Libs/Items/Modules/Equipment.xml

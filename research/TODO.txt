@@ -4,6 +4,7 @@
   The total script size is now around 500k (67k compressed) and may affect initial load time.
 
 - drag on mobile
+- allow move to end of list in drag and drop
 - save team settings (on separate hash parameter)
 - some omnimechs have no CT omnipod entry (HBR-F). See where to find this info.
 - LBX damage spread
