@@ -1,5 +1,8 @@
 - AUTOMATED UNIT TESTS!!!!!!
 
+- See if it's worth moving all the added data to a single json file and fetching it at runtime.
+  The total script size is now around 500k (67k compressed) and may affect initial load time.
+
 - drag on mobile
 - save team settings (on separate hash parameter)
 - some omnimechs have no CT omnipod entry (HBR-F). See where to find this info.
