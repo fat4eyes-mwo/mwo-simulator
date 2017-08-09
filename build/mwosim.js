@@ -47,9 +47,9 @@ var AddedData;
         }
     };
 })(AddedData || (AddedData = {}));
-//Generated from Game/mechs/*.pak on Tue, 08 Aug 2017 21:52:36 GMT
+//Generated from Game/mechs/*.pak on Wed, 09 Aug 2017 03:56:50 GMT
 var AddedData;
-//Generated from Game/mechs/*.pak on Tue, 08 Aug 2017 21:52:36 GMT
+//Generated from Game/mechs/*.pak on Wed, 09 Aug 2017 03:56:50 GMT
 (function (AddedData) {
     AddedData._AddedOmnipodData = {
         "adr-prime": {
@@ -2214,9 +2214,9 @@ var AddedData;
         }
     };
 })(AddedData || (AddedData = {}));
-//Generated from GameData.pak Tue, 08 Aug 2017 21:51:50 GMT
+//Generated from GameData.pak Wed, 09 Aug 2017 03:56:43 GMT
 var AddedData;
-//Generated from GameData.pak Tue, 08 Aug 2017 21:51:50 GMT
+//Generated from GameData.pak Wed, 09 Aug 2017 03:56:43 GMT
 (function (AddedData) {
     AddedData._AddedWeaponData = {
         "AutoCannon20": {
@@ -5112,6 +5112,2123 @@ var SimulatorSettings;
         ],
     };
 })(SimulatorSettings || (SimulatorSettings = {}));
+//Generated from GameData.pak on Wed, 09 Aug 2017 03:56:43 GMT
+var AddedData;
+//Generated from GameData.pak on Wed, 09 Aug 2017 03:56:43 GMT
+(function (AddedData) {
+    AddedData._SkillTreeData = {
+        "Range": {
+            "names": [
+                "Range1",
+                "Range2",
+                "Range3",
+                "Range4",
+                "Range5",
+                "Range6",
+                "Range7",
+                "Range8",
+                "Range9",
+                "Range10",
+                "Range11",
+                "Range12",
+                "Range13",
+                "Range14",
+                "Range15"
+            ],
+            "baseName": "Range",
+            "effects": [
+                {
+                    "quirkName": "all_range_multiplier",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": 0.01
+                        },
+                        {
+                            "faction": "Clan",
+                            "quirkValue": 0.01
+                        }
+                    ]
+                }
+            ]
+        },
+        "Velocity": {
+            "names": [
+                "Velocity1",
+                "Velocity2",
+                "Velocity3",
+                "Velocity4",
+                "Velocity5"
+            ],
+            "baseName": "Velocity",
+            "effects": [
+                {
+                    "quirkName": "all_velocity_multiplier",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": 0.02
+                        },
+                        {
+                            "faction": "Clan",
+                            "quirkValue": 0.02
+                        }
+                    ]
+                }
+            ]
+        },
+        "Cooldown": {
+            "names": [
+                "Cooldown1",
+                "Cooldown2",
+                "Cooldown3",
+                "Cooldown4",
+                "Cooldown5",
+                "Cooldown6",
+                "Cooldown7",
+                "Cooldown8",
+                "Cooldown9",
+                "Cooldown10",
+                "Cooldown11",
+                "Cooldown12",
+                "Cooldown13",
+                "Cooldown14",
+                "Cooldown15",
+                "Cooldown16"
+            ],
+            "baseName": "Cooldown",
+            "effects": [
+                {
+                    "quirkName": "all_cooldown_multiplier",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": -0.0075
+                        },
+                        {
+                            "faction": "Clan",
+                            "quirkValue": -0.006
+                        }
+                    ]
+                }
+            ]
+        },
+        "HeatGen": {
+            "names": [
+                "HeatGen1",
+                "HeatGen2",
+                "HeatGen3",
+                "HeatGen4",
+                "HeatGen5",
+                "HeatGen6",
+                "HeatGen7",
+                "HeatGen8",
+                "HeatGen9",
+                "HeatGen10",
+                "HeatGen11",
+                "HeatGen12",
+                "HeatGen13",
+                "HeatGen14"
+            ],
+            "baseName": "HeatGen",
+            "effects": [
+                {
+                    "quirkName": "all_heat_multiplier",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": -0.0075
+                        },
+                        {
+                            "faction": "Clan",
+                            "quirkValue": -0.0075
+                        }
+                    ]
+                }
+            ]
+        },
+        "LaserDuration": {
+            "names": [
+                "LaserDuration1",
+                "LaserDuration2",
+                "LaserDuration3",
+                "LaserDuration4"
+            ],
+            "baseName": "LaserDuration",
+            "effects": [
+                {
+                    "quirkName": "laser_duration_multiplier",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": -0.0375
+                        },
+                        {
+                            "faction": "Clan",
+                            "quirkValue": -0.025
+                        }
+                    ]
+                }
+            ]
+        },
+        "HighExplosive": {
+            "names": [
+                "HighExplosive1",
+                "HighExplosive2"
+            ],
+            "baseName": "HighExplosive",
+            "effects": [
+                {
+                    "quirkName": "missile_critdamage_multiplier",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": 0.075
+                        },
+                        {
+                            "faction": "Clan",
+                            "quirkValue": 0.075
+                        }
+                    ]
+                }
+            ]
+        },
+        "MissileSpread": {
+            "names": [
+                "MissileSpread1",
+                "MissileSpread2"
+            ],
+            "baseName": "MissileSpread",
+            "effects": [
+                {
+                    "quirkName": "missile_spread_multiplier",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": -0.025
+                        },
+                        {
+                            "faction": "Clan",
+                            "quirkValue": -0.025
+                        }
+                    ]
+                }
+            ]
+        },
+        "LBXSpread": {
+            "names": [
+                "LBXSpread1",
+                "LBXSpread2"
+            ],
+            "baseName": "LBXSpread",
+            "effects": [
+                {
+                    "quirkName": "lbxautocannon_spread_multiplier",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": -0.05
+                        },
+                        {
+                            "faction": "Clan",
+                            "quirkValue": -0.05
+                        }
+                    ]
+                }
+            ]
+        },
+        "GaussCharge": {
+            "names": [
+                "GaussCharge1",
+                "GaussCharge2"
+            ],
+            "baseName": "GaussCharge",
+            "effects": [
+                {
+                    "quirkName": "gaussextendedcharge_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": 0.75
+                        },
+                        {
+                            "faction": "Clan",
+                            "quirkValue": 0.75
+                        }
+                    ]
+                }
+            ]
+        },
+        "UACJamChance": {
+            "names": [
+                "UACJamChance1",
+                "UACJamChance2"
+            ],
+            "baseName": "UACJamChance",
+            "effects": [
+                {
+                    "quirkName": "ultraautocannon_jamduration_multiplier",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": -0.075
+                        },
+                        {
+                            "faction": "Clan",
+                            "quirkValue": -0.075
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "rotaryautocannon_jamrampdownduration_multiplier",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": -0.075
+                        }
+                    ]
+                }
+            ]
+        },
+        "ReinforcedCasing": {
+            "names": [
+                "ReinforcedCasing1",
+                "ReinforcedCasing2",
+                "ReinforcedCasing3",
+                "ReinforcedCasing4",
+                "ReinforcedCasing5",
+                "ReinforcedCasing6",
+                "ReinforcedCasing7",
+                "ReinforcedCasing8"
+            ],
+            "baseName": "ReinforcedCasing",
+            "effects": [
+                {
+                    "quirkName": "critchance_receiving_multiplier",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": -0.01
+                        },
+                        {
+                            "faction": "Clan",
+                            "quirkValue": -0.01
+                        }
+                    ]
+                }
+            ]
+        },
+        "FlamerVentilation": {
+            "names": [
+                "FlamerVentilation1",
+                "FlamerVentilation2"
+            ],
+            "baseName": "FlamerVentilation",
+            "effects": [
+                {
+                    "quirkName": "flamer_rampdownduration_multiplier",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": -0.075
+                        },
+                        {
+                            "faction": "Clan",
+                            "quirkValue": -0.075
+                        }
+                    ]
+                }
+            ]
+        },
+        "ArmorHardening": {
+            "names": [
+                "ArmorHardening1",
+                "ArmorHardening2",
+                "ArmorHardening3",
+                "ArmorHardening4",
+                "ArmorHardening5",
+                "ArmorHardening6",
+                "ArmorHardening7",
+                "ArmorHardening8",
+                "ArmorHardening9",
+                "ArmorHardening10"
+            ],
+            "baseName": "ArmorHardening",
+            "effects": [
+                {
+                    "quirkName": "increasedarmor_multiplier",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "tonnage": 20,
+                            "quirkValue": 0.026
+                        },
+                        {
+                            "faction": "IS",
+                            "tonnage": 25,
+                            "quirkValue": 0.025
+                        },
+                        {
+                            "faction": "IS",
+                            "tonnage": 30,
+                            "quirkValue": 0.024
+                        },
+                        {
+                            "faction": "IS",
+                            "tonnage": 35,
+                            "quirkValue": 0.023
+                        },
+                        {
+                            "faction": "IS",
+                            "tonnage": 40,
+                            "quirkValue": 0.022
+                        },
+                        {
+                            "faction": "IS",
+                            "tonnage": 45,
+                            "quirkValue": 0.021
+                        },
+                        {
+                            "faction": "IS",
+                            "tonnage": 50,
+                            "quirkValue": 0.02
+                        },
+                        {
+                            "faction": "IS",
+                            "tonnage": 55,
+                            "quirkValue": 0.019
+                        },
+                        {
+                            "faction": "IS",
+                            "tonnage": 60,
+                            "quirkValue": 0.018
+                        },
+                        {
+                            "faction": "IS",
+                            "tonnage": 65,
+                            "quirkValue": 0.017
+                        },
+                        {
+                            "faction": "IS",
+                            "tonnage": 70,
+                            "quirkValue": 0.016
+                        },
+                        {
+                            "faction": "IS",
+                            "tonnage": 75,
+                            "quirkValue": 0.015
+                        },
+                        {
+                            "faction": "IS",
+                            "tonnage": 80,
+                            "quirkValue": 0.014
+                        },
+                        {
+                            "faction": "IS",
+                            "tonnage": 85,
+                            "quirkValue": 0.013
+                        },
+                        {
+                            "faction": "IS",
+                            "tonnage": 90,
+                            "quirkValue": 0.012
+                        },
+                        {
+                            "faction": "IS",
+                            "tonnage": 95,
+                            "quirkValue": 0.011
+                        },
+                        {
+                            "faction": "IS",
+                            "tonnage": 100,
+                            "quirkValue": 0.01
+                        },
+                        {
+                            "faction": "Clan",
+                            "tonnage": 20,
+                            "quirkValue": 0.026
+                        },
+                        {
+                            "faction": "Clan",
+                            "tonnage": 25,
+                            "quirkValue": 0.025
+                        },
+                        {
+                            "faction": "Clan",
+                            "tonnage": 30,
+                            "quirkValue": 0.024
+                        },
+                        {
+                            "faction": "Clan",
+                            "tonnage": 35,
+                            "quirkValue": 0.023
+                        },
+                        {
+                            "faction": "Clan",
+                            "tonnage": 40,
+                            "quirkValue": 0.022
+                        },
+                        {
+                            "faction": "Clan",
+                            "tonnage": 45,
+                            "quirkValue": 0.021
+                        },
+                        {
+                            "faction": "Clan",
+                            "tonnage": 50,
+                            "quirkValue": 0.02
+                        },
+                        {
+                            "faction": "Clan",
+                            "tonnage": 55,
+                            "quirkValue": 0.019
+                        },
+                        {
+                            "faction": "Clan",
+                            "tonnage": 60,
+                            "quirkValue": 0.018
+                        },
+                        {
+                            "faction": "Clan",
+                            "tonnage": 65,
+                            "quirkValue": 0.017
+                        },
+                        {
+                            "faction": "Clan",
+                            "tonnage": 70,
+                            "quirkValue": 0.016
+                        },
+                        {
+                            "faction": "Clan",
+                            "tonnage": 75,
+                            "quirkValue": 0.015
+                        },
+                        {
+                            "faction": "Clan",
+                            "tonnage": 80,
+                            "quirkValue": 0.014
+                        },
+                        {
+                            "faction": "Clan",
+                            "tonnage": 85,
+                            "quirkValue": 0.013
+                        },
+                        {
+                            "faction": "Clan",
+                            "tonnage": 90,
+                            "quirkValue": 0.012
+                        },
+                        {
+                            "faction": "Clan",
+                            "tonnage": 95,
+                            "quirkValue": 0.011
+                        },
+                        {
+                            "faction": "Clan",
+                            "tonnage": 100,
+                            "quirkValue": 0.01
+                        }
+                    ]
+                }
+            ]
+        },
+        "SkeletalDensity": {
+            "names": [
+                "SkeletalDensity1",
+                "SkeletalDensity2",
+                "SkeletalDensity3",
+                "SkeletalDensity4",
+                "SkeletalDensity5",
+                "SkeletalDensity6",
+                "SkeletalDensity7",
+                "SkeletalDensity8",
+                "SkeletalDensity9",
+                "SkeletalDensity10"
+            ],
+            "baseName": "SkeletalDensity",
+            "effects": [
+                {
+                    "quirkName": "increasedstructure_multiplier",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "tonnage": 20,
+                            "quirkValue": 0.041
+                        },
+                        {
+                            "faction": "IS",
+                            "tonnage": 25,
+                            "quirkValue": 0.04
+                        },
+                        {
+                            "faction": "IS",
+                            "tonnage": 30,
+                            "quirkValue": 0.039
+                        },
+                        {
+                            "faction": "IS",
+                            "tonnage": 35,
+                            "quirkValue": 0.038
+                        },
+                        {
+                            "faction": "IS",
+                            "tonnage": 40,
+                            "quirkValue": 0.037
+                        },
+                        {
+                            "faction": "IS",
+                            "tonnage": 45,
+                            "quirkValue": 0.036
+                        },
+                        {
+                            "faction": "IS",
+                            "tonnage": 50,
+                            "quirkValue": 0.035
+                        },
+                        {
+                            "faction": "IS",
+                            "tonnage": 55,
+                            "quirkValue": 0.034
+                        },
+                        {
+                            "faction": "IS",
+                            "tonnage": 60,
+                            "quirkValue": 0.033
+                        },
+                        {
+                            "faction": "IS",
+                            "tonnage": 65,
+                            "quirkValue": 0.032
+                        },
+                        {
+                            "faction": "IS",
+                            "tonnage": 70,
+                            "quirkValue": 0.031
+                        },
+                        {
+                            "faction": "IS",
+                            "tonnage": 75,
+                            "quirkValue": 0.03
+                        },
+                        {
+                            "faction": "IS",
+                            "tonnage": 80,
+                            "quirkValue": 0.029
+                        },
+                        {
+                            "faction": "IS",
+                            "tonnage": 85,
+                            "quirkValue": 0.028
+                        },
+                        {
+                            "faction": "IS",
+                            "tonnage": 90,
+                            "quirkValue": 0.027
+                        },
+                        {
+                            "faction": "IS",
+                            "tonnage": 95,
+                            "quirkValue": 0.026
+                        },
+                        {
+                            "faction": "IS",
+                            "tonnage": 100,
+                            "quirkValue": 0.025
+                        },
+                        {
+                            "faction": "Clan",
+                            "tonnage": 20,
+                            "quirkValue": 0.041
+                        },
+                        {
+                            "faction": "Clan",
+                            "tonnage": 25,
+                            "quirkValue": 0.04
+                        },
+                        {
+                            "faction": "Clan",
+                            "tonnage": 30,
+                            "quirkValue": 0.039
+                        },
+                        {
+                            "faction": "Clan",
+                            "tonnage": 35,
+                            "quirkValue": 0.038
+                        },
+                        {
+                            "faction": "Clan",
+                            "tonnage": 40,
+                            "quirkValue": 0.037
+                        },
+                        {
+                            "faction": "Clan",
+                            "tonnage": 45,
+                            "quirkValue": 0.036
+                        },
+                        {
+                            "faction": "Clan",
+                            "tonnage": 50,
+                            "quirkValue": 0.035
+                        },
+                        {
+                            "faction": "Clan",
+                            "tonnage": 55,
+                            "quirkValue": 0.034
+                        },
+                        {
+                            "faction": "Clan",
+                            "tonnage": 60,
+                            "quirkValue": 0.033
+                        },
+                        {
+                            "faction": "Clan",
+                            "tonnage": 65,
+                            "quirkValue": 0.032
+                        },
+                        {
+                            "faction": "Clan",
+                            "tonnage": 70,
+                            "quirkValue": 0.031
+                        },
+                        {
+                            "faction": "Clan",
+                            "tonnage": 75,
+                            "quirkValue": 0.03
+                        },
+                        {
+                            "faction": "Clan",
+                            "tonnage": 80,
+                            "quirkValue": 0.029
+                        },
+                        {
+                            "faction": "Clan",
+                            "tonnage": 85,
+                            "quirkValue": 0.028
+                        },
+                        {
+                            "faction": "Clan",
+                            "tonnage": 90,
+                            "quirkValue": 0.027
+                        },
+                        {
+                            "faction": "Clan",
+                            "tonnage": 95,
+                            "quirkValue": 0.026
+                        },
+                        {
+                            "faction": "Clan",
+                            "tonnage": 100,
+                            "quirkValue": 0.025
+                        }
+                    ]
+                }
+            ]
+        },
+        "ShockAbsorbance": {
+            "names": [
+                "ShockAbsorbance1",
+                "ShockAbsorbance2",
+                "ShockAbsorbance3",
+                "ShockAbsorbance4",
+                "ShockAbsorbance5"
+            ],
+            "baseName": "ShockAbsorbance",
+            "effects": [
+                {
+                    "quirkName": "falldamage_multiplier",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "weightClass": "Light",
+                            "quirkValue": -0.1
+                        },
+                        {
+                            "faction": "IS",
+                            "weightClass": "Medium",
+                            "quirkValue": -0.1
+                        },
+                        {
+                            "faction": "IS",
+                            "weightClass": "Heavy",
+                            "quirkValue": -0.1
+                        },
+                        {
+                            "faction": "IS",
+                            "weightClass": "Assault",
+                            "quirkValue": -0.1
+                        },
+                        {
+                            "faction": "Clan",
+                            "weightClass": "Light",
+                            "quirkValue": -0.1
+                        },
+                        {
+                            "faction": "Clan",
+                            "weightClass": "Medium",
+                            "quirkValue": -0.1
+                        },
+                        {
+                            "faction": "Clan",
+                            "weightClass": "Heavy",
+                            "quirkValue": -0.1
+                        },
+                        {
+                            "faction": "Clan",
+                            "weightClass": "Assault",
+                            "quirkValue": -0.1
+                        }
+                    ]
+                }
+            ]
+        },
+        "AMSOverload": {
+            "names": [
+                "AMSOverload1",
+                "AMSOverload2"
+            ],
+            "baseName": "AMSOverload",
+            "effects": [
+                {
+                    "quirkName": "antimissilesystem_damage_additive",
+                    "quirkValues": [
+                        {
+                            "quirkValue": 0.75
+                        }
+                    ]
+                }
+            ]
+        },
+        "EnhancedNARC": {
+            "names": [
+                "EnhancedNARC1",
+                "EnhancedNARC2"
+            ],
+            "baseName": "EnhancedNARC",
+            "effects": [
+                {
+                    "quirkName": "narcbeacon_velocity_multiplier",
+                    "quirkValues": [
+                        {
+                            "quirkValue": 0.1
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "narcbeacon_narcduration_multiplier",
+                    "quirkValues": [
+                        {
+                            "quirkValue": 0.15
+                        }
+                    ]
+                }
+            ]
+        },
+        "TorsoSpeed": {
+            "names": [
+                "TorsoSpeed1",
+                "TorsoSpeed2",
+                "TorsoSpeed3",
+                "TorsoSpeed4",
+                "TorsoSpeed5",
+                "TorsoSpeed6"
+            ],
+            "baseName": "TorsoSpeed",
+            "effects": [
+                {
+                    "quirkName": "torso_yawspeed_multiplier",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "weightClass": "Light",
+                            "quirkValue": 0.05
+                        },
+                        {
+                            "faction": "IS",
+                            "weightClass": "Medium",
+                            "quirkValue": 0.04
+                        },
+                        {
+                            "faction": "IS",
+                            "weightClass": "Heavy",
+                            "quirkValue": 0.035
+                        },
+                        {
+                            "faction": "IS",
+                            "weightClass": "Assault",
+                            "quirkValue": 0.035
+                        },
+                        {
+                            "faction": "Clan",
+                            "weightClass": "Light",
+                            "quirkValue": 0.05
+                        },
+                        {
+                            "faction": "Clan",
+                            "weightClass": "Medium",
+                            "quirkValue": 0.04
+                        },
+                        {
+                            "faction": "Clan",
+                            "weightClass": "Heavy",
+                            "quirkValue": 0.035
+                        },
+                        {
+                            "faction": "Clan",
+                            "weightClass": "Assault",
+                            "quirkValue": 0.035
+                        }
+                    ]
+                }
+            ]
+        },
+        "TorsoYaw": {
+            "names": [
+                "TorsoYaw1",
+                "TorsoYaw2",
+                "TorsoYaw3",
+                "TorsoYaw4",
+                "TorsoYaw5"
+            ],
+            "baseName": "TorsoYaw",
+            "effects": [
+                {
+                    "quirkName": "torso_yawangle_multiplier",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "weightClass": "Light",
+                            "quirkValue": 0.02
+                        },
+                        {
+                            "faction": "IS",
+                            "weightClass": "Medium",
+                            "quirkValue": 0.02
+                        },
+                        {
+                            "faction": "IS",
+                            "weightClass": "Heavy",
+                            "quirkValue": 0.02
+                        },
+                        {
+                            "faction": "IS",
+                            "weightClass": "Assault",
+                            "quirkValue": 0.02
+                        },
+                        {
+                            "faction": "Clan",
+                            "weightClass": "Light",
+                            "quirkValue": 0.02
+                        },
+                        {
+                            "faction": "Clan",
+                            "weightClass": "Medium",
+                            "quirkValue": 0.02
+                        },
+                        {
+                            "faction": "Clan",
+                            "weightClass": "Heavy",
+                            "quirkValue": 0.02
+                        },
+                        {
+                            "faction": "Clan",
+                            "weightClass": "Assault",
+                            "quirkValue": 0.02
+                        }
+                    ]
+                }
+            ]
+        },
+        "TorsoPitch": {
+            "names": [
+                "TorsoPitch1",
+                "TorsoPitch2",
+                "TorsoPitch3",
+                "TorsoPitch4",
+                "TorsoPitch5"
+            ],
+            "baseName": "TorsoPitch",
+            "effects": [
+                {
+                    "quirkName": "torso_pitchangle_multiplier",
+                    "quirkValues": [
+                        {
+                            "quirkValue": 0.02
+                        }
+                    ]
+                }
+            ]
+        },
+        "KineticBurst": {
+            "names": [
+                "KineticBurst1",
+                "KineticBurst2",
+                "KineticBurst3",
+                "KineticBurst4",
+                "KineticBurst5",
+                "KineticBurst6",
+                "KineticBurst7"
+            ],
+            "baseName": "KineticBurst",
+            "effects": [
+                {
+                    "quirkName": "accellerp_all_multiplier",
+                    "quirkValues": [
+                        {
+                            "quirkValue": 0.035
+                        }
+                    ]
+                }
+            ]
+        },
+        "HardBrake": {
+            "names": [
+                "HardBrake1",
+                "HardBrake2",
+                "HardBrake3",
+                "HardBrake4",
+                "HardBrake5",
+                "HardBrake6",
+                "HardBrake7"
+            ],
+            "baseName": "HardBrake",
+            "effects": [
+                {
+                    "quirkName": "decellerp_all_multiplier",
+                    "quirkValues": [
+                        {
+                            "quirkValue": 0.035
+                        }
+                    ]
+                }
+            ]
+        },
+        "AnchorTurn": {
+            "names": [
+                "AnchorTurn1",
+                "AnchorTurn2",
+                "AnchorTurn3",
+                "AnchorTurn4",
+                "AnchorTurn5"
+            ],
+            "baseName": "AnchorTurn",
+            "effects": [
+                {
+                    "quirkName": "turnlerp_all_multiplier",
+                    "quirkValues": [
+                        {
+                            "quirkValue": 0.05
+                        }
+                    ]
+                }
+            ]
+        },
+        "SpeedTweak": {
+            "names": [
+                "SpeedTweak1",
+                "SpeedTweak2",
+                "SpeedTweak3",
+                "SpeedTweak4",
+                "SpeedTweak5"
+            ],
+            "baseName": "SpeedTweak",
+            "effects": [
+                {
+                    "quirkName": "mechtopspeed_multiplier",
+                    "quirkValues": [
+                        {
+                            "quirkValue": 0.015
+                        }
+                    ]
+                }
+            ]
+        },
+        "LiftSpeed": {
+            "names": [
+                "LiftSpeed1",
+                "LiftSpeed2",
+                "LiftSpeed3",
+                "LiftSpeed4",
+                "LiftSpeed5"
+            ],
+            "baseName": "LiftSpeed",
+            "effects": [
+                {
+                    "quirkName": "jumpjets_initialthrust_multiplier",
+                    "quirkValues": [
+                        {
+                            "quirkValue": 0.03
+                        }
+                    ]
+                }
+            ]
+        },
+        "Vectoring": {
+            "names": [
+                "Vectoring1",
+                "Vectoring2",
+                "Vectoring3",
+                "Vectoring4",
+                "Vectoring5"
+            ],
+            "baseName": "Vectoring",
+            "effects": [
+                {
+                    "quirkName": "jumpjets_forwardthrust_multiplier",
+                    "quirkValues": [
+                        {
+                            "quirkValue": 0.25
+                        }
+                    ]
+                }
+            ]
+        },
+        "VentCalibration": {
+            "names": [
+                "VentCalibration1",
+                "VentCalibration2",
+                "VentCalibration3",
+                "VentCalibration4",
+                "VentCalibration5"
+            ],
+            "baseName": "VentCalibration",
+            "effects": [
+                {
+                    "quirkName": "jumpjets_burntime_multiplier",
+                    "quirkValues": [
+                        {
+                            "quirkValue": 0.03
+                        }
+                    ]
+                }
+            ]
+        },
+        "HeatShielding": {
+            "names": [
+                "HeatShielding1",
+                "HeatShielding2",
+                "HeatShielding3",
+                "HeatShielding4",
+                "HeatShielding5"
+            ],
+            "baseName": "HeatShielding",
+            "effects": [
+                {
+                    "quirkName": "jumpjets_heat_multiplier",
+                    "quirkValues": [
+                        {
+                            "quirkValue": -0.06
+                        }
+                    ]
+                }
+            ]
+        },
+        "QuickIgnition": {
+            "names": [
+                "QuickIgnition1",
+                "QuickIgnition2",
+                "QuickIgnition3",
+                "QuickIgnition4",
+                "QuickIgnition5"
+            ],
+            "baseName": "QuickIgnition",
+            "effects": [
+                {
+                    "quirkName": "startupduration_multiplier",
+                    "quirkValues": [
+                        {
+                            "quirkValue": -0.07
+                        }
+                    ]
+                }
+            ]
+        },
+        "HeatContainment": {
+            "names": [
+                "HeatContainment1",
+                "HeatContainment2",
+                "HeatContainment3",
+                "HeatContainment4",
+                "HeatContainment5"
+            ],
+            "baseName": "HeatContainment",
+            "effects": [
+                {
+                    "quirkName": "maxheat_multiplier",
+                    "quirkValues": [
+                        {
+                            "quirkValue": 0.03
+                        }
+                    ]
+                }
+            ]
+        },
+        "CoolRun": {
+            "names": [
+                "CoolRun1",
+                "CoolRun2",
+                "CoolRun3",
+                "CoolRun4",
+                "CoolRun5"
+            ],
+            "baseName": "CoolRun",
+            "effects": [
+                {
+                    "quirkName": "heatdissipation_multiplier",
+                    "quirkValues": [
+                        {
+                            "quirkValue": 0.02
+                        }
+                    ]
+                }
+            ]
+        },
+        "HillClimb": {
+            "names": [
+                "HillClimb1",
+                "HillClimb2",
+                "HillClimb3"
+            ],
+            "baseName": "HillClimb",
+            "effects": [
+                {
+                    "quirkName": "hillclimb_multiplier",
+                    "quirkValues": [
+                        {
+                            "quirkValue": 0.05
+                        }
+                    ]
+                }
+            ]
+        },
+        "ImprovedGyros": {
+            "names": [
+                "ImprovedGyros1",
+                "ImprovedGyros2",
+                "ImprovedGyros3",
+                "ImprovedGyros4"
+            ],
+            "baseName": "ImprovedGyros",
+            "effects": [
+                {
+                    "quirkName": "screenshake_multiplier",
+                    "quirkValues": [
+                        {
+                            "quirkValue": -0.175
+                        }
+                    ]
+                }
+            ]
+        },
+        "SpeedRetention": {
+            "names": [
+                "SpeedRetention1",
+                "SpeedRetention2",
+                "SpeedRetention3"
+            ],
+            "baseName": "SpeedRetention",
+            "effects": [
+                {
+                    "quirkName": "speedretention_multiplier",
+                    "quirkValues": [
+                        {
+                            "quirkValue": 0.1
+                        }
+                    ]
+                }
+            ]
+        },
+        "MagazineCapacity": {
+            "names": [
+                "MagazineCapacity1",
+                "MagazineCapacity2"
+            ],
+            "baseName": "MagazineCapacity",
+            "effects": [
+                {
+                    "quirkName": "ammocapacity_machinegun_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": 200
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_lightmachinegun_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": 250
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_heavymachinegun_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": 100
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_ac2_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": 8
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_ac5_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": 3
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_ac10_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": 2
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_ac20_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": 1
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_lb2x_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": 8
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_lb5x_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": 3
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_lb10x_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": 2
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_lb20x_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": 1
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_gauss_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": 1
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_lightgauss_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": 2
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_heavygauss_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": 1
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_ultraac2_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": 8
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_ultraac5_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": 3
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_ultraac10_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": 4
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_ultraac20_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": 3
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_rotary_ac2_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": 30
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_rotary_ac5_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": 15
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_clightmachinegun_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "Clan",
+                            "quirkValue": 250
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_cmachinegun_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "Clan",
+                            "quirkValue": 200
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_cheavymachinegun_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "Clan",
+                            "quirkValue": 100
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_clb2x_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "Clan",
+                            "quirkValue": 8
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_clb5x_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "Clan",
+                            "quirkValue": 3
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_clb10x_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "Clan",
+                            "quirkValue": 2
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_clb20x_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "Clan",
+                            "quirkValue": 1
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_cultraac2_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "Clan",
+                            "quirkValue": 8
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_cultraac5_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "Clan",
+                            "quirkValue": 6
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_cultraac10_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "Clan",
+                            "quirkValue": 6
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_cultraac20_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "Clan",
+                            "quirkValue": 4
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_cgauss_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "Clan",
+                            "quirkValue": 1
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_cac2_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "Clan",
+                            "quirkValue": 8
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_cac5_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "Clan",
+                            "quirkValue": 6
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_cac10_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "Clan",
+                            "quirkValue": 6
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_cac20_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "Clan",
+                            "quirkValue": 4
+                        }
+                    ]
+                }
+            ]
+        },
+        "MissileRack": {
+            "names": [
+                "MissileRack1",
+                "MissileRack2"
+            ],
+            "baseName": "MissileRack",
+            "effects": [
+                {
+                    "quirkName": "ammocapacity_lrm_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": 18
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_srm_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": 10
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_streak_srm_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": 10
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_narc_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": 1
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_lrm_artemis_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": 18
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_srm_artemis_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": 10
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_mrm_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "quirkValue": 30
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_clrm_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "Clan",
+                            "quirkValue": 18
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_csrm_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "Clan",
+                            "quirkValue": 10
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_cstreak_srm_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "Clan",
+                            "quirkValue": 10
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_cnarc_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "Clan",
+                            "quirkValue": 1
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_clrm_artemis_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "Clan",
+                            "quirkValue": 18
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_csrm_artemis_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "Clan",
+                            "quirkValue": 10
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "ammocapacity_catm_additive",
+                    "quirkValues": [
+                        {
+                            "faction": "Clan",
+                            "quirkValue": 9
+                        }
+                    ]
+                }
+            ]
+        },
+        "SensorRange": {
+            "names": [
+                "SensorRange1",
+                "SensorRange2",
+                "SensorRange3",
+                "SensorRange4",
+                "SensorRange5"
+            ],
+            "baseName": "SensorRange",
+            "effects": [
+                {
+                    "quirkName": "sensorrange_multiplier",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "weightClass": "Light",
+                            "quirkValue": 0.07
+                        },
+                        {
+                            "faction": "IS",
+                            "weightClass": "Medium",
+                            "quirkValue": 0.07
+                        },
+                        {
+                            "faction": "IS",
+                            "weightClass": "Heavy",
+                            "quirkValue": 0.07
+                        },
+                        {
+                            "faction": "IS",
+                            "weightClass": "Assault",
+                            "quirkValue": 0.07
+                        },
+                        {
+                            "faction": "Clan",
+                            "weightClass": "Light",
+                            "quirkValue": 0.07
+                        },
+                        {
+                            "faction": "Clan",
+                            "weightClass": "Medium",
+                            "quirkValue": 0.07
+                        },
+                        {
+                            "faction": "Clan",
+                            "weightClass": "Heavy",
+                            "quirkValue": 0.07
+                        },
+                        {
+                            "faction": "Clan",
+                            "weightClass": "Assault",
+                            "quirkValue": 0.07
+                        }
+                    ]
+                }
+            ]
+        },
+        "TargetInfoGathering": {
+            "names": [
+                "TargetInfoGathering1",
+                "TargetInfoGathering2",
+                "TargetInfoGathering3",
+                "TargetInfoGathering4",
+                "TargetInfoGathering5"
+            ],
+            "baseName": "TargetInfoGathering",
+            "effects": [
+                {
+                    "quirkName": "targetinfogathering_multiplier",
+                    "quirkValues": [
+                        {
+                            "faction": "IS",
+                            "weightClass": "Light",
+                            "quirkValue": 0.07
+                        },
+                        {
+                            "faction": "IS",
+                            "weightClass": "Medium",
+                            "quirkValue": 0.07
+                        },
+                        {
+                            "faction": "IS",
+                            "weightClass": "Heavy",
+                            "quirkValue": 0.07
+                        },
+                        {
+                            "faction": "IS",
+                            "weightClass": "Assault",
+                            "quirkValue": 0.07
+                        },
+                        {
+                            "faction": "Clan",
+                            "weightClass": "Light",
+                            "quirkValue": 0.07
+                        },
+                        {
+                            "faction": "Clan",
+                            "weightClass": "Medium",
+                            "quirkValue": 0.07
+                        },
+                        {
+                            "faction": "Clan",
+                            "weightClass": "Heavy",
+                            "quirkValue": 0.07
+                        },
+                        {
+                            "faction": "Clan",
+                            "weightClass": "Assault",
+                            "quirkValue": 0.07
+                        }
+                    ]
+                }
+            ]
+        },
+        "TargetDecay": {
+            "names": [
+                "TargetDecay1",
+                "TargetDecay2",
+                "TargetDecay3",
+                "TargetDecay4",
+                "TargetDecay5"
+            ],
+            "baseName": "TargetDecay",
+            "effects": [
+                {
+                    "quirkName": "targetdecayduration_additive",
+                    "quirkValues": [
+                        {
+                            "quirkValue": 0.7
+                        }
+                    ]
+                }
+            ]
+        },
+        "RadarDeprivation": {
+            "names": [
+                "RadarDeprivation1",
+                "RadarDeprivation2",
+                "RadarDeprivation3",
+                "RadarDeprivation4",
+                "RadarDeprivation5"
+            ],
+            "baseName": "RadarDeprivation",
+            "effects": [
+                {
+                    "quirkName": "radardeprivation_multiplier",
+                    "quirkValues": [
+                        {
+                            "quirkValue": 0.2
+                        }
+                    ]
+                }
+            ]
+        },
+        "AdvancedZoom": {
+            "names": [
+                "AdvancedZoom"
+            ],
+            "baseName": "AdvancedZoom",
+            "effects": [
+                {
+                    "quirkName": "advancedzoom_additive",
+                    "quirkValues": [
+                        {
+                            "quirkValue": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        "SeismicSensor": {
+            "names": [
+                "SeismicSensor1",
+                "SeismicSensor2"
+            ],
+            "baseName": "SeismicSensor",
+            "effects": [
+                {
+                    "quirkName": "seismicsensorrange_additive",
+                    "quirkValues": [
+                        {
+                            "quirkValue": 100
+                        }
+                    ]
+                }
+            ]
+        },
+        "TargetRetention": {
+            "names": [
+                "TargetRetention1",
+                "TargetRetention2"
+            ],
+            "baseName": "TargetRetention",
+            "effects": [
+                {
+                    "quirkName": "backfacetargetretentionrange_additive",
+                    "quirkValues": [
+                        {
+                            "quirkValue": 200
+                        }
+                    ]
+                }
+            ]
+        },
+        "ConsumableSlot": {
+            "names": [
+                "ConsumableSlot1",
+                "ConsumableSlot2",
+                "ConsumableSlot3",
+                "ConsumableSlot4"
+            ],
+            "baseName": "ConsumableSlot",
+            "effects": [
+                {
+                    "quirkName": "extraconsumableslot_additive",
+                    "quirkValues": [
+                        {
+                            "quirkValue": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        "ExtraUAV": {
+            "names": [
+                "ExtraUAV"
+            ],
+            "baseName": "ExtraUAV",
+            "effects": [
+                {
+                    "quirkName": "uavcapacity_additive",
+                    "quirkValues": [
+                        {
+                            "quirkValue": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        "UAVRange": {
+            "names": [
+                "UAVRange1",
+                "UAVRange2"
+            ],
+            "baseName": "UAVRange",
+            "effects": [
+                {
+                    "quirkName": "uavrange_multiplier",
+                    "quirkValues": [
+                        {
+                            "quirkValue": 0.2
+                        }
+                    ]
+                }
+            ]
+        },
+        "UAVTime": {
+            "names": [
+                "UAVTime"
+            ],
+            "baseName": "UAVTime",
+            "effects": [
+                {
+                    "quirkName": "uavduration_additive",
+                    "quirkValues": [
+                        {
+                            "quirkValue": 10
+                        }
+                    ]
+                }
+            ]
+        },
+        "CoolantReserves": {
+            "names": [
+                "CoolantReserves"
+            ],
+            "baseName": "CoolantReserves",
+            "effects": [
+                {
+                    "quirkName": "coolshotcapacity_additive",
+                    "quirkValues": [
+                        {
+                            "quirkValue": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        "EnhancedCoolshot": {
+            "names": [
+                "EnhancedCoolshot1",
+                "EnhancedCoolshot2"
+            ],
+            "baseName": "EnhancedCoolshot",
+            "effects": [
+                {
+                    "quirkName": "coolshotcooling_multiplier",
+                    "quirkValues": [
+                        {
+                            "quirkValue": 0.15
+                        }
+                    ]
+                }
+            ]
+        },
+        "CoolshotCooldown": {
+            "names": [
+                "CoolshotCooldown"
+            ],
+            "baseName": "CoolshotCooldown",
+            "effects": [
+                {
+                    "quirkName": "coolshotcooldown_multiplier",
+                    "quirkValues": [
+                        {
+                            "quirkValue": -0.25
+                        }
+                    ]
+                }
+            ]
+        },
+        "ExpandedReserves": {
+            "names": [
+                "ExpandedReserves"
+            ],
+            "baseName": "ExpandedReserves",
+            "effects": [
+                {
+                    "quirkName": "strategicstrikecapacity_additive",
+                    "quirkValues": [
+                        {
+                            "quirkValue": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        "ExtendedBombardment": {
+            "names": [
+                "ExtendedBombardment1",
+                "ExtendedBombardment2"
+            ],
+            "baseName": "ExtendedBombardment",
+            "effects": [
+                {
+                    "quirkName": "strategicstrikenumshells_multiplier",
+                    "quirkValues": [
+                        {
+                            "quirkValue": 0.25
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "strategicstrikeduration_multiplier",
+                    "quirkValues": [
+                        {
+                            "quirkValue": 0.25
+                        }
+                    ]
+                }
+            ]
+        },
+        "EnhancedSpotting": {
+            "names": [
+                "EnhancedSpotting"
+            ],
+            "baseName": "EnhancedSpotting",
+            "effects": [
+                {
+                    "quirkName": "strategicstrikespread_multiplier",
+                    "quirkValues": [
+                        {
+                            "quirkValue": -0.2
+                        }
+                    ]
+                }
+            ]
+        },
+        "CaptureAssist": {
+            "names": [
+                "CaptureAssist1",
+                "CaptureAssist2",
+                "CaptureAssist3",
+                "CaptureAssist4"
+            ],
+            "baseName": "CaptureAssist",
+            "effects": [
+                {
+                    "quirkName": "captureaccelerator_multiplier",
+                    "quirkValues": [
+                        {
+                            "quirkValue": 0.05
+                        }
+                    ]
+                }
+            ]
+        },
+        "EnhancedECM": {
+            "names": [
+                "EnhancedECM1",
+                "EnhancedECM2"
+            ],
+            "baseName": "EnhancedECM",
+            "effects": [
+                {
+                    "quirkName": "ecmtargetrangereduction_multiplier",
+                    "quirkValues": [
+                        {
+                            "quirkValue": 0.225
+                        }
+                    ]
+                },
+                {
+                    "quirkName": "stealtharmorcooldown_multiplier",
+                    "quirkValues": [
+                        {
+                            "quirkValue": -0.1
+                        }
+                    ]
+                }
+            ]
+        }
+    };
+})(AddedData || (AddedData = {}));
 //Reference: https://mwomercs.com/forums/topic/254199-lrm-spread-experiments/
 //Non-ct damage are eyeball estimates
 ////////////////////////////////////////////////////////////////////////////////

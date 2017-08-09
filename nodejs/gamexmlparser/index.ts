@@ -6,6 +6,7 @@
 import {NumberIndexed, StringIndexed} from "./parser-common";
 import {WeaponData} from  "./weapondata";
 import {MechData} from "./mechdata";
+import {SkillTreeData} from "./skilltreedata"
 import program = require('commander');
 import AdmZip = require('adm-zip');
 import XML2js = require('xml2js');
@@ -14,19 +15,36 @@ import FS = require('fs');
 const WEAPONSPATH = "Libs/Items/Weapons/Weapons.xml";
 interface GameData {
   xmlWeaponData : WeaponData.XMLWeaponData;
+  xmlSkillTreeData : SkillTreeData.XMLSkillTreeData;
 }
+interface GameDataPath {
+  name : string,
+  path : string,
+}
+const GameDataPaths : GameDataPath[] = [
+  { name : "xmlWeaponData",
+    path : "Libs/Items/Weapons/Weapons.xml",
+  },
+  { name : "xmlSkillTreeData",
+    path : "Libs/MechPilotTalents/MechSkillTreeNodes.xml",
+  }
+]
 var loadGameData = function(gameDataPakFile : string) : GameData {
   var gameDataZip = new AdmZip(gameDataPakFile);
-
-  var parseResult : WeaponData.XMLWeaponData;
-  let weaponsXML = gameDataZip.readAsText(WEAPONSPATH);
-  XML2js.parseString(weaponsXML, {attrkey:"attr"}, function(err : any, result : any) {
-    parseResult = result as WeaponData.XMLWeaponData;
-  });
-
-  return {
-    xmlWeaponData : parseResult
+  let ret : GameData = {
+    xmlWeaponData : null,
+    xmlSkillTreeData : null,
   };
+  for (let gamePath of GameDataPaths) {
+    var parseResult : any;
+    let weaponsXML = gameDataZip.readAsText(gamePath.path);
+    XML2js.parseString(weaponsXML, {attrkey:"attr"}, function(err : any, result : any) {
+      parseResult = result;
+    });
+    (ret as StringIndexed)[gamePath.name] = parseResult;
+  }
+
+  return ret;
 }
 
 var loadMechData = function (mechPakFile : string) : MechData.XMLMechData {
@@ -62,9 +80,12 @@ var main = function() {
 
       //GameData.pak
       let gameData = loadGameData(mwoDir + "/Game/GameData.pak");
+      //weapons
       let addedWeaponData = WeaponData.generateAddedWeaponData(gameData.xmlWeaponData);
       WeaponData.writeAddedWeaponData(addedWeaponData, scriptDataDir + "/addedweapondata.ts");
-
+      //skills
+      let skillData = SkillTreeData.generateSkillTreeData(gameData.xmlSkillTreeData);
+      SkillTreeData.writeSkillTreeData(skillData, scriptDataDir + "/skilltreedata.ts");
       //Mech data
       const MechDir = mwoDir + "/Game/mechs/";
       let dirContents = FS.readdirSync(MechDir);

@@ -1,28 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const mechdata_quirks_1 = require("./data/mechdata-quirks");
+const parser_common_1 = require("./parser-common");
 const FS = require("fs");
 var MechData;
 (function (MechData) {
-    class Quirk {
-        constructor(name, value) {
-            this.name = name;
-            this.value = Number(value);
-            this.translated_name = this.translateName();
-        }
-        translateName() {
-            let nameEntry = mechdata_quirks_1.MechDataQuirkData.QuirkTranslatedNameMap[this.name];
-            if (nameEntry) {
-                return nameEntry.translated_name;
-            }
-            else {
-                return this.name;
-            }
-        }
-        toString() {
-            return `{name: "${this.name}", value: "${this.value}"}`;
-        }
-    }
     class OmnipodSet {
         constructor(xmlOmnipodSet) {
             this.name = xmlOmnipodSet.attr.name;
@@ -30,7 +11,7 @@ var MechData;
             for (let xmlSetBonus of xmlOmnipodSet.SetBonuses) {
                 for (let xmlBonus of xmlSetBonus.Bonus) {
                     for (let xmlQuirk of xmlBonus.Quirk) {
-                        this.setBonusQuirks.push(new Quirk(xmlQuirk.attr.name, xmlQuirk.attr.value));
+                        this.setBonusQuirks.push(new parser_common_1.Quirk(xmlQuirk.attr.name, xmlQuirk.attr.value));
                     }
                 }
             }
