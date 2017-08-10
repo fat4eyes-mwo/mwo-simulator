@@ -44,7 +44,9 @@ namespace MechViewAddMech {
     dialogId : string;
     constructor(loadDialogTemplate : string, dialogId : string) {
       let loadDialogDiv = MechViewWidgets.cloneTemplate(loadDialogTemplate);
-      super(loadDialogDiv, LoadFromURLDialog.DomKey);
+      super(loadDialogDiv);
+      this.storeToDom(LoadFromURLDialog.DomKey);
+
       this.dialogId = dialogId;
       let loadDialogJQ = $(loadDialogDiv)
                             .attr("id", dialogId);
@@ -52,8 +54,10 @@ namespace MechViewAddMech {
   }
 
   export class AddMechDialog extends LoadFromURLDialog {
+    private static readonly AddMechDialogDomKey = "mwosim.AddMechDialog.uiObject";
     constructor(team : Team) {
       super("addMechDialog-template", "addMechDialogContainer");
+      this.storeToDom(AddMechDialog.AddMechDialogDomKey);
       //TODO: What to do with DomStorage in this class?
       let thisJQ = $(this.domElement).addClass(team);
     }

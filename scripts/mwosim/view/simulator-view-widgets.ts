@@ -77,10 +77,8 @@ namespace MechViewWidgets {
   //so keep it a superclass
   export abstract class DomStoredWidget implements DomElementWidget {
     domElement : Element;
-    readonly DomKey : string;
-    constructor(domElement : Element, DomKey : string) {
+    constructor(domElement : Element) {
       this.domElement = domElement;
-      this.DomKey = DomKey;
       //TODO: forcing storage in the constructor means that the DomKey must be passed 
       //through the entire chain of constructors in descendant classes. See about changing
       //the contract so that the descendant classes explicitly call storeToElement if
@@ -88,33 +86,37 @@ namespace MechViewWidgets {
       //'interface' to classes that may have at least one of their parents stored to dom.
       //This will also allow multiple Symbol property assignments to the element, one for each
       //class that wants to be stored in the DOM
-      DomStorage.storeToElement(domElement, this.DomKey, this);
+    }
+
+    //This method should be called by child constructors after the super call if they want to store
+    //a reference to themselves in the domElement.
+    storeToDom(DomKey : string) {
+      DomStorage.storeToElement(this.domElement, DomKey, this);
 
       //marker attribute to make it visible in the element tree that there's an
       //object stored in the Element
       //NOTE: browsers automatically lowercase attribute names (at least chrome does)
       //We explicitly lowercase DomKey here to make that obvious so we don't try to
       //unset the attribute with a non-lowercase name
-      domElement.setAttribute("data-symbol-" + DomKey.toLowerCase(), this.toString())
+      this.domElement.setAttribute("data-symbol-" + DomKey.toLowerCase(), this.toString())
     }
 
-    //static abstract fromDom(domElement) : <T extends DomStoredWidget>
-    //Subclasses of DomStoredWidget are expected to have a static method fromDom
-    //that calls the static method below. Can't enforce it with the type system,
-    //therefore this comment.
-
-    static fromDomBase<T extends DomStoredWidget>(domElement : Element, DomKey : string) : T {
+    
+    static fromDom<T extends DomStoredWidget>(domElement : Element, DomKey : string) : T {
       let ret : any = DomStorage.getFromElement(domElement, DomKey);
       return ret; //NOTE: Would be better with an instanceof check, but since T isn't really a value can't do that here
     }
   }
 
   export class Button extends DomStoredWidget {
-    private static readonly DomKey = "mwosim.MechButton.uiObject";
+    //NOTE: Can't use the same variable name for static objects in descendants because the child
+    //fields will clobber the parent's field. 
+    static readonly ButtonDomKey = "mwosim.Button.uiObject";
     clickHandler : Util.AnyFunction;
     enabled : boolean;
     constructor(domElement : Element, clickHandler : Util.AnyFunction) {
-      super(domElement, Button.DomKey);
+      super(domElement);
+      this.storeToDom(Button.ButtonDomKey);
       this.clickHandler = (function(context) {
           var clickContext = context;
           return function(event : any) {
@@ -127,10 +129,6 @@ namespace MechViewWidgets {
       })(this);
       this.enabled = true;
       $(this.domElement).click(this.clickHandler);
-    }
-
-    static fromDom(domElement : Element) : Button {
-      return DomStoredWidget.fromDomBase(domElement, Button.DomKey) as Button;
     }
 
     setHtml(html : string) : void {
@@ -161,9 +159,11 @@ namespace MechViewWidgets {
   }
 
   export class ExpandButton extends Button {
+    private static readonly ExpandButtonDomKey = "mwosim.ExpandButton.uiObject";
     elementsToExpand : Element[];
     constructor(domElement : Element, clickHandler : Util.AnyFunction, ...elementsToExpand : Element[]) {
       super(domElement, clickHandler);
+      this.storeToDom(ExpandButton.ExpandButtonDomKey);
       if (elementsToExpand) {
         this.elementsToExpand = elementsToExpand;
       } else {
@@ -194,14 +194,15 @@ namespace MechViewWidgets {
   }
 
   export class Tooltip extends DomStoredWidget {
-    private static readonly DomKey = "mwosim.Tooltip.uiObject";
+    static readonly TooltipDomKey = "mwosim.Tooltip.uiObject";
     id : string;
     domElement : Element;
     constructor(templateId : string,
                 tooltipId : string,
                 targetElement : Element) {
       let domElement = MechViewWidgets.cloneTemplate(templateId);
-      super(domElement, Tooltip.DomKey);
+      super(domElement);
+      this.storeToDom(Tooltip.TooltipDomKey);
       this.id = tooltipId;
       $(this.domElement)
         .addClass("tooltip")
@@ -218,9 +219,6 @@ namespace MechViewWidgets {
       $("#" + this.id).addClass("hidden");
     }
 
-    static fromDom(element : Element) : Tooltip {
-      return DomStoredWidget.fromDomBase(element, Tooltip.DomKey) as Tooltip;
-    }
   }
 
   export interface RenderedWidget {
@@ -235,14 +233,15 @@ namespace MechViewWidgets {
   }
 
   export class TabPanel extends DomStoredWidget {
-    private static readonly DomKey = "mwosim.TabPanel.uiObject";
+    private static readonly TabPanelDomKey = "mwosim.TabPanel.uiObject";
     private tabList : Tab[];
     private selectedTab : Tab;
     //TODO: Try to see if it is possible to specify the layout of tab panels
     //completely in HTML without code generation
     constructor(tabList : Tab[]) {
       let domElement = cloneTemplate("tabpanel-template");
-      super(domElement, TabPanel.DomKey);
+      super(domElement);
+      this.storeToDom(TabPanel.TabPanelDomKey);
       this.tabList = tabList;
 
       if (tabList.length > 0) {
@@ -297,10 +296,11 @@ namespace MechViewWidgets {
   }
 
   export class SimpleWidget extends DomStoredWidget implements RenderedWidget {
-    private static readonly DomKey = "mwosim.SimpleWidget.uiObject";
+    private static readonly SimpleWidgetDomKey = "mwosim.SimpleWidget.uiObject";
     constructor(templateId : string) {
       let domElement = cloneTemplate(templateId);
-      super(domElement, SimpleWidget.DomKey);
+      super(domElement);
+      this.storeToDom(SimpleWidget.SimpleWidgetDomKey);
     }
 
     render() {

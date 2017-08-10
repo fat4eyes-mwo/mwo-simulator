@@ -3,11 +3,12 @@
 namespace MechViewMechDetails {
   export class MechDetails extends MechViewWidgets.DomStoredWidget
                           implements MechViewWidgets.RenderedWidget {
-    private static readonly DomKey = "mwosim.MechDetails.uiObject";
+    private static readonly MechDetailsDomKey = "mwosim.MechDetails.uiObject";
     mechId : string;
     constructor(mechId : string) {
       let mechDetailsDiv = MechViewWidgets.cloneTemplate("mechDetails-template");
-      super(mechDetailsDiv, MechDetails.DomKey);
+      super(mechDetailsDiv);
+      this.storeToDom(MechDetails.MechDetailsDomKey);
       this.mechId = mechId;
     }
 
@@ -44,12 +45,13 @@ namespace MechViewMechDetails {
 
   class MechDetailsQuirks extends MechViewWidgets.DomStoredWidget
                           implements MechViewWidgets.RenderedWidget {
-    private static readonly DomKey = "mwosim.MechDetailsQuirks.uiObject";
+    private static readonly MechDetailsQuirksDomKey = "mwosim.MechDetailsQuirks.uiObject";
     private mechId : string;
 
     constructor(mechId : string) {
       let mechDetailsQuirksDiv = MechViewWidgets.cloneTemplate("mechDetailsQuirks-template");
-      super(mechDetailsQuirksDiv, MechDetailsQuirks.DomKey);
+      super(mechDetailsQuirksDiv);
+      this.storeToDom(MechDetailsQuirks.MechDetailsQuirksDomKey);
       this.mechId = mechId;
     }
 

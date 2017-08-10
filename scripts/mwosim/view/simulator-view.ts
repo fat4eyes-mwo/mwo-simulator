@@ -152,7 +152,7 @@ namespace MechView {
 
   var getStatusTooltip = function(tooltipId : string) : Tooltip {
     let element = document.getElementById(tooltipId);
-    return MechViewWidgets.Tooltip.fromDom(element);
+    return MechViewWidgets.Tooltip.fromDom(element, MechViewWidgets.Tooltip.TooltipDomKey);
   }
 
   var showStatusTooltip = function(tooltipId : string) : void {
