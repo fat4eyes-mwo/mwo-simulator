@@ -1,6 +1,6 @@
 /// <reference path="../scripts/lib/jquery-3.2.d.ts" />
 
-import {StoreValue} from "storevalue";
+import {DomStorage} from "domstorage";
 
 let testInterval : number;
 let testCtr : number = 0;
@@ -17,14 +17,14 @@ export var testStoredElem = function() {
 
       let newDivJQ = $("<span></span>").addClass("testSpan").text(testCtr);
       let newDiv = newDivJQ.get(0);
-      StoreValue.storeToElement(newDiv, "testKey", new LargeClass(testCtr, 10000));
+      DomStorage.storeToElement(newDiv, "testKey", new LargeClass(testCtr, 10000));
       testJQ.append(newDiv);
 
       if (testCtr % 100 === 0) {
         testJQ.empty(); //clearing this should trigger garbage collection
       }
 
-      let storedVal : LargeClass = StoreValue.getFromElement(newDiv, "testKey");
+      let storedVal : LargeClass = DomStorage.getFromElement(newDiv, "testKey");
       console.log(storedVal.getId());
 
       testCtr++;

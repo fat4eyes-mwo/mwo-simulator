@@ -1,5 +1,5 @@
 
-export namespace StoreValue {
+export namespace DomStorage {
   export var storeToElement = function (elem : Element, key : string, value : any) : any {
     let symbolKey = Symbol.for(key);
     let anyElem = elem as any;

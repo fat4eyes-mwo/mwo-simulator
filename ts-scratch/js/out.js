@@ -62,40 +62,40 @@ System.register("libtest/moduleC", [], function (exports_3, context_3) {
         }
     };
 });
-System.register("storevalue", [], function (exports_4, context_4) {
+System.register("domstorage", [], function (exports_4, context_4) {
     "use strict";
     var __moduleName = context_4 && context_4.id;
-    var StoreValue;
+    var DomStorage;
     return {
         setters: [],
         execute: function () {
-            (function (StoreValue) {
-                StoreValue.storeToElement = function (elem, key, value) {
+            (function (DomStorage) {
+                DomStorage.storeToElement = function (elem, key, value) {
                     let symbolKey = Symbol.for(key);
                     let anyElem = elem;
                     let prevValue = anyElem[symbolKey];
                     anyElem[symbolKey] = value;
                     return prevValue;
                 };
-                StoreValue.getFromElement = function (elem, key) {
+                DomStorage.getFromElement = function (elem, key) {
                     let symbolKey = Symbol.for(key);
                     let anyElem = elem;
                     return anyElem[symbolKey];
                 };
-            })(StoreValue || (StoreValue = {}));
-            exports_4("StoreValue", StoreValue);
+            })(DomStorage || (DomStorage = {}));
+            exports_4("DomStorage", DomStorage);
         }
     };
 });
 /// <reference path="../scripts/lib/jquery-3.2.d.ts" />
-System.register("storedElemTest", ["storevalue"], function (exports_5, context_5) {
+System.register("storedElemTest", ["domstorage"], function (exports_5, context_5) {
     "use strict";
     var __moduleName = context_5 && context_5.id;
-    var storevalue_1, testInterval, testCtr, TestIntervalDuration, TestDiv, testRunning, testStoredElem, toggleTest, LargeClass;
+    var domstorage_1, testInterval, testCtr, TestIntervalDuration, TestDiv, testRunning, testStoredElem, toggleTest, LargeClass;
     return {
         setters: [
-            function (storevalue_1_1) {
-                storevalue_1 = storevalue_1_1;
+            function (domstorage_1_1) {
+                domstorage_1 = domstorage_1_1;
             }
         ],
         execute: function () {
@@ -112,12 +112,12 @@ System.register("storedElemTest", ["storevalue"], function (exports_5, context_5
                         }
                         let newDivJQ = $("<span></span>").addClass("testSpan").text(testCtr);
                         let newDiv = newDivJQ.get(0);
-                        storevalue_1.StoreValue.storeToElement(newDiv, "testKey", new LargeClass(testCtr, 10000));
+                        domstorage_1.DomStorage.storeToElement(newDiv, "testKey", new LargeClass(testCtr, 10000));
                         testJQ.append(newDiv);
                         if (testCtr % 100 === 0) {
                             testJQ.empty(); //clearing this should trigger garbage collection
                         }
-                        let storedVal = storevalue_1.StoreValue.getFromElement(newDiv, "testKey");
+                        let storedVal = domstorage_1.DomStorage.getFromElement(newDiv, "testKey");
                         console.log(storedVal.getId());
                         testCtr++;
                     }, TestIntervalDuration);
