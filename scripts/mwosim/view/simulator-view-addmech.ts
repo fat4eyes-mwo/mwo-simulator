@@ -21,6 +21,7 @@ namespace MechViewAddMech {
         .attr("data-team", team);
       let addMechButtonElem = addMechButtonJQ.get(0);
       super(addMechButtonElem, AddMechButton.addMechButtonHandler);
+      //TODO: What to do with DomStorage in this class?
     }
 
     private static addMechButtonId(team: Team): string {
@@ -32,6 +33,29 @@ namespace MechViewAddMech {
         let team = $(this).attr('data-team');
         MechViewAddMech.showAddMechDialog(team);
       }
+    }
+  }
+
+  export abstract class LoadFromURLDialog extends MechViewWidgets.DomStoredWidget {
+    private static readonly DomKey = "mwosim.LoadFromURLDialog.uiObject";
+    okButton : MechButton;
+    cancelButton : MechButton;
+    loadButton : MechButton;
+    dialogId : string;
+    constructor(loadDialogTemplate : string, dialogId : string) {
+      let loadDialogDiv = MechViewWidgets.cloneTemplate(loadDialogTemplate);
+      super(loadDialogDiv, LoadFromURLDialog.DomKey);
+      this.dialogId = dialogId;
+      let loadDialogJQ = $(loadDialogDiv)
+                            .attr("id", dialogId);
+    }
+  }
+
+  export class AddMechDialog extends LoadFromURLDialog {
+    constructor(team : Team) {
+      super("addMechDialog-template", "addMechDialogContainer");
+      //TODO: What to do with DomStorage in this class?
+      let thisJQ = $(this.domElement).addClass(team);
     }
   }
 
@@ -175,8 +199,8 @@ namespace MechViewAddMech {
   let SMURFY_BASE_URL = "http://mwo.smurfy-net.de/mechlab#";
   var createLoadedMechPanel =
     function (containerElem: Element,
-      smurfyMechLoadout: SmurfyMechLoadout)
-      : void {
+              smurfyMechLoadout: SmurfyMechLoadout)
+              : void {
       let loadedMechDiv = MechViewWidgets.cloneTemplate("loadedMech-template");
       let loadedMechJQ = $(loadedMechDiv)
         .removeAttr("id")
