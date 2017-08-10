@@ -57,7 +57,7 @@ namespace MechViewTeamStats {
       .text(teamDisplayName(team));
 
     //Add mech button
-    MechViewAddMech.createAddMechButton(team, teamStatsContainerPanelId);
+    let addMechButton = new MechViewAddMech.AddMechButton(team, teamStatsContainerJQ.get(0));
 
     //mech pips
     let teamMechPipsContainerDivId = teamMechPipsContainerId(team);
