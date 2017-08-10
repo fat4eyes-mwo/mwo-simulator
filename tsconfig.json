@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "baseUrl" : "./scripts/",
-        "module": "System",
+        "module": "system",
         "alwaysStrict" : true,
         "noImplicitAny": true,
         "noImplicitThis" : true,
@@ -10,7 +10,7 @@
         "preserveConstEnums": true,
         "sourceMap": true,
         "target": "es6",
-        "lib" : ["DOM","ES6","DOM.Iterable","ScriptHost","ES2016"],
+        "lib" : ["dom","es6","dom.iterable","scripthost","es2016"],
         "noEmitOnError" : true,
         "forceConsistentCasingInFileNames": true,
         "outFile" : "build/mwosim.js"
