@@ -11794,7 +11794,7 @@ var MechViewAddMech;
             else {
                 addMechDialogJQ.find(".addMechDialog-result")
                     .addClass("error")
-                    .html("Invalid smurfy URL. Expected format is 'http://mwo.smurfy-net.de/mechlab#i=mechid&l=loadoutid'");
+                    .text("Invalid smurfy URL. Expected format is 'http://mwo.smurfy-net.de/mechlab#i=mechid&l=loadoutid'");
                 addMechLoadButton.enable();
                 addMechLoadButton.removeClass("loading");
                 addMechLoadButton.setHtml("Load");
