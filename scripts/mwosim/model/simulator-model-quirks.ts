@@ -166,12 +166,12 @@ namespace MechModelQuirks {
   }
 
   //returns {armor: <bonus armor>, structure: <bonus structure>}
-  export interface HealthBonus {
+  export interface HealthBonusAdditive {
     armor : number;
     structure : number;
   }
   export var getArmorStructureBonus =
-    function(component : string, quirkList : MechQuirk[]) : HealthBonus {
+    function(component : string, quirkList : MechQuirk[]) : HealthBonusAdditive {
     let ret = {armor: 0, structure: 0};
 
     for (let quirk of quirkList) {

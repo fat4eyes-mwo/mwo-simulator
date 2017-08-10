@@ -9595,8 +9595,33 @@ var MechModel;
             this.location = location;
             this.armor = armor; //current armor. used in state
             this.structure = structure;
-            this.maxArmor = maxArmor; //maximum armor from loadout
-            this.maxStructure = maxStructure; //maximum structure from loadout
+            this.baseMaxArmor = maxArmor; //maximum armor from loadout
+            this.baseMaxStructure = maxStructure; //maximum structure from loadout
+        }
+        //applies bonus from mech quirks.
+        applyQuirkBonus(bonus) {
+            this.quirkBonus = bonus;
+            this.resetToFullHealth();
+        }
+        resetToFullHealth() {
+            this.armor = this.maxArmor;
+            this.structure = this.maxStructure;
+        }
+        get maxArmor() {
+            let ret = this.baseMaxArmor;
+            if (this.quirkBonus) {
+                ret += Number(this.quirkBonus.armor);
+            }
+            //TODO: Add skill bonus
+            return ret;
+        }
+        get maxStructure() {
+            let ret = this.baseMaxStructure;
+            if (this.quirkBonus) {
+                ret += Number(this.quirkBonus.structure);
+            }
+            //TODO: Add skill bonus
+            return ret;
         }
         isIntact() {
             return this.structure > 0;
@@ -9641,7 +9666,11 @@ var MechModel;
                 ((this.maxStructure) ? Number(this.maxStructure) : 0); //special case for undefined structure in rear components
         }
         clone() {
-            return new ComponentHealth(this.location, this.armor, this.structure, this.maxArmor, this.maxStructure);
+            let ret = new ComponentHealth(this.location, this.armor, this.structure, this.baseMaxArmor, this.baseMaxStructure);
+            if (this.quirkBonus) {
+                ret.applyQuirkBonus(this.quirkBonus);
+            }
+            return ret;
         }
     }
     MechModel.ComponentHealth = ComponentHealth;
@@ -10623,7 +10652,8 @@ var MechModel;
         var armor = smurfyMechComponent.armor;
         var structure = MechModel.baseMechStructure(location, tonnage);
         let bonus = MechModelQuirks.getArmorStructureBonus(location, smurfyMechQuirks);
-        componentHealth = new ComponentHealth(location, Number(armor) + Number(bonus.armor), Number(structure) + Number(bonus.structure), Number(armor) + Number(bonus.armor), Number(structure) + Number(bonus.structure));
+        componentHealth = new ComponentHealth(location, Number(armor), Number(structure), Number(armor), Number(structure));
+        componentHealth.applyQuirkBonus(bonus);
         return componentHealth;
     };
     var collectFromSmurfyConfiguration = function (smurfyMechConfiguration, collectFunction) {

@@ -162,8 +162,9 @@ namespace MechModel  {
     location : string;
     armor : number;
     structure : number;
-    maxArmor : number;
-    maxStructure : number;
+    baseMaxArmor : number;
+    baseMaxStructure : number;
+    quirkBonus : MechModelQuirks.HealthBonusAdditive;
 
     constructor(location : string,
                 armor : number, structure : number,
@@ -171,8 +172,33 @@ namespace MechModel  {
       this.location = location;
       this.armor = armor; //current armor. used in state
       this.structure = structure;
-      this.maxArmor = maxArmor; //maximum armor from loadout
-      this.maxStructure = maxStructure; //maximum structure from loadout
+      this.baseMaxArmor = maxArmor; //maximum armor from loadout
+      this.baseMaxStructure = maxStructure; //maximum structure from loadout
+    }
+    //applies bonus from mech quirks.
+    applyQuirkBonus(bonus : MechModelQuirks.HealthBonusAdditive) {
+      this.quirkBonus = bonus;
+      this.resetToFullHealth();
+    }
+    resetToFullHealth() {
+      this.armor = this.maxArmor;
+      this.structure = this.maxStructure;
+    }
+    get maxArmor() : number{
+      let ret = this.baseMaxArmor;
+      if (this.quirkBonus) {
+        ret += Number(this.quirkBonus.armor);
+      }
+      //TODO: Add skill bonus
+      return ret;
+    }
+    get maxStructure() : number{
+      let ret = this.baseMaxStructure;
+      if (this.quirkBonus) {
+        ret += Number(this.quirkBonus.structure);
+      }
+      //TODO: Add skill bonus
+      return ret;
     }
     isIntact() : boolean {
       return this.structure > 0;
@@ -214,11 +240,15 @@ namespace MechModel  {
         ((this.maxStructure) ? Number(this.maxStructure) : 0); //special case for undefined structure in rear components
     }
     clone() : ComponentHealth {
-      return new ComponentHealth(this.location,
+      let ret = new ComponentHealth(this.location,
         this.armor,
         this.structure,
-        this.maxArmor,
-        this.maxStructure);
+        this.baseMaxArmor,
+        this.baseMaxStructure);
+      if (this.quirkBonus) {
+        ret.applyQuirkBonus(this.quirkBonus);
+      }
+      return ret;
     }
   }
 
@@ -1372,7 +1402,7 @@ namespace MechModel  {
 
     var smurfyMechData = getSmurfyMechData(smurfyMechLoadout.mech_id);
     var tonnage = smurfyMechData.details.tons;
-    var componentHealthList = [];
+    var componentHealthList : ComponentHealth[] = [];
     for (let smurfyMechComponent of smurfyMechLoadout.configuration) {
       let componentHealth = componentHealthFromSmurfyMechComponent(smurfyMechComponent, quirks, tonnage);
       componentHealthList.push(componentHealth);
@@ -1385,7 +1415,7 @@ namespace MechModel  {
   var componentHealthFromSmurfyMechComponent =
       function (smurfyMechComponent : SmurfyMechComponent,
                 smurfyMechQuirks : MechQuirk[],
-                tonnage : number) {
+                tonnage : number) : ComponentHealth {
     var componentHealth; //return value
 
     var location = smurfyMechComponent.name;
@@ -1393,10 +1423,11 @@ namespace MechModel  {
     var structure = baseMechStructure(location, tonnage);
     let bonus = MechModelQuirks.getArmorStructureBonus(location, smurfyMechQuirks);
     componentHealth = new ComponentHealth(location,
-                                  Number(armor) + Number(bonus.armor),
-                                  Number(structure) + Number(bonus.structure),
-                                  Number(armor) + Number(bonus.armor),
-                                  Number(structure) + Number(bonus.structure));
+                                  Number(armor),
+                                  Number(structure),
+                                  Number(armor),
+                                  Number(structure));
+    componentHealth.applyQuirkBonus(bonus);
     return componentHealth;
   }
 
