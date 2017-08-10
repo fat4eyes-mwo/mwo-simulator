@@ -13827,10 +13827,13 @@ var MechView;
                 console.log("Done save app state. Data: " + data);
             });
         });
-        new MechViewWidgets.Tooltip("modifiedTooltip-template", "modifiedTooltip", permalinkButtonJQ.get(0));
-        new MechViewWidgets.Tooltip("permalinkGeneratedTooltip-template", "permalinkGeneratedTooltip", permalinkButtonJQ.get(0));
+        //NOTE: We don't actually use the tooltip variable, it's just there to make tslint 
+        //shut up about unused expressions. The tooltips themselves are stored in the DOM
+        let tooltip;
+        tooltip = new MechViewWidgets.Tooltip("modifiedTooltip-template", "modifiedTooltip", permalinkButtonJQ.get(0));
+        tooltip = new MechViewWidgets.Tooltip("permalinkGeneratedTooltip-template", "permalinkGeneratedTooltip", permalinkButtonJQ.get(0));
         let miscControlJQ = $("#" + "miscControl");
-        new MechViewWidgets.Tooltip("loadErrorTooltip-template", "loadErrorTooltip", miscControlJQ.get(0));
+        tooltip = new MechViewWidgets.Tooltip("loadErrorTooltip-template", "loadErrorTooltip", miscControlJQ.get(0));
         $("#settingsButton").click(() => {
             MechSimulatorLogic.pauseSimulation();
             MechViewSimSettings.showSettingsDialog();
@@ -14169,6 +14172,9 @@ var MechTest;
         }
         //omnipod set quirks
         for (let omnipodSetName in AddedData._AddedOmnipodData) {
+            if (!AddedData._AddedOmnipodData.hasOwnProperty(omnipodSetName)) {
+                continue;
+            }
             let omnipodSet = AddedData._AddedOmnipodData[omnipodSetName];
             for (let quirkEntry of omnipodSet.setBonusQuirks) {
                 if (!quirkMap[quirkEntry.name]) {

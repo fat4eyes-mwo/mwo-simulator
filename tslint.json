@@ -3,18 +3,16 @@
 	"rulesDirectory": [],
 	"rules": {
 		"align" : [false],
-		"only-arrow-functions": false,
-		"comment-format": {
-			"options": []
-		},
+		"only-arrow-functions": [false],
+		"comment-format": [false],
 		"interface-name": [false],
 		"no-trailing-whitespace" : false,
-		"trailing-comma": {
-			"options": {
-				"multiline": "ignore",
+		"trailing-comma": [
+			true,
+			{	"multiline": "ignore",
 				"singleline": "never"
 			}
-		},
+		],
 		"forin": true,
 		"max-classes-per-file": [true, 20],
 		"member-access": [false],

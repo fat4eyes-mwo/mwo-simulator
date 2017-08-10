@@ -260,6 +260,9 @@ namespace MechTest {
     }
     //omnipod set quirks
     for (let omnipodSetName in AddedData._AddedOmnipodData ) {
+      if (!AddedData._AddedOmnipodData.hasOwnProperty(omnipodSetName)) {
+        continue;
+      }
       let omnipodSet = AddedData._AddedOmnipodData[omnipodSetName] as SmurfyTypes.OmnipodSet;
       for (let quirkEntry of omnipodSet.setBonusQuirks) {
         if (!quirkMap[quirkEntry.name]) {

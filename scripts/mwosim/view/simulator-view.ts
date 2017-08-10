@@ -131,14 +131,17 @@ namespace MechView {
             console.log("Done save app state. Data: " + data);
           });
       });
-    new MechViewWidgets.Tooltip("modifiedTooltip-template",
+    //NOTE: We don't actually use the tooltip variable, it's just there to make tslint 
+    //shut up about unused expressions. The tooltips themselves are stored in the DOM
+    let tooltip : MechViewWidgets.Tooltip;
+    tooltip = new MechViewWidgets.Tooltip("modifiedTooltip-template",
                                 "modifiedTooltip",
                                 permalinkButtonJQ.get(0));
-    new MechViewWidgets.Tooltip("permalinkGeneratedTooltip-template",
+    tooltip = new MechViewWidgets.Tooltip("permalinkGeneratedTooltip-template",
                                 "permalinkGeneratedTooltip",
                                 permalinkButtonJQ.get(0));
     let miscControlJQ = $("#" + "miscControl");
-    new MechViewWidgets.Tooltip("loadErrorTooltip-template",
+    tooltip = new MechViewWidgets.Tooltip("loadErrorTooltip-template",
                                 "loadErrorTooltip",
                                 miscControlJQ.get(0));
     $("#settingsButton").click(() => {
