@@ -270,6 +270,26 @@ namespace MechTest {
         }
       }
     }
+
+    //skill quirks
+    for (let skillName in AddedData._SkillTreeData) {
+      if (!AddedData._SkillTreeData.hasOwnProperty(skillName)) {
+        continue;
+      }
+      let skillNode = AddedData._SkillTreeData[skillName];
+      for (let skillEffect of skillNode.effects) {
+        let quirkEntry = {
+          name : skillEffect.quirkName,
+          translated_name : skillEffect.quirkTranslatedName,
+          value : 0 //filler value, we just need the names
+        };
+        if (!quirkMap[quirkEntry.name]) {
+          quirkMap[quirkEntry.name] = quirkEntry;
+        }
+      }
+    }
+
+    //print out quirk list
     let numQuirks = 0;
     let sortedQuirkNames = [];
     for (let quirkName in quirkMap) {

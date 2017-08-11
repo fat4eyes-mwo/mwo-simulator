@@ -1,4 +1,5 @@
 import FS = require('fs');
+import {MechDataQuirkData} from "./data/mechdata-quirks"
 
 export namespace SkillTreeData {
 
@@ -31,7 +32,7 @@ export namespace SkillTreeData {
   export interface XMLSkillTonnage {
     attr: any; //{name : <tons>, value}
   }
-  export interface SkillTreeData {
+  export interface SkillTree {
     [index:string] : SkillNode
   }
   export interface SkillNode {
@@ -40,6 +41,7 @@ export namespace SkillTreeData {
   }
   export interface SkillEffect {
     quirkName : string;
+    quirkTranslatedName : string;
     quirkValues : SkillValue[];
   }
   export interface SkillValue {
@@ -65,9 +67,16 @@ export namespace SkillTreeData {
   }
   export class SkillEffect implements SkillEffect {
     quirkName : string;
+    quirkTranslatedName : string;
     quirkValues : SkillValue[];
     constructor(xmlSkillEffect : XMLSkillEffect) {
       this.quirkName = xmlSkillEffect.attr.name;
+      let quirkNameEntry = MechDataQuirkData.QuirkTranslatedNameMap[this.quirkName];
+      if (quirkNameEntry) {
+        this.quirkTranslatedName = quirkNameEntry.translated_name;
+      } else {
+        this.quirkTranslatedName = this.quirkName;
+      }
       this.quirkValues = [];
       if (xmlSkillEffect.Faction) {
         for (let factionEntry of xmlSkillEffect.Faction) {
@@ -105,20 +114,20 @@ export namespace SkillTreeData {
       }
     }
   }
-  export var generateSkillTreeData = function(xmlSkillData : XMLSkillTreeData ) : SkillTreeData  {
-    let ret : SkillTreeData= {};
+  export var generateSkillTreeData = function(xmlSkillData : XMLSkillTreeData ) : SkillTree  {
+    let ret : SkillTree= {};
     for (let xmlSkillNode of xmlSkillData.MechSkillTree.Node) {
       let skillNode = new SkillNode(xmlSkillNode);
       ret[skillNode.baseName] = skillNode;
     }
     return ret;
   }
-  export var writeSkillTreeData = function(skillTreeData : SkillTreeData, filePath : string) {
+  export var writeSkillTreeData = function(skillTreeData : SkillTree, filePath : string) {
     let dataString = JSON.stringify(skillTreeData, null, "\t");
     let writeString =
 `//Generated from GameData.pak on ${new Date().toUTCString()}
 namespace AddedData {
-  export var _SkillTreeData : {[index:string] : any} = ${dataString}
+  export var _SkillTreeData : {[index:string] : AddedData.SkillTreeNode} = ${dataString}
 }
 `;
     FS.writeFile(filePath, writeString, function(err : any) {

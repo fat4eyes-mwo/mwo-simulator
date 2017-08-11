@@ -4,7 +4,7 @@
 //NOTE: Nodejs module lookup is different for "./<file>" and "<file>"
 //Whoever thought that was a good idea should be SHOT. GIVE MODULES CANONICAL NAMES MOTHERFUCKERS!
 import {NumberIndexed, StringIndexed} from "./parser-common";
-import {WeaponData} from  "./weapondata";
+import {WeaponData} from "./weapondata";
 import {MechData} from "./mechdata";
 import {SkillTreeData} from "./skilltreedata"
 import program = require('commander');
@@ -61,7 +61,11 @@ var loadMechData = function (mechPakFile : string) : MechData.XMLMechData {
   }
 }
 
-var parseMechOmnipods = function(mechZip : AdmZip, mechName : string, mechPathInZip : string) : MechData.XMLOmnipodData {
+var parseMechOmnipods = 
+    function(mechZip : AdmZip, 
+            mechName : string, 
+            mechPathInZip : string) 
+            : MechData.XMLOmnipodData {
   const OmnipodPathInZip = mechPathInZip + `${mechName}-omnipods.xml`;
   let omnipodXML = mechZip.readAsText(OmnipodPathInZip);
   var parsedXML : MechData.XMLOmnipodData;
@@ -79,7 +83,9 @@ var main = function() {
       console.log("Script data dir: " + scriptDataDir);
 
       //GameData.pak
-      let gameData = loadGameData(mwoDir + "/Game/GameData.pak");
+      let gameDataPath = mwoDir + "/Game/GameData.pak";
+      console.log("Processing " + gameDataPath);
+      let gameData = loadGameData(gameDataPath);
       //weapons
       let addedWeaponData = WeaponData.generateAddedWeaponData(gameData.xmlWeaponData);
       WeaponData.writeAddedWeaponData(addedWeaponData, scriptDataDir + "/addedweapondata.ts");

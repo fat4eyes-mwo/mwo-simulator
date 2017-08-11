@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const FS = require("fs");
+const mechdata_quirks_1 = require("./data/mechdata-quirks");
 var SkillTreeData;
 (function (SkillTreeData) {
     class SkillNode {
@@ -20,6 +21,13 @@ var SkillTreeData;
     class SkillEffect {
         constructor(xmlSkillEffect) {
             this.quirkName = xmlSkillEffect.attr.name;
+            let quirkNameEntry = mechdata_quirks_1.MechDataQuirkData.QuirkTranslatedNameMap[this.quirkName];
+            if (quirkNameEntry) {
+                this.quirkTranslatedName = quirkNameEntry.translated_name;
+            }
+            else {
+                this.quirkTranslatedName = this.quirkName;
+            }
             this.quirkValues = [];
             if (xmlSkillEffect.Faction) {
                 for (let factionEntry of xmlSkillEffect.Faction) {
@@ -76,7 +84,7 @@ var SkillTreeData;
         let dataString = JSON.stringify(skillTreeData, null, "\t");
         let writeString = `//Generated from GameData.pak on ${new Date().toUTCString()}
 namespace AddedData {
-  export var _SkillTreeData : {[index:string] : any} = ${dataString}
+  export var _SkillTreeData : {[index:string] : AddedData.SkillTreeNode} = ${dataString}
 }
 `;
         FS.writeFile(filePath, writeString, function (err) {

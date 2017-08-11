@@ -62,7 +62,9 @@ var main = function () {
         console.log("MWO base dir: " + mwoDir);
         console.log("Script data dir: " + scriptDataDir);
         //GameData.pak
-        let gameData = loadGameData(mwoDir + "/Game/GameData.pak");
+        let gameDataPath = mwoDir + "/Game/GameData.pak";
+        console.log("Processing " + gameDataPath);
+        let gameData = loadGameData(gameDataPath);
         //weapons
         let addedWeaponData = weapondata_1.WeaponData.generateAddedWeaponData(gameData.xmlWeaponData);
         weapondata_1.WeaponData.writeAddedWeaponData(addedWeaponData, scriptDataDir + "/addedweapondata.ts");
