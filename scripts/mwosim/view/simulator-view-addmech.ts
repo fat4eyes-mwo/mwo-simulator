@@ -106,18 +106,14 @@ namespace MechViewAddMech {
             .html("Failed to load " + url);
         };
         let alwaysHandler = function () {
-          dialog.loadButton.enable();
-          dialog.loadButton.removeClass("loading");
-          dialog.loadButton.setHtml("Load");
+          dialog.setLoading(false);
         };
         let loadMechPromise = MechModel.loadSmurfyMechLoadoutFromURL(url);
         if (loadMechPromise) {
           $(dialog.getResultPanel())
             .removeClass("error")
             .html("Loading url : " + url);
-          dialog.loadButton.disable();
-          dialog.loadButton.addClass("loading");
-          dialog.loadButton.setHtml("Loading...");
+          dialog.setLoading(true);
           loadMechPromise
             .then(doneHandler)
             .catch(failHandler)

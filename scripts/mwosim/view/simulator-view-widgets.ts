@@ -368,6 +368,18 @@ namespace MechViewWidgets {
     getResultPanel(): Element {
       return $(this.domElement).find(".resultPanel").get(0);
     }
+
+    setLoading(loading : boolean) {
+      if (loading) {
+        this.loadButton.disable();
+        this.loadButton.addClass("loading");
+        this.loadButton.setHtml("Loading...");
+      } else {
+        this.loadButton.enable();
+        this.loadButton.removeClass("loading");
+        this.loadButton.setHtml("Load");
+      }
+    }
   }
   //Clones a template and returns the first element of the template
   export var cloneTemplate = function(templateName : string) : Element {

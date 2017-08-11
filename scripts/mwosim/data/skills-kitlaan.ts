@@ -3,6 +3,14 @@ namespace SkillTreeData {
   export interface SkillNameMap {
     [index:string] : string;
   }
+  export interface KitlaanSkillTree {
+    success?: boolean;
+    mwoskill: string;
+    ver: string;
+    skillVersion: string;
+    selected: {[index:string] : (string | number)[][]};
+  }
+
   export var _KitlaanSkillNameMap : SkillNameMap = {
     "AC Cooldown": null,
     "AC Range": null,
