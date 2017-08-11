@@ -47,9 +47,9 @@ var AddedData;
         }
     };
 })(AddedData || (AddedData = {}));
-//Generated from Game/mechs/*.pak on Wed, 09 Aug 2017 04:07:31 GMT
+//Generated from Game/mechs/*.pak on Fri, 11 Aug 2017 16:35:03 GMT
 var AddedData;
-//Generated from Game/mechs/*.pak on Wed, 09 Aug 2017 04:07:31 GMT
+//Generated from Game/mechs/*.pak on Fri, 11 Aug 2017 16:35:03 GMT
 (function (AddedData) {
     AddedData._AddedOmnipodData = {
         "adr-prime": {
@@ -2214,9 +2214,9 @@ var AddedData;
         }
     };
 })(AddedData || (AddedData = {}));
-//Generated from GameData.pak Wed, 09 Aug 2017 04:06:50 GMT
+//Generated from GameData.pak Fri, 11 Aug 2017 16:34:59 GMT
 var AddedData;
-//Generated from GameData.pak Wed, 09 Aug 2017 04:06:50 GMT
+//Generated from GameData.pak Fri, 11 Aug 2017 16:34:59 GMT
 (function (AddedData) {
     AddedData._AddedWeaponData = {
         "AutoCannon20": {
@@ -5056,6 +5056,7 @@ var MechModelQuirks;
         "isantimissilesystem": ["AntiMissileSystem"],
         "lbxautocannon": ["LBXAutoCannon10", "LBXAutoCannon2", "LBXAutoCannon5", "LBXAutoCannon20",
             "ClanLBXAutoCannon2", "ClanLBXAutoCannon5", "ClanLBXAutoCannon10", "ClanLBXAutoCannon20",],
+        "rotaryautocannon": ["RotaryAutoCannon2", "RotaryAutoCannon5"],
         "srm": ["SRM2", "SRM2_Artemis", "SRM4", "SRM4_Artemis", "SRM6", "SRM6_Artemis",
             "ClanSRM2", "ClanSRM2_Artemis", "ClanSRM4", "ClanSRM4_Artemis", "ClanSRM6", "ClanSRM6_Artemis"],
         "streaksrm": ["StreakSRM2", "StreakSRM4", "StreakSRM6", "ClanStreakSRM2", "ClanStreakSRM4", "ClanStreakSRM6"]
@@ -5214,9 +5215,9 @@ var SkillTreeData;
         "Vent Calibration": "VentCalibration"
     };
 })(SkillTreeData || (SkillTreeData = {}));
-//Generated from GameData.pak on Wed, 09 Aug 2017 04:06:50 GMT
+//Generated from GameData.pak on Fri, 11 Aug 2017 16:34:59 GMT
 var AddedData;
-//Generated from GameData.pak on Wed, 09 Aug 2017 04:06:50 GMT
+//Generated from GameData.pak on Fri, 11 Aug 2017 16:34:59 GMT
 (function (AddedData) {
     AddedData._SkillTreeData = {
         "Range": {
@@ -5224,6 +5225,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "all_range_multiplier",
+                    "quirkTranslatedName": "RANGE",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -5242,6 +5244,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "all_velocity_multiplier",
+                    "quirkTranslatedName": "VELOCITY",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -5260,6 +5263,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "all_cooldown_multiplier",
+                    "quirkTranslatedName": "COOLDOWN",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -5278,6 +5282,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "all_heat_multiplier",
+                    "quirkTranslatedName": "HEAT GEN",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -5296,6 +5301,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "laser_duration_multiplier",
+                    "quirkTranslatedName": "LASER DURATION",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -5314,6 +5320,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "missile_critdamage_multiplier",
+                    "quirkTranslatedName": "MISSILE CRIT DAMAGE",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -5332,6 +5339,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "missile_spread_multiplier",
+                    "quirkTranslatedName": "MISSILE SPREAD",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -5350,6 +5358,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "lbxautocannon_spread_multiplier",
+                    "quirkTranslatedName": "LB-X SPREAD",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -5368,6 +5377,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "gaussextendedcharge_additive",
+                    "quirkTranslatedName": "GAUSS CHARGE",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -5386,6 +5396,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "ultraautocannon_jamduration_multiplier",
+                    "quirkTranslatedName": "UAC JAM DURATION",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -5399,6 +5410,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "rotaryautocannon_jamrampdownduration_multiplier",
+                    "quirkTranslatedName": "RAC JAM DURATION",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -5413,6 +5425,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "critchance_receiving_multiplier",
+                    "quirkTranslatedName": "CRIT HIT CHANCE (RECEIVING)",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -5431,6 +5444,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "flamer_rampdownduration_multiplier",
+                    "quirkTranslatedName": "FLAMER RAMPDOWN",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -5449,6 +5463,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "increasedarmor_multiplier",
+                    "quirkTranslatedName": "ARMOR",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -5629,6 +5644,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "increasedstructure_multiplier",
+                    "quirkTranslatedName": "STRUCTURE",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -5809,6 +5825,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "falldamage_multiplier",
+                    "quirkTranslatedName": "FALL DAMAGE",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -5859,6 +5876,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "antimissilesystem_damage_additive",
+                    "quirkTranslatedName": "AMS DAMAGE",
                     "quirkValues": [
                         {
                             "quirkValue": 0.75
@@ -5872,6 +5890,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "narcbeacon_velocity_multiplier",
+                    "quirkTranslatedName": "NARC VELOCITY",
                     "quirkValues": [
                         {
                             "quirkValue": 0.1
@@ -5880,6 +5899,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "narcbeacon_narcduration_multiplier",
+                    "quirkTranslatedName": "NARC DURATION",
                     "quirkValues": [
                         {
                             "quirkValue": 0.15
@@ -5893,6 +5913,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "torso_yawspeed_multiplier",
+                    "quirkTranslatedName": "Torso Yaw Speed",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -5943,6 +5964,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "torso_yawangle_multiplier",
+                    "quirkTranslatedName": "Torso Yaw Angle",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -5993,6 +6015,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "torso_pitchangle_multiplier",
+                    "quirkTranslatedName": "Torso Pitch Angle",
                     "quirkValues": [
                         {
                             "quirkValue": 0.02
@@ -6006,6 +6029,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "accellerp_all_multiplier",
+                    "quirkTranslatedName": "ACCELERATION RATE",
                     "quirkValues": [
                         {
                             "quirkValue": 0.035
@@ -6019,6 +6043,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "decellerp_all_multiplier",
+                    "quirkTranslatedName": "DECELERATION RATE",
                     "quirkValues": [
                         {
                             "quirkValue": 0.035
@@ -6032,6 +6057,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "turnlerp_all_multiplier",
+                    "quirkTranslatedName": "TURN RATE",
                     "quirkValues": [
                         {
                             "quirkValue": 0.05
@@ -6045,6 +6071,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "mechtopspeed_multiplier",
+                    "quirkTranslatedName": "TOP SPEED",
                     "quirkValues": [
                         {
                             "quirkValue": 0.015
@@ -6058,6 +6085,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "jumpjets_initialthrust_multiplier",
+                    "quirkTranslatedName": "JUMP JETS INITIAL THRUST",
                     "quirkValues": [
                         {
                             "quirkValue": 0.03
@@ -6071,6 +6099,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "jumpjets_forwardthrust_multiplier",
+                    "quirkTranslatedName": "JUMP JETS FORWARD THRUST",
                     "quirkValues": [
                         {
                             "quirkValue": 0.25
@@ -6084,6 +6113,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "jumpjets_burntime_multiplier",
+                    "quirkTranslatedName": "JUMP JETS BURN TIME",
                     "quirkValues": [
                         {
                             "quirkValue": 0.03
@@ -6097,6 +6127,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "jumpjets_heat_multiplier",
+                    "quirkTranslatedName": "JUMP JETS HEAT",
                     "quirkValues": [
                         {
                             "quirkValue": -0.06
@@ -6110,6 +6141,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "startupduration_multiplier",
+                    "quirkTranslatedName": "QUICK IGNITION",
                     "quirkValues": [
                         {
                             "quirkValue": -0.07
@@ -6123,6 +6155,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "maxheat_multiplier",
+                    "quirkTranslatedName": "HEAT CAPACITY",
                     "quirkValues": [
                         {
                             "quirkValue": 0.03
@@ -6136,6 +6169,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "heatdissipation_multiplier",
+                    "quirkTranslatedName": "Heat Dissipation",
                     "quirkValues": [
                         {
                             "quirkValue": 0.02
@@ -6149,6 +6183,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "hillclimb_multiplier",
+                    "quirkTranslatedName": "HILL CLIMB",
                     "quirkValues": [
                         {
                             "quirkValue": 0.05
@@ -6162,6 +6197,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "screenshake_multiplier",
+                    "quirkTranslatedName": "IMPROVED GYROS",
                     "quirkValues": [
                         {
                             "quirkValue": -0.175
@@ -6175,6 +6211,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "speedretention_multiplier",
+                    "quirkTranslatedName": "SPEED RETENTION",
                     "quirkValues": [
                         {
                             "quirkValue": 0.1
@@ -6188,6 +6225,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "ammocapacity_machinegun_additive",
+                    "quirkTranslatedName": "MG AMMO",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -6197,6 +6235,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_lightmachinegun_additive",
+                    "quirkTranslatedName": "LMG AMMO",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -6206,6 +6245,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_heavymachinegun_additive",
+                    "quirkTranslatedName": "HMG AMMO",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -6215,6 +6255,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_ac2_additive",
+                    "quirkTranslatedName": "AC2 AMMO",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -6224,6 +6265,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_ac5_additive",
+                    "quirkTranslatedName": "AC5 AMMO",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -6233,6 +6275,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_ac10_additive",
+                    "quirkTranslatedName": "AC10 AMMO",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -6242,6 +6285,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_ac20_additive",
+                    "quirkTranslatedName": "AC20 AMMO",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -6251,6 +6295,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_lb2x_additive",
+                    "quirkTranslatedName": "LB-X2 AMMO",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -6260,6 +6305,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_lb5x_additive",
+                    "quirkTranslatedName": "LB-X5 AMMO",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -6269,6 +6315,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_lb10x_additive",
+                    "quirkTranslatedName": "LB-X10 AMMO",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -6278,6 +6325,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_lb20x_additive",
+                    "quirkTranslatedName": "LB-X20 AMMO",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -6287,6 +6335,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_gauss_additive",
+                    "quirkTranslatedName": "GAUSS AMMO",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -6296,6 +6345,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_lightgauss_additive",
+                    "quirkTranslatedName": "LIGHT GAUSS AMMO",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -6305,6 +6355,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_heavygauss_additive",
+                    "quirkTranslatedName": "HEAVY GAUSS AMMO",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -6314,6 +6365,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_ultraac2_additive",
+                    "quirkTranslatedName": "UAC/2 AMMO",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -6323,6 +6375,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_ultraac5_additive",
+                    "quirkTranslatedName": "UAC/5 AMMO",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -6332,6 +6385,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_ultraac10_additive",
+                    "quirkTranslatedName": "UAC/10 AMMO",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -6341,6 +6395,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_ultraac20_additive",
+                    "quirkTranslatedName": "UAC/20 AMMO",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -6350,6 +6405,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_rotary_ac2_additive",
+                    "quirkTranslatedName": "RAC 2 AMMO",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -6359,6 +6415,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_rotary_ac5_additive",
+                    "quirkTranslatedName": "RAC 5 AMMO",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -6368,6 +6425,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_clightmachinegun_additive",
+                    "quirkTranslatedName": "CLAN LMG AMMO",
                     "quirkValues": [
                         {
                             "faction": "Clan",
@@ -6377,6 +6435,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_cmachinegun_additive",
+                    "quirkTranslatedName": "CLAN MG AMMO",
                     "quirkValues": [
                         {
                             "faction": "Clan",
@@ -6386,6 +6445,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_cheavymachinegun_additive",
+                    "quirkTranslatedName": "CLAN HMG AMMO",
                     "quirkValues": [
                         {
                             "faction": "Clan",
@@ -6395,6 +6455,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_clb2x_additive",
+                    "quirkTranslatedName": "CLAN LB-X2 AMMO",
                     "quirkValues": [
                         {
                             "faction": "Clan",
@@ -6404,6 +6465,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_clb5x_additive",
+                    "quirkTranslatedName": "CLAN LB-X5 AMMO",
                     "quirkValues": [
                         {
                             "faction": "Clan",
@@ -6413,6 +6475,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_clb10x_additive",
+                    "quirkTranslatedName": "CLAN LB-X10 AMMO",
                     "quirkValues": [
                         {
                             "faction": "Clan",
@@ -6422,6 +6485,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_clb20x_additive",
+                    "quirkTranslatedName": "CLAN LB-X20 AMMO",
                     "quirkValues": [
                         {
                             "faction": "Clan",
@@ -6431,6 +6495,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_cultraac2_additive",
+                    "quirkTranslatedName": "CLAN UAC/2 AMMO",
                     "quirkValues": [
                         {
                             "faction": "Clan",
@@ -6440,6 +6505,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_cultraac5_additive",
+                    "quirkTranslatedName": "CLAN UAC/5 AMMO",
                     "quirkValues": [
                         {
                             "faction": "Clan",
@@ -6449,6 +6515,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_cultraac10_additive",
+                    "quirkTranslatedName": "CLAN UAC/10 AMMO",
                     "quirkValues": [
                         {
                             "faction": "Clan",
@@ -6458,6 +6525,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_cultraac20_additive",
+                    "quirkTranslatedName": "CLAN UAC/20 AMMO",
                     "quirkValues": [
                         {
                             "faction": "Clan",
@@ -6467,6 +6535,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_cgauss_additive",
+                    "quirkTranslatedName": "CLAN GAUSS AMMO",
                     "quirkValues": [
                         {
                             "faction": "Clan",
@@ -6476,6 +6545,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_cac2_additive",
+                    "quirkTranslatedName": "CLAN AC2 AMMO",
                     "quirkValues": [
                         {
                             "faction": "Clan",
@@ -6485,6 +6555,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_cac5_additive",
+                    "quirkTranslatedName": "CLAN AC5 AMMO",
                     "quirkValues": [
                         {
                             "faction": "Clan",
@@ -6494,6 +6565,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_cac10_additive",
+                    "quirkTranslatedName": "CLAN AC10 AMMO",
                     "quirkValues": [
                         {
                             "faction": "Clan",
@@ -6503,6 +6575,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_cac20_additive",
+                    "quirkTranslatedName": "CLAN AC20 AMMO",
                     "quirkValues": [
                         {
                             "faction": "Clan",
@@ -6517,6 +6590,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "ammocapacity_lrm_additive",
+                    "quirkTranslatedName": "LRM AMMO",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -6526,6 +6600,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_srm_additive",
+                    "quirkTranslatedName": "SRM AMMO",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -6535,6 +6610,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_streak_srm_additive",
+                    "quirkTranslatedName": "STREAK AMMO",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -6544,6 +6620,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_narc_additive",
+                    "quirkTranslatedName": "NARC AMMO",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -6553,6 +6630,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_lrm_artemis_additive",
+                    "quirkTranslatedName": "ALRM AMMO",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -6562,6 +6640,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_srm_artemis_additive",
+                    "quirkTranslatedName": "ASRM AMMO",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -6571,6 +6650,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_mrm_additive",
+                    "quirkTranslatedName": "MRM AMMO",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -6580,6 +6660,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_clrm_additive",
+                    "quirkTranslatedName": "CLAN LRM AMMO",
                     "quirkValues": [
                         {
                             "faction": "Clan",
@@ -6589,6 +6670,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_csrm_additive",
+                    "quirkTranslatedName": "CLAN SRM AMO",
                     "quirkValues": [
                         {
                             "faction": "Clan",
@@ -6598,6 +6680,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_cstreak_srm_additive",
+                    "quirkTranslatedName": "CLAN STREAK AMMO",
                     "quirkValues": [
                         {
                             "faction": "Clan",
@@ -6607,6 +6690,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_cnarc_additive",
+                    "quirkTranslatedName": "CLAN NARC AMMO",
                     "quirkValues": [
                         {
                             "faction": "Clan",
@@ -6616,6 +6700,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_clrm_artemis_additive",
+                    "quirkTranslatedName": "CLAN ALRM AMMO",
                     "quirkValues": [
                         {
                             "faction": "Clan",
@@ -6625,6 +6710,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_csrm_artemis_additive",
+                    "quirkTranslatedName": "CLAN ASRM AMMO",
                     "quirkValues": [
                         {
                             "faction": "Clan",
@@ -6634,6 +6720,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "ammocapacity_catm_additive",
+                    "quirkTranslatedName": "CLAN ATM AMMO",
                     "quirkValues": [
                         {
                             "faction": "Clan",
@@ -6648,6 +6735,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "sensorrange_multiplier",
+                    "quirkTranslatedName": "SENSOR RANGE",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -6698,6 +6786,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "targetinfogathering_multiplier",
+                    "quirkTranslatedName": "TARGET INFO GATHERING",
                     "quirkValues": [
                         {
                             "faction": "IS",
@@ -6748,6 +6837,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "targetdecayduration_additive",
+                    "quirkTranslatedName": "TARGET DECAY",
                     "quirkValues": [
                         {
                             "quirkValue": 0.7
@@ -6761,6 +6851,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "radardeprivation_multiplier",
+                    "quirkTranslatedName": "RADAR DEPRIVATION",
                     "quirkValues": [
                         {
                             "quirkValue": 0.2
@@ -6774,6 +6865,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "advancedzoom_additive",
+                    "quirkTranslatedName": "ADVANCED ZOOM",
                     "quirkValues": [
                         {
                             "quirkValue": 1
@@ -6787,6 +6879,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "seismicsensorrange_additive",
+                    "quirkTranslatedName": "SEISMIC SENSOR RANGE",
                     "quirkValues": [
                         {
                             "quirkValue": 100
@@ -6800,6 +6893,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "backfacetargetretentionrange_additive",
+                    "quirkTranslatedName": "TARGET RETENTION",
                     "quirkValues": [
                         {
                             "quirkValue": 200
@@ -6813,6 +6907,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "extraconsumableslot_additive",
+                    "quirkTranslatedName": "CONSUMABLE SLOT",
                     "quirkValues": [
                         {
                             "quirkValue": 1
@@ -6826,6 +6921,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "uavcapacity_additive",
+                    "quirkTranslatedName": "UAV CAPACITY",
                     "quirkValues": [
                         {
                             "quirkValue": 1
@@ -6839,6 +6935,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "uavrange_multiplier",
+                    "quirkTranslatedName": "UAV RANGE",
                     "quirkValues": [
                         {
                             "quirkValue": 0.2
@@ -6852,6 +6949,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "uavduration_additive",
+                    "quirkTranslatedName": "UAV DURATION",
                     "quirkValues": [
                         {
                             "quirkValue": 10
@@ -6865,6 +6963,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "coolshotcapacity_additive",
+                    "quirkTranslatedName": "COOLSHOT CAPACITY",
                     "quirkValues": [
                         {
                             "quirkValue": 1
@@ -6878,6 +6977,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "coolshotcooling_multiplier",
+                    "quirkTranslatedName": "COOLSHOT COOLING",
                     "quirkValues": [
                         {
                             "quirkValue": 0.15
@@ -6891,6 +6991,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "coolshotcooldown_multiplier",
+                    "quirkTranslatedName": "COOLSHOT COOLDOWN",
                     "quirkValues": [
                         {
                             "quirkValue": -0.25
@@ -6904,6 +7005,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "strategicstrikecapacity_additive",
+                    "quirkTranslatedName": "STRIKE CAPACITY",
                     "quirkValues": [
                         {
                             "quirkValue": 1
@@ -6917,6 +7019,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "strategicstrikenumshells_multiplier",
+                    "quirkTranslatedName": "STRIKE SHELLS",
                     "quirkValues": [
                         {
                             "quirkValue": 0.25
@@ -6925,6 +7028,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "strategicstrikeduration_multiplier",
+                    "quirkTranslatedName": "STRIKE DURATION",
                     "quirkValues": [
                         {
                             "quirkValue": 0.25
@@ -6938,6 +7042,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "strategicstrikespread_multiplier",
+                    "quirkTranslatedName": "STRIKE SPREAD",
                     "quirkValues": [
                         {
                             "quirkValue": -0.2
@@ -6951,6 +7056,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "captureaccelerator_multiplier",
+                    "quirkTranslatedName": "CAPTURE ACCELERATION",
                     "quirkValues": [
                         {
                             "quirkValue": 0.05
@@ -6964,6 +7070,7 @@ var AddedData;
             "effects": [
                 {
                     "quirkName": "ecmtargetrangereduction_multiplier",
+                    "quirkTranslatedName": "ENHANCED ECM",
                     "quirkValues": [
                         {
                             "quirkValue": 0.225
@@ -6972,6 +7079,7 @@ var AddedData;
                 },
                 {
                     "quirkName": "stealtharmorcooldown_multiplier",
+                    "quirkTranslatedName": "STEALTH ARMOR ACTIVATION",
                     "quirkValues": [
                         {
                             "quirkValue": -0.1
@@ -11627,7 +11735,7 @@ var MechModelView;
         }
         return null;
     };
-    MechModelView.getMechName = function (mechId, team) {
+    MechModelView.getMechName = function (mechId) {
         let mech = MechModel.getMechFromId(mechId);
         if (mech) {
             return mech.getTranslatedName();
@@ -12248,7 +12356,7 @@ var MechViewMechDetails;
             };
             let MechDetailsSkillsTab = {
                 tabTitle: new MechDetailsTabTitle("Skills"),
-                tabContent: new MechViewWidgets.SimpleWidget("mechDetailsSkills-template"),
+                tabContent: new MechDetailsSkills(this.mechId),
             };
             let mechDetailsTab = new MechViewWidgets.TabPanel([MechDetailsQuirksTab, MechDetailsSkillsTab]);
             mechDetailsJQ.find(".tabPanelContainer").append(mechDetailsTab.domElement);
@@ -12299,6 +12407,58 @@ var MechViewMechDetails;
         }
     }
     MechDetailsQuirks.MechDetailsQuirksDomKey = "mwosim.MechDetailsQuirks.uiObject";
+    class MechDetailsSkills extends MechViewWidgets.DomStoredWidget {
+        constructor(mechId) {
+            let domElement = MechViewWidgets.cloneTemplate("mechDetailsSkills-template");
+            super(domElement);
+            this.storeToDom(MechDetailsSkills.MechDetailsSkillsDomKey);
+            this.mechId = mechId;
+            let loadButtonJQ = $(this.domElement).find(".loadButton");
+            this.loadButton = new MechViewWidgets.Button(loadButtonJQ.get(0), this.createLoadButtonHandler(this));
+        }
+        createLoadButtonHandler(skillsPanel) {
+            return function () {
+                let loadSkillsDialog = new LoadMechSkillsDialog(skillsPanel);
+                MechViewWidgets.setModal(loadSkillsDialog.domElement);
+                MechSimulatorLogic.pauseSimulation();
+                MechViewWidgets.showModal();
+                $(loadSkillsDialog.getTextInput()).focus();
+            };
+        }
+        render() {
+            let skillListJQ = $(this.domElement).find(".skillList");
+            skillListJQ.empty();
+            //TODO: Fill list of mech skills
+            skillListJQ.text("Skills go here");
+        }
+    }
+    MechDetailsSkills.MechDetailsSkillsDomKey = "mwosim.MechDetailsSkills.uiObject";
+    class LoadMechSkillsDialog extends MechViewWidgets.LoadFromURLDialog {
+        constructor(mechSkillsPanel) {
+            super("loadFromURLDialog-loadSkills-template", LoadMechSkillsDialog.DialogId);
+            this.mechSkillsPanel = mechSkillsPanel;
+            let mechNameJQ = $(this.domElement).find(".mechName");
+            let mechName = MechModelView.getMechName(mechSkillsPanel.mechId);
+            mechNameJQ.text(mechName);
+        }
+        createOkButtonHandler(dialog) {
+            return function () {
+                //TODO: Implement setting and updating UI for mech skills
+                MechViewWidgets.hideModal();
+            };
+        }
+        createCancelButtonHandler(dialog) {
+            return function () {
+                MechViewWidgets.hideModal();
+            };
+        }
+        createLoadButtonHandler(dialog) {
+            return function () {
+                //TODO: Implement async request for skills
+            };
+        }
+    }
+    LoadMechSkillsDialog.DialogId = "loadMechSkillsDialog";
 })(MechViewMechDetails || (MechViewMechDetails = {}));
 //TODO: Wrap mechPanel in a class
 var MechViewMechPanel;
@@ -13552,7 +13712,7 @@ var MechViewTeamStats;
         let teamMechPipsJQ = teamStatsContainerJQ.find("[class~=mechPipsContainer]")
             .attr("id", teamMechPipsContainerDivId);
         for (let mechId of mechIds) {
-            let mechName = MechModelView.getMechName(mechId, team);
+            let mechName = MechModelView.getMechName(mechId);
             mechName = mechName ? mechName : "";
             let mechPipSpan = MechViewWidgets.cloneTemplate("mechPip-template");
             $(mechPipSpan)
@@ -14222,6 +14382,24 @@ var MechTest;
                 }
             }
         }
+        //skill quirks
+        for (let skillName in AddedData._SkillTreeData) {
+            if (!AddedData._SkillTreeData.hasOwnProperty(skillName)) {
+                continue;
+            }
+            let skillNode = AddedData._SkillTreeData[skillName];
+            for (let skillEffect of skillNode.effects) {
+                let quirkEntry = {
+                    name: skillEffect.quirkName,
+                    translated_name: skillEffect.quirkTranslatedName,
+                    value: 0 //filler value, we just need the names
+                };
+                if (!quirkMap[quirkEntry.name]) {
+                    quirkMap[quirkEntry.name] = quirkEntry;
+                }
+            }
+        }
+        //print out quirk list
         let numQuirks = 0;
         let sortedQuirkNames = [];
         for (let quirkName in quirkMap) {
