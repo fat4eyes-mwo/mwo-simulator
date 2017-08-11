@@ -1,6 +1,9 @@
 /// <reference path="simulator-view-widgets.ts" />
 
 namespace MechViewMechDetails {
+  type LoadFromURLDialog = MechViewWidgets.LoadFromURLDialog;
+  type ClickHandler = MechViewWidgets.ClickHandler;
+
   export class MechDetails extends MechViewWidgets.DomStoredWidget
                           implements MechViewWidgets.RenderedWidget {
     private static readonly MechDetailsDomKey = "mwosim.MechDetails.uiObject";
@@ -22,7 +25,7 @@ namespace MechViewMechDetails {
       };
       let MechDetailsSkillsTab = {
         tabTitle : new MechDetailsTabTitle("Skills"),
-        tabContent : new MechViewWidgets.SimpleWidget("mechDetailsSkills-template"),
+        tabContent : new MechDetailsSkills(this.mechId),
       };
       let mechDetailsTab = new MechViewWidgets.TabPanel(
                                 [MechDetailsQuirksTab, MechDetailsSkillsTab]);
@@ -80,6 +83,68 @@ namespace MechViewMechDetails {
         mechQuirksJQ.append(mechQuirkJQ);
       }
     }
+  }
 
+  class MechDetailsSkills extends MechViewWidgets.DomStoredWidget
+                          implements MechViewWidgets.RenderedWidget {
+    private static readonly MechDetailsSkillsDomKey = "mwosim.MechDetailsSkills.uiObject";
+    mechId : string;
+    loadButton : MechViewWidgets.Button;
+    constructor(mechId : string) {
+      let domElement = MechViewWidgets.cloneTemplate("mechDetailsSkills-template");
+      super(domElement);
+      this.storeToDom(MechDetailsSkills.MechDetailsSkillsDomKey);
+      this.mechId = mechId;
+
+      let loadButtonJQ = $(this.domElement).find(".loadButton");
+      this.loadButton = new MechViewWidgets.Button(loadButtonJQ.get(0), this.createLoadButtonHandler(this));
+    }
+
+    private createLoadButtonHandler(skillsPanel : MechDetailsSkills) : MechViewWidgets.ClickHandler {
+      return function() : void {
+        let loadSkillsDialog = new LoadMechSkillsDialog(skillsPanel);
+        MechViewWidgets.setModal(loadSkillsDialog.domElement);
+
+        MechSimulatorLogic.pauseSimulation();
+        MechViewWidgets.showModal();
+        $(loadSkillsDialog.getTextInput()).focus();
+      }
+    }
+
+    render() {
+      let skillListJQ = $(this.domElement).find("skillList");
+      skillListJQ.empty();
+      //TODO: Fill list of mech skills
+    }
+  }
+
+  class LoadMechSkillsDialog extends MechViewWidgets.LoadFromURLDialog {
+    private static readonly DialogId = "loadMechSkillsDialog";
+    mechSkillsPanel : MechDetailsSkills;
+    constructor(mechSkillsPanel : MechDetailsSkills) {
+      super("loadFromURLDialog-loadSkills-template", LoadMechSkillsDialog.DialogId);
+      this.mechSkillsPanel = mechSkillsPanel;
+
+      let mechNameJQ = $(this.domElement).find(".mechName");
+      let mechName = MechModelView.getMechName(mechSkillsPanel.mechId);
+      mechNameJQ.text(mechName);
+    }
+
+    createOkButtonHandler(dialog: LoadFromURLDialog): ClickHandler {
+      return function() {
+        //TODO: Implement setting and updating UI for mech skills
+        MechViewWidgets.hideModal();
+      };
+    }
+    createCancelButtonHandler(dialog: LoadFromURLDialog): ClickHandler {
+      return function() {
+        MechViewWidgets.hideModal();
+      }
+    }
+    createLoadButtonHandler(dialog: LoadFromURLDialog): ClickHandler {
+      return function() {
+        //TODO: Implement async request for skills
+      }
+    }
   }
 }

@@ -786,6 +786,15 @@ $malus-color : rgb(150, 50, 50);
   color: $malus-color;
 }
 
+.statusPanel .mechDetails .mechDetailsSkills .loadButton {
+  float: right;
+  font-size: 0.8em;
+  margin-right: 5px;
+}
+
+.statusPanel .mechDetails .mechDetailsSkills .skillList {
+}
+
 .teamStatsNav {
   position: sticky;
   top: $navbar-top;

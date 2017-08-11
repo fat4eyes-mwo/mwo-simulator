@@ -540,7 +540,7 @@ namespace MechModelView {
     return null;
   }
 
-  export var getMechName = function(mechId : string, team : Team) {
+  export var getMechName = function(mechId : string) {
     let mech = MechModel.getMechFromId(mechId);
     if (mech) {
       return mech.getTranslatedName();

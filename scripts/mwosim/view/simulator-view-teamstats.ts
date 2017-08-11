@@ -65,7 +65,7 @@ namespace MechViewTeamStats {
       teamStatsContainerJQ.find("[class~=mechPipsContainer]")
         .attr("id", teamMechPipsContainerDivId);
     for (let mechId of mechIds) {
-      let mechName = MechModelView.getMechName(mechId, team);
+      let mechName = MechModelView.getMechName(mechId);
       mechName = mechName ? mechName : "";
       let mechPipSpan = MechViewWidgets.cloneTemplate("mechPip-template");
       $(mechPipSpan)

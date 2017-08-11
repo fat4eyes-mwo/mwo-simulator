@@ -715,6 +715,12 @@ a:hover {
   color: #963232;
 }
 
+.statusPanel .mechDetails .mechDetailsSkills .loadButton {
+  float: right;
+  font-size: 0.8em;
+  margin-right: 5px;
+}
+
 .teamStatsNav {
   position: sticky;
   top: 0px;
