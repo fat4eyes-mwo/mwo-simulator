@@ -1,4 +1,4 @@
-import {StringIndexed, NumberIndexed} from "./parser-common";
+import {NumberIndexed, StringIndexed} from "./parser-common";
 import FS = require('fs');
 
 export namespace WeaponData {
@@ -71,7 +71,7 @@ export namespace WeaponData {
         this.jamRampDownTime = Number(xmlWeaponStats.attr.jamRampDownTime);
       }
       if (xmlWeaponStats.attr.isOneShot) {
-        this.isOneShot = xmlWeaponStats.attr.isOneShot != 0;
+        this.isOneShot = xmlWeaponStats.attr.isOneShot !== 0;
       }
       if (xmlWeaponStats.attr.volleydelay) {
         this.volleyDelay = Number(xmlWeaponStats.attr.volleydelay);
