@@ -115,7 +115,7 @@ namespace MechViewMechDetails {
       let skillListJQ = $(this.domElement).find(".skillList");
       skillListJQ.empty();
       //TODO: Fill list of mech skills
-      skillListJQ.text("Skils go here");
+      skillListJQ.text("Skills go here");
     }
   }
 
