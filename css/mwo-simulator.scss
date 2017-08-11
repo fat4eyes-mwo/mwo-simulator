@@ -1031,15 +1031,18 @@ $team_settings_transition : 0.5s;
 
 }
 
-.addMechDialog.blue .addMechDialogTitle{
+.loadFromURLDialog .title {
+}
+
+.addMechDialog.blue .title {
   color: $blue-team-color;
 }
 
-.addMechDialog.red .addMechDialogTitle{
+.addMechDialog.red .title {
   color: $red-team-color;
 }
 
-.addMechDialog-text {
+.loadFromURLDialog .textInput {
   border-radius: 3px;
   border: solid thin gold;
   padding: 3px;
@@ -1047,7 +1050,7 @@ $team_settings_transition : 0.5s;
   float:none;
 }
 
-.addMechDialog-result {
+.loadFromURLDialog .resultPanel {
   margin: 3px;
 }
 
@@ -1074,11 +1077,11 @@ $team_settings_transition : 0.5s;
   50% {background-color: rgb(255, 0, 0); color: white;}
 }
 
-.addMechDialog-load {
+.loadFromURLDialog .loadButton {
   float:right;
 }
 
-.addMechDialog-load.loading {
+.loadFromURLDialog .loadButton.loading {
   cursor:none;
   animation-duration: 1s;
   animation-name: buttonglow;
@@ -1086,15 +1089,15 @@ $team_settings_transition : 0.5s;
   opacity: 1;
 }
 
-.addMechDialog-ok, .addMechDialog-cancel {
+.loadFromURLDialog .okButton, .loadFromURLDialog .cancelButton {
   float: right;
 }
 
-.addMechDialog-result {
+.loadFromURLDialog .resultPanel {
   word-wrap: break-word;
 }
 
-.addMechDialog-result.error {
+.loadFromURLDialog .resultPanel.error {
   animation-duration: 0.5s;
   animation-name: errorblink;
   animation-iteration-count: 1;

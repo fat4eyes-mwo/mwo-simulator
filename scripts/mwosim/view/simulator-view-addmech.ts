@@ -3,12 +3,13 @@
 
 namespace MechViewAddMech {
   import Team = MechModelCommon.Team;
+  import LoadFromURLDialog = MechViewWidgets.LoadFromURLDialog;
 
-  type MechButton = MechViewWidgets.Button;
   type SmurfyMechLoadout = SmurfyTypes.SmurfyMechLoadout;
-  type ClickHandler = () => void;
+  type ClickHandler = MechViewWidgets.ClickHandler;
 
   export class AddMechButton extends MechViewWidgets.Button {
+    static readonly AddMechButtonDomKey = "mwosim.AddMechButton.uiObject";
     private static addMechButtonHandler : ClickHandler;
     constructor(team: Team, container: Element) {
       let addMechButtonPanelId = AddMechButton.addMechButtonId(team);
@@ -21,7 +22,7 @@ namespace MechViewAddMech {
         .attr("data-team", team);
       let addMechButtonElem = addMechButtonJQ.get(0);
       super(addMechButtonElem, AddMechButton.addMechButtonHandler);
-      //TODO: What to do with DomStorage in this class?
+      this.storeToDom(AddMechButton.AddMechButtonDomKey);
     }
 
     private static addMechButtonId(team: Team): string {
@@ -36,175 +37,108 @@ namespace MechViewAddMech {
     }
   }
 
-  export abstract class LoadFromURLDialog extends MechViewWidgets.DomStoredWidget {
-    private static readonly DomKey = "mwosim.LoadFromURLDialog.uiObject";
-    okButton : MechButton;
-    cancelButton : MechButton;
-    loadButton : MechButton;
-    dialogId : string;
-    constructor(loadDialogTemplate : string, dialogId : string) {
-      let loadDialogDiv = MechViewWidgets.cloneTemplate(loadDialogTemplate);
-      super(loadDialogDiv);
-      this.storeToDom(LoadFromURLDialog.DomKey);
-
-      this.dialogId = dialogId;
-      let loadDialogJQ = $(loadDialogDiv)
-                            .attr("id", dialogId);
-    }
-  }
-
   export class AddMechDialog extends LoadFromURLDialog {
-    private static readonly AddMechDialogDomKey = "mwosim.AddMechDialog.uiObject";
+    static readonly AddMechDialogDomKey = "mwosim.AddMechDialog.uiObject";
+    private static readonly AddMechDialogId = "addMechDialogContainer";
+
     constructor(team : Team) {
-      super("addMechDialog-template", "addMechDialogContainer");
+      super("loadFromURLDialog-addMech-template", AddMechDialog.AddMechDialogId);
       this.storeToDom(AddMechDialog.AddMechDialogDomKey);
-      //TODO: What to do with DomStorage in this class?
       let thisJQ = $(this.domElement).addClass(team);
+      $(this.okButton.domElement).attr("data-team", team);
+      $(this.cancelButton.domElement).attr("data-team", team);
+      $(this.loadButton.domElement).attr("data-team", team);
     }
-  }
 
-  var addMechOKButton: MechButton;
-  var addMechCancelButton: MechButton;
-  var addMechLoadButton: MechButton;
-  var addMechDialogJQ: JQuery;
-  export var showAddMechDialog = function (team: Team): void {
-    let addMechDialogDiv =
-      MechViewWidgets.cloneTemplate("addMechDialog-template");
-    addMechDialogJQ = $(addMechDialogDiv)
-      .attr("id", "addMechDialogContainer")
-      .addClass(team);
-    MechViewWidgets.setModal(addMechDialogDiv, "addMech");
-
-    let resultPanelJQ = addMechDialogJQ.find(".addMechDialog-result");
-    resultPanelJQ
-      .removeClass("error")
-      .empty()
-      .on("animationend", function (data) {
-        resultPanelJQ.removeClass("error");
-      });
-
-    if (!addMechDialogOKHandler) {
-      addMechDialogOKHandler = createAddMechDialogOKHandler();
-    }
-    if (!addMechDialogCancelHandler) {
-      addMechDialogCancelHandler = createAddMechDialogCancelHandler();
-    }
-    if (!addMechDialogLoadHandler) {
-      addMechDialogLoadHandler = createAddMechDialogLoadHandler();
-    }
-    let okButtonJQ = addMechDialogJQ.find(".addMechDialog-ok").attr("data-team", team);
-    addMechOKButton =
-      new MechViewWidgets.Button(okButtonJQ.get(0), addMechDialogOKHandler);
-
-    let cancelButtonJQ = addMechDialogJQ.find(".addMechDialog-cancel").attr("data-team", team);
-    addMechCancelButton =
-      new MechViewWidgets.Button(cancelButtonJQ.get(0), addMechDialogCancelHandler);
-
-    let loadButtonJQ = addMechDialogJQ.find(".addMechDialog-load").attr("data-team", team);
-    addMechLoadButton =
-      new MechViewWidgets.Button(loadButtonJQ.get(0), addMechDialogLoadHandler);
-
-    addMechOKButton.disable();
-
-    MechViewWidgets.showModal();
-
-    addMechDialogJQ.find(".addMechDialog-text").focus();
-  }
-
-  export var hideAddMechDialog = function (team: Team): void {
-    MechViewWidgets.hideModal("addMech");
-    addMechDialogJQ = undefined;
-  }
-
-  var loadedSmurfyLoadout: SmurfyMechLoadout = null;
-  var createAddMechDialogOKHandler = function (): ClickHandler {
-    return function (this: Element) {
-      let team = $(this).attr('data-team');
-      let url = addMechDialogJQ.find(".addMechDialog-text").val()
-      console.log("Mech loaded. team: " + team + " URL: " + url);
-      //TODO: Avoid accessing MechModel directly here. Create a method in ModelView to do this
-      let smurfyMechLoadout = loadedSmurfyLoadout;
-      let smurfyMechData = MechModel.getSmurfyMechData(smurfyMechLoadout.mech_id);
-      let mechTranslatedName = smurfyMechData.translated_name;
-      let mechName = smurfyMechData.name;
-      let newMech = MechModelView.addMech(team, smurfyMechLoadout);
-      //set patterns of added mech to selected team patterns
-      MechViewTeamStats.setSelectedTeamPatterns(team);
-      MechViewRouter.modifyAppState();
-      MechViewMechPanel.addMechPanel(newMech, team);
-      MechModelView.refreshView([MechModelView.ViewUpdate.TEAMSTATS]);
-      MechViewAddMech.hideAddMechDialog(team);
-    }
-  };
-  var addMechDialogOKHandler: ClickHandler; //set on dialog creation, singleton
-
-  var createAddMechDialogCancelHandler = function (): ClickHandler {
-    return function (this: Element) {
-      let team = $(this).attr('data-team');
-      MechViewAddMech.hideAddMechDialog(team);
-    }
-  };
-  var addMechDialogCancelHandler: ClickHandler; //set on dialog creation, singleton
-
-  const SMURFY_PROXY_URL = "./php/smurfyproxy.php?path=";
-  var createAddMechDialogLoadHandler = function (): ClickHandler {
-
-    return function (this: Element) {
-      let team = $(this).attr('data-team');
-      let url: string = String(addMechDialogJQ.find(".addMechDialog-text").val());
-      console.log("Load. team: " + team + " URL: " + url);
-
-      let doneHandler = function (data: any) {
-        loadedSmurfyLoadout = data;
-        let smurfyMechData = MechModel.getSmurfyMechData(loadedSmurfyLoadout.mech_id);
+    loadedSmurfyLoadout: SmurfyMechLoadout = null;
+    createOkButtonHandler(dialog: LoadFromURLDialog): ClickHandler {
+      return function (this: Element) {
+        let thisJQ = $(this);
+        let team = thisJQ.attr('data-team');
+        let url = dialog.getTextInputValue();
+        console.log("Mech loaded. team: " + team + " URL: " + url);
+        //TODO: Avoid accessing MechModel directly here. Create a method in ModelView to do this
+        let smurfyMechLoadout = (dialog as AddMechDialog).loadedSmurfyLoadout;
+        let smurfyMechData = MechModel.getSmurfyMechData(smurfyMechLoadout.mech_id);
         let mechTranslatedName = smurfyMechData.translated_name;
         let mechName = smurfyMechData.name;
-        let resultJQ = addMechDialogJQ.find(".addMechDialog-result")
-          .removeClass("error")
-          .empty();
-        createLoadedMechPanel(resultJQ.get(0), loadedSmurfyLoadout);
-        addMechOKButton.enable();
-      };
-      let failHandler = function () {
-        addMechDialogJQ.find(".addMechDialog-result")
-          .addClass("error")
-          .html("Failed to load " + url);
-      };
-      let alwaysHandler = function () {
-        addMechLoadButton.enable();
-        addMechLoadButton.removeClass("loading");
-        addMechLoadButton.setHtml("Load");
-      };
-      let loadMechPromise = MechModel.loadSmurfyMechLoadoutFromURL(url);
-      if (loadMechPromise) {
-        addMechDialogJQ.find(".addMechDialog-result")
-          .removeClass("error")
-          .html("Loading url : " + url);
-        addMechLoadButton.disable();
-        addMechLoadButton.addClass("loading");
-        addMechLoadButton.setHtml("Loading...");
-        loadMechPromise
-          .then(doneHandler)
-          .catch(failHandler)
-          .then(alwaysHandler);
-      } else {
-        addMechDialogJQ.find(".addMechDialog-result")
-          .addClass("error")
-          .text("Invalid smurfy URL. Expected format is 'http://mwo.smurfy-net.de/mechlab#i=mechid&l=loadoutid'");
-        addMechLoadButton.enable();
-        addMechLoadButton.removeClass("loading");
-        addMechLoadButton.setHtml("Load");
-        console.error("Invalid smurfy url");
+        let newMech = MechModelView.addMech(team, smurfyMechLoadout);
+        //set patterns of added mech to selected team patterns
+        MechViewTeamStats.setSelectedTeamPatterns(team);
+        MechViewRouter.modifyAppState();
+        MechViewMechPanel.addMechPanel(newMech, team);
+        MechModelView.refreshView([MechModelView.ViewUpdate.TEAMSTATS]);
+        MechViewAddMech.hideAddMechDialog(team);
+      }
+    };
+
+    createCancelButtonHandler(dialog: LoadFromURLDialog): ClickHandler {
+      return function (this: Element) {
+        let team = $(this).attr('data-team');
+        MechViewAddMech.hideAddMechDialog(team);
+      }
+    };
+
+    private static readonly SMURFY_PROXY_URL = "./php/smurfyproxy.php?path=";
+    createLoadButtonHandler(dialog: LoadFromURLDialog): ClickHandler {
+
+      return function (this: Element) {
+        let thisJQ = $(this);
+        let team = thisJQ.attr('data-team');
+        let addMechDialogJQ = $(dialog.domElement);
+        let url: string = dialog.getTextInputValue();
+        console.log("Load. team: " + team + " URL: " + url);
+
+        let doneHandler = function (data: any) {
+          (dialog as AddMechDialog).loadedSmurfyLoadout = data;
+          let smurfyMechData = MechModel.getSmurfyMechData((dialog as AddMechDialog).loadedSmurfyLoadout.mech_id);
+          let mechTranslatedName = smurfyMechData.translated_name;
+          let mechName = smurfyMechData.name;
+          let resultJQ = $(dialog.getResultPanel())
+            .removeClass("error")
+            .empty();
+          let loadedMechPanel = new LoadedMechPanel(resultJQ.get(0), (dialog as AddMechDialog).loadedSmurfyLoadout);
+          dialog.okButton.enable();
+        };
+        let failHandler = function () {
+          $(dialog.getResultPanel())
+            .addClass("error")
+            .html("Failed to load " + url);
+        };
+        let alwaysHandler = function () {
+          dialog.loadButton.enable();
+          dialog.loadButton.removeClass("loading");
+          dialog.loadButton.setHtml("Load");
+        };
+        let loadMechPromise = MechModel.loadSmurfyMechLoadoutFromURL(url);
+        if (loadMechPromise) {
+          $(dialog.getResultPanel())
+            .removeClass("error")
+            .html("Loading url : " + url);
+          dialog.loadButton.disable();
+          dialog.loadButton.addClass("loading");
+          dialog.loadButton.setHtml("Loading...");
+          loadMechPromise
+            .then(doneHandler)
+            .catch(failHandler)
+            .then(alwaysHandler);
+        } else {
+          $(dialog.getResultPanel())
+            .addClass("error")
+            .text("Invalid smurfy URL. Expected format is 'http://mwo.smurfy-net.de/mechlab#i=mechid&l=loadoutid'");
+          dialog.loadButton.enable();
+          dialog.loadButton.removeClass("loading");
+          dialog.loadButton.setHtml("Load");
+          console.error("Invalid smurfy url");
+        }
       }
     }
   }
-  var addMechDialogLoadHandler: ClickHandler; //set on dialog creation, singleton
 
-  let SMURFY_BASE_URL = "http://mwo.smurfy-net.de/mechlab#";
-  var createLoadedMechPanel =
-    function (containerElem: Element,
-              smurfyMechLoadout: SmurfyMechLoadout)
-              : void {
+  class LoadedMechPanel {
+    private static readonly SMURFY_BASE_URL = "http://mwo.smurfy-net.de/mechlab#";
+    constructor(containerElem: Element,
+              smurfyMechLoadout: SmurfyMechLoadout) {
       let loadedMechDiv = MechViewWidgets.cloneTemplate("loadedMech-template");
       let loadedMechJQ = $(loadedMechDiv)
         .removeAttr("id")
@@ -215,7 +149,7 @@ namespace MechViewAddMech {
       //Mech name and link
       let smurfyMechData = MechModel.getSmurfyMechData(smurfyMechId);
       let mechLinkJQ = $("<a></a>")
-        .attr("href", `${SMURFY_BASE_URL}i=${smurfyMechId}&l=${smurfyLoadoutId}`)
+        .attr("href", `${LoadedMechPanel.SMURFY_BASE_URL}i=${smurfyMechId}&l=${smurfyLoadoutId}`)
         .attr("target", "_blank")
         .attr("rel", "noopener")
         .text(smurfyMechData.translated_name);
@@ -229,9 +163,9 @@ namespace MechViewAddMech {
       let heatsink: string = `${mechStats.heatsinks} HS`;
       loadedMechJQ
         .find("[class~=mechEquipment]")
-        .append(loadedMechSpan(mechSpeed, "equipment"))
-        .append(loadedMechSpan(mechEngine, "equipment"))
-        .append(loadedMechSpan(heatsink, "equipment"));
+        .append(this.loadedMechSpan(mechSpeed, "equipment"))
+        .append(this.loadedMechSpan(mechEngine, "equipment"))
+        .append(this.loadedMechSpan(heatsink, "equipment"));
 
       //Mech armament
       for (let weapon of smurfyMechLoadout.stats.armaments) {
@@ -239,20 +173,19 @@ namespace MechViewAddMech {
         let weaponType = smurfyWeaponData.type;
         loadedMechJQ
           .find("[class~=mechArmament]")
-          .append(loadedMechWeaponSpan(weapon.name, weapon.count, weaponType));
+          .append(this.loadedMechWeaponSpan(weapon.name, weapon.count, weaponType));
       }
     }
 
-  var loadedMechSpan = function (text: string, spanClass: string): JQuery {
-    let span = MechViewWidgets.cloneTemplate("loadedMechInfo-template");
-    return $(span)
-      .addClass(spanClass)
-      .text(text);
-  }
+    private loadedMechSpan(text: string, spanClass: string): JQuery {
+      let span = MechViewWidgets.cloneTemplate("loadedMechInfo-template");
+      return $(span)
+        .addClass(spanClass)
+        .text(text);
+    }
 
-  var loadedMechWeaponSpan =
-    function (name: string, count: number, type: string): JQuery {
-      let numberClass = loadedMechWeaponClass(type);
+    private loadedMechWeaponSpan(name: string, count: number, type: string): JQuery {
+      let numberClass = this.loadedMechWeaponClass(type);
       let weaponSpan = MechViewWidgets.cloneTemplate("loadedMechWeapon-template");
       let ret = $(weaponSpan);
       ret.find(".weaponName")
@@ -263,18 +196,33 @@ namespace MechViewAddMech {
       return ret;
     }
 
-  var loadedMechWeaponClass = function (smurfyType: string): string {
-    if (smurfyType === "BALLISTIC") {
-      return "ballistic";
-    } else if (smurfyType === "BEAM") {
-      return "beam";
-    } else if (smurfyType === "MISSLE") {//sic
-      return "missile";
-    } else if (smurfyType === "AMS") {
-      return "ams";
-    } else {
-      console.warn("Unexpected weapon type: " + smurfyType);
-      return "";
+    private loadedMechWeaponClass(smurfyType: string): string {
+      if (smurfyType === "BALLISTIC") {
+        return "ballistic";
+      } else if (smurfyType === "BEAM") {
+        return "beam";
+      } else if (smurfyType === "MISSLE") {//sic
+        return "missile";
+      } else if (smurfyType === "AMS") {
+        return "ams";
+      } else {
+        console.warn("Unexpected weapon type: " + smurfyType);
+        return "";
+      }
     }
   }
+
+  export var showAddMechDialog = function (team: Team): void {
+    let addMechDialog = new AddMechDialog(team);
+    MechViewWidgets.setModal(addMechDialog.domElement, "addMech");
+
+    MechViewWidgets.showModal();
+
+    $(addMechDialog.getTextInput()).focus();
+  }
+
+  export var hideAddMechDialog = function (team: Team): void {
+    MechViewWidgets.hideModal("addMech");
+  }
+
 }

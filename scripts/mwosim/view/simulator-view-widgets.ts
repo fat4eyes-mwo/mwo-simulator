@@ -72,6 +72,8 @@ namespace MechViewWidgets {
     return "rgb(" + red + ","  + green + "," + blue + ")";
   }
 
+  export type ClickHandler = () => void;
+
   //Widgets that are stored in the dom using StoreValue.storeToElement
   //Would be better as a mixin, but initializing mixin classes is still syntactically messy,
   //so keep it a superclass
@@ -308,6 +310,65 @@ namespace MechViewWidgets {
     }
   }
 
+  export abstract class LoadFromURLDialog extends MechViewWidgets.DomStoredWidget {
+    static readonly DomKey = "mwosim.LoadFromURLDialog.uiObject";
+    okButton: Button;
+    cancelButton: Button;
+    loadButton: Button;
+    dialogId: string;
+    constructor(loadDialogTemplate: string, dialogId: string) {
+      let loadDialogDiv = MechViewWidgets.cloneTemplate(loadDialogTemplate);
+      super(loadDialogDiv);
+      this.storeToDom(LoadFromURLDialog.DomKey);
+
+      this.dialogId = dialogId;
+      let thisJQ = $(loadDialogDiv)
+        .attr("id", dialogId);
+
+      let resultPanelJQ = thisJQ.find(".resultPanel");
+      resultPanelJQ
+        .removeClass("error")
+        .empty()
+        .on("animationend", function (data) {
+          resultPanelJQ.removeClass("error");
+          resultPanelJQ.off("animationend");
+        });
+
+      let okButtonHandler = this.createOkButtonHandler(this);
+      let cancelButtonHandler = this.createCancelButtonHandler(this);
+      let loadButtonHandler = this.createLoadButtonHandler(this);
+
+      let okButtonJQ = thisJQ.find(".okButton");
+      this.okButton =
+        new MechViewWidgets.Button(okButtonJQ.get(0), okButtonHandler);
+
+      let cancelButtonJQ = thisJQ.find(".cancelButton");
+      this.cancelButton =
+        new MechViewWidgets.Button(cancelButtonJQ.get(0), cancelButtonHandler);
+
+      let loadButtonJQ = thisJQ.find(".loadButton");
+      this.loadButton =
+        new MechViewWidgets.Button(loadButtonJQ.get(0), loadButtonHandler);
+
+      this.okButton.disable();
+    }
+
+    abstract createOkButtonHandler(dialog: LoadFromURLDialog): ClickHandler;
+    abstract createCancelButtonHandler(dialog: LoadFromURLDialog): ClickHandler;
+    abstract createLoadButtonHandler(dialog: LoadFromURLDialog): ClickHandler;
+
+    getTextInput(): Element {
+      return $(this.domElement).find(".textInput").get(0);
+    }
+
+    getTextInputValue(): string {
+      return $(this.domElement).find(".textInput").val() as string;
+    }
+
+    getResultPanel(): Element {
+      return $(this.domElement).find(".resultPanel").get(0);
+    }
+  }
   //Clones a template and returns the first element of the template
   export var cloneTemplate = function(templateName : string) : Element {
     let template : HTMLTemplateElement =

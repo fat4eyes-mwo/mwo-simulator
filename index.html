@@ -409,22 +409,40 @@
       <span class="mechPip">&#9632;</span>
     </template>
 
-    <!-- Add mech dialog template -->
-    <template id="addMechDialog-template">
-      <div class="addMechDialog">
+    <!-- loadFromURLDialog 'abstract' template. All templates used by classes that derive from 
+      LoadFromURLDialog should at least have these elements-->
+    <template id="loadFromURLDialog-abstract-template">
+      <div class="loadFromURLDialog">
         <div class="row">
-          <h3 class="addMechDialogTitle">Import loadout from smurfy</h3>
+          <input type="url" class="textInput">
+          <div class="loadButton button">Load</div>
         </div>
-        <div class="row">
-          <input type="url" class="addMechDialog-text column column-10" placeholder="Paste Smurfy URL here">
-          <div class="addMechDialog-load button column column-2">Load</div>
-        </div>
-        <div class="addMechDialog-result row">
+        <div class="resultPanel row">
           &nbsp;
         </div>
         <div class="okCancelButtons row">
-          <div class="addMechDialog-cancel button">Cancel</div>
-          <div class="addMechDialog-ok button">OK</div>
+          <div class="cancelButton button">Cancel</div>
+          <div class="okButton button">OK</div>
+        </div>
+      </div>
+    </template>
+
+    <!-- Add mech dialog template -->
+    <template id="loadFromURLDialog-addMech-template">
+      <div class="loadFromURLDialog addMechDialog">
+        <div class="row">
+          <h3 class="title">Import loadout from smurfy</h3>
+        </div>
+        <div class="row">
+          <input type="url" class="textInput column column-10" placeholder="Paste Smurfy URL here">
+          <div class="loadButton button column column-2">Load</div>
+        </div>
+        <div class="resultPanel row">
+          &nbsp;
+        </div>
+        <div class="okCancelButtons row">
+          <div class="cancelButton button">Cancel</div>
+          <div class="okButton button">OK</div>
         </div>
       </div>
     </template>

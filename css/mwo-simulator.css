@@ -942,15 +942,15 @@ a:hover {
   margin-top: 5%;
 }
 
-.addMechDialog.blue .addMechDialogTitle {
+.addMechDialog.blue .title {
   color: dodgerblue;
 }
 
-.addMechDialog.red .addMechDialogTitle {
+.addMechDialog.red .title {
   color: #c83232;
 }
 
-.addMechDialog-text {
+.loadFromURLDialog .textInput {
   border-radius: 3px;
   border: solid thin gold;
   padding: 3px;
@@ -958,7 +958,7 @@ a:hover {
   float: none;
 }
 
-.addMechDialog-result {
+.loadFromURLDialog .resultPanel {
   margin: 3px;
 }
 
@@ -1005,11 +1005,11 @@ a:hover {
   }
 }
 
-.addMechDialog-load {
+.loadFromURLDialog .loadButton {
   float: right;
 }
 
-.addMechDialog-load.loading {
+.loadFromURLDialog .loadButton.loading {
   cursor: none;
   animation-duration: 1s;
   animation-name: buttonglow;
@@ -1017,15 +1017,15 @@ a:hover {
   opacity: 1;
 }
 
-.addMechDialog-ok, .addMechDialog-cancel {
+.loadFromURLDialog .okButton, .loadFromURLDialog .cancelButton {
   float: right;
 }
 
-.addMechDialog-result {
+.loadFromURLDialog .resultPanel {
   word-wrap: break-word;
 }
 
-.addMechDialog-result.error {
+.loadFromURLDialog .resultPanel.error {
   animation-duration: 0.5s;
   animation-name: errorblink;
   animation-iteration-count: 1;
