@@ -9,7 +9,11 @@
             "type": "shell",
             "problemMatcher": [
                 "$tsc"
-            ]
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         }
     ]
 }
