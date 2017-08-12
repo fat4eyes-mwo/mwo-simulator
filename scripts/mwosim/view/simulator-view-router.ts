@@ -36,6 +36,11 @@ namespace MechViewRouter {
   interface PersistedMechState {
     smurfyId : string,
     smurfyLoadoutId : string,
+    skills? : PersistedSkillState,
+  }
+  interface PersistedSkillState {
+    type : string,
+    state : string,
   }
   class AppState {
     range : number;
@@ -63,10 +68,14 @@ namespace MechViewRouter {
             let mechInfo = mech.getMechState().mechInfo;
             let smurfyId = mechInfo.smurfyMechId;
             let smurfyLoadoutId = mechInfo.smurfyLoadoutId;
-            this.teams[team].push({
+            let teamEntry : PersistedMechState = {
               "smurfyId" : smurfyId,
               "smurfyLoadoutId" : smurfyLoadoutId,
-            });
+            };
+            if (mechInfo.skillState) {
+              teamEntry.skills = mechInfo.skillState;
+            }
+            this.teams[team].push(teamEntry);
           }
         }
       }
@@ -88,10 +97,13 @@ namespace MechViewRouter {
       for (let team of teamList) {
         ret.teams[team] = [];
         for (let teamEntry of this.teams[team]) {
-          let newTeamEntry = {
+          let newTeamEntry : PersistedMechState = {
             "smurfyId" : teamEntry.smurfyId,
             "smurfyLoadoutId" : teamEntry.smurfyLoadoutId
           };
+          if (teamEntry.skills) {
+            newTeamEntry.skills = teamEntry.skills;
+          }
           ret.teams[team].push(newTeamEntry);
         }
       }
@@ -229,29 +241,48 @@ namespace MechViewRouter {
     let promiseToEntryMap = new Map<Promise<any>, CombinedListEntry>();
     let combinedTeamPromiseList = combinedTeamList.map(function(combinedTeamEntry) {
       let mechEntry = combinedTeamEntry.mechEntry;
+
+      let mechAndSkillPromises : Array<Promise<any>> = [];
       let loadMechPromise =
         MechModel.loadSmurfyMechLoadoutFromID(mechEntry.smurfyId,
                                               mechEntry.smurfyLoadoutId);
-      promiseToEntryMap.set(loadMechPromise, combinedTeamEntry);
-      return loadMechPromise;
+      mechAndSkillPromises.push(loadMechPromise);
+      if (mechEntry.skills) {
+        let skillLoader = MechModelSkills.getSkillLoader(mechEntry.skills.type);
+        let loadSkillsPromise = skillLoader.loadSkillsFromState(mechEntry.skills.state);
+        mechAndSkillPromises.push(loadSkillsPromise);
+      }
+
+      let combinedPromise = Promise.all(mechAndSkillPromises);
+      
+      promiseToEntryMap.set(combinedPromise, combinedTeamEntry);
+      return combinedPromise;
     });
 
     let retPromise = combinedTeamPromiseList.reduce(function(prevPromise, currPromise) {
       return prevPromise.then(function() {
           return currPromise.then(function(data) {
             //immediate action on loading a mech
-            let smurfyLoadout = data;
+            let smurfyLoadout = data[0];
             let combinedTeamEntry = promiseToEntryMap.get(currPromise);
             let team = combinedTeamEntry.team;
             let mechIdx = combinedTeamEntry.index;
             let mechId = MechModel.generateMechId(smurfyLoadout);
-            MechModel.addMechAtIndex(mechId, team, smurfyLoadout, mechIdx);
+            let newMech = MechModel.addMechAtIndex(mechId, team, smurfyLoadout, mechIdx);
+            if (combinedTeamEntry.mechEntry.skills) {
+              let skillData = data[1];
+              let skillState = combinedTeamEntry.mechEntry.skills;
+              newMech.setSkillState(skillState);
+              let skillLoader = MechModelSkills.getSkillLoader(skillState.type);
+              let skillQuirks = skillLoader.convertDataToMechQuirks(skillData, mechId);
+              newMech.applySkillQuirks(skillQuirks);
+            }
             currMechsLoaded++;
             MechView.updateLoadingScreenProgress(currMechsLoaded / totalMechsToLoad);
             return data;
           });
       });
-    }, Promise.resolve());
+    }, Promise.resolve([]));
 
     return retPromise;
   }

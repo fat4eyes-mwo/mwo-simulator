@@ -1,33 +1,71 @@
 namespace MechModelSkills {
-  export interface KitlaanURLComponents {
-    urlPrefix: string,
-    hash: string
+  type MechQuirk = MechModelQuirks.MechQuirk;
+  export interface SkillState {
+    type: string,
+    state: string,
   }
-  export class KitlaanSkillLoader {
+  export interface SkillLoader {
+    loadSkillsFromState(state: string): Promise<any>;
+    loadSkillsFromURL(url: string): Promise<any>;
+    getSkillState(): SkillState;
+    convertDataToMechQuirks(data: any, mechId: string) : MechQuirk[];
+  }
+
+  export var getSkillLoader = function (type: string): SkillLoader {
+    if (type === KitlaanSkillLoader.type) {
+      return new KitlaanSkillLoader();
+    }
+    throw Error("Unexpected skill type : " + type);
+  }
+
+  interface KitlaanURLComponents {
+    urlPrefix: string,
+    hash: string,
+    state: string,
+  }
+  class KitlaanSkillLoader implements SkillLoader {
     private static readonly KITLAAN_PREFIX = "https://kitlaan.gitlab.io/mwoskill/archive/json/";
     private static readonly JSON_BIN_PREFIX = "https://jsonbin.io/b/";
+    public static readonly type = "kitlaan";
+    private state: string;
+
     constructor() {
       //nothing yet
     }
 
-    parseURL(url: string): KitlaanURLComponents {
+    private parseURL(url: string): KitlaanURLComponents {
       let matcher = /^https:\/\/kitlaan\.gitlab\.io\/mwoskill\/\?p=([^&]+).*$/
       let match = matcher.exec(url);
       if (!match) {
         return null;
       }
+      let state = match[1];
+      return this.parseState(state);
+    }
+
+    private parseState(state: string): KitlaanURLComponents {
       let urlPrefix = null;
-      let hash = match[1];
       const JsonBinMarkerPrefix = "jsonbin1.";
-      if (hash.startsWith(JsonBinMarkerPrefix)) {
-        hash = hash.substring(JsonBinMarkerPrefix.length);
+      let hash;
+      if (state.startsWith(JsonBinMarkerPrefix)) {
+        hash = state.substring(JsonBinMarkerPrefix.length);
         urlPrefix = KitlaanSkillLoader.JSON_BIN_PREFIX;
       } else {
+        hash = state;
         urlPrefix = KitlaanSkillLoader.KITLAAN_PREFIX;
       }
       return {
-        urlPrefix, hash
+        urlPrefix, hash, state
       };
+    }
+
+    loadSkillsFromState(state: string): Promise<any> {
+      let urlComponents = this.parseState(state);
+      if (!urlComponents) {
+        return null;
+      }
+      this.state = urlComponents.state;
+      return this.createLoadPromise(urlComponents);
     }
 
     loadSkillsFromURL(url: string): Promise<any> {
@@ -35,7 +73,18 @@ namespace MechModelSkills {
       if (!urlComponents) {
         return null;
       }
+      this.state = urlComponents.state;
+      return this.createLoadPromise(urlComponents);
+    }
 
+    getSkillState(): SkillState {
+      return {
+        type: KitlaanSkillLoader.type,
+        state: this.state,
+      }
+    }
+
+    private createLoadPromise(urlComponents: KitlaanURLComponents) {
       return new Promise(function (resolve: (data: any) => any, reject: (data: any) => any) {
         $.ajax({
           url: urlComponents.urlPrefix + urlComponents.hash,
@@ -49,6 +98,35 @@ namespace MechModelSkills {
             reject(Error(err));
           })
       });
+    }
+
+    convertDataToMechQuirks(
+      kitlaanData: ExternalSkillTrees.KitlaanSkillTree,
+      mechId: string)
+      : MechQuirk[] {
+      let skillQuirks: MechModelQuirks.MechQuirkList = new MechModelQuirks.MechQuirkList();
+      for (let category in kitlaanData.selected) {
+        if (!kitlaanData.selected.hasOwnProperty(category)) {
+          continue;
+        }
+        let kitlaanCategorySkills = kitlaanData.selected[category];
+
+        for (let kitlaanSkill of kitlaanCategorySkills) {
+          let kitlaanName = kitlaanSkill[0];
+          let skillName = ExternalSkillTrees._KitlaanSkillNameMap[kitlaanName];
+          let mech = MechModel.getMechFromId(mechId);
+          let mechQuirks = MechModelQuirks.convertSkillToMechQuirks(skillName, mech.getMechInfo());
+          if (mechQuirks) {
+            skillQuirks.addQuirkList(mechQuirks);
+          } else {
+            console.warn(Error("No quirks found for " + kitlaanName));
+          }
+        }
+      }
+      skillQuirks.sort(function (quirkA: MechQuirk, quirkB: MechQuirk): number {
+        return quirkA.translated_name.localeCompare(quirkB.translated_name);
+      });
+      return skillQuirks;
     }
   }
 }

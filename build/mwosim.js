@@ -8939,6 +8939,12 @@ var MechModelQuirks;
 })(MechModelQuirks || (MechModelQuirks = {}));
 var MechModelSkills;
 (function (MechModelSkills) {
+    MechModelSkills.getSkillLoader = function (type) {
+        if (type === KitlaanSkillLoader.type) {
+            return new KitlaanSkillLoader();
+        }
+        throw Error("Unexpected skill type : " + type);
+    };
     class KitlaanSkillLoader {
         constructor() {
             //nothing yet
@@ -8949,25 +8955,48 @@ var MechModelSkills;
             if (!match) {
                 return null;
             }
+            let state = match[1];
+            return this.parseState(state);
+        }
+        parseState(state) {
             let urlPrefix = null;
-            let hash = match[1];
             const JsonBinMarkerPrefix = "jsonbin1.";
-            if (hash.startsWith(JsonBinMarkerPrefix)) {
-                hash = hash.substring(JsonBinMarkerPrefix.length);
+            let hash;
+            if (state.startsWith(JsonBinMarkerPrefix)) {
+                hash = state.substring(JsonBinMarkerPrefix.length);
                 urlPrefix = KitlaanSkillLoader.JSON_BIN_PREFIX;
             }
             else {
+                hash = state;
                 urlPrefix = KitlaanSkillLoader.KITLAAN_PREFIX;
             }
             return {
-                urlPrefix, hash
+                urlPrefix, hash, state
             };
+        }
+        loadSkillsFromState(state) {
+            let urlComponents = this.parseState(state);
+            if (!urlComponents) {
+                return null;
+            }
+            this.state = urlComponents.state;
+            return this.createLoadPromise(urlComponents);
         }
         loadSkillsFromURL(url) {
             let urlComponents = this.parseURL(url);
             if (!urlComponents) {
                 return null;
             }
+            this.state = urlComponents.state;
+            return this.createLoadPromise(urlComponents);
+        }
+        getSkillState() {
+            return {
+                type: KitlaanSkillLoader.type,
+                state: this.state,
+            };
+        }
+        createLoadPromise(urlComponents) {
             return new Promise(function (resolve, reject) {
                 $.ajax({
                     url: urlComponents.urlPrefix + urlComponents.hash,
@@ -8982,10 +9011,35 @@ var MechModelSkills;
                 });
             });
         }
+        convertDataToMechQuirks(kitlaanData, mechId) {
+            let skillQuirks = new MechModelQuirks.MechQuirkList();
+            for (let category in kitlaanData.selected) {
+                if (!kitlaanData.selected.hasOwnProperty(category)) {
+                    continue;
+                }
+                let kitlaanCategorySkills = kitlaanData.selected[category];
+                for (let kitlaanSkill of kitlaanCategorySkills) {
+                    let kitlaanName = kitlaanSkill[0];
+                    let skillName = ExternalSkillTrees._KitlaanSkillNameMap[kitlaanName];
+                    let mech = MechModel.getMechFromId(mechId);
+                    let mechQuirks = MechModelQuirks.convertSkillToMechQuirks(skillName, mech.getMechInfo());
+                    if (mechQuirks) {
+                        skillQuirks.addQuirkList(mechQuirks);
+                    }
+                    else {
+                        console.warn(Error("No quirks found for " + kitlaanName));
+                    }
+                }
+            }
+            skillQuirks.sort(function (quirkA, quirkB) {
+                return quirkA.translated_name.localeCompare(quirkB.translated_name);
+            });
+            return skillQuirks;
+        }
     }
     KitlaanSkillLoader.KITLAAN_PREFIX = "https://kitlaan.gitlab.io/mwoskill/archive/json/";
     KitlaanSkillLoader.JSON_BIN_PREFIX = "https://jsonbin.io/b/";
-    MechModelSkills.KitlaanSkillLoader = KitlaanSkillLoader;
+    KitlaanSkillLoader.type = "kitlaan";
 })(MechModelSkills || (MechModelSkills = {}));
 //Weapon state classes
 var MechModelWeapons;
@@ -9781,6 +9835,9 @@ var MechModel;
         applySkillQuirks(skillQuirks) {
             this.skillQuirks = skillQuirks;
             this.initComputedValues();
+        }
+        setSkillState(skillState) {
+            this.skillState = skillState;
         }
     }
     MechModel.MechInfo = MechInfo;
@@ -11167,6 +11224,9 @@ var MechModel;
             this.mechInfo.applySkillQuirks(skillQuirks);
             this.resetMechState();
         }
+        setSkillState(skillState) {
+            this.mechInfo.setSkillState(skillState);
+        }
     }
     MechModel.Mech = Mech;
     MechModel.getMechTeam = function (team) {
@@ -11918,15 +11978,15 @@ var MechModelView;
             return null;
         }
     };
-    MechModelView.convertSkillToMechQuirks = function (skillName, mechId) {
-        let mechInfo = MechModel.getMechFromId(mechId).getMechState().mechInfo;
-        return MechModelQuirks.convertSkillToMechQuirks(skillName, mechInfo);
-    };
     MechModelView.applySkillQuirks = function (mechId, skillQuirks) {
         let mech = MechModel.getMechFromId(mechId);
         mech.applySkillQuirks(skillQuirks);
         mech.getMechState().setUpdate(UpdateType.FULL);
         MechModelView.updateMech(mech);
+    };
+    MechModelView.setSkillState = function (mechId, skillState) {
+        let mech = MechModel.getMechFromId(mechId);
+        mech.setSkillState(skillState);
     };
     MechModelView.resetModel = function () {
         MechModel.resetState();
@@ -12622,6 +12682,7 @@ var MechViewMechDetails;
                 let loadDialog = dialog;
                 if (loadDialog.loadedSkillQuirks) {
                     MechModelView.applySkillQuirks(loadDialog.mechId, loadDialog.loadedSkillQuirks);
+                    MechModelView.setSkillState(loadDialog.mechId, loadDialog.loadedSkillState);
                     loadDialog.mechSkillsPanel.render();
                     MechViewRouter.modifyAppState();
                 }
@@ -12638,11 +12699,10 @@ var MechViewMechDetails;
         }
         createLoadButtonHandler(dialog) {
             return function () {
-                //TODO: Implement async request for skills
                 let loadMechDialog = dialog;
-                let kitlaanLoader = new MechModelSkills.KitlaanSkillLoader();
+                let skillLoader = MechModelSkills.getSkillLoader("kitlaan");
                 let url = dialog.getTextInputValue();
-                let loadPromise = kitlaanLoader.loadSkillsFromURL(url);
+                let loadPromise = skillLoader.loadSkillsFromURL(url);
                 let resultJQ = $(dialog.getResultPanel());
                 if (!loadPromise) {
                     resultJQ
@@ -12657,8 +12717,9 @@ var MechViewMechDetails;
                 loadPromise
                     .then(function (data) {
                     let kitlaanData = data;
-                    let skillQuirks = loadMechDialog.convertKitlaanDataToMechQuirks(kitlaanData);
+                    let skillQuirks = skillLoader.convertDataToMechQuirks(kitlaanData, loadMechDialog.mechId);
                     loadMechDialog.loadedSkillQuirks = skillQuirks;
+                    loadMechDialog.loadedSkillState = skillLoader.getSkillState();
                     loadMechDialog.skillListPanel.setQuirks(skillQuirks);
                     loadMechDialog.skillListPanel.render();
                     loadMechDialog.okButton.enable();
@@ -12674,30 +12735,6 @@ var MechViewMechDetails;
                     console.log("Kitlaan load done.");
                 });
             };
-        }
-        convertKitlaanDataToMechQuirks(kitlaanData) {
-            let skillQuirks = new MechModelQuirks.MechQuirkList();
-            for (let category in kitlaanData.selected) {
-                if (!kitlaanData.selected.hasOwnProperty(category)) {
-                    continue;
-                }
-                let kitlaanCategorySkills = kitlaanData.selected[category];
-                for (let kitlaanSkill of kitlaanCategorySkills) {
-                    let kitlaanName = kitlaanSkill[0];
-                    let skillName = ExternalSkillTrees._KitlaanSkillNameMap[kitlaanName];
-                    let mechQuirks = MechModelView.convertSkillToMechQuirks(skillName, this.mechId);
-                    if (mechQuirks) {
-                        skillQuirks.addQuirkList(mechQuirks);
-                    }
-                    else {
-                        console.warn(Error("No quirks found for " + kitlaanName));
-                    }
-                }
-            }
-            skillQuirks.sort(function (quirkA, quirkB) {
-                return quirkA.translated_name.localeCompare(quirkB.translated_name);
-            });
-            return skillQuirks;
         }
     }
     LoadMechSkillsDialog.DialogId = "loadMechSkillsDialog";
@@ -13521,10 +13558,14 @@ var MechViewRouter;
                         let mechInfo = mech.getMechState().mechInfo;
                         let smurfyId = mechInfo.smurfyMechId;
                         let smurfyLoadoutId = mechInfo.smurfyLoadoutId;
-                        this.teams[team].push({
+                        let teamEntry = {
                             "smurfyId": smurfyId,
                             "smurfyLoadoutId": smurfyLoadoutId,
-                        });
+                        };
+                        if (mechInfo.skillState) {
+                            teamEntry.skills = mechInfo.skillState;
+                        }
+                        this.teams[team].push(teamEntry);
                     }
                 }
             }
@@ -13549,6 +13590,9 @@ var MechViewRouter;
                         "smurfyId": teamEntry.smurfyId,
                         "smurfyLoadoutId": teamEntry.smurfyLoadoutId
                     };
+                    if (teamEntry.skills) {
+                        newTeamEntry.skills = teamEntry.skills;
+                    }
                     ret.teams[team].push(newTeamEntry);
                 }
             }
@@ -13668,26 +13712,42 @@ var MechViewRouter;
         let promiseToEntryMap = new Map();
         let combinedTeamPromiseList = combinedTeamList.map(function (combinedTeamEntry) {
             let mechEntry = combinedTeamEntry.mechEntry;
+            let mechAndSkillPromises = [];
             let loadMechPromise = MechModel.loadSmurfyMechLoadoutFromID(mechEntry.smurfyId, mechEntry.smurfyLoadoutId);
-            promiseToEntryMap.set(loadMechPromise, combinedTeamEntry);
-            return loadMechPromise;
+            mechAndSkillPromises.push(loadMechPromise);
+            if (mechEntry.skills) {
+                let skillLoader = MechModelSkills.getSkillLoader(mechEntry.skills.type);
+                let loadSkillsPromise = skillLoader.loadSkillsFromState(mechEntry.skills.state);
+                mechAndSkillPromises.push(loadSkillsPromise);
+            }
+            let combinedPromise = Promise.all(mechAndSkillPromises);
+            promiseToEntryMap.set(combinedPromise, combinedTeamEntry);
+            return combinedPromise;
         });
         let retPromise = combinedTeamPromiseList.reduce(function (prevPromise, currPromise) {
             return prevPromise.then(function () {
                 return currPromise.then(function (data) {
                     //immediate action on loading a mech
-                    let smurfyLoadout = data;
+                    let smurfyLoadout = data[0];
                     let combinedTeamEntry = promiseToEntryMap.get(currPromise);
                     let team = combinedTeamEntry.team;
                     let mechIdx = combinedTeamEntry.index;
                     let mechId = MechModel.generateMechId(smurfyLoadout);
-                    MechModel.addMechAtIndex(mechId, team, smurfyLoadout, mechIdx);
+                    let newMech = MechModel.addMechAtIndex(mechId, team, smurfyLoadout, mechIdx);
+                    if (combinedTeamEntry.mechEntry.skills) {
+                        let skillData = data[1];
+                        let skillState = combinedTeamEntry.mechEntry.skills;
+                        newMech.setSkillState(skillState);
+                        let skillLoader = MechModelSkills.getSkillLoader(skillState.type);
+                        let skillQuirks = skillLoader.convertDataToMechQuirks(skillData, mechId);
+                        newMech.applySkillQuirks(skillQuirks);
+                    }
                     currMechsLoaded++;
                     MechView.updateLoadingScreenProgress(currMechsLoaded / totalMechsToLoad);
                     return data;
                 });
             });
-        }, Promise.resolve());
+        }, Promise.resolve([]));
         return retPromise;
     };
     //Called to let the router know that the app state has changed

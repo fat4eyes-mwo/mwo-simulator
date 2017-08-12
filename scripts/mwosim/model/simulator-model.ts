@@ -58,6 +58,7 @@ namespace MechModel  {
     heatsinkInfoList : Heatsink[];
     ammoBoxList : AmmoBox[];
     engineInfo : EngineInfo;
+    skillState : MechModelSkills.SkillState;
     //NOTE: DO NOT ACCESS THIS MEMBER'S FIELDS. It is here only to reconstruct the data in applySkillQuirks
     smurfyMechLoadout : SmurfyMechLoadout; 
 
@@ -101,6 +102,10 @@ namespace MechModel  {
     applySkillQuirks(skillQuirks : MechQuirk[]) {
       this.skillQuirks = skillQuirks;
       this.initComputedValues();
+    }
+
+    setSkillState(skillState : MechModelSkills.SkillState) {
+      this.skillState = skillState;
     }
   }
 
@@ -1770,6 +1775,9 @@ namespace MechModel  {
     applySkillQuirks(skillQuirks : MechQuirk[]) {
       this.mechInfo.applySkillQuirks(skillQuirks);
       this.resetMechState();
+    }
+    setSkillState(skillState : MechModelSkills.SkillState) {
+      this.mechInfo.setSkillState(skillState);
     }
   }
 
