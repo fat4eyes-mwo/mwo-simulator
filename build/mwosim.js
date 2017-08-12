@@ -8677,7 +8677,9 @@ var MechModelQuirks;
                 "cooldown",
                 "heat",
                 "duration",
+                "falldamage",
                 "jamchance",
+                "jamduration",
                 "receiving",
             ];
             let quirkTypeNameComponent = quirkNameComponents[endIdx - 1];
@@ -8691,22 +8693,10 @@ var MechModelQuirks;
     }
     const CompleteOmnipodSetCount = 8;
     MechModelQuirks.collectOmnipodQuirks = function (smurfyMechLoadout) {
-        let ret = [];
-        let seenQuirkMap = new Map();
+        let ret = new MechQuirkList();
         if (!MechModel.isOmnimech(smurfyMechLoadout)) {
             return ret;
         }
-        var addQuirk = function (smurfyQuirk) {
-            let mechQuirk = seenQuirkMap.get(smurfyQuirk.name);
-            if (!mechQuirk) {
-                mechQuirk = new MechQuirkInfo(smurfyQuirk);
-                ret.push(mechQuirk);
-                seenQuirkMap.set(mechQuirk.name, mechQuirk);
-            }
-            else {
-                mechQuirk.value = mechQuirk.value + Number(smurfyQuirk.value);
-            }
-        };
         let omnipodSetCounts = new Map(); //omnipodId -> count
         var incrementOmnipodSet = function (setName) {
             let setCount = omnipodSetCounts.get(setName);
@@ -8724,7 +8714,7 @@ var MechModelQuirks;
                 let omnipodData = MechModel.getSmurfyOmnipodData(omnipodId);
                 let omnipodQuirks = omnipodData.configuration.quirks;
                 for (let smurfyQuirk of omnipodQuirks) {
-                    addQuirk(smurfyQuirk);
+                    ret.addQuirk(new MechQuirkInfo(smurfyQuirk));
                 }
                 let setName = omnipodData.details.set;
                 incrementOmnipodSet(setName);
@@ -8735,7 +8725,7 @@ var MechModelQuirks;
         let ctOmnipod = MechModel.getSmurfyCTOmnipod(smurfyMechInfo.name);
         if (ctOmnipod) {
             for (let smurfyQuirk of ctOmnipod.configuration.quirks) {
-                addQuirk(smurfyQuirk);
+                ret.addQuirk(new MechQuirkInfo(smurfyQuirk));
             }
             let omnipodSetName = ctOmnipod.details.set;
             incrementOmnipodSet(omnipodSetName);
@@ -8744,7 +8734,7 @@ var MechModelQuirks;
             if (setCount >= CompleteOmnipodSetCount) {
                 let fullSetQuirks = AddedData._AddedOmnipodData[omnipodSetName].setBonusQuirks;
                 for (let smurfyQuirk of fullSetQuirks) {
-                    addQuirk(smurfyQuirk);
+                    ret.addQuirk(new MechQuirkInfo(smurfyQuirk));
                 }
             }
         }
@@ -8855,6 +8845,77 @@ var MechModelQuirks;
         }
         return ret;
     };
+    const factionNameMap = {
+        "InnerSphere": "IS",
+        "IS": "IS",
+        "Clan": "Clan",
+    };
+    MechModelQuirks.convertSkillToMechQuirks = function (skillName, mechInfo) {
+        let ret = new MechQuirkList();
+        let skillNode = AddedData._SkillTreeData[skillName];
+        for (let effect of skillNode.effects) {
+            let name = effect.quirkName;
+            let value = 0;
+            let matched = false;
+            for (let effectValue of effect.quirkValues) {
+                if (effectValue.faction) {
+                    if (factionNameMap[effectValue.faction] !== factionNameMap[mechInfo.faction]) {
+                        continue;
+                    }
+                }
+                if (effectValue.weightClass) {
+                    if (effectValue.weightClass.toLowerCase !== mechInfo.mechType.toLowerCase) {
+                        continue;
+                    }
+                }
+                if (effectValue.tonnage) {
+                    if (Number(effectValue.tonnage) !== Number(mechInfo.tons)) {
+                        continue;
+                    }
+                }
+                //matched
+                matched = true;
+                value += Number(effectValue.quirkValue);
+                break;
+            }
+            if (matched) {
+                let effectQuirk = {
+                    name,
+                    value,
+                    translated_name: effect.quirkTranslatedName
+                };
+                let mechQuirk = new MechQuirkInfo(effectQuirk);
+                ret.addQuirk(mechQuirk);
+            }
+        }
+        if (ret.length === 0) {
+            console.warn(Error("Unable to match skill: " + skillName));
+        }
+        return ret;
+    };
+    class MechQuirkList extends Array {
+        constructor() {
+            super();
+            this.quirkNameMap = new Map();
+        }
+        //adds a quirk, merging it with a quirk already nthe list if it has the same name
+        addQuirk(quirk) {
+            if (!(this.quirkNameMap.get(quirk.name))) {
+                this.quirkNameMap.set(quirk.name, quirk);
+                this.push(quirk);
+            }
+            else {
+                let quirkInList = this.quirkNameMap.get(quirk.name);
+                quirkInList.value = Number(quirkInList.value) + Number(quirk.value);
+            }
+        }
+        addQuirkList(quirks) {
+            for (let quirk of quirks) {
+                this.addQuirk(quirk);
+            }
+        }
+    }
+    MechModelQuirks.MechQuirkList = MechQuirkList;
 })(MechModelQuirks || (MechModelQuirks = {}));
 //Weapon state classes
 var MechModelWeapons;
@@ -9619,6 +9680,8 @@ var MechModel;
             this.mechName = smurfyMechData.name;
             this.mechTranslatedName = smurfyMechData.translated_name;
             this.tons = Number(smurfyMechData.details.tons);
+            this.mechType = smurfyMechData.mech_type;
+            this.faction = smurfyMechData.faction;
             //NOTE: Quirks should be set before creating WeaponInfos
             if (MechModel.isOmnimech(smurfyMechLoadout)) {
                 this.quirks = MechModelQuirks.collectOmnipodQuirks(smurfyMechLoadout);
@@ -9626,6 +9689,9 @@ var MechModel;
             else {
                 this.quirks = MechModelQuirks.collectMechQuirks(smurfyMechData);
             }
+            this.initComputedValues(smurfyMechLoadout);
+        }
+        initComputedValues(smurfyMechLoadout) {
             //NOTE: General quirk bonus must be computed before collecting heatsinks
             //(bonus is used in computing heatdissipation)
             this.generalQuirkBonus = MechModelQuirks.getGeneralBonus(this.quirks);
@@ -11753,6 +11819,10 @@ var MechModelView;
             return null;
         }
     };
+    MechModelView.convertSkillToMechQuirks = function (skillName, mechId) {
+        let mechInfo = MechModel.getMechFromId(mechId).getMechState().mechInfo;
+        return MechModelQuirks.convertSkillToMechQuirks(skillName, mechInfo);
+    };
     MechModelView.resetModel = function () {
         MechModel.resetState();
     };
@@ -12094,6 +12164,28 @@ var MechViewWidgets;
         getResultPanel() {
             return $(this.domElement).find(".resultPanel").get(0);
         }
+        setLoading(loading) {
+            if (loading) {
+                this.loadButton.disable();
+                this.loadButton.addClass("loading");
+                this.loadButton.setHtml("Loading...");
+            }
+            else {
+                this.loadButton.enable();
+                this.loadButton.removeClass("loading");
+                this.loadButton.setHtml("Load");
+            }
+        }
+        setError(error) {
+            $(this.getResultPanel())
+                .addClass("error")
+                .text(error);
+            this.okButton.disable();
+        }
+        clearError() {
+            $(this.getResultPanel())
+                .removeClass("error");
+        }
     }
     LoadFromURLDialog.DomKey = "mwosim.LoadFromURLDialog.uiObject";
     MechViewWidgets.LoadFromURLDialog = LoadFromURLDialog;
@@ -12207,42 +12299,31 @@ var MechViewAddMech;
                     let smurfyMechData = MechModel.getSmurfyMechData(dialog.loadedSmurfyLoadout.mech_id);
                     let mechTranslatedName = smurfyMechData.translated_name;
                     let mechName = smurfyMechData.name;
-                    let resultJQ = $(dialog.getResultPanel())
-                        .removeClass("error")
-                        .empty();
-                    let loadedMechPanel = new LoadedMechPanel(resultJQ.get(0), dialog.loadedSmurfyLoadout);
+                    dialog.clearError();
+                    let loadedMechPanel = new LoadedMechPanel(dialog.getResultPanel(), dialog.loadedSmurfyLoadout);
                     dialog.okButton.enable();
                 };
                 let failHandler = function () {
-                    $(dialog.getResultPanel())
-                        .addClass("error")
-                        .html("Failed to load " + url);
+                    dialog.setError("Failed to load " + url);
                 };
                 let alwaysHandler = function () {
-                    dialog.loadButton.enable();
-                    dialog.loadButton.removeClass("loading");
-                    dialog.loadButton.setHtml("Load");
+                    dialog.setLoading(false);
                 };
                 let loadMechPromise = MechModel.loadSmurfyMechLoadoutFromURL(url);
                 if (loadMechPromise) {
+                    dialog.clearError();
                     $(dialog.getResultPanel())
-                        .removeClass("error")
-                        .html("Loading url : " + url);
-                    dialog.loadButton.disable();
-                    dialog.loadButton.addClass("loading");
-                    dialog.loadButton.setHtml("Loading...");
+                        .text("Loading url : " + url);
+                    dialog.setLoading(true);
                     loadMechPromise
                         .then(doneHandler)
                         .catch(failHandler)
                         .then(alwaysHandler);
                 }
                 else {
-                    $(dialog.getResultPanel())
-                        .addClass("error")
-                        .text("Invalid smurfy URL. Expected format is 'http://mwo.smurfy-net.de/mechlab#i=mechid&l=loadoutid'");
-                    dialog.loadButton.enable();
-                    dialog.loadButton.removeClass("loading");
-                    dialog.loadButton.setHtml("Load");
+                    dialog
+                        .setError("Invalid smurfy URL. Expected format is 'http://mwo.smurfy-net.de/mechlab#i=mechid&l=loadoutid'");
+                    dialog.setLoading(false);
                     console.error("Invalid smurfy url");
                 }
             };
@@ -12385,25 +12466,9 @@ var MechViewMechDetails;
             let mechDetailsJQ = $(this.domElement);
             let mechQuirksJQ = mechDetailsJQ.find(".mechQuirkList");
             let mechQuirkList = MechModelView.getMechQuirks(this.mechId);
-            if (mechQuirkList.length === 0) {
-                let mechQuirkDiv = MechViewWidgets.cloneTemplate("mechDetailsQuirkRow-template");
-                let mechQuirkJQ = $(mechQuirkDiv);
-                mechQuirkJQ.find(".name").text("None");
-                mechQuirksJQ.append(mechQuirkJQ);
-            }
-            for (let mechQuirk of mechQuirkList) {
-                let mechQuirkDiv = MechViewWidgets.cloneTemplate("mechDetailsQuirkRow-template");
-                let mechQuirkJQ = $(mechQuirkDiv);
-                mechQuirkJQ.find(".name").text(mechQuirk.translated_name);
-                mechQuirkJQ.find(".value").text(mechQuirk.translated_value);
-                if (mechQuirk.isBonus()) {
-                    mechQuirkJQ.addClass("bonus");
-                }
-                else {
-                    mechQuirkJQ.addClass("malus");
-                }
-                mechQuirksJQ.append(mechQuirkJQ);
-            }
+            let mechQuirkListPanel = new MechQuirkListPanel(mechQuirksJQ.get(0));
+            mechQuirkListPanel.setQuirks(mechQuirkList);
+            mechQuirkListPanel.render();
         }
     }
     MechDetailsQuirks.MechDetailsQuirksDomKey = "mwosim.MechDetailsQuirks.uiObject";
@@ -12415,6 +12480,8 @@ var MechViewMechDetails;
             this.mechId = mechId;
             let loadButtonJQ = $(this.domElement).find(".loadButton");
             this.loadButton = new MechViewWidgets.Button(loadButtonJQ.get(0), this.createLoadButtonHandler(this));
+            let skillListJQ = $(this.domElement).find(".skillList");
+            this.quirkListPanel = new MechQuirkListPanel(skillListJQ.get(0));
         }
         createLoadButtonHandler(skillsPanel) {
             return function () {
@@ -12425,21 +12492,24 @@ var MechViewMechDetails;
                 $(loadSkillsDialog.getTextInput()).focus();
             };
         }
+        setSkillQuirks(quirks) {
+            this.quirkListPanel.setQuirks(quirks);
+        }
         render() {
             let skillListJQ = $(this.domElement).find(".skillList");
             skillListJQ.empty();
-            //TODO: Fill list of mech skills
-            skillListJQ.text("Skills go here");
+            this.quirkListPanel.render();
         }
     }
     MechDetailsSkills.MechDetailsSkillsDomKey = "mwosim.MechDetailsSkills.uiObject";
     class LoadMechSkillsDialog extends MechViewWidgets.LoadFromURLDialog {
         constructor(mechSkillsPanel) {
             super("loadFromURLDialog-loadSkills-template", LoadMechSkillsDialog.DialogId);
-            this.mechSkillsPanel = mechSkillsPanel;
+            this.mechId = mechSkillsPanel.mechId;
             let mechNameJQ = $(this.domElement).find(".mechName");
             let mechName = MechModelView.getMechName(mechSkillsPanel.mechId);
             mechNameJQ.text(mechName);
+            this.skillListPanel = new MechQuirkListPanel(this.getResultPanel());
         }
         createOkButtonHandler(dialog) {
             return function () {
@@ -12455,10 +12525,149 @@ var MechViewMechDetails;
         createLoadButtonHandler(dialog) {
             return function () {
                 //TODO: Implement async request for skills
+                let loadMechDialog = dialog;
+                let kitlaanLoader = new KitlaanSkillLoader();
+                let url = dialog.getTextInputValue();
+                let loadPromise = kitlaanLoader.loadSkillsFromURL(url);
+                let resultJQ = $(dialog.getResultPanel());
+                if (!loadPromise) {
+                    resultJQ
+                        .addClass("error")
+                        .text("Invalid kitlaan URL. Expected format is https://kitlaan.gitlab.io/mwoskill/?p=<skills>...");
+                    return;
+                }
+                resultJQ
+                    .removeClass("error")
+                    .text("Loading URL " + url);
+                dialog.setLoading(true);
+                loadPromise
+                    .then(function (data) {
+                    let kitlaanData = data;
+                    let skillQuirks = loadMechDialog.convertKitlaanDataToMechQuirks(kitlaanData);
+                    loadMechDialog.loadedSkillQuirks = skillQuirks;
+                    loadMechDialog.skillListPanel.setQuirks(skillQuirks);
+                    loadMechDialog.skillListPanel.render();
+                    loadMechDialog.okButton.enable();
+                    console.log("Loaded data from kitlaan: " + data);
+                })
+                    .catch(function (err) {
+                    console.error("Error loading kitlaan data: " + Error(err));
+                    dialog.setError("Error loading kitlaan data: " + Error(err));
+                    dialog.okButton.disable();
+                })
+                    .then(function (data) {
+                    //
+                    dialog.setLoading(false);
+                    console.log("Kitlaan load done.");
+                });
             };
+        }
+        convertKitlaanDataToMechQuirks(kitlaanData) {
+            let skillQuirks = new MechModelQuirks.MechQuirkList();
+            for (let category in kitlaanData.selected) {
+                if (!kitlaanData.selected.hasOwnProperty(category)) {
+                    continue;
+                }
+                let kitlaanCategorySkills = kitlaanData.selected[category];
+                for (let kitlaanSkill of kitlaanCategorySkills) {
+                    let kitlaanName = kitlaanSkill[0];
+                    let skillName = SkillTreeData._KitlaanSkillNameMap[kitlaanName];
+                    let mechQuirks = MechModelView.convertSkillToMechQuirks(skillName, this.mechId);
+                    if (mechQuirks) {
+                        skillQuirks.addQuirkList(mechQuirks);
+                    }
+                    else {
+                        console.warn(Error("No quirks found for " + kitlaanName));
+                    }
+                }
+            }
+            skillQuirks.sort(function (quirkA, quirkB) {
+                return quirkA.translated_name.localeCompare(quirkB.translated_name);
+            });
+            return skillQuirks;
         }
     }
     LoadMechSkillsDialog.DialogId = "loadMechSkillsDialog";
+    class MechQuirkListPanel extends MechViewWidgets.DomStoredWidget {
+        constructor(domElement) {
+            super(domElement);
+            this.quirkList = [];
+            this.storeToDom(MechQuirkListPanel.MechQuirkListDomKey);
+        }
+        setQuirks(skillQuirks) {
+            this.quirkList = skillQuirks;
+        }
+        render() {
+            let mechQuirksJQ = $(this.domElement);
+            mechQuirksJQ.empty();
+            if (this.quirkList.length === 0) {
+                let mechQuirkDiv = MechViewWidgets.cloneTemplate("mechDetailsQuirkRow-template");
+                let mechQuirkJQ = $(mechQuirkDiv);
+                mechQuirkJQ.find(".name").text("None");
+                mechQuirksJQ.append(mechQuirkJQ);
+            }
+            for (let mechQuirk of this.quirkList) {
+                let mechQuirkDiv = MechViewWidgets.cloneTemplate("mechDetailsQuirkRow-template");
+                let mechQuirkJQ = $(mechQuirkDiv);
+                mechQuirkJQ.find(".name").text(mechQuirk.translated_name);
+                mechQuirkJQ.find(".value").text(mechQuirk.translated_value);
+                if (mechQuirk.isBonus()) {
+                    mechQuirkJQ.addClass("bonus");
+                }
+                else {
+                    mechQuirkJQ.addClass("malus");
+                }
+                mechQuirksJQ.append(mechQuirkJQ);
+            }
+        }
+    }
+    MechQuirkListPanel.MechQuirkListDomKey = "mwosim.MechQuirkListPanel.uiObject";
+    class KitlaanSkillLoader {
+        constructor() {
+            //nothing yet
+        }
+        parseURL(url) {
+            let matcher = /^https:\/\/kitlaan\.gitlab\.io\/mwoskill\/\?p=([^&]+).*$/;
+            let match = matcher.exec(url);
+            if (!match) {
+                return null;
+            }
+            let urlPrefix = null;
+            let hash = match[1];
+            const JsonBinMarkerPrefix = "jsonbin1.";
+            if (hash.startsWith(JsonBinMarkerPrefix)) {
+                hash = hash.substring(JsonBinMarkerPrefix.length);
+                urlPrefix = KitlaanSkillLoader.JSON_BIN_PREFIX;
+            }
+            else {
+                urlPrefix = KitlaanSkillLoader.KITLAAN_PREFIX;
+            }
+            return {
+                urlPrefix, hash
+            };
+        }
+        loadSkillsFromURL(url) {
+            let urlComponents = this.parseURL(url);
+            if (!urlComponents) {
+                return null;
+            }
+            return new Promise(function (resolve, reject) {
+                $.ajax({
+                    url: urlComponents.urlPrefix + urlComponents.hash,
+                    type: 'GET',
+                    dataType: 'JSON'
+                })
+                    .done(function (ajaxData) {
+                    resolve(ajaxData);
+                })
+                    .catch(function (err) {
+                    reject(Error(err));
+                });
+            });
+        }
+    }
+    KitlaanSkillLoader.KITLAAN_PREFIX = "https://kitlaan.gitlab.io/mwoskill/archive/json/";
+    KitlaanSkillLoader.JSON_BIN_PREFIX = "https://jsonbin.io/b/";
 })(MechViewMechDetails || (MechViewMechDetails = {}));
 //TODO: Wrap mechPanel in a class
 var MechViewMechPanel;

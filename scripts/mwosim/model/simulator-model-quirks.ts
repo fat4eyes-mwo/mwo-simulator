@@ -58,7 +58,9 @@ namespace MechModelQuirks {
         "cooldown",
         "heat",
         "duration",
+        "falldamage",
         "jamchance",
+        "jamduration",
         "receiving", //TODO: for critchance_receiving. Works for now, may not later
       ];
       let quirkTypeNameComponent = quirkNameComponents[endIdx - 1];
@@ -74,20 +76,9 @@ namespace MechModelQuirks {
   export var collectOmnipodQuirks =
     function(smurfyMechLoadout : SmurfyMechLoadout)
       : MechQuirk[] {
-    let ret : MechQuirk[] = [];
-    let seenQuirkMap = new Map<string, MechQuirk>();
+    let ret : MechQuirkList = new MechQuirkList();
     if (!MechModel.isOmnimech(smurfyMechLoadout)) {
       return ret;
-    }
-    var addQuirk = function(smurfyQuirk : SmurfyQuirk) : void {
-      let mechQuirk = seenQuirkMap.get(smurfyQuirk.name);
-      if (!mechQuirk) {
-        mechQuirk = new MechQuirkInfo(smurfyQuirk);
-        ret.push(mechQuirk);
-        seenQuirkMap.set(mechQuirk.name, mechQuirk);
-      } else {
-        mechQuirk.value = mechQuirk.value + Number(smurfyQuirk.value);
-      }
     }
 
     let omnipodSetCounts = new Map<string, number>(); //omnipodId -> count
@@ -107,7 +98,7 @@ namespace MechModelQuirks {
         let omnipodData = MechModel.getSmurfyOmnipodData(omnipodId);
         let omnipodQuirks = omnipodData.configuration.quirks;
         for (let smurfyQuirk of omnipodQuirks) {
-          addQuirk(smurfyQuirk);
+          ret.addQuirk(new MechQuirkInfo(smurfyQuirk));
         }
         let setName = omnipodData.details.set;
         incrementOmnipodSet(setName);
@@ -118,7 +109,7 @@ namespace MechModelQuirks {
     let ctOmnipod = MechModel.getSmurfyCTOmnipod(smurfyMechInfo.name);
     if (ctOmnipod) {
       for (let smurfyQuirk of ctOmnipod.configuration.quirks) {
-        addQuirk(smurfyQuirk);
+        ret.addQuirk(new MechQuirkInfo(smurfyQuirk));
       }
       let omnipodSetName = ctOmnipod.details.set;
       incrementOmnipodSet(omnipodSetName);
@@ -128,7 +119,7 @@ namespace MechModelQuirks {
       if (setCount >= CompleteOmnipodSetCount) {
         let fullSetQuirks = AddedData._AddedOmnipodData[omnipodSetName].setBonusQuirks as SmurfyQuirk[];
         for (let smurfyQuirk of fullSetQuirks) {
-          addQuirk(smurfyQuirk);
+          ret.addQuirk(new MechQuirkInfo(smurfyQuirk));
         }
       }
     } else {
@@ -267,4 +258,75 @@ namespace MechModelQuirks {
 
     return ret;
   }
+
+  const factionNameMap : {[index:string] : string} = {
+    "InnerSphere" : "IS",
+    "IS" : "IS",
+    "Clan" : "Clan",
+  }
+  export var convertSkillToMechQuirks = function(skillName : string, mechInfo: MechModel.MechInfo) : MechQuirk[] {
+    let ret : MechQuirkList = new MechQuirkList();
+    let skillNode = AddedData._SkillTreeData[skillName];
+    for (let effect of skillNode.effects) {
+      let name = effect.quirkName;
+      let value : number = 0;
+      let matched = false;
+      for (let effectValue of effect.quirkValues) {
+        if (effectValue.faction) {
+          if (factionNameMap[effectValue.faction] !== factionNameMap[mechInfo.faction]) {
+            continue;
+          }
+        }
+        if (effectValue.weightClass) {
+          if (effectValue.weightClass.toLowerCase !== mechInfo.mechType.toLowerCase) {
+            continue;
+          }
+        }
+        if (effectValue.tonnage) {
+          if (Number(effectValue.tonnage) !== Number(mechInfo.tons)) {
+            continue;
+          }
+        }
+        //matched
+        matched = true;
+        value += Number(effectValue.quirkValue);
+        break;
+      }
+      if (matched) {
+        let effectQuirk :SmurfyQuirk = {
+          name, 
+          value, 
+          translated_name : effect.quirkTranslatedName};
+        let mechQuirk = new MechQuirkInfo(effectQuirk);
+        ret.addQuirk(mechQuirk);
+      }
+    }
+    if (ret.length === 0) {
+      console.warn(Error("Unable to match skill: " + skillName));
+    }
+    return ret;
+  }
+
+  export class MechQuirkList extends Array<MechQuirk> {
+    private quirkNameMap = new Map<string, MechQuirk>();
+    constructor() {
+      super();
+    }
+    //adds a quirk, merging it with a quirk already nthe list if it has the same name
+    addQuirk(quirk : MechQuirk) {
+      if (!(this.quirkNameMap.get(quirk.name))) {
+        this.quirkNameMap.set(quirk.name, quirk);
+        this.push(quirk);
+      } else {
+        let quirkInList = this.quirkNameMap.get(quirk.name);
+        quirkInList.value = Number(quirkInList.value) + Number(quirk.value);
+      }
+    }
+    addQuirkList(quirks : MechQuirk[]) {
+      for (let quirk of quirks) {
+        this.addQuirk(quirk);
+      }
+    }
+  }
+
 }

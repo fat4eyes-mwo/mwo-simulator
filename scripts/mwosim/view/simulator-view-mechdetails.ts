@@ -3,6 +3,7 @@
 namespace MechViewMechDetails {
   type LoadFromURLDialog = MechViewWidgets.LoadFromURLDialog;
   type ClickHandler = MechViewWidgets.ClickHandler;
+  type MechQuirk = MechModelQuirks.MechQuirk;
 
   export class MechDetails extends MechViewWidgets.DomStoredWidget
                           implements MechViewWidgets.RenderedWidget {
@@ -113,14 +114,18 @@ namespace MechViewMechDetails {
 
   class LoadMechSkillsDialog extends MechViewWidgets.LoadFromURLDialog {
     private static readonly DialogId = "loadMechSkillsDialog";
-    mechSkillsPanel : MechDetailsSkills;
+    mechId : string;
+    skillListPanel : MechQuirkListPanel;
+    loadedSkillQuirks : MechQuirk[];
     constructor(mechSkillsPanel : MechDetailsSkills) {
       super("loadFromURLDialog-loadSkills-template", LoadMechSkillsDialog.DialogId);
-      this.mechSkillsPanel = mechSkillsPanel;
+      this.mechId = mechSkillsPanel.mechId;
 
       let mechNameJQ = $(this.domElement).find(".mechName");
       let mechName = MechModelView.getMechName(mechSkillsPanel.mechId);
       mechNameJQ.text(mechName);
+
+      this.skillListPanel = new MechQuirkListPanel(this.getResultPanel());
     }
 
     createOkButtonHandler(dialog: LoadFromURLDialog): ClickHandler {
@@ -137,6 +142,7 @@ namespace MechViewMechDetails {
     createLoadButtonHandler(dialog: LoadFromURLDialog): ClickHandler {
       return function() {
         //TODO: Implement async request for skills
+        let loadMechDialog = dialog as LoadMechSkillsDialog;
         let kitlaanLoader = new KitlaanSkillLoader();
         let url = dialog.getTextInputValue();
         let loadPromise = kitlaanLoader.loadSkillsFromURL(url);
@@ -153,24 +159,19 @@ namespace MechViewMechDetails {
         dialog.setLoading(true);
         loadPromise
         .then(function(data : any) {
-          //
           let kitlaanData = data as SkillTreeData.KitlaanSkillTree;
-          for (let category in kitlaanData.selected) {
-            if (!kitlaanData.selected.hasOwnProperty(category)) {
-              continue;
-            }
-            let kitlaanCategorySkills = kitlaanData.selected[category];
-            for (let kitlaanSkill of kitlaanCategorySkills) {
-              let kitlaanName = kitlaanSkill[0];
-              let skillName = SkillTreeData._KitlaanSkillNameMap[kitlaanName];
-              console.log(skillName);
-            }
-          }
+          let skillQuirks = loadMechDialog.convertKitlaanDataToMechQuirks(kitlaanData);
+          loadMechDialog.loadedSkillQuirks = skillQuirks;
+
+          loadMechDialog.skillListPanel.setQuirks(skillQuirks);
+          loadMechDialog.skillListPanel.render();
+          loadMechDialog.okButton.enable();
           console.log("Loaded data from kitlaan: " + data);
         })
         .catch(function(err: any) {
-          //
           console.error("Error loading kitlaan data: " + Error(err));
+          dialog.setError("Error loading kitlaan data: " + Error(err));
+          dialog.okButton.disable();
         })
         .then(function(data : any) {
           //
@@ -178,6 +179,34 @@ namespace MechViewMechDetails {
           console.log("Kitlaan load done.");
         });
       }
+    }
+
+    private convertKitlaanDataToMechQuirks(
+          kitlaanData: SkillTreeData.KitlaanSkillTree)
+          : MechModelQuirks.MechQuirkList {
+      let skillQuirks: MechModelQuirks.MechQuirkList = new MechModelQuirks.MechQuirkList();
+      for (let category in kitlaanData.selected) {
+        if (!kitlaanData.selected.hasOwnProperty(category)) {
+          continue;
+        }
+        let kitlaanCategorySkills = kitlaanData.selected[category];
+
+        for (let kitlaanSkill of kitlaanCategorySkills) {
+          let kitlaanName = kitlaanSkill[0];
+          let skillName = SkillTreeData._KitlaanSkillNameMap[kitlaanName];
+          let mechQuirks = MechModelView.convertSkillToMechQuirks(skillName,
+            this.mechId);
+          if (mechQuirks) {
+            skillQuirks.addQuirkList(mechQuirks);
+          } else {
+            console.warn(Error("No quirks found for " + kitlaanName));
+          }
+        }
+      }
+      skillQuirks.sort(function (quirkA: MechQuirk, quirkB: MechQuirk): number {
+        return quirkA.translated_name.localeCompare(quirkB.translated_name);
+      });
+      return skillQuirks;
     }
   }
 
@@ -196,6 +225,7 @@ namespace MechViewMechDetails {
 
     render() {
       let mechQuirksJQ = $(this.domElement);
+      mechQuirksJQ.empty();
       if (this.quirkList.length === 0) {
         let mechQuirkDiv = MechViewWidgets.cloneTemplate("mechDetailsQuirkRow-template");
         let mechQuirkJQ = $(mechQuirkDiv);

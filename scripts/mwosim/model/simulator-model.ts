@@ -48,6 +48,8 @@ namespace MechModel  {
     mechName : string;
     mechTranslatedName : string;
     tons : number;
+    mechType : string; //light, medium, heavy, assault
+    faction : string; //InnerSphere, Clan
     quirks : MechQuirk[];
     generalQuirkBonus : MechModelQuirks.GeneralBonus;
     mechHealth : MechHealth;
@@ -64,14 +66,21 @@ namespace MechModel  {
       this.mechName = smurfyMechData.name;
       this.mechTranslatedName = smurfyMechData.translated_name;
       this.tons = Number(smurfyMechData.details.tons);
+      this.mechType = smurfyMechData.mech_type;
+      this.faction = smurfyMechData.faction;
       //NOTE: Quirks should be set before creating WeaponInfos
       if (isOmnimech(smurfyMechLoadout)) {
         this.quirks = MechModelQuirks.collectOmnipodQuirks(smurfyMechLoadout);
       } else {
         this.quirks = MechModelQuirks.collectMechQuirks(smurfyMechData);
       }
+      this.initComputedValues(smurfyMechLoadout);
+    }
+
+    initComputedValues(smurfyMechLoadout : SmurfyMechLoadout) {
       //NOTE: General quirk bonus must be computed before collecting heatsinks
       //(bonus is used in computing heatdissipation)
+
       this.generalQuirkBonus = MechModelQuirks.getGeneralBonus(this.quirks);
       this.mechHealth = mechHealthFromSmurfyMechLoadout(smurfyMechLoadout, this.quirks);
       this.weaponInfoList = weaponInfoListFromSmurfyMechLoadout(smurfyMechLoadout, this);

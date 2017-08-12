@@ -380,6 +380,18 @@ namespace MechViewWidgets {
         this.loadButton.setHtml("Load");
       }
     }
+
+    setError(error : string) {
+      $(this.getResultPanel())
+          .addClass("error")
+          .text(error);
+      this.okButton.disable();
+    }
+
+    clearError() {
+      $(this.getResultPanel())
+          .removeClass("error");
+    }
   }
   //Clones a template and returns the first element of the template
   export var cloneTemplate = function(templateName : string) : Element {

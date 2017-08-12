@@ -779,10 +779,12 @@ $malus-color : rgb(150, 50, 50);
 .statusPanel .mechDetails .mechDetailsQuirkRow {
   font-size: 0.9em;
 }
-.statusPanel .mechDetails .mechDetailsQuirkRow.bonus {
+.statusPanel .mechDetails .mechDetailsQuirkRow.bonus,
+.loadSkillsDialog .mechDetailsQuirkRow.bonus {
   color: $bonus-color;
 }
-.statusPanel .mechDetails .mechDetailsQuirkRow.malus {
+.statusPanel .mechDetails .mechDetailsQuirkRow.malus,
+.loadSkillsDialog .mechDetailsQuirkRow.malus {
   color: $malus-color;
 }
 

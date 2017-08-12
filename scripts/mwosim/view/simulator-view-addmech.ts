@@ -94,37 +94,32 @@ namespace MechViewAddMech {
           let smurfyMechData = MechModel.getSmurfyMechData((dialog as AddMechDialog).loadedSmurfyLoadout.mech_id);
           let mechTranslatedName = smurfyMechData.translated_name;
           let mechName = smurfyMechData.name;
-          let resultJQ = $(dialog.getResultPanel())
-            .removeClass("error")
-            .empty();
-          let loadedMechPanel = new LoadedMechPanel(resultJQ.get(0), (dialog as AddMechDialog).loadedSmurfyLoadout);
+          dialog.clearError();
+          let loadedMechPanel = new LoadedMechPanel(
+                                        dialog.getResultPanel(), 
+                                        (dialog as AddMechDialog).loadedSmurfyLoadout);
           dialog.okButton.enable();
         };
         let failHandler = function () {
-          $(dialog.getResultPanel())
-            .addClass("error")
-            .html("Failed to load " + url);
+          dialog.setError("Failed to load " + url);
         };
         let alwaysHandler = function () {
           dialog.setLoading(false);
         };
         let loadMechPromise = MechModel.loadSmurfyMechLoadoutFromURL(url);
         if (loadMechPromise) {
+          dialog.clearError();
           $(dialog.getResultPanel())
-            .removeClass("error")
-            .html("Loading url : " + url);
+            .text("Loading url : " + url);
           dialog.setLoading(true);
           loadMechPromise
             .then(doneHandler)
             .catch(failHandler)
             .then(alwaysHandler);
         } else {
-          $(dialog.getResultPanel())
-            .addClass("error")
-            .text("Invalid smurfy URL. Expected format is 'http://mwo.smurfy-net.de/mechlab#i=mechid&l=loadoutid'");
-          dialog.loadButton.enable();
-          dialog.loadButton.removeClass("loading");
-          dialog.loadButton.setHtml("Load");
+          dialog
+            .setError("Invalid smurfy URL. Expected format is 'http://mwo.smurfy-net.de/mechlab#i=mechid&l=loadoutid'");
+          dialog.setLoading(false);
           console.error("Invalid smurfy url");
         }
       }
