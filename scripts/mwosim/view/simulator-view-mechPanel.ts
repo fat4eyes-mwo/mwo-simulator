@@ -480,6 +480,26 @@ namespace MechViewMechPanel {
     mechBurstDiv.textContent = Number(update.burst).toFixed(1);
   }
 
+  export var updateQuirkSkillFlags = function(mechId : string) {
+    let mechJQ = $("#" + mechPanelId(mechId));
+
+    let mechQuirks = MechModelView.getMechQuirks(mechId);
+    let quirkFlagJQ = mechJQ.find(".quirkFlag");
+    if (mechQuirks && mechQuirks.length > 0) {
+      quirkFlagJQ.removeClass("hidden");
+    } else {
+      quirkFlagJQ.addClass("hidden");
+    }
+
+    let mechSkills = MechModelView.getMechSkillQuirks(mechId);
+    let skillFlagJQ = mechJQ.find(".skillFlag");
+    if (mechSkills && mechSkills.length > 0) {
+      skillFlagJQ.removeClass("hidden");
+    } else {
+      skillFlagJQ.addClass("hidden");
+    }
+  }
+
   //Delete button
   var mechDeleteButtonId = function(mechId : string) : string {
     return mechId + "-deleteButton";

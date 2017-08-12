@@ -24,6 +24,9 @@ $mobile-width: 0px; //disable mobile for now
 $navbar-top: 0px;
 $button-bgcolor: gold;
 $button-hover-bgcolor: rgb(255, 255, 30);
+$bonus-color : rgb(50, 150, 50);
+$malus-color : rgb(150, 50, 50);
+
 /*Main panel styles*/
 body {
   background-color: $background-color;
@@ -164,6 +167,10 @@ div {
 
 .fillWidth {
   width: 100%;
+}
+
+.hidden {
+  display : none;
 }
 
 .branding {
@@ -703,6 +710,16 @@ div {
   color: $low-emphasis-color;
 }
 
+.statusPanel .quirkSkillsFlags {
+  float: left;
+  font-size: 0.9em;
+}
+
+.statusPanel .quirkSkillsFlags .quirkFlag,
+.statusPanel .quirkSkillsFlags .skillFlag {
+  color: $bonus-color;
+}
+
 .statusPanel .mechDetailsButtonContainer {
   font-size: 0.9em;
   float: right;
@@ -754,9 +771,6 @@ div {
 .statusPanel .mechDetails .mechQuirkList {
   overflow: auto;
 }
-
-$bonus-color : rgb(50, 150, 50);
-$malus-color : rgb(150, 50, 50);
 
 .statusPanel .mechDetails .tabPanel {
   height: 100%;

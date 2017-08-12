@@ -140,6 +140,10 @@ a:hover {
   width: 100%;
 }
 
+.hidden {
+  display: none;
+}
+
 .branding {
   position: relative;
 }
@@ -629,6 +633,16 @@ a:hover {
   font-size: 0.9em;
   margin-left: 10%;
   color: goldenrod;
+}
+
+.statusPanel .quirkSkillsFlags {
+  float: left;
+  font-size: 0.9em;
+}
+
+.statusPanel .quirkSkillsFlags .quirkFlag,
+.statusPanel .quirkSkillsFlags .skillFlag {
+  color: #329632;
 }
 
 .statusPanel .mechDetailsButtonContainer {

@@ -233,6 +233,10 @@ namespace MechModelView {
     updateMechStatus(mech);
   }
 
+  var updateQuirksSkills = function(mech : Mech) : void {
+    MechViewMechPanel.updateQuirkSkillFlags(mech.getMechId());
+  }
+
   var updateAll = function(mech : Mech) : void {
     updateMechTitle(mech);
     updateHealth(mech);
@@ -240,6 +244,7 @@ namespace MechModelView {
     updateCooldown(mech);
     updateWeaponStatus(mech);
     updateStats(mech);
+    updateQuirksSkills(mech);
   }
 
   export class MechHealthToView {

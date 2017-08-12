@@ -11721,6 +11721,9 @@ var MechModelView;
     var updateStats = function (mech) {
         updateMechStatus(mech);
     };
+    var updateQuirksSkills = function (mech) {
+        MechViewMechPanel.updateQuirkSkillFlags(mech.getMechId());
+    };
     var updateAll = function (mech) {
         updateMechTitle(mech);
         MechModelView.updateHealth(mech);
@@ -11728,6 +11731,7 @@ var MechModelView;
         MechModelView.updateCooldown(mech);
         MechModelView.updateWeaponStatus(mech);
         updateStats(mech);
+        updateQuirksSkills(mech);
     };
     class MechHealthToView {
         constructor(mechId, currHealth, maxHealth, isAlive) {
@@ -13175,6 +13179,25 @@ var MechViewMechPanel;
         let mechBurstId = mechBurstPanelId(update.mechId);
         let mechBurstDiv = document.getElementById(mechBurstId);
         mechBurstDiv.textContent = Number(update.burst).toFixed(1);
+    };
+    MechViewMechPanel.updateQuirkSkillFlags = function (mechId) {
+        let mechJQ = $("#" + mechPanelId(mechId));
+        let mechQuirks = MechModelView.getMechQuirks(mechId);
+        let quirkFlagJQ = mechJQ.find(".quirkFlag");
+        if (mechQuirks && mechQuirks.length > 0) {
+            quirkFlagJQ.removeClass("hidden");
+        }
+        else {
+            quirkFlagJQ.addClass("hidden");
+        }
+        let mechSkills = MechModelView.getMechSkillQuirks(mechId);
+        let skillFlagJQ = mechJQ.find(".skillFlag");
+        if (mechSkills && mechSkills.length > 0) {
+            skillFlagJQ.removeClass("hidden");
+        }
+        else {
+            skillFlagJQ.addClass("hidden");
+        }
     };
     //Delete button
     var mechDeleteButtonId = function (mechId) {
