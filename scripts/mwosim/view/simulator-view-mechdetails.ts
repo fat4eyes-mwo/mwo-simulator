@@ -102,8 +102,19 @@ namespace MechViewMechDetails {
     }
 
     render() {
-      let skillListJQ = $(this.domElement).find(".skillList");
+      let thisJQ = $(this.domElement);
+      let skillListJQ = thisJQ.find(".skillList");
       skillListJQ.empty();
+      let skillState = MechModelView.getSkillState(this.mechId);
+      let skillLinkJQ = thisJQ.find(".skillLink");
+      if (skillState) {
+        let skillLoader = MechModelSkills.getSkillLoader(skillState.type);
+        skillLoader.setSkillState(skillState);
+        skillLinkJQ.text("View skills").attr("href", skillLoader.getSkillURL());
+        skillLinkJQ.append(MechViewWidgets.cloneTemplate("external-link-template"));
+      } else {
+        skillLinkJQ.text("").attr("href", "");
+      }
       this.quirkListPanel.setQuirks(MechModelView.getMechSkillQuirks(this.mechId));
       this.quirkListPanel.render();
     }

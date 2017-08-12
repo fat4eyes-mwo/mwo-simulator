@@ -8,6 +8,8 @@ namespace MechModelSkills {
     loadSkillsFromState(state: string): Promise<any>;
     loadSkillsFromURL(url: string): Promise<any>;
     getSkillState(): SkillState;
+    setSkillState(skillState : SkillState) : void;
+    getSkillURL() : string;
     convertDataToMechQuirks(data: any, mechId: string) : MechQuirk[];
   }
 
@@ -81,6 +83,19 @@ namespace MechModelSkills {
       return {
         type: KitlaanSkillLoader.type,
         state: this.state,
+      }
+    }
+
+    setSkillState(skillState : SkillState) {
+      this.state = skillState.state;
+    }
+
+    getSkillURL() : string {
+      if (this.state) {
+        const urlPrefix = "https://kitlaan.gitlab.io/mwoskill/?p=";
+        return urlPrefix + this.state;
+      } else {
+        return null;
       }
     }
 

@@ -8996,6 +8996,18 @@ var MechModelSkills;
                 state: this.state,
             };
         }
+        setSkillState(skillState) {
+            this.state = skillState.state;
+        }
+        getSkillURL() {
+            if (this.state) {
+                const urlPrefix = "https://kitlaan.gitlab.io/mwoskill/?p=";
+                return urlPrefix + this.state;
+            }
+            else {
+                return null;
+            }
+        }
         createLoadPromise(urlComponents) {
             return new Promise(function (resolve, reject) {
                 $.ajax({
@@ -11988,6 +12000,9 @@ var MechModelView;
         let mech = MechModel.getMechFromId(mechId);
         mech.setSkillState(skillState);
     };
+    MechModelView.getSkillState = function (mechId) {
+        return MechModel.getMechFromId(mechId).getMechInfo().skillState;
+    };
     MechModelView.resetModel = function () {
         MechModel.resetState();
     };
@@ -12659,8 +12674,20 @@ var MechViewMechDetails;
             };
         }
         render() {
-            let skillListJQ = $(this.domElement).find(".skillList");
+            let thisJQ = $(this.domElement);
+            let skillListJQ = thisJQ.find(".skillList");
             skillListJQ.empty();
+            let skillState = MechModelView.getSkillState(this.mechId);
+            let skillLinkJQ = thisJQ.find(".skillLink");
+            if (skillState) {
+                let skillLoader = MechModelSkills.getSkillLoader(skillState.type);
+                skillLoader.setSkillState(skillState);
+                skillLinkJQ.text("View skills").attr("href", skillLoader.getSkillURL());
+                skillLinkJQ.append(MechViewWidgets.cloneTemplate("external-link-template"));
+            }
+            else {
+                skillLinkJQ.text("").attr("href", "");
+            }
             this.quirkListPanel.setQuirks(MechModelView.getMechSkillQuirks(this.mechId));
             this.quirkListPanel.render();
         }

@@ -581,6 +581,10 @@ namespace MechModelView {
     mech.setSkillState(skillState);
   }
 
+  export var getSkillState = function(mechId: string) {
+    return MechModel.getMechFromId(mechId).getMechInfo().skillState;
+  }
+
   export var resetModel = function() : void{
     MechModel.resetState();
   }

@@ -778,6 +778,7 @@ $malus-color : rgb(150, 50, 50);
 }
 .statusPanel .mechDetails .mechDetailsQuirkRow {
   font-size: 0.9em;
+  margin-left: 10px;
 }
 .statusPanel .mechDetails .mechDetailsQuirkRow.bonus,
 .loadSkillsDialog .mechDetailsQuirkRow.bonus {
@@ -788,15 +789,30 @@ $malus-color : rgb(150, 50, 50);
   color: $malus-color;
 }
 
-.statusPanel .mechDetails .mechDetailsSkills .loadButton {
+.statusPanel .mechDetails .mechDetailsQuirks .mechQuirkList {
+}
+
+.statusPanel .mechDetails .mechDetailsSkills .buttonContainer {
   float: right;
-  font-size: 0.8em;
   margin-right: 5px;
-  position: sticky;
+  position: absolute;
   top: 2em;
+  right: 15px;
+}
+.statusPanel .mechDetails .mechDetailsSkills .loadButton {
+  font-size: 0.8em;
+}
+
+.statusPanel .mechDetails .mechDetailsSkills .skillLink {
+  font-size: 0.8em;
+}
+
+.statusPanel .mechDetails .mechDetailsSkills .skillLink svg {
+  margin-left : 2px;
 }
 
 .statusPanel .mechDetails .mechDetailsSkills .skillList {
+  overflow: auto;
 }
 
 .teamStatsNav {
