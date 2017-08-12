@@ -1,4 +1,6 @@
 - AUTOMATED UNIT TESTS!!!!!!
+- Persist skills
+- Apply ammo skill quirks
 
 - See if it's worth moving all the added data to a single json file and fetching it at runtime.
   The total script size is now around 500k (67k compressed) and may affect initial load time.
