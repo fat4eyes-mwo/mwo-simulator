@@ -8937,6 +8937,56 @@ var MechModelQuirks;
     }
     MechModelQuirks.MechQuirkList = MechQuirkList;
 })(MechModelQuirks || (MechModelQuirks = {}));
+var MechModelSkills;
+(function (MechModelSkills) {
+    class KitlaanSkillLoader {
+        constructor() {
+            //nothing yet
+        }
+        parseURL(url) {
+            let matcher = /^https:\/\/kitlaan\.gitlab\.io\/mwoskill\/\?p=([^&]+).*$/;
+            let match = matcher.exec(url);
+            if (!match) {
+                return null;
+            }
+            let urlPrefix = null;
+            let hash = match[1];
+            const JsonBinMarkerPrefix = "jsonbin1.";
+            if (hash.startsWith(JsonBinMarkerPrefix)) {
+                hash = hash.substring(JsonBinMarkerPrefix.length);
+                urlPrefix = KitlaanSkillLoader.JSON_BIN_PREFIX;
+            }
+            else {
+                urlPrefix = KitlaanSkillLoader.KITLAAN_PREFIX;
+            }
+            return {
+                urlPrefix, hash
+            };
+        }
+        loadSkillsFromURL(url) {
+            let urlComponents = this.parseURL(url);
+            if (!urlComponents) {
+                return null;
+            }
+            return new Promise(function (resolve, reject) {
+                $.ajax({
+                    url: urlComponents.urlPrefix + urlComponents.hash,
+                    type: 'GET',
+                    dataType: 'JSON'
+                })
+                    .done(function (ajaxData) {
+                    resolve(ajaxData);
+                })
+                    .catch(function (err) {
+                    reject(Error(err));
+                });
+            });
+        }
+    }
+    KitlaanSkillLoader.KITLAAN_PREFIX = "https://kitlaan.gitlab.io/mwoskill/archive/json/";
+    KitlaanSkillLoader.JSON_BIN_PREFIX = "https://jsonbin.io/b/";
+    MechModelSkills.KitlaanSkillLoader = KitlaanSkillLoader;
+})(MechModelSkills || (MechModelSkills = {}));
 //Weapon state classes
 var MechModelWeapons;
 //Weapon state classes
@@ -12590,7 +12640,7 @@ var MechViewMechDetails;
             return function () {
                 //TODO: Implement async request for skills
                 let loadMechDialog = dialog;
-                let kitlaanLoader = new KitlaanSkillLoader();
+                let kitlaanLoader = new MechModelSkills.KitlaanSkillLoader();
                 let url = dialog.getTextInputValue();
                 let loadPromise = kitlaanLoader.loadSkillsFromURL(url);
                 let resultJQ = $(dialog.getResultPanel());
@@ -12685,52 +12735,6 @@ var MechViewMechDetails;
         }
     }
     MechQuirkListPanel.MechQuirkListDomKey = "mwosim.MechQuirkListPanel.uiObject";
-    class KitlaanSkillLoader {
-        constructor() {
-            //nothing yet
-        }
-        parseURL(url) {
-            let matcher = /^https:\/\/kitlaan\.gitlab\.io\/mwoskill\/\?p=([^&]+).*$/;
-            let match = matcher.exec(url);
-            if (!match) {
-                return null;
-            }
-            let urlPrefix = null;
-            let hash = match[1];
-            const JsonBinMarkerPrefix = "jsonbin1.";
-            if (hash.startsWith(JsonBinMarkerPrefix)) {
-                hash = hash.substring(JsonBinMarkerPrefix.length);
-                urlPrefix = KitlaanSkillLoader.JSON_BIN_PREFIX;
-            }
-            else {
-                urlPrefix = KitlaanSkillLoader.KITLAAN_PREFIX;
-            }
-            return {
-                urlPrefix, hash
-            };
-        }
-        loadSkillsFromURL(url) {
-            let urlComponents = this.parseURL(url);
-            if (!urlComponents) {
-                return null;
-            }
-            return new Promise(function (resolve, reject) {
-                $.ajax({
-                    url: urlComponents.urlPrefix + urlComponents.hash,
-                    type: 'GET',
-                    dataType: 'JSON'
-                })
-                    .done(function (ajaxData) {
-                    resolve(ajaxData);
-                })
-                    .catch(function (err) {
-                    reject(Error(err));
-                });
-            });
-        }
-    }
-    KitlaanSkillLoader.KITLAAN_PREFIX = "https://kitlaan.gitlab.io/mwoskill/archive/json/";
-    KitlaanSkillLoader.JSON_BIN_PREFIX = "https://jsonbin.io/b/";
 })(MechViewMechDetails || (MechViewMechDetails = {}));
 //TODO: Wrap mechPanel in a class
 var MechViewMechPanel;
