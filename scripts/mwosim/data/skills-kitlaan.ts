@@ -4,7 +4,6 @@ namespace SkillTreeData {
     [index:string] : string;
   }
   export interface KitlaanSkillTree {
-    success?: boolean;
     mwoskill: string;
     ver: string;
     skillVersion: string;

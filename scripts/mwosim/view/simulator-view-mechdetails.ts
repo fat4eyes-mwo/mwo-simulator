@@ -174,7 +174,6 @@ namespace MechViewMechDetails {
           dialog.okButton.disable();
         })
         .then(function(data : any) {
-          //
           dialog.setLoading(false);
           console.log("Kitlaan load done.");
         });
