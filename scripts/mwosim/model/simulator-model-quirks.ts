@@ -61,6 +61,13 @@ namespace MechModelQuirks {
         "falldamage",
         "jamchance",
         "jamduration",
+        "jamrampdownduration",
+        "rampdownduration",
+        "startupduration",
+        "screenshake",
+        "coolshotcooldown",
+        "strategicstrikespread",
+        "stealtharmorcooldown",
         "receiving", //TODO: for critchance_receiving. Works for now, may not later
       ];
       let quirkTypeNameComponent = quirkNameComponents[endIdx - 1];
