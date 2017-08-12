@@ -4940,9 +4940,11 @@ var MechModelQuirks;
 //Constants used by simulator-model-quirks.js to compute quirk bonuses
 (function (MechModelQuirks) {
     //quirks that apply to the mech, not a component or weapon
+    //NOTE: Many other skill quirks fit in here, add them whenever they become relevant to the simulation
     MechModelQuirks._quirkGeneral = {
         "heatloss_multiplier": true,
         "heatdissipation_multiplier": true,
+        "maxheat_multiplier": true,
         "externalheat_multiplier": true,
         "sensorrange_additive": true,
     };
@@ -4957,8 +4959,10 @@ var MechModelQuirks;
         "right_torso": "rt",
         "head": "hd",
     };
-    MechModelQuirks._quirkArmorPrefix = "armorresist";
-    MechModelQuirks._quirkStructurePrefix = "internalresist";
+    MechModelQuirks.QuirkArmorAdditivePrefix = "armorresist";
+    MechModelQuirks.QuirkStructureAdditivePrefix = "internalresist";
+    MechModelQuirks.QuirkArmorMultiplier = "increasedarmor_multiplier";
+    MechModelQuirks.QuirkStructureMultiplier = "increasedstructure_multiplier";
     //Weapon quirks
     //Map from quirk name weapon types to smurfy weapon types
     MechModelQuirks._weaponClassMap = {
@@ -5113,9 +5117,9 @@ var SimulatorSettings;
         ],
     };
 })(SimulatorSettings || (SimulatorSettings = {}));
-var SkillTreeData;
-(function (SkillTreeData) {
-    SkillTreeData._KitlaanSkillNameMap = {
+var ExternalSkillTrees;
+(function (ExternalSkillTrees) {
+    ExternalSkillTrees._KitlaanSkillNameMap = {
         "AC Cooldown": null,
         "AC Range": null,
         "AC Velocity": null,
@@ -5156,12 +5160,12 @@ var SkillTreeData;
         "Improved Gyros": "ImprovedGyros",
         "Kinetic Burst": "KineticBurst",
         "Laser Cooldown": null,
-        "Laser Duration": null,
+        "Laser Duration": "LaserDuration",
         "Laser Heat": null,
         "Laser Range": null,
         "LBX Cooldown": null,
         "LBX Range": null,
-        "LBX Spread": null,
+        "LBX Spread": "LBXSpread",
         "LBX Velocity": null,
         "Lift Speed": "LiftSpeed",
         "LRM Cooldown": null,
@@ -5214,7 +5218,7 @@ var SkillTreeData;
         "Velocity": "Velocity",
         "Vent Calibration": "VentCalibration"
     };
-})(SkillTreeData || (SkillTreeData = {}));
+})(ExternalSkillTrees || (ExternalSkillTrees = {}));
 //Generated from GameData.pak on Fri, 11 Aug 2017 16:34:59 GMT
 var AddedData;
 //Generated from GameData.pak on Fri, 11 Aug 2017 16:34:59 GMT
@@ -8680,6 +8684,13 @@ var MechModelQuirks;
                 "falldamage",
                 "jamchance",
                 "jamduration",
+                "jamrampdownduration",
+                "rampdownduration",
+                "startupduration",
+                "screenshake",
+                "coolshotcooldown",
+                "strategicstrikespread",
+                "stealtharmorcooldown",
                 "receiving",
             ];
             let quirkTypeNameComponent = quirkNameComponents[endIdx - 1];
@@ -8765,22 +8776,28 @@ var MechModelQuirks;
         }
         return ret;
     };
-    MechModelQuirks.getArmorStructureBonus = function (component, quirkList) {
-        let ret = { armor: 0, structure: 0 };
+    MechModelQuirks.getHealthBonus = function (component, quirkList) {
+        let ret = { armor: 0, structure: 0, armor_multiplier: 1.0, structure_multiplier: 1.0 };
         for (let quirk of quirkList) {
-            if (quirk.name.startsWith(MechModelQuirks._quirkArmorPrefix)) {
+            if (quirk.name.startsWith(MechModelQuirks.QuirkArmorAdditivePrefix)) {
                 let quirkComponent = quirk.name.split("_")[1];
                 if (MechModelQuirks._quirkComponentMap[component] !== quirkComponent) {
                     continue;
                 }
                 ret.armor += Number(quirk.value);
             }
-            else if (quirk.name.startsWith(MechModelQuirks._quirkStructurePrefix)) {
+            else if (quirk.name.startsWith(MechModelQuirks.QuirkStructureAdditivePrefix)) {
                 let quirkComponent = quirk.name.split("_")[1];
                 if (MechModelQuirks._quirkComponentMap[component] !== quirkComponent) {
                     continue;
                 }
                 ret.structure += Number(quirk.value);
+            }
+            else if (quirk.name === MechModelQuirks.QuirkArmorMultiplier) {
+                ret.armor_multiplier += Number(quirk.value);
+            }
+            else if (quirk.name === MechModelQuirks.QuirkStructureMultiplier) {
+                ret.structure_multiplier += Number(quirk.value);
             }
         }
         return ret;
@@ -8824,9 +8841,12 @@ var MechModelQuirks;
     ;
     MechModelQuirks.getWeaponBonus = function (weaponInfo) {
         let quirkList = weaponInfo.mechInfo.quirks;
+        if (weaponInfo.mechInfo.skillQuirks) {
+            quirkList = quirkList.concat(weaponInfo.mechInfo.skillQuirks);
+        }
         let ret = { cooldown_multiplier: 0, duration_multiplier: 0,
             heat_multiplier: 0, range_multiplier: 0, velocity_multiplier: 0,
-            jamchance_multiplier: 0 };
+            jamchance_multiplier: 0, jamduration_multiplier: 0 };
         for (let quirk of quirkList) {
             let quirkNameComponents = quirk.name.split("_");
             let firstNameComponent = quirkNameComponents[0];
@@ -9229,9 +9249,10 @@ var MechModelWeapons;
             return Number(this.weaponInfo.jamChance) * jamMultiplier;
         }
         computeJamTime() {
-            //TODO: See if any quirks affect jam time
             //NOTE: Skills affect jam time
-            return Number(this.weaponInfo.jamTime);
+            let weaponBonus = this.weaponInfo.weaponBonus;
+            let jamTimeMultiplier = 1.0 + weaponBonus.jamduration_multiplier;
+            return Number(this.weaponInfo.jamTime * jamTimeMultiplier);
         }
         computeTimeBetweenAutoShots() {
             return Number(this.weaponInfo.timeBetweenAutoShots);
@@ -9682,6 +9703,7 @@ var MechModel;
             this.tons = Number(smurfyMechData.details.tons);
             this.mechType = smurfyMechData.mech_type;
             this.faction = smurfyMechData.faction;
+            this.smurfyMechLoadout = smurfyMechLoadout;
             //NOTE: Quirks should be set before creating WeaponInfos
             if (MechModel.isOmnimech(smurfyMechLoadout)) {
                 this.quirks = MechModelQuirks.collectOmnipodQuirks(smurfyMechLoadout);
@@ -9689,17 +9711,26 @@ var MechModel;
             else {
                 this.quirks = MechModelQuirks.collectMechQuirks(smurfyMechData);
             }
-            this.initComputedValues(smurfyMechLoadout);
+            this.skillQuirks = []; //is set using applySkillQuirks
+            this.initComputedValues();
         }
-        initComputedValues(smurfyMechLoadout) {
+        initComputedValues() {
             //NOTE: General quirk bonus must be computed before collecting heatsinks
             //(bonus is used in computing heatdissipation)
-            this.generalQuirkBonus = MechModelQuirks.getGeneralBonus(this.quirks);
-            this.mechHealth = mechHealthFromSmurfyMechLoadout(smurfyMechLoadout, this.quirks);
-            this.weaponInfoList = weaponInfoListFromSmurfyMechLoadout(smurfyMechLoadout, this);
-            this.heatsinkInfoList = heatsinkListFromSmurfyMechLoadout(smurfyMechLoadout);
-            this.ammoBoxList = ammoBoxListFromSmurfyMechLoadout(smurfyMechLoadout);
-            this.engineInfo = engineInfoFromSmurfyMechLoadout(smurfyMechLoadout);
+            let combinedQuirks = this.quirks;
+            if (this.skillQuirks) {
+                combinedQuirks = combinedQuirks.concat(this.skillQuirks);
+            }
+            this.generalQuirkBonus = MechModelQuirks.getGeneralBonus(combinedQuirks);
+            this.mechHealth = mechHealthFromSmurfyMechLoadout(this.smurfyMechLoadout, combinedQuirks);
+            this.weaponInfoList = weaponInfoListFromSmurfyMechLoadout(this.smurfyMechLoadout, this);
+            this.heatsinkInfoList = heatsinkListFromSmurfyMechLoadout(this.smurfyMechLoadout);
+            this.ammoBoxList = ammoBoxListFromSmurfyMechLoadout(this.smurfyMechLoadout, combinedQuirks);
+            this.engineInfo = engineInfoFromSmurfyMechLoadout(this.smurfyMechLoadout);
+        }
+        applySkillQuirks(skillQuirks) {
+            this.skillQuirks = skillQuirks;
+            this.initComputedValues();
         }
     }
     MechModel.MechInfo = MechInfo;
@@ -9772,7 +9803,7 @@ var MechModel;
             this.baseMaxArmor = maxArmor; //maximum armor from loadout
             this.baseMaxStructure = maxStructure; //maximum structure from loadout
         }
-        //applies bonus from mech quirks.
+        //applies bonus from quirks.
         applyQuirkBonus(bonus) {
             this.quirkBonus = bonus;
             this.resetToFullHealth();
@@ -9785,16 +9816,16 @@ var MechModel;
             let ret = this.baseMaxArmor;
             if (this.quirkBonus) {
                 ret += Number(this.quirkBonus.armor);
+                ret = ret * Number(this.quirkBonus.armor_multiplier);
             }
-            //TODO: Add skill bonus
             return ret;
         }
         get maxStructure() {
             let ret = this.baseMaxStructure;
             if (this.quirkBonus) {
                 ret += Number(this.quirkBonus.structure);
+                ret = ret * Number(this.quirkBonus.structure_multiplier);
             }
-            //TODO: Add skill bonus
             return ret;
         }
         isIntact() {
@@ -10820,12 +10851,12 @@ var MechModel;
         mechHealth = new MechHealth(componentHealthList);
         return mechHealth;
     };
-    var componentHealthFromSmurfyMechComponent = function (smurfyMechComponent, smurfyMechQuirks, tonnage) {
+    var componentHealthFromSmurfyMechComponent = function (smurfyMechComponent, quirkList, tonnage) {
         var componentHealth; //return value
         var location = smurfyMechComponent.name;
         var armor = smurfyMechComponent.armor;
         var structure = MechModel.baseMechStructure(location, tonnage);
-        let bonus = MechModelQuirks.getArmorStructureBonus(location, smurfyMechQuirks);
+        let bonus = MechModelQuirks.getHealthBonus(location, quirkList);
         componentHealth = new ComponentHealth(location, Number(armor), Number(structure), Number(armor), Number(structure));
         componentHealth.applyQuirkBonus(bonus);
         return componentHealth;
@@ -10878,7 +10909,7 @@ var MechModel;
         let heatsink = new Heatsink(location, smurfyModuleData);
         return heatsink;
     };
-    var ammoBoxListFromSmurfyMechLoadout = function (smurfyMechLoadout) {
+    var ammoBoxListFromSmurfyMechLoadout = function (smurfyMechLoadout, quirks) {
         var ammoList = [];
         ammoList = collectFromSmurfyConfiguration(smurfyMechLoadout.configuration, function (location, smurfyMechComponentItem) {
             if (smurfyMechComponentItem.type === "ammo") {
@@ -10995,6 +11026,7 @@ var MechModel;
             Number(engineHeatsink.engineCooling) *
             Number(engineHeatEfficiency);
         let heatDissipationMultiplier = 1.0;
+        let heatCapacityMultiplier = 1.0;
         //TODO: Find the difference between heatloss and heatdissipation
         if (generalQuirkBonus.heatloss_multiplier) {
             heatDissipationMultiplier += generalQuirkBonus.heatloss_multiplier;
@@ -11002,7 +11034,11 @@ var MechModel;
         if (generalQuirkBonus.heatdissipation_multiplier) {
             heatDissipationMultiplier += generalQuirkBonus.heatdissipation_multiplier;
         }
+        if (generalQuirkBonus.maxheat_multiplier) {
+            heatCapacityMultiplier += Number(generalQuirkBonus.maxheat_multiplier);
+        }
         heatDissipation = heatDissipation * heatDissipationMultiplier;
+        heatCapacity = heatCapacity * heatCapacityMultiplier;
         return {
             "heatCapacity": heatCapacity,
             "heatDissipation": heatDissipation
@@ -11076,6 +11112,10 @@ var MechModel;
         }
         getTargetMech() {
             return this.targetMech;
+        }
+        applySkillQuirks(skillQuirks) {
+            this.mechInfo.applySkillQuirks(skillQuirks);
+            this.resetMechState();
         }
     }
     MechModel.Mech = Mech;
@@ -11819,9 +11859,24 @@ var MechModelView;
             return null;
         }
     };
+    MechModelView.getMechSkillQuirks = function (mechId) {
+        let mech = MechModel.getMechFromId(mechId);
+        if (mech) {
+            return mech.getMechInfo().skillQuirks;
+        }
+        else {
+            return null;
+        }
+    };
     MechModelView.convertSkillToMechQuirks = function (skillName, mechId) {
         let mechInfo = MechModel.getMechFromId(mechId).getMechState().mechInfo;
         return MechModelQuirks.convertSkillToMechQuirks(skillName, mechInfo);
+    };
+    MechModelView.applySkillQuirks = function (mechId, skillQuirks) {
+        let mech = MechModel.getMechFromId(mechId);
+        mech.applySkillQuirks(skillQuirks);
+        mech.getMechState().setUpdate(UpdateType.FULL);
+        MechModelView.updateMech(mech);
     };
     MechModelView.resetModel = function () {
         MechModel.resetState();
@@ -12300,6 +12355,7 @@ var MechViewAddMech;
                     let mechTranslatedName = smurfyMechData.translated_name;
                     let mechName = smurfyMechData.name;
                     dialog.clearError();
+                    $(dialog.getResultPanel()).empty();
                     let loadedMechPanel = new LoadedMechPanel(dialog.getResultPanel(), dialog.loadedSmurfyLoadout);
                     dialog.okButton.enable();
                 };
@@ -12492,12 +12548,10 @@ var MechViewMechDetails;
                 $(loadSkillsDialog.getTextInput()).focus();
             };
         }
-        setSkillQuirks(quirks) {
-            this.quirkListPanel.setQuirks(quirks);
-        }
         render() {
             let skillListJQ = $(this.domElement).find(".skillList");
             skillListJQ.empty();
+            this.quirkListPanel.setQuirks(MechModelView.getMechSkillQuirks(this.mechId));
             this.quirkListPanel.render();
         }
     }
@@ -12506,6 +12560,7 @@ var MechViewMechDetails;
         constructor(mechSkillsPanel) {
             super("loadFromURLDialog-loadSkills-template", LoadMechSkillsDialog.DialogId);
             this.mechId = mechSkillsPanel.mechId;
+            this.mechSkillsPanel = mechSkillsPanel;
             let mechNameJQ = $(this.domElement).find(".mechName");
             let mechName = MechModelView.getMechName(mechSkillsPanel.mechId);
             mechNameJQ.text(mechName);
@@ -12514,6 +12569,15 @@ var MechViewMechDetails;
         createOkButtonHandler(dialog) {
             return function () {
                 //TODO: Implement setting and updating UI for mech skills
+                let loadDialog = dialog;
+                if (loadDialog.loadedSkillQuirks) {
+                    MechModelView.applySkillQuirks(loadDialog.mechId, loadDialog.loadedSkillQuirks);
+                    loadDialog.mechSkillsPanel.render();
+                    MechViewRouter.modifyAppState();
+                }
+                else {
+                    console.warn("No loaded skill quirks");
+                }
                 MechViewWidgets.hideModal();
             };
         }
@@ -12556,7 +12620,6 @@ var MechViewMechDetails;
                     dialog.okButton.disable();
                 })
                     .then(function (data) {
-                    //
                     dialog.setLoading(false);
                     console.log("Kitlaan load done.");
                 });
@@ -12571,7 +12634,7 @@ var MechViewMechDetails;
                 let kitlaanCategorySkills = kitlaanData.selected[category];
                 for (let kitlaanSkill of kitlaanCategorySkills) {
                     let kitlaanName = kitlaanSkill[0];
-                    let skillName = SkillTreeData._KitlaanSkillNameMap[kitlaanName];
+                    let skillName = ExternalSkillTrees._KitlaanSkillNameMap[kitlaanName];
                     let mechQuirks = MechModelView.convertSkillToMechQuirks(skillName, this.mechId);
                     if (mechQuirks) {
                         skillQuirks.addQuirkList(mechQuirks);

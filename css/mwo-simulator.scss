@@ -792,6 +792,8 @@ $malus-color : rgb(150, 50, 50);
   float: right;
   font-size: 0.8em;
   margin-right: 5px;
+  position: sticky;
+  top: 2em;
 }
 
 .statusPanel .mechDetails .mechDetailsSkills .skillList {

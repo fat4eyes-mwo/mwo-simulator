@@ -560,9 +560,25 @@ namespace MechModelView {
     }
   }
 
-  export var convertSkillToMechQuirks = function(skillName : string, mechId : string) : MechModelQuirks.MechQuirk[] {
+  export var getMechSkillQuirks = function(mechId: string) : MechViewQuirk[] {
+    let mech = MechModel.getMechFromId(mechId);
+    if (mech) {
+      return mech.getMechInfo().skillQuirks;
+    } else {
+      return null;
+    }
+  }
+
+  export var convertSkillToMechQuirks = function(skillName : string, mechId : string) : MechViewQuirk[] {
     let mechInfo = MechModel.getMechFromId(mechId).getMechState().mechInfo;
     return MechModelQuirks.convertSkillToMechQuirks(skillName, mechInfo);
+  }
+
+  export var applySkillQuirks = function(mechId : string, skillQuirks : MechViewQuirk[]) : void {
+    let mech = MechModel.getMechFromId(mechId);
+    mech.applySkillQuirks(skillQuirks);
+    mech.getMechState().setUpdate(UpdateType.FULL);
+    updateMech(mech);
   }
 
   export var resetModel = function() : void{

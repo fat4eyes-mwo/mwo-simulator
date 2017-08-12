@@ -101,13 +101,10 @@ namespace MechViewMechDetails {
       }
     }
 
-    setSkillQuirks(quirks : MechModelQuirks.MechQuirk[]) {
-      this.quirkListPanel.setQuirks(quirks);
-    }
-
     render() {
       let skillListJQ = $(this.domElement).find(".skillList");
       skillListJQ.empty();
+      this.quirkListPanel.setQuirks(MechModelView.getMechSkillQuirks(this.mechId));
       this.quirkListPanel.render();
     }
   }
@@ -115,11 +112,13 @@ namespace MechViewMechDetails {
   class LoadMechSkillsDialog extends MechViewWidgets.LoadFromURLDialog {
     private static readonly DialogId = "loadMechSkillsDialog";
     mechId : string;
+    mechSkillsPanel : MechDetailsSkills;
     skillListPanel : MechQuirkListPanel;
     loadedSkillQuirks : MechQuirk[];
     constructor(mechSkillsPanel : MechDetailsSkills) {
       super("loadFromURLDialog-loadSkills-template", LoadMechSkillsDialog.DialogId);
       this.mechId = mechSkillsPanel.mechId;
+      this.mechSkillsPanel = mechSkillsPanel;
 
       let mechNameJQ = $(this.domElement).find(".mechName");
       let mechName = MechModelView.getMechName(mechSkillsPanel.mechId);
@@ -131,6 +130,14 @@ namespace MechViewMechDetails {
     createOkButtonHandler(dialog: LoadFromURLDialog): ClickHandler {
       return function() {
         //TODO: Implement setting and updating UI for mech skills
+        let loadDialog = dialog as LoadMechSkillsDialog;
+        if (loadDialog.loadedSkillQuirks) {
+          MechModelView.applySkillQuirks(loadDialog.mechId, loadDialog.loadedSkillQuirks);
+          loadDialog.mechSkillsPanel.render();
+          MechViewRouter.modifyAppState();
+        } else {
+          console.warn("No loaded skill quirks");
+        }
         MechViewWidgets.hideModal();
       };
     }
@@ -159,7 +166,7 @@ namespace MechViewMechDetails {
         dialog.setLoading(true);
         loadPromise
         .then(function(data : any) {
-          let kitlaanData = data as SkillTreeData.KitlaanSkillTree;
+          let kitlaanData = data as ExternalSkillTrees.KitlaanSkillTree;
           let skillQuirks = loadMechDialog.convertKitlaanDataToMechQuirks(kitlaanData);
           loadMechDialog.loadedSkillQuirks = skillQuirks;
 
@@ -181,7 +188,7 @@ namespace MechViewMechDetails {
     }
 
     private convertKitlaanDataToMechQuirks(
-          kitlaanData: SkillTreeData.KitlaanSkillTree)
+          kitlaanData: ExternalSkillTrees.KitlaanSkillTree)
           : MechModelQuirks.MechQuirkList {
       let skillQuirks: MechModelQuirks.MechQuirkList = new MechModelQuirks.MechQuirkList();
       for (let category in kitlaanData.selected) {
@@ -192,7 +199,7 @@ namespace MechViewMechDetails {
 
         for (let kitlaanSkill of kitlaanCategorySkills) {
           let kitlaanName = kitlaanSkill[0];
-          let skillName = SkillTreeData._KitlaanSkillNameMap[kitlaanName];
+          let skillName = ExternalSkillTrees._KitlaanSkillNameMap[kitlaanName];
           let mechQuirks = MechModelView.convertSkillToMechQuirks(skillName,
             this.mechId);
           if (mechQuirks) {

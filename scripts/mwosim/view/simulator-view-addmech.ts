@@ -95,6 +95,7 @@ namespace MechViewAddMech {
           let mechTranslatedName = smurfyMechData.translated_name;
           let mechName = smurfyMechData.name;
           dialog.clearError();
+          $(dialog.getResultPanel()).empty();
           let loadedMechPanel = new LoadedMechPanel(
                                         dialog.getResultPanel(), 
                                         (dialog as AddMechDialog).loadedSmurfyLoadout);

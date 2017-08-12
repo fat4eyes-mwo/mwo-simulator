@@ -51,12 +51,15 @@ namespace MechModel  {
     mechType : string; //light, medium, heavy, assault
     faction : string; //InnerSphere, Clan
     quirks : MechQuirk[];
+    skillQuirks : MechQuirk[];
     generalQuirkBonus : MechModelQuirks.GeneralBonus;
     mechHealth : MechHealth;
     weaponInfoList : MechModelWeapons.WeaponInfo[];
     heatsinkInfoList : Heatsink[];
     ammoBoxList : AmmoBox[];
     engineInfo : EngineInfo;
+    //NOTE: DO NOT ACCESS THIS MEMBER'S FIELDS. It is here only to reconstruct the data in applySkillQuirks
+    smurfyMechLoadout : SmurfyMechLoadout; 
 
     constructor(mechId : string, smurfyMechLoadout : SmurfyMechLoadout) {
       this.mechId = mechId;
@@ -68,25 +71,36 @@ namespace MechModel  {
       this.tons = Number(smurfyMechData.details.tons);
       this.mechType = smurfyMechData.mech_type;
       this.faction = smurfyMechData.faction;
+      this.smurfyMechLoadout = smurfyMechLoadout;
       //NOTE: Quirks should be set before creating WeaponInfos
       if (isOmnimech(smurfyMechLoadout)) {
         this.quirks = MechModelQuirks.collectOmnipodQuirks(smurfyMechLoadout);
       } else {
         this.quirks = MechModelQuirks.collectMechQuirks(smurfyMechData);
       }
-      this.initComputedValues(smurfyMechLoadout);
+      this.skillQuirks = []; //is set using applySkillQuirks
+      this.initComputedValues();
     }
 
-    initComputedValues(smurfyMechLoadout : SmurfyMechLoadout) {
+    initComputedValues() {
       //NOTE: General quirk bonus must be computed before collecting heatsinks
       //(bonus is used in computing heatdissipation)
+      let combinedQuirks = this.quirks;
+      if (this.skillQuirks) {
+        combinedQuirks = combinedQuirks.concat(this.skillQuirks);
+      }
 
-      this.generalQuirkBonus = MechModelQuirks.getGeneralBonus(this.quirks);
-      this.mechHealth = mechHealthFromSmurfyMechLoadout(smurfyMechLoadout, this.quirks);
-      this.weaponInfoList = weaponInfoListFromSmurfyMechLoadout(smurfyMechLoadout, this);
-      this.heatsinkInfoList = heatsinkListFromSmurfyMechLoadout(smurfyMechLoadout);
-      this.ammoBoxList = ammoBoxListFromSmurfyMechLoadout(smurfyMechLoadout);
-      this.engineInfo = engineInfoFromSmurfyMechLoadout(smurfyMechLoadout);
+      this.generalQuirkBonus = MechModelQuirks.getGeneralBonus(combinedQuirks);
+      this.mechHealth = mechHealthFromSmurfyMechLoadout(this.smurfyMechLoadout, combinedQuirks);
+      this.weaponInfoList = weaponInfoListFromSmurfyMechLoadout(this.smurfyMechLoadout, this);
+      this.heatsinkInfoList = heatsinkListFromSmurfyMechLoadout(this.smurfyMechLoadout);
+      this.ammoBoxList = ammoBoxListFromSmurfyMechLoadout(this.smurfyMechLoadout, combinedQuirks);
+      this.engineInfo = engineInfoFromSmurfyMechLoadout(this.smurfyMechLoadout);
+    }
+
+    applySkillQuirks(skillQuirks : MechQuirk[]) {
+      this.skillQuirks = skillQuirks;
+      this.initComputedValues();
     }
   }
 
@@ -173,7 +187,7 @@ namespace MechModel  {
     structure : number;
     baseMaxArmor : number;
     baseMaxStructure : number;
-    quirkBonus : MechModelQuirks.HealthBonusAdditive;
+    quirkBonus : MechModelQuirks.HealthBonus;
 
     constructor(location : string,
                 armor : number, structure : number,
@@ -184,8 +198,8 @@ namespace MechModel  {
       this.baseMaxArmor = maxArmor; //maximum armor from loadout
       this.baseMaxStructure = maxStructure; //maximum structure from loadout
     }
-    //applies bonus from mech quirks.
-    applyQuirkBonus(bonus : MechModelQuirks.HealthBonusAdditive) {
+    //applies bonus from quirks.
+    applyQuirkBonus(bonus : MechModelQuirks.HealthBonus) {
       this.quirkBonus = bonus;
       this.resetToFullHealth();
     }
@@ -197,16 +211,16 @@ namespace MechModel  {
       let ret = this.baseMaxArmor;
       if (this.quirkBonus) {
         ret += Number(this.quirkBonus.armor);
+        ret = ret * Number(this.quirkBonus.armor_multiplier);
       }
-      //TODO: Add skill bonus
       return ret;
     }
     get maxStructure() : number{
       let ret = this.baseMaxStructure;
       if (this.quirkBonus) {
         ret += Number(this.quirkBonus.structure);
+        ret = ret * Number(this.quirkBonus.structure_multiplier);
       }
-      //TODO: Add skill bonus
       return ret;
     }
     isIntact() : boolean {
@@ -1423,14 +1437,14 @@ namespace MechModel  {
 
   var componentHealthFromSmurfyMechComponent =
       function (smurfyMechComponent : SmurfyMechComponent,
-                smurfyMechQuirks : MechQuirk[],
+                quirkList : MechQuirk[],
                 tonnage : number) : ComponentHealth {
     var componentHealth; //return value
 
     var location = smurfyMechComponent.name;
     var armor = smurfyMechComponent.armor;
     var structure = baseMechStructure(location, tonnage);
-    let bonus = MechModelQuirks.getArmorStructureBonus(location, smurfyMechQuirks);
+    let bonus = MechModelQuirks.getHealthBonus(location, quirkList);
     componentHealth = new ComponentHealth(location,
                                   Number(armor),
                                   Number(structure),
@@ -1509,7 +1523,8 @@ namespace MechModel  {
   }
 
   var ammoBoxListFromSmurfyMechLoadout =
-      function (smurfyMechLoadout : SmurfyMechLoadout) {
+      function (smurfyMechLoadout : SmurfyMechLoadout,
+                quirks : MechQuirk[]) {
     var ammoList = [];
     ammoList = collectFromSmurfyConfiguration(smurfyMechLoadout.configuration,
       function (location, smurfyMechComponentItem) : AmmoBox {
@@ -1651,6 +1666,7 @@ namespace MechModel  {
                       Number(engineHeatsink.engineCooling) *
                       Number(engineHeatEfficiency);
     let heatDissipationMultiplier = 1.0;
+    let heatCapacityMultiplier = 1.0;
     //TODO: Find the difference between heatloss and heatdissipation
     if (generalQuirkBonus.heatloss_multiplier) {
       heatDissipationMultiplier += generalQuirkBonus.heatloss_multiplier;
@@ -1658,7 +1674,11 @@ namespace MechModel  {
     if (generalQuirkBonus.heatdissipation_multiplier) {
       heatDissipationMultiplier += generalQuirkBonus.heatdissipation_multiplier;
     }
+    if (generalQuirkBonus.maxheat_multiplier) {
+      heatCapacityMultiplier += Number(generalQuirkBonus.maxheat_multiplier);
+    }
     heatDissipation = heatDissipation * heatDissipationMultiplier;
+    heatCapacity = heatCapacity * heatCapacityMultiplier;
     return {
       "heatCapacity" : heatCapacity ,
       "heatDissipation" : heatDissipation
@@ -1746,6 +1766,10 @@ namespace MechModel  {
     }
     getTargetMech() {
       return this.targetMech;
+    }
+    applySkillQuirks(skillQuirks : MechQuirk[]) {
+      this.mechInfo.applySkillQuirks(skillQuirks);
+      this.resetMechState();
     }
   }
 

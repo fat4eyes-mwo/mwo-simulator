@@ -1,5 +1,5 @@
 
-namespace SkillTreeData {
+namespace ExternalSkillTrees {
   export interface SkillNameMap {
     [index:string] : string;
   }

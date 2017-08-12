@@ -392,9 +392,10 @@ namespace MechModelWeapons {
     }
 
     computeJamTime() {
-      //TODO: See if any quirks affect jam time
       //NOTE: Skills affect jam time
-      return Number(this.weaponInfo.jamTime);
+      let weaponBonus = this.weaponInfo.weaponBonus;
+      let jamTimeMultiplier = 1.0 + weaponBonus.jamduration_multiplier;
+      return Number(this.weaponInfo.jamTime * jamTimeMultiplier);
     }
 
     computeTimeBetweenAutoShots() {

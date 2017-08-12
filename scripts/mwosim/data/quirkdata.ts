@@ -2,9 +2,11 @@
 
 namespace MechModelQuirks {
   //quirks that apply to the mech, not a component or weapon
+  //NOTE: Many other skill quirks fit in here, add them whenever they become relevant to the simulation
   export const _quirkGeneral : {[index:string] : boolean} = {
     "heatloss_multiplier" : true,
     "heatdissipation_multiplier" : true,
+    "maxheat_multiplier" : true,
     "externalheat_multiplier" : true,
     "sensorrange_additive" : true,
   };
@@ -20,8 +22,10 @@ namespace MechModelQuirks {
     "right_torso" : "rt",
     "head" : "hd",
   };
-  export const _quirkArmorPrefix : string = "armorresist";
-  export const _quirkStructurePrefix : string = "internalresist";
+  export const QuirkArmorAdditivePrefix : string = "armorresist";
+  export const QuirkStructureAdditivePrefix : string = "internalresist";
+  export const QuirkArmorMultiplier : string = "increasedarmor_multiplier";
+  export const QuirkStructureMultiplier : string = "increasedstructure_multiplier";
 
 
   //Weapon quirks

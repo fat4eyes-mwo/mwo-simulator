@@ -164,27 +164,33 @@ namespace MechModelQuirks {
   }
 
   //returns {armor: <bonus armor>, structure: <bonus structure>}
-  export interface HealthBonusAdditive {
+  export interface HealthBonus {
     armor : number;
     structure : number;
+    armor_multiplier : number;
+    structure_multiplier : number;
   }
-  export var getArmorStructureBonus =
-    function(component : string, quirkList : MechQuirk[]) : HealthBonusAdditive {
-    let ret = {armor: 0, structure: 0};
+  export var getHealthBonus =
+    function(component : string, quirkList : MechQuirk[]) : HealthBonus {
+    let ret = {armor: 0, structure: 0, armor_multiplier : 1.0, structure_multiplier : 1.0};
 
     for (let quirk of quirkList) {
-      if (quirk.name.startsWith(_quirkArmorPrefix)) {
+      if (quirk.name.startsWith(QuirkArmorAdditivePrefix)) {
         let quirkComponent = quirk.name.split("_")[1];
         if (_quirkComponentMap[component] !== quirkComponent) {
           continue;
         }
         ret.armor += Number(quirk.value);
-      } else if (quirk.name.startsWith(_quirkStructurePrefix)) {
+      } else if (quirk.name.startsWith(QuirkStructureAdditivePrefix)) {
         let quirkComponent = quirk.name.split("_")[1];
         if (_quirkComponentMap[component] !== quirkComponent) {
           continue;
         }
         ret.structure += Number(quirk.value);
+      } else if (quirk.name === QuirkArmorMultiplier) {
+        ret.armor_multiplier += Number(quirk.value);
+      } else if (quirk.name === QuirkStructureMultiplier) {
+        ret.structure_multiplier += Number(quirk.value);
       }
     }
     return ret;
@@ -241,9 +247,12 @@ namespace MechModelQuirks {
   };
   export var getWeaponBonus = function(weaponInfo : WeaponInfo) : WeaponBonus {
     let quirkList = weaponInfo.mechInfo.quirks;
+    if (weaponInfo.mechInfo.skillQuirks) {
+      quirkList = quirkList.concat(weaponInfo.mechInfo.skillQuirks);
+    }
     let ret : {[index:string] : number} = {cooldown_multiplier : 0, duration_multiplier : 0,
               heat_multiplier : 0, range_multiplier : 0, velocity_multiplier : 0,
-              jamchance_multiplier: 0};
+              jamchance_multiplier: 0, jamduration_multiplier: 0};
     for (let quirk of quirkList) {
       let quirkNameComponents = quirk.name.split("_");
       let firstNameComponent = quirkNameComponents[0];
