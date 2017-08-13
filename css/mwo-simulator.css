@@ -732,6 +732,11 @@ a:hover {
   color: #963232;
 }
 
+.statusPanel .mechDetails .mechDetailsQuirkRow.noeffect,
+.loadSkillsDialog .mechDetailsQuirkRow.noeffect {
+  color: #787878;
+}
+
 .statusPanel .mechDetails .mechDetailsSkills .buttonContainer {
   float: right;
   margin-right: 5px;

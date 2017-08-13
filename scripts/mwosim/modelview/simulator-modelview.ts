@@ -598,4 +598,9 @@ namespace MechModelView {
     let newMechId = MechModel.generateMechId(smurfyMechLoadout);
     return MechModel.addMech(newMechId, team, smurfyMechLoadout);
   }
+
+  export var isQuirkApplicable = function(mechId : string, quirk : MechViewQuirk) {
+    let mech = MechModel.getMechFromId(mechId);
+    return MechModelQuirks.isQuirkApplicable(quirk, mech.getMechInfo());
+  }
 }

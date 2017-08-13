@@ -3,7 +3,7 @@
 namespace MechViewMechDetails {
   type LoadFromURLDialog = MechViewWidgets.LoadFromURLDialog;
   type ClickHandler = MechViewWidgets.ClickHandler;
-  type MechQuirk = MechModelQuirks.MechQuirk;
+  type MechQuirk = MechModelView.MechViewQuirk;
 
   export class MechDetails extends MechViewWidgets.DomStoredWidget
                           implements MechViewWidgets.RenderedWidget {
@@ -65,7 +65,7 @@ namespace MechViewMechDetails {
       let mechQuirkList = MechModelView.getMechQuirks(this.mechId);
 
       
-      let mechQuirkListPanel = new MechQuirkListPanel(mechQuirksJQ.get(0));
+      let mechQuirkListPanel = new MechQuirkListPanel(mechQuirksJQ.get(0), this.mechId);
       mechQuirkListPanel.setQuirks(mechQuirkList);
       mechQuirkListPanel.render();
     }
@@ -87,7 +87,7 @@ namespace MechViewMechDetails {
       this.loadButton = new MechViewWidgets.Button(loadButtonJQ.get(0), this.createLoadButtonHandler(this));
 
       let skillListJQ = $(this.domElement).find(".skillList");
-      this.quirkListPanel = new MechQuirkListPanel(skillListJQ.get(0));
+      this.quirkListPanel = new MechQuirkListPanel(skillListJQ.get(0), this.mechId);
     }
 
     private createLoadButtonHandler(skillsPanel : MechDetailsSkills) : MechViewWidgets.ClickHandler {
@@ -136,7 +136,7 @@ namespace MechViewMechDetails {
       let mechName = MechModelView.getMechName(mechSkillsPanel.mechId);
       mechNameJQ.text(mechName);
 
-      this.skillListPanel = new MechQuirkListPanel(this.getResultPanel());
+      this.skillListPanel = new MechQuirkListPanel(this.getResultPanel(), this.mechId);
     }
 
     createOkButtonHandler(dialog: LoadFromURLDialog): ClickHandler {
@@ -204,14 +204,25 @@ namespace MechViewMechDetails {
   class MechQuirkListPanel extends MechViewWidgets.DomStoredWidget 
                         implements MechViewWidgets.RenderedWidget {
     static readonly MechQuirkListDomKey = "mwosim.MechQuirkListPanel.uiObject";
-    private quirkList : MechModelQuirks.MechQuirk[] = [];
-    constructor(domElement : Element) {
+    private quirkList : MechQuirk[] = [];
+    mechId : string;
+    constructor(domElement : Element, mechId : string) {
       super(domElement);
       this.storeToDom(MechQuirkListPanel.MechQuirkListDomKey);
+      this.mechId = mechId;
     }
 
-    setQuirks(skillQuirks : MechModelQuirks.MechQuirk[]) {
-      this.quirkList = skillQuirks;
+    setQuirks(quirkList : MechQuirk[]) {
+      let thisPanel = this;
+      this.quirkList = quirkList.slice();
+      this.quirkList.sort(function(quirkA : MechQuirk, quirkB : MechQuirk) : number {
+        let applicableQuirkA = MechModelView.isQuirkApplicable(thisPanel.mechId, quirkA) ? 0 : 1;
+        let applicableQuirkB = MechModelView.isQuirkApplicable(thisPanel.mechId, quirkB) ? 0 : 1;
+        if (applicableQuirkA !== applicableQuirkB) {
+          return applicableQuirkA - applicableQuirkB;
+        }
+        return (quirkA.translated_name.localeCompare(quirkB.translated_name));
+      });
     }
 
     render() {
@@ -229,10 +240,14 @@ namespace MechViewMechDetails {
         let mechQuirkJQ = $(mechQuirkDiv);
         mechQuirkJQ.find(".name").text(mechQuirk.translated_name);
         mechQuirkJQ.find(".value").text(mechQuirk.translated_value);
-        if (mechQuirk.isBonus()) {
-          mechQuirkJQ.addClass("bonus");
+        if (MechModelView.isQuirkApplicable(this.mechId, mechQuirk)) {
+          if (mechQuirk.isBonus()) {
+            mechQuirkJQ.addClass("bonus");
+          } else {
+            mechQuirkJQ.addClass("malus");
+          }
         } else {
-          mechQuirkJQ.addClass("malus");
+          mechQuirkJQ.addClass("noeffect");
         }
         mechQuirksJQ.append(mechQuirkJQ);
       }

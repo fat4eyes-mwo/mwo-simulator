@@ -57,11 +57,7 @@ namespace MechViewAddMech {
         let team = thisJQ.attr('data-team');
         let url = dialog.getTextInputValue();
         console.log("Mech loaded. team: " + team + " URL: " + url);
-        //TODO: Avoid accessing MechModel directly here. Create a method in ModelView to do this
         let smurfyMechLoadout = (dialog as AddMechDialog).loadedSmurfyLoadout;
-        let smurfyMechData = MechModel.getSmurfyMechData(smurfyMechLoadout.mech_id);
-        let mechTranslatedName = smurfyMechData.translated_name;
-        let mechName = smurfyMechData.name;
         let newMech = MechModelView.addMech(team, smurfyMechLoadout);
         //set patterns of added mech to selected team patterns
         MechViewTeamStats.setSelectedTeamPatterns(team);
@@ -91,9 +87,6 @@ namespace MechViewAddMech {
 
         let doneHandler = function (data: any) {
           (dialog as AddMechDialog).loadedSmurfyLoadout = data;
-          let smurfyMechData = MechModel.getSmurfyMechData((dialog as AddMechDialog).loadedSmurfyLoadout.mech_id);
-          let mechTranslatedName = smurfyMechData.translated_name;
-          let mechName = smurfyMechData.name;
           dialog.clearError();
           $(dialog.getResultPanel()).empty();
           let loadedMechPanel = new LoadedMechPanel(

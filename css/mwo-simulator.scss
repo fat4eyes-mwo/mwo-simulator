@@ -26,6 +26,7 @@ $button-bgcolor: gold;
 $button-hover-bgcolor: rgb(255, 255, 30);
 $bonus-color : rgb(50, 150, 50);
 $malus-color : rgb(150, 50, 50);
+$noeffect-color : rgb(120, 120, 120);
 
 /*Main panel styles*/
 body {
@@ -802,6 +803,11 @@ div {
 .loadSkillsDialog .mechDetailsQuirkRow.malus {
   color: $malus-color;
 }
+.statusPanel .mechDetails .mechDetailsQuirkRow.noeffect,
+.loadSkillsDialog .mechDetailsQuirkRow.noeffect {
+  color: $noeffect-color;
+}
+
 
 .statusPanel .mechDetails .mechDetailsQuirks .mechQuirkList {
 }

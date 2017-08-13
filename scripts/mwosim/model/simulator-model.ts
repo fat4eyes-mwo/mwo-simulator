@@ -673,7 +673,7 @@ namespace MechModel  {
         let firstWeaponId = ammoBox.weaponIds[0];
         //Create an ammocount for the weapon if it is not yet in the map
         if (!this.ammoCounts[firstWeaponId]) {
-          let newAmmoCount = new AmmoCount();
+          let newAmmoCount = new AmmoCount(ammoBox.type);
           this.ammoCounts[firstWeaponId] = newAmmoCount;
           //Map all the weapons that can use the ammo to the ammo count
           for (let weaponId of ammoBox.weaponIds) {
@@ -726,13 +726,15 @@ namespace MechModel  {
 
   //The amount of ammo for a given set of weapons
   export class AmmoCount {
+    type : string;
     weaponIds : string[];
     ammoCount : number;
     ammoBoxList : AmmoBox[];
     maxAmmoCount : number;
     currAmmoBoxIdx : number;
 
-    constructor() {
+    constructor(type : string) {
+      this.type = type;
       this.weaponIds = [];
       this.ammoCount = 0; //Total ammo count of all the boxes in the ammoBoxList
       this.ammoBoxList = []; //[AmmoBox...]

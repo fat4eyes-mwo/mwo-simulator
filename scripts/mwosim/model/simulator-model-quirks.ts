@@ -250,9 +250,15 @@ namespace MechModelQuirks {
     if (weaponInfo.mechInfo.skillQuirks) {
       quirkList = quirkList.concat(weaponInfo.mechInfo.skillQuirks);
     }
-    let ret : {[index:string] : number} = {cooldown_multiplier : 0, duration_multiplier : 0,
-              heat_multiplier : 0, range_multiplier : 0, velocity_multiplier : 0,
-              jamchance_multiplier: 0, jamduration_multiplier: 0};
+    return getWeaponBonusForQuirklist(weaponInfo, quirkList);
+  }
+
+  var getWeaponBonusForQuirklist = function(weaponInfo : WeaponInfo, quirkList : MechQuirk[]) : WeaponBonus {
+    let ret: { [index: string]: number } = {
+      cooldown_multiplier: 0, duration_multiplier: 0,
+      heat_multiplier: 0, range_multiplier: 0, velocity_multiplier: 0,
+      jamchance_multiplier: 0, jamduration_multiplier: 0
+    };
     for (let quirk of quirkList) {
       let quirkNameComponents = quirk.name.split("_");
       let firstNameComponent = quirkNameComponents[0];
@@ -266,7 +272,7 @@ namespace MechModelQuirks {
 
       //specific weapon bonuses
       let applicableQuirks =
-            reversedWeaponQuirkMap.getApplicableQuirks(weaponInfo.name);
+        reversedWeaponQuirkMap.getApplicableQuirks(weaponInfo.name);
       if (applicableQuirks && applicableQuirks.has(firstNameComponent)) {
         ret[restOfNameComponents] += Number(quirk.value);
       }
@@ -343,6 +349,46 @@ namespace MechModelQuirks {
         this.addQuirk(quirk);
       }
     }
+  }
+
+  export var isQuirkApplicable = function(quirk : MechQuirk, mechInfo : MechModel.MechInfo) : boolean {
+    //general quirks
+    let generalBonus : GeneralBonus  = getGeneralBonus([quirk]);
+    for (let idx in generalBonus) {
+      if (generalBonus.hasOwnProperty(idx)) {
+        return true;
+      }
+    }
+
+    //armor quirks
+    if (quirk.name.startsWith(QuirkArmorAdditivePrefix) 
+        || quirk.name.startsWith(QuirkStructureAdditivePrefix)
+        || quirk.name === QuirkArmorMultiplier
+        || quirk.name === QuirkStructureMultiplier) {
+      return true;
+    }
+
+    //weapon bonuses
+    for (let weaponInfo of mechInfo.weaponInfoList) {
+      let weaponBonus = getWeaponBonusForQuirklist(weaponInfo, [quirk]);
+      for (let idx in weaponBonus) {
+        if (weaponBonus.hasOwnProperty(idx)) {
+          if (weaponBonus[idx] !== 0) {
+            return true;
+          }
+        }
+      }
+    }
+
+    //ammo bonuses
+    for (let ammoBox of mechInfo.ammoBoxList) {
+      let ammoType = MechModelQuirks._ammoCapacityMap[quirk.name];
+      if (ammoType === ammoBox.type) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
 }

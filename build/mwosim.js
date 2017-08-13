@@ -4947,6 +4947,44 @@ var MechModelQuirks;
         "maxheat_multiplier": true,
         "externalheat_multiplier": true,
         "sensorrange_additive": true,
+        "critchance_receiving_multiplier": true,
+        "falldamage_multiplier": true,
+        "torso_yawspeed_multiplier": true,
+        "torso_yawangle_multiplier": true,
+        "torso_pitchangle_multiplier": true,
+        "accellerp_all_multiplier": true,
+        "decellerp_all_multiplier": true,
+        "turnlerp_all_multiplier": true,
+        "mechtopspeed_multiplier": true,
+        "jumpjets_initialthrust_multiplier": true,
+        "jumpjets_forwardthrust_multiplier": true,
+        "jumpjets_burntime_multiplier": true,
+        "jumpjets_heat_multiplier": true,
+        "startupduration_multiplier": true,
+        "hillclimb_multiplier": true,
+        "speedretention_multiplier": true,
+        "sensorrange_multiplier": true,
+        "targetinfogathering_multiplier": true,
+        "targetdecayduration_additive": true,
+        "radardeprivation_multiplier": true,
+        "advancedzoom_additive": true,
+        "seismicsensorrange_additive": true,
+        "backfacetargetretentionrange_additive": true,
+        "extraconsumableslot_additive": true,
+        "uavcapacity_additive": true,
+        "uavrange_multiplier": true,
+        "uavduration_additive": true,
+        "coolshotcapacity_additive": true,
+        "coolshotcooling_multiplier": true,
+        "coolshotcooldown_multiplier": true,
+        "strategicstrikecapacity_additive": true,
+        "strategicstrikenumshells_multiplier": true,
+        "strategicstrikeduration_multiplier": true,
+        "strategicstrikespread_multiplier": true,
+        "captureaccelerator_multiplier": true,
+        "ecmtargetrangereduction_multiplier": true,
+        "stealtharmorcooldown_multiplier": true,
+        "screenshake_multiplier": true,
     };
     //Defensive quirks
     MechModelQuirks._quirkComponentMap = {
@@ -8896,9 +8934,14 @@ var MechModelQuirks;
         if (weaponInfo.mechInfo.skillQuirks) {
             quirkList = quirkList.concat(weaponInfo.mechInfo.skillQuirks);
         }
-        let ret = { cooldown_multiplier: 0, duration_multiplier: 0,
+        return getWeaponBonusForQuirklist(weaponInfo, quirkList);
+    };
+    var getWeaponBonusForQuirklist = function (weaponInfo, quirkList) {
+        let ret = {
+            cooldown_multiplier: 0, duration_multiplier: 0,
             heat_multiplier: 0, range_multiplier: 0, velocity_multiplier: 0,
-            jamchance_multiplier: 0, jamduration_multiplier: 0 };
+            jamchance_multiplier: 0, jamduration_multiplier: 0
+        };
         for (let quirk of quirkList) {
             let quirkNameComponents = quirk.name.split("_");
             let firstNameComponent = quirkNameComponents[0];
@@ -8988,6 +9031,41 @@ var MechModelQuirks;
         }
     }
     MechModelQuirks.MechQuirkList = MechQuirkList;
+    MechModelQuirks.isQuirkApplicable = function (quirk, mechInfo) {
+        //general quirks
+        let generalBonus = MechModelQuirks.getGeneralBonus([quirk]);
+        for (let idx in generalBonus) {
+            if (generalBonus.hasOwnProperty(idx)) {
+                return true;
+            }
+        }
+        //armor quirks
+        if (quirk.name.startsWith(MechModelQuirks.QuirkArmorAdditivePrefix)
+            || quirk.name.startsWith(MechModelQuirks.QuirkStructureAdditivePrefix)
+            || quirk.name === MechModelQuirks.QuirkArmorMultiplier
+            || quirk.name === MechModelQuirks.QuirkStructureMultiplier) {
+            return true;
+        }
+        //weapon bonuses
+        for (let weaponInfo of mechInfo.weaponInfoList) {
+            let weaponBonus = getWeaponBonusForQuirklist(weaponInfo, [quirk]);
+            for (let idx in weaponBonus) {
+                if (weaponBonus.hasOwnProperty(idx)) {
+                    if (weaponBonus[idx] !== 0) {
+                        return true;
+                    }
+                }
+            }
+        }
+        //ammo bonuses
+        for (let ammoBox of mechInfo.ammoBoxList) {
+            let ammoType = MechModelQuirks._ammoCapacityMap[quirk.name];
+            if (ammoType === ammoBox.type) {
+                return true;
+            }
+        }
+        return false;
+    };
 })(MechModelQuirks || (MechModelQuirks = {}));
 var MechModelSkills;
 (function (MechModelSkills) {
@@ -10366,7 +10444,7 @@ var MechModel;
                 let firstWeaponId = ammoBox.weaponIds[0];
                 //Create an ammocount for the weapon if it is not yet in the map
                 if (!this.ammoCounts[firstWeaponId]) {
-                    let newAmmoCount = new AmmoCount();
+                    let newAmmoCount = new AmmoCount(ammoBox.type);
                     this.ammoCounts[firstWeaponId] = newAmmoCount;
                     //Map all the weapons that can use the ammo to the ammo count
                     for (let weaponId of ammoBox.weaponIds) {
@@ -10418,7 +10496,8 @@ var MechModel;
     MechModel.AmmoState = AmmoState;
     //The amount of ammo for a given set of weapons
     class AmmoCount {
-        constructor() {
+        constructor(type) {
+            this.type = type;
             this.weaponIds = [];
             this.ammoCount = 0; //Total ammo count of all the boxes in the ammoBoxList
             this.ammoBoxList = []; //[AmmoBox...]
@@ -12072,6 +12151,10 @@ var MechModelView;
         let newMechId = MechModel.generateMechId(smurfyMechLoadout);
         return MechModel.addMech(newMechId, team, smurfyMechLoadout);
     };
+    MechModelView.isQuirkApplicable = function (mechId, quirk) {
+        let mech = MechModel.getMechFromId(mechId);
+        return MechModelQuirks.isQuirkApplicable(quirk, mech.getMechInfo());
+    };
 })(MechModelView || (MechModelView = {}));
 //returns index of matching entry, otherwise returns the closest lower entry in
 //the array
@@ -12507,11 +12590,7 @@ var MechViewAddMech;
                 let team = thisJQ.attr('data-team');
                 let url = dialog.getTextInputValue();
                 console.log("Mech loaded. team: " + team + " URL: " + url);
-                //TODO: Avoid accessing MechModel directly here. Create a method in ModelView to do this
                 let smurfyMechLoadout = dialog.loadedSmurfyLoadout;
-                let smurfyMechData = MechModel.getSmurfyMechData(smurfyMechLoadout.mech_id);
-                let mechTranslatedName = smurfyMechData.translated_name;
-                let mechName = smurfyMechData.name;
                 let newMech = MechModelView.addMech(team, smurfyMechLoadout);
                 //set patterns of added mech to selected team patterns
                 MechViewTeamStats.setSelectedTeamPatterns(team);
@@ -12538,9 +12617,6 @@ var MechViewAddMech;
                 console.log("Load. team: " + team + " URL: " + url);
                 let doneHandler = function (data) {
                     dialog.loadedSmurfyLoadout = data;
-                    let smurfyMechData = MechModel.getSmurfyMechData(dialog.loadedSmurfyLoadout.mech_id);
-                    let mechTranslatedName = smurfyMechData.translated_name;
-                    let mechName = smurfyMechData.name;
                     dialog.clearError();
                     $(dialog.getResultPanel()).empty();
                     let loadedMechPanel = new LoadedMechPanel(dialog.getResultPanel(), dialog.loadedSmurfyLoadout);
@@ -12709,7 +12785,7 @@ var MechViewMechDetails;
             let mechDetailsJQ = $(this.domElement);
             let mechQuirksJQ = mechDetailsJQ.find(".mechQuirkList");
             let mechQuirkList = MechModelView.getMechQuirks(this.mechId);
-            let mechQuirkListPanel = new MechQuirkListPanel(mechQuirksJQ.get(0));
+            let mechQuirkListPanel = new MechQuirkListPanel(mechQuirksJQ.get(0), this.mechId);
             mechQuirkListPanel.setQuirks(mechQuirkList);
             mechQuirkListPanel.render();
         }
@@ -12724,7 +12800,7 @@ var MechViewMechDetails;
             let loadButtonJQ = $(this.domElement).find(".loadButton");
             this.loadButton = new MechViewWidgets.Button(loadButtonJQ.get(0), this.createLoadButtonHandler(this));
             let skillListJQ = $(this.domElement).find(".skillList");
-            this.quirkListPanel = new MechQuirkListPanel(skillListJQ.get(0));
+            this.quirkListPanel = new MechQuirkListPanel(skillListJQ.get(0), this.mechId);
         }
         createLoadButtonHandler(skillsPanel) {
             return function () {
@@ -12763,7 +12839,7 @@ var MechViewMechDetails;
             let mechNameJQ = $(this.domElement).find(".mechName");
             let mechName = MechModelView.getMechName(mechSkillsPanel.mechId);
             mechNameJQ.text(mechName);
-            this.skillListPanel = new MechQuirkListPanel(this.getResultPanel());
+            this.skillListPanel = new MechQuirkListPanel(this.getResultPanel(), this.mechId);
         }
         createOkButtonHandler(dialog) {
             return function () {
@@ -12828,13 +12904,23 @@ var MechViewMechDetails;
     }
     LoadMechSkillsDialog.DialogId = "loadMechSkillsDialog";
     class MechQuirkListPanel extends MechViewWidgets.DomStoredWidget {
-        constructor(domElement) {
+        constructor(domElement, mechId) {
             super(domElement);
             this.quirkList = [];
             this.storeToDom(MechQuirkListPanel.MechQuirkListDomKey);
+            this.mechId = mechId;
         }
-        setQuirks(skillQuirks) {
-            this.quirkList = skillQuirks;
+        setQuirks(quirkList) {
+            let thisPanel = this;
+            this.quirkList = quirkList.slice();
+            this.quirkList.sort(function (quirkA, quirkB) {
+                let applicableQuirkA = MechModelView.isQuirkApplicable(thisPanel.mechId, quirkA) ? 0 : 1;
+                let applicableQuirkB = MechModelView.isQuirkApplicable(thisPanel.mechId, quirkB) ? 0 : 1;
+                if (applicableQuirkA !== applicableQuirkB) {
+                    return applicableQuirkA - applicableQuirkB;
+                }
+                return (quirkA.translated_name.localeCompare(quirkB.translated_name));
+            });
         }
         render() {
             let mechQuirksJQ = $(this.domElement);
@@ -12850,11 +12936,16 @@ var MechViewMechDetails;
                 let mechQuirkJQ = $(mechQuirkDiv);
                 mechQuirkJQ.find(".name").text(mechQuirk.translated_name);
                 mechQuirkJQ.find(".value").text(mechQuirk.translated_value);
-                if (mechQuirk.isBonus()) {
-                    mechQuirkJQ.addClass("bonus");
+                if (MechModelView.isQuirkApplicable(this.mechId, mechQuirk)) {
+                    if (mechQuirk.isBonus()) {
+                        mechQuirkJQ.addClass("bonus");
+                    }
+                    else {
+                        mechQuirkJQ.addClass("malus");
+                    }
                 }
                 else {
-                    mechQuirkJQ.addClass("malus");
+                    mechQuirkJQ.addClass("noeffect");
                 }
                 mechQuirksJQ.append(mechQuirkJQ);
             }
