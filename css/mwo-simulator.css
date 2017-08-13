@@ -1064,6 +1064,8 @@ a:hover {
 
 .loadFromURLDialog .resultPanel {
   word-wrap: break-word;
+  overflow: auto;
+  max-height: 10em;
 }
 
 .loadFromURLDialog .resultPanel.error {
