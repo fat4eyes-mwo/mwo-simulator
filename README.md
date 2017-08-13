@@ -55,7 +55,6 @@
 * Exponential dropoff for cLRMs below min range (right now they do 0 damage below min range)
 * Environmental heat effects
 * Targeting computer effects
-* Mech skills
 * Crits and weapon/heatsink/ammo destruction. Right now weapons/heatsinks/ammo are only destroyed if the component they are on are destroyed. The crux here is to find a way to simulate this randomness deterministically.
 * Special weapon crit/damage effects (this includes LBX,SRM crits, MG crits and flamer heat).
 * Ammo explosions
@@ -76,6 +75,7 @@ The main entry point of the program is in `scripts/simulator.ts`.
 
 # Update Info
 
+* 2017-08-13: Mech skills (using kitlaan's skill planner).
 * 2017-08-08: Omnipod full set bonuses.
 * 2017-08-05: Added mech details popup. Currently contains list of mech's quirks.
 * 2017-08-02: Added 'Expected Value' setting for simulating UAC jams.
