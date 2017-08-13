@@ -47,6 +47,12 @@ namespace MechModelQuirks {
     "ecmtargetrangereduction_multiplier" : true,
     "stealtharmorcooldown_multiplier" : true,
     "screenshake_multiplier" : true,
+    "torso_pitchangle_additive" : true,
+    "torso_pitchspeed_multiplier" : true,
+    "torso_yawangle_additive" : true,
+    "xpbonus_multiplier" : true,
+    "jumpjetslots_additive" : true,
+    "reversespeed_multiplier" : true,
   };
 
   //Defensive quirks
