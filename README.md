@@ -26,9 +26,11 @@
 
 6. Click 'Settings' to view and set various Team Settings.
 7. Click Speed setting (1x to 8x) to set simulation speed.
-8. Click 'Run'.
-9. Click 'Permalink' to save changes and share your simulation.
-10. Click 'Reset Simulation' to bring dead mechs back to life and start again.
+8. Click 'Details' to see the mech's quirks and skills.
+9. Click 'Skills'->'Load Skills' to load skills from [kitlaan](https://kitlaan.gitlab.io/mwoskill/).
+10. Click 'Run'.
+11. Click 'Permalink' to save changes and share your simulation.
+12. Click 'Reset Simulation' to bring dead mechs back to life and start again.
 
 # Guide for Reporting Bugs
 
