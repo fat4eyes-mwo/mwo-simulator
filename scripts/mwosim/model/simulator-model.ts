@@ -1534,7 +1534,7 @@ namespace MechModel  {
     ammoList = collectFromSmurfyConfiguration(smurfyMechLoadout.configuration,
       function (location, smurfyMechComponentItem) : AmmoBox {
         if (smurfyMechComponentItem.type === "ammo") {
-          let ammoBox = ammoBoxFromSmurfyMechComponentItem(location, smurfyMechComponentItem);
+          let ammoBox = ammoBoxFromSmurfyMechComponentItem(location, smurfyMechComponentItem, quirks);
           return ammoBox;
         } else {
           return null;
@@ -1546,13 +1546,20 @@ namespace MechModel  {
 
   var ammoBoxFromSmurfyMechComponentItem =
       function(location : string,
-                smurfyMechComponentItem : SmurfyMechComponentItem)
+                smurfyMechComponentItem : SmurfyMechComponentItem,
+                quirks : MechQuirk[])
                 : AmmoBox {
     var ammoBox;
     let ammoData = getSmurfyAmmoData(smurfyMechComponentItem.id);
     let type = ammoData.type;
     let ammoCount = ammoData.num_shots;
     let weaponIds = ammoData.weapons;
+    for (let quirk of quirks) {
+      let ammoType = MechModelQuirks._ammoCapacityMap[quirk.name];
+      if (ammoType === type) {
+        ammoCount += Number(quirk.value);
+      }
+    }
     ammoBox = new AmmoBox(type, location, weaponIds, ammoCount, true);
 
     return ammoBox;

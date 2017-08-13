@@ -5065,6 +5065,58 @@ var MechModelQuirks;
             "ClanSRM2", "ClanSRM2_Artemis", "ClanSRM4", "ClanSRM4_Artemis", "ClanSRM6", "ClanSRM6_Artemis"],
         "streaksrm": ["StreakSRM2", "StreakSRM4", "StreakSRM6", "ClanStreakSRM2", "ClanStreakSRM4", "ClanStreakSRM6"]
     };
+    MechModelQuirks._ammoCapacityMap = {
+        "ammocapacity_ac10_additive": "AC10Ammo",
+        "ammocapacity_ac20_additive": "AC20Ammo",
+        "ammocapacity_ac2_additive": "AC2Ammo",
+        "ammocapacity_ac5_additive": "AC5Ammo",
+        "ammocapacity_cac10_additive": "ClanAC10Ammo",
+        "ammocapacity_cac20_additive": "ClanAC20Ammo",
+        "ammocapacity_cac2_additive": "ClanAC2Ammo",
+        "ammocapacity_cac5_additive": "ClanAC5Ammo",
+        "ammocapacity_catm_additive": "ClanATMAmmo",
+        "ammocapacity_cgauss_additive": "ClanGaussAmmo",
+        "ammocapacity_cheavymachinegun_additive": "ClanHeavyMachineGunAmmo",
+        "ammocapacity_clb10x_additive": "ClanLB10-XACAmmo",
+        "ammocapacity_clb20x_additive": "ClanLB20-XACAmmo",
+        "ammocapacity_clb2x_additive": "ClanLB2-XACAmmo",
+        "ammocapacity_clb5x_additive": "ClanLB5-XACAmmo",
+        "ammocapacity_clightmachinegun_additive": "ClanLightMachineGunAmmo",
+        "ammocapacity_clrm_additive": "ClanLRMAmmo",
+        "ammocapacity_clrm_artemis_additive": "ClanLRMAmmoArtemis",
+        "ammocapacity_cmachinegun_additive": "ClanMachineGunAmmo",
+        "ammocapacity_cnarc_additive": "ClanNARCAmmo",
+        "ammocapacity_csrm_additive": "ClanSRMAmmo",
+        "ammocapacity_csrm_artemis_additive": "ClanSRMAmmoArtemis",
+        "ammocapacity_cstreak_srm_additive": "ClanStreakSRMAmmo",
+        "ammocapacity_cultraac10_additive": "ClanUltraAC10Ammo",
+        "ammocapacity_cultraac20_additive": "ClanUltraAC20Ammo",
+        "ammocapacity_cultraac2_additive": "ClanUltraAC2Ammo",
+        "ammocapacity_cultraac5_additive": "ClanUltraAC5Ammo",
+        "ammocapacity_gauss_additive": "GaussAmmo",
+        "ammocapacity_heavygauss_additive": "HeavyGaussAmmo",
+        "ammocapacity_heavymachinegun_additive": "HeavyMachineGunAmmo",
+        "ammocapacity_lb10x_additive": "LB10-XACAmmo",
+        "ammocapacity_lb20x_additive": "LB20-XACAmmo",
+        "ammocapacity_lb2x_additive": "LB2-XACAmmo",
+        "ammocapacity_lb5x_additive": "LB5-XACAmmo",
+        "ammocapacity_lightgauss_additive": "LightGaussAmmo",
+        "ammocapacity_lightmachinegun_additive": "LightMachineGunAmmo",
+        "ammocapacity_lrm_additive": "LRMAmmo",
+        "ammocapacity_lrm_artemis_additive": "LRMAmmoArtemis",
+        "ammocapacity_machinegun_additive": "MachineGunAmmo",
+        "ammocapacity_mrm_additive": "MRMAmmo",
+        "ammocapacity_narc_additive": "NARCAmmo",
+        "ammocapacity_rotary_ac2_additive": "RotaryAC2Ammo",
+        "ammocapacity_rotary_ac5_additive": "RotaryAC5Ammo",
+        "ammocapacity_srm_additive": "SRMAmmo",
+        "ammocapacity_srm_artemis_additive": "SRMAmmoArtemis",
+        "ammocapacity_streak_srm_additive": "StreakSRMAmmo",
+        "ammocapacity_ultraac10_additive": "UltraAC10Ammo",
+        "ammocapacity_ultraac20_additive": "UltraAC20Ammo",
+        "ammocapacity_ultraac2_additive": "UltraAC2Ammo",
+        "ammocapacity_ultraac5_additive": "UltraAC5Ammo",
+    };
 })(MechModelQuirks || (MechModelQuirks = {}));
 //User-changable options in SimulatorParameters. Used in
 //simulator-view-simsettings to populate the settings dialog
@@ -11032,7 +11084,7 @@ var MechModel;
         var ammoList = [];
         ammoList = collectFromSmurfyConfiguration(smurfyMechLoadout.configuration, function (location, smurfyMechComponentItem) {
             if (smurfyMechComponentItem.type === "ammo") {
-                let ammoBox = ammoBoxFromSmurfyMechComponentItem(location, smurfyMechComponentItem);
+                let ammoBox = ammoBoxFromSmurfyMechComponentItem(location, smurfyMechComponentItem, quirks);
                 return ammoBox;
             }
             else {
@@ -11041,12 +11093,18 @@ var MechModel;
         });
         return ammoList;
     };
-    var ammoBoxFromSmurfyMechComponentItem = function (location, smurfyMechComponentItem) {
+    var ammoBoxFromSmurfyMechComponentItem = function (location, smurfyMechComponentItem, quirks) {
         var ammoBox;
         let ammoData = MechModel.getSmurfyAmmoData(smurfyMechComponentItem.id);
         let type = ammoData.type;
         let ammoCount = ammoData.num_shots;
         let weaponIds = ammoData.weapons;
+        for (let quirk of quirks) {
+            let ammoType = MechModelQuirks._ammoCapacityMap[quirk.name];
+            if (ammoType === type) {
+                ammoCount += Number(quirk.value);
+            }
+        }
         ammoBox = new AmmoBox(type, location, weaponIds, ammoCount, true);
         return ammoBox;
     };
