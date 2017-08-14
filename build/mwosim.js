@@ -4936,12 +4936,12 @@ var GlobalGameInfo;
     GlobalGameInfo.GHOST_HEAT_INTERVAL = 500;
 })(GlobalGameInfo || (GlobalGameInfo = {}));
 //Constants used by simulator-model-quirks.js to compute quirk bonuses
-var MechModelQuirks;
+var MechModelQuirksData;
 //Constants used by simulator-model-quirks.js to compute quirk bonuses
-(function (MechModelQuirks) {
+(function (MechModelQuirksData) {
     //quirks that apply to the mech, not a component or weapon
     //NOTE: Many other skill quirks fit in here, add them whenever they become relevant to the simulation
-    MechModelQuirks._quirkGeneral = {
+    MechModelQuirksData._quirkGeneral = {
         "heatloss_multiplier": true,
         "heatdissipation_multiplier": true,
         "maxheat_multiplier": true,
@@ -4993,7 +4993,7 @@ var MechModelQuirks;
         "reversespeed_multiplier": true,
     };
     //Defensive quirks
-    MechModelQuirks._quirkComponentMap = {
+    MechModelQuirksData._quirkComponentMap = {
         "centre_torso": "ct",
         "left_arm": "ra",
         "left_leg": "ll",
@@ -5003,20 +5003,20 @@ var MechModelQuirks;
         "right_torso": "rt",
         "head": "hd",
     };
-    MechModelQuirks.QuirkArmorAdditivePrefix = "armorresist";
-    MechModelQuirks.QuirkStructureAdditivePrefix = "internalresist";
-    MechModelQuirks.QuirkArmorMultiplier = "increasedarmor_multiplier";
-    MechModelQuirks.QuirkStructureMultiplier = "increasedstructure_multiplier";
+    MechModelQuirksData.QuirkArmorAdditivePrefix = "armorresist";
+    MechModelQuirksData.QuirkStructureAdditivePrefix = "internalresist";
+    MechModelQuirksData.QuirkArmorMultiplier = "increasedarmor_multiplier";
+    MechModelQuirksData.QuirkStructureMultiplier = "increasedstructure_multiplier";
     //Weapon quirks
     //Map from quirk name weapon types to smurfy weapon types
-    MechModelQuirks._weaponClassMap = {
+    MechModelQuirksData._weaponClassMap = {
         "all": ["BALLISTIC", "BEAM", "MISSLE"],
         "ballistic": ["BALLISTIC"],
         "energy": ["BEAM"],
         "missile": ["MISSLE"] //(sic) from smurfy data
     };
     //Map from quirk weapon names to smurfy weapon names
-    MechModelQuirks._weaponNameMap = {
+    MechModelQuirksData._weaponNameMap = {
         "atm": ["ClanATM3", "ClanATM6", "ClanATM9", "ClanATM12"],
         "atm3": ["ClanATM3"],
         "atm6": ["ClanATM6"],
@@ -5110,7 +5110,7 @@ var MechModelQuirks;
         "streaksrm": ["StreakSRM2", "StreakSRM4", "StreakSRM6", "ClanStreakSRM2", "ClanStreakSRM4", "ClanStreakSRM6"]
     };
     //ammo skill quirk name -> ammo type
-    MechModelQuirks._ammoCapacityMap = {
+    MechModelQuirksData._ammoCapacityMap = {
         "ammocapacity_ac10_additive": "AC10Ammo",
         "ammocapacity_ac20_additive": "AC20Ammo",
         "ammocapacity_ac2_additive": "AC2Ammo",
@@ -5162,7 +5162,7 @@ var MechModelQuirks;
         "ammocapacity_ultraac2_additive": "UltraAC2Ammo",
         "ammocapacity_ultraac5_additive": "UltraAC5Ammo",
     };
-})(MechModelQuirks || (MechModelQuirks = {}));
+})(MechModelQuirksData || (MechModelQuirksData = {}));
 //User-changable options in SimulatorParameters. Used in
 //simulator-view-simsettings to populate the settings dialog
 var SimulatorSettings;
@@ -8866,7 +8866,7 @@ var MechModelQuirks;
     MechModelQuirks.getGeneralBonus = function (quirkList) {
         let ret = {};
         for (let quirk of quirkList) {
-            if (MechModelQuirks._quirkGeneral[quirk.name]) {
+            if (MechModelQuirksData._quirkGeneral[quirk.name]) {
                 if (!ret[quirk.name]) {
                     ret[quirk.name] = Number(quirk.value);
                 }
@@ -8880,24 +8880,24 @@ var MechModelQuirks;
     MechModelQuirks.getHealthBonus = function (component, quirkList) {
         let ret = { armor: 0, structure: 0, armor_multiplier: 1.0, structure_multiplier: 1.0 };
         for (let quirk of quirkList) {
-            if (quirk.name.startsWith(MechModelQuirks.QuirkArmorAdditivePrefix)) {
+            if (quirk.name.startsWith(MechModelQuirksData.QuirkArmorAdditivePrefix)) {
                 let quirkComponent = quirk.name.split("_")[1];
-                if (MechModelQuirks._quirkComponentMap[component] !== quirkComponent) {
+                if (MechModelQuirksData._quirkComponentMap[component] !== quirkComponent) {
                     continue;
                 }
                 ret.armor += Number(quirk.value);
             }
-            else if (quirk.name.startsWith(MechModelQuirks.QuirkStructureAdditivePrefix)) {
+            else if (quirk.name.startsWith(MechModelQuirksData.QuirkStructureAdditivePrefix)) {
                 let quirkComponent = quirk.name.split("_")[1];
-                if (MechModelQuirks._quirkComponentMap[component] !== quirkComponent) {
+                if (MechModelQuirksData._quirkComponentMap[component] !== quirkComponent) {
                     continue;
                 }
                 ret.structure += Number(quirk.value);
             }
-            else if (quirk.name === MechModelQuirks.QuirkArmorMultiplier) {
+            else if (quirk.name === MechModelQuirksData.QuirkArmorMultiplier) {
                 ret.armor_multiplier += Number(quirk.value);
             }
-            else if (quirk.name === MechModelQuirks.QuirkStructureMultiplier) {
+            else if (quirk.name === MechModelQuirksData.QuirkStructureMultiplier) {
                 ret.structure_multiplier += Number(quirk.value);
             }
         }
@@ -8921,11 +8921,11 @@ var MechModelQuirks;
         }
         initReversedWeaponNameMap() {
             let ret = {};
-            for (let quirkName in MechModelQuirks._weaponNameMap) {
-                if (!MechModelQuirks._weaponNameMap.hasOwnProperty(quirkName)) {
+            for (let quirkName in MechModelQuirksData._weaponNameMap) {
+                if (!MechModelQuirksData._weaponNameMap.hasOwnProperty(quirkName)) {
                     continue;
                 }
-                for (let weaponName of MechModelQuirks._weaponNameMap[quirkName]) {
+                for (let weaponName of MechModelQuirksData._weaponNameMap[quirkName]) {
                     let reverseEntry = ret[weaponName];
                     if (!reverseEntry) {
                         reverseEntry = new Set();
@@ -8960,8 +8960,8 @@ var MechModelQuirks;
             let firstNameComponent = quirkNameComponents[0];
             let restOfNameComponents = quirkNameComponents.slice(1).join("_");
             //general weapon bonuses
-            if (MechModelQuirks._weaponClassMap[firstNameComponent]) {
-                if (MechModelQuirks._weaponClassMap[firstNameComponent].includes(weaponInfo.type)) {
+            if (MechModelQuirksData._weaponClassMap[firstNameComponent]) {
+                if (MechModelQuirksData._weaponClassMap[firstNameComponent].includes(weaponInfo.type)) {
                     ret[restOfNameComponents] += Number(quirk.value);
                 }
             }
@@ -9055,10 +9055,10 @@ var MechModelQuirks;
             }
         }
         //armor quirks
-        if (quirk.name.startsWith(MechModelQuirks.QuirkArmorAdditivePrefix)
-            || quirk.name.startsWith(MechModelQuirks.QuirkStructureAdditivePrefix)
-            || quirk.name === MechModelQuirks.QuirkArmorMultiplier
-            || quirk.name === MechModelQuirks.QuirkStructureMultiplier) {
+        if (quirk.name.startsWith(MechModelQuirksData.QuirkArmorAdditivePrefix)
+            || quirk.name.startsWith(MechModelQuirksData.QuirkStructureAdditivePrefix)
+            || quirk.name === MechModelQuirksData.QuirkArmorMultiplier
+            || quirk.name === MechModelQuirksData.QuirkStructureMultiplier) {
             return true;
         }
         //weapon bonuses
@@ -9074,7 +9074,7 @@ var MechModelQuirks;
         }
         //ammo bonuses
         for (let ammoBox of mechInfo.ammoBoxList) {
-            let ammoType = MechModelQuirks._ammoCapacityMap[quirk.name];
+            let ammoType = MechModelQuirksData._ammoCapacityMap[quirk.name];
             if (ammoType === ammoBox.type) {
                 return true;
             }
@@ -11194,7 +11194,7 @@ var MechModel;
         let ammoCount = ammoData.num_shots;
         let weaponIds = ammoData.weapons;
         for (let quirk of quirks) {
-            let ammoType = MechModelQuirks._ammoCapacityMap[quirk.name];
+            let ammoType = MechModelQuirksData._ammoCapacityMap[quirk.name];
             if (ammoType === type) {
                 ammoCount += Math.floor(Number(ammoData.tons) * Number(quirk.value));
             }

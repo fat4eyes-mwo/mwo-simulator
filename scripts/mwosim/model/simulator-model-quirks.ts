@@ -155,7 +155,7 @@ namespace MechModelQuirks {
     function(quirkList : MechQuirk[]) : GeneralBonus {
     let ret : {[index:string] : number} = {};
     for (let quirk of quirkList) {
-      if (_quirkGeneral[quirk.name]) {
+      if (MechModelQuirksData._quirkGeneral[quirk.name]) {
         if (!ret[quirk.name]) {
           ret[quirk.name] = Number(quirk.value);
         } else {
@@ -178,21 +178,21 @@ namespace MechModelQuirks {
     let ret = {armor: 0, structure: 0, armor_multiplier : 1.0, structure_multiplier : 1.0};
 
     for (let quirk of quirkList) {
-      if (quirk.name.startsWith(QuirkArmorAdditivePrefix)) {
+      if (quirk.name.startsWith(MechModelQuirksData.QuirkArmorAdditivePrefix)) {
         let quirkComponent = quirk.name.split("_")[1];
-        if (_quirkComponentMap[component] !== quirkComponent) {
+        if (MechModelQuirksData._quirkComponentMap[component] !== quirkComponent) {
           continue;
         }
         ret.armor += Number(quirk.value);
-      } else if (quirk.name.startsWith(QuirkStructureAdditivePrefix)) {
+      } else if (quirk.name.startsWith(MechModelQuirksData.QuirkStructureAdditivePrefix)) {
         let quirkComponent = quirk.name.split("_")[1];
-        if (_quirkComponentMap[component] !== quirkComponent) {
+        if (MechModelQuirksData._quirkComponentMap[component] !== quirkComponent) {
           continue;
         }
         ret.structure += Number(quirk.value);
-      } else if (quirk.name === QuirkArmorMultiplier) {
+      } else if (quirk.name === MechModelQuirksData.QuirkArmorMultiplier) {
         ret.armor_multiplier += Number(quirk.value);
-      } else if (quirk.name === QuirkStructureMultiplier) {
+      } else if (quirk.name === MechModelQuirksData.QuirkStructureMultiplier) {
         ret.structure_multiplier += Number(quirk.value);
       }
     }
@@ -224,11 +224,11 @@ namespace MechModelQuirks {
 
     private initReversedWeaponNameMap() : ReversedNameMap {
       let ret : ReversedNameMap = {};
-      for (let quirkName in _weaponNameMap) {
-        if (!_weaponNameMap.hasOwnProperty(quirkName)) {
+      for (let quirkName in MechModelQuirksData._weaponNameMap) {
+        if (!MechModelQuirksData._weaponNameMap.hasOwnProperty(quirkName)) {
           continue;
         }
-        for (let weaponName of _weaponNameMap[quirkName]) {
+        for (let weaponName of MechModelQuirksData._weaponNameMap[quirkName]) {
           let reverseEntry = ret[weaponName];
           if (!reverseEntry) {
             reverseEntry = new Set<string>();
@@ -267,8 +267,8 @@ namespace MechModelQuirks {
       let firstNameComponent = quirkNameComponents[0];
       let restOfNameComponents = quirkNameComponents.slice(1).join("_");
       //general weapon bonuses
-      if (_weaponClassMap[firstNameComponent]) {
-        if (_weaponClassMap[firstNameComponent].includes(weaponInfo.type)) {
+      if (MechModelQuirksData._weaponClassMap[firstNameComponent]) {
+        if (MechModelQuirksData._weaponClassMap[firstNameComponent].includes(weaponInfo.type)) {
           ret[restOfNameComponents] += Number(quirk.value);
         }
       }
@@ -366,10 +366,10 @@ namespace MechModelQuirks {
     }
 
     //armor quirks
-    if (quirk.name.startsWith(QuirkArmorAdditivePrefix) 
-        || quirk.name.startsWith(QuirkStructureAdditivePrefix)
-        || quirk.name === QuirkArmorMultiplier
-        || quirk.name === QuirkStructureMultiplier) {
+    if (quirk.name.startsWith(MechModelQuirksData.QuirkArmorAdditivePrefix) 
+        || quirk.name.startsWith(MechModelQuirksData.QuirkStructureAdditivePrefix)
+        || quirk.name === MechModelQuirksData.QuirkArmorMultiplier
+        || quirk.name === MechModelQuirksData.QuirkStructureMultiplier) {
       return true;
     }
 
@@ -387,7 +387,7 @@ namespace MechModelQuirks {
 
     //ammo bonuses
     for (let ammoBox of mechInfo.ammoBoxList) {
-      let ammoType = MechModelQuirks._ammoCapacityMap[quirk.name];
+      let ammoType = MechModelQuirksData._ammoCapacityMap[quirk.name];
       if (ammoType === ammoBox.type) {
         return true;
       }

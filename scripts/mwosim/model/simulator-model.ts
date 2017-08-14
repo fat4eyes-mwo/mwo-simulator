@@ -1557,7 +1557,7 @@ namespace MechModel  {
     let ammoCount = ammoData.num_shots;
     let weaponIds = ammoData.weapons;
     for (let quirk of quirks) {
-      let ammoType = MechModelQuirks._ammoCapacityMap[quirk.name];
+      let ammoType = MechModelQuirksData._ammoCapacityMap[quirk.name];
       if (ammoType === type) {
         ammoCount += Math.floor(Number(ammoData.tons) * Number(quirk.value));
       }

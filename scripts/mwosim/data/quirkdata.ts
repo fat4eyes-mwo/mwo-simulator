@@ -1,6 +1,6 @@
 //Constants used by simulator-model-quirks.js to compute quirk bonuses
 
-namespace MechModelQuirks {
+namespace MechModelQuirksData {
   //quirks that apply to the mech, not a component or weapon
   //NOTE: Many other skill quirks fit in here, add them whenever they become relevant to the simulation
   export const _quirkGeneral : {[index:string] : boolean} = {
