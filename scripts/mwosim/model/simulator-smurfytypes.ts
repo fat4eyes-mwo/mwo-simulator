@@ -220,6 +220,7 @@ namespace SmurfyTypes {
   export interface SmurfyAmmoData {
     id : string,
     type : string,
+    tons : number,
     name : string,
     num_shots : number,
     weapons : string[], //[string] weaponIds that use this ammo

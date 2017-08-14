@@ -11196,7 +11196,7 @@ var MechModel;
         for (let quirk of quirks) {
             let ammoType = MechModelQuirks._ammoCapacityMap[quirk.name];
             if (ammoType === type) {
-                ammoCount += Number(quirk.value);
+                ammoCount += Math.floor(Number(ammoData.tons) * Number(quirk.value));
             }
         }
         ammoBox = new AmmoBox(type, location, weaponIds, ammoCount, true);
