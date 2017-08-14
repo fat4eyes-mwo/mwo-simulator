@@ -46,6 +46,7 @@ namespace MechModelQuirks {
         return String(this.value);
       }
     }
+    //returns true if the quirk is beneficial, false if not.
     isBonus() : boolean {
       let quirkNameComponents = this.name.split("_");
       let endIdx = quirkNameComponents.length - 1;
@@ -79,6 +80,7 @@ namespace MechModelQuirks {
     }
   }
 
+  //collects the set of quirks for omnimechs
   const CompleteOmnipodSetCount = 8;
   export var collectOmnipodQuirks =
     function(smurfyMechLoadout : SmurfyMechLoadout)
@@ -135,6 +137,7 @@ namespace MechModelQuirks {
     return ret;
   }
 
+  //collects the set of quirks for a battlemech (non-omnimech)
   export var collectMechQuirks =
     function(smurfyMechData : SmurfyMechData) : MechQuirk[] {
       let ret : MechQuirk[] = [];
@@ -219,7 +222,6 @@ namespace MechModelQuirks {
       return this.reversedWeaponNameMap;
     }
 
-    //Initialize the map. Make sure that quirkData.js is loaded before simulator-model-quirks.js
     private initReversedWeaponNameMap() : ReversedNameMap {
       let ret : ReversedNameMap = {};
       for (let quirkName in _weaponNameMap) {
@@ -240,11 +242,12 @@ namespace MechModelQuirks {
   }
   var reversedWeaponQuirkMap = new ReverseWeaponQuirkMap();
 
-  //returns {cooldown_multiplier: <bonus>, duration_multiplier: <bonus>,
-  //          heat_multiplier: <bonus>, range_multiplier: <bonus>, velocity_multiplier: <bonus>}
   export interface WeaponBonus {
     [index:string] : number
   };
+  //returns {cooldown_multiplier: <bonus>, duration_multiplier: <bonus>,
+  //          heat_multiplier: <bonus>, range_multiplier: <bonus>, velocity_multiplier: <bonus>, 
+  //          jamchance_multiplier: <bonus>, jamduration_multiplier:<bonus>}
   export var getWeaponBonus = function(weaponInfo : WeaponInfo) : WeaponBonus {
     let quirkList = weaponInfo.mechInfo.quirks;
     if (weaponInfo.mechInfo.skillQuirks) {
@@ -329,6 +332,7 @@ namespace MechModelQuirks {
     return ret;
   }
 
+  //quirk list that accumulates quirks with the same name into a single entry (when added through addQuirk)
   export class MechQuirkList extends Array<MechQuirk> {
     private quirkNameMap = new Map<string, MechQuirk>();
     constructor() {
@@ -351,6 +355,7 @@ namespace MechModelQuirks {
     }
   }
 
+  //returns true if the quirk has any effect on the mech given its current loadout, false otherwise.
   export var isQuirkApplicable = function(quirk : MechQuirk, mechInfo : MechModel.MechInfo) : boolean {
     //general quirks
     let generalBonus : GeneralBonus  = getGeneralBonus([quirk]);

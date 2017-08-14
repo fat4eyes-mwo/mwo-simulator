@@ -5109,6 +5109,7 @@ var MechModelQuirks;
             "ClanSRM2", "ClanSRM2_Artemis", "ClanSRM4", "ClanSRM4_Artemis", "ClanSRM6", "ClanSRM6_Artemis"],
         "streaksrm": ["StreakSRM2", "StreakSRM4", "StreakSRM6", "ClanStreakSRM2", "ClanStreakSRM4", "ClanStreakSRM6"]
     };
+    //ammo skill quirk name -> ammo type
     MechModelQuirks._ammoCapacityMap = {
         "ammocapacity_ac10_additive": "AC10Ammo",
         "ammocapacity_ac20_additive": "AC20Ammo",
@@ -5215,6 +5216,7 @@ var SimulatorSettings;
 })(SimulatorSettings || (SimulatorSettings = {}));
 var ExternalSkillTrees;
 (function (ExternalSkillTrees) {
+    //Kitlaan skill name -> GameData skill name
     ExternalSkillTrees._KitlaanSkillNameMap = {
         "AC Cooldown": null,
         "AC Range": null,
@@ -8765,6 +8767,7 @@ var MechModelQuirks;
                 return String(this.value);
             }
         }
+        //returns true if the quirk is beneficial, false if not.
         isBonus() {
             let quirkNameComponents = this.name.split("_");
             let endIdx = quirkNameComponents.length - 1;
@@ -8798,6 +8801,7 @@ var MechModelQuirks;
             }
         }
     }
+    //collects the set of quirks for omnimechs
     const CompleteOmnipodSetCount = 8;
     MechModelQuirks.collectOmnipodQuirks = function (smurfyMechLoadout) {
         let ret = new MechQuirkList();
@@ -8850,6 +8854,7 @@ var MechModelQuirks;
         }
         return ret;
     };
+    //collects the set of quirks for a battlemech (non-omnimech)
     MechModelQuirks.collectMechQuirks = function (smurfyMechData) {
         let ret = [];
         for (let smurfyQuirk of smurfyMechData.details.quirks) {
@@ -8914,7 +8919,6 @@ var MechModelQuirks;
             }
             return this.reversedWeaponNameMap;
         }
-        //Initialize the map. Make sure that quirkData.js is loaded before simulator-model-quirks.js
         initReversedWeaponNameMap() {
             let ret = {};
             for (let quirkName in MechModelQuirks._weaponNameMap) {
@@ -8935,6 +8939,9 @@ var MechModelQuirks;
     }
     var reversedWeaponQuirkMap = new ReverseWeaponQuirkMap();
     ;
+    //returns {cooldown_multiplier: <bonus>, duration_multiplier: <bonus>,
+    //          heat_multiplier: <bonus>, range_multiplier: <bonus>, velocity_multiplier: <bonus>, 
+    //          jamchance_multiplier: <bonus>, jamduration_multiplier:<bonus>}
     MechModelQuirks.getWeaponBonus = function (weaponInfo) {
         let quirkList = weaponInfo.mechInfo.quirks;
         if (weaponInfo.mechInfo.skillQuirks) {
@@ -9014,6 +9021,7 @@ var MechModelQuirks;
         }
         return ret;
     };
+    //quirk list that accumulates quirks with the same name into a single entry (when added through addQuirk)
     class MechQuirkList extends Array {
         constructor() {
             super();
@@ -9037,6 +9045,7 @@ var MechModelQuirks;
         }
     }
     MechModelQuirks.MechQuirkList = MechQuirkList;
+    //returns true if the quirk has any effect on the mech given its current loadout, false otherwise.
     MechModelQuirks.isQuirkApplicable = function (quirk, mechInfo) {
         //general quirks
         let generalBonus = MechModelQuirks.getGeneralBonus([quirk]);
@@ -11636,6 +11645,8 @@ var MechModel;
             return Component.RIGHT_TORSO;
         }
     };
+    //NOTE: This is currently O(n) on the number of mechs. Not too bad given we don't have that many mechs,
+    //but try to avoid calling this inside the simulation loop. It's ok for user initiated UI actions.
     MechModel.getMechFromId = function (mechId) {
         let mechPos = getMechPosFromId(mechId);
         if (!mechPos) {
@@ -11900,7 +11911,14 @@ var MechModelView;
         }
         let dps = MechSimulatorLogic.getSimTime() > 0 ?
             Number(totalTeamDamage) / MechSimulatorLogic.getSimTime() * 1000 : 0;
-        MechViewTeamStats.updateTeamStats(team, mechHealthList, Number(totalTeamDamage), dps, totalTeamBurstDamage);
+        let update = {
+            team,
+            mechHealthList,
+            damage: Number(totalTeamDamage),
+            dps,
+            burstDamage: Number(totalTeamBurstDamage)
+        };
+        MechViewTeamStats.updateTeamStats(update);
     };
     MechModelView.updateDebugText = function (text) {
         MechView.setDebugText(text);
@@ -12266,8 +12284,8 @@ var MechViewWidgets;
     class DomStoredWidget {
         constructor(domElement) {
             this.domElement = domElement;
-            //TODO: forcing storage in the constructor means that the DomKey must be passed 
-            //through the entire chain of constructors in descendant classes. See about changing
+            //NOTE: forcing storage in the constructor means that the DomKey must be passed 
+            //through the entire chain of constructors in descendant classes. I've changed
             //the contract so that the descendant classes explicitly call storeToElement if
             //they want to be stored in the DOM. DomStoredWidget then just becomes a marker
             //'interface' to classes that may have at least one of their parents stored to dom.
@@ -12849,7 +12867,6 @@ var MechViewMechDetails;
         }
         createOkButtonHandler(dialog) {
             return function () {
-                //TODO: Implement setting and updating UI for mech skills
                 let loadDialog = dialog;
                 if (loadDialog.loadedSkillQuirks) {
                     MechModelView.applySkillQuirks(loadDialog.mechId, loadDialog.loadedSkillQuirks);
@@ -14402,12 +14419,12 @@ var MechViewTeamStats;
             patternType.setTeamPatternFunction(team, pattern);
         }
     };
-    //TODO Wrap params in an object
-    MechViewTeamStats.updateTeamStats = function (team, mechHealthList, damage, dps, burstDamage) {
+    MechViewTeamStats.updateTeamStats = function (update) {
         let totalTeamCurrHealth = 0;
         let totalTeamMaxHealth = 0;
         let liveMechs = 0;
-        for (let mechHealth of mechHealthList) {
+        let team = update.team;
+        for (let mechHealth of update.mechHealthList) {
             let mechId = mechHealth.mechId;
             let currHealth = mechHealth.currHealth;
             let maxHealth = mechHealth.maxHealth;
@@ -14428,7 +14445,7 @@ var MechViewTeamStats;
         }
         //live mechs
         let liveMechsDiv = document.getElementById(teamLiveMechsId(team));
-        let totalMechs = mechHealthList.length;
+        let totalMechs = update.mechHealthList.length;
         let percentAlive = totalMechs > 0 ? liveMechs / totalMechs : 0;
         let color = MechViewWidgets.damageColor(percentAlive, MechViewWidgets.healthDamageGradient);
         liveMechsDiv.style.color = color;
@@ -14443,13 +14460,13 @@ var MechViewTeamStats;
             `(${Number(teamHealthPercent * 100).toFixed(1)}%)`;
         //damage
         let teamDamageDiv = document.getElementById(teamDamageId(team));
-        teamDamageDiv.textContent = Number(damage).toFixed(1);
+        teamDamageDiv.textContent = Number(update.damage).toFixed(1);
         //dps
         let teamDPSValueDiv = document.getElementById(teamDPSValueId(team));
-        teamDPSValueDiv.textContent = Number(dps).toFixed(1);
+        teamDPSValueDiv.textContent = Number(update.dps).toFixed(1);
         //burst
         let teamBurstDamageDiv = document.getElementById(teamBurstDamageId(team));
-        teamBurstDamageDiv.textContent = Number(burstDamage).toFixed(1);
+        teamBurstDamageDiv.textContent = Number(update.burstDamage).toFixed(1);
     };
     MechViewTeamStats.clearTeamStats = function (team) {
         let teamStatsContainerPanelId = teamStatsContainerId(team);

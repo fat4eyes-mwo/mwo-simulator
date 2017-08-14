@@ -176,6 +176,7 @@ namespace MechModelQuirks {
     "streaksrm" : ["StreakSRM2", "StreakSRM4", "StreakSRM6", "ClanStreakSRM2", "ClanStreakSRM4", "ClanStreakSRM6"]
   };
 
+  //ammo skill quirk name -> ammo type
   export var _ammoCapacityMap : {[index:string] : string} = {
     "ammocapacity_ac10_additive" : "AC10Ammo",
     "ammocapacity_ac20_additive" : "AC20Ammo",

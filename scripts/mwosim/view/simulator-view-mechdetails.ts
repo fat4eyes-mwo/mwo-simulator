@@ -3,7 +3,7 @@
 namespace MechViewMechDetails {
   type LoadFromURLDialog = MechViewWidgets.LoadFromURLDialog;
   type ClickHandler = MechViewWidgets.ClickHandler;
-  type MechQuirk = MechModelView.MechViewQuirk;
+  type MechViewQuirk = MechModelView.MechViewQuirk;
 
   export class MechDetails extends MechViewWidgets.DomStoredWidget
                           implements MechViewWidgets.RenderedWidget {
@@ -125,7 +125,7 @@ namespace MechViewMechDetails {
     mechId : string;
     mechSkillsPanel : MechDetailsSkills;
     skillListPanel : MechQuirkListPanel;
-    loadedSkillQuirks : MechQuirk[];
+    loadedSkillQuirks : MechViewQuirk[];
     loadedSkillState : MechModelSkills.SkillState;
     constructor(mechSkillsPanel : MechDetailsSkills) {
       super("loadFromURLDialog-loadSkills-template", LoadMechSkillsDialog.DialogId);
@@ -203,7 +203,7 @@ namespace MechViewMechDetails {
   class MechQuirkListPanel extends MechViewWidgets.DomStoredWidget 
                         implements MechViewWidgets.RenderedWidget {
     static readonly MechQuirkListDomKey = "mwosim.MechQuirkListPanel.uiObject";
-    private quirkList : MechQuirk[] = [];
+    private quirkList : MechViewQuirk[] = [];
     mechId : string;
     constructor(domElement : Element, mechId : string) {
       super(domElement);
@@ -211,10 +211,10 @@ namespace MechViewMechDetails {
       this.mechId = mechId;
     }
 
-    setQuirks(quirkList : MechQuirk[]) {
+    setQuirks(quirkList : MechViewQuirk[]) {
       let thisPanel = this;
       this.quirkList = quirkList.slice();
-      this.quirkList.sort(function(quirkA : MechQuirk, quirkB : MechQuirk) : number {
+      this.quirkList.sort(function(quirkA : MechViewQuirk, quirkB : MechViewQuirk) : number {
         let applicableQuirkA = MechModelView.isQuirkApplicable(thisPanel.mechId, quirkA) ? 0 : 1;
         let applicableQuirkB = MechModelView.isQuirkApplicable(thisPanel.mechId, quirkB) ? 0 : 1;
         if (applicableQuirkA !== applicableQuirkB) {

@@ -10,6 +10,7 @@ namespace ExternalSkillTrees {
     selected: {[index:string] : (string | number)[][]};
   }
 
+  //Kitlaan skill name -> GameData skill name
   export var _KitlaanSkillNameMap : SkillNameMap = {
     "AC Cooldown": null,
     "AC Range": null,

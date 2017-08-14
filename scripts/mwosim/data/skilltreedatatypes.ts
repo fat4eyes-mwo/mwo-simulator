@@ -1,4 +1,5 @@
 namespace AddedData {
+  //types for skill tree data in skilltreedata.ts
   export interface SkillTreeNode {
     baseName: string;
     effects: SkillTreeEffect[];

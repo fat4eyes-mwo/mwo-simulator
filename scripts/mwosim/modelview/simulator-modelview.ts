@@ -282,8 +282,14 @@ namespace MechModelView {
     }
     let dps = MechSimulatorLogic.getSimTime() > 0 ?
                 Number(totalTeamDamage)/MechSimulatorLogic.getSimTime() * 1000 : 0;
-    MechViewTeamStats.updateTeamStats(team, mechHealthList,
-            Number(totalTeamDamage), dps, totalTeamBurstDamage);
+    let update : MechViewTeamStats.TeamStatsUpdate = {
+      team,
+      mechHealthList,
+      damage : Number(totalTeamDamage),
+      dps,
+      burstDamage : Number(totalTeamBurstDamage)
+    }
+    MechViewTeamStats.updateTeamStats(update);
   }
 
   export var updateDebugText = function (text : string) : void {

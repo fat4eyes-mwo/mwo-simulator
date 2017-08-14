@@ -244,18 +244,21 @@ namespace MechViewTeamStats {
     }
   }
 
-  //TODO Wrap params in an object
+  export interface TeamStatsUpdate {
+    team : Team,
+    mechHealthList : MechHealthToView[],
+    damage : number,
+    dps : number,
+    burstDamage : number
+  }
   export var updateTeamStats =
-      function(team : Team,
-              mechHealthList : MechHealthToView[],
-              damage : number,
-              dps : number,
-              burstDamage : number)
+      function(update : TeamStatsUpdate)
               : void {
     let totalTeamCurrHealth = 0;
     let totalTeamMaxHealth = 0;
     let liveMechs = 0;
-    for (let mechHealth of mechHealthList) {
+    let team = update.team;
+    for (let mechHealth of update.mechHealthList) {
       let mechId = mechHealth.mechId;
       let currHealth = mechHealth.currHealth;
       let maxHealth = mechHealth.maxHealth;
@@ -278,7 +281,7 @@ namespace MechViewTeamStats {
     }
     //live mechs
     let liveMechsDiv = document.getElementById(teamLiveMechsId(team));
-    let totalMechs = mechHealthList.length;
+    let totalMechs = update.mechHealthList.length;
     let percentAlive = totalMechs > 0 ? liveMechs / totalMechs : 0;
     let color = MechViewWidgets.damageColor(percentAlive, MechViewWidgets.healthDamageGradient);
     liveMechsDiv.style.color = color;
@@ -295,13 +298,13 @@ namespace MechViewTeamStats {
 
     //damage
     let teamDamageDiv = document.getElementById(teamDamageId(team));
-    teamDamageDiv.textContent = Number(damage).toFixed(1);
+    teamDamageDiv.textContent = Number(update.damage).toFixed(1);
     //dps
     let teamDPSValueDiv = document.getElementById(teamDPSValueId(team));
-    teamDPSValueDiv.textContent = Number(dps).toFixed(1);
+    teamDPSValueDiv.textContent = Number(update.dps).toFixed(1);
     //burst
     let teamBurstDamageDiv = document.getElementById(teamBurstDamageId(team));
-    teamBurstDamageDiv.textContent = Number(burstDamage).toFixed(1);
+    teamBurstDamageDiv.textContent = Number(update.burstDamage).toFixed(1);
   }
 
   export var clearTeamStats = function(team : Team) {
