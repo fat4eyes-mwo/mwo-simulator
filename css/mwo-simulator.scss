@@ -818,6 +818,8 @@ div {
   position: absolute;
   top: 2em;
   right: 15px;
+  z-index: 10;
+  background-color: $background-color;
 }
 .statusPanel .mechDetails .mechDetailsSkills .loadButton {
   font-size: 0.8em;
