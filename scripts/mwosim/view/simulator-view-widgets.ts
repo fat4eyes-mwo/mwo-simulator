@@ -81,8 +81,8 @@ namespace MechViewWidgets {
     domElement : Element;
     constructor(domElement : Element) {
       this.domElement = domElement;
-      //TODO: forcing storage in the constructor means that the DomKey must be passed 
-      //through the entire chain of constructors in descendant classes. See about changing
+      //NOTE: forcing storage in the constructor means that the DomKey must be passed 
+      //through the entire chain of constructors in descendant classes. I've changed
       //the contract so that the descendant classes explicitly call storeToElement if
       //they want to be stored in the DOM. DomStoredWidget then just becomes a marker
       //'interface' to classes that may have at least one of their parents stored to dom.

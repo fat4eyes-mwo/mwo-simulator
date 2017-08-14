@@ -141,7 +141,6 @@ namespace MechViewMechDetails {
 
     createOkButtonHandler(dialog: LoadFromURLDialog): ClickHandler {
       return function() {
-        //TODO: Implement setting and updating UI for mech skills
         let loadDialog = dialog as LoadMechSkillsDialog;
         if (loadDialog.loadedSkillQuirks) {
           MechModelView.applySkillQuirks(loadDialog.mechId, loadDialog.loadedSkillQuirks);

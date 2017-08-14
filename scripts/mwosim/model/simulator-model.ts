@@ -1979,7 +1979,6 @@ namespace MechModel  {
     return teamStats[team];
   }
 
-  //returns {"i"=<id>, "l"=<loadout>}
   interface SmurfyLoadoutId {
     id : string;
     loadout : string;
@@ -2071,6 +2070,8 @@ namespace MechModel  {
     }
   }
 
+  //NOTE: This is currently O(n) on the number of mechs. Not too bad given we don't have that many mechs,
+  //but try to avoid calling this inside the simulation loop. It's ok for user initiated UI actions.
   export var getMechFromId = function(mechId : string) : Mech {
     let mechPos = getMechPosFromId(mechId);
     if (!mechPos) {

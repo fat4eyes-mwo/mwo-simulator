@@ -1,14 +1,15 @@
 - AUTOMATED UNIT TESTS!!!!!!
 
-- See if it's worth moving all the added data to a single json file and fetching it at runtime.
-  The total script size is now around 500k (67k compressed) and may affect initial load time.
-
 - drag on mobile
+- Mech details display (weapon damage summary)
+
+- See if it's worth moving all the added data to a single json file and fetching it at runtime.
+  The total script size is now around 500k (90k compressed) and may affect initial load time.
+
+- LBX damage spread
 - save team settings (on separate hash parameter)
 - some omnimechs have no CT omnipod entry (HBR-F). See where to find this info.
-- LBX damage spread
 - MG/HMG/LMG extra struct damage computation
-- Mech details display (weapon damage summary)
 - Ambient heat effects
 - LBX crit effects (just the added damage)
 - Flamer heat effects
