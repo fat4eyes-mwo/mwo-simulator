@@ -1,5 +1,6 @@
 - AUTOMATED UNIT TESTS!!!!!!
 
+- event queue and listeners (maybe try rxjs)
 - drag on mobile
 - Mech details display (weapon damage summary)
 
