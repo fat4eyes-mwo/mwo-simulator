@@ -121,7 +121,8 @@ namespace MechModelView {
       } else if (weaponState.weaponCycle === WeaponCycle.JAMMED) {
         cooldownPercent = 1;
       }
-      MechViewMechPanel.setWeaponCooldown(mech.getMechId(), Number(weaponIndex), cooldownPercent, type);
+      let weaponPanel = MechViewMechPanel.WeaponPanel.getWeaponPanel(mech.getMechId());
+      weaponPanel.setWeaponCooldown(Number(weaponIndex), cooldownPercent, type);
     }
   }
 
@@ -132,10 +133,11 @@ namespace MechModelView {
         continue;
       }
       let weaponState = mechState.weaponStateList[weaponIndex];
-      MechViewMechPanel.setWeaponState(mech.getMechId(), Number(weaponIndex), weaponState.weaponCycle);
+      let weaponPanel = MechViewMechPanel.WeaponPanel.getWeaponPanel(mech.getMechId());
+      weaponPanel.setWeaponState(Number(weaponIndex), weaponState.weaponCycle);
       let ammoState = mech.getMechState().ammoState;
       let weaponAmmoCount = weaponState.getAvailableAmmo();
-      MechViewMechPanel.setWeaponAmmo(mech.getMechId(), Number(weaponIndex), weaponAmmoCount);
+      weaponPanel.setWeaponAmmo(Number(weaponIndex), weaponAmmoCount);
     }
   }
 

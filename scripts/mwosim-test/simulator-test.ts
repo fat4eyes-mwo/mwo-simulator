@@ -64,11 +64,10 @@ namespace MechTest {
       let heatbar = MechViewMechPanel.Heatbar.getHeatbar(mech.getMechId());
       heatbar.setHeatbarValue(Math.random());
       for (var i = 0; i < mech.getMechInfo().weaponInfoList.length; i++) {
-        MechViewMechPanel.setWeaponCooldown(mech.getMechId(), i, Math.random());
-        MechViewMechPanel.setWeaponAmmo(
-            mech.getMechId(), i, Math.random() > 0.2 ? Math.floor(Math.random() * 100) : -1);
-        MechViewMechPanel.setWeaponState(
-          mech.getMechId(), i, weaponStates[Math.floor(weaponStates.length * Math.random())]);
+        let weaponPanel = MechViewMechPanel.WeaponPanel.getWeaponPanel(mech.getMechId());
+        weaponPanel.setWeaponCooldown(i, Math.random());
+        weaponPanel.setWeaponAmmo(i, Math.random() > 0.2 ? Math.floor(Math.random() * 100) : -1);
+        weaponPanel.setWeaponState(i, weaponStates[Math.floor(weaponStates.length * Math.random())]);
       }
     });
   }

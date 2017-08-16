@@ -206,111 +206,122 @@ namespace MechViewMechPanel {
     }
   }
 
-  var weaponRowId = function (mechId : string, idx : number) : string {
-    return `${mechId}-${idx}-weaponrow`;
-  }
-  var weaponNameId = function (mechId : string, idx : number) : string {
-    return weaponRowId(mechId, idx) + "-weaponName";
-  }
-  var weaponLocationId = function (mechId : string, idx : number) : string {
-    return weaponRowId(mechId, idx) + "-weaponLocation";
-  }
-  var weaponCooldownBarId = function (mechId : string, idx : number) : string {
-    return weaponRowId(mechId, idx) + "-weaponCooldownBar";
-  }
-  var weaponAmmoId = function(mechId : string, idx : number) : string {
-    return weaponRowId(mechId, idx) + "-weaponAmmo";
-  }
-  const weaponLocAbbr : {[index:string] : string} = {
-    "head" : "H",
-    "left_arm" : "LA",
-    "left_torso" : "LT",
-    "centre_torso" : "CT",
-    "right_torso" : "RT",
-    "right_arm" : "RA",
-    "left_leg" : "LL",
-    "right_leg" : "RL"
-  }
-  //TODO: Do not directly access WeaponState and AmmoState here
-  var addWeaponPanel =
-      function (mechId : string,
-                weaponStateList : WeaponState[],
-                ammoState : AmmoState,
-                weaponPanel : Element)
-                : void {
-    for (var idx in weaponStateList) {
-      if (!weaponStateList.hasOwnProperty(idx)) {
-        continue;
-      }
-      var weaponState = weaponStateList[idx];
-      let weaponRowDiv = MechViewWidgets.cloneTemplate("weaponRow-template");
-      $(weaponRowDiv)
-        .attr("id", weaponRowId(mechId, Number(idx)))
-        .attr("data-mech-id", mechId)
-        .attr("data-weapon-idx", idx)
-        .appendTo(weaponPanel);
-      $(weaponRowDiv).find(".weaponName")
-        .attr("id", weaponNameId(mechId, Number(idx)))
-        .html(weaponState.weaponInfo.translatedName);
-      $(weaponRowDiv).find(".weaponLocation")
-        .attr("id", weaponLocationId(mechId, Number(idx)))
-        .html(weaponLocAbbr[weaponState.weaponInfo.location]);
-      $(weaponRowDiv).find(".weaponCooldownBar")
-        .attr("id", weaponCooldownBarId(mechId, Number(idx)));
-      $(weaponRowDiv).find(".weaponAmmo")
-        .attr("id", weaponAmmoId(mechId, Number(idx)));
-
-      setWeaponAmmo(mechId, Number(idx), 0);
-      setWeaponState(mechId, Number(idx), weaponState.weaponCycle);
-      setWeaponCooldown(mechId, Number(idx), 0);
-    }
-  }
   export type WeaponBarType = string;
-  export var setWeaponCooldown =
-      function (mechId : string,
-                weaponIdx : number,
-                percent : number,
-                type : WeaponBarType ="cooldown")
-                : void{
-    let cooldownDiv = document.getElementById(weaponCooldownBarId(mechId, weaponIdx));
-    if (percent > 1) {
-      cooldownDiv.classList.add("over100");
-    } else {
-      cooldownDiv.classList.remove("over100");
+  export class WeaponPanel extends DomStoredWidget {
+    private static readonly WeaponPanelDomKey = "mwosim.WeaponPanel.uiObject";
+    static weaponPanelId(mechId : string) {
+      return `${mechId}-weaponPanelContainer`;
     }
-    percent = Math.min(1, percent);
-    cooldownDiv.style.width = (100*percent) + "%";
-    if (type === "cooldown") {
-      cooldownDiv.classList.remove("jamBar");
-    } else if (type === "jamBar") {
-      cooldownDiv.classList.add("jamBar");
+    private static weaponRowId(mechId : string, idx : number) : string {
+      return `${mechId}-${idx}-weaponrow`;
     }
-  }
-  export var setWeaponAmmo =
-      function (mechId : string,
-                weaponIdx : number,
-                ammo : number)
-                : void {
-    let weaponAmmoDiv : Node = document.getElementById(weaponAmmoId(mechId, weaponIdx));
-    weaponAmmoDiv.textContent = ammo !== -1 ? String(ammo) : "\u221e"; //infinity symbol
-  }
+    private static weaponNameId(mechId : string, idx : number) : string {
+      return WeaponPanel.weaponRowId(mechId, idx) + "-weaponName";
+    }
+    private static weaponLocationId(mechId : string, idx : number) : string {
+      return WeaponPanel.weaponRowId(mechId, idx) + "-weaponLocation";
+    }
+    private static weaponCooldownBarId(mechId : string, idx : number) : string {
+      return WeaponPanel.weaponRowId(mechId, idx) + "-weaponCooldownBar";
+    }
+    private static weaponAmmoId(mechId : string, idx : number) : string {
+      return WeaponPanel.weaponRowId(mechId, idx) + "-weaponAmmo";
+    }
+    private static readonly weaponLocAbbr : {[index:string] : string} = {
+      "head" : "H",
+      "left_arm" : "LA",
+      "left_torso" : "LT",
+      "centre_torso" : "CT",
+      "right_torso" : "RT",
+      "right_arm" : "RA",
+      "left_leg" : "LL",
+      "right_leg" : "RL"
+    }
+    private mechId : string;
+    //TODO: Do not directly access WeaponState and AmmoState here
+    constructor(mechId : string,
+                  weaponStateList : WeaponState[],
+                  ammoState : AmmoState,
+                  weaponPanel : Element) {
+      super(weaponPanel);
+      this.storeToDom(WeaponPanel.WeaponPanelDomKey);
+      this.mechId = mechId;
+      $(weaponPanel).attr("id", WeaponPanel.weaponPanelId(mechId));
 
-  export var setWeaponState =
-      function (mechId : string,
-                weaponIdx : number,
-                state : WeaponCycle)
-                : void {
-    //Note: the remove class string must include all the MechModel.WeaponCycle strings
-    let removeClassString = "";
-    for (let weaponCycle in WeaponCycle) {
-      if (WeaponCycle.hasOwnProperty(weaponCycle)) {
-        removeClassString += WeaponCycle[weaponCycle] + " ";
+      for (var idx in weaponStateList) {
+        if (!weaponStateList.hasOwnProperty(idx)) {
+          continue;
+        }
+        var weaponState = weaponStateList[idx];
+        let weaponRowDiv = MechViewWidgets.cloneTemplate("weaponRow-template");
+        $(weaponRowDiv)
+          .attr("id", WeaponPanel.weaponRowId(mechId, Number(idx)))
+          .attr("data-mech-id", mechId)
+          .attr("data-weapon-idx", idx)
+          .appendTo(weaponPanel);
+        $(weaponRowDiv).find(".weaponName")
+          .attr("id", WeaponPanel.weaponNameId(mechId, Number(idx)))
+          .html(weaponState.weaponInfo.translatedName);
+        $(weaponRowDiv).find(".weaponLocation")
+          .attr("id", WeaponPanel.weaponLocationId(mechId, Number(idx)))
+          .html(WeaponPanel.weaponLocAbbr[weaponState.weaponInfo.location]);
+        $(weaponRowDiv).find(".weaponCooldownBar")
+          .attr("id", WeaponPanel.weaponCooldownBarId(mechId, Number(idx)));
+        $(weaponRowDiv).find(".weaponAmmo")
+          .attr("id", WeaponPanel.weaponAmmoId(mechId, Number(idx)));
+
+        this.setWeaponAmmo(Number(idx), 0);
+        this.setWeaponState(Number(idx), weaponState.weaponCycle);
+        this.setWeaponCooldown(Number(idx), 0);
       }
     }
-    let weaponRowDiv = document.getElementById(weaponRowId(mechId, weaponIdx));
-    let weaponRowJQ = $(weaponRowDiv);
-    weaponRowJQ.removeClass(removeClassString);
-    weaponRowJQ.addClass(state);
+    static getWeaponPanel(mechId : string) : WeaponPanel {
+      let domElement = document.getElementById(WeaponPanel.weaponPanelId(mechId));
+      if (!domElement) {
+        return null;
+      }
+      return DomStoredWidget.fromDom(domElement, WeaponPanel.WeaponPanelDomKey);
+    }
+    setWeaponCooldown(weaponIdx : number,
+                  percent : number,
+                  type : WeaponBarType ="cooldown")
+                  : void {
+      let cooldownDiv = document.getElementById(WeaponPanel.weaponCooldownBarId(this.mechId, weaponIdx));
+      if (percent > 1) {
+        cooldownDiv.classList.add("over100");
+      } else {
+        cooldownDiv.classList.remove("over100");
+      }
+      percent = Math.min(1, percent);
+      cooldownDiv.style.width = (100*percent) + "%";
+      if (type === "cooldown") {
+        cooldownDiv.classList.remove("jamBar");
+      } else if (type === "jamBar") {
+        cooldownDiv.classList.add("jamBar");
+      }
+    }
+    setWeaponAmmo(weaponIdx : number,
+                  ammo : number)
+                  : void {
+      let weaponAmmoDiv : Node = document.getElementById(WeaponPanel.weaponAmmoId(this.mechId, weaponIdx));
+      weaponAmmoDiv.textContent = ammo !== -1 ? String(ammo) : "\u221e"; //infinity symbol
+    }
+
+    setWeaponState(weaponIdx : number,
+                  state : WeaponCycle)
+                  : void {
+      //Note: the remove class string must include all the MechModel.WeaponCycle strings
+      let removeClassString = "";
+      for (let weaponCycle in WeaponCycle) {
+        if (WeaponCycle.hasOwnProperty(weaponCycle)) {
+          removeClassString += WeaponCycle[weaponCycle] + " ";
+        }
+      }
+      let weaponRowDiv = document.getElementById(WeaponPanel.weaponRowId(this.mechId, weaponIdx));
+      let weaponRowJQ = $(weaponRowDiv);
+      weaponRowJQ.removeClass(removeClassString);
+      weaponRowJQ.addClass(state);
+    }
   }
 
   //adds a mech panel (which contains a paperDoll, a heatbar and a weaponPanel)
@@ -380,10 +391,9 @@ namespace MechViewMechPanel {
     mechPanelJQ.find("[class~='heatNumber']")
       .attr("id", heatNumberId);
 
-    var weaponPanelContainerId = mechId + "-weaponPanelContainer";
-    let weaponPanelJQ = mechPanelJQ.find("[class~='weaponPanelContainer']")
-      .attr("id", weaponPanelContainerId);
-    addWeaponPanel(mechId, weaponStateList, ammoState, weaponPanelJQ.get(0));
+    var weaponPanelContainerId = WeaponPanel.weaponPanelId(mechId);
+    let weaponPanelJQ = mechPanelJQ.find("[class~='weaponPanelContainer']");
+    let weaponPanel = new WeaponPanel(mechId, weaponStateList, ammoState, weaponPanelJQ.get(0));
 
     let mechNameId =  mechNamePanelId(mechId);
     mechPanelJQ.find("[class~='titlePanel'] [class~='mechName']")
