@@ -159,6 +159,11 @@ System.register("test-touch", [], function (exports_6, context_6) {
                         .on("touchend", touchEnd)
                         .on("touchcancel", touchCancel)
                         .on("touchmove", touchMove);
+                    $("#touch2")
+                        .on("touchstart", touchStart)
+                        .on("touchend", touchEnd)
+                        .on("touchcancel", touchCancel)
+                        .on("touchmove", touchMove);
                 };
                 var touchStart = function (data) {
                     console.log(`touchStart ${this.id} : ${data}`);
@@ -167,23 +172,41 @@ System.register("test-touch", [], function (exports_6, context_6) {
                 var touchEnd = function (data) {
                     console.log(`touchEnd ${this.id} : ${data}`);
                     let touchEvent = data.originalEvent;
-                    console.log("Drop target: " + currDropTarget.id);
+                    let currDropTarget = currDropTargetMap.get(touchEvent.target);
+                    let id = currDropTarget ? currDropTarget.id : "undefined";
+                    console.log("Drop target: " + id);
                     hideTouchIcon(data.originalEvent);
+                    if (currDropTarget) {
+                        let currDropTargetJQ = $(currDropTarget);
+                        currDropTargetJQ
+                            .removeClass("dropTarget")
+                            .addClass("flashSelected")
+                            .on("animationend", function () {
+                            currDropTargetJQ.removeClass("flashSelected");
+                            currDropTargetJQ.off("animationend");
+                        });
+                    }
                 };
                 var touchCancel = function (data) {
                     console.log(`touchCancel ${this.id} : ${data}`);
                     hideTouchIcon(data.originalEvent);
                 };
-                var currDropTarget;
+                var currDropTargetMap = new Map();
                 var touchMove = function (data) {
                     // console.log(`touchMove ${this.id} : ${data}`);
                     let touchEvent = data.originalEvent;
                     touchEvent.preventDefault();
                     let touch = touchEvent.touches[0];
                     let touchTargetElem = document.elementFromPoint(touch.clientX, touch.clientY);
+                    let currDropTarget = currDropTargetMap.get(touchEvent.target);
                     if (currDropTarget !== touchTargetElem) {
                         console.log("Touch drop target: " + touchTargetElem.id);
+                        if (currDropTarget) {
+                            currDropTarget.classList.remove("dropTarget");
+                        }
                         currDropTarget = touchTargetElem;
+                        currDropTargetMap.set(touchEvent.target, currDropTarget);
+                        currDropTarget.classList.add("dropTarget");
                     }
                     moveTouchIcon(data.originalEvent);
                 };
