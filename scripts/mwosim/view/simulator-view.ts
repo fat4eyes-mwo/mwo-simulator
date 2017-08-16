@@ -238,8 +238,8 @@ namespace MechView {
     for (let componentIdx in Component) {
       if (Component.hasOwnProperty(componentIdx)) {
         let component = Component[componentIdx];
-        paperDoll.setPaperDollArmor(LOADING_SCREEN_MECH_ID, component, 1);
-        paperDoll.setPaperDollStructure(LOADING_SCREEN_MECH_ID, component, 1);
+        paperDoll.setPaperDollArmor(component, 1);
+        paperDoll.setPaperDollStructure(component, 1);
       }
     }
     if (loadingScreenAnimateInterval) {
@@ -250,8 +250,8 @@ namespace MechView {
         for (let componentIdx in Component) {
           if (Component.hasOwnProperty(componentIdx)) {
             let component = Component[componentIdx];
-            paperDoll.setPaperDollArmor(LOADING_SCREEN_MECH_ID, component, Math.random());
-            paperDoll.setPaperDollStructure(LOADING_SCREEN_MECH_ID, component, Math.random());
+            paperDoll.setPaperDollArmor(component, Math.random());
+            paperDoll.setPaperDollStructure(component, Math.random());
           }
         }
       }

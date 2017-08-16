@@ -146,15 +146,16 @@ namespace MechModelView {
       let armorPercent = Number(mechComponentHealth.armor) / Number(mechComponentHealth.maxArmor);
       let structurePercent = Number(mechComponentHealth.structure) / Number(mechComponentHealth.maxStructure);
       let paperDoll = MechViewMechPanel.PaperDoll.getPaperDoll(mechId);
-      paperDoll.setPaperDollArmor(mechId, location, armorPercent);
-      paperDoll.setPaperDollStructure(mechId, location, structurePercent);
+      paperDoll.setPaperDollArmor(location, armorPercent);
+      paperDoll.setPaperDollStructure(location, structurePercent);
     }
   }
 
   var updateMechHealthNumbers = function (mech : Mech) : void {
     let mechHealth = mech.getMechState().mechHealth;
     for (let mechComponentHealth of mechHealth.componentHealth) {
-      MechViewMechPanel.updateMechHealthNumbers(mech.getMechId(),
+      let mechHealthNumbers = MechViewMechPanel.MechHealthNumbers.getMechHealthNumbers(mech.getMechId());
+      mechHealthNumbers.updateMechHealthNumbers(
                             {
                               location: mechComponentHealth.location,
                               armor: mechComponentHealth.armor,
@@ -200,6 +201,7 @@ namespace MechModelView {
   }
 
   export var updateHealth = function(mech : Mech) : void {
+    //TODO: Unify these calls in MechPanel.updateHealth()
     updatePaperDoll(mech);
     updateMechHealthNumbers(mech);
     updateMechStatus(mech);

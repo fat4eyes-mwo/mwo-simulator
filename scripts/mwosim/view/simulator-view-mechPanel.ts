@@ -21,10 +21,13 @@ namespace MechViewMechPanel {
     private static paperDollComponentId(mechId: string, component: Component): string {
       return `${mechId}-paperDoll-${component}`;
     }
+    mechId : string;
     constructor(mechId: string) {
       let paperDollDiv = MechViewWidgets.cloneTemplate("paperDoll-template");
       super(paperDollDiv);
       this.storeToDom(PaperDoll.PaperDollDomKey);
+
+      this.mechId = mechId;
 
       let paperDollJQ = $(paperDollDiv)
         .attr("id", PaperDoll.paperDollId(mechId))
@@ -42,68 +45,25 @@ namespace MechViewMechPanel {
 
     static getPaperDoll(mechId : string) : PaperDoll {
       let domElement = document.getElementById(PaperDoll.paperDollId(mechId));
-      if (domElement == null) {
+      if (!domElement) {
         return null;
       }
       return DomStoredWidget.fromDom(domElement, PaperDoll.PaperDollDomKey);
     }
 
     //Percent values from 0 to 1
-    setPaperDollArmor(mechId : string,
-                  location : Component,
-                  percent : number)
-                  : void {
+    setPaperDollArmor(location : Component, percent : number) : void {
       var color = MechViewWidgets.damageColor(percent, MechViewWidgets.paperDollDamageGradient);
-      let paperDollComponent = document.getElementById(PaperDoll.paperDollComponentId(mechId, location));
+      let paperDollComponent = document.getElementById(PaperDoll.paperDollComponentId(this.mechId, location));
       if (paperDollComponent) {
         paperDollComponent.style.borderColor = color;
       }
     }
-    setPaperDollStructure(mechId : string,
-                  location : Component,
-                  percent : number)
-                  : void {
+    setPaperDollStructure(location : Component, percent : number) : void {
       var color = MechViewWidgets.damageColor(percent, MechViewWidgets.paperDollDamageGradient);
-      let paperDollComponent = document.getElementById(PaperDoll.paperDollComponentId(mechId, location));
+      let paperDollComponent = document.getElementById(PaperDoll.paperDollComponentId(this.mechId, location));
       if (paperDollComponent) {
         paperDollComponent.style.backgroundColor = color;
-      }
-    }
-  }
-
-  var mechHealthNumbersId = function (mechId : string) : string {
-    return mechId + "-mechHealthNumbers";
-  }
-  var mechHealthNumbersArmorId =
-      function(mechId : string, location : Component) : string {
-    return mechId + "-mechHealthNumbers-" + location + "-armor";
-  }
-  var mechHealthNumbersStructureId =
-      function(mechId : string, location : Component) : string {
-    return mechId + "-mechHealthNumbers-" + location + "-structure";
-  }
-  var addMechHealthNumbers =
-      function (mech : Mech, mechHealthNumbersContainer : Element) : void {
-    let mechId = mech.getMechId();
-    let mechHealthNumbersDivId = mechHealthNumbersId(mechId);
-    let mechHealthNumbersDiv =
-        MechViewWidgets.cloneTemplate("mechHealthNumbers-template");
-    $(mechHealthNumbersDiv)
-      .attr("id", mechHealthNumbersDivId)
-      .attr("data-mech-id", mechId)
-      .appendTo(mechHealthNumbersContainer);
-
-    for (let locationIdx in Component) {
-      if (Component.hasOwnProperty(locationIdx)) {
-        let location = Component[locationIdx];
-        $(`#${mechHealthNumbersDivId}` +
-          ` [data-location='${location}']` +
-          " [data-healthtype=armor]")
-            .attr("id", mechHealthNumbersArmorId(mechId, location));
-        $(`#${mechHealthNumbersDivId}` +
-          ` [data-location='${location}']` +
-          " [data-healthtype=structure]")
-          .attr("id", mechHealthNumbersStructureId(mechId, location));
       }
     }
   }
@@ -115,37 +75,83 @@ namespace MechViewMechPanel {
     maxArmor : number;
     maxStructure : number;
   }
-  export var updateMechHealthNumbers =
-      function(mechId : string, updateParams : HealthUpdate) : void {
-    let location = updateParams.location;
-    let armor = updateParams.armor;
-    let structure = updateParams.structure;
-    let maxArmor = updateParams.maxArmor;
-    let maxStructure = updateParams.maxStructure;
+  export class MechHealthNumbers extends DomStoredWidget {
+    private static readonly MechHealthNumbersDomKey = "mwosim.MechHealthNumbers.uiObject";
+    private static mechHealthNumbersId(mechId : string) : string {
+      return mechId + "-mechHealthNumbers";
+    }
+    private static mechHealthNumbersArmorId(mechId : string, location : Component) : string {
+      return mechId + "-mechHealthNumbers-" + location + "-armor";
+    }
+    private static mechHealthNumbersStructureId(mechId : string, location : Component) : string {
+      return mechId + "-mechHealthNumbers-" + location + "-structure";
+    }
+    private mechId : string;
+    constructor(mech : Mech) {
+      let mechHealthNumbersDiv = MechViewWidgets.cloneTemplate("mechHealthNumbers-template");
+      super(mechHealthNumbersDiv);
+      this.storeToDom(MechHealthNumbers.MechHealthNumbersDomKey);
+      this.mechId = mech.getMechId();
 
-    let mechHealthNumbersDivId = mechHealthNumbersId(mechId);
-    let armorPercent = Number(armor) / Number(maxArmor);
-    let structurePercent = Number(structure) / Number(maxStructure);
-    let armorColor = MechViewWidgets.damageColor(armorPercent, MechViewWidgets.componentHealthDamageGradient);
-    let structureColor = MechViewWidgets.damageColor(structurePercent, MechViewWidgets.componentHealthDamageGradient);
+      let mechHealthNumbersDivId = MechHealthNumbers.mechHealthNumbersId(this.mechId);
+      let mechHealthNumbersJQ = $(mechHealthNumbersDiv)
+                                    .attr("id", mechHealthNumbersDivId)
+                                    .attr("data-mech-id", this.mechId);
 
-    let armorLocationDivId = mechHealthNumbersArmorId(mechId, location);
-    let structureLocationDivId = mechHealthNumbersStructureId(mechId, location);
-
-    let armorLocationDiv = document.getElementById(armorLocationDivId);
-    if (armorLocationDiv) {
-      armorLocationDiv.textContent = String(Math.round(armor));
-      //NOTE: Title change too expensive
-      // armorLocationDiv.setAttribute("title", (Number(armor)).toFixed(2));
-      armorLocationDiv.style.color = armorColor;
+      for (let locationIdx in Component) {
+        if (Component.hasOwnProperty(locationIdx)) {
+          let location = Component[locationIdx];
+          mechHealthNumbersJQ.find(
+            ` [data-location='${location}']` +
+            " [data-healthtype=armor]")
+              .attr("id", MechHealthNumbers.mechHealthNumbersArmorId(this.mechId, location));
+          mechHealthNumbersJQ.find(
+            ` [data-location='${location}']` +
+            " [data-healthtype=structure]")
+            .attr("id", MechHealthNumbers.mechHealthNumbersStructureId(this.mechId, location));
+        }
+      }
     }
 
-    let structureLocationDiv = document.getElementById(structureLocationDivId);
-    if (structureLocationDiv) {
-      structureLocationDiv.textContent = String(Math.round(structure));
-      //NOTE: Title change too expensive
-      // structureLocationDiv.setAttribute("title", (Number(structure)).toFixed(2));
-      structureLocationDiv.style.color = structureColor;
+    static getMechHealthNumbers(mechId : string) : MechHealthNumbers {
+      let domElement = document.getElementById(MechHealthNumbers.mechHealthNumbersId(mechId));
+      if (!domElement) {
+        return null;
+      }
+      return DomStoredWidget.fromDom(domElement, MechHealthNumbers.MechHealthNumbersDomKey);
+    }
+
+    updateMechHealthNumbers(updateParams : HealthUpdate) : void {
+      let location = updateParams.location;
+      let armor = updateParams.armor;
+      let structure = updateParams.structure;
+      let maxArmor = updateParams.maxArmor;
+      let maxStructure = updateParams.maxStructure;
+
+      let mechHealthNumbersDivId = MechHealthNumbers.mechHealthNumbersId(this.mechId);
+      let armorPercent = Number(armor) / Number(maxArmor);
+      let structurePercent = Number(structure) / Number(maxStructure);
+      let armorColor = MechViewWidgets.damageColor(armorPercent, MechViewWidgets.componentHealthDamageGradient);
+      let structureColor = MechViewWidgets.damageColor(structurePercent, MechViewWidgets.componentHealthDamageGradient);
+
+      let armorLocationDivId = MechHealthNumbers.mechHealthNumbersArmorId(this.mechId, location);
+      let structureLocationDivId = MechHealthNumbers.mechHealthNumbersStructureId(this.mechId, location);
+
+      let armorLocationDiv = document.getElementById(armorLocationDivId);
+      if (armorLocationDiv) {
+        armorLocationDiv.textContent = String(Math.round(armor));
+        //NOTE: Title change too expensive
+        // armorLocationDiv.setAttribute("title", (Number(armor)).toFixed(2));
+        armorLocationDiv.style.color = armorColor;
+      }
+
+      let structureLocationDiv = document.getElementById(structureLocationDivId);
+      if (structureLocationDiv) {
+        structureLocationDiv.textContent = String(Math.round(structure));
+        //NOTE: Title change too expensive
+        // structureLocationDiv.setAttribute("title", (Number(structure)).toFixed(2));
+        structureLocationDiv.style.color = structureColor;
+      }
     }
   }
 
@@ -352,7 +358,8 @@ namespace MechViewMechPanel {
 
     let mechHealthNumbersContainerJQ =
             mechPanelJQ.find("[class~='mechHealthNumbersContainer']");
-    addMechHealthNumbers(mech, mechHealthNumbersContainerJQ.get(0));
+    let mechHealthNumbers = new MechHealthNumbers(mech);
+    mechHealthNumbersContainerJQ.append(mechHealthNumbers.domElement);
 
     var heatbarContainerId = mechId + "-heatbarContainer";
     mechPanelJQ.find("[class~='heatbarContainer']")

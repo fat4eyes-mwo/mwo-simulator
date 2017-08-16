@@ -57,8 +57,8 @@ namespace MechTest {
       for (var property in Component) {
         if (Component.hasOwnProperty(property)) {
           let paperDoll = MechViewMechPanel.PaperDoll.getPaperDoll(mech.getMechId());
-          paperDoll.setPaperDollArmor(mech.getMechId(), Component[property], Math.random());
-          paperDoll.setPaperDollStructure(mech.getMechId(), Component[property], Math.random());
+          paperDoll.setPaperDollArmor(Component[property], Math.random());
+          paperDoll.setPaperDollStructure(Component[property], Math.random());
         }
       }
       MechViewMechPanel.setHeatbarValue(mech.getMechId(), Math.random());
