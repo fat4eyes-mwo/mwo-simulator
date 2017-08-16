@@ -14,6 +14,8 @@ export namespace TouchTest {
 
   var touchEnd = function(this: Element, data : JQuery.Event) {
     console.log(`touchEnd ${this.id} : ${data}`);
+    let touchEvent = data.originalEvent as TouchEvent;
+    console.log("Drop target: " + currDropTarget.id);
   }
 
   var touchCancel = function(this: Element, data : JQuery.Event) {

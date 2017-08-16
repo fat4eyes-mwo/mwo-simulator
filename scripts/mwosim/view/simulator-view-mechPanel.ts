@@ -72,7 +72,7 @@ namespace MechViewMechPanel {
     return mechId + "-mechHealthNumbers-" + location + "-structure";
   }
   var addMechHealthNumbers =
-      function (mech : Mech, mechHealthNumbersContainer : JQuery) : void {
+      function (mech : Mech, mechHealthNumbersContainer : Element) : void {
     let mechId = mech.getMechId();
     let mechHealthNumbersDivId = mechHealthNumbersId(mechId);
     let mechHealthNumbersDiv =
@@ -210,7 +210,7 @@ namespace MechViewMechPanel {
       function (mechId : string,
                 weaponStateList : WeaponState[],
                 ammoState : AmmoState,
-                weaponPanel : string)
+                weaponPanel : Element)
                 : void {
     for (var idx in weaponStateList) {
       if (!weaponStateList.hasOwnProperty(idx)) {
@@ -222,7 +222,7 @@ namespace MechViewMechPanel {
         .attr("id", weaponRowId(mechId, Number(idx)))
         .attr("data-mech-id", mechId)
         .attr("data-weapon-idx", idx)
-        .appendTo("#" + weaponPanel);
+        .appendTo(weaponPanel);
       $(weaponRowDiv).find(".weaponName")
         .attr("id", weaponNameId(mechId, Number(idx)))
         .html(weaponState.weaponInfo.translatedName);
@@ -340,7 +340,7 @@ namespace MechViewMechPanel {
 
     let mechHealthNumbersContainerJQ =
             mechPanelJQ.find("[class~='mechHealthNumbersContainer']");
-    addMechHealthNumbers(mech, mechHealthNumbersContainerJQ);
+    addMechHealthNumbers(mech, mechHealthNumbersContainerJQ.get(0));
 
     var heatbarContainerId = mechId + "-heatbarContainer";
     mechPanelJQ.find("[class~='heatbarContainer']")
@@ -352,9 +352,9 @@ namespace MechViewMechPanel {
       .attr("id", heatNumberId);
 
     var weaponPanelContainerId = mechId + "-weaponPanelContainer";
-    mechPanelJQ.find("[class~='weaponPanelContainer']")
+    let weaponPanelJQ = mechPanelJQ.find("[class~='weaponPanelContainer']")
       .attr("id", weaponPanelContainerId);
-    addWeaponPanel(mechId, weaponStateList, ammoState, weaponPanelContainerId);
+    addWeaponPanel(mechId, weaponStateList, ammoState, weaponPanelJQ.get(0));
 
     let mechNameId =  mechNamePanelId(mechId);
     mechPanelJQ.find("[class~='titlePanel'] [class~='mechName']")
@@ -362,10 +362,10 @@ namespace MechViewMechPanel {
       .html("");
 
     //delete button
-    addDeleteMechButton(mechId, team, mechPanelJQ);
+    addDeleteMechButton(mechId, team, mechPanelDiv);
 
     //move button
-    addMoveMechButton(mechId, team, mechPanelJQ);
+    addMoveMechButton(mechId, team, mechPanelDiv);
 
     //drag and drop handlers
     addDragAndDropHandlers(mechId, mechPanelDiv);
@@ -507,8 +507,9 @@ namespace MechViewMechPanel {
   var addDeleteMechButton =
       function(mechId : string,
               team : Team,
-              mechPanelJQ : JQuery)
+              mechPanelDiv : Element)
               : void {
+    let mechPanelJQ = $(mechPanelDiv);
     if (!deleteMechButtonHandler) {
       deleteMechButtonHandler = createDeleteMechButtonHandler();
     }
@@ -545,8 +546,9 @@ namespace MechViewMechPanel {
   var addMoveMechButton =
       function(mechId : string,
               team : Team,
-              mechPanelJQ : JQuery)
+              mechPanelDiv : Element)
               : void {
+    let mechPanelJQ = $(mechPanelDiv);
     let moveIconSVG = MechViewWidgets.cloneTemplate("move-icon-template");
     let mechMoveButtonDivId = moveMechButtonId(mechId);
     if (!moveMechButtonHandler) {
