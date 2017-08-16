@@ -144,19 +144,62 @@ System.register("storedElemTest", ["domstorage"], function (exports_5, context_5
         }
     };
 });
-System.register("main", ["moduleA", "moduleB", "libtest/moduleC", "storedElemTest"], function (exports_6, context_6) {
+System.register("test-touch", [], function (exports_6, context_6) {
     "use strict";
     var __moduleName = context_6 && context_6.id;
+    var TouchTest;
+    return {
+        setters: [],
+        execute: function () {
+            /// <reference path="../scripts/lib/jquery-3.2.d.ts" />
+            (function (TouchTest) {
+                TouchTest.touchTest = function () {
+                    $("#touch1")
+                        .on("touchstart", touchStart)
+                        .on("touchend", touchEnd)
+                        .on("touchcancel", touchCancel)
+                        .on("touchmove", touchMove);
+                };
+                var touchStart = function (data) {
+                    console.log(`touchStart ${this.id} : ${data}`);
+                };
+                var touchEnd = function (data) {
+                    console.log(`touchEnd ${this.id} : ${data}`);
+                };
+                var touchCancel = function (data) {
+                    console.log(`touchCancel ${this.id} : ${data}`);
+                };
+                var currDropTarget;
+                var touchMove = function (data) {
+                    // console.log(`touchMove ${this.id} : ${data}`);
+                    let touchEvent = data.originalEvent;
+                    let touch = touchEvent.touches[0];
+                    let touchTargetElem = document.elementFromPoint(touch.clientX, touch.clientY);
+                    if (currDropTarget !== touchTargetElem) {
+                        console.log("Touch drop target: " + touchTargetElem.id);
+                        currDropTarget = touchTargetElem;
+                    }
+                };
+            })(TouchTest || (TouchTest = {}));
+            exports_6("TouchTest", TouchTest);
+        }
+    };
+});
+System.register("main", ["moduleA", "moduleB", "libtest/moduleC", "storedElemTest", "test-touch"], function (exports_7, context_7) {
+    "use strict";
+    var __moduleName = context_7 && context_7.id;
     function main() {
         ModuleA.setA("a1");
         ModuleA2.setA("a2"); //Should set the same variable a in moduleA.js
         ModuleC.funcC("foo");
         $("#debugText").text("Hello again from typescript" + ModuleA.funcA("Foo") + ModuleB.bfunc("Bar") +
-            ` ModuleA.a=${ModuleA.getA()}` + ` ModuleA2.a=${ModuleA2.getA()}` + ` ModuleB.getAFromB()=${ModuleB.getAfromB()}`);
+            ` ModuleA.a=${ModuleA.getA()}` + ` ModuleA2.a=${ModuleA2.getA()}` +
+            ` ModuleB.getAFromB()=${ModuleB.getAfromB()}`);
         StoreElemTest.testStoredElem();
+        test_touch_1.TouchTest.touchTest();
     }
-    exports_6("main", main);
-    var ModuleA, ModuleA2, ModuleB, ModuleC, StoreElemTest, foo;
+    exports_7("main", main);
+    var ModuleA, ModuleA2, ModuleB, ModuleC, StoreElemTest, test_touch_1, foo;
     return {
         setters: [
             function (ModuleA_2) {
@@ -171,6 +214,9 @@ System.register("main", ["moduleA", "moduleB", "libtest/moduleC", "storedElemTes
             },
             function (StoreElemTest_1) {
                 StoreElemTest = StoreElemTest_1;
+            },
+            function (test_touch_1_1) {
+                test_touch_1 = test_touch_1_1;
             }
         ],
         execute: function () {

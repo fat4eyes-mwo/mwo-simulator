@@ -6,6 +6,7 @@ import * as ModuleA2 from "moduleA";
 import * as ModuleB from "moduleB";
 import * as ModuleC from "libtest/moduleC";
 import * as StoreElemTest from "storedElemTest";
+import {TouchTest} from "test-touch";
 
 let foo : ModuleA.TypeA;
 export function main() {
@@ -13,8 +14,11 @@ export function main() {
   ModuleA2.setA("a2"); //Should set the same variable a in moduleA.js
   ModuleC.funcC("foo");
   $("#debugText").text("Hello again from typescript" + ModuleA.funcA("Foo") + ModuleB.bfunc("Bar") +
-              ` ModuleA.a=${ModuleA.getA()}` + ` ModuleA2.a=${ModuleA2.getA()}` + ` ModuleB.getAFromB()=${ModuleB.getAfromB()}`);
+              ` ModuleA.a=${ModuleA.getA()}` + ` ModuleA2.a=${ModuleA2.getA()}` + 
+              ` ModuleB.getAFromB()=${ModuleB.getAfromB()}`);
   StoreElemTest.testStoredElem();
+  
+  TouchTest.touchTest();
 }
 
 $(document).ready(main);
