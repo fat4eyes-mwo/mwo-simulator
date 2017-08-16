@@ -62,7 +62,7 @@ namespace MechViewAddMech {
         //set patterns of added mech to selected team patterns
         MechViewTeamStats.setSelectedTeamPatterns(team);
         MechViewRouter.modifyAppState();
-        MechViewMechPanel.addMechPanel(newMech, team);
+        MechView.addMechPanel(newMech, team);
         MechModelView.refreshView([MechModelView.ViewUpdate.TEAMSTATS]);
         MechViewAddMech.hideAddMechDialog(team);
       }

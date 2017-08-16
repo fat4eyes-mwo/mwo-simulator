@@ -44,7 +44,7 @@ namespace MechModelView {
       }
       for (let mech of MechModel.getMechTeam(team)) {
         if (updates.includes(ViewUpdate.MECHLISTS)) {
-          MechViewMechPanel.addMechPanel(mech, team);
+          MechView.addMechPanel(mech, team);
         }
         updateAll(mech);
       }
@@ -184,7 +184,6 @@ namespace MechModelView {
     let burst = mechStats.getBurstDamage(simTime);
 
     let update : MechViewMechPanel.MechPanelStatusUpdate = {
-      mechId : mech.getMechId(),
       mechIsAlive : isAlive,
       mechCurrTotalHealth : currTotalHealth,
       mechCurrMaxHealth : currMaxHealth,
@@ -193,13 +192,15 @@ namespace MechModelView {
       burst : burst,
       totalDmg : totalDmg
     }
-    MechViewMechPanel.updateMechStatusPanel(update);
+    let mechPanel = MechView.getMechPanel(mech.getMechId());
+    mechPanel.updateMechStatusPanel(mech.getMechId(), update);
   }
 
   var updateMechTitle = function (mech : Mech) : void {
     let mechName = mech.getTranslatedName();
     let mechInfo = mech.getMechState().mechInfo;
-    MechViewMechPanel.updateMechTitlePanel(mech.getMechId(), mechName,
+    let mechPanel = MechView.getMechPanel(mech.getMechId());
+    mechPanel.updateMechTitlePanel(mech.getMechId(), mechName,
             mechInfo.smurfyMechId, mechInfo.smurfyLoadoutId);
   }
 
@@ -240,7 +241,8 @@ namespace MechModelView {
   }
 
   var updateQuirksSkills = function(mech : Mech) : void {
-    MechViewMechPanel.updateQuirkSkillFlags(mech.getMechId());
+    let mechPanel = MechView.getMechPanel(mech.getMechId());
+    mechPanel.updateQuirkSkillFlags(mech.getMechId());
   }
 
   var updateAll = function(mech : Mech) : void {

@@ -116,7 +116,8 @@ namespace MechViewTeamStats {
   var mechPipClickHandler = function(this : Element, data : any) {
     let thisJQ = $(this);
     let mechId = thisJQ.attr("data-mech-id");
-    MechViewMechPanel.highlightMechPanel(mechId);
+    let mechPanel = MechView.getMechPanel(mechId);
+    mechPanel.highlightMechPanel(mechId);
   }
 
   //store selected value (since we do a lot of refreshViews which recreates this panel)

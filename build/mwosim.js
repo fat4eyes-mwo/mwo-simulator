@@ -11699,7 +11699,7 @@ var MechModelView;
             }
             for (let mech of MechModel.getMechTeam(team)) {
                 if (updates.includes(MechModelView.ViewUpdate.MECHLISTS)) {
-                    MechViewMechPanel.addMechPanel(mech, team);
+                    MechView.addMechPanel(mech, team);
                 }
                 updateAll(mech);
             }
@@ -11740,7 +11740,8 @@ var MechModelView;
     };
     MechModelView.updateHeat = function (mech) {
         let heatState = mech.getMechState().heatState;
-        MechViewMechPanel.updateHeat(mech.getMechId(), heatState.currHeat, heatState.currMaxHeat);
+        let heatbar = MechViewMechPanel.Heatbar.getHeatbar(mech.getMechId());
+        heatbar.updateHeat(heatState.currHeat, heatState.currMaxHeat);
     };
     MechModelView.updateCooldown = function (mech) {
         let mechState = mech.getMechState();
@@ -11776,7 +11777,8 @@ var MechModelView;
             else if (weaponState.weaponCycle === WeaponCycle.JAMMED) {
                 cooldownPercent = 1;
             }
-            MechViewMechPanel.setWeaponCooldown(mech.getMechId(), Number(weaponIndex), cooldownPercent, type);
+            let weaponPanel = MechViewMechPanel.WeaponPanel.getWeaponPanel(mech.getMechId());
+            weaponPanel.setWeaponCooldown(Number(weaponIndex), cooldownPercent, type);
         }
     };
     MechModelView.updateWeaponStatus = function (mech) {
@@ -11786,10 +11788,11 @@ var MechModelView;
                 continue;
             }
             let weaponState = mechState.weaponStateList[weaponIndex];
-            MechViewMechPanel.setWeaponState(mech.getMechId(), Number(weaponIndex), weaponState.weaponCycle);
+            let weaponPanel = MechViewMechPanel.WeaponPanel.getWeaponPanel(mech.getMechId());
+            weaponPanel.setWeaponState(Number(weaponIndex), weaponState.weaponCycle);
             let ammoState = mech.getMechState().ammoState;
             let weaponAmmoCount = weaponState.getAvailableAmmo();
-            MechViewMechPanel.setWeaponAmmo(mech.getMechId(), Number(weaponIndex), weaponAmmoCount);
+            weaponPanel.setWeaponAmmo(Number(weaponIndex), weaponAmmoCount);
         }
     };
     var updatePaperDoll = function (mech) {
@@ -11799,14 +11802,16 @@ var MechModelView;
             let location = mechComponentHealth.location;
             let armorPercent = Number(mechComponentHealth.armor) / Number(mechComponentHealth.maxArmor);
             let structurePercent = Number(mechComponentHealth.structure) / Number(mechComponentHealth.maxStructure);
-            MechViewMechPanel.setPaperDollArmor(mechId, location, armorPercent);
-            MechViewMechPanel.setPaperDollStructure(mechId, location, structurePercent);
+            let paperDoll = MechViewMechPanel.PaperDoll.getPaperDoll(mechId);
+            paperDoll.setPaperDollArmor(location, armorPercent);
+            paperDoll.setPaperDollStructure(location, structurePercent);
         }
     };
     var updateMechHealthNumbers = function (mech) {
         let mechHealth = mech.getMechState().mechHealth;
         for (let mechComponentHealth of mechHealth.componentHealth) {
-            MechViewMechPanel.updateMechHealthNumbers(mech.getMechId(), {
+            let mechHealthNumbers = MechViewMechPanel.MechHealthNumbers.getMechHealthNumbers(mech.getMechId());
+            mechHealthNumbers.updateMechHealthNumbers({
                 location: mechComponentHealth.location,
                 armor: mechComponentHealth.armor,
                 structure: mechComponentHealth.structure,
@@ -11829,7 +11834,6 @@ var MechModelView;
         let dps = simTime > 0 ? Number(mechStats.totalDamage) / simTime * 1000 : 0;
         let burst = mechStats.getBurstDamage(simTime);
         let update = {
-            mechId: mech.getMechId(),
             mechIsAlive: isAlive,
             mechCurrTotalHealth: currTotalHealth,
             mechCurrMaxHealth: currMaxHealth,
@@ -11838,14 +11842,17 @@ var MechModelView;
             burst: burst,
             totalDmg: totalDmg
         };
-        MechViewMechPanel.updateMechStatusPanel(update);
+        let mechPanel = MechView.getMechPanel(mech.getMechId());
+        mechPanel.updateMechStatusPanel(mech.getMechId(), update);
     };
     var updateMechTitle = function (mech) {
         let mechName = mech.getTranslatedName();
         let mechInfo = mech.getMechState().mechInfo;
-        MechViewMechPanel.updateMechTitlePanel(mech.getMechId(), mechName, mechInfo.smurfyMechId, mechInfo.smurfyLoadoutId);
+        let mechPanel = MechView.getMechPanel(mech.getMechId());
+        mechPanel.updateMechTitlePanel(mech.getMechId(), mechName, mechInfo.smurfyMechId, mechInfo.smurfyLoadoutId);
     };
     MechModelView.updateHealth = function (mech) {
+        //TODO: Unify these calls in MechPanel.updateHealth()
         updatePaperDoll(mech);
         updateMechHealthNumbers(mech);
         updateMechStatus(mech);
@@ -11876,7 +11883,8 @@ var MechModelView;
         updateMechStatus(mech);
     };
     var updateQuirksSkills = function (mech) {
-        MechViewMechPanel.updateQuirkSkillFlags(mech.getMechId());
+        let mechPanel = MechView.getMechPanel(mech.getMechId());
+        mechPanel.updateQuirkSkillFlags(mech.getMechId());
     };
     var updateAll = function (mech) {
         updateMechTitle(mech);
@@ -12619,7 +12627,7 @@ var MechViewAddMech;
                 //set patterns of added mech to selected team patterns
                 MechViewTeamStats.setSelectedTeamPatterns(team);
                 MechViewRouter.modifyAppState();
-                MechViewMechPanel.addMechPanel(newMech, team);
+                MechView.addMechPanel(newMech, team);
                 MechModelView.refreshView([MechModelView.ViewUpdate.TEAMSTATS]);
                 MechViewAddMech.hideAddMechDialog(team);
             };
@@ -12976,159 +12984,276 @@ var MechViewMechDetails;
     }
     MechQuirkListPanel.MechQuirkListDomKey = "mwosim.MechQuirkListPanel.uiObject";
 })(MechViewMechDetails || (MechViewMechDetails = {}));
-//TODO: Wrap mechPanel in a class
+//TODO: Unify the update methods into mechpanel, so ModelView doesn't have to know about mechpanel's
+//individual components
+//TODO: Remove mechId from method parameters in MechPanel. Use stored mechId instead.
 var MechViewMechPanel;
-//TODO: Wrap mechPanel in a class
+//TODO: Unify the update methods into mechpanel, so ModelView doesn't have to know about mechpanel's
+//individual components
+//TODO: Remove mechId from method parameters in MechPanel. Use stored mechId instead.
 (function (MechViewMechPanel) {
     var WeaponCycle = MechModelCommon.WeaponCycle;
     var Component = MechModelCommon.Component;
-    //Add a paper doll with the given mechId to the element with the id
-    //paperDollContainer uses the template paperDoll-template from the main HTML file
-    var paperDollId = function (mechId) {
-        return mechId + "-paperDoll";
-    };
-    var paperDollComponentId = function (mechId, component) {
-        return `${mechId}-paperDoll-${component}`;
-    };
-    MechViewMechPanel.addPaperDoll = function (mechId, paperDollContainer) {
-        let paperDollDiv = MechViewWidgets.cloneTemplate("paperDoll-template");
-        let paperDollJQ = $(paperDollDiv)
-            .attr("id", paperDollId(mechId))
-            .attr("data-mech-id", mechId)
-            .appendTo(paperDollContainer);
-        for (let componentField in Component) {
-            if (!Component.hasOwnProperty(componentField)) {
-                continue;
-            }
-            let component = Component[componentField];
-            let findStr = `> [data-location='${component}']`;
-            paperDollJQ.find(findStr)
-                .attr("id", paperDollComponentId(mechId, component));
-        }
-    };
-    //Percent values from 0 to 1
-    MechViewMechPanel.setPaperDollArmor = function (mechId, location, percent) {
-        var color = MechViewWidgets.damageColor(percent, MechViewWidgets.paperDollDamageGradient);
-        let paperDollComponent = document.getElementById(paperDollComponentId(mechId, location));
-        if (paperDollComponent) {
-            paperDollComponent.style.borderColor = color;
-        }
-    };
-    MechViewMechPanel.setPaperDollStructure = function (mechId, location, percent) {
-        var color = MechViewWidgets.damageColor(percent, MechViewWidgets.paperDollDamageGradient);
-        let paperDollComponent = document.getElementById(paperDollComponentId(mechId, location));
-        if (paperDollComponent) {
-            paperDollComponent.style.backgroundColor = color;
-        }
-    };
-    var mechHealthNumbersId = function (mechId) {
-        return mechId + "-mechHealthNumbers";
-    };
-    var mechHealthNumbersArmorId = function (mechId, location) {
-        return mechId + "-mechHealthNumbers-" + location + "-armor";
-    };
-    var mechHealthNumbersStructureId = function (mechId, location) {
-        return mechId + "-mechHealthNumbers-" + location + "-structure";
-    };
-    var addMechHealthNumbers = function (mech, mechHealthNumbersContainer) {
-        let mechId = mech.getMechId();
-        let mechHealthNumbersDivId = mechHealthNumbersId(mechId);
-        let mechHealthNumbersDiv = MechViewWidgets.cloneTemplate("mechHealthNumbers-template");
-        $(mechHealthNumbersDiv)
-            .attr("id", mechHealthNumbersDivId)
-            .attr("data-mech-id", mechId)
-            .appendTo(mechHealthNumbersContainer);
-        for (let locationIdx in Component) {
-            if (Component.hasOwnProperty(locationIdx)) {
-                let location = Component[locationIdx];
-                $(`#${mechHealthNumbersDivId}` +
-                    ` [data-location='${location}']` +
-                    " [data-healthtype=armor]")
-                    .attr("id", mechHealthNumbersArmorId(mechId, location));
-                $(`#${mechHealthNumbersDivId}` +
-                    ` [data-location='${location}']` +
-                    " [data-healthtype=structure]")
-                    .attr("id", mechHealthNumbersStructureId(mechId, location));
+    var DomStoredWidget = MechViewWidgets.DomStoredWidget;
+    class PaperDoll extends DomStoredWidget {
+        constructor(mechId) {
+            let paperDollDiv = MechViewWidgets.cloneTemplate("paperDoll-template");
+            super(paperDollDiv);
+            this.storeToDom(PaperDoll.PaperDollDomKey);
+            this.mechId = mechId;
+            let paperDollJQ = $(paperDollDiv)
+                .attr("id", PaperDoll.paperDollId(mechId))
+                .attr("data-mech-id", mechId);
+            for (let componentField in Component) {
+                if (!Component.hasOwnProperty(componentField)) {
+                    continue;
+                }
+                let component = Component[componentField];
+                let findStr = `> [data-location='${component}']`;
+                paperDollJQ.find(findStr)
+                    .attr("id", PaperDoll.paperDollComponentId(mechId, component));
             }
         }
-    };
-    MechViewMechPanel.updateMechHealthNumbers = function (mechId, updateParams) {
-        let location = updateParams.location;
-        let armor = updateParams.armor;
-        let structure = updateParams.structure;
-        let maxArmor = updateParams.maxArmor;
-        let maxStructure = updateParams.maxStructure;
-        let mechHealthNumbersDivId = mechHealthNumbersId(mechId);
-        let armorPercent = Number(armor) / Number(maxArmor);
-        let structurePercent = Number(structure) / Number(maxStructure);
-        let armorColor = MechViewWidgets.damageColor(armorPercent, MechViewWidgets.componentHealthDamageGradient);
-        let structureColor = MechViewWidgets.damageColor(structurePercent, MechViewWidgets.componentHealthDamageGradient);
-        let armorLocationDivId = mechHealthNumbersArmorId(mechId, location);
-        let structureLocationDivId = mechHealthNumbersStructureId(mechId, location);
-        let armorLocationDiv = document.getElementById(armorLocationDivId);
-        if (armorLocationDiv) {
-            armorLocationDiv.textContent = String(Math.round(armor));
-            //NOTE: Title change too expensive
-            // armorLocationDiv.setAttribute("title", (Number(armor)).toFixed(2));
-            armorLocationDiv.style.color = armorColor;
+        //Add a paper doll with the given mechId to the element with the id
+        //paperDollContainer uses the template paperDoll-template from the main HTML file
+        static paperDollId(mechId) {
+            return mechId + "-paperDoll";
         }
-        let structureLocationDiv = document.getElementById(structureLocationDivId);
-        if (structureLocationDiv) {
-            structureLocationDiv.textContent = String(Math.round(structure));
-            //NOTE: Title change too expensive
-            // structureLocationDiv.setAttribute("title", (Number(structure)).toFixed(2));
-            structureLocationDiv.style.color = structureColor;
+        static paperDollComponentId(mechId, component) {
+            return `${mechId}-paperDoll-${component}`;
         }
-    };
-    //Heatbar UI functions
-    var heatbarId = function (mechId) {
-        return mechId + "-heatbar";
-    };
-    var heatbarValueId = function (mechId) {
-        return mechId + "-heatbarValue";
-    };
-    var addHeatbar = function (mechId, heatbarContainer) {
-        let heatbarDiv = MechViewWidgets.cloneTemplate("heatbar-template");
-        $(heatbarDiv)
-            .attr("id", heatbarId(mechId))
-            .attr("data-mech-id", mechId)
-            .appendTo("#" + heatbarContainer);
-        $(heatbarDiv).find("[class~=heatbar]")
-            .attr("id", heatbarValueId(mechId))
-            .attr("data-mech-id", mechId);
-    };
-    //Sets the heatbar value for a given mech id to a specified percentage. Value of
-    //percent is 0 to 1
-    MechViewMechPanel.setHeatbarValue = function (mechId, percent) {
-        var invPercent = 1 - percent;
-        let heatbarValueDiv = document.getElementById(heatbarValueId(mechId));
-        heatbarValueDiv.style.height = (100 * invPercent) + "%";
-    };
-    MechViewMechPanel.updateHeat = function (mechId, currHeat, currMaxHeat) {
-        let heatPercent = Number(currHeat) / Number(currMaxHeat);
-        MechViewMechPanel.setHeatbarValue(mechId, heatPercent);
-        var heatNumberId = heatNumberPanelId(mechId);
-        let heatText = Number(heatPercent * 100).toFixed(0) + "%" +
-            " (" + Number(currHeat).toFixed(1) + ")";
-        let heatNumberDiv = document.getElementById(heatNumberId);
-        heatNumberDiv.textContent = heatText;
-    };
-    var weaponRowId = function (mechId, idx) {
-        return `${mechId}-${idx}-weaponrow`;
-    };
-    var weaponNameId = function (mechId, idx) {
-        return weaponRowId(mechId, idx) + "-weaponName";
-    };
-    var weaponLocationId = function (mechId, idx) {
-        return weaponRowId(mechId, idx) + "-weaponLocation";
-    };
-    var weaponCooldownBarId = function (mechId, idx) {
-        return weaponRowId(mechId, idx) + "-weaponCooldownBar";
-    };
-    var weaponAmmoId = function (mechId, idx) {
-        return weaponRowId(mechId, idx) + "-weaponAmmo";
-    };
-    const weaponLocAbbr = {
+        static getPaperDoll(mechId) {
+            let domElement = document.getElementById(PaperDoll.paperDollId(mechId));
+            if (!domElement) {
+                return null;
+            }
+            return DomStoredWidget.fromDom(domElement, PaperDoll.PaperDollDomKey);
+        }
+        //Percent values from 0 to 1
+        setPaperDollArmor(location, percent) {
+            var color = MechViewWidgets.damageColor(percent, MechViewWidgets.paperDollDamageGradient);
+            let paperDollComponent = document.getElementById(PaperDoll.paperDollComponentId(this.mechId, location));
+            if (paperDollComponent) {
+                paperDollComponent.style.borderColor = color;
+            }
+        }
+        setPaperDollStructure(location, percent) {
+            var color = MechViewWidgets.damageColor(percent, MechViewWidgets.paperDollDamageGradient);
+            let paperDollComponent = document.getElementById(PaperDoll.paperDollComponentId(this.mechId, location));
+            if (paperDollComponent) {
+                paperDollComponent.style.backgroundColor = color;
+            }
+        }
+    }
+    PaperDoll.PaperDollDomKey = "mwosim.PaperDoll.uiObject";
+    MechViewMechPanel.PaperDoll = PaperDoll;
+    class MechHealthNumbers extends DomStoredWidget {
+        constructor(mech) {
+            let mechHealthNumbersDiv = MechViewWidgets.cloneTemplate("mechHealthNumbers-template");
+            super(mechHealthNumbersDiv);
+            this.storeToDom(MechHealthNumbers.MechHealthNumbersDomKey);
+            this.mechId = mech.getMechId();
+            let mechHealthNumbersDivId = MechHealthNumbers.mechHealthNumbersId(this.mechId);
+            let mechHealthNumbersJQ = $(mechHealthNumbersDiv)
+                .attr("id", mechHealthNumbersDivId)
+                .attr("data-mech-id", this.mechId);
+            for (let locationIdx in Component) {
+                if (Component.hasOwnProperty(locationIdx)) {
+                    let location = Component[locationIdx];
+                    mechHealthNumbersJQ.find(` [data-location='${location}']` +
+                        " [data-healthtype=armor]")
+                        .attr("id", MechHealthNumbers.mechHealthNumbersArmorId(this.mechId, location));
+                    mechHealthNumbersJQ.find(` [data-location='${location}']` +
+                        " [data-healthtype=structure]")
+                        .attr("id", MechHealthNumbers.mechHealthNumbersStructureId(this.mechId, location));
+                }
+            }
+        }
+        static mechHealthNumbersId(mechId) {
+            return mechId + "-mechHealthNumbers";
+        }
+        static mechHealthNumbersArmorId(mechId, location) {
+            return mechId + "-mechHealthNumbers-" + location + "-armor";
+        }
+        static mechHealthNumbersStructureId(mechId, location) {
+            return mechId + "-mechHealthNumbers-" + location + "-structure";
+        }
+        static getMechHealthNumbers(mechId) {
+            let domElement = document.getElementById(MechHealthNumbers.mechHealthNumbersId(mechId));
+            if (!domElement) {
+                return null;
+            }
+            return DomStoredWidget.fromDom(domElement, MechHealthNumbers.MechHealthNumbersDomKey);
+        }
+        updateMechHealthNumbers(updateParams) {
+            let location = updateParams.location;
+            let armor = updateParams.armor;
+            let structure = updateParams.structure;
+            let maxArmor = updateParams.maxArmor;
+            let maxStructure = updateParams.maxStructure;
+            let mechHealthNumbersDivId = MechHealthNumbers.mechHealthNumbersId(this.mechId);
+            let armorPercent = Number(armor) / Number(maxArmor);
+            let structurePercent = Number(structure) / Number(maxStructure);
+            let armorColor = MechViewWidgets.damageColor(armorPercent, MechViewWidgets.componentHealthDamageGradient);
+            let structureColor = MechViewWidgets.damageColor(structurePercent, MechViewWidgets.componentHealthDamageGradient);
+            let armorLocationDivId = MechHealthNumbers.mechHealthNumbersArmorId(this.mechId, location);
+            let structureLocationDivId = MechHealthNumbers.mechHealthNumbersStructureId(this.mechId, location);
+            let armorLocationDiv = document.getElementById(armorLocationDivId);
+            if (armorLocationDiv) {
+                armorLocationDiv.textContent = String(Math.round(armor));
+                //NOTE: Title change too expensive
+                // armorLocationDiv.setAttribute("title", (Number(armor)).toFixed(2));
+                armorLocationDiv.style.color = armorColor;
+            }
+            let structureLocationDiv = document.getElementById(structureLocationDivId);
+            if (structureLocationDiv) {
+                structureLocationDiv.textContent = String(Math.round(structure));
+                //NOTE: Title change too expensive
+                // structureLocationDiv.setAttribute("title", (Number(structure)).toFixed(2));
+                structureLocationDiv.style.color = structureColor;
+            }
+        }
+    }
+    MechHealthNumbers.MechHealthNumbersDomKey = "mwosim.MechHealthNumbers.uiObject";
+    MechViewMechPanel.MechHealthNumbers = MechHealthNumbers;
+    class Heatbar extends DomStoredWidget {
+        constructor(mechId, heatbarContainer) {
+            let heatbarDiv = MechViewWidgets.cloneTemplate("heatbar-template");
+            super(heatbarDiv);
+            this.storeToDom(Heatbar.HeatbarDomKey);
+            this.mechId = mechId;
+            $(heatbarDiv)
+                .attr("id", Heatbar.heatbarId(mechId))
+                .attr("data-mech-id", mechId)
+                .appendTo("#" + heatbarContainer);
+            $(heatbarDiv).find("[class~=heatbar]")
+                .attr("id", Heatbar.heatbarValueId(mechId))
+                .attr("data-mech-id", mechId);
+        }
+        static heatbarId(mechId) {
+            return mechId + "-heatbar";
+        }
+        static heatbarValueId(mechId) {
+            return mechId + "-heatbarValue";
+        }
+        static getHeatbar(mechId) {
+            let domElement = document.getElementById(Heatbar.heatbarId(mechId));
+            if (!domElement) {
+                return null;
+            }
+            return DomStoredWidget.fromDom(domElement, Heatbar.HeatbarDomKey);
+        }
+        //Sets the heatbar value for a given mech id to a specified percentage. Value of
+        //percent is 0 to 1
+        setHeatbarValue(percent) {
+            var invPercent = 1 - percent;
+            let heatbarValueDiv = document.getElementById(Heatbar.heatbarValueId(this.mechId));
+            heatbarValueDiv.style.height = (100 * invPercent) + "%";
+        }
+        updateHeat(currHeat, currMaxHeat) {
+            let heatPercent = Number(currHeat) / Number(currMaxHeat);
+            this.setHeatbarValue(heatPercent);
+            var heatNumberId = MechPanel.heatNumberPanelId(this.mechId);
+            let heatText = Number(heatPercent * 100).toFixed(0) + "%" +
+                " (" + Number(currHeat).toFixed(1) + ")";
+            let heatNumberDiv = document.getElementById(heatNumberId);
+            heatNumberDiv.textContent = heatText;
+        }
+    }
+    Heatbar.HeatbarDomKey = "mwosim.Heatbar.uiObject";
+    MechViewMechPanel.Heatbar = Heatbar;
+    class WeaponPanel extends DomStoredWidget {
+        //TODO: Do not directly access WeaponState and AmmoState here
+        constructor(mechId, weaponStateList, ammoState, weaponPanel) {
+            super(weaponPanel);
+            this.storeToDom(WeaponPanel.WeaponPanelDomKey);
+            this.mechId = mechId;
+            $(weaponPanel).attr("id", WeaponPanel.weaponPanelId(mechId));
+            for (var idx in weaponStateList) {
+                if (!weaponStateList.hasOwnProperty(idx)) {
+                    continue;
+                }
+                var weaponState = weaponStateList[idx];
+                let weaponRowDiv = MechViewWidgets.cloneTemplate("weaponRow-template");
+                $(weaponRowDiv)
+                    .attr("id", WeaponPanel.weaponRowId(mechId, Number(idx)))
+                    .attr("data-mech-id", mechId)
+                    .attr("data-weapon-idx", idx)
+                    .appendTo(weaponPanel);
+                $(weaponRowDiv).find(".weaponName")
+                    .attr("id", WeaponPanel.weaponNameId(mechId, Number(idx)))
+                    .html(weaponState.weaponInfo.translatedName);
+                $(weaponRowDiv).find(".weaponLocation")
+                    .attr("id", WeaponPanel.weaponLocationId(mechId, Number(idx)))
+                    .html(WeaponPanel.weaponLocAbbr[weaponState.weaponInfo.location]);
+                $(weaponRowDiv).find(".weaponCooldownBar")
+                    .attr("id", WeaponPanel.weaponCooldownBarId(mechId, Number(idx)));
+                $(weaponRowDiv).find(".weaponAmmo")
+                    .attr("id", WeaponPanel.weaponAmmoId(mechId, Number(idx)));
+                this.setWeaponAmmo(Number(idx), 0);
+                this.setWeaponState(Number(idx), weaponState.weaponCycle);
+                this.setWeaponCooldown(Number(idx), 0);
+            }
+        }
+        static weaponPanelId(mechId) {
+            return `${mechId}-weaponPanelContainer`;
+        }
+        static weaponRowId(mechId, idx) {
+            return `${mechId}-${idx}-weaponrow`;
+        }
+        static weaponNameId(mechId, idx) {
+            return WeaponPanel.weaponRowId(mechId, idx) + "-weaponName";
+        }
+        static weaponLocationId(mechId, idx) {
+            return WeaponPanel.weaponRowId(mechId, idx) + "-weaponLocation";
+        }
+        static weaponCooldownBarId(mechId, idx) {
+            return WeaponPanel.weaponRowId(mechId, idx) + "-weaponCooldownBar";
+        }
+        static weaponAmmoId(mechId, idx) {
+            return WeaponPanel.weaponRowId(mechId, idx) + "-weaponAmmo";
+        }
+        static getWeaponPanel(mechId) {
+            let domElement = document.getElementById(WeaponPanel.weaponPanelId(mechId));
+            if (!domElement) {
+                return null;
+            }
+            return DomStoredWidget.fromDom(domElement, WeaponPanel.WeaponPanelDomKey);
+        }
+        setWeaponCooldown(weaponIdx, percent, type = "cooldown") {
+            let cooldownDiv = document.getElementById(WeaponPanel.weaponCooldownBarId(this.mechId, weaponIdx));
+            if (percent > 1) {
+                cooldownDiv.classList.add("over100");
+            }
+            else {
+                cooldownDiv.classList.remove("over100");
+            }
+            percent = Math.min(1, percent);
+            cooldownDiv.style.width = (100 * percent) + "%";
+            if (type === "cooldown") {
+                cooldownDiv.classList.remove("jamBar");
+            }
+            else if (type === "jamBar") {
+                cooldownDiv.classList.add("jamBar");
+            }
+        }
+        setWeaponAmmo(weaponIdx, ammo) {
+            let weaponAmmoDiv = document.getElementById(WeaponPanel.weaponAmmoId(this.mechId, weaponIdx));
+            weaponAmmoDiv.textContent = ammo !== -1 ? String(ammo) : "\u221e"; //infinity symbol
+        }
+        setWeaponState(weaponIdx, state) {
+            //Note: the remove class string must include all the MechModel.WeaponCycle strings
+            let weaponRowDiv = document.getElementById(WeaponPanel.weaponRowId(this.mechId, weaponIdx));
+            for (let weaponCycle in WeaponCycle) {
+                if (WeaponCycle.hasOwnProperty(weaponCycle)) {
+                    weaponRowDiv.classList.remove(WeaponCycle[weaponCycle]);
+                }
+            }
+            weaponRowDiv.classList.add(state);
+        }
+    }
+    WeaponPanel.WeaponPanelDomKey = "mwosim.WeaponPanel.uiObject";
+    WeaponPanel.weaponLocAbbr = {
         "head": "H",
         "left_arm": "LA",
         "left_torso": "LT",
@@ -13138,458 +13263,432 @@ var MechViewMechPanel;
         "left_leg": "LL",
         "right_leg": "RL"
     };
-    //TODO: Do not directly access WeaponState and AmmoState here
-    var addWeaponPanel = function (mechId, weaponStateList, ammoState, weaponPanel) {
-        for (var idx in weaponStateList) {
-            if (!weaponStateList.hasOwnProperty(idx)) {
-                continue;
-            }
-            var weaponState = weaponStateList[idx];
-            let weaponRowDiv = MechViewWidgets.cloneTemplate("weaponRow-template");
-            $(weaponRowDiv)
-                .attr("id", weaponRowId(mechId, Number(idx)))
+    MechViewMechPanel.WeaponPanel = WeaponPanel;
+    //TODO: Not happy with implementation of drag and drop behavior sharing between MechPanel and EndMechPanel
+    //Possible solutions: 
+    //  common superclass (but may make the inheritance tree unnecessarily tall)
+    //  mixin (but drag and drop behavior is deeply coupled with mechpanel contents, 
+    //          maybe it's better as a proper member)
+    //  separate service class (as with mixin, behavior is deeply coupled, putting it in a 
+    //                          separate service class seems wrong)
+    class MechPanel extends DomStoredWidget {
+        constructor(mech, team) {
+            let mechPanelDiv = MechViewWidgets.cloneTemplate("mechPanel-template");
+            super(mechPanelDiv);
+            this.storeToDom(MechPanel.MechPanelDomKey);
+            this.mechId = mech.getMechId();
+            let mechId = mech.getMechId();
+            let mechState = mech.getMechState();
+            let weaponStateList = mechState.weaponStateList;
+            let ammoState = mechState.ammoState;
+            let mechPanelContainer = "#" + team + "Team";
+            let mechPanelJQ = $(mechPanelDiv);
+            //TODO: Mechpanel inserts itself into the DOM in the constructor because weapon panel updates
+            //use document.getElementById() for performance reasons. Find a way to use the standard idiom 
+            //(where the caller to new MechPanel() is responsible for DOM insertion) without using querySelectors
+            //in WeaponPanel updates. Possible solution: implement RenderedWidget and only call render upon dom insertion
+            let endPanelJQ = $("#" + MechPanel.mechPanelId(EndMechPanel.getEndMechId(team)));
+            mechPanelJQ
+                .attr("id", MechPanel.mechPanelId(mechId))
                 .attr("data-mech-id", mechId)
-                .attr("data-weapon-idx", idx)
-                .appendTo(weaponPanel);
-            $(weaponRowDiv).find(".weaponName")
-                .attr("id", weaponNameId(mechId, Number(idx)))
-                .html(weaponState.weaponInfo.translatedName);
-            $(weaponRowDiv).find(".weaponLocation")
-                .attr("id", weaponLocationId(mechId, Number(idx)))
-                .html(weaponLocAbbr[weaponState.weaponInfo.location]);
-            $(weaponRowDiv).find(".weaponCooldownBar")
-                .attr("id", weaponCooldownBarId(mechId, Number(idx)));
-            $(weaponRowDiv).find(".weaponAmmo")
-                .attr("id", weaponAmmoId(mechId, Number(idx)));
-            MechViewMechPanel.setWeaponAmmo(mechId, Number(idx), 0);
-            MechViewMechPanel.setWeaponState(mechId, Number(idx), weaponState.weaponCycle);
-            MechViewMechPanel.setWeaponCooldown(mechId, Number(idx), 0);
+                .insertBefore(endPanelJQ);
+            var mechHealthAndWeaponsDivId = MechPanel.mechHealthAndWeaponsId(mechId);
+            mechPanelJQ.find("[class~=mechHealthAndWeapons]")
+                .attr("id", mechHealthAndWeaponsDivId);
+            var paperDollContainerId = mechId + "-paperDollContainer";
+            let paperDollJQ = mechPanelJQ.find("[class~='paperDollContainer']")
+                .attr("id", paperDollContainerId);
+            let paperDoll = new PaperDoll(mechId);
+            paperDollJQ.append(paperDoll.domElement);
+            let mechHealthNumbersContainerJQ = mechPanelJQ.find("[class~='mechHealthNumbersContainer']");
+            let mechHealthNumbers = new MechHealthNumbers(mech);
+            mechHealthNumbersContainerJQ.append(mechHealthNumbers.domElement);
+            var heatbarContainerId = mechId + "-heatbarContainer";
+            let heatbarContainerJQ = mechPanelJQ.find("[class~='heatbarContainer']")
+                .attr("id", heatbarContainerId);
+            let heatbar = new Heatbar(mechId, heatbarContainerId);
+            heatbarContainerJQ.append(heatbar.domElement);
+            var heatNumberId = MechPanel.heatNumberPanelId(mechId);
+            mechPanelJQ.find("[class~='heatNumber']")
+                .attr("id", heatNumberId);
+            var weaponPanelContainerId = WeaponPanel.weaponPanelId(mechId);
+            let weaponPanelJQ = mechPanelJQ.find("[class~='weaponPanelContainer']");
+            let weaponPanel = new WeaponPanel(mechId, weaponStateList, ammoState, weaponPanelJQ.get(0));
+            let mechNameId = MechPanel.mechNamePanelId(mechId);
+            mechPanelJQ.find("[class~='titlePanel'] [class~='mechName']")
+                .attr("id", mechNameId)
+                .html("");
+            //delete button
+            this.addDeleteMechButton(mechId, team, mechPanelDiv);
+            //move button
+            this.addMoveMechButton(mechId, team, mechPanelDiv);
+            //drag and drop handlers
+            MechPanel.addDragAndDropHandlers(mechId, mechPanelDiv);
+            //Mech stats
+            let mechSummaryHealthId = MechPanel.mechSummaryHealthPanelId(mechId);
+            mechPanelJQ.find("[class~='statusPanel'] [class~='mechSummaryHealthText']")
+                .attr("id", mechSummaryHealthId)
+                .html("");
+            let mechTargetId = MechPanel.mechTargetPanelId(mechId);
+            mechPanelJQ.find("[class~='statusPanel'] [class~='mechTargetText']")
+                .attr("id", mechTargetId)
+                .html("");
+            let mechDPSId = MechPanel.mechDPSPanelId(mechId);
+            mechPanelJQ.find("[class~='statusPanel'] [class~='mechDPSText']")
+                .attr("id", mechDPSId)
+                .html("");
+            let mechBurstId = MechPanel.mechBurstPanelId(mechId);
+            mechPanelJQ.find("[class~='statusPanel'] [class~='mechBurstText']")
+                .attr("id", mechBurstId)
+                .html("");
+            let mechTotalDamageId = MechPanel.mechTotalDamagePanelId(mechId);
+            mechPanelJQ.find("[class~='statusPanel'] [class~='mechTotalDamageText']")
+                .attr("id", mechTotalDamageId)
+                .html("");
+            this.addMechDetailsButton(mechId, mechPanelDiv);
         }
-    };
-    MechViewMechPanel.setWeaponCooldown = function (mechId, weaponIdx, percent, type = "cooldown") {
-        let cooldownDiv = document.getElementById(weaponCooldownBarId(mechId, weaponIdx));
-        if (percent > 1) {
-            cooldownDiv.classList.add("over100");
+        //adds a mech panel (which contains a paperDoll, a heatbar and a weaponPanel)
+        static mechPanelId(mechId) {
+            return mechId + "-mechPanel";
         }
-        else {
-            cooldownDiv.classList.remove("over100");
+        static mechSummaryHealthPanelId(mechId) {
+            return mechId + "-mechSummaryHealth";
         }
-        percent = Math.min(1, percent);
-        cooldownDiv.style.width = (100 * percent) + "%";
-        if (type === "cooldown") {
-            cooldownDiv.classList.remove("jamBar");
+        static mechNamePanelId(mechId) {
+            return mechId + "-mechName";
         }
-        else if (type === "jamBar") {
-            cooldownDiv.classList.add("jamBar");
+        static heatNumberPanelId(mechId) {
+            return mechId + "-heatbarNumber";
         }
-    };
-    MechViewMechPanel.setWeaponAmmo = function (mechId, weaponIdx, ammo) {
-        let weaponAmmoDiv = document.getElementById(weaponAmmoId(mechId, weaponIdx));
-        weaponAmmoDiv.textContent = ammo !== -1 ? String(ammo) : "\u221e"; //infinity symbol
-    };
-    MechViewMechPanel.setWeaponState = function (mechId, weaponIdx, state) {
-        //Note: the remove class string must include all the MechModel.WeaponCycle strings
-        let removeClassString = "";
-        for (let weaponCycle in WeaponCycle) {
-            if (WeaponCycle.hasOwnProperty(weaponCycle)) {
-                removeClassString += WeaponCycle[weaponCycle] + " ";
+        static mechTargetPanelId(mechId) {
+            return mechId + "-mechTarget";
+        }
+        static mechHealthAndWeaponsId(mechId) {
+            return mechId + "-mechHealthAndWeapons";
+        }
+        static mechDPSPanelId(mechId) {
+            return mechId + "-mechDPSText";
+        }
+        static mechBurstPanelId(mechId) {
+            return mechId + "-mechBurstText";
+        }
+        static mechTotalDamagePanelId(mechId) {
+            return mechId + "-mechTotalDamageText";
+        }
+        static getMechPanel(mechId) {
+            let domElement = document.getElementById(MechPanel.mechPanelId(mechId));
+            if (!domElement) {
+                return null;
+            }
+            return DomStoredWidget.fromDom(domElement, MechPanel.MechPanelDomKey);
+        }
+        updateMechTitlePanel(mechId, mechName, smurfyMechId, smurfyLayoutId) {
+            const SMURFY_BASE_URL = "http://mwo.smurfy-net.de/mechlab#";
+            let mechNameId = MechPanel.mechNamePanelId(mechId);
+            //Create smurfy link then set the mech name
+            let smurfyLink = SMURFY_BASE_URL + "i=" + smurfyMechId + "&l=" + smurfyLayoutId;
+            let mechNameDiv = document.getElementById(mechNameId);
+            let externalLinkSpan = MechViewWidgets.cloneTemplate("external-link-template");
+            let mechLink = $("<a></a>").attr("href", smurfyLink)
+                .attr("target", "_blank")
+                .attr("rel", "noopener")
+                .text(mechName)
+                .append(externalLinkSpan);
+            $(mechNameDiv)
+                .empty()
+                .append(mechLink);
+        }
+        updateMechStatusPanel(mechId, update) {
+            let mechSummaryHealthId = MechPanel.mechSummaryHealthPanelId(mechId);
+            let mechHealthAndWeaponsDivId = MechPanel.mechHealthAndWeaponsId(mechId);
+            let mechHealthAndWeaponsDiv = document.getElementById(mechHealthAndWeaponsDivId);
+            //set mech summary health
+            let mechSummaryHealthText = "";
+            let percentHealth = Number(update.mechCurrTotalHealth) / Number(update.mechCurrMaxHealth);
+            if (update.mechCurrTotalHealth > 0 && update.mechIsAlive) {
+                mechSummaryHealthText = ((percentHealth * 100).toFixed(0)) + "%";
+                if (mechHealthAndWeaponsDiv.classList.contains("kia")) {
+                    mechHealthAndWeaponsDiv.classList.remove("kia");
+                }
+            }
+            else {
+                mechSummaryHealthText =
+                    "KIA" + "(" + ((percentHealth * 100).toFixed(0)) + "%" + ")";
+                percentHealth = 0;
+                if (!mechHealthAndWeaponsDiv.classList.contains("kia")) {
+                    mechHealthAndWeaponsDiv.classList.add("kia");
+                }
+            }
+            let mechSummaryHealthDiv = document.getElementById(mechSummaryHealthId);
+            mechSummaryHealthDiv.style.color =
+                MechViewWidgets.damageColor(percentHealth, MechViewWidgets.healthDamageGradient);
+            mechSummaryHealthDiv.textContent = mechSummaryHealthText;
+            //update mech target
+            let mechTargetId = MechPanel.mechTargetPanelId(mechId);
+            let mechTargetDiv = document.getElementById(mechTargetId);
+            mechTargetDiv.textContent = update.targetMechName;
+            //set mech total damage
+            let mechTotalDamageId = MechPanel.mechTotalDamagePanelId(mechId);
+            let mechTotalDamageDiv = document.getElementById(mechTotalDamageId);
+            mechTotalDamageDiv.textContent = Number(update.totalDmg).toFixed(1);
+            //set mech dps
+            let mechDPSId = MechPanel.mechDPSPanelId(mechId);
+            let mechDPSDiv = document.getElementById(mechDPSId);
+            mechDPSDiv.textContent = Number(update.dps).toFixed(1);
+            //set mech burst
+            let mechBurstId = MechPanel.mechBurstPanelId(mechId);
+            let mechBurstDiv = document.getElementById(mechBurstId);
+            mechBurstDiv.textContent = Number(update.burst).toFixed(1);
+        }
+        updateQuirkSkillFlags(mechId) {
+            let mechJQ = $("#" + MechPanel.mechPanelId(mechId));
+            let mechQuirks = MechModelView.getMechQuirks(mechId);
+            let quirkFlagJQ = mechJQ.find(".quirkFlag");
+            if (mechQuirks && mechQuirks.length > 0) {
+                quirkFlagJQ.removeClass("hidden");
+            }
+            else {
+                quirkFlagJQ.addClass("hidden");
+            }
+            let mechSkills = MechModelView.getMechSkillQuirks(mechId);
+            let skillFlagJQ = mechJQ.find(".skillFlag");
+            if (mechSkills && mechSkills.length > 0) {
+                skillFlagJQ.removeClass("hidden");
+            }
+            else {
+                skillFlagJQ.addClass("hidden");
             }
         }
-        let weaponRowDiv = document.getElementById(weaponRowId(mechId, weaponIdx));
-        let weaponRowJQ = $(weaponRowDiv);
-        weaponRowJQ.removeClass(removeClassString);
-        weaponRowJQ.addClass(state);
-    };
-    //adds a mech panel (which contains a paperDoll, a heatbar and a weaponPanel)
-    function mechPanelId(mechId) {
-        return mechId + "-mechPanel";
+        //Delete button
+        static mechDeleteButtonId(mechId) {
+            return mechId + "-deleteButton";
+        }
+        addDeleteMechButton(mechId, team, mechPanelDiv) {
+            let mechPanelJQ = $(mechPanelDiv);
+            if (!MechPanel.deleteMechButtonHandler) {
+                MechPanel.deleteMechButtonHandler = this.createDeleteMechButtonHandler();
+            }
+            let deleteIconSVG = MechViewWidgets.cloneTemplate("delete-icon-template");
+            let mechDeleteButtonDivId = MechPanel.mechDeleteButtonId(mechId);
+            mechPanelJQ.find("[class~='titlePanel'] [class~='deleteMechButton']")
+                .attr("id", mechDeleteButtonDivId)
+                .attr("data-mech-id", mechId)
+                .append(deleteIconSVG)
+                .click(MechPanel.deleteMechButtonHandler);
+        }
+        createDeleteMechButtonHandler() {
+            return function () {
+                let mechId = $(this).attr("data-mech-id");
+                console.log("Deleting " + mechId);
+                let result = MechModel.deleteMech(mechId);
+                if (!result) {
+                    throw Error("Error deleting " + mechId);
+                }
+                MechViewRouter.modifyAppState();
+                let mechPanelDivId = MechPanel.mechPanelId(mechId);
+                $("#" + mechPanelDivId).remove();
+                MechView.resetSimulation();
+                MechModelView.refreshView([MechModelView.ViewUpdate.TEAMSTATS]);
+            };
+        }
+        static moveMechButtonId(mechId) {
+            return mechId + "-moveButton";
+        }
+        addMoveMechButton(mechId, team, mechPanelDiv) {
+            let mechPanelJQ = $(mechPanelDiv);
+            let moveIconSVG = MechViewWidgets.cloneTemplate("move-icon-template");
+            let mechMoveButtonDivId = MechPanel.moveMechButtonId(mechId);
+            if (!MechPanel.moveMechButtonHandler) {
+                MechPanel.moveMechButtonHandler = this.createMoveMechButtonHandler();
+            }
+            mechPanelJQ.find("[class~='titlePanel'] [class~='moveMechButton']")
+                .attr("id", mechMoveButtonDivId)
+                .attr("data-mech-id", mechId)
+                .attr("data-dragenabled", "false")
+                .append(moveIconSVG)
+                .click(MechPanel.moveMechButtonHandler);
+        }
+        toggleMoveMech(mechId) {
+            let moveMechButtonJQ = $("#" + MechPanel.moveMechButtonId(mechId));
+            let dragEnabled = moveMechButtonJQ.attr("data-dragenabled") === "true";
+            let mechPanelDivId = MechPanel.mechPanelId(mechId);
+            let mechPanelJQ = $("#" + mechPanelDivId);
+            dragEnabled = !dragEnabled; //toggle
+            moveMechButtonJQ.attr("data-dragenabled", String(dragEnabled));
+            if (dragEnabled) {
+                mechPanelJQ
+                    .attr("draggable", "true")
+                    .addClass("dragging");
+            }
+            else {
+                mechPanelJQ
+                    .attr("draggable", "false")
+                    .removeClass("dragging");
+            }
+        }
+        createMoveMechButtonHandler() {
+            let mechPanel = this;
+            return function () {
+                let mechId = $(this).attr("data-mech-id");
+                mechPanel.toggleMoveMech(mechId);
+            };
+        }
+        //TODO: Not happy with having to make this static public so it can be reused by the end mech panel
+        //See if there's a better way of sharing this code without too tall inheritance
+        //NOTE: The use of static prevDropTarget means you can only drag one item at a time. Could be an
+        //issue on multi-touch devices
+        static addDragAndDropHandlers(mechId, mechPanelDiv) {
+            let mechPanelJQ = $(mechPanelDiv);
+            if (!MechPanel.mechOnDragHandler) {
+                MechPanel.mechOnDragHandler = this.createMechOnDragHandler();
+            }
+            mechPanelJQ.on("dragstart", MechPanel.mechOnDragHandler);
+            if (!MechPanel.mechOnDragOverHandler) {
+                MechPanel.mechOnDragOverHandler = this.createMechOnDragOverHandler();
+            }
+            mechPanelJQ.on("dragover", MechPanel.mechOnDragOverHandler);
+            if (!MechPanel.mechOnDropHandler) {
+                MechPanel.mechOnDropHandler = this.createMechOnDropHandler();
+            }
+            mechPanelJQ.on("drop", MechPanel.mechOnDropHandler);
+        }
+        static createMechOnDragHandler() {
+            return function (jqEvent) {
+                let mechId = $(this).attr("data-mech-id");
+                let origEvent = jqEvent.originalEvent;
+                origEvent.dataTransfer.setData("text/plain", mechId);
+                origEvent.dataTransfer.effectAllowed = "move";
+                console.log("Drag start: " + mechId);
+            };
+        }
+        static createMechOnDragOverHandler() {
+            return function (jqEvent) {
+                let thisJQ = $(this);
+                let mechId = thisJQ.attr("data-mech-id");
+                let origEvent = jqEvent.originalEvent;
+                jqEvent.preventDefault();
+                //allow move on drop
+                origEvent.dataTransfer.dropEffect = "move";
+                if (MechPanel.prevDropTarget !== mechId) {
+                    if (MechPanel.prevDropTarget) {
+                        let prevDropTargetJQ = $("#" + MechPanel.mechPanelId(MechPanel.prevDropTarget));
+                        prevDropTargetJQ.removeClass("droptarget");
+                        thisJQ.addClass("droptarget");
+                    }
+                    MechPanel.prevDropTarget = mechId;
+                }
+            };
+        }
+        static createMechOnDropHandler() {
+            return function (jqEvent) {
+                let thisJQ = $(this);
+                let dropTargetMechId = thisJQ.attr("data-mech-id");
+                let origEvent = jqEvent.originalEvent;
+                let srcMechId = origEvent.dataTransfer.getData("text/plain");
+                jqEvent.preventDefault();
+                let srcMechPanel = MechPanel.getMechPanel(srcMechId);
+                thisJQ.removeClass("droptarget");
+                MechPanel.prevDropTarget = null;
+                if (dropTargetMechId !== srcMechId) {
+                    MechView.resetSimulation();
+                    let status = false;
+                    if (!EndMechPanel.isEndMechId(dropTargetMechId)) {
+                        status = MechModel.moveMech(srcMechId, dropTargetMechId);
+                    }
+                    else {
+                        let team = EndMechPanel.getEndMechIdTeam(dropTargetMechId);
+                        status = MechModel.moveMechToEndOfList(srcMechId, team);
+                        console.log("Insert at end: team=" + team);
+                    }
+                    if (!status) {
+                        console.error(`Error moving mech. src=${srcMechId} dest=${dropTargetMechId}`);
+                    }
+                    else {
+                        console.log(`Drop: src=${srcMechId} dest=${dropTargetMechId}`);
+                        let srcMechJQ = $("#" + MechPanel.mechPanelId(srcMechId));
+                        srcMechJQ
+                            .detach()
+                            .insertBefore(thisJQ);
+                        srcMechPanel.toggleMoveMech(srcMechId);
+                        MechViewRouter.modifyAppState();
+                        MechModelView.refreshView([MechModelView.ViewUpdate.TEAMSTATS]);
+                    }
+                }
+            };
+        }
+        addMechDetailsButton(mechId, mechPanelDiv) {
+            let mechPanelJQ = $(mechPanelDiv);
+            let mechDetailsJQ = mechPanelJQ.find(".mechDetailsContainer");
+            let mechDetailsButtonJQ = mechPanelJQ.find(".mechDetailsButton")
+                .attr("data-mech-id", mechId);
+            let mechDetailsButtonArrowJQ = mechPanelJQ.find(".mechDetailsButtonArrow");
+            let mechDetailsTransitionEndHandler = function () {
+                mechDetailsButtonArrowJQ.off("transitionend", mechDetailsTransitionEndHandler);
+                if (!mechDetailsButton.expanded) {
+                    mechDetailsJQ.empty();
+                }
+            };
+            let mechPanel = this;
+            let mechDetailsClickHandler = function () {
+                mechDetailsButtonArrowJQ.on("transitionend", mechDetailsTransitionEndHandler);
+                if (!mechDetailsButton.expanded) {
+                    mechPanel.createMechDetails(mechId, mechDetailsJQ.get(0));
+                }
+            };
+            let mechDetailsButton = new MechViewWidgets.ExpandButton(mechDetailsButtonJQ.get(0), mechDetailsClickHandler, mechDetailsJQ.get(0), mechDetailsButtonArrowJQ.get(0));
+        }
+        createMechDetails(mechId, mechDetailsContainer) {
+            let mechDetails = new MechViewMechDetails.MechDetails(mechId);
+            mechDetails.render();
+            $(mechDetailsContainer).append(mechDetails.domElement);
+        }
+        //scrolls to and flashes the selected mech panel
+        highlightMechPanel(mechId) {
+            let mechPanelDivId = MechPanel.mechPanelId(mechId);
+            let mechPanelJQ = $("#" + mechPanelDivId);
+            mechPanelJQ.get(0).scrollIntoView(false);
+            mechPanelJQ.addClass("flashSelected");
+            mechPanelJQ.on("animationend", function (data) {
+                mechPanelJQ.removeClass("flashSelected");
+                mechPanelJQ.off("animationend");
+            });
+        }
     }
-    var mechSummaryHealthPanelId = function (mechId) {
-        return mechId + "-mechSummaryHealth";
-    };
-    var mechNamePanelId = function (mechId) {
-        return mechId + "-mechName";
-    };
-    var heatNumberPanelId = function (mechId) {
-        return mechId + "-heatbarNumber";
-    };
-    var mechTargetPanelId = function (mechId) {
-        return mechId + "-mechTarget";
-    };
-    var mechHealthAndWeaponsId = function (mechId) {
-        return mechId + "-mechHealthAndWeapons";
-    };
-    var mechDPSPanelId = function (mechId) {
-        return mechId + "-mechDPSText";
-    };
-    var mechBurstPanelId = function (mechId) {
-        return mechId + "-mechBurstText";
-    };
-    var mechTotalDamagePanelId = function (mechId) {
-        return mechId + "-mechTotalDamageText";
-    };
-    MechViewMechPanel.addMechPanel = function (mech, team) {
-        let mechId = mech.getMechId();
-        let mechState = mech.getMechState();
-        let weaponStateList = mechState.weaponStateList;
-        let ammoState = mechState.ammoState;
-        let mechPanelContainer = "#" + team + "Team";
-        let mechPanelDiv = MechViewWidgets.cloneTemplate("mechPanel-template");
-        let endPanelJQ = $("#" + mechPanelId(getEndMechId(team)));
-        let mechPanelJQ = $(mechPanelDiv);
-        mechPanelJQ
-            .attr("id", mechPanelId(mechId))
-            .attr("data-mech-id", mechId)
-            .insertBefore(endPanelJQ);
-        var mechHealthAndWeaponsDivId = mechHealthAndWeaponsId(mechId);
-        mechPanelJQ.find("[class~=mechHealthAndWeapons]")
-            .attr("id", mechHealthAndWeaponsDivId);
-        var paperDollContainerId = mechId + "-paperDollContainer";
-        let paperDollJQ = mechPanelJQ.find("[class~='paperDollContainer']")
-            .attr("id", paperDollContainerId);
-        MechViewMechPanel.addPaperDoll(mechId, paperDollJQ.get(0));
-        let mechHealthNumbersContainerJQ = mechPanelJQ.find("[class~='mechHealthNumbersContainer']");
-        addMechHealthNumbers(mech, mechHealthNumbersContainerJQ.get(0));
-        var heatbarContainerId = mechId + "-heatbarContainer";
-        mechPanelJQ.find("[class~='heatbarContainer']")
-            .attr("id", heatbarContainerId);
-        addHeatbar(mechId, heatbarContainerId);
-        var heatNumberId = heatNumberPanelId(mechId);
-        mechPanelJQ.find("[class~='heatNumber']")
-            .attr("id", heatNumberId);
-        var weaponPanelContainerId = mechId + "-weaponPanelContainer";
-        let weaponPanelJQ = mechPanelJQ.find("[class~='weaponPanelContainer']")
-            .attr("id", weaponPanelContainerId);
-        addWeaponPanel(mechId, weaponStateList, ammoState, weaponPanelJQ.get(0));
-        let mechNameId = mechNamePanelId(mechId);
-        mechPanelJQ.find("[class~='titlePanel'] [class~='mechName']")
-            .attr("id", mechNameId)
-            .html("");
-        //delete button
-        addDeleteMechButton(mechId, team, mechPanelDiv);
-        //move button
-        addMoveMechButton(mechId, team, mechPanelDiv);
-        //drag and drop handlers
-        addDragAndDropHandlers(mechId, mechPanelDiv);
-        //Mech stats
-        let mechSummaryHealthId = mechSummaryHealthPanelId(mechId);
-        mechPanelJQ.find("[class~='statusPanel'] [class~='mechSummaryHealthText']")
-            .attr("id", mechSummaryHealthId)
-            .html("");
-        let mechTargetId = mechTargetPanelId(mechId);
-        mechPanelJQ.find("[class~='statusPanel'] [class~='mechTargetText']")
-            .attr("id", mechTargetId)
-            .html("");
-        let mechDPSId = mechDPSPanelId(mechId);
-        mechPanelJQ.find("[class~='statusPanel'] [class~='mechDPSText']")
-            .attr("id", mechDPSId)
-            .html("");
-        let mechBurstId = mechBurstPanelId(mechId);
-        mechPanelJQ.find("[class~='statusPanel'] [class~='mechBurstText']")
-            .attr("id", mechBurstId)
-            .html("");
-        let mechTotalDamageId = mechTotalDamagePanelId(mechId);
-        mechPanelJQ.find("[class~='statusPanel'] [class~='mechTotalDamageText']")
-            .attr("id", mechTotalDamageId)
-            .html("");
-        addMechDetailsButton(mechId, mechPanelDiv);
-    };
-    const SMURFY_BASE_URL = "http://mwo.smurfy-net.de/mechlab#";
-    MechViewMechPanel.updateMechTitlePanel = function (mechId, mechName, smurfyMechId, smurfyLayoutId) {
-        let mechNameId = mechNamePanelId(mechId);
-        //Create smurfy link then set the mech name
-        let smurfyLink = SMURFY_BASE_URL + "i=" + smurfyMechId + "&l=" + smurfyLayoutId;
-        let mechNameDiv = document.getElementById(mechNameId);
-        let externalLinkSpan = MechViewWidgets.cloneTemplate("external-link-template");
-        let mechLink = $("<a></a>").attr("href", smurfyLink)
-            .attr("target", "_blank")
-            .attr("rel", "noopener")
-            .text(mechName)
-            .append(externalLinkSpan);
-        $(mechNameDiv)
-            .empty()
-            .append(mechLink);
-    };
-    MechViewMechPanel.updateMechStatusPanel = function (update) {
-        let mechSummaryHealthId = mechSummaryHealthPanelId(update.mechId);
-        let mechHealthAndWeaponsDivId = mechHealthAndWeaponsId(update.mechId);
-        let mechHealthAndWeaponsDiv = document.getElementById(mechHealthAndWeaponsDivId);
-        //set mech summary health
-        let mechSummaryHealthText = "";
-        let percentHealth = Number(update.mechCurrTotalHealth) / Number(update.mechCurrMaxHealth);
-        if (update.mechCurrTotalHealth > 0 && update.mechIsAlive) {
-            mechSummaryHealthText = ((percentHealth * 100).toFixed(0)) + "%";
-            if (mechHealthAndWeaponsDiv.classList.contains("kia")) {
-                mechHealthAndWeaponsDiv.classList.remove("kia");
-            }
-        }
-        else {
-            mechSummaryHealthText =
-                "KIA" + "(" + ((percentHealth * 100).toFixed(0)) + "%" + ")";
-            percentHealth = 0;
-            if (!mechHealthAndWeaponsDiv.classList.contains("kia")) {
-                mechHealthAndWeaponsDiv.classList.add("kia");
-            }
-        }
-        let mechSummaryHealthDiv = document.getElementById(mechSummaryHealthId);
-        mechSummaryHealthDiv.style.color =
-            MechViewWidgets.damageColor(percentHealth, MechViewWidgets.healthDamageGradient);
-        mechSummaryHealthDiv.textContent = mechSummaryHealthText;
-        //update mech target
-        let mechTargetId = mechTargetPanelId(update.mechId);
-        let mechTargetDiv = document.getElementById(mechTargetId);
-        mechTargetDiv.textContent = update.targetMechName;
-        //set mech total damage
-        let mechTotalDamageId = mechTotalDamagePanelId(update.mechId);
-        let mechTotalDamageDiv = document.getElementById(mechTotalDamageId);
-        mechTotalDamageDiv.textContent = Number(update.totalDmg).toFixed(1);
-        //set mech dps
-        let mechDPSId = mechDPSPanelId(update.mechId);
-        let mechDPSDiv = document.getElementById(mechDPSId);
-        mechDPSDiv.textContent = Number(update.dps).toFixed(1);
-        //set mech burst
-        let mechBurstId = mechBurstPanelId(update.mechId);
-        let mechBurstDiv = document.getElementById(mechBurstId);
-        mechBurstDiv.textContent = Number(update.burst).toFixed(1);
-    };
-    MechViewMechPanel.updateQuirkSkillFlags = function (mechId) {
-        let mechJQ = $("#" + mechPanelId(mechId));
-        let mechQuirks = MechModelView.getMechQuirks(mechId);
-        let quirkFlagJQ = mechJQ.find(".quirkFlag");
-        if (mechQuirks && mechQuirks.length > 0) {
-            quirkFlagJQ.removeClass("hidden");
-        }
-        else {
-            quirkFlagJQ.addClass("hidden");
-        }
-        let mechSkills = MechModelView.getMechSkillQuirks(mechId);
-        let skillFlagJQ = mechJQ.find(".skillFlag");
-        if (mechSkills && mechSkills.length > 0) {
-            skillFlagJQ.removeClass("hidden");
-        }
-        else {
-            skillFlagJQ.addClass("hidden");
-        }
-    };
-    //Delete button
-    var mechDeleteButtonId = function (mechId) {
-        return mechId + "-deleteButton";
-    };
-    var addDeleteMechButton = function (mechId, team, mechPanelDiv) {
-        let mechPanelJQ = $(mechPanelDiv);
-        if (!deleteMechButtonHandler) {
-            deleteMechButtonHandler = createDeleteMechButtonHandler();
-        }
-        let deleteIconSVG = MechViewWidgets.cloneTemplate("delete-icon-template");
-        let mechDeleteButtonDivId = mechDeleteButtonId(mechId);
-        mechPanelJQ.find("[class~='titlePanel'] [class~='deleteMechButton']")
-            .attr("id", mechDeleteButtonDivId)
-            .attr("data-mech-id", mechId)
-            .append(deleteIconSVG)
-            .click(deleteMechButtonHandler);
-    };
-    var createDeleteMechButtonHandler = function () {
-        return function () {
-            let mechId = $(this).attr("data-mech-id");
-            console.log("Deleting " + mechId);
-            let result = MechModel.deleteMech(mechId);
-            if (!result) {
-                throw Error("Error deleting " + mechId);
-            }
-            MechViewRouter.modifyAppState();
-            let mechPanelDivId = mechPanelId(mechId);
-            $("#" + mechPanelDivId).remove();
-            MechView.resetSimulation();
-            MechModelView.refreshView([MechModelView.ViewUpdate.TEAMSTATS]);
-        };
-    };
-    var deleteMechButtonHandler; //singleton
-    var moveMechButtonId = function (mechId) {
-        return mechId + "-moveButton";
-    };
-    var addMoveMechButton = function (mechId, team, mechPanelDiv) {
-        let mechPanelJQ = $(mechPanelDiv);
-        let moveIconSVG = MechViewWidgets.cloneTemplate("move-icon-template");
-        let mechMoveButtonDivId = moveMechButtonId(mechId);
-        if (!moveMechButtonHandler) {
-            moveMechButtonHandler = createMoveMechButtonHandler();
-        }
-        mechPanelJQ.find("[class~='titlePanel'] [class~='moveMechButton']")
-            .attr("id", mechMoveButtonDivId)
-            .attr("data-mech-id", mechId)
-            .attr("data-dragenabled", "false")
-            .append(moveIconSVG)
-            .click(moveMechButtonHandler);
-    };
-    var toggleMoveMech = function (mechId) {
-        let moveMechButtonJQ = $("#" + moveMechButtonId(mechId));
-        let dragEnabled = moveMechButtonJQ.attr("data-dragenabled") === "true";
-        let mechPanelDivId = mechPanelId(mechId);
-        let mechPanelJQ = $("#" + mechPanelDivId);
-        dragEnabled = !dragEnabled; //toggle
-        moveMechButtonJQ.attr("data-dragenabled", String(dragEnabled));
-        if (dragEnabled) {
+    MechPanel.MechPanelDomKey = "mwosim.MechPanel.uiObject";
+    MechPanel.mechOnDragHandler = null;
+    MechPanel.mechOnDragOverHandler = null;
+    MechPanel.mechOnDropHandler = null;
+    MechViewMechPanel.MechPanel = MechPanel;
+    class EndMechPanel extends DomStoredWidget {
+        constructor(team) {
+            let mechPanelDiv = MechViewWidgets.cloneTemplate("endMechPanel-template");
+            super(mechPanelDiv);
+            this.storeToDom(EndMechPanel.EndMechPanelDomKey);
+            let mechPanelJQ = $(mechPanelDiv);
+            let mechId = EndMechPanel.getEndMechId(team);
             mechPanelJQ
-                .attr("draggable", "true")
-                .addClass("dragging");
+                .attr("id", MechPanel.mechPanelId(mechId))
+                .attr("data-mech-id", mechId);
+            MechPanel.addDragAndDropHandlers(mechId, mechPanelDiv);
         }
-        else {
-            mechPanelJQ
-                .attr("draggable", "false")
-                .removeClass("dragging");
+        static getEndMechId(team) {
+            return EndMechPanel.EndMechIdPrefix + team;
         }
-    };
-    var createMoveMechButtonHandler = function () {
-        return function () {
-            let mechId = $(this).attr("data-mech-id");
-            toggleMoveMech(mechId);
-        };
-    };
-    var moveMechButtonHandler; //initialized on first addMoveMechButton call
-    const EndMechIdPrefix = "end-mech-fake-id-";
-    var getEndMechId = function (team) {
-        return EndMechIdPrefix + team;
-    };
-    var isEndMechId = function (mechId) {
-        return mechId.startsWith(EndMechIdPrefix);
-    };
-    var getEndMechIdTeam = function (mechId) {
-        if (isEndMechId(mechId)) {
-            return mechId.substring(EndMechIdPrefix.length);
+        static isEndMechId(mechId) {
+            return mechId.startsWith(EndMechPanel.EndMechIdPrefix);
+        }
+    }
+    EndMechPanel.EndMechPanelDomKey = "mwosim.EndMechPanel.uiObject";
+    EndMechPanel.EndMechIdPrefix = "end-mech-fake-id-";
+    EndMechPanel.getEndMechIdTeam = function (mechId) {
+        if (EndMechPanel.isEndMechId(mechId)) {
+            return mechId.substring(EndMechPanel.EndMechIdPrefix.length);
         }
         else {
             return null;
         }
     };
-    MechViewMechPanel.addEndMechPanel = function (team) {
-        let mechPanelContainer = "#" + team + "Team";
-        let mechPanelDiv = MechViewWidgets.cloneTemplate("endMechPanel-template");
-        let mechPanelJQ = $(mechPanelDiv);
-        let mechId = getEndMechId(team);
-        mechPanelJQ
-            .attr("id", mechPanelId(mechId))
-            .attr("data-mech-id", mechId)
-            .appendTo(mechPanelContainer);
-        addDragAndDropHandlers(mechId, mechPanelDiv);
-    };
-    var addDragAndDropHandlers = function (mechId, mechPanelDiv) {
-        let mechPanelJQ = $(mechPanelDiv);
-        if (!mechOnDragHandler) {
-            mechOnDragHandler = createMechOnDragHandler();
-        }
-        mechPanelJQ.on("dragstart", mechOnDragHandler);
-        if (!mechOnDragOverHandler) {
-            mechOnDragOverHandler = createMechOnDragOverHandler();
-        }
-        mechPanelJQ.on("dragover", mechOnDragOverHandler);
-        if (!mechOnDropHandler) {
-            mechOnDropHandler = createMechOnDropHandler();
-        }
-        mechPanelJQ.on("drop", mechOnDropHandler);
-    };
-    var createMechOnDragHandler = function () {
-        return function (jqEvent) {
-            let mechId = $(this).attr("data-mech-id");
-            let origEvent = jqEvent.originalEvent;
-            origEvent.dataTransfer.setData("text/plain", mechId);
-            origEvent.dataTransfer.effectAllowed = "move";
-            console.log("Drag start: " + mechId);
-        };
-    };
-    var mechOnDragHandler = null;
-    let prevDropTarget = null;
-    var createMechOnDragOverHandler = function () {
-        return function (jqEvent) {
-            let thisJQ = $(this);
-            let mechId = thisJQ.attr("data-mech-id");
-            let origEvent = jqEvent.originalEvent;
-            jqEvent.preventDefault();
-            //allow move on drop
-            origEvent.dataTransfer.dropEffect = "move";
-            if (prevDropTarget !== mechId) {
-                if (prevDropTarget) {
-                    let prevDropTargetJQ = $("#" + mechPanelId(prevDropTarget));
-                    prevDropTargetJQ.removeClass("droptarget");
-                    thisJQ.addClass("droptarget");
-                }
-                prevDropTarget = mechId;
-            }
-        };
-    };
-    var mechOnDragOverHandler = null;
-    var createMechOnDropHandler = function () {
-        return function (jqEvent) {
-            let thisJQ = $(this);
-            let dropTargetMechId = thisJQ.attr("data-mech-id");
-            let origEvent = jqEvent.originalEvent;
-            let srcMechId = origEvent.dataTransfer.getData("text/plain");
-            jqEvent.preventDefault();
-            thisJQ.removeClass("droptarget");
-            prevDropTarget = null;
-            if (dropTargetMechId !== srcMechId) {
-                MechView.resetSimulation();
-                let status = false;
-                if (!isEndMechId(dropTargetMechId)) {
-                    status = MechModel.moveMech(srcMechId, dropTargetMechId);
-                }
-                else {
-                    let team = getEndMechIdTeam(dropTargetMechId);
-                    status = MechModel.moveMechToEndOfList(srcMechId, team);
-                    console.log("Insert at end: team=" + team);
-                }
-                if (!status) {
-                    console.error(`Error moving mech. src=${srcMechId} dest=${dropTargetMechId}`);
-                }
-                else {
-                    console.log(`Drop: src=${srcMechId} dest=${dropTargetMechId}`);
-                    let srcMechJQ = $("#" + mechPanelId(srcMechId));
-                    srcMechJQ
-                        .detach()
-                        .insertBefore(thisJQ);
-                    toggleMoveMech(srcMechId);
-                    MechViewRouter.modifyAppState();
-                    MechModelView.refreshView([MechModelView.ViewUpdate.TEAMSTATS]);
-                }
-            }
-        };
-    };
-    var mechOnDropHandler = null;
-    var addMechDetailsButton = function (mechId, mechPanelDiv) {
-        let mechPanelJQ = $(mechPanelDiv);
-        let mechDetailsJQ = mechPanelJQ.find(".mechDetailsContainer");
-        let mechDetailsButtonJQ = mechPanelJQ.find(".mechDetailsButton")
-            .attr("data-mech-id", mechId);
-        let mechDetailsButtonArrowJQ = mechPanelJQ.find(".mechDetailsButtonArrow");
-        let mechDetailsTransitionEndHandler = function () {
-            mechDetailsButtonArrowJQ.off("transitionend", mechDetailsTransitionEndHandler);
-            if (!mechDetailsButton.expanded) {
-                mechDetailsJQ.empty();
-            }
-        };
-        let mechDetailsClickHandler = function () {
-            mechDetailsButtonArrowJQ.on("transitionend", mechDetailsTransitionEndHandler);
-            if (!mechDetailsButton.expanded) {
-                createMechDetails(mechId, mechDetailsJQ.get(0));
-            }
-        };
-        let mechDetailsButton = new MechViewWidgets.ExpandButton(mechDetailsButtonJQ.get(0), mechDetailsClickHandler, mechDetailsJQ.get(0), mechDetailsButtonArrowJQ.get(0));
-    };
-    var createMechDetails = function (mechId, mechDetailsContainer) {
-        let mechDetails = new MechViewMechDetails.MechDetails(mechId);
-        mechDetails.render();
-        $(mechDetailsContainer).append(mechDetails.domElement);
-    };
-    //scrolls to and flashes the selected mech panel
-    MechViewMechPanel.highlightMechPanel = function (mechId) {
-        let mechPanelDivId = mechPanelId(mechId);
-        let mechPanelJQ = $("#" + mechPanelDivId);
-        mechPanelJQ.get(0).scrollIntoView(false);
-        mechPanelJQ.addClass("flashSelected");
-        mechPanelJQ.on("animationend", function (data) {
-            mechPanelJQ.removeClass("flashSelected");
-            mechPanelJQ.off("animationend");
-        });
-    };
+    MechViewMechPanel.EndMechPanel = EndMechPanel;
 })(MechViewMechPanel || (MechViewMechPanel = {}));
 var MechViewReport;
 (function (MechViewReport) {
@@ -14317,7 +14416,8 @@ var MechViewTeamStats;
     var mechPipClickHandler = function (data) {
         let thisJQ = $(this);
         let mechId = thisJQ.attr("data-mech-id");
-        MechViewMechPanel.highlightMechPanel(mechId);
+        let mechPanel = MechView.getMechPanel(mechId);
+        mechPanel.highlightMechPanel(mechId);
     };
     var patternTypes;
     //values used to initialize the contents of the team settings panel.
@@ -14482,13 +14582,23 @@ var MechView;
 //UI methods
 (function (MechView) {
     var Component = MechModelCommon.Component;
+    var MechPanel = MechViewMechPanel.MechPanel;
     var teamListPanel = function (team) {
         return team + "Team";
     };
+    MechView.addMechPanel = function (mech, team) {
+        let mechPanel = new MechPanel(mech, team);
+        //TODO: The appends happen inside mechpanel (due to WeaponPanel updates needing document.geElementbyId)
+        //Try to find a way around this
+    };
+    MechView.getMechPanel = function (mechId) {
+        return MechPanel.getMechPanel(mechId);
+    };
     MechView.clearMechList = function (team) {
         let teamMechPanelId = teamListPanel(team);
-        $("#" + teamMechPanelId).empty();
-        MechViewMechPanel.addEndMechPanel(team);
+        let mechTeamListJQ = $("#" + teamMechPanelId).empty();
+        let endMechPanel = new MechViewMechPanel.EndMechPanel(team);
+        mechTeamListJQ.append(endMechPanel.domElement);
     };
     MechView.clearMechStats = function (team) {
         MechViewTeamStats.clearTeamStats(team);
@@ -14671,12 +14781,13 @@ var MechView;
             .attr("id", "loadingScreenContainer");
         MechViewWidgets.setModal(loadingScreenDiv);
         let loadingScreenPaperDollJQ = $("#loadingScreenPaperDollContainer");
-        MechViewMechPanel.addPaperDoll(LOADING_SCREEN_MECH_ID, loadingScreenPaperDollJQ.get(0));
+        let paperDoll = new MechViewMechPanel.PaperDoll(LOADING_SCREEN_MECH_ID);
+        loadingScreenPaperDollJQ.append(paperDoll.domElement);
         for (let componentIdx in Component) {
             if (Component.hasOwnProperty(componentIdx)) {
                 let component = Component[componentIdx];
-                MechViewMechPanel.setPaperDollArmor(LOADING_SCREEN_MECH_ID, component, 1);
-                MechViewMechPanel.setPaperDollStructure(LOADING_SCREEN_MECH_ID, component, 1);
+                paperDoll.setPaperDollArmor(component, 1);
+                paperDoll.setPaperDollStructure(component, 1);
             }
         }
         if (loadingScreenAnimateInterval) {
@@ -14686,8 +14797,8 @@ var MechView;
             for (let componentIdx in Component) {
                 if (Component.hasOwnProperty(componentIdx)) {
                     let component = Component[componentIdx];
-                    MechViewMechPanel.setPaperDollArmor(LOADING_SCREEN_MECH_ID, component, Math.random());
-                    MechViewMechPanel.setPaperDollStructure(LOADING_SCREEN_MECH_ID, component, Math.random());
+                    paperDoll.setPaperDollArmor(component, Math.random());
+                    paperDoll.setPaperDollStructure(component, Math.random());
                 }
             }
         }, LOADING_SCREEN_ANIMATE_INTERVAL);
@@ -14751,15 +14862,18 @@ var MechTest;
         $.each(mechTeam, (index, mech) => {
             for (var property in Component) {
                 if (Component.hasOwnProperty(property)) {
-                    MechViewMechPanel.setPaperDollArmor(mech.getMechId(), Component[property], Math.random());
-                    MechViewMechPanel.setPaperDollStructure(mech.getMechId(), Component[property], Math.random());
+                    let paperDoll = MechViewMechPanel.PaperDoll.getPaperDoll(mech.getMechId());
+                    paperDoll.setPaperDollArmor(Component[property], Math.random());
+                    paperDoll.setPaperDollStructure(Component[property], Math.random());
                 }
             }
-            MechViewMechPanel.setHeatbarValue(mech.getMechId(), Math.random());
+            let heatbar = MechViewMechPanel.Heatbar.getHeatbar(mech.getMechId());
+            heatbar.setHeatbarValue(Math.random());
             for (var i = 0; i < mech.getMechInfo().weaponInfoList.length; i++) {
-                MechViewMechPanel.setWeaponCooldown(mech.getMechId(), i, Math.random());
-                MechViewMechPanel.setWeaponAmmo(mech.getMechId(), i, Math.random() > 0.2 ? Math.floor(Math.random() * 100) : -1);
-                MechViewMechPanel.setWeaponState(mech.getMechId(), i, weaponStates[Math.floor(weaponStates.length * Math.random())]);
+                let weaponPanel = MechViewMechPanel.WeaponPanel.getWeaponPanel(mech.getMechId());
+                weaponPanel.setWeaponCooldown(i, Math.random());
+                weaponPanel.setWeaponAmmo(i, Math.random() > 0.2 ? Math.floor(Math.random() * 100) : -1);
+                weaponPanel.setWeaponState(i, weaponStates[Math.floor(weaponStates.length * Math.random())]);
             }
         });
     };

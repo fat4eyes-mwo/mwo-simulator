@@ -3,17 +3,30 @@
 //UI methods
 namespace MechView {
   import Component = MechModelCommon.Component;
+  import MechPanel = MechViewMechPanel.MechPanel;
+  import EndMechPanel = MechViewMechPanel.EndMechPanel;
 
+  type Mech = MechModel.Mech;
   type Team = MechModelCommon.Team;
   type Tooltip = MechViewWidgets.Tooltip;
 
   var teamListPanel = function(team : Team) {
     return  team + "Team";
   }
+  export var addMechPanel = function(mech : Mech, team : Team) {
+    let mechPanel = new MechPanel(mech, team);
+    //TODO: The appends happen inside mechpanel (due to WeaponPanel updates needing document.geElementbyId)
+    //Try to find a way around this
+  }
+  export var getMechPanel = function(mechId : string) {
+    return MechPanel.getMechPanel(mechId);
+  }
   export var clearMechList = function(team : Team) : void {
     let teamMechPanelId = teamListPanel(team);
-    $("#" + teamMechPanelId).empty();
-    MechViewMechPanel.addEndMechPanel(team);
+    let mechTeamListJQ = $("#" + teamMechPanelId).empty();
+
+    let endMechPanel = new MechViewMechPanel.EndMechPanel(team);
+    mechTeamListJQ.append(endMechPanel.domElement);
   }
 
   export var clearMechStats = function(team : Team) : void {
