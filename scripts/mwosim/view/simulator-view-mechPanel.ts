@@ -368,7 +368,7 @@ namespace MechViewMechPanel {
     addMoveMechButton(mechId, team, mechPanelJQ);
 
     //drag and drop handlers
-    addDragAndDropHandlers(mechId, mechPanelJQ);
+    addDragAndDropHandlers(mechId, mechPanelDiv);
 
     //Mech stats
     let mechSummaryHealthId = mechSummaryHealthPanelId(mechId);
@@ -396,7 +396,7 @@ namespace MechViewMechPanel {
       .attr("id", mechTotalDamageId)
       .html("");
 
-    addMechDetailsButton(mechId, mechPanelJQ);
+    addMechDetailsButton(mechId, mechPanelDiv);
   }
 
   const SMURFY_BASE_URL= "http://mwo.smurfy-net.de/mechlab#";
@@ -609,11 +609,12 @@ namespace MechViewMechPanel {
       .attr("id", mechPanelId(mechId))
       .attr("data-mech-id", mechId)
       .appendTo(mechPanelContainer);
-    addDragAndDropHandlers(mechId, mechPanelJQ);
+    addDragAndDropHandlers(mechId, mechPanelDiv);
   }
 
   var addDragAndDropHandlers =
-      function(mechId : string, mechPanelJQ : JQuery) : void {
+      function(mechId : string, mechPanelDiv : Element) : void {
+    let mechPanelJQ = $(mechPanelDiv);
     if (!mechOnDragHandler) {
       mechOnDragHandler = createMechOnDragHandler();
     }
@@ -707,7 +708,8 @@ namespace MechViewMechPanel {
   var mechOnDropHandler : JQEventHandler = null;
 
   var addMechDetailsButton =
-      function(mechId : string, mechPanelJQ : JQuery) : void {
+      function(mechId : string, mechPanelDiv : Element) : void {
+      let mechPanelJQ = $(mechPanelDiv);
       let mechDetailsJQ = mechPanelJQ.find(".mechDetailsContainer");
       let mechDetailsButtonJQ = mechPanelJQ.find(".mechDetailsButton")
                                       .attr("data-mech-id", mechId);

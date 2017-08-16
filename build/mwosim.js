@@ -13270,7 +13270,7 @@ var MechViewMechPanel;
         //move button
         addMoveMechButton(mechId, team, mechPanelJQ);
         //drag and drop handlers
-        addDragAndDropHandlers(mechId, mechPanelJQ);
+        addDragAndDropHandlers(mechId, mechPanelDiv);
         //Mech stats
         let mechSummaryHealthId = mechSummaryHealthPanelId(mechId);
         mechPanelJQ.find("[class~='statusPanel'] [class~='mechSummaryHealthText']")
@@ -13292,7 +13292,7 @@ var MechViewMechPanel;
         mechPanelJQ.find("[class~='statusPanel'] [class~='mechTotalDamageText']")
             .attr("id", mechTotalDamageId)
             .html("");
-        addMechDetailsButton(mechId, mechPanelJQ);
+        addMechDetailsButton(mechId, mechPanelDiv);
     };
     const SMURFY_BASE_URL = "http://mwo.smurfy-net.de/mechlab#";
     MechViewMechPanel.updateMechTitlePanel = function (mechId, mechName, smurfyMechId, smurfyLayoutId) {
@@ -13468,9 +13468,10 @@ var MechViewMechPanel;
             .attr("id", mechPanelId(mechId))
             .attr("data-mech-id", mechId)
             .appendTo(mechPanelContainer);
-        addDragAndDropHandlers(mechId, mechPanelJQ);
+        addDragAndDropHandlers(mechId, mechPanelDiv);
     };
-    var addDragAndDropHandlers = function (mechId, mechPanelJQ) {
+    var addDragAndDropHandlers = function (mechId, mechPanelDiv) {
+        let mechPanelJQ = $(mechPanelDiv);
         if (!mechOnDragHandler) {
             mechOnDragHandler = createMechOnDragHandler();
         }
@@ -13551,7 +13552,8 @@ var MechViewMechPanel;
         };
     };
     var mechOnDropHandler = null;
-    var addMechDetailsButton = function (mechId, mechPanelJQ) {
+    var addMechDetailsButton = function (mechId, mechPanelDiv) {
+        let mechPanelJQ = $(mechPanelDiv);
         let mechDetailsJQ = mechPanelJQ.find(".mechDetailsContainer");
         let mechDetailsButtonJQ = mechPanelJQ.find(".mechDetailsButton")
             .attr("data-mech-id", mechId);

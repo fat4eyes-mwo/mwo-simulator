@@ -1,7 +1,7 @@
 - AUTOMATED UNIT TESTS!!!!!!
 
-- event queue and listeners (maybe try rxjs)
 - drag on mobile
+- event queue and listeners (maybe try rxjs)
 - Mech details display (weapon damage summary)
 
 - See if it's worth moving all the added data to a single json file and fetching it at runtime.
