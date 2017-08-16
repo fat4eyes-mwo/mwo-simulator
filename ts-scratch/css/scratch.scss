@@ -14,3 +14,17 @@
   cursor: pointer;
   float: left;
 }
+
+.dragIcon {
+  position: fixed;
+  z-index: 100;
+  font-weight: bold;
+  transform: translateY(-30px) translateX(-50%);
+}
+.dragIcon svg {
+  fill: red;
+  transform: scale(2);
+}
+.hidden {
+  display: none;
+}

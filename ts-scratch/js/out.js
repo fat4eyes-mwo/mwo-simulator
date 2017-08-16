@@ -162,14 +162,17 @@ System.register("test-touch", [], function (exports_6, context_6) {
                 };
                 var touchStart = function (data) {
                     console.log(`touchStart ${this.id} : ${data}`);
+                    showTouchIcon(data.originalEvent);
                 };
                 var touchEnd = function (data) {
                     console.log(`touchEnd ${this.id} : ${data}`);
                     let touchEvent = data.originalEvent;
                     console.log("Drop target: " + currDropTarget.id);
+                    hideTouchIcon(data.originalEvent);
                 };
                 var touchCancel = function (data) {
                     console.log(`touchCancel ${this.id} : ${data}`);
+                    hideTouchIcon(data.originalEvent);
                 };
                 var currDropTarget;
                 var touchMove = function (data) {
@@ -180,6 +183,32 @@ System.register("test-touch", [], function (exports_6, context_6) {
                     if (currDropTarget !== touchTargetElem) {
                         console.log("Touch drop target: " + touchTargetElem.id);
                         currDropTarget = touchTargetElem;
+                    }
+                    moveTouchIcon(data.originalEvent);
+                };
+                var showTouchIcon = function (event) {
+                    let touch = event.touches[0];
+                    let dragIcon = document.getElementById("touchDragIcon");
+                    if (dragIcon != null) {
+                        moveTouchIcon(event);
+                        dragIcon.classList.remove("hidden");
+                    }
+                };
+                var moveTouchIcon = function (event) {
+                    let touch = event.touches[0];
+                    let dragIcon = document.getElementById("touchDragIcon");
+                    if (dragIcon != null) {
+                        let left = Math.floor(touch.clientX).toString() + "px";
+                        let top = Math.floor(touch.clientY).toString() + "px";
+                        dragIcon.style.left = left;
+                        dragIcon.style.top = top;
+                    }
+                };
+                var hideTouchIcon = function (event) {
+                    let touch = event.touches[0];
+                    let dragIcon = document.getElementById("touchDragIcon");
+                    if (dragIcon != null) {
+                        dragIcon.classList.add("hidden");
                     }
                 };
             })(TouchTest || (TouchTest = {}));
