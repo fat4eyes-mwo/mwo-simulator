@@ -174,7 +174,7 @@ System.register("test-touch", [], function (exports_6, context_6) {
                     let touchEvent = data.originalEvent;
                     let currDropTarget = currDropTargetMap.get(touchEvent.target);
                     let id = currDropTarget ? currDropTarget.id : "undefined";
-                    console.log("Drop target: " + id);
+                    console.log("Drop target: " + id + " source: " + touchEvent.target.id);
                     hideTouchIcon(data.originalEvent);
                     if (currDropTarget) {
                         let currDropTargetJQ = $(currDropTarget);

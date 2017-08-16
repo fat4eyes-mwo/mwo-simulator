@@ -24,7 +24,7 @@ export namespace TouchTest {
     let touchEvent = data.originalEvent as TouchEvent;
     let currDropTarget = currDropTargetMap.get(touchEvent.target);
     let id = currDropTarget? currDropTarget.id : "undefined";
-    console.log("Drop target: " + id);
+    console.log("Drop target: " + id + " source: " + (touchEvent.target as HTMLElement).id);
     hideTouchIcon(data.originalEvent as TouchEvent);
     if (currDropTarget) {
       let currDropTargetJQ = $(currDropTarget);
