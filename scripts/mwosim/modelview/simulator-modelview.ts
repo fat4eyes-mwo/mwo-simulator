@@ -145,8 +145,9 @@ namespace MechModelView {
       let location = mechComponentHealth.location;
       let armorPercent = Number(mechComponentHealth.armor) / Number(mechComponentHealth.maxArmor);
       let structurePercent = Number(mechComponentHealth.structure) / Number(mechComponentHealth.maxStructure);
-      MechViewMechPanel.setPaperDollArmor(mechId, location, armorPercent);
-      MechViewMechPanel.setPaperDollStructure(mechId, location, structurePercent);
+      let paperDoll = MechViewMechPanel.PaperDoll.getPaperDoll(mechId);
+      paperDoll.setPaperDollArmor(mechId, location, armorPercent);
+      paperDoll.setPaperDollStructure(mechId, location, structurePercent);
     }
   }
 

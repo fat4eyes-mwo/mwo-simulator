@@ -233,12 +233,13 @@ namespace MechView {
     MechViewWidgets.setModal(loadingScreenDiv);
 
     let loadingScreenPaperDollJQ = $("#loadingScreenPaperDollContainer");
-    MechViewMechPanel.addPaperDoll(LOADING_SCREEN_MECH_ID, loadingScreenPaperDollJQ.get(0));
+    let paperDoll = new MechViewMechPanel.PaperDoll(LOADING_SCREEN_MECH_ID);
+    loadingScreenPaperDollJQ.append(paperDoll.domElement);
     for (let componentIdx in Component) {
       if (Component.hasOwnProperty(componentIdx)) {
         let component = Component[componentIdx];
-        MechViewMechPanel.setPaperDollArmor(LOADING_SCREEN_MECH_ID, component, 1);
-        MechViewMechPanel.setPaperDollStructure(LOADING_SCREEN_MECH_ID, component, 1);
+        paperDoll.setPaperDollArmor(LOADING_SCREEN_MECH_ID, component, 1);
+        paperDoll.setPaperDollStructure(LOADING_SCREEN_MECH_ID, component, 1);
       }
     }
     if (loadingScreenAnimateInterval) {
@@ -249,8 +250,8 @@ namespace MechView {
         for (let componentIdx in Component) {
           if (Component.hasOwnProperty(componentIdx)) {
             let component = Component[componentIdx];
-            MechViewMechPanel.setPaperDollArmor(LOADING_SCREEN_MECH_ID, component, Math.random());
-            MechViewMechPanel.setPaperDollStructure(LOADING_SCREEN_MECH_ID, component, Math.random());
+            paperDoll.setPaperDollArmor(LOADING_SCREEN_MECH_ID, component, Math.random());
+            paperDoll.setPaperDollStructure(LOADING_SCREEN_MECH_ID, component, Math.random());
           }
         }
       }

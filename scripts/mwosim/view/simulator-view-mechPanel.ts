@@ -5,58 +5,69 @@ namespace MechViewMechPanel {
   import WeaponCycle = MechModelCommon.WeaponCycle;
   import Component = MechModelCommon.Component;
   import Team = MechModelCommon.Team;
+  import DomStoredWidget = MechViewWidgets.DomStoredWidget;
 
   type Mech = MechModel.Mech;
   type WeaponState = MechModelWeapons.WeaponState;
   type AmmoState = MechModel.AmmoState;
 
-  //Add a paper doll with the given mechId to the element with the id
-  //paperDollContainer uses the template paperDoll-template from the main HTML file
-  var paperDollId =function (mechId : string) : string {
-    return mechId + "-paperDoll";
-  }
-  var paperDollComponentId = function(mechId : string, component: Component) : string {
-    return `${mechId}-paperDoll-${component}`;
-  }
-  export var addPaperDoll =
-      function (mechId : string, paperDollContainer : Element) : void {
-    let paperDollDiv = MechViewWidgets.cloneTemplate("paperDoll-template");
-    let paperDollJQ = $(paperDollDiv)
-                          .attr("id", paperDollId(mechId))
-                          .attr("data-mech-id", mechId)
-                          .appendTo(paperDollContainer);
-    for (let componentField in Component) {
-      if (!Component.hasOwnProperty(componentField)) {
-        continue;
-      }
-      let component = Component[componentField];
-      let findStr = `> [data-location='${component}']`;
-      paperDollJQ.find(findStr)
-                  .attr("id", paperDollComponentId(mechId, component));
+  export class PaperDoll extends DomStoredWidget {
+    private static readonly PaperDollDomKey = "mwosim.PaperDoll.uiObject";
+    //Add a paper doll with the given mechId to the element with the id
+    //paperDollContainer uses the template paperDoll-template from the main HTML file
+    private static paperDollId(mechId: string): string {
+      return mechId + "-paperDoll";
     }
-  }
+    private static paperDollComponentId(mechId: string, component: Component): string {
+      return `${mechId}-paperDoll-${component}`;
+    }
+    constructor(mechId: string) {
+      let paperDollDiv = MechViewWidgets.cloneTemplate("paperDoll-template");
+      super(paperDollDiv);
+      this.storeToDom(PaperDoll.PaperDollDomKey);
 
-  //Percent values from 0 to 1
-  export var setPaperDollArmor =
-      function (mechId : string,
-                location : Component,
-                percent : number)
-                : void {
-    var color = MechViewWidgets.damageColor(percent, MechViewWidgets.paperDollDamageGradient);
-    let paperDollComponent = document.getElementById(paperDollComponentId(mechId, location));
-    if (paperDollComponent) {
-      paperDollComponent.style.borderColor = color;
+      let paperDollJQ = $(paperDollDiv)
+        .attr("id", PaperDoll.paperDollId(mechId))
+        .attr("data-mech-id", mechId);
+      for (let componentField in Component) {
+        if (!Component.hasOwnProperty(componentField)) {
+          continue;
+        }
+        let component = Component[componentField];
+        let findStr = `> [data-location='${component}']`;
+        paperDollJQ.find(findStr)
+          .attr("id", PaperDoll.paperDollComponentId(mechId, component));
+      }
     }
-  }
-  export var setPaperDollStructure =
-      function (mechId : string,
-                location : Component,
-                percent : number)
-                : void {
-    var color = MechViewWidgets.damageColor(percent, MechViewWidgets.paperDollDamageGradient);
-    let paperDollComponent = document.getElementById(paperDollComponentId(mechId, location));
-    if (paperDollComponent) {
-      paperDollComponent.style.backgroundColor = color;
+
+    static getPaperDoll(mechId : string) : PaperDoll {
+      let domElement = document.getElementById(PaperDoll.paperDollId(mechId));
+      if (domElement == null) {
+        return null;
+      }
+      return DomStoredWidget.fromDom(domElement, PaperDoll.PaperDollDomKey);
+    }
+
+    //Percent values from 0 to 1
+    setPaperDollArmor(mechId : string,
+                  location : Component,
+                  percent : number)
+                  : void {
+      var color = MechViewWidgets.damageColor(percent, MechViewWidgets.paperDollDamageGradient);
+      let paperDollComponent = document.getElementById(PaperDoll.paperDollComponentId(mechId, location));
+      if (paperDollComponent) {
+        paperDollComponent.style.borderColor = color;
+      }
+    }
+    setPaperDollStructure(mechId : string,
+                  location : Component,
+                  percent : number)
+                  : void {
+      var color = MechViewWidgets.damageColor(percent, MechViewWidgets.paperDollDamageGradient);
+      let paperDollComponent = document.getElementById(PaperDoll.paperDollComponentId(mechId, location));
+      if (paperDollComponent) {
+        paperDollComponent.style.backgroundColor = color;
+      }
     }
   }
 
@@ -336,7 +347,8 @@ namespace MechViewMechPanel {
     var paperDollContainerId = mechId + "-paperDollContainer";
     let paperDollJQ = mechPanelJQ.find("[class~='paperDollContainer']")
                                   .attr("id", paperDollContainerId);
-    addPaperDoll(mechId, paperDollJQ.get(0));
+    let paperDoll = new PaperDoll(mechId);
+    paperDollJQ.append(paperDoll.domElement);
 
     let mechHealthNumbersContainerJQ =
             mechPanelJQ.find("[class~='mechHealthNumbersContainer']");

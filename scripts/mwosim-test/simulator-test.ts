@@ -56,8 +56,9 @@ namespace MechTest {
     $.each(mechTeam, (index, mech) => {
       for (var property in Component) {
         if (Component.hasOwnProperty(property)) {
-          MechViewMechPanel.setPaperDollArmor(mech.getMechId(), Component[property], Math.random());
-          MechViewMechPanel.setPaperDollStructure(mech.getMechId(), Component[property], Math.random());
+          let paperDoll = MechViewMechPanel.PaperDoll.getPaperDoll(mech.getMechId());
+          paperDoll.setPaperDollArmor(mech.getMechId(), Component[property], Math.random());
+          paperDoll.setPaperDollStructure(mech.getMechId(), Component[property], Math.random());
         }
       }
       MechViewMechPanel.setHeatbarValue(mech.getMechId(), Math.random());
