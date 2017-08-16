@@ -13150,7 +13150,7 @@ var MechViewMechPanel;
                 .attr("id", weaponRowId(mechId, Number(idx)))
                 .attr("data-mech-id", mechId)
                 .attr("data-weapon-idx", idx)
-                .appendTo("#" + weaponPanel);
+                .appendTo(weaponPanel);
             $(weaponRowDiv).find(".weaponName")
                 .attr("id", weaponNameId(mechId, Number(idx)))
                 .html(weaponState.weaponInfo.translatedName);
@@ -13249,7 +13249,7 @@ var MechViewMechPanel;
             .attr("id", paperDollContainerId);
         MechViewMechPanel.addPaperDoll(mechId, paperDollJQ.get(0));
         let mechHealthNumbersContainerJQ = mechPanelJQ.find("[class~='mechHealthNumbersContainer']");
-        addMechHealthNumbers(mech, mechHealthNumbersContainerJQ);
+        addMechHealthNumbers(mech, mechHealthNumbersContainerJQ.get(0));
         var heatbarContainerId = mechId + "-heatbarContainer";
         mechPanelJQ.find("[class~='heatbarContainer']")
             .attr("id", heatbarContainerId);
@@ -13258,17 +13258,17 @@ var MechViewMechPanel;
         mechPanelJQ.find("[class~='heatNumber']")
             .attr("id", heatNumberId);
         var weaponPanelContainerId = mechId + "-weaponPanelContainer";
-        mechPanelJQ.find("[class~='weaponPanelContainer']")
+        let weaponPanelJQ = mechPanelJQ.find("[class~='weaponPanelContainer']")
             .attr("id", weaponPanelContainerId);
-        addWeaponPanel(mechId, weaponStateList, ammoState, weaponPanelContainerId);
+        addWeaponPanel(mechId, weaponStateList, ammoState, weaponPanelJQ.get(0));
         let mechNameId = mechNamePanelId(mechId);
         mechPanelJQ.find("[class~='titlePanel'] [class~='mechName']")
             .attr("id", mechNameId)
             .html("");
         //delete button
-        addDeleteMechButton(mechId, team, mechPanelJQ);
+        addDeleteMechButton(mechId, team, mechPanelDiv);
         //move button
-        addMoveMechButton(mechId, team, mechPanelJQ);
+        addMoveMechButton(mechId, team, mechPanelDiv);
         //drag and drop handlers
         addDragAndDropHandlers(mechId, mechPanelDiv);
         //Mech stats
@@ -13375,7 +13375,8 @@ var MechViewMechPanel;
     var mechDeleteButtonId = function (mechId) {
         return mechId + "-deleteButton";
     };
-    var addDeleteMechButton = function (mechId, team, mechPanelJQ) {
+    var addDeleteMechButton = function (mechId, team, mechPanelDiv) {
+        let mechPanelJQ = $(mechPanelDiv);
         if (!deleteMechButtonHandler) {
             deleteMechButtonHandler = createDeleteMechButtonHandler();
         }
@@ -13406,7 +13407,8 @@ var MechViewMechPanel;
     var moveMechButtonId = function (mechId) {
         return mechId + "-moveButton";
     };
-    var addMoveMechButton = function (mechId, team, mechPanelJQ) {
+    var addMoveMechButton = function (mechId, team, mechPanelDiv) {
+        let mechPanelJQ = $(mechPanelDiv);
         let moveIconSVG = MechViewWidgets.cloneTemplate("move-icon-template");
         let mechMoveButtonDivId = moveMechButtonId(mechId);
         if (!moveMechButtonHandler) {

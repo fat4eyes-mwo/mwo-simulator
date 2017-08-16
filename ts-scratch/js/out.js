@@ -165,6 +165,8 @@ System.register("test-touch", [], function (exports_6, context_6) {
                 };
                 var touchEnd = function (data) {
                     console.log(`touchEnd ${this.id} : ${data}`);
+                    let touchEvent = data.originalEvent;
+                    console.log("Drop target: " + currDropTarget.id);
                 };
                 var touchCancel = function (data) {
                     console.log(`touchCancel ${this.id} : ${data}`);
