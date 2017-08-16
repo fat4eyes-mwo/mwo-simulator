@@ -61,7 +61,8 @@ namespace MechTest {
           paperDoll.setPaperDollStructure(Component[property], Math.random());
         }
       }
-      MechViewMechPanel.setHeatbarValue(mech.getMechId(), Math.random());
+      let heatbar = MechViewMechPanel.Heatbar.getHeatbar(mech.getMechId());
+      heatbar.setHeatbarValue(Math.random());
       for (var i = 0; i < mech.getMechInfo().weaponInfoList.length; i++) {
         MechViewMechPanel.setWeaponCooldown(mech.getMechId(), i, Math.random());
         MechViewMechPanel.setWeaponAmmo(

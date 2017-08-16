@@ -89,7 +89,8 @@ namespace MechModelView {
   export var updateHeat = function(mech : Mech) : void {
     let heatState = mech.getMechState().heatState;
 
-    MechViewMechPanel.updateHeat(mech.getMechId(), heatState.currHeat, heatState.currMaxHeat);
+    let heatbar = MechViewMechPanel.Heatbar.getHeatbar(mech.getMechId());
+    heatbar.updateHeat(heatState.currHeat, heatState.currMaxHeat);
   }
 
   export var updateCooldown = function(mech : Mech) : void {

@@ -155,46 +155,55 @@ namespace MechViewMechPanel {
     }
   }
 
-  //Heatbar UI functions
-  var heatbarId = function (mechId : string) : string {
-    return mechId + "-heatbar";
-  }
-  var heatbarValueId = function (mechId : string) : string {
-    return mechId + "-heatbarValue";
-  }
-  var addHeatbar =
-      function (mechId : string, heatbarContainer : string) : void {
-    let heatbarDiv = MechViewWidgets.cloneTemplate("heatbar-template");
-    $(heatbarDiv)
-      .attr("id", heatbarId(mechId))
-      .attr("data-mech-id", mechId)
-      .appendTo("#" + heatbarContainer);
-    $(heatbarDiv).find("[class~=heatbar]")
-      .attr("id", heatbarValueId(mechId))
-      .attr("data-mech-id", mechId);
-  }
-  //Sets the heatbar value for a given mech id to a specified percentage. Value of
-  //percent is 0 to 1
-  export var setHeatbarValue = function (mechId : string, percent : number) : void {
-    var invPercent = 1 - percent;
+  export class Heatbar extends DomStoredWidget {
+    private static readonly HeatbarDomKey = "mwosim.Heatbar.uiObject";
+    private static heatbarId(mechId : string) : string {
+      return mechId + "-heatbar";
+    }
+    private static heatbarValueId(mechId : string) : string {
+      return mechId + "-heatbarValue";
+    }
+    private mechId : string;
+    constructor(mechId : string, heatbarContainer : string) {
+      let heatbarDiv = MechViewWidgets.cloneTemplate("heatbar-template");
+      super(heatbarDiv);
+      this.storeToDom(Heatbar.HeatbarDomKey);
+      this.mechId = mechId;
 
-    let heatbarValueDiv = document.getElementById(heatbarValueId(mechId));
-    heatbarValueDiv.style.height = (100 * invPercent) + "%";
-  }
+      $(heatbarDiv)
+        .attr("id", Heatbar.heatbarId(mechId))
+        .attr("data-mech-id", mechId)
+        .appendTo("#" + heatbarContainer);
+      $(heatbarDiv).find("[class~=heatbar]")
+        .attr("id", Heatbar.heatbarValueId(mechId))
+        .attr("data-mech-id", mechId);
+    }
+    static getHeatbar(mechId : string) : Heatbar {
+      let domElement = document.getElementById(Heatbar.heatbarId(mechId));
+      if (!domElement) {
+        return null;
+      }
+      return DomStoredWidget.fromDom(domElement, Heatbar.HeatbarDomKey);
+    }
+    //Sets the heatbar value for a given mech id to a specified percentage. Value of
+    //percent is 0 to 1
+    setHeatbarValue(percent : number) : void {
+      var invPercent = 1 - percent;
 
-  export var updateHeat =
-      function(mechId : string,
-              currHeat : number,
-              currMaxHeat : number)
-              : void {
-    let heatPercent = Number(currHeat) / Number(currMaxHeat);
-    setHeatbarValue(mechId, heatPercent);
+      let heatbarValueDiv = document.getElementById(Heatbar.heatbarValueId(this.mechId));
+      heatbarValueDiv.style.height = (100 * invPercent) + "%";
+    }
 
-    var heatNumberId = heatNumberPanelId(mechId);
-    let heatText = Number(heatPercent * 100).toFixed(0) + "%" +
-                    " (" + Number(currHeat).toFixed(1) + ")";
-    let heatNumberDiv = document.getElementById(heatNumberId);
-    heatNumberDiv.textContent = heatText;
+    updateHeat(currHeat : number, currMaxHeat : number) : void {
+      let heatPercent = Number(currHeat) / Number(currMaxHeat);
+      this.setHeatbarValue(heatPercent);
+
+      var heatNumberId = heatNumberPanelId(this.mechId);
+      let heatText = Number(heatPercent * 100).toFixed(0) + "%" +
+                      " (" + Number(currHeat).toFixed(1) + ")";
+      let heatNumberDiv = document.getElementById(heatNumberId);
+      heatNumberDiv.textContent = heatText;
+    }
   }
 
   var weaponRowId = function (mechId : string, idx : number) : string {
@@ -362,9 +371,10 @@ namespace MechViewMechPanel {
     mechHealthNumbersContainerJQ.append(mechHealthNumbers.domElement);
 
     var heatbarContainerId = mechId + "-heatbarContainer";
-    mechPanelJQ.find("[class~='heatbarContainer']")
-      .attr("id", heatbarContainerId);
-    addHeatbar(mechId, heatbarContainerId);
+    let heatbarContainerJQ = mechPanelJQ.find("[class~='heatbarContainer']")
+                                        .attr("id", heatbarContainerId);
+    let heatbar = new Heatbar(mechId, heatbarContainerId);
+    heatbarContainerJQ.append(heatbar.domElement);
 
     var heatNumberId = heatNumberPanelId(mechId);
     mechPanelJQ.find("[class~='heatNumber']")
