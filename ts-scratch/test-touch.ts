@@ -29,6 +29,7 @@ export namespace TouchTest {
   var touchMove = function(this: Element, data : JQuery.Event) {
     // console.log(`touchMove ${this.id} : ${data}`);
     let touchEvent = data.originalEvent as TouchEvent;
+    touchEvent.preventDefault();
     let touch = touchEvent.touches[0];
     let touchTargetElem = document.elementFromPoint(touch.clientX, touch.clientY);
     if (currDropTarget !== touchTargetElem) {

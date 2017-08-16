@@ -178,6 +178,7 @@ System.register("test-touch", [], function (exports_6, context_6) {
                 var touchMove = function (data) {
                     // console.log(`touchMove ${this.id} : ${data}`);
                     let touchEvent = data.originalEvent;
+                    touchEvent.preventDefault();
                     let touch = touchEvent.touches[0];
                     let touchTargetElem = document.elementFromPoint(touch.clientX, touch.clientY);
                     if (currDropTarget !== touchTargetElem) {
