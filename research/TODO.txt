@@ -1,5 +1,6 @@
 - AUTOMATED UNIT TESTS!!!!!!
 
+- possible touchhandler-caused slowdown on real mobile devices (chrome mobile).
 - event queue and listeners (maybe try rxjs)
 - Mech details display (weapon damage summary)
 
