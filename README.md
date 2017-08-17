@@ -77,6 +77,7 @@ The main entry point of the program is in `scripts/simulator.ts`.
 
 # Update Info
 
+* 2017-08-17: Added support for drag and drop on touch devices.
 * 2017-08-13: Mech skills (using kitlaan's skill planner).
 * 2017-08-08: Omnipod full set bonuses.
 * 2017-08-05: Added mech details popup. Currently contains list of mech's quirks.
