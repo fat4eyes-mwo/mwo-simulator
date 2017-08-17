@@ -431,6 +431,9 @@ namespace MechViewMechPanel {
       //drag and drop handlers
       DragAndDropHelper.addDragAndDropHandlers(mechPanelDiv);
 
+      //touch handlers
+      TouchHelper.addTouchHandlers(mechPanelDiv);
+
       //Mech stats
       let mechSummaryHealthId = MechPanel.mechSummaryHealthPanelId(mechId);
       mechPanelJQ.find("[class~='statusPanel'] [class~='mechSummaryHealthText']")
@@ -701,19 +704,22 @@ namespace MechViewMechPanel {
     }
 
     public moveToTargetMechId(targetMechId : string) {
+      let targetMechPanel : MechPanel | EndMechPanel;
+      targetMechPanel = MechPanel.getMechPanel(targetMechId) 
+                        || EndMechPanel.getEndMechPanel(targetMechId);
+      targetMechPanel.domElement.classList.remove("droptarget");
+
       if (this.mechId === targetMechId) {
         return;
       }
       MechView.resetSimulation();
       let status = false;
-      let targetMechPanel : MechPanel | EndMechPanel;
+      
       if (!EndMechPanel.isEndMechId(targetMechId)) {
         status = MechModel.moveMech(this.mechId, targetMechId);
-        targetMechPanel = MechPanel.getMechPanel(targetMechId);
       } else {
         let team = EndMechPanel.getEndMechIdTeam(targetMechId);
         status = MechModel.moveMechToEndOfList(this.mechId, team);
-        targetMechPanel = EndMechPanel.getEndMechPanel(targetMechId);
         console.log("Insert at end: team=" + team);
       }
 
@@ -721,7 +727,7 @@ namespace MechViewMechPanel {
         console.error(`Error moving mech. src=${this.mechId} dest=${targetMechId}`);
       } else {
         console.log(`Drop: src=${this.mechId} dest=${targetMechId}`);
-        let srcMechJQ = $("#" + MechPanel.mechPanelId(this.mechId));
+        let srcMechJQ = $(this.domElement);
         srcMechJQ
           .detach()
           .insertBefore(targetMechPanel.domElement);
@@ -843,12 +849,8 @@ namespace MechViewMechPanel {
         jqEvent.preventDefault();
         let srcMechPanel = MechPanel.getMechPanel(srcMechId);
 
-        thisJQ.removeClass("droptarget");
+        srcMechPanel.moveToTargetMechId(dropTargetMechId);
         DragAndDropHelper.prevDropTarget = null;
-
-        if (dropTargetMechId !== srcMechId) {
-          srcMechPanel.moveToTargetMechId(dropTargetMechId);
-        }
       }
     }
     public static mechOnDropHandler: JQEventHandler = null;
@@ -863,20 +865,118 @@ namespace MechViewMechPanel {
           .on("touchmove", TouchHelper.touchMoveHandler);
     }
 
+    private static readonly TouchIconId = "touchMoveIcon";
+    private static touchIcon : HTMLElement;
+    private static isTouchDragging : boolean;
+    private static currDropTarget : Element;
     private static touchStartHandler(this: Element, event : JQuery.Event) : void {
+      let thisJQ = $(this);
+      if (thisJQ.attr("draggable") === "true") {
+        let startMechId = TouchHelper.findMechId(this as HTMLElement);
+        console.log(`Touch start mechId: ${startMechId}`);
+
+        let mechName = MechModelView.getMechName(startMechId);
+
+        TouchHelper.isTouchDragging = true;
+      } else {
+        return;
+      }
     }
 
     private static touchEndHandler(this: Element, event : JQuery.Event) : void {
-      
+      if (!TouchHelper.isTouchDragging) {
+        return;
+      }
+      let touchEvent = event.originalEvent as TouchEvent;
+      let srcMechId = TouchHelper.findMechId(touchEvent.target as HTMLElement);
+      let dropMechId = TouchHelper.findMechId(TouchHelper.currDropTarget as HTMLElement);
+      console.log(`Touch end srcMechId: ${srcMechId} dropMechId: ${dropMechId}`);
+
+      if (srcMechId && dropMechId) {
+        let mechPanel = MechPanel.getMechPanel(srcMechId);
+        mechPanel.moveToTargetMechId(dropMechId);
+      } else {
+        console.warn(Error(`Touch end null mechId: src: ${srcMechId} dest: ${dropMechId}`))
+      }
+
+      TouchHelper.isTouchDragging = false;
+      TouchHelper.currDropTarget = null;
     }
 
     private static touchCancelHandler(this: Element, event : JQuery.Event) : void {
-      
+      if (!TouchHelper.isTouchDragging) {
+        return;
+      }
+
+      TouchHelper.isTouchDragging = false;
+      TouchHelper.currDropTarget = null;
     }
 
     private static touchMoveHandler(this: Element, event : JQuery.Event) : void {
-      
+      if (!TouchHelper.isTouchDragging) {
+        return;
+      }
+      let touchEvent = event.originalEvent as TouchEvent;
+      touchEvent.preventDefault();
+      let touch = touchEvent.touches[0];
+      let touchTargetElem = document.elementFromPoint(touch.clientX, touch.clientY);
+      let prevDropTargetMechId = TouchHelper.findMechId(TouchHelper.currDropTarget as HTMLElement);
+      let newDropTargetMechId = TouchHelper.findMechId(touchTargetElem as HTMLElement);
+
+      if (newDropTargetMechId !== prevDropTargetMechId) {
+        let newDropTargetMechPanel : MechPanel | EndMechPanel = 
+            MechPanel.getMechPanel(newDropTargetMechId) ||
+            EndMechPanel.getEndMechPanel(newDropTargetMechId);
+        if (newDropTargetMechPanel) {
+          newDropTargetMechPanel.highlightOnDragOver(prevDropTargetMechId);
+          TouchHelper.currDropTarget = touchTargetElem;
+        }
+      }
+    }
+
+    private static findMechId(element : HTMLElement) : string {
+      let currElement = element;
+      while (currElement 
+            && currElement.parentElement 
+            && (currElement.parentElement instanceof HTMLElement)) {
+        let mechIdAttr = currElement.attributes.getNamedItem("data-mech-id");
+        if (mechIdAttr) {
+          return mechIdAttr.value;
+        } else {
+          currElement = currElement.parentElement;
+        }
+      }
+      return null;
+    }
+
+    //TODO: positioning of touchIcon is still erratic and interferes with the touchMove
+    //handler. See what causes the problem.
+    private static showTouchIcon(event : TouchEvent, element : Element, mechName: string) : void {
+      if (TouchHelper.touchIcon) {
+        $(TouchHelper.touchIcon).remove();
+      }
+
+      TouchHelper.touchIcon = MechViewWidgets.cloneTemplate("touchmove-icon-template") as HTMLElement;
+      let touchIconJQ = $(TouchHelper.touchIcon)
+                              .appendTo(element);
+      touchIconJQ.find(".touchStartItem").text(mechName);
+
+      TouchHelper.moveTouchIcon(event);
+    }
+
+    private static moveTouchIcon(event : TouchEvent) : void {
+      let touch = event.touches[0];
+      if (TouchHelper.touchIcon) {
+        let left = Math.floor(touch.clientX).toString() + "px";
+        let top = Math.floor(touch.clientY).toString() + "px";
+        TouchHelper.touchIcon.style.left = left;
+        TouchHelper.touchIcon.style.top = top;
+      }
+    }
+    private static hideTouchIcon(event: TouchEvent) : void {
+      TouchHelper.touchIcon.remove(); 
     }
   }
 
+  
 }

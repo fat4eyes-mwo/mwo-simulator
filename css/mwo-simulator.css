@@ -1387,3 +1387,11 @@ a:hover {
 .tabPanel .hidden {
   display: none;
 }
+
+.touchMoveIcon {
+  position: fixed;
+  transform: translateY(-25px);
+  z-index: 100;
+  color: gold;
+  font-weight: bold;
+}

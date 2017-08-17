@@ -1500,3 +1500,11 @@ $loaded-mech-highlight-border-radius: 4px;
 .tabPanel .hidden {
   display: none;
 }
+
+.touchMoveIcon {
+  position: fixed;
+  transform: translateY(-25px);
+  z-index: 100;
+  color: $emphasis-color;
+  font-weight: bold;
+}

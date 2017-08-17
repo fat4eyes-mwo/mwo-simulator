@@ -13264,13 +13264,6 @@ var MechViewMechPanel;
         "right_leg": "RL"
     };
     MechViewMechPanel.WeaponPanel = WeaponPanel;
-    //TODO: Not happy with implementation of drag and drop behavior sharing between MechPanel and EndMechPanel
-    //Possible solutions: 
-    //  common superclass (but may make the inheritance tree unnecessarily tall)
-    //  mixin (but drag and drop behavior is deeply coupled with mechpanel contents, 
-    //          maybe it's better as a proper member)
-    //  separate service class (as with mixin, behavior is deeply coupled, putting it in a 
-    //                          separate service class seems wrong)
     class MechPanel extends DomStoredWidget {
         constructor(mech, team) {
             let mechPanelDiv = MechViewWidgets.cloneTemplate("mechPanel-template");
@@ -13323,7 +13316,9 @@ var MechViewMechPanel;
             //move button
             this.addMoveMechButton(mechId, team, mechPanelDiv);
             //drag and drop handlers
-            MechPanel.addDragAndDropHandlers(mechId, mechPanelDiv);
+            DragAndDropHelper.addDragAndDropHandlers(mechPanelDiv);
+            //touch handlers
+            TouchHelper.addTouchHandlers(mechPanelDiv);
             //Mech stats
             let mechSummaryHealthId = MechPanel.mechSummaryHealthPanelId(mechId);
             mechPanelJQ.find("[class~='statusPanel'] [class~='mechSummaryHealthText']")
@@ -13533,89 +13528,6 @@ var MechViewMechPanel;
                 mechPanel.toggleMoveMech(mechId);
             };
         }
-        //TODO: Not happy with having to make this static public so it can be reused by the end mech panel
-        //See if there's a better way of sharing this code without too tall inheritance
-        //NOTE: The use of static prevDropTarget means you can only drag one item at a time. Could be an
-        //issue on multi-touch devices
-        static addDragAndDropHandlers(mechId, mechPanelDiv) {
-            let mechPanelJQ = $(mechPanelDiv);
-            if (!MechPanel.mechOnDragHandler) {
-                MechPanel.mechOnDragHandler = this.createMechOnDragHandler();
-            }
-            mechPanelJQ.on("dragstart", MechPanel.mechOnDragHandler);
-            if (!MechPanel.mechOnDragOverHandler) {
-                MechPanel.mechOnDragOverHandler = this.createMechOnDragOverHandler();
-            }
-            mechPanelJQ.on("dragover", MechPanel.mechOnDragOverHandler);
-            if (!MechPanel.mechOnDropHandler) {
-                MechPanel.mechOnDropHandler = this.createMechOnDropHandler();
-            }
-            mechPanelJQ.on("drop", MechPanel.mechOnDropHandler);
-        }
-        static createMechOnDragHandler() {
-            return function (jqEvent) {
-                let mechId = $(this).attr("data-mech-id");
-                let origEvent = jqEvent.originalEvent;
-                origEvent.dataTransfer.setData("text/plain", mechId);
-                origEvent.dataTransfer.effectAllowed = "move";
-                console.log("Drag start: " + mechId);
-            };
-        }
-        static createMechOnDragOverHandler() {
-            return function (jqEvent) {
-                let thisJQ = $(this);
-                let mechId = thisJQ.attr("data-mech-id");
-                let origEvent = jqEvent.originalEvent;
-                jqEvent.preventDefault();
-                //allow move on drop
-                origEvent.dataTransfer.dropEffect = "move";
-                if (MechPanel.prevDropTarget !== mechId) {
-                    if (MechPanel.prevDropTarget) {
-                        let prevDropTargetJQ = $("#" + MechPanel.mechPanelId(MechPanel.prevDropTarget));
-                        prevDropTargetJQ.removeClass("droptarget");
-                        thisJQ.addClass("droptarget");
-                    }
-                    MechPanel.prevDropTarget = mechId;
-                }
-            };
-        }
-        static createMechOnDropHandler() {
-            return function (jqEvent) {
-                let thisJQ = $(this);
-                let dropTargetMechId = thisJQ.attr("data-mech-id");
-                let origEvent = jqEvent.originalEvent;
-                let srcMechId = origEvent.dataTransfer.getData("text/plain");
-                jqEvent.preventDefault();
-                let srcMechPanel = MechPanel.getMechPanel(srcMechId);
-                thisJQ.removeClass("droptarget");
-                MechPanel.prevDropTarget = null;
-                if (dropTargetMechId !== srcMechId) {
-                    MechView.resetSimulation();
-                    let status = false;
-                    if (!EndMechPanel.isEndMechId(dropTargetMechId)) {
-                        status = MechModel.moveMech(srcMechId, dropTargetMechId);
-                    }
-                    else {
-                        let team = EndMechPanel.getEndMechIdTeam(dropTargetMechId);
-                        status = MechModel.moveMechToEndOfList(srcMechId, team);
-                        console.log("Insert at end: team=" + team);
-                    }
-                    if (!status) {
-                        console.error(`Error moving mech. src=${srcMechId} dest=${dropTargetMechId}`);
-                    }
-                    else {
-                        console.log(`Drop: src=${srcMechId} dest=${dropTargetMechId}`);
-                        let srcMechJQ = $("#" + MechPanel.mechPanelId(srcMechId));
-                        srcMechJQ
-                            .detach()
-                            .insertBefore(thisJQ);
-                        srcMechPanel.toggleMoveMech(srcMechId);
-                        MechViewRouter.modifyAppState();
-                        MechModelView.refreshView([MechModelView.ViewUpdate.TEAMSTATS]);
-                    }
-                }
-            };
-        }
         addMechDetailsButton(mechId, mechPanelDiv) {
             let mechPanelJQ = $(mechPanelDiv);
             let mechDetailsJQ = mechPanelJQ.find(".mechDetailsContainer");
@@ -13653,11 +13565,47 @@ var MechViewMechPanel;
                 mechPanelJQ.off("animationend");
             });
         }
+        highlightOnDragOver(prevDropTargetId) {
+            if (prevDropTargetId) {
+                let prevMechPanel = MechPanel.getMechPanel(prevDropTargetId) || EndMechPanel.getEndMechPanel(prevDropTargetId);
+                prevMechPanel.domElement.classList.remove("droptarget");
+            }
+            this.domElement.classList.add("droptarget");
+        }
+        moveToTargetMechId(targetMechId) {
+            let targetMechPanel;
+            targetMechPanel = MechPanel.getMechPanel(targetMechId)
+                || EndMechPanel.getEndMechPanel(targetMechId);
+            targetMechPanel.domElement.classList.remove("droptarget");
+            if (this.mechId === targetMechId) {
+                return;
+            }
+            MechView.resetSimulation();
+            let status = false;
+            if (!EndMechPanel.isEndMechId(targetMechId)) {
+                status = MechModel.moveMech(this.mechId, targetMechId);
+            }
+            else {
+                let team = EndMechPanel.getEndMechIdTeam(targetMechId);
+                status = MechModel.moveMechToEndOfList(this.mechId, team);
+                console.log("Insert at end: team=" + team);
+            }
+            if (!status) {
+                console.error(`Error moving mech. src=${this.mechId} dest=${targetMechId}`);
+            }
+            else {
+                console.log(`Drop: src=${this.mechId} dest=${targetMechId}`);
+                let srcMechJQ = $(this.domElement);
+                srcMechJQ
+                    .detach()
+                    .insertBefore(targetMechPanel.domElement);
+                this.toggleMoveMech(this.mechId);
+                MechViewRouter.modifyAppState();
+                MechModelView.refreshView([MechModelView.ViewUpdate.TEAMSTATS]);
+            }
+        }
     }
     MechPanel.MechPanelDomKey = "mwosim.MechPanel.uiObject";
-    MechPanel.mechOnDragHandler = null;
-    MechPanel.mechOnDragOverHandler = null;
-    MechPanel.mechOnDropHandler = null;
     MechViewMechPanel.MechPanel = MechPanel;
     class EndMechPanel extends DomStoredWidget {
         constructor(team) {
@@ -13669,13 +13617,27 @@ var MechViewMechPanel;
             mechPanelJQ
                 .attr("id", MechPanel.mechPanelId(mechId))
                 .attr("data-mech-id", mechId);
-            MechPanel.addDragAndDropHandlers(mechId, mechPanelDiv);
+            DragAndDropHelper.addDragAndDropHandlers(mechPanelDiv);
         }
         static getEndMechId(team) {
             return EndMechPanel.EndMechIdPrefix + team;
         }
         static isEndMechId(mechId) {
             return mechId.startsWith(EndMechPanel.EndMechIdPrefix);
+        }
+        static getEndMechPanel(mechId) {
+            let domElement = document.getElementById(MechPanel.mechPanelId(mechId));
+            if (!domElement) {
+                return null;
+            }
+            return DomStoredWidget.fromDom(domElement, EndMechPanel.EndMechPanelDomKey);
+        }
+        highlightOnDragOver(prevDropTargetId) {
+            if (prevDropTargetId) {
+                let prevMechPanel = MechPanel.getMechPanel(prevDropTargetId) || EndMechPanel.getEndMechPanel(prevDropTargetId);
+                prevMechPanel.domElement.classList.remove("droptarget");
+            }
+            this.domElement.classList.add("droptarget");
         }
     }
     EndMechPanel.EndMechPanelDomKey = "mwosim.EndMechPanel.uiObject";
@@ -13689,6 +13651,170 @@ var MechViewMechPanel;
         }
     };
     MechViewMechPanel.EndMechPanel = EndMechPanel;
+    class DragAndDropHelper {
+        //NOTE: The use of static prevDropTarget means you can only drag one item at a time. Could be an
+        //issue on multi-touch devices
+        static addDragAndDropHandlers(mechPanelDiv) {
+            let mechPanelJQ = $(mechPanelDiv);
+            if (!DragAndDropHelper.mechOnDragHandler) {
+                DragAndDropHelper.mechOnDragHandler = this.createMechOnDragHandler();
+            }
+            mechPanelJQ.on("dragstart", DragAndDropHelper.mechOnDragHandler);
+            if (!DragAndDropHelper.mechOnDragOverHandler) {
+                DragAndDropHelper.mechOnDragOverHandler = this.createMechOnDragOverHandler();
+            }
+            mechPanelJQ.on("dragover", DragAndDropHelper.mechOnDragOverHandler);
+            if (!DragAndDropHelper.mechOnDropHandler) {
+                DragAndDropHelper.mechOnDropHandler = this.createMechOnDropHandler();
+            }
+            mechPanelJQ.on("drop", DragAndDropHelper.mechOnDropHandler);
+        }
+        static createMechOnDragHandler() {
+            return function (jqEvent) {
+                let mechId = $(this).attr("data-mech-id");
+                let origEvent = jqEvent.originalEvent;
+                origEvent.dataTransfer.setData("text/plain", mechId);
+                origEvent.dataTransfer.effectAllowed = "move";
+                console.log("Drag start: " + mechId);
+            };
+        }
+        static createMechOnDragOverHandler() {
+            return function (jqEvent) {
+                let thisJQ = $(this);
+                let mechId = thisJQ.attr("data-mech-id");
+                let origEvent = jqEvent.originalEvent;
+                jqEvent.preventDefault();
+                //allow move on drop
+                origEvent.dataTransfer.dropEffect = "move";
+                if (DragAndDropHelper.prevDropTarget !== mechId) {
+                    let mechPanel = MechPanel.getMechPanel(mechId) || EndMechPanel.getEndMechPanel(mechId);
+                    mechPanel.highlightOnDragOver(DragAndDropHelper.prevDropTarget);
+                    DragAndDropHelper.prevDropTarget = mechId;
+                }
+            };
+        }
+        static createMechOnDropHandler() {
+            return function (jqEvent) {
+                let thisJQ = $(this);
+                let dropTargetMechId = thisJQ.attr("data-mech-id");
+                let origEvent = jqEvent.originalEvent;
+                let srcMechId = origEvent.dataTransfer.getData("text/plain");
+                jqEvent.preventDefault();
+                let srcMechPanel = MechPanel.getMechPanel(srcMechId);
+                srcMechPanel.moveToTargetMechId(dropTargetMechId);
+                DragAndDropHelper.prevDropTarget = null;
+            };
+        }
+    }
+    DragAndDropHelper.mechOnDragHandler = null;
+    DragAndDropHelper.mechOnDragOverHandler = null;
+    DragAndDropHelper.mechOnDropHandler = null;
+    class TouchHelper {
+        static addTouchHandlers(mechPanelDiv) {
+            $(mechPanelDiv)
+                .on("touchstart", TouchHelper.touchStartHandler)
+                .on("touchend", TouchHelper.touchEndHandler)
+                .on("touchcancel", TouchHelper.touchCancelHandler)
+                .on("touchmove", TouchHelper.touchMoveHandler);
+        }
+        static touchStartHandler(event) {
+            let thisJQ = $(this);
+            if (thisJQ.attr("draggable") === "true") {
+                let startMechId = TouchHelper.findMechId(this);
+                console.log(`Touch start mechId: ${startMechId}`);
+                let mechName = MechModelView.getMechName(startMechId);
+                TouchHelper.isTouchDragging = true;
+            }
+            else {
+                return;
+            }
+        }
+        static touchEndHandler(event) {
+            if (!TouchHelper.isTouchDragging) {
+                return;
+            }
+            let touchEvent = event.originalEvent;
+            let srcMechId = TouchHelper.findMechId(touchEvent.target);
+            let dropMechId = TouchHelper.findMechId(TouchHelper.currDropTarget);
+            console.log(`Touch end srcMechId: ${srcMechId} dropMechId: ${dropMechId}`);
+            if (srcMechId && dropMechId) {
+                let mechPanel = MechPanel.getMechPanel(srcMechId);
+                mechPanel.moveToTargetMechId(dropMechId);
+            }
+            else {
+                console.warn(Error(`Touch end null mechId: src: ${srcMechId} dest: ${dropMechId}`));
+            }
+            TouchHelper.isTouchDragging = false;
+            TouchHelper.currDropTarget = null;
+            //TODO: Handle drop
+        }
+        static touchCancelHandler(event) {
+            if (!TouchHelper.isTouchDragging) {
+                return;
+            }
+            TouchHelper.isTouchDragging = false;
+            TouchHelper.currDropTarget = null;
+        }
+        static touchMoveHandler(event) {
+            if (!TouchHelper.isTouchDragging) {
+                return;
+            }
+            let touchEvent = event.originalEvent;
+            touchEvent.preventDefault();
+            let touch = touchEvent.touches[0];
+            let touchTargetElem = document.elementFromPoint(touch.clientX, touch.clientY);
+            let prevDropTargetMechId = TouchHelper.findMechId(TouchHelper.currDropTarget);
+            let newDropTargetMechId = TouchHelper.findMechId(touchTargetElem);
+            if (newDropTargetMechId !== prevDropTargetMechId) {
+                let newDropTargetMechPanel = MechPanel.getMechPanel(newDropTargetMechId) ||
+                    EndMechPanel.getEndMechPanel(newDropTargetMechId);
+                if (newDropTargetMechPanel) {
+                    newDropTargetMechPanel.highlightOnDragOver(prevDropTargetMechId);
+                    TouchHelper.currDropTarget = touchTargetElem;
+                }
+            }
+        }
+        static findMechId(element) {
+            let currElement = element;
+            while (currElement
+                && currElement.parentElement
+                && (currElement.parentElement instanceof HTMLElement)) {
+                let mechIdAttr = currElement.attributes.getNamedItem("data-mech-id");
+                if (mechIdAttr) {
+                    return mechIdAttr.value;
+                }
+                else {
+                    currElement = currElement.parentElement;
+                }
+            }
+            return null;
+        }
+        //TODO: positioning of touchIcon is still erratic and interferes with the touchMove
+        //handler. See what causes the problem.
+        static showTouchIcon(event, element, mechName) {
+            if (TouchHelper.touchIcon) {
+                $(TouchHelper.touchIcon).remove();
+            }
+            TouchHelper.touchIcon = MechViewWidgets.cloneTemplate("touchmove-icon-template");
+            let touchIconJQ = $(TouchHelper.touchIcon)
+                .appendTo(element);
+            touchIconJQ.find(".touchStartItem").text(mechName);
+            TouchHelper.moveTouchIcon(event);
+        }
+        static moveTouchIcon(event) {
+            let touch = event.touches[0];
+            if (TouchHelper.touchIcon) {
+                let left = Math.floor(touch.clientX).toString() + "px";
+                let top = Math.floor(touch.clientY).toString() + "px";
+                TouchHelper.touchIcon.style.left = left;
+                TouchHelper.touchIcon.style.top = top;
+            }
+        }
+        static hideTouchIcon(event) {
+            TouchHelper.touchIcon.remove();
+        }
+    }
+    TouchHelper.TouchIconId = "touchMoveIcon";
 })(MechViewMechPanel || (MechViewMechPanel = {}));
 var MechViewReport;
 (function (MechViewReport) {
