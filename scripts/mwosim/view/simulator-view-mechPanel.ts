@@ -435,7 +435,7 @@ namespace MechViewMechPanel {
       this.addMoveMechButton(mechId, team, mechPanelDiv);
 
       //drag and drop handlers
-      MechPanel.addDragAndDropHandlers(mechId, mechPanelDiv);
+      MechPanel.addDragAndDropHandlers(mechPanelDiv);
 
       //Mech stats
       let mechSummaryHealthId = MechPanel.mechSummaryHealthPanelId(mechId);
@@ -654,8 +654,7 @@ namespace MechViewMechPanel {
     //See if there's a better way of sharing this code without too tall inheritance
     //NOTE: The use of static prevDropTarget means you can only drag one item at a time. Could be an
     //issue on multi-touch devices
-    public static addDragAndDropHandlers(mechId : string, 
-                                        mechPanelDiv : Element) : void {
+    public static addDragAndDropHandlers(mechPanelDiv : Element) : void {
       let mechPanelJQ = $(mechPanelDiv);
       if (!MechPanel.mechOnDragHandler) {
         MechPanel.mechOnDragHandler = this.createMechOnDragHandler();
@@ -823,7 +822,7 @@ namespace MechViewMechPanel {
       mechPanelJQ
         .attr("id", MechPanel.mechPanelId(mechId))
         .attr("data-mech-id", mechId)
-      MechPanel.addDragAndDropHandlers(mechId, mechPanelDiv);
+      MechPanel.addDragAndDropHandlers(mechPanelDiv);
     }
   }
 
