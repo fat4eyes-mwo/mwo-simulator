@@ -323,7 +323,7 @@ namespace MechViewMechPanel {
     }
   }
 
-  type JQEventHandler = (ev : JQuery.Event) => void;
+  type JQEventHandler = (this: Element, ev : JQuery.Event) => void;
   export interface  MechPanelStatusUpdate {
     mechIsAlive : boolean,
     mechCurrTotalHealth : number,
@@ -333,7 +333,7 @@ namespace MechViewMechPanel {
     burst : number,
     totalDmg : number
   }
-  
+
   export class MechPanel extends DomStoredWidget {
     private static MechPanelDomKey = "mwosim.MechPanel.uiObject";
     //adds a mech panel (which contains a paperDoll, a heatbar and a weaponPanel)
@@ -690,6 +690,47 @@ namespace MechViewMechPanel {
         mechPanelJQ.off("animationend");
       });
     }
+
+    public highlightOnDragOver(prevDropTargetId : string) {
+      if (prevDropTargetId) {
+        let prevMechPanel : MechPanel | EndMechPanel = 
+          MechPanel.getMechPanel(prevDropTargetId) || EndMechPanel.getEndMechPanel(prevDropTargetId);
+        prevMechPanel.domElement.classList.remove("droptarget");
+      }
+      this.domElement.classList.add("droptarget");
+    }
+
+    public moveToTargetMechId(targetMechId : string) {
+      if (this.mechId === targetMechId) {
+        return;
+      }
+      MechView.resetSimulation();
+      let status = false;
+      let targetMechPanel : MechPanel | EndMechPanel;
+      if (!EndMechPanel.isEndMechId(targetMechId)) {
+        status = MechModel.moveMech(this.mechId, targetMechId);
+        targetMechPanel = MechPanel.getMechPanel(targetMechId);
+      } else {
+        let team = EndMechPanel.getEndMechIdTeam(targetMechId);
+        status = MechModel.moveMechToEndOfList(this.mechId, team);
+        targetMechPanel = EndMechPanel.getEndMechPanel(targetMechId);
+        console.log("Insert at end: team=" + team);
+      }
+
+      if (!status) {
+        console.error(`Error moving mech. src=${this.mechId} dest=${targetMechId}`);
+      } else {
+        console.log(`Drop: src=${this.mechId} dest=${targetMechId}`);
+        let srcMechJQ = $("#" + MechPanel.mechPanelId(this.mechId));
+        srcMechJQ
+          .detach()
+          .insertBefore(targetMechPanel.domElement);
+
+        this.toggleMoveMech(this.mechId);
+        MechViewRouter.modifyAppState();
+        MechModelView.refreshView([MechModelView.ViewUpdate.TEAMSTATS]);
+      }
+    }
   }
 
   export class EndMechPanel extends DomStoredWidget {
@@ -720,6 +761,21 @@ namespace MechViewMechPanel {
         .attr("data-mech-id", mechId)
       DragAndDropHelper.addDragAndDropHandlers(mechPanelDiv);
     }
+    public static getEndMechPanel(mechId : string) : EndMechPanel {
+      let domElement = document.getElementById(MechPanel.mechPanelId(mechId));
+      if (!domElement) {
+        return null;
+      }
+      return DomStoredWidget.fromDom(domElement, EndMechPanel.EndMechPanelDomKey);
+    }
+    public highlightOnDragOver(prevDropTargetId : string) {
+      if (prevDropTargetId) {
+        let prevMechPanel : MechPanel | EndMechPanel = 
+          MechPanel.getMechPanel(prevDropTargetId) || EndMechPanel.getEndMechPanel(prevDropTargetId);
+        prevMechPanel.domElement.classList.remove("droptarget");
+      }
+      this.domElement.classList.add("droptarget");
+    }
   }
 
   class DragAndDropHelper {
@@ -744,7 +800,7 @@ namespace MechViewMechPanel {
       mechPanelJQ.on("drop", DragAndDropHelper.mechOnDropHandler);
     }
 
-    public static createMechOnDragHandler(): JQEventHandler {
+    private static createMechOnDragHandler(): JQEventHandler {
       return function (this: Element,
         jqEvent: JQuery.Event) {
         let mechId = $(this).attr("data-mech-id");
@@ -754,9 +810,9 @@ namespace MechViewMechPanel {
         console.log("Drag start: " + mechId);
       }
     }
-    private static mechOnDragHandler: JQEventHandler = null;
+    public static mechOnDragHandler: JQEventHandler = null;
 
-    public static createMechOnDragOverHandler(): JQEventHandler {
+    private static createMechOnDragOverHandler(): JQEventHandler {
       return function (this: Element,
         jqEvent: JQuery.Event) {
         let thisJQ = $(this);
@@ -767,18 +823,17 @@ namespace MechViewMechPanel {
         //allow move on drop
         origEvent.dataTransfer.dropEffect = "move";
         if (DragAndDropHelper.prevDropTarget !== mechId) {
-          if (DragAndDropHelper.prevDropTarget) {
-            let prevDropTargetJQ = $("#" + MechPanel.mechPanelId(DragAndDropHelper.prevDropTarget));
-            prevDropTargetJQ.removeClass("droptarget");
-            thisJQ.addClass("droptarget");
-          }
+          let mechPanel : MechPanel | EndMechPanel = 
+              MechPanel.getMechPanel(mechId) || EndMechPanel.getEndMechPanel(mechId);
+          mechPanel.highlightOnDragOver(DragAndDropHelper.prevDropTarget);
+
           DragAndDropHelper.prevDropTarget = mechId;
         }
       }
     }
-    private static mechOnDragOverHandler: JQEventHandler = null;
+    public static mechOnDragOverHandler: JQEventHandler = null;
 
-    public static createMechOnDropHandler(): JQEventHandler {
+    private static createMechOnDropHandler(): JQEventHandler {
       return function (this: Element,
         jqEvent: JQuery.Event): void {
         let thisJQ = $(this);
@@ -792,33 +847,36 @@ namespace MechViewMechPanel {
         DragAndDropHelper.prevDropTarget = null;
 
         if (dropTargetMechId !== srcMechId) {
-          MechView.resetSimulation();
-          let status = false;
-          if (!EndMechPanel.isEndMechId(dropTargetMechId)) {
-            status = MechModel.moveMech(srcMechId, dropTargetMechId);
-          } else {
-            let team = EndMechPanel.getEndMechIdTeam(dropTargetMechId);
-            status = MechModel.moveMechToEndOfList(srcMechId, team);
-            console.log("Insert at end: team=" + team);
-          }
-
-          if (!status) {
-            console.error(`Error moving mech. src=${srcMechId} dest=${dropTargetMechId}`);
-          } else {
-            console.log(`Drop: src=${srcMechId} dest=${dropTargetMechId}`);
-            let srcMechJQ = $("#" + MechPanel.mechPanelId(srcMechId));
-            srcMechJQ
-              .detach()
-              .insertBefore(thisJQ);
-
-            srcMechPanel.toggleMoveMech(srcMechId);
-            MechViewRouter.modifyAppState();
-            MechModelView.refreshView([MechModelView.ViewUpdate.TEAMSTATS]);
-          }
+          srcMechPanel.moveToTargetMechId(dropTargetMechId);
         }
       }
     }
-    private static mechOnDropHandler: JQEventHandler = null;
+    public static mechOnDropHandler: JQEventHandler = null;
+  }
+
+  class TouchHelper {
+    public static addTouchHandlers(mechPanelDiv : Element) : void {
+      $(mechPanelDiv)
+          .on("touchstart", TouchHelper.touchStartHandler)
+          .on("touchend", TouchHelper.touchEndHandler)
+          .on("touchcancel", TouchHelper.touchCancelHandler)
+          .on("touchmove", TouchHelper.touchMoveHandler);
+    }
+
+    private static touchStartHandler(this: Element, event : JQuery.Event) : void {
+    }
+
+    private static touchEndHandler(this: Element, event : JQuery.Event) : void {
+      
+    }
+
+    private static touchCancelHandler(this: Element, event : JQuery.Event) : void {
+      
+    }
+
+    private static touchMoveHandler(this: Element, event : JQuery.Event) : void {
+      
+    }
   }
 
 }
