@@ -6,3 +6,4 @@ nodejs/gamexmlparser/node_modules
 nodejs/**/*.bat
 nodejs/gamexmlparser/build
 tslint.out
+node_modules
