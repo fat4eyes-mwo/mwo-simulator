@@ -158,14 +158,14 @@ namespace MechModelView {
     let mechHealth = mech.getMechState().mechHealth;
     for (let mechComponentHealth of mechHealth.componentHealthList) {
       let mechHealthNumbers = MechViewMechPanel.MechHealthNumbers.getMechHealthNumbers(mech.getMechId());
-      mechHealthNumbers.updateMechHealthNumbers(
-                            {
-                              location: mechComponentHealth.location,
-                              armor: mechComponentHealth.armor,
-                              structure: mechComponentHealth.structure,
-                              maxArmor: mechComponentHealth.maxArmor,
-                              maxStructure: mechComponentHealth.maxStructure
-                            });
+      let update = {
+        location: mechComponentHealth.location,
+        armor: mechComponentHealth.armor,
+        structure: mechComponentHealth.structure,
+        maxArmor: mechComponentHealth.maxArmor,
+        maxStructure: mechComponentHealth.maxStructure
+      };
+      mechHealthNumbers.updateMechHealthNumbers(update);
     }
   }
 
