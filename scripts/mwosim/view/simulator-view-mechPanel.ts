@@ -886,6 +886,7 @@ namespace MechViewMechPanel {
         console.log(`Touch start mechId: ${startMechId}`);
 
         let mechName = MechModelView.getMechName(startMechId);
+        TouchHelper.showTouchIcon(event.originalEvent as TouchEvent, mechName);
 
         TouchHelper.isTouchDragging = true;
       } else {
@@ -909,6 +910,7 @@ namespace MechViewMechPanel {
         console.warn(Error(`Touch end null mechId: src: ${srcMechId} dest: ${dropMechId}`))
       }
 
+      TouchHelper.hideTouchIcon(event.originalEvent as TouchEvent);
       TouchHelper.isTouchDragging = false;
       TouchHelper.currDropTarget = null;
     }
@@ -928,6 +930,8 @@ namespace MechViewMechPanel {
       }
       let touchEvent = event.originalEvent as TouchEvent;
       touchEvent.preventDefault();
+      TouchHelper.moveTouchIcon(touchEvent);
+      
       let touch = touchEvent.touches[0];
       let touchTargetElem = document.elementFromPoint(touch.clientX, touch.clientY);
       let prevDropTargetMechId = TouchHelper.findMechId(TouchHelper.currDropTarget as HTMLElement);
@@ -959,16 +963,17 @@ namespace MechViewMechPanel {
       return null;
     }
 
-    //TODO: positioning of touchIcon is still erratic and interferes with the touchMove
-    //handler. See what causes the problem.
-    private static showTouchIcon(event : TouchEvent, element : Element, mechName: string) : void {
+    private static showTouchIcon(event : TouchEvent, mechName: string) : void {
       if (TouchHelper.touchIcon) {
         $(TouchHelper.touchIcon).remove();
       }
 
+      //NOTE: attach touchIcon to body. 'fixed' position doesn't work well when hovering over the 
+      //source mechpanel element (it acts as relative in that case)
+      let bodyJQ = $("body");
       TouchHelper.touchIcon = MechViewWidgets.cloneTemplate("touchmove-icon-template") as HTMLElement;
       let touchIconJQ = $(TouchHelper.touchIcon)
-                              .appendTo(element);
+                              .appendTo(bodyJQ);
       touchIconJQ.find(".touchStartItem").text(mechName);
 
       TouchHelper.moveTouchIcon(event);

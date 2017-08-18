@@ -13716,6 +13716,15 @@ var MechViewMechPanel;
                 .on("touchend", TouchHelper.touchEndHandler)
                 .on("touchcancel", TouchHelper.touchCancelHandler)
                 .on("touchmove", TouchHelper.touchMoveHandler);
+            //NOTE: using these touch handlers that do nothing still causes the slowdown on chrome on android. 
+            //Do a remote debug to see what's eating the cycles
+            // mechPanelDiv.addEventListener("touchstart", TouchHelper.emptyHandler, false);
+            // mechPanelDiv.addEventListener("touchend", TouchHelper.emptyHandler, false);
+            // mechPanelDiv.addEventListener("touchcancel", TouchHelper.emptyHandler, false);
+            // mechPanelDiv.addEventListener("touchmove", TouchHelper.emptyHandler, false);
+        }
+        static emptyHandler(event) {
+            return;
         }
         static touchStartHandler(event) {
             let thisJQ = $(this);
@@ -13723,6 +13732,7 @@ var MechViewMechPanel;
                 let startMechId = TouchHelper.findMechId(this);
                 console.log(`Touch start mechId: ${startMechId}`);
                 let mechName = MechModelView.getMechName(startMechId);
+                TouchHelper.showTouchIcon(event.originalEvent, mechName);
                 TouchHelper.isTouchDragging = true;
             }
             else {
@@ -13744,9 +13754,9 @@ var MechViewMechPanel;
             else {
                 console.warn(Error(`Touch end null mechId: src: ${srcMechId} dest: ${dropMechId}`));
             }
+            TouchHelper.hideTouchIcon(event.originalEvent);
             TouchHelper.isTouchDragging = false;
             TouchHelper.currDropTarget = null;
-            //TODO: Handle drop
         }
         static touchCancelHandler(event) {
             if (!TouchHelper.isTouchDragging) {
@@ -13761,6 +13771,7 @@ var MechViewMechPanel;
             }
             let touchEvent = event.originalEvent;
             touchEvent.preventDefault();
+            TouchHelper.moveTouchIcon(touchEvent);
             let touch = touchEvent.touches[0];
             let touchTargetElem = document.elementFromPoint(touch.clientX, touch.clientY);
             let prevDropTargetMechId = TouchHelper.findMechId(TouchHelper.currDropTarget);
@@ -13789,15 +13800,16 @@ var MechViewMechPanel;
             }
             return null;
         }
-        //TODO: positioning of touchIcon is still erratic and interferes with the touchMove
-        //handler. See what causes the problem.
-        static showTouchIcon(event, element, mechName) {
+        static showTouchIcon(event, mechName) {
             if (TouchHelper.touchIcon) {
                 $(TouchHelper.touchIcon).remove();
             }
+            //NOTE: attach touchIcon to body. 'fixed' position doesn't work well when hovering over the 
+            //source mechpanel element (it acts as relative in that case)
+            let bodyJQ = $("body");
             TouchHelper.touchIcon = MechViewWidgets.cloneTemplate("touchmove-icon-template");
             let touchIconJQ = $(TouchHelper.touchIcon)
-                .appendTo(element);
+                .appendTo(bodyJQ);
             touchIconJQ.find(".touchStartItem").text(mechName);
             TouchHelper.moveTouchIcon(event);
         }
