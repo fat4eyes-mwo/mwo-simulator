@@ -863,6 +863,16 @@ namespace MechViewMechPanel {
           .on("touchend", TouchHelper.touchEndHandler)
           .on("touchcancel", TouchHelper.touchCancelHandler)
           .on("touchmove", TouchHelper.touchMoveHandler);
+      //NOTE: using these touch handlers that do nothing still causes the slowdown on chrome on android. 
+      //Do a remote debug to see what's eating the cycles
+      // mechPanelDiv.addEventListener("touchstart", TouchHelper.emptyHandler, false);
+      // mechPanelDiv.addEventListener("touchend", TouchHelper.emptyHandler, false);
+      // mechPanelDiv.addEventListener("touchcancel", TouchHelper.emptyHandler, false);
+      // mechPanelDiv.addEventListener("touchmove", TouchHelper.emptyHandler, false);
+    }
+
+    private static emptyHandler(this: Element, event : Event) : void {
+      return;
     }
 
     private static readonly TouchIconId = "touchMoveIcon";
