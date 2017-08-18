@@ -144,7 +144,7 @@ namespace MechModelView {
   var updatePaperDoll = function(mech : Mech) : void {
     let mechId = mech.getMechId();
     let mechHealth = mech.getMechState().mechHealth;
-    for (let mechComponentHealth of mechHealth.componentHealth) {
+    for (let mechComponentHealth of mechHealth.componentHealthList) {
       let location = mechComponentHealth.location;
       let armorPercent = Number(mechComponentHealth.armor) / Number(mechComponentHealth.maxArmor);
       let structurePercent = Number(mechComponentHealth.structure) / Number(mechComponentHealth.maxStructure);
@@ -156,7 +156,7 @@ namespace MechModelView {
 
   var updateMechHealthNumbers = function (mech : Mech) : void {
     let mechHealth = mech.getMechState().mechHealth;
-    for (let mechComponentHealth of mechHealth.componentHealth) {
+    for (let mechComponentHealth of mechHealth.componentHealthList) {
       let mechHealthNumbers = MechViewMechPanel.MechHealthNumbers.getMechHealthNumbers(mech.getMechId());
       mechHealthNumbers.updateMechHealthNumbers(
                             {

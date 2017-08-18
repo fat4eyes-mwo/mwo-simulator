@@ -175,8 +175,6 @@ namespace MechViewRouter {
           });
       });
 
-    //TODO: See if the state bookkeeping (isLoading and prevstatehash) can be
-    //put in an 'always' block in this function
     return loadStateThenMechsPromise
         .then(function(data) {
           isLoading = false;

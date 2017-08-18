@@ -143,14 +143,14 @@ namespace MechModel  {
   //http://mwomercs.com/forums/topic/176345-understanding-damage/
   //TODO: Find a non-random way to simulate critical hits
   class MechHealth {
-    componentHealth : ComponentHealth[];
+    componentHealthList : ComponentHealth[];
     //Component -> ComponentHealth
     componentHealthMap : {[index : string] : ComponentHealth};
-    constructor(componentHealth : ComponentHealth[]) {
+    constructor(componentHealthList : ComponentHealth[]) {
       //TODO: try to get rid of this componentHealth list
-      this.componentHealth = componentHealth; //[ComponentHealth...]
+      this.componentHealthList = componentHealthList; //[ComponentHealth...]
       this.componentHealthMap = {};
-      for (let component of componentHealth) {
+      for (let component of componentHealthList) {
         this.componentHealthMap[component.location] = component;
       }
     }
@@ -165,21 +165,21 @@ namespace MechModel  {
     }
     totalCurrHealth() : number {
       let ret = 0;
-      for (let componentHealthEntry of this.componentHealth) {
+      for (let componentHealthEntry of this.componentHealthList) {
         ret = Number(ret) + componentHealthEntry.totalCurrHealth();
       }
       return ret;
     }
     totalMaxHealth() : number {
       let ret = 0;
-      for (let componentHealthEntry of this.componentHealth) {
+      for (let componentHealthEntry of this.componentHealthList) {
         ret = Number(ret) + componentHealthEntry.totalMaxHealth();
       }
       return ret;
     }
     clone() : MechHealth {
       let newComponentHealth : ComponentHealth[] = [];
-      for (let componentHealthEntry of this.componentHealth) {
+      for (let componentHealthEntry of this.componentHealthList) {
         newComponentHealth.push(componentHealthEntry.clone());
       }
       return new MechHealth(newComponentHealth);

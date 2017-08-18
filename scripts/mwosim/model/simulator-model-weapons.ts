@@ -203,7 +203,6 @@ namespace MechModelWeapons {
     weaponCycle : WeaponCycle;
     cooldownLeft : number;
     volleyDelayLeft : number;
-    //TODO: see if these fields can be pushed to subclasses without too much method duplication
     durationLeft : number;
     jamLeft : number;
     spoolupLeft : number;

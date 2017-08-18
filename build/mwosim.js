@@ -10020,11 +10020,11 @@ var MechModel;
     //http://mwomercs.com/forums/topic/176345-understanding-damage/
     //TODO: Find a non-random way to simulate critical hits
     class MechHealth {
-        constructor(componentHealth) {
+        constructor(componentHealthList) {
             //TODO: try to get rid of this componentHealth list
-            this.componentHealth = componentHealth; //[ComponentHealth...]
+            this.componentHealthList = componentHealthList; //[ComponentHealth...]
             this.componentHealthMap = {};
-            for (let component of componentHealth) {
+            for (let component of componentHealthList) {
                 this.componentHealthMap[component.location] = component;
             }
         }
@@ -10039,21 +10039,21 @@ var MechModel;
         }
         totalCurrHealth() {
             let ret = 0;
-            for (let componentHealthEntry of this.componentHealth) {
+            for (let componentHealthEntry of this.componentHealthList) {
                 ret = Number(ret) + componentHealthEntry.totalCurrHealth();
             }
             return ret;
         }
         totalMaxHealth() {
             let ret = 0;
-            for (let componentHealthEntry of this.componentHealth) {
+            for (let componentHealthEntry of this.componentHealthList) {
                 ret = Number(ret) + componentHealthEntry.totalMaxHealth();
             }
             return ret;
         }
         clone() {
             let newComponentHealth = [];
-            for (let componentHealthEntry of this.componentHealth) {
+            for (let componentHealthEntry of this.componentHealthList) {
                 newComponentHealth.push(componentHealthEntry.clone());
             }
             return new MechHealth(newComponentHealth);
@@ -11798,7 +11798,7 @@ var MechModelView;
     var updatePaperDoll = function (mech) {
         let mechId = mech.getMechId();
         let mechHealth = mech.getMechState().mechHealth;
-        for (let mechComponentHealth of mechHealth.componentHealth) {
+        for (let mechComponentHealth of mechHealth.componentHealthList) {
             let location = mechComponentHealth.location;
             let armorPercent = Number(mechComponentHealth.armor) / Number(mechComponentHealth.maxArmor);
             let structurePercent = Number(mechComponentHealth.structure) / Number(mechComponentHealth.maxStructure);
@@ -11809,7 +11809,7 @@ var MechModelView;
     };
     var updateMechHealthNumbers = function (mech) {
         let mechHealth = mech.getMechState().mechHealth;
-        for (let mechComponentHealth of mechHealth.componentHealth) {
+        for (let mechComponentHealth of mechHealth.componentHealthList) {
             let mechHealthNumbers = MechViewMechPanel.MechHealthNumbers.getMechHealthNumbers(mech.getMechId());
             mechHealthNumbers.updateMechHealthNumbers({
                 location: mechComponentHealth.location,
@@ -14123,8 +14123,6 @@ var MechViewRouter;
                 return mechLoadoutData;
             });
         });
-        //TODO: See if the state bookkeeping (isLoading and prevstatehash) can be
-        //put in an 'always' block in this function
         return loadStateThenMechsPromise
             .then(function (data) {
             isLoading = false;
@@ -15060,7 +15058,7 @@ var MechTest;
                 for (let mech of MechModel.getMechTeam(team)) {
                     let mechState = mech.getMechState();
                     //random component health
-                    for (let mechComponentHealth of mechState.mechHealth.componentHealth) {
+                    for (let mechComponentHealth of mechState.mechHealth.componentHealthList) {
                         mechComponentHealth.armor = Math.random() * mechComponentHealth.maxArmor;
                         mechComponentHealth.structure = Math.random() * mechComponentHealth.maxStructure;
                     }

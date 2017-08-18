@@ -123,7 +123,7 @@ namespace MechTest {
         for (let mech of MechModel.getMechTeam(team)) {
           let mechState = mech.getMechState();
           //random component health
-          for (let mechComponentHealth of mechState.mechHealth.componentHealth) {
+          for (let mechComponentHealth of mechState.mechHealth.componentHealthList) {
             mechComponentHealth.armor = Math.random() * mechComponentHealth.maxArmor;
             mechComponentHealth.structure = Math.random() * mechComponentHealth.maxStructure;
           }
