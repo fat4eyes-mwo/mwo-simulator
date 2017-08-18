@@ -1390,7 +1390,7 @@ a:hover {
 
 .touchMoveIcon {
   position: fixed;
-  transform: translateY(-50px) translateX(-50%);
+  transform: translateY(-100px) translateX(-50%);
   z-index: 100;
   color: gold;
   font-weight: bold;
