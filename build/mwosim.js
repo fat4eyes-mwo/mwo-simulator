@@ -11811,13 +11811,14 @@ var MechModelView;
         let mechHealth = mech.getMechState().mechHealth;
         for (let mechComponentHealth of mechHealth.componentHealthList) {
             let mechHealthNumbers = MechViewMechPanel.MechHealthNumbers.getMechHealthNumbers(mech.getMechId());
-            mechHealthNumbers.updateMechHealthNumbers({
+            let update = {
                 location: mechComponentHealth.location,
                 armor: mechComponentHealth.armor,
                 structure: mechComponentHealth.structure,
                 maxArmor: mechComponentHealth.maxArmor,
                 maxStructure: mechComponentHealth.maxStructure
-            });
+            };
+            mechHealthNumbers.updateMechHealthNumbers(update);
         }
     };
     var updateMechStatus = function (mech) {
@@ -13318,7 +13319,8 @@ var MechViewMechPanel;
             //drag and drop handlers
             DragAndDropHelper.addDragAndDropHandlers(mechPanelDiv);
             //touch handlers
-            TouchHelper.addTouchHandlers(mechPanelDiv);
+            //TODO: Disabled for touchhandler slowdown workaround (touch handlers are added in toggleMoveMech)
+            // TouchHelper.addTouchHandlers(mechPanelDiv);
             //Mech stats
             let mechSummaryHealthId = MechPanel.mechSummaryHealthPanelId(mechId);
             mechPanelJQ.find("[class~='statusPanel'] [class~='mechSummaryHealthText']")
@@ -13493,32 +13495,53 @@ var MechViewMechPanel;
             let mechPanelJQ = $(mechPanelDiv);
             let moveIconSVG = MechViewWidgets.cloneTemplate("move-icon-template");
             let mechMoveButtonDivId = MechPanel.moveMechButtonId(mechId);
-            if (!MechPanel.moveMechButtonHandler) {
-                MechPanel.moveMechButtonHandler = this.createMoveMechButtonHandler();
-            }
             mechPanelJQ.find("[class~='titlePanel'] [class~='moveMechButton']")
                 .attr("id", mechMoveButtonDivId)
                 .attr("data-mech-id", mechId)
                 .attr("data-dragenabled", "false")
                 .append(moveIconSVG)
-                .click(MechPanel.moveMechButtonHandler);
+                .click(this.createMoveMechButtonHandler());
         }
-        toggleMoveMech(mechId) {
-            let moveMechButtonJQ = $("#" + MechPanel.moveMechButtonId(mechId));
-            let dragEnabled = moveMechButtonJQ.attr("data-dragenabled") === "true";
-            let mechPanelDivId = MechPanel.mechPanelId(mechId);
-            let mechPanelJQ = $("#" + mechPanelDivId);
+        isDragEnabled() {
+            let moveMechButtonJQ = $(this.domElement).find(".moveMechButton");
+            return moveMechButtonJQ.attr("data-dragenabled") === "true";
+        }
+        toggleMoveMech(mechId, updateTouchHandlers = true) {
+            let moveMechButtonJQ = $(this.domElement).find(".moveMechButton");
+            let dragEnabled = this.isDragEnabled();
+            let mechPanelJQ = $(this.domElement);
             dragEnabled = !dragEnabled; //toggle
             moveMechButtonJQ.attr("data-dragenabled", String(dragEnabled));
+            let thisMechPanel = this;
             if (dragEnabled) {
                 mechPanelJQ
                     .attr("draggable", "true")
                     .addClass("dragging");
+                $(".mechPanel").map(function (index, domElement) {
+                    let otherMechId = $(this).attr("data-mech-id");
+                    let otherMechPanel = MechPanel.getMechPanel(otherMechId);
+                    if (otherMechPanel && otherMechPanel.isDragEnabled() && otherMechPanel !== thisMechPanel) {
+                        otherMechPanel.toggleMoveMech(otherMechId, false);
+                    }
+                    //TODO: Workaround for slowdown caused by touchhandlers: Only put in touch handlers when
+                    //a mechpanel is being dragged
+                    if (updateTouchHandlers) {
+                        TouchHelper.addTouchHandlers(this);
+                    }
+                    return this;
+                });
             }
             else {
                 mechPanelJQ
                     .attr("draggable", "false")
                     .removeClass("dragging");
+                //TODO: Touchpanel slowdown workaround
+                $(".mechPanel").map(function (index, domElement) {
+                    if (updateTouchHandlers) {
+                        TouchHelper.removeTouchHandlers(this);
+                    }
+                    return this;
+                });
             }
         }
         createMoveMechButtonHandler() {
@@ -13722,6 +13745,13 @@ var MechViewMechPanel;
             // mechPanelDiv.addEventListener("touchend", TouchHelper.emptyHandler, false);
             // mechPanelDiv.addEventListener("touchcancel", TouchHelper.emptyHandler, false);
             // mechPanelDiv.addEventListener("touchmove", TouchHelper.emptyHandler, false);
+        }
+        static removeTouchHandlers(mechPanelDiv) {
+            $(mechPanelDiv)
+                .off("touchstart", TouchHelper.touchStartHandler)
+                .off("touchend", TouchHelper.touchEndHandler)
+                .off("touchcancel", TouchHelper.touchCancelHandler)
+                .off("touchmove", TouchHelper.touchMoveHandler);
         }
         static emptyHandler(event) {
             return;

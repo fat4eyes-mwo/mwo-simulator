@@ -432,7 +432,8 @@ namespace MechViewMechPanel {
       DragAndDropHelper.addDragAndDropHandlers(mechPanelDiv);
 
       //touch handlers
-      TouchHelper.addTouchHandlers(mechPanelDiv);
+      //TODO: Disabled for touchhandler slowdown workaround (touch handlers are added in toggleMoveMech)
+      // TouchHelper.addTouchHandlers(mechPanelDiv);
 
       //Mech stats
       let mechSummaryHealthId = MechPanel.mechSummaryHealthPanelId(mechId);
@@ -609,32 +610,54 @@ namespace MechViewMechPanel {
       let mechPanelJQ = $(mechPanelDiv);
       let moveIconSVG = MechViewWidgets.cloneTemplate("move-icon-template");
       let mechMoveButtonDivId = MechPanel.moveMechButtonId(mechId);
-      if (!MechPanel.moveMechButtonHandler) {
-        MechPanel.moveMechButtonHandler = this.createMoveMechButtonHandler();
-      }
       mechPanelJQ.find("[class~='titlePanel'] [class~='moveMechButton']")
         .attr("id", mechMoveButtonDivId)
         .attr("data-mech-id", mechId)
         .attr("data-dragenabled", "false")
         .append(moveIconSVG)
-        .click(MechPanel.moveMechButtonHandler);
+        .click(this.createMoveMechButtonHandler());
     }
 
-    toggleMoveMech(mechId : string) : void {
-      let moveMechButtonJQ = $("#" + MechPanel.moveMechButtonId(mechId));
-      let dragEnabled = moveMechButtonJQ.attr("data-dragenabled") === "true";
-      let mechPanelDivId = MechPanel.mechPanelId(mechId);
-      let mechPanelJQ = $("#" + mechPanelDivId);
+    isDragEnabled() : boolean {
+      let moveMechButtonJQ = $(this.domElement).find(".moveMechButton");
+      return moveMechButtonJQ.attr("data-dragenabled") === "true";
+    }
+
+    toggleMoveMech(mechId : string, updateTouchHandlers = true) : void {
+      let moveMechButtonJQ = $(this.domElement).find(".moveMechButton");
+      let dragEnabled = this.isDragEnabled();
+      let mechPanelJQ = $(this.domElement);
       dragEnabled = !dragEnabled; //toggle
       moveMechButtonJQ.attr("data-dragenabled", String(dragEnabled));
+      let thisMechPanel = this;
       if (dragEnabled) {
         mechPanelJQ
           .attr("draggable", "true")
           .addClass("dragging");
+        $(".mechPanel").map(function(this : HTMLElement, index : number, domElement : HTMLElement) {
+          let otherMechId = $(this).attr("data-mech-id");
+          let otherMechPanel = MechPanel.getMechPanel(otherMechId);
+          if (otherMechPanel && otherMechPanel.isDragEnabled() && otherMechPanel!==thisMechPanel) {
+            otherMechPanel.toggleMoveMech(otherMechId, false);
+          }
+        //TODO: Workaround for slowdown caused by touchhandlers: Only put in touch handlers when
+        //a mechpanel is being dragged
+        if (updateTouchHandlers) {
+            TouchHelper.addTouchHandlers(this);
+          }
+          return this;
+        });
       } else {
         mechPanelJQ
           .attr("draggable", "false")
           .removeClass("dragging");
+        //TODO: Touchpanel slowdown workaround
+        $(".mechPanel").map(function(this : HTMLElement, index : number, domElement : HTMLElement) {
+          if (updateTouchHandlers) {
+            TouchHelper.removeTouchHandlers(this);
+          }
+          return this;
+        });
       }
     }
 
@@ -645,7 +668,6 @@ namespace MechViewMechPanel {
         mechPanel.toggleMoveMech(mechId);
       }
     }
-    private static moveMechButtonHandler : () => void; //initialized on first addMoveMechButton call
 
     private addMechDetailsButton(mechId : string, mechPanelDiv : Element) : void {
         let mechPanelJQ = $(mechPanelDiv);
@@ -869,6 +891,14 @@ namespace MechViewMechPanel {
       // mechPanelDiv.addEventListener("touchend", TouchHelper.emptyHandler, false);
       // mechPanelDiv.addEventListener("touchcancel", TouchHelper.emptyHandler, false);
       // mechPanelDiv.addEventListener("touchmove", TouchHelper.emptyHandler, false);
+    }
+
+    public static removeTouchHandlers(mechPanelDiv : Element) : void {
+      $(mechPanelDiv)
+        .off("touchstart", TouchHelper.touchStartHandler)
+        .off("touchend", TouchHelper.touchEndHandler)
+        .off("touchcancel", TouchHelper.touchCancelHandler)
+        .off("touchmove", TouchHelper.touchMoveHandler);
     }
 
     private static emptyHandler(this: Element, event : Event) : void {
