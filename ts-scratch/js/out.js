@@ -240,9 +240,32 @@ System.register("test-touch", [], function (exports_6, context_6) {
         }
     };
 });
-System.register("main", ["moduleA", "moduleB", "libtest/moduleC", "storedElemTest", "test-touch"], function (exports_7, context_7) {
+System.register("test-weakmap", [], function (exports_7, context_7) {
     "use strict";
     var __moduleName = context_7 && context_7.id;
+    var WeakmapTest;
+    return {
+        setters: [],
+        execute: function () {
+            (function (WeakmapTest) {
+                WeakmapTest.testWeakmap = function () {
+                    let weakMap = new WeakMap();
+                    let key1 = "foo";
+                    weakMap.set(key1, 1);
+                    let key2 = "";
+                    key2 += "foo";
+                    weakMap.set(key2, 2);
+                    console.log(`key ${key1} val ${weakMap.get(key1)}`);
+                    console.log(`key ${key2} val ${weakMap.get(key2)}`);
+                };
+            })(WeakmapTest || (WeakmapTest = {}));
+            exports_7("WeakmapTest", WeakmapTest);
+        }
+    };
+});
+System.register("main", ["moduleA", "moduleB", "libtest/moduleC", "storedElemTest", "test-touch", "test-weakmap"], function (exports_8, context_8) {
+    "use strict";
+    var __moduleName = context_8 && context_8.id;
     function main() {
         ModuleA.setA("a1");
         ModuleA2.setA("a2"); //Should set the same variable a in moduleA.js
@@ -252,9 +275,10 @@ System.register("main", ["moduleA", "moduleB", "libtest/moduleC", "storedElemTes
             ` ModuleB.getAFromB()=${ModuleB.getAfromB()}`);
         StoreElemTest.testStoredElem();
         test_touch_1.TouchTest.touchTest();
+        test_weakmap_1.WeakmapTest.testWeakmap();
     }
-    exports_7("main", main);
-    var ModuleA, ModuleA2, ModuleB, ModuleC, StoreElemTest, test_touch_1, foo;
+    exports_8("main", main);
+    var ModuleA, ModuleA2, ModuleB, ModuleC, StoreElemTest, test_touch_1, test_weakmap_1, foo;
     return {
         setters: [
             function (ModuleA_2) {
@@ -272,6 +296,9 @@ System.register("main", ["moduleA", "moduleB", "libtest/moduleC", "storedElemTes
             },
             function (test_touch_1_1) {
                 test_touch_1 = test_touch_1_1;
+            },
+            function (test_weakmap_1_1) {
+                test_weakmap_1 = test_weakmap_1_1;
             }
         ],
         execute: function () {
