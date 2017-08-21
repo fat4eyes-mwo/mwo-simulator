@@ -2,6 +2,15 @@ import * as Rx from "../node_modules/rxjs/Rx";
 
 export namespace TestObservables {
 
+  let functionObserver = function(observer : Rx.Observer<number>) {
+    setTimeout(() => {
+      observer.next(2);
+      observer.next(4);
+      observer.complete();
+      
+    }, 1000);
+  }
+
   var eventQueue: number[];
   var initEventQueue = function () {
     const INIT_MAX = 10000;
@@ -18,18 +27,10 @@ export namespace TestObservables {
     let observable = Rx.default.Observable;
     initEventQueue();
 
-
     for (let OBSERVERS = 1; OBSERVERS <=20; OBSERVERS++) {
-      
-      let eventQueueObservable = observable.create(function(observer : Rx.Observer<number>) {
-        setTimeout(() => {
-          console.time(`Rx_${OBSERVERS}_observer`);
-          observer.next(2);
-          observer.next(4);
-          observer.complete();
-          console.timeEnd(`Rx_${OBSERVERS}_observer`);
-        }, 1000);
-      })
+      let timerName = `Rx_${OBSERVERS}x_observer`;
+      console.time(timerName);
+      let eventQueueObservable = observable.from(eventQueue)
         .map(function (x: number) { return x; });
       
       //NOTE: All subscribed functions WILL NOT BE GARBAGE COLLECTED until they unsubscribe
@@ -39,9 +40,11 @@ export namespace TestObservables {
         eventQueueObservable
         .subscribe(function (x: number) {
           let y= x * ctr;
-          console.log(`Observer#${ctr} : ${y}`);
+          return y;
+          // console.log(`Observer#${ctr} : ${y}`);
         });
       }
+      console.timeEnd(timerName);
     }
   }
 }

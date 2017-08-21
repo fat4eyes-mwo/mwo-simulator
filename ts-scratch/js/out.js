@@ -252,6 +252,13 @@ System.register("test-observables", ["../node_modules/rxjs/Rx"], function (expor
         ],
         execute: function () {
             (function (TestObservables) {
+                let functionObserver = function (observer) {
+                    setTimeout(() => {
+                        observer.next(2);
+                        observer.next(4);
+                        observer.complete();
+                    }, 1000);
+                };
                 var eventQueue;
                 var initEventQueue = function () {
                     const INIT_MAX = 10000;
@@ -261,26 +268,28 @@ System.register("test-observables", ["../node_modules/rxjs/Rx"], function (expor
                     }
                 };
                 TestObservables.testObservables = function () {
+                    //TODO: The way you import Rxjs is wrong somehow, it puts the contents of the module in
+                    //Rx.default instead of Rx itself. Compiling this produces an error but the generated code
+                    //actually works
                     let observable = Rx.default.Observable;
                     initEventQueue();
                     for (let OBSERVERS = 1; OBSERVERS <= 20; OBSERVERS++) {
-                        let eventQueueObservable = observable.create(function (observer) {
-                            setTimeout(() => {
-                                console.time(`Rx_${OBSERVERS}_observer`);
-                                observer.next(2);
-                                observer.next(4);
-                                observer.complete();
-                                console.timeEnd(`Rx_${OBSERVERS}_observer`);
-                            }, 1000);
-                        })
+                        let timerName = `Rx_${OBSERVERS}x_observer`;
+                        console.time(timerName);
+                        let eventQueueObservable = observable.from(eventQueue)
                             .map(function (x) { return x; });
+                        //NOTE: All subscribed functions WILL NOT BE GARBAGE COLLECTED until they unsubscribe
+                        //It may be a better choice to use a standard event queue with a weakmap to observers
+                        //so you don't have to do explicit unsubscribes when a UI component is deleted.
                         for (let ctr = 0; ctr < OBSERVERS; ctr++) {
                             eventQueueObservable
                                 .subscribe(function (x) {
                                 let y = x * ctr;
-                                console.log(`Observer#${ctr} : ${y}`);
+                                return y;
+                                // console.log(`Observer#${ctr} : ${y}`);
                             });
                         }
+                        console.timeEnd(timerName);
                     }
                 };
             })(TestObservables || (TestObservables = {}));
