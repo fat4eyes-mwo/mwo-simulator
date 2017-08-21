@@ -4,7 +4,10 @@
     To replicate: load page in portrait orientation, and scroll down by touching 
     one of the mech panels (triggering a touch handler). Animation slows down considerably
     compared to a version with touch handlers disabled.
-- event queue and listeners (maybe try rxjs)
+    Current workaround: Only put in touchhandlers when a mechpanel is being moved. Seems to solve
+    the performance issue.
+- event queue and listeners 
+    (NOTE: rxjs is good performance wise, but not so good wrt garbage collection (requires explicit unsubscribe))
 - Mech details display (weapon damage summary)
 
 - See if it's worth moving all the added data to a single json file and fetching it at runtime.
