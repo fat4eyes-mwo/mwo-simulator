@@ -65,15 +65,15 @@
 
 The project uses Typescript, and the project build configuration `tsconfig.json` is in the root project directory. The transpiled `.js` file is outputted in `build/`.
 
-For those interested in looking at the code, the most interesting stuff can be found in `scripts/simulator-logic.ts`. It contains the simulation loop and most of the mechanics of the simulation. The main loop function is `step()`.
+For those interested in looking at the code, the most interesting stuff can be found in `scripts/model/simulator-logic.ts`. It contains the simulation loop and most of the mechanics of the simulation. The main loop function is `step()`.
 
-The definition of the data structures used by the simulation are in `scripts/simulator-model*.ts`. The important bits are in `class` declarations, most of the other code there is just data conversion from smurfy format to the one used by the simulation.
+The definition of the data structures used by the simulation are in `scripts/model/simulator-model*.ts`. The important bits are in `class` declarations, most of the other code there is just data conversion from smurfy format to the one used by the simulation.
 
-The weapon fire patterns (which determine how mechs choose what weapons to fire) are in `scripts/simulator-firepattern.ts`. Target component patterns (which determine what components a mech targets) are in `scripts/simulator-componenttarget.ts`. Target mech patterns (which enemy mech to target) are in `scripts/simulator-mechtarget.ts`. And weapon accuracy patterns (which determine how a weapon or mech spreads damage) are in `scripts/simulator-accuracypattern.ts`. Read the comments in those files if you want to try adding your own patterns and have them appear in the UI.
+The weapon fire patterns (which determine how mechs choose what weapons to fire) are in `scripts/model/simulator-firepattern.ts`. Target component patterns (which determine what components a mech targets) are in `scripts/model/simulator-componenttarget.ts`. Target mech patterns (which enemy mech to target) are in `scripts/model/simulator-mechtarget.ts`. And weapon accuracy patterns (which determine how a weapon or mech spreads damage) are in `scripts/simulator-accuracypattern.ts`. Read the comments in those files if you want to try adding your own patterns and have them appear in the UI.
 
-The UI code can be found in the files `scripts/simulator-view*.ts`. At the moment I woudn't suggest looking at these as they're a bit of a mess, and a big refactoring is coming soon.
+The UI code can be found in the files `scripts/view/simulator-view*.ts`. At the moment I woudn't suggest looking at these as they're a bit of a mess, and a big refactoring is coming soon.
 
-The main entry point of the program is in `scripts/simulator.ts`.
+The main entry point of the program is in `scripts/main/simulator.ts`.
 
 # Update Info
 
