@@ -7,9 +7,15 @@
     <link rel="stylesheet" href="css/scratch.css">
     <script src="../scripts/lib/jquery-3.2.1.min.js"></script>
     <script src="../scripts/lib/system.js"></script>
+    <!--See https://github.com/systemjs/systemjs/blob/master/docs/config-api.md#packages for system.js package doc-->
     <script>
       System.config({
-        baseURL : "/"
+        "baseURL" : "/",
+        packages: {
+            '../node_modules/rxjs': {
+              defaultExtension: 'js',
+            }
+          }
       });
       System.import("./js/out.js")
         .then(() => {

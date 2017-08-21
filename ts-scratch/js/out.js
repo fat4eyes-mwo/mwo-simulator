@@ -240,9 +240,57 @@ System.register("test-touch", [], function (exports_6, context_6) {
         }
     };
 });
-System.register("main", ["moduleA", "moduleB", "libtest/moduleC", "storedElemTest", "test-touch"], function (exports_7, context_7) {
+System.register("test-observables", ["../node_modules/rxjs/Rx"], function (exports_7, context_7) {
     "use strict";
     var __moduleName = context_7 && context_7.id;
+    var Rx, TestObservables;
+    return {
+        setters: [
+            function (Rx_1) {
+                Rx = Rx_1;
+            }
+        ],
+        execute: function () {
+            (function (TestObservables) {
+                var eventQueue;
+                var initEventQueue = function () {
+                    const INIT_MAX = 10000;
+                    eventQueue = new Array(INIT_MAX);
+                    for (let i = 0; i < INIT_MAX; i++) {
+                        eventQueue[i] = i;
+                    }
+                };
+                TestObservables.testObservables = function () {
+                    let observable = Rx.default.Observable;
+                    initEventQueue();
+                    for (let OBSERVERS = 1; OBSERVERS <= 20; OBSERVERS++) {
+                        let eventQueueObservable = observable.create(function (observer) {
+                            setTimeout(() => {
+                                console.time(`Rx_${OBSERVERS}_observer`);
+                                observer.next(2);
+                                observer.next(4);
+                                observer.complete();
+                                console.timeEnd(`Rx_${OBSERVERS}_observer`);
+                            }, 1000);
+                        })
+                            .map(function (x) { return x; });
+                        for (let ctr = 0; ctr < OBSERVERS; ctr++) {
+                            eventQueueObservable
+                                .subscribe(function (x) {
+                                let y = x * ctr;
+                                console.log(`Observer#${ctr} : ${y}`);
+                            });
+                        }
+                    }
+                };
+            })(TestObservables || (TestObservables = {}));
+            exports_7("TestObservables", TestObservables);
+        }
+    };
+});
+System.register("main", ["moduleA", "moduleB", "libtest/moduleC", "storedElemTest", "test-touch", "test-observables"], function (exports_8, context_8) {
+    "use strict";
+    var __moduleName = context_8 && context_8.id;
     function main() {
         ModuleA.setA("a1");
         ModuleA2.setA("a2"); //Should set the same variable a in moduleA.js
@@ -252,9 +300,10 @@ System.register("main", ["moduleA", "moduleB", "libtest/moduleC", "storedElemTes
             ` ModuleB.getAFromB()=${ModuleB.getAfromB()}`);
         StoreElemTest.testStoredElem();
         test_touch_1.TouchTest.touchTest();
+        test_observables_1.TestObservables.testObservables();
     }
-    exports_7("main", main);
-    var ModuleA, ModuleA2, ModuleB, ModuleC, StoreElemTest, test_touch_1, foo;
+    exports_8("main", main);
+    var ModuleA, ModuleA2, ModuleB, ModuleC, StoreElemTest, test_touch_1, test_observables_1, foo;
     return {
         setters: [
             function (ModuleA_2) {
@@ -272,6 +321,9 @@ System.register("main", ["moduleA", "moduleB", "libtest/moduleC", "storedElemTes
             },
             function (test_touch_1_1) {
                 test_touch_1 = test_touch_1_1;
+            },
+            function (test_observables_1_1) {
+                test_observables_1 = test_observables_1_1;
             }
         ],
         execute: function () {

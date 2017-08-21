@@ -7,6 +7,7 @@ import * as ModuleB from "moduleB";
 import * as ModuleC from "libtest/moduleC";
 import * as StoreElemTest from "storedElemTest";
 import {TouchTest} from "test-touch";
+import {TestObservables} from "test-observables";
 
 let foo : ModuleA.TypeA;
 export function main() {
@@ -19,6 +20,8 @@ export function main() {
   StoreElemTest.testStoredElem();
   
   TouchTest.touchTest();
+
+  TestObservables.testObservables();
 }
 
 $(document).ready(main);
