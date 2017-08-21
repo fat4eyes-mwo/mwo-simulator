@@ -5,6 +5,7 @@ export namespace WeakmapTest {
     let key1 = "foo";
     weakMap.set(key1, 1);
 
+    //Weakmaps only accept objects as keys. bummer.
     let key2 = "";
     key2 += "foo";
     weakMap.set(key2, 2);
