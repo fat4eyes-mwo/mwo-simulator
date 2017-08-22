@@ -252,6 +252,7 @@ System.register("test-weakmap", [], function (exports_7, context_7) {
                     let weakMap = new WeakMap();
                     let key1 = "foo";
                     weakMap.set(key1, 1);
+                    //Weakmaps only accept objects as keys. bummer.
                     let key2 = "";
                     key2 += "foo";
                     weakMap.set(key2, 2);
