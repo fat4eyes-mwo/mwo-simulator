@@ -28,7 +28,7 @@ namespace MechViewSimSettings {
       }
     });
     rangeJQ.on("keydown", (event) => {
-      if (event.which === 13 ) { //enter key
+      if (event.key.toLocaleUpperCase() === "ENTER" ) { //enter key
         setRangeValue();
       }
     });
