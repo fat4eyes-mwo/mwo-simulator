@@ -66,6 +66,7 @@ armorresist_lt_additive	BASE ARMOR (LT)
 armorresist_ra_additive	BASE ARMOR (RA)
 armorresist_rl_additive	BASE ARMOR (RL)
 armorresist_rt_additive	BASE ARMOR (RT)
+atm_heat_multiplier	ATM HEAT
 atm_spread_multiplier	ATM SPREAD
 backfacetargetretentionrange_additive	TARGET RETENTION
 ballistic_cooldown_multiplier	BALLISTIC COOLDOWN
@@ -84,6 +85,7 @@ clanerppc_cooldown_multiplier	ER PPC COOLDOWN
 clanerppc_heat_multiplier	ER PPC HEAT GENERATION
 clanerppc_velocity_multiplier	CLAN ER PPC VELOCITY
 clangaussrifle_cooldown_multiplier	Clan Gauss Cooldown
+clanlaser_duration_multiplier	Clan Laser Cooldown
 clanlbxautocannon10_cooldown_multiplier	Clan LB-X10 Cooldown
 clanlrm20_cooldown_multiplier	Clan LRM20 Cooldown
 clanlrm20_spread_multiplier	Clan LRM20 Spread
@@ -91,7 +93,10 @@ clanlrm_cooldown_multiplier	Clan LRM Cooldown
 clanmachinegun_range_multiplier	MACHINE GUN RANGE
 clanmachinegun_rof_multiplier	MACHINE GUN ROF
 clanmediumpulselaser_heat_multiplier	Clan Medium Pulse Laser Heat
+clanmediumpulselaser_range_multiplier	Clan Medium Pulse Laser Range
 clannarcbeacon_range_additive	NARC BEACON RANGE
+clanppc_velocity_multiplier	Clan PPC Velocity
+clanpulselaser_heat_multiplier	Clan Pulse Laser Heat
 clansrm2_heat_multiplier	Clan SRM2 Heat
 clanstreaksrm_cooldown_multiplier	Clan Streak Cooldown
 clanultraautocannon2_heat_multiplier	Clan UAC2 Heat
@@ -115,6 +120,9 @@ flamer_rampdownduration_multiplier	FLAMER RAMPDOWN
 gaussextendedcharge_additive	GAUSS CHARGE
 heatdissipation_multiplier	Heat Dissipation
 heatloss_multiplier	RATE OF HEAT LOSS
+heavylaser_duration_multiplier	Heavy Laser Duration
+heavylaser_heat_multiplier	Heavy Laser Heat
+heavylaser_range_multiplier	Heavy Laser Range
 hillclimb_multiplier	HILL CLIMB
 increasedarmor_multiplier	ARMOR
 increasedstructure_multiplier	STRUCTURE
@@ -232,14 +240,16 @@ torso_yawangle_additive	Torso Yaw Angle
 torso_yawangle_multiplier	Torso Yaw Angle
 torso_yawspeed_multiplier	Torso Yaw Speed
 turnlerp_all_multiplier	TURN RATE
+turnrate_multiplier	TURN RATE
 uavcapacity_additive	UAV CAPACITY
 uavduration_additive	UAV DURATION
 uavrange_multiplier	UAV RANGE
 ultraautocannon20_cooldown_multiplier	@UI_QUIRK_ULTRAAUTOCANNON20_COOLDOWN_MULTIPLIER
+ultraautocannon20_jamchance_multiplier	UAC/20 JAM CHANCE
 ultraautocannon_cooldown_multiplier	UAC Cooldown
 ultraautocannon_jamchance_multiplier	UAC JAM CHANCE
 ultraautocannon_jamduration_multiplier	UAC JAM DURATION
 ultraautocannon_range_multiplier	UAC RANGE
 ultraautocannon_velocity_multiplier	UAC VELOCITY
 xpbonus_multiplier	XP Bonus
-numQuirks : 244
+simulator-test.ts:308 numQuirks : 254

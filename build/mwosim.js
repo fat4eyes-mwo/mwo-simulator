@@ -47,9 +47,9 @@ var AddedData;
         }
     };
 })(AddedData || (AddedData = {}));
-//Generated from Game/mechs/*.pak on Fri, 11 Aug 2017 16:35:03 GMT
+//Generated from Game/mechs/*.pak on Tue, 22 Aug 2017 01:59:53 GMT
 var AddedData;
-//Generated from Game/mechs/*.pak on Fri, 11 Aug 2017 16:35:03 GMT
+//Generated from Game/mechs/*.pak on Tue, 22 Aug 2017 01:59:53 GMT
 (function (AddedData) {
     AddedData._AddedOmnipodData = {
         "adr-prime": {
@@ -172,8 +172,13 @@ var AddedData;
                 },
                 {
                     "name": "turnlerp_all_multiplier",
-                    "value": 0.025,
+                    "value": 0.1,
                     "translated_name": "TURN RATE"
+                },
+                {
+                    "name": "missile_cooldown_multiplier",
+                    "value": -0.1,
+                    "translated_name": "MISSILE COOLDOWN"
                 }
             ]
         },
@@ -184,6 +189,16 @@ var AddedData;
                     "name": "xpbonus_multiplier",
                     "value": 0.025,
                     "translated_name": "XP Bonus"
+                },
+                {
+                    "name": "missile_cooldown_multiplier",
+                    "value": -0.1,
+                    "translated_name": "MISSILE COOLDOWN"
+                },
+                {
+                    "name": "energy_cooldown_multiplier",
+                    "value": -0.15,
+                    "translated_name": "ENERGY COOLDOWN"
                 }
             ]
         },
@@ -196,9 +211,14 @@ var AddedData;
                     "translated_name": "XP Bonus"
                 },
                 {
-                    "name": "torso_yawspeed_multiplier",
-                    "value": 0.03,
-                    "translated_name": "Torso Yaw Speed"
+                    "name": "ballistic_cooldown_multiplier",
+                    "value": -0.15,
+                    "translated_name": "BALLISTIC COOLDOWN"
+                },
+                {
+                    "name": "energy_cooldown_multiplier",
+                    "value": -0.1,
+                    "translated_name": "ENERGY COOLDOWN"
                 }
             ]
         },
@@ -212,13 +232,58 @@ var AddedData;
                 },
                 {
                     "name": "accellerp_all_multiplier",
-                    "value": 0.025,
+                    "value": 0.15,
                     "translated_name": "ACCELERATION RATE"
                 },
                 {
                     "name": "decellerp_all_multiplier",
-                    "value": 0.025,
+                    "value": 0.15,
                     "translated_name": "DECELERATION RATE"
+                },
+                {
+                    "name": "turnrate_multiplier",
+                    "value": 0.1,
+                    "translated_name": "TURN RATE"
+                }
+            ]
+        },
+        "ach-sh": {
+            "name": "ach-sh",
+            "setBonusQuirks": [
+                {
+                    "name": "xpbonus_multiplier",
+                    "value": 0.025,
+                    "translated_name": "XP Bonus"
+                },
+                {
+                    "name": "clanmachinegun_rof_multiplier",
+                    "value": 0.2,
+                    "translated_name": "MACHINE GUN ROF"
+                },
+                {
+                    "name": "missile_cooldown_multiplier",
+                    "value": -0.15,
+                    "translated_name": "MISSILE COOLDOWN"
+                }
+            ]
+        },
+        "ach-e": {
+            "name": "ach-e",
+            "setBonusQuirks": [
+                {
+                    "name": "turnlerp_all_multiplier",
+                    "value": 0.05,
+                    "translated_name": "TURN RATE"
+                },
+                {
+                    "name": "xpbonus_multiplier",
+                    "value": 0.025,
+                    "translated_name": "XP Bonus"
+                },
+                {
+                    "name": "clanmediumpulselaser_range_multiplier",
+                    "value": 0.05,
+                    "translated_name": "Clan Medium Pulse Laser Range"
                 }
             ]
         },
@@ -474,6 +539,21 @@ var AddedData;
                     "name": "xpbonus_multiplier",
                     "value": 0.025,
                     "translated_name": "XP Bonus"
+                },
+                {
+                    "name": "ballistic_cooldown_multiplier",
+                    "value": -0.1,
+                    "translated_name": "BALLISTIC COOLDOWN"
+                },
+                {
+                    "name": "energy_cooldown_multiplier",
+                    "value": -0.15,
+                    "translated_name": "ENERGY COOLDOWN"
+                },
+                {
+                    "name": "missile_cooldown_multiplier",
+                    "value": -0.1,
+                    "translated_name": "MISSILE COOLDOWN"
                 }
             ]
         },
@@ -484,6 +564,16 @@ var AddedData;
                     "name": "xpbonus_multiplier",
                     "value": 0.025,
                     "translated_name": "XP Bonus"
+                },
+                {
+                    "name": "ultraautocannon20_jamchance_multiplier",
+                    "value": -0.15,
+                    "translated_name": "UAC/20 JAM CHANCE"
+                },
+                {
+                    "name": "clanmachinegun_rof_multiplier",
+                    "value": 0.2,
+                    "translated_name": "MACHINE GUN ROF"
                 }
             ]
         },
@@ -494,12 +584,77 @@ var AddedData;
                     "name": "xpbonus_multiplier",
                     "value": 0.025,
                     "translated_name": "XP Bonus"
+                },
+                {
+                    "name": "accellerp_all_multiplier",
+                    "value": 0.1,
+                    "translated_name": "ACCELERATION RATE"
+                },
+                {
+                    "name": "decellerp_all_multiplier",
+                    "value": 0.1,
+                    "translated_name": "DECELERATION RATE"
+                },
+                {
+                    "name": "turnlerp_all_multiplier",
+                    "value": 0.1,
+                    "translated_name": "TURN RATE"
                 }
             ]
         },
         "ebj-c": {
             "name": "ebj-c",
             "setBonusQuirks": [
+                {
+                    "name": "xpbonus_multiplier",
+                    "value": 0.025,
+                    "translated_name": "XP Bonus"
+                },
+                {
+                    "name": "missile_spread_multiplier",
+                    "value": -0.05,
+                    "translated_name": "MISSILE SPREAD"
+                },
+                {
+                    "name": "ultraautocannon_jamchance_multiplier",
+                    "value": -0.2,
+                    "translated_name": "UAC JAM CHANCE"
+                }
+            ]
+        },
+        "ebj-ec": {
+            "name": "ebj-ec",
+            "setBonusQuirks": [
+                {
+                    "name": "ballistic_cooldown_multiplier",
+                    "value": -0.15,
+                    "translated_name": "BALLISTIC COOLDOWN"
+                },
+                {
+                    "name": "missile_cooldown_multiplier",
+                    "value": -0.1,
+                    "translated_name": "MISSILE COOLDOWN"
+                },
+                {
+                    "name": "xpbonus_multiplier",
+                    "value": 0.025,
+                    "translated_name": "XP Bonus"
+                }
+            ]
+        },
+        "ebj-d": {
+            "name": "ebj-d",
+            "setBonusQuirks": [
+                {
+                    "name": "erlaser_range_multiplier",
+                    "value": 0.05,
+                    "translated_name": "ER LASER RANGE"
+                },
+                {
+                    "name": "ultraautocannon_jamchance_multiplier",
+                    "value": -0.2,
+                    "translated_name": "UAC JAM CHANCE"
+                },
                 {
                     "name": "xpbonus_multiplier",
                     "value": 0.025,
@@ -514,6 +669,21 @@ var AddedData;
                     "name": "xpbonus_multiplier",
                     "value": 0.025,
                     "translated_name": "XP Bonus"
+                },
+                {
+                    "name": "clanmachinegun_rof_multiplier",
+                    "value": 0.2,
+                    "translated_name": "MACHINE GUN ROF"
+                },
+                {
+                    "name": "erlaser_heat_multiplier",
+                    "value": -0.1,
+                    "translated_name": "ER LASER HEAT GENERATION"
+                },
+                {
+                    "name": "energy_cooldown_multiplier",
+                    "value": -0.15,
+                    "translated_name": "ENERGY COOLDOWN"
                 }
             ]
         },
@@ -524,6 +694,21 @@ var AddedData;
                     "name": "xpbonus_multiplier",
                     "value": 0.025,
                     "translated_name": "XP Bonus"
+                },
+                {
+                    "name": "clanmachinegun_rof_multiplier",
+                    "value": 0.2,
+                    "translated_name": "MACHINE GUN ROF"
+                },
+                {
+                    "name": "energy_heat_multiplier",
+                    "value": -0.1,
+                    "translated_name": "Energy Heat"
+                },
+                {
+                    "name": "energy_range_multiplier",
+                    "value": 0.1,
+                    "translated_name": "ENERGY RANGE"
                 }
             ]
         },
@@ -534,6 +719,16 @@ var AddedData;
                     "name": "xpbonus_multiplier",
                     "value": 0.025,
                     "translated_name": "XP Bonus"
+                },
+                {
+                    "name": "energy_cooldown_multiplier",
+                    "value": -0.1,
+                    "translated_name": "ENERGY COOLDOWN"
+                },
+                {
+                    "name": "ultraautocannon_jamchance_multiplier",
+                    "value": -0.2,
+                    "translated_name": "UAC JAM CHANCE"
                 }
             ]
         },
@@ -544,6 +739,21 @@ var AddedData;
                     "name": "xpbonus_multiplier",
                     "value": 0.025,
                     "translated_name": "XP Bonus"
+                },
+                {
+                    "name": "torso_yawspeed_multiplier",
+                    "value": 0.05,
+                    "translated_name": "Torso Yaw Speed"
+                },
+                {
+                    "name": "torso_pitchspeed_multiplier",
+                    "value": 0.05,
+                    "translated_name": "Torso Pitch Speed"
+                },
+                {
+                    "name": "pulselaser_heat_multiplier",
+                    "value": -0.05,
+                    "translated_name": "PULSE LASER HEAT GEN."
                 }
             ]
         },
@@ -554,6 +764,66 @@ var AddedData;
                     "name": "xpbonus_multiplier",
                     "value": 0.025,
                     "translated_name": "XP Bonus"
+                },
+                {
+                    "name": "ultraautocannon_jamchance_multiplier",
+                    "value": -0.2,
+                    "translated_name": "UAC JAM CHANCE"
+                },
+                {
+                    "name": "ballistic_cooldown_multiplier",
+                    "value": -0.2,
+                    "translated_name": "BALLISTIC COOLDOWN"
+                },
+                {
+                    "name": "missile_cooldown_multiplier",
+                    "value": -0.2,
+                    "translated_name": "MISSILE COOLDOWN"
+                },
+                {
+                    "name": "missile_spread_multiplier",
+                    "value": -0.1,
+                    "translated_name": "MISSILE SPREAD"
+                }
+            ]
+        },
+        "exe-ch": {
+            "name": "exe-ch",
+            "setBonusQuirks": [
+                {
+                    "name": "xpbonus_multiplier",
+                    "value": 0.025,
+                    "translated_name": "XP Bonus"
+                },
+                {
+                    "name": "ballistic_cooldown_multiplier",
+                    "value": -0.15,
+                    "translated_name": "BALLISTIC COOLDOWN"
+                },
+                {
+                    "name": "energy_cooldown_multiplier",
+                    "value": -0.1,
+                    "translated_name": "ENERGY COOLDOWN"
+                }
+            ]
+        },
+        "exe-e": {
+            "name": "exe-e",
+            "setBonusQuirks": [
+                {
+                    "name": "atm_heat_multiplier",
+                    "value": -0.05,
+                    "translated_name": "ATM HEAT"
+                },
+                {
+                    "name": "xpbonus_multiplier",
+                    "value": 0.025,
+                    "translated_name": "XP Bonus"
+                },
+                {
+                    "name": "heavylaser_range_multiplier",
+                    "value": 0.1,
+                    "translated_name": "Heavy Laser Range"
                 }
             ]
         },
@@ -566,9 +836,14 @@ var AddedData;
                     "translated_name": "XP Bonus"
                 },
                 {
-                    "name": "reversespeed_multiplier",
-                    "value": 0.05,
-                    "translated_name": "REVERSE SPEED"
+                    "name": "missile_cooldown_multiplier",
+                    "value": -0.1,
+                    "translated_name": "MISSILE COOLDOWN"
+                },
+                {
+                    "name": "turnlerp_all_multiplier",
+                    "value": 0.1,
+                    "translated_name": "TURN RATE"
                 }
             ]
         },
@@ -581,14 +856,14 @@ var AddedData;
                     "translated_name": "XP Bonus"
                 },
                 {
-                    "name": "torso_pitchangle_additive",
-                    "value": 2,
-                    "translated_name": "Torso Pitch Angle"
+                    "name": "clanppc_velocity_multiplier",
+                    "value": 0.2,
+                    "translated_name": "Clan PPC Velocity"
                 },
                 {
-                    "name": "torso_yawspeed_multiplier",
-                    "value": 0.025,
-                    "translated_name": "Torso Yaw Speed"
+                    "name": "laser_duration_multiplier",
+                    "value": -0.05,
+                    "translated_name": "LASER DURATION"
                 }
             ]
         },
@@ -601,9 +876,14 @@ var AddedData;
                     "translated_name": "XP Bonus"
                 },
                 {
-                    "name": "torso_yawspeed_multiplier",
-                    "value": 0.05,
-                    "translated_name": "Torso Yaw Speed"
+                    "name": "energy_heat_multiplier",
+                    "value": -0.05,
+                    "translated_name": "Energy Heat"
+                },
+                {
+                    "name": "laser_duration_multiplier",
+                    "value": -0.05,
+                    "translated_name": "LASER DURATION"
                 }
             ]
         },
@@ -617,8 +897,13 @@ var AddedData;
                 },
                 {
                     "name": "turnlerp_all_multiplier",
-                    "value": 0.05,
+                    "value": 0.1,
                     "translated_name": "TURN RATE"
+                },
+                {
+                    "name": "ballistic_cooldown_multiplier",
+                    "value": -0.05,
+                    "translated_name": "BALLISTIC COOLDOWN"
                 }
             ]
         },
@@ -631,14 +916,54 @@ var AddedData;
                     "translated_name": "XP Bonus"
                 },
                 {
-                    "name": "accellerp_all_multiplier",
-                    "value": 0.025,
-                    "translated_name": "ACCELERATION RATE"
+                    "name": "missile_cooldown_multiplier",
+                    "value": -0.1,
+                    "translated_name": "MISSILE COOLDOWN"
                 },
                 {
-                    "name": "decellerp_all_multiplier",
+                    "name": "ballistic_cooldown_multiplier",
+                    "value": -0.05,
+                    "translated_name": "BALLISTIC COOLDOWN"
+                }
+            ]
+        },
+        "gar-kw": {
+            "name": "gar-kw",
+            "setBonusQuirks": [
+                {
+                    "name": "energy_cooldown_multiplier",
+                    "value": -0.1,
+                    "translated_name": "ENERGY COOLDOWN"
+                },
+                {
+                    "name": "turnlerp_all_multiplier",
+                    "value": 0.05,
+                    "translated_name": "TURN RATE"
+                },
+                {
+                    "name": "xpbonus_multiplier",
                     "value": 0.025,
-                    "translated_name": "DECELERATION RATE"
+                    "translated_name": "XP Bonus"
+                }
+            ]
+        },
+        "gar-e": {
+            "name": "gar-e",
+            "setBonusQuirks": [
+                {
+                    "name": "energy_cooldown_multiplier",
+                    "value": -0.1,
+                    "translated_name": "ENERGY COOLDOWN"
+                },
+                {
+                    "name": "turnlerp_all_multiplier",
+                    "value": 0.05,
+                    "translated_name": "TURN RATE"
+                },
+                {
+                    "name": "xpbonus_multiplier",
+                    "value": 0.025,
+                    "translated_name": "XP Bonus"
                 }
             ]
         },
@@ -649,6 +974,21 @@ var AddedData;
                     "name": "xpbonus_multiplier",
                     "value": 0.025,
                     "translated_name": "XP Bonus"
+                },
+                {
+                    "name": "energy_heat_multiplier",
+                    "value": -0.1,
+                    "translated_name": "Energy Heat"
+                },
+                {
+                    "name": "clanmachinegun_rof_multiplier",
+                    "value": 0.2,
+                    "translated_name": "MACHINE GUN ROF"
+                },
+                {
+                    "name": "missile_cooldown_multiplier",
+                    "value": -0.15,
+                    "translated_name": "MISSILE COOLDOWN"
                 }
             ]
         },
@@ -659,6 +999,16 @@ var AddedData;
                     "name": "xpbonus_multiplier",
                     "value": 0.025,
                     "translated_name": "XP Bonus"
+                },
+                {
+                    "name": "clanmachinegun_rof_multiplier",
+                    "value": 0.2,
+                    "translated_name": "MACHINE GUN ROF"
+                },
+                {
+                    "name": "energy_cooldown_multiplier",
+                    "value": -0.1,
+                    "translated_name": "ENERGY COOLDOWN"
                 }
             ]
         },
@@ -669,6 +1019,16 @@ var AddedData;
                     "name": "xpbonus_multiplier",
                     "value": 0.025,
                     "translated_name": "XP Bonus"
+                },
+                {
+                    "name": "ballistic_cooldown_multiplier",
+                    "value": -0.075,
+                    "translated_name": "BALLISTIC COOLDOWN"
+                },
+                {
+                    "name": "missile_cooldown_multiplier",
+                    "value": -0.1,
+                    "translated_name": "MISSILE COOLDOWN"
                 }
             ]
         },
@@ -679,6 +1039,56 @@ var AddedData;
                     "name": "xpbonus_multiplier",
                     "value": 0.025,
                     "translated_name": "XP Bonus"
+                },
+                {
+                    "name": "ballistic_cooldown_multiplier",
+                    "value": -0.075,
+                    "translated_name": "BALLISTIC COOLDOWN"
+                },
+                {
+                    "name": "missile_cooldown_multiplier",
+                    "value": -0.15,
+                    "translated_name": "MISSILE COOLDOWN"
+                }
+            ]
+        },
+        "hbr-vi": {
+            "name": "hbr-vi",
+            "setBonusQuirks": [
+                {
+                    "name": "energy_heat_multiplier",
+                    "value": -0.1,
+                    "translated_name": "Energy Heat"
+                },
+                {
+                    "name": "missile_cooldown_multiplier",
+                    "value": -0.1,
+                    "translated_name": "MISSILE COOLDOWN"
+                },
+                {
+                    "name": "xpbonus_multiplier",
+                    "value": 0.025,
+                    "translated_name": "XP Bonus"
+                }
+            ]
+        },
+        "hbr-p": {
+            "name": "hbr-p",
+            "setBonusQuirks": [
+                {
+                    "name": "missile_cooldown_multiplier",
+                    "value": -0.05,
+                    "translated_name": "MISSILE COOLDOWN"
+                },
+                {
+                    "name": "xpbonus_multiplier",
+                    "value": 0.025,
+                    "translated_name": "XP Bonus"
+                },
+                {
+                    "name": "clanerlaser_heat_multiplier",
+                    "value": -0.1,
+                    "translated_name": "CLAN ER LASER HEAT GENERATION"
                 }
             ]
         },
@@ -1039,6 +1449,16 @@ var AddedData;
                     "name": "xpbonus_multiplier",
                     "value": 0.025,
                     "translated_name": "XP Bonus"
+                },
+                {
+                    "name": "clanpulselaser_heat_multiplier",
+                    "value": -0.1,
+                    "translated_name": "Clan Pulse Laser Heat"
+                },
+                {
+                    "name": "missile_spread_multiplier",
+                    "value": -0.05,
+                    "translated_name": "MISSILE SPREAD"
                 }
             ]
         },
@@ -1049,6 +1469,16 @@ var AddedData;
                     "name": "xpbonus_multiplier",
                     "value": 0.025,
                     "translated_name": "XP Bonus"
+                },
+                {
+                    "name": "clanppc_velocity_multiplier",
+                    "value": 0.2,
+                    "translated_name": "Clan PPC Velocity"
+                },
+                {
+                    "name": "ballistic_cooldown_multiplier",
+                    "value": -0.15,
+                    "translated_name": "BALLISTIC COOLDOWN"
                 }
             ]
         },
@@ -1059,6 +1489,16 @@ var AddedData;
                     "name": "xpbonus_multiplier",
                     "value": 0.025,
                     "translated_name": "XP Bonus"
+                },
+                {
+                    "name": "energy_heat_multiplier",
+                    "value": -0.05,
+                    "translated_name": "Energy Heat"
+                },
+                {
+                    "name": "missile_velocity_multiplier",
+                    "value": 0.05,
+                    "translated_name": "MISSILE VELOCITY"
                 }
             ]
         },
@@ -1069,6 +1509,56 @@ var AddedData;
                     "name": "xpbonus_multiplier",
                     "value": 0.025,
                     "translated_name": "XP Bonus"
+                },
+                {
+                    "name": "critchance_receiving_multiplier",
+                    "value": -0.15,
+                    "translated_name": "CRIT HIT CHANCE (RECEIVING)"
+                },
+                {
+                    "name": "ballistic_cooldown_multiplier",
+                    "value": -0.05,
+                    "translated_name": "BALLISTIC COOLDOWN"
+                }
+            ]
+        },
+        "mdd-ba": {
+            "name": "mdd-ba",
+            "setBonusQuirks": [
+                {
+                    "name": "clanlaser_duration_multiplier",
+                    "value": -0.05,
+                    "translated_name": "Clan Laser Cooldown"
+                },
+                {
+                    "name": "turnlerp_all_multiplier",
+                    "value": 0.1,
+                    "translated_name": "TURN RATE"
+                },
+                {
+                    "name": "xpbonus_multiplier",
+                    "value": 0.025,
+                    "translated_name": "XP Bonus"
+                }
+            ]
+        },
+        "mdd-h": {
+            "name": "mdd-h",
+            "setBonusQuirks": [
+                {
+                    "name": "missile_cooldown_multiplier",
+                    "value": -0.2,
+                    "translated_name": "MISSILE COOLDOWN"
+                },
+                {
+                    "name": "xpbonus_multiplier",
+                    "value": 0.025,
+                    "translated_name": "XP Bonus"
+                },
+                {
+                    "name": "heavylaser_duration_multiplier",
+                    "value": -0.1,
+                    "translated_name": "Heavy Laser Duration"
                 }
             ]
         },
@@ -1173,6 +1663,51 @@ var AddedData;
                 {
                     "name": "energy_cooldown_multiplier",
                     "value": -0.15,
+                    "translated_name": "ENERGY COOLDOWN"
+                }
+            ]
+        },
+        "mlx-ed": {
+            "name": "mlx-ed",
+            "setBonusQuirks": [
+                {
+                    "name": "xpbonus_multiplier",
+                    "value": 0.025,
+                    "translated_name": "XP Bonus"
+                },
+                {
+                    "name": "missile_spread_multiplier",
+                    "value": -0.05,
+                    "translated_name": "MISSILE SPREAD"
+                },
+                {
+                    "name": "missile_cooldown_multiplier",
+                    "value": -0.1,
+                    "translated_name": "MISSILE COOLDOWN"
+                }
+            ]
+        },
+        "mlx-g": {
+            "name": "mlx-g",
+            "setBonusQuirks": [
+                {
+                    "name": "xpbonus_multiplier",
+                    "value": 0.025,
+                    "translated_name": "XP Bonus"
+                },
+                {
+                    "name": "accellerp_all_multiplier",
+                    "value": 0.1,
+                    "translated_name": "ACCELERATION RATE"
+                },
+                {
+                    "name": "decellerp_all_multiplier",
+                    "value": 0.1,
+                    "translated_name": "DECELERATION RATE"
+                },
+                {
+                    "name": "energy_cooldown_multiplier",
+                    "value": -0.1,
                     "translated_name": "ENERGY COOLDOWN"
                 }
             ]
@@ -1457,7 +1992,7 @@ var AddedData;
                 },
                 {
                     "name": "energy_cooldown_multiplier",
-                    "value": -0.05,
+                    "value": -0.1,
                     "translated_name": "ENERGY COOLDOWN"
                 }
             ]
@@ -1472,7 +2007,7 @@ var AddedData;
                 },
                 {
                     "name": "missile_cooldown_multiplier",
-                    "value": -0.1,
+                    "value": -0.15,
                     "translated_name": "MISSILE COOLDOWN"
                 },
                 {
@@ -1489,6 +2024,11 @@ var AddedData;
                     "name": "xpbonus_multiplier",
                     "value": 0.025,
                     "translated_name": "XP Bonus"
+                },
+                {
+                    "name": "energy_cooldown_multiplier",
+                    "value": -0.1,
+                    "translated_name": "ENERGY COOLDOWN"
                 },
                 {
                     "name": "missile_cooldown_multiplier",
@@ -1524,6 +2064,56 @@ var AddedData;
                     "name": "ballistic_range_multiplier",
                     "value": 0.1,
                     "translated_name": "BALLISTIC RANGE"
+                }
+            ]
+        },
+        "shc-mi": {
+            "name": "shc-mi",
+            "setBonusQuirks": [
+                {
+                    "name": "missile_cooldown_multiplier",
+                    "value": -0.1,
+                    "translated_name": "MISSILE COOLDOWN"
+                },
+                {
+                    "name": "xpbonus_multiplier",
+                    "value": 0.025,
+                    "translated_name": "XP Bonus"
+                },
+                {
+                    "name": "energy_cooldown_multiplier",
+                    "value": -0.1,
+                    "translated_name": "ENERGY COOLDOWN"
+                },
+                {
+                    "name": "ultraautocannon_jamchance_multiplier",
+                    "value": -0.2,
+                    "translated_name": "UAC JAM CHANCE"
+                }
+            ]
+        },
+        "shc-h": {
+            "name": "shc-h",
+            "setBonusQuirks": [
+                {
+                    "name": "missile_cooldown_multiplier",
+                    "value": -0.1,
+                    "translated_name": "MISSILE COOLDOWN"
+                },
+                {
+                    "name": "energy_cooldown_multiplier",
+                    "value": -0.15,
+                    "translated_name": "ENERGY COOLDOWN"
+                },
+                {
+                    "name": "xpbonus_multiplier",
+                    "value": 0.025,
+                    "translated_name": "XP Bonus"
+                },
+                {
+                    "name": "heavylaser_heat_multiplier",
+                    "value": -0.05,
+                    "translated_name": "Heavy Laser Heat"
                 }
             ]
         },
@@ -2214,9 +2804,9 @@ var AddedData;
         }
     };
 })(AddedData || (AddedData = {}));
-//Generated from GameData.pak Fri, 11 Aug 2017 16:34:59 GMT
+//Generated from GameData.pak Tue, 22 Aug 2017 01:59:50 GMT
 var AddedData;
-//Generated from GameData.pak Fri, 11 Aug 2017 16:34:59 GMT
+//Generated from GameData.pak Tue, 22 Aug 2017 01:59:50 GMT
 (function (AddedData) {
     AddedData._AddedWeaponData = {
         "AutoCannon20": {
@@ -4955,6 +5545,7 @@ var MechModelQuirksData;
         "accellerp_all_multiplier": true,
         "decellerp_all_multiplier": true,
         "turnlerp_all_multiplier": true,
+        "turnrate_multiplier": true,
         "mechtopspeed_multiplier": true,
         "jumpjets_initialthrust_multiplier": true,
         "jumpjets_forwardthrust_multiplier": true,
@@ -5079,6 +5670,10 @@ var MechModelQuirksData;
         "clanlbxautocannon10": ["ClanLBXAutoCannon10"],
         "clanerppc": ["ClanERPPC"],
         "clangaussrifle": ["ClanGaussRifle"],
+        "clanlaser": ["ClanERSmallLaser", "ClanERMediumLaser", "ClanERLargeLaser", "ClanERMicroLaser",
+            "ClanSmallPulseLaser", "ClanMediumPulseLaser", "ClanLargePulseLaser", "ClanMicroPulseLaser",
+            "ClanHeavySmallLaser", "ClanHeavyMediumLaser", "ClanHeavyLargeLaser",
+        ],
         "clanlrm": ["ClanLRM5", "ClanLRM10", "ClanLRM15", "ClanLRM20",
             "ClanLRM5_Artemis", "ClanLRM10_Artemis", "ClanLRM15_Artemis", "ClanLRM20_Artemis"],
         "clanlrm5": ["ClanLRM5", "ClanLRM5_Artemis"],
@@ -5087,6 +5682,8 @@ var MechModelQuirksData;
         "clanlrm20": ["ClanLRM20", "ClanLRM20_Artemis"],
         "clanmachinegun": ["ClanMachineGun"],
         "clanmediumpulselaser": ["ClanMediumPulseLaser"],
+        "clanppc": ["ClanERPPC"],
+        "clanpulselaser": ["ClanSmallPulseLaser", "ClanMediumPulseLaser", "ClanLargePulseLaser", "ClanMicroPulseLaser",],
         "clansrm2": ["ClanSRM2", "ClanSRM2_Artemis"],
         "clansrm4": ["ClanSRM4", "ClanSRM4_Artemis"],
         "clansrm6": ["ClanSRM6", "ClanSRM6_Artemis"],
@@ -5101,6 +5698,7 @@ var MechModelQuirksData;
         "clanultraautocannon20": ["ClanUltraAutoCannon20"],
         "erlaser": ["ERLargeLaser", "ERMediumLaser", "ERSmallLaser",
             "ClanERMicroLaser", "ClanERSmallLaser", "ClanERMediumLaser", "ClanERLargeLaser"],
+        "heavylaser": ["ClanHeavySmallLaser", "ClanHeavyMediumLaser", "ClanHeavyLargeLaser",],
         "isantimissilesystem": ["AntiMissileSystem"],
         "lbxautocannon": ["LBXAutoCannon10", "LBXAutoCannon2", "LBXAutoCannon5", "LBXAutoCannon20",
             "ClanLBXAutoCannon2", "ClanLBXAutoCannon5", "ClanLBXAutoCannon10", "ClanLBXAutoCannon20",],
@@ -5317,9 +5915,9 @@ var ExternalSkillTrees;
         "Vent Calibration": "VentCalibration"
     };
 })(ExternalSkillTrees || (ExternalSkillTrees = {}));
-//Generated from GameData.pak on Fri, 11 Aug 2017 16:34:59 GMT
+//Generated from GameData.pak on Tue, 22 Aug 2017 01:59:50 GMT
 var AddedData;
-//Generated from GameData.pak on Fri, 11 Aug 2017 16:34:59 GMT
+//Generated from GameData.pak on Tue, 22 Aug 2017 01:59:50 GMT
 (function (AddedData) {
     AddedData._SkillTreeData = {
         "Range": {
