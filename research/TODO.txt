@@ -13,6 +13,7 @@
 - See if it's worth moving all the added data to a single json file and fetching it at runtime.
   The total script size is now around 500k (90k compressed) and may affect initial load time.
     One more reason to do this: Updates that affect addedData can be done without recompiling the app.
+- Set up a build process to automatically update generated game data.
 
 - LBX damage spread
 - save team settings (on separate hash parameter)
