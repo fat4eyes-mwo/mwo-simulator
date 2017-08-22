@@ -77,6 +77,7 @@ The main entry point of the program is in `scripts/main/simulator.ts`.
 
 # Update Info
 
+* 2017-08-22: Updated app with data from 2017 Aug 17 patch (various omnipod set quirk data).
 * 2017-08-17: Added support for drag and drop on touch devices.
 * 2017-08-13: Mech skills (using kitlaan's skill planner).
 * 2017-08-08: Omnipod full set bonuses.
