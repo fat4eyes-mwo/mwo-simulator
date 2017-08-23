@@ -562,8 +562,12 @@ namespace MechTest {
     eventQueue.addListener(listener3, "baz");
     eventQueue.addListener(listener3, "foo");
 
-    let logStr = eventQueue.debugString();
-    console.log(logStr);
+    console.log(eventQueue.debugString());
+
+    eventQueue.removeListener(listener1);
+    eventQueue.removeListener(listener3, "foo");
+
+    console.log(eventQueue.debugString());
   }
 
   var testScratch = function() {
