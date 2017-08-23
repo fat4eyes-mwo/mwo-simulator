@@ -14978,7 +14978,7 @@ var MechViewSimSettings;
             }
         });
         rangeJQ.on("keydown", (event) => {
-            if (event.which === 13) {
+            if (event.key.toLocaleUpperCase() === "ENTER") {
                 MechViewSimSettings.setRangeValue();
             }
         });
