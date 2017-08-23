@@ -33,4 +33,28 @@ namespace Util {
       return mid;
     }
   }
+
+  export class StringLogger {
+    private logStr : string;
+    constructor() {
+      this.logStr = "";
+    }
+    log(msg : any) {
+      this.logStr += `${msg}\n`;
+    }
+    warn(msg : any) {
+      let error = Error(msg);
+      this.logStr += `${msg}: ${error.stack}\n`;
+    }
+    error(msg: any) {
+      let error = Error(msg);
+      this.logStr += `${msg}: ${error.stack}\n`;
+    }
+    clear() {
+      this.logStr = "";
+    }
+    getLog() {
+      return this.logStr;
+    }
+  }
 }

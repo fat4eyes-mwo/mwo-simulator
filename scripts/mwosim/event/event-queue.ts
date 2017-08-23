@@ -91,8 +91,9 @@ namespace MWOSimEvents {
       }
     }
 
-    public printDebugString() {
-      console.log("Listeners:");
+    public debugString() : string {
+      let logger = new Util.StringLogger();
+      logger.log("Listeners");
       for (let listener of this.listenerMap.keys()) {
         let logStr = listener.name;
         
@@ -102,9 +103,9 @@ namespace MWOSimEvents {
           logStr += type + " ";
         });
         logStr += "]";
-        console.log(logStr);
+        logger.log(logStr);
       }
-      console.log("Event->Listener map");
+      logger.log("Event->Listener map");
       for (let eventType of this.listeners.keys()) {
         let logStr = eventType;
         logStr += " [";
@@ -112,8 +113,9 @@ namespace MWOSimEvents {
           logStr += listener.name + " ";
         }
         logStr += "]";
-        console.log(logStr);
+        logger.log(logStr);
       }
+      return logger.getLog();
     }
 
     public queueEvent(event : Event) {
