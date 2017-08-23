@@ -8209,6 +8209,135 @@ var SimulatorSettings;
         return simulatorParameters.clone();
     };
 })(SimulatorSettings || (SimulatorSettings = {}));
+var MWOSimEvents;
+(function (MWOSimEvents) {
+    class ListenerEntry {
+        constructor(listener, types) {
+            this.listener = listener;
+            this.eventTypes = new Set(types);
+        }
+        isListening(type) {
+            return this.eventTypes.has(type);
+        }
+        getListener() {
+            return this.listener;
+        }
+        getEventTypes() {
+            return this.eventTypes;
+        }
+        addEventTypes(types) {
+            for (let type of types) {
+                this.eventTypes.add(type);
+            }
+        }
+    }
+    class EventQueue {
+        constructor() {
+            this.queue = [];
+            this.stepScheduled = false;
+            this.listeners = new Map();
+            this.listenerMap = new Map();
+        }
+        getListeners(event) {
+            let ret = this.listeners.get(event);
+            if (!ret) {
+                ret = new Set();
+                this.listeners.set(event, ret);
+            }
+            return ret;
+        }
+        addListener(listener, ...eventTypes) {
+            let listenerEntry = this.listenerMap.get(listener);
+            if (!listenerEntry) {
+                listenerEntry = new ListenerEntry(listener, eventTypes);
+                this.listenerMap.set(listener, listenerEntry);
+            }
+            listenerEntry.addEventTypes(eventTypes);
+            for (let type of listenerEntry.getEventTypes()) {
+                let listenerSet = this.getListeners(type);
+                listenerSet.add(listenerEntry.getListener());
+            }
+        }
+        //if no event types given, will unregister listener to all events
+        removeListener(listener, ...eventTypes) {
+            let listenerEntry = this.listenerMap.get(listener);
+            if (!listenerEntry) {
+                throw Error("Listener not registered");
+            }
+            let eventTypesToRemove;
+            if (!eventTypes || eventTypes.length === 0) {
+                eventTypesToRemove = listenerEntry.getEventTypes();
+            }
+            else {
+                eventTypesToRemove = eventTypes;
+            }
+            for (let eventType of eventTypesToRemove) {
+                let listenerSet = this.listeners.get(eventType);
+                listenerSet.delete(listener);
+                //NOTE: delete semantics on javascript iterators allow 'concurrent' modification 
+                //(it actually just puts an empty element in the deleted position)
+                listenerEntry.getEventTypes().delete(eventType);
+            }
+            //all entries removed
+            if (listenerEntry.getEventTypes().size === 0) {
+                this.listenerMap.delete(listener);
+            }
+        }
+        debugString() {
+            let logger = new Util.StringLogger();
+            logger.log("Listeners");
+            for (let listener of this.listenerMap.keys()) {
+                let logStr = listener.name;
+                logStr += " [";
+                let listenerEntry = this.listenerMap.get(listener);
+                listenerEntry.getEventTypes().forEach((type) => {
+                    logStr += type + " ";
+                });
+                logStr += "]";
+                logger.log(logStr);
+            }
+            logger.log("Event->Listener map");
+            for (let eventType of this.listeners.keys()) {
+                let logStr = eventType;
+                logStr += " [";
+                for (let listener of this.listeners.get(eventType)) {
+                    logStr += listener.name + " ";
+                }
+                logStr += "]";
+                logger.log(logStr);
+            }
+            return logger.getLog();
+        }
+        queueEvent(event) {
+            this.queue.push(event);
+            if (!this.stepScheduled) {
+                this.stepScheduled = true;
+                setTimeout(this.step.bind(this), 0);
+            }
+        }
+        step() {
+            if (this.queue.length === 0) {
+                console.warn("Step executed on empty queue");
+                return;
+            }
+            let currEvent = this.queue.shift();
+            let listeners = this.listeners.get(currEvent.type);
+            if (!listeners) {
+                console.warn(`No listener for event ${currEvent.type}`);
+                return;
+            }
+            for (let listener of listeners) {
+                listener(currEvent);
+            }
+            this.stepScheduled = false;
+            if (this.queue.length > 0) {
+                this.stepScheduled = true;
+                setTimeout(this.step.bind(this), 0);
+            }
+        }
+    }
+    MWOSimEvents.EventQueue = EventQueue;
+})(MWOSimEvents || (MWOSimEvents = {}));
 var MechSimulator;
 (function (MechSimulator) {
     var SimulatorParameters = SimulatorSettings.SimulatorParameters;
@@ -12820,6 +12949,29 @@ var Util;
         }
     }
     Util.binarySearchClosest = binarySearchClosest;
+    class StringLogger {
+        constructor() {
+            this.logStr = "";
+        }
+        log(msg) {
+            this.logStr += `${msg}\n`;
+        }
+        warn(msg) {
+            let error = Error(msg);
+            this.logStr += `${msg}: ${error.stack}\n`;
+        }
+        error(msg) {
+            let error = Error(msg);
+            this.logStr += `${msg}: ${error.stack}\n`;
+        }
+        clear() {
+            this.logStr = "";
+        }
+        getLog() {
+            return this.logStr;
+        }
+    }
+    Util.StringLogger = StringLogger;
 })(Util || (Util = {}));
 //Widget design policy: No logic in HTML, no layout in Javascript.
 //Javascript only provides behavior, it does NOT generate HTML unless it's from a template.
@@ -16059,6 +16211,34 @@ var MechTest;
                 console.log("Range: " + range + " " + transformedDamage.toString());
             }
         }
+    };
+    MechTest.testEventQueue = function () {
+        let eventQueue = new MWOSimEvents.EventQueue();
+        let listener1 = function (event) {
+            console.log(`listener1 ${event.type}`);
+        };
+        let listener2 = function (event) {
+            console.log(`listener2 ${event.type}`);
+        };
+        let listener3 = function (event) {
+            console.log(`listener3 ${event.type}`);
+        };
+        eventQueue.addListener(listener1, "foo", "bar");
+        eventQueue.addListener(listener2, "foo", "baz");
+        eventQueue.addListener(listener3, "baz");
+        eventQueue.addListener(listener3, "foo");
+        console.log(eventQueue.debugString());
+        eventQueue.queueEvent({ type: "foo", data: "foo1" });
+        eventQueue.queueEvent({ type: "bar", data: "bar1" });
+        eventQueue.queueEvent({ type: "baz", data: "baz1" });
+        setTimeout(() => {
+            eventQueue.removeListener(listener1);
+            eventQueue.removeListener(listener3, "foo");
+            console.log(eventQueue.debugString());
+            eventQueue.queueEvent({ type: "foo", data: "foo1" });
+            eventQueue.queueEvent({ type: "bar", data: "bar1" });
+            eventQueue.queueEvent({ type: "baz", data: "baz1" });
+        }, 1000);
     };
     var testScratch = function () {
         //Scratch test

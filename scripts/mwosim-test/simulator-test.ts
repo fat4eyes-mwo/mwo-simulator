@@ -564,10 +564,21 @@ namespace MechTest {
 
     console.log(eventQueue.debugString());
 
-    eventQueue.removeListener(listener1);
-    eventQueue.removeListener(listener3, "foo");
+    eventQueue.queueEvent({type: "foo", data: "foo1"});
+    eventQueue.queueEvent({type: "bar", data: "bar1"});
+    eventQueue.queueEvent({type: "baz", data: "baz1"});
 
-    console.log(eventQueue.debugString());
+    setTimeout(() => {
+      eventQueue.removeListener(listener1);
+      eventQueue.removeListener(listener3, "foo");
+      console.log(eventQueue.debugString());
+
+      eventQueue.queueEvent({type: "foo", data: "foo1"});
+      eventQueue.queueEvent({type: "bar", data: "bar1"});
+      eventQueue.queueEvent({type: "baz", data: "baz1"});
+      }, 1000);
+
+    
   }
 
   var testScratch = function() {

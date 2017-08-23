@@ -83,6 +83,8 @@ namespace MWOSimEvents {
       for (let eventType of eventTypesToRemove) {
         let listenerSet = this.listeners.get(eventType);
         listenerSet.delete(listener);
+        //NOTE: delete semantics on javascript iterators allow 'concurrent' modification 
+        //(it actually just puts an empty element in the deleted position)
         listenerEntry.getEventTypes().delete(eventType);
       }
       //all entries removed
@@ -118,15 +120,35 @@ namespace MWOSimEvents {
       return logger.getLog();
     }
 
-    public queueEvent(event : Event) {
+    public queueEvent<T extends Event>(event : T) : void {
+      this.queue.push(event);
 
+      if (!this.stepScheduled) {
+        this.stepScheduled = true;
+        setTimeout(this.step.bind(this), 0);
+      }
     }
 
-    private step() {
-      //TODO: Execute observers
-
+    private step(this : EventQueue) {
+      if (this.queue.length === 0) {
+        console.warn("Step executed on empty queue");
+        return;
+      }
+      let currEvent = this.queue.shift();
+      let listeners = this.listeners.get(currEvent.type);
+      if (!listeners) {
+        console.warn(`No listener for event ${currEvent.type}`);
+        return;
+      }
+      for (let listener of listeners) {
+        listener(currEvent);
+      }
 
       this.stepScheduled = false;
+      if (this.queue.length > 0) {
+        this.stepScheduled = true;
+        setTimeout(this.step.bind(this), 0);
+      }
     }
   }
 }
