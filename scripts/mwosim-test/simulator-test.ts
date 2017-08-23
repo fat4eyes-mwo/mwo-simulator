@@ -544,6 +544,27 @@ namespace MechTest {
     }
   }
 
+  export var testEventQueue = function() {
+    let eventQueue = new MWOSimEvents.EventQueue();
+
+    let listener1 = function(event : MWOSimEvents.Event) : void {
+      console.log(`listener1 ${event.type}`);
+    }
+    let listener2 = function(event : MWOSimEvents.Event) : void {
+      console.log(`listener2 ${event.type}`);
+    }
+    let listener3 = function(event : MWOSimEvents.Event) : void {
+      console.log(`listener3 ${event.type}`);
+    }
+    
+    eventQueue.addListener(listener1, "foo", "bar");
+    eventQueue.addListener(listener2, "foo", "baz");
+    eventQueue.addListener(listener3, "baz");
+    eventQueue.addListener(listener3, "foo");
+
+    eventQueue.printDebugString();
+  }
+
   var testScratch = function() {
     //Scratch test
   }
