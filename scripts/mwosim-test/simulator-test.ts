@@ -547,14 +547,18 @@ namespace MechTest {
   export var testEventQueue = function() {
     let eventQueue = new MWOSimEvents.EventQueue();
 
-    let listener1 = function(event : MWOSimEvents.Event) : void {
-      console.log(`listener1 ${event.type}`);
+    interface TestEvent extends MWOSimEvents.Event {
+      data : string;
     }
-    let listener2 = function(event : MWOSimEvents.Event) : void {
-      console.log(`listener2 ${event.type}`);
+
+    let listener1 = function(event : TestEvent) : void {
+      console.log(`listener1 ${event.type} ${event.data}`);
     }
-    let listener3 = function(event : MWOSimEvents.Event) : void {
-      console.log(`listener3 ${event.type}`);
+    let listener2 = function(event : TestEvent) : void {
+      console.log(`listener2 ${event.type} ${event.data}`);
+    }
+    let listener3 = function(event : TestEvent) : void {
+      console.log(`listener3 ${event.type} ${event.data}`);
     }
     
     eventQueue.addListener(listener1, "foo", "bar");
@@ -567,6 +571,9 @@ namespace MechTest {
     eventQueue.queueEvent({type: "foo", data: "foo1"});
     eventQueue.queueEvent({type: "bar", data: "bar1"});
     eventQueue.queueEvent({type: "baz", data: "baz1"});
+    eventQueue.queueEvent({type: "foo", data: "foo2"});
+    eventQueue.queueEvent({type: "bar", data: "bar2"});
+    eventQueue.queueEvent({type: "baz", data: "baz2"});
 
     setTimeout(() => {
       eventQueue.removeListener(listener1);
@@ -574,8 +581,11 @@ namespace MechTest {
       console.log(eventQueue.debugString());
 
       eventQueue.queueEvent({type: "foo", data: "foo1"});
+      eventQueue.queueEvent({type: "foo", data: "foo2"});
       eventQueue.queueEvent({type: "bar", data: "bar1"});
+      eventQueue.queueEvent({type: "bar", data: "bar2"});
       eventQueue.queueEvent({type: "baz", data: "baz1"});
+      eventQueue.queueEvent({type: "baz", data: "baz2"});
 
       setTimeout(()=> {
         eventQueue.removeListener(listener2);
