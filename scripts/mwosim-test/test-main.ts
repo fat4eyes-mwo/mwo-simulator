@@ -25,7 +25,7 @@ namespace MechTest {
 
   //Loads the body of the main index.html into test-index.html.
   //NOTE: This relies on the body tags in the main index.html file to be in
-  //lower case and have no spaces due to the string.search calls
+  //lower case and have no spaces due to the string.search() calls
   function replaceBody() : Promise<any> {
     return loadAppHTMLPromise().then(function(data : string) {
       let bodyStart = data.search("<body>");
@@ -56,7 +56,7 @@ namespace MechTest {
   }
 
   export function testMain() : void {
-    console.log("Hello from test main");
+    console.log("testMain started");
     replaceBody().then(function(data : any) {
       runTest();
     })
