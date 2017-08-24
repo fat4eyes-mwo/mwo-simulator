@@ -5,6 +5,7 @@ namespace MechModelView {
   import Team = MechModelCommon.Team;
   import WeaponCycle = MechModelCommon.WeaponCycle;
   import UpdateType = MechModelCommon.UpdateType;
+  import EventType = MechModelCommon.EventType;
 
   type Mech = MechModel.Mech;
   type WeaponState = MechModelWeapons.WeaponState;
@@ -23,6 +24,36 @@ namespace MechModelView {
     TEAMSTATS : "teamstats",
     MECHLISTS : "mechlists",
   };
+
+  export var init = function() {
+    let eventQueue = MWOSimEvents.getEventQueue();
+    eventQueue.addListener(mechUpdateListener, EventType.MECH_UPDATE);
+    eventQueue.addListener(teamStatsListener, EventType.TEAMSTATS_UPDATE);
+    eventQueue.addListener(simTimeListener, EventType.SIMTIME_UPDATE);
+    eventQueue.addListener(teamVictoryUpdate, EventType.TEAMVICTORY_UPDATE);
+  }
+
+  var mechUpdateListener = function(event : MechSimulatorLogic.MechUpdate) {
+    //NOTE: When EventQueue uses setTimeout(0) to execute the next event, the browser
+    //seems to defer UI updates so the animations become VERY CHOPPY when there are a lot of dom 
+    //elements being updated. 
+    //Solved using EventQueue.deferExecution(), executeAllQueued() to combine all mech dom updates
+    //to a single stack frame.
+    updateMech(event.mech);
+  }
+
+  var teamStatsListener = function(event : MechSimulatorLogic.TeamStatsUpdate) {
+    MechModel.updateModelTeamStats(event.team, event.simTime);
+    updateTeamStats(event.team);
+  }
+
+  var simTimeListener = function(event : MechSimulatorLogic.SimTimeUpdate) {
+    updateSimTime(event.simTime);
+  }
+
+  var teamVictoryUpdate = function(event : MechSimulatorLogic.TeamVictoryUpdate) {
+    updateVictory(getVictorTeam());
+  }
 
   export var refreshView =
       function (updates : ViewUpdate[] = [ViewUpdate.TEAMSTATS, ViewUpdate.MECHLISTS]) : void {

@@ -8166,6 +8166,12 @@ var MechModelCommon;
         CLAN_XL: "clan_xl",
         LIGHT: "light",
     };
+    MechModelCommon.EventType = {
+        MECH_UPDATE: "MechUpdate",
+        SIMTIME_UPDATE: "SimTimeUpdate",
+        TEAMSTATS_UPDATE: "TeamStatsUpdate",
+        TEAMVICTORY_UPDATE: "TeamVictoryUpdate",
+    };
     MechModelCommon.BURST_DAMAGE_INTERVAL = 2000; //Interval considered for burst damage calculation
 })(MechModelCommon || (MechModelCommon = {}));
 var SimulatorSettings;
@@ -8235,6 +8241,7 @@ var MWOSimEvents;
         constructor() {
             this.queue = [];
             this.stepScheduled = false;
+            this.executionDeferred = false;
             this.listeners = new Map();
             this.listenerMap = new Map();
         }
@@ -8310,10 +8317,26 @@ var MWOSimEvents;
         }
         queueEvent(event) {
             this.queue.push(event);
+            if (this.executionDeferred) {
+                return;
+            }
             if (!this.stepScheduled) {
                 this.stepScheduled = true;
                 setTimeout(this.step.bind(this), 0);
             }
+        }
+        //When called, all events queued are not executed until executeAllQueued is called.
+        //Used when you want to execute a set of events all at once (e.g. a large set of dom updates)
+        deferExecution() {
+            this.executionDeferred = true;
+        }
+        executeAllQueued() {
+            while (this.queue.length > 0) {
+                let currEvent = this.queue.shift();
+                this.executeEvent(currEvent);
+            }
+            this.executionDeferred = false;
+            this.stepScheduled = false;
         }
         step() {
             if (this.queue.length === 0) {
@@ -8321,22 +8344,32 @@ var MWOSimEvents;
                 return;
             }
             let currEvent = this.queue.shift();
-            let listeners = this.listeners.get(currEvent.type);
-            if (!listeners) {
-                console.warn(`No listener for event ${currEvent.type}`);
-                return;
-            }
-            for (let listener of listeners) {
-                listener(currEvent);
-            }
+            this.executeEvent(currEvent);
             this.stepScheduled = false;
             if (this.queue.length > 0) {
                 this.stepScheduled = true;
                 setTimeout(this.step.bind(this), 0);
             }
         }
+        executeEvent(event) {
+            let listeners = this.listeners.get(event.type);
+            if (!listeners) {
+                console.warn(`No listener for event ${event.type}`);
+                return;
+            }
+            for (let listener of listeners) {
+                listener(event);
+            }
+        }
     }
     MWOSimEvents.EventQueue = EventQueue;
+    let eventQueueInstance;
+    MWOSimEvents.getEventQueue = function () {
+        if (!eventQueueInstance) {
+            eventQueueInstance = new EventQueue();
+        }
+        return eventQueueInstance;
+    };
 })(MWOSimEvents || (MWOSimEvents = {}));
 var MechSimulator;
 (function (MechSimulator) {
@@ -8345,6 +8378,7 @@ var MechSimulator;
     const DEFAULT_SPEED = 1;
     function init() {
         MechView.initView();
+        MechModelView.init();
         MechView.showLoadingScreen();
         let simulatorParameters = new SimulatorParameters(DEFAULT_RANGE, DEFAULT_SPEED);
         MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
@@ -9170,6 +9204,8 @@ var MechSimulatorLogic;
     //Simulation step function. Called every tick
     MechSimulatorLogic.step = function () {
         let teams = [Team.BLUE, Team.RED];
+        let eventQueue = MWOSimEvents.getEventQueue();
+        eventQueue.deferExecution();
         willUpdateTeamStats = {};
         processWeaponFires();
         for (let team of teams) {
@@ -9202,15 +9238,31 @@ var MechSimulatorLogic;
                         mechState.setUpdate(UpdateType.STATS);
                     }
                 }
-                MechModelView.updateMech(mech);
+                let mechUpdate = {
+                    type: MechModelCommon.EventType.MECH_UPDATE,
+                    mech
+                };
+                eventQueue.queueEvent(mechUpdate);
+                // MechModelView.updateMech(mech);
             }
             if (willUpdateTeamStats[team]) {
-                MechModelView.updateTeamStats(team);
-                MechModel.updateModelTeamStats(team, MechSimulatorLogic.getSimTime());
+                let update = {
+                    type: MechModelCommon.EventType.TEAMSTATS_UPDATE,
+                    team,
+                    simTime: MechSimulatorLogic.getSimTime()
+                };
+                eventQueue.queueEvent(update);
+                // MechModel.updateModelTeamStats(team, getSimTime());
+                // MechModelView.updateTeamStats(team);
             }
         }
         simTime += MechSimulatorLogic.getStepDuration();
-        MechModelView.updateSimTime(simTime);
+        let simTimeUpdate = {
+            type: MechModelCommon.EventType.SIMTIME_UPDATE,
+            simTime: MechSimulatorLogic.getSimTime(),
+        };
+        eventQueue.queueEvent(simTimeUpdate);
+        // MechModelView.updateSimTime(simTime);
         //if one team is dead, stop simulation, compute stats for the current step
         //and inform ModelView of victory
         if (!MechModel.isTeamAlive(Team.BLUE) ||
@@ -9218,11 +9270,22 @@ var MechSimulatorLogic;
             MechSimulatorLogic.pauseSimulation();
             flushWeaponFireQueue();
             for (let team of teams) {
-                MechModelView.updateTeamStats(team);
-                MechModel.updateModelTeamStats(team, MechSimulatorLogic.getSimTime());
+                // MechModel.updateModelTeamStats(team, getSimTime());
+                // MechModelView.updateTeamStats(team);
+                let update = {
+                    type: MechModelCommon.EventType.TEAMSTATS_UPDATE,
+                    team,
+                    simTime: MechSimulatorLogic.getSimTime()
+                };
+                eventQueue.queueEvent(update);
             }
-            MechModelView.updateVictory(MechModelView.getVictorTeam());
+            let victoryUpdate = {
+                type: MechModelCommon.EventType.TEAMVICTORY_UPDATE,
+            };
+            eventQueue.queueEvent(victoryUpdate);
+            // MechModelView.updateVictory(MechModelView.getVictorTeam());
         }
+        eventQueue.executeAllQueued();
     };
     var enemyTeam = function (myTeam) {
         if (myTeam === Team.BLUE) {
@@ -12403,9 +12466,35 @@ var MechModelView;
     var Team = MechModelCommon.Team;
     var WeaponCycle = MechModelCommon.WeaponCycle;
     var UpdateType = MechModelCommon.UpdateType;
+    var EventType = MechModelCommon.EventType;
     MechModelView.ViewUpdate = {
         TEAMSTATS: "teamstats",
         MECHLISTS: "mechlists",
+    };
+    MechModelView.init = function () {
+        let eventQueue = MWOSimEvents.getEventQueue();
+        eventQueue.addListener(mechUpdateListener, EventType.MECH_UPDATE);
+        eventQueue.addListener(teamStatsListener, EventType.TEAMSTATS_UPDATE);
+        eventQueue.addListener(simTimeListener, EventType.SIMTIME_UPDATE);
+        eventQueue.addListener(teamVictoryUpdate, EventType.TEAMVICTORY_UPDATE);
+    };
+    var mechUpdateListener = function (event) {
+        //NOTE: When EventQueue uses setTimeout(0) to execute the next event, the browser
+        //seems to defer UI updates so the animations become VERY CHOPPY when there are a lot of dom 
+        //elements being updated. 
+        //Solved using EventQueue.deferExecution(), executeAllQueued() to combine all mech dom updates
+        //to a single stack frame.
+        MechModelView.updateMech(event.mech);
+    };
+    var teamStatsListener = function (event) {
+        MechModel.updateModelTeamStats(event.team, event.simTime);
+        MechModelView.updateTeamStats(event.team);
+    };
+    var simTimeListener = function (event) {
+        MechModelView.updateSimTime(event.simTime);
+    };
+    var teamVictoryUpdate = function (event) {
+        MechModelView.updateVictory(MechModelView.getVictorTeam());
     };
     MechModelView.refreshView = function (updates = [MechModelView.ViewUpdate.TEAMSTATS, MechModelView.ViewUpdate.MECHLISTS]) {
         document.title = getPageTitle();
@@ -16215,13 +16304,13 @@ var MechTest;
     MechTest.testEventQueue = function () {
         let eventQueue = new MWOSimEvents.EventQueue();
         let listener1 = function (event) {
-            console.log(`listener1 ${event.type}`);
+            console.log(`listener1 ${event.type} ${event.data}`);
         };
         let listener2 = function (event) {
-            console.log(`listener2 ${event.type}`);
+            console.log(`listener2 ${event.type} ${event.data}`);
         };
         let listener3 = function (event) {
-            console.log(`listener3 ${event.type}`);
+            console.log(`listener3 ${event.type} ${event.data}`);
         };
         eventQueue.addListener(listener1, "foo", "bar");
         eventQueue.addListener(listener2, "foo", "baz");
@@ -16231,13 +16320,31 @@ var MechTest;
         eventQueue.queueEvent({ type: "foo", data: "foo1" });
         eventQueue.queueEvent({ type: "bar", data: "bar1" });
         eventQueue.queueEvent({ type: "baz", data: "baz1" });
+        eventQueue.queueEvent({ type: "foo", data: "foo2" });
+        eventQueue.queueEvent({ type: "bar", data: "bar2" });
+        eventQueue.queueEvent({ type: "baz", data: "baz2" });
         setTimeout(() => {
             eventQueue.removeListener(listener1);
             eventQueue.removeListener(listener3, "foo");
             console.log(eventQueue.debugString());
             eventQueue.queueEvent({ type: "foo", data: "foo1" });
+            eventQueue.queueEvent({ type: "foo", data: "foo2" });
             eventQueue.queueEvent({ type: "bar", data: "bar1" });
+            eventQueue.queueEvent({ type: "bar", data: "bar2" });
             eventQueue.queueEvent({ type: "baz", data: "baz1" });
+            eventQueue.queueEvent({ type: "baz", data: "baz2" });
+            setTimeout(() => {
+                eventQueue.removeListener(listener2);
+                eventQueue.removeListener(listener3);
+                console.log(eventQueue.debugString());
+                eventQueue.queueEvent({ type: "foo", data: "foo1" });
+                eventQueue.queueEvent({ type: "foo", data: "foo2" });
+                eventQueue.queueEvent({ type: "bar", data: "bar1" });
+                eventQueue.queueEvent({ type: "bar", data: "bar2" });
+                eventQueue.queueEvent({ type: "baz", data: "baz1" });
+                eventQueue.queueEvent({ type: "baz", data: "baz2" });
+                console.log("Done");
+            }, 1000);
         }, 1000);
     };
     var testScratch = function () {
@@ -16272,7 +16379,7 @@ var MechTest;
     }
     //Loads the body of the main index.html into test-index.html.
     //NOTE: This relies on the body tags in the main index.html file to be in
-    //lower case and have no spaces due to the string.search calls
+    //lower case and have no spaces due to the string.search() calls
     function replaceBody() {
         return loadAppHTMLPromise().then(function (data) {
             let bodyStart = data.search("<body>");
@@ -16302,7 +16409,7 @@ var MechTest;
         }
     }
     function testMain() {
-        console.log("Hello from test main");
+        console.log("testMain started");
         replaceBody().then(function (data) {
             runTest();
         })

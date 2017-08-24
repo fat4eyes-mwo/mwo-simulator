@@ -13,6 +13,25 @@ namespace MechSimulatorLogic {
   type DamageMap = MechModel.DamageMap;
   type GhostHeatMap = MechModel.GhostHeatMap;
 
+  export interface MechUpdate extends MWOSimEvents.Event {
+    mech : MechModel.Mech;
+  }
+
+  export interface TeamStatsUpdate extends MWOSimEvents.Event {
+    team : MechModelCommon.Team;
+    simTime : number;
+  }
+
+  export interface SimTimeUpdate extends MWOSimEvents.Event {
+    simTime : number;
+  }
+
+  export type TeamVictoryUpdate = MWOSimEvents.Event;
+
+  export type ResetSimUpdate = MWOSimEvents.Event;
+  export type StartSimUpdate = MWOSimEvents.Event;
+  export type PauseSimUpdate = MWOSimEvents.Event;
+
   var simulationInterval : number = null;
   var simRunning = false;
   var simTime = 0;
@@ -88,6 +107,8 @@ namespace MechSimulatorLogic {
   //Simulation step function. Called every tick
   export var step = function() : void {
     let teams : Team[] = [Team.BLUE, Team.RED];
+    let eventQueue = MWOSimEvents.getEventQueue();
+    eventQueue.deferExecution();
     willUpdateTeamStats = {};
     processWeaponFires();
 
@@ -120,16 +141,33 @@ namespace MechSimulatorLogic {
             mechState.setUpdate(UpdateType.STATS);
           }
         }
-        MechModelView.updateMech(mech);
+        let mechUpdate : MechUpdate = {
+          type: MechModelCommon.EventType.MECH_UPDATE,
+          mech
+        }
+        eventQueue.queueEvent(mechUpdate)
+        // MechModelView.updateMech(mech);
       }
       if (willUpdateTeamStats[team]) {
-        MechModelView.updateTeamStats(team);
-        MechModel.updateModelTeamStats(team, getSimTime());
+        
+        let update : TeamStatsUpdate = {
+          type : MechModelCommon.EventType.TEAMSTATS_UPDATE,
+          team,
+          simTime : getSimTime()
+        }
+        eventQueue.queueEvent(update);
+        // MechModel.updateModelTeamStats(team, getSimTime());
+        // MechModelView.updateTeamStats(team);
       }
     }
 
     simTime += getStepDuration();
-    MechModelView.updateSimTime(simTime);
+    let simTimeUpdate : SimTimeUpdate = {
+      type : MechModelCommon.EventType.SIMTIME_UPDATE,
+      simTime : getSimTime(),
+    }
+    eventQueue.queueEvent(simTimeUpdate);
+    // MechModelView.updateSimTime(simTime);
 
     //if one team is dead, stop simulation, compute stats for the current step
     //and inform ModelView of victory
@@ -138,11 +176,23 @@ namespace MechSimulatorLogic {
       pauseSimulation();
       flushWeaponFireQueue();
       for (let team of teams) {
-        MechModelView.updateTeamStats(team);
-        MechModel.updateModelTeamStats(team, getSimTime());
+        // MechModel.updateModelTeamStats(team, getSimTime());
+        // MechModelView.updateTeamStats(team);
+        let update : TeamStatsUpdate = {
+          type : MechModelCommon.EventType.TEAMSTATS_UPDATE,
+          team,
+          simTime : getSimTime()
+        }
+        eventQueue.queueEvent(update);
       }
-      MechModelView.updateVictory(MechModelView.getVictorTeam());
+      let victoryUpdate : TeamVictoryUpdate = {
+        type : MechModelCommon.EventType.TEAMVICTORY_UPDATE,
+      }
+      eventQueue.queueEvent(victoryUpdate);
+      // MechModelView.updateVictory(MechModelView.getVictorTeam());
     }
+
+    eventQueue.executeAllQueued();
   }
 
   var enemyTeam = function(myTeam : Team) : Team {

@@ -38,12 +38,14 @@ namespace MWOSimEvents {
 
     private queue : Event[];
     private stepScheduled : boolean;
+    private executionDeferred : boolean;
     private listeners : Map<EventType, Set<EventListener>>;
     private listenerMap : Map<EventListener, ListenerEntry>;
 
     constructor() {
       this.queue = [];
       this.stepScheduled = false;
+      this.executionDeferred = false;
       this.listeners = new Map();
       this.listenerMap = new Map();
     }
@@ -122,11 +124,28 @@ namespace MWOSimEvents {
 
     public queueEvent<T extends Event>(event : T) : void {
       this.queue.push(event);
-
+      if (this.executionDeferred) {
+        return;
+      }
       if (!this.stepScheduled) {
         this.stepScheduled = true;
         setTimeout(this.step.bind(this), 0);
       }
+    }
+
+    //When called, all events queued are not executed until executeAllQueued is called.
+    //Used when you want to execute a set of events all at once (e.g. a large set of dom updates)
+    public deferExecution() {
+      this.executionDeferred = true;
+    }
+
+    public executeAllQueued() {
+      while (this.queue.length > 0) {
+        let currEvent = this.queue.shift();
+        this.executeEvent(currEvent);
+      }
+      this.executionDeferred = false;
+      this.stepScheduled = false;
     }
 
     private step(this : EventQueue) {
@@ -135,14 +154,7 @@ namespace MWOSimEvents {
         return;
       }
       let currEvent = this.queue.shift();
-      let listeners = this.listeners.get(currEvent.type);
-      if (!listeners) {
-        console.warn(`No listener for event ${currEvent.type}`);
-        return;
-      }
-      for (let listener of listeners) {
-        listener(currEvent);
-      }
+      this.executeEvent(currEvent);
 
       this.stepScheduled = false;
       if (this.queue.length > 0) {
@@ -150,5 +162,24 @@ namespace MWOSimEvents {
         setTimeout(this.step.bind(this), 0);
       }
     }
+
+    private executeEvent<T extends Event>(event : T) {
+      let listeners = this.listeners.get(event.type);
+      if (!listeners) {
+        console.warn(`No listener for event ${event.type}`);
+        return;
+      }
+      for (let listener of listeners) {
+        listener(event);
+      }
+    }
+  }
+
+  let eventQueueInstance : EventQueue;
+  export var getEventQueue = function() {
+    if (!eventQueueInstance) {
+      eventQueueInstance = new EventQueue();
+    }
+    return eventQueueInstance;
   }
 }

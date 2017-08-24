@@ -7,6 +7,7 @@ namespace MechSimulator {
 
   function init() : void {
     MechView.initView();
+    MechModelView.init();
     MechView.showLoadingScreen();
 
     let simulatorParameters =

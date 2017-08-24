@@ -128,8 +128,7 @@ a:hover {
 }
 
 .stylishText {
-  font-family: Orbitron;
-  /*font-family: sans-serif;;*/
+  font-family: Orbitron, sans-serif;
 }
 
 .fillHeight {
@@ -790,7 +789,7 @@ a:hover {
 .teamStats .teamStatsDetails {
   font-size: 1em;
   font-weight: bold;
-  font-family: Orbitron;
+  font-family: Orbitron, sans-serif;
 }
 
 .teamStats .mechPipsContainer {

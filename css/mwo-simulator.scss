@@ -10,7 +10,7 @@ $cooldown-bar-color: rgb(255, 50, 50);
 $cooldown-bar-negative-color : $off-background-color;
 $jam-bar-color : yellow;
 $jammed-color : maroon;
-$fancy-font-family: Orbitron;
+$fancy-font-family: Orbitron, sans-serif;
 $modal-wide-width: 80%;
 $link-color: gold;
 $tooltip-background: $off-background-color;
@@ -159,7 +159,6 @@ div {
 
 .stylishText {
   font-family: $fancy-font-family;
-  /*font-family: sans-serif;;*/
 }
 
 .fillHeight {

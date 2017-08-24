@@ -66,5 +66,12 @@ namespace MechModelCommon {
     LIGHT : "light",
   };
 
+  export const EventType = {
+    MECH_UPDATE : "MechUpdate",
+    SIMTIME_UPDATE : "SimTimeUpdate",
+    TEAMSTATS_UPDATE : "TeamStatsUpdate",
+    TEAMVICTORY_UPDATE : "TeamVictoryUpdate",
+  };
+
   export const BURST_DAMAGE_INTERVAL = 2000; //Interval considered for burst damage calculation
 }
