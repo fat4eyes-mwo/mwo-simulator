@@ -4,14 +4,38 @@
 //individual components
 //TODO: Remove mechId from method parameters in MechPanel. Use stored mechId instead.
 namespace MechViewMechPanel {
+  import EventType = MechModelCommon.EventType;
   import WeaponCycle = MechModelCommon.WeaponCycle;
   import Component = MechModelCommon.Component;
   import Team = MechModelCommon.Team;
   import DomStoredWidget = MechViewWidgets.DomStoredWidget;
+  import Button = MechViewWidgets.Button;
 
   type Mech = MechModel.Mech;
   type WeaponState = MechModelWeapons.WeaponState;
   type AmmoState = MechModel.AmmoState;
+
+  export var init = function() {
+    let eventQueue = MWOSimEvents.getEventQueue();
+    eventQueue.addListener(simulationStateListener, EventType.START, EventType.PAUSE);
+  }
+
+  var simulationStateListener = function(event: MWOSimEvents.Event) {
+    let setButtonEnabled = MechViewWidgets.setButtonListEnabled;
+    if (event.type === EventType.START) {
+      //disable move and delete buttons
+      let deleteButtonsJQ = $(".deleteMechButton");
+      setButtonEnabled(deleteButtonsJQ, false);
+      let moveButtonsJQ = $(".moveMechButton");
+      setButtonEnabled(moveButtonsJQ, false);
+    } else {
+      //enable move and delete buttons
+      let deleteButtonsJQ = $(".deleteMechButton");
+      setButtonEnabled(deleteButtonsJQ, true);
+      let moveButtonsJQ = $(".moveMechButton");
+      setButtonEnabled(moveButtonsJQ, true);
+    }
+  }
 
   export class PaperDoll extends DomStoredWidget {
     private static readonly PaperDollDomKey = "mwosim.PaperDoll.uiObject";

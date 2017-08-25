@@ -8171,6 +8171,8 @@ var MechModelCommon;
         SIMTIME_UPDATE: "SimTimeUpdate",
         TEAMSTATS_UPDATE: "TeamStatsUpdate",
         TEAMVICTORY_UPDATE: "TeamVictoryUpdate",
+        START: "Start",
+        PAUSE: "Pause"
     };
     MechModelCommon.BURST_DAMAGE_INTERVAL = 2000; //Interval considered for burst damage calculation
 })(MechModelCommon || (MechModelCommon = {}));
@@ -9140,6 +9142,7 @@ var MechSimulatorLogic;
 (function (MechSimulatorLogic) {
     var UpdateType = MechModelCommon.UpdateType;
     var Team = MechModelCommon.Team;
+    var EventType = MechModelCommon.EventType;
     var simulationInterval = null;
     var simRunning = false;
     var simTime = 0;
@@ -9177,16 +9180,18 @@ var MechSimulatorLogic;
             createSimulationInterval();
         }
         simRunning = true;
+        MWOSimEvents.getEventQueue().queueEvent({ type: EventType.START });
     };
     MechSimulatorLogic.pauseSimulation = function () {
         simRunning = false;
+        MWOSimEvents.getEventQueue().queueEvent({ type: EventType.PAUSE });
     };
     MechSimulatorLogic.stepSimulation = function () {
         MechSimulatorLogic.pauseSimulation();
         MechSimulatorLogic.step();
     };
     MechSimulatorLogic.resetSimulation = function () {
-        simRunning = false;
+        MechSimulatorLogic.pauseSimulation();
         if (simulationInterval) {
             window.clearInterval(simulationInterval);
             simulationInterval = null;
@@ -9195,7 +9200,11 @@ var MechSimulatorLogic;
         simTime = 0;
         clearMechStats();
         willUpdateTeamStats = {};
-        MechModelView.updateSimTime(simTime);
+        let update = {
+            type: MechModelCommon.EventType.SIMTIME_UPDATE,
+            simTime
+        };
+        MWOSimEvents.getEventQueue().queueEvent(update);
         MechAccuracyPattern.reset();
         MechTargetComponent.reset();
         MechFirePattern.reset();
@@ -9243,7 +9252,6 @@ var MechSimulatorLogic;
                     mech
                 };
                 eventQueue.queueEvent(mechUpdate);
-                // MechModelView.updateMech(mech);
             }
             if (willUpdateTeamStats[team]) {
                 let update = {
@@ -9252,8 +9260,6 @@ var MechSimulatorLogic;
                     simTime: MechSimulatorLogic.getSimTime()
                 };
                 eventQueue.queueEvent(update);
-                // MechModel.updateModelTeamStats(team, getSimTime());
-                // MechModelView.updateTeamStats(team);
             }
         }
         simTime += MechSimulatorLogic.getStepDuration();
@@ -9262,7 +9268,6 @@ var MechSimulatorLogic;
             simTime: MechSimulatorLogic.getSimTime(),
         };
         eventQueue.queueEvent(simTimeUpdate);
-        // MechModelView.updateSimTime(simTime);
         //if one team is dead, stop simulation, compute stats for the current step
         //and inform ModelView of victory
         if (!MechModel.isTeamAlive(Team.BLUE) ||
@@ -9270,8 +9275,6 @@ var MechSimulatorLogic;
             MechSimulatorLogic.pauseSimulation();
             flushWeaponFireQueue();
             for (let team of teams) {
-                // MechModel.updateModelTeamStats(team, getSimTime());
-                // MechModelView.updateTeamStats(team);
                 let update = {
                     type: MechModelCommon.EventType.TEAMSTATS_UPDATE,
                     team,
@@ -9283,7 +9286,6 @@ var MechSimulatorLogic;
                 type: MechModelCommon.EventType.TEAMVICTORY_UPDATE,
             };
             eventQueue.queueEvent(victoryUpdate);
-            // MechModelView.updateVictory(MechModelView.getVictorTeam());
         }
         eventQueue.executeAllQueued();
     };
@@ -13200,6 +13202,18 @@ var MechViewWidgets;
     //fields will clobber the parent's field. 
     Button.ButtonDomKey = "mwosim.Button.uiObject";
     MechViewWidgets.Button = Button;
+    //helper function for enabling/disabling sets of buttons
+    MechViewWidgets.setButtonListEnabled = function (buttonDivs, enabled) {
+        for (let buttonDiv of buttonDivs) {
+            let button = Button.fromDom(buttonDiv, Button.ButtonDomKey);
+            if (enabled) {
+                button.enable();
+            }
+            else {
+                button.disable();
+            }
+        }
+    };
     class ExpandButton extends Button {
         constructor(domElement, clickHandler, ...elementsToExpand) {
             super(domElement, clickHandler);
@@ -13420,7 +13434,21 @@ var MechViewWidgets;
 })(MechViewWidgets || (MechViewWidgets = {}));
 var MechViewAddMech;
 (function (MechViewAddMech) {
+    var EventType = MechModelCommon.EventType;
     var LoadFromURLDialog = MechViewWidgets.LoadFromURLDialog;
+    MechViewAddMech.init = function () {
+        MWOSimEvents.getEventQueue().addListener(simStateListener, EventType.START, EventType.PAUSE);
+    };
+    var simStateListener = function (event) {
+        if (event.type === EventType.START) {
+            let addMechButtonsJQ = $(".addMechButton");
+            MechViewWidgets.setButtonListEnabled(addMechButtonsJQ, false);
+        }
+        else if (event.type === EventType.PAUSE) {
+            let addMechButtonsJQ = $(".addMechButton");
+            MechViewWidgets.setButtonListEnabled(addMechButtonsJQ, true);
+        }
+    };
     class AddMechButton extends MechViewWidgets.Button {
         constructor(team, container) {
             let addMechButtonPanelId = AddMechButton.addMechButtonId(team);
@@ -13832,9 +13860,31 @@ var MechViewMechPanel;
 //individual components
 //TODO: Remove mechId from method parameters in MechPanel. Use stored mechId instead.
 (function (MechViewMechPanel) {
+    var EventType = MechModelCommon.EventType;
     var WeaponCycle = MechModelCommon.WeaponCycle;
     var Component = MechModelCommon.Component;
     var DomStoredWidget = MechViewWidgets.DomStoredWidget;
+    MechViewMechPanel.init = function () {
+        let eventQueue = MWOSimEvents.getEventQueue();
+        eventQueue.addListener(simulationStateListener, EventType.START, EventType.PAUSE);
+    };
+    var simulationStateListener = function (event) {
+        let setButtonEnabled = MechViewWidgets.setButtonListEnabled;
+        if (event.type === EventType.START) {
+            //disable move and delete buttons
+            let deleteButtonsJQ = $(".deleteMechButton");
+            setButtonEnabled(deleteButtonsJQ, false);
+            let moveButtonsJQ = $(".moveMechButton");
+            setButtonEnabled(moveButtonsJQ, false);
+        }
+        else {
+            //enable move and delete buttons
+            let deleteButtonsJQ = $(".deleteMechButton");
+            setButtonEnabled(deleteButtonsJQ, true);
+            let moveButtonsJQ = $(".moveMechButton");
+            setButtonEnabled(moveButtonsJQ, true);
+        }
+    };
     class PaperDoll extends DomStoredWidget {
         constructor(mechId) {
             let paperDollDiv = MechViewWidgets.cloneTemplate("paperDoll-template");
@@ -14306,11 +14356,11 @@ var MechViewMechPanel;
             }
             let deleteIconSVG = MechViewWidgets.cloneTemplate("delete-icon-template");
             let mechDeleteButtonDivId = MechPanel.mechDeleteButtonId(mechId);
-            mechPanelJQ.find("[class~='titlePanel'] [class~='deleteMechButton']")
+            let deleteButtonJQ = mechPanelJQ.find("[class~='titlePanel'] [class~='deleteMechButton']")
                 .attr("id", mechDeleteButtonDivId)
                 .attr("data-mech-id", mechId)
-                .append(deleteIconSVG)
-                .click(MechPanel.deleteMechButtonHandler);
+                .append(deleteIconSVG);
+            let deleteButton = new MechViewWidgets.Button(deleteButtonJQ.get(0), MechPanel.deleteMechButtonHandler);
         }
         createDeleteMechButtonHandler() {
             return function () {
@@ -14334,12 +14384,12 @@ var MechViewMechPanel;
             let mechPanelJQ = $(mechPanelDiv);
             let moveIconSVG = MechViewWidgets.cloneTemplate("move-icon-template");
             let mechMoveButtonDivId = MechPanel.moveMechButtonId(mechId);
-            mechPanelJQ.find("[class~='titlePanel'] [class~='moveMechButton']")
+            let mechMoveButtonJQ = mechPanelJQ.find("[class~='titlePanel'] [class~='moveMechButton']")
                 .attr("id", mechMoveButtonDivId)
                 .attr("data-mech-id", mechId)
                 .attr("data-dragenabled", "false")
-                .append(moveIconSVG)
-                .click(this.createMoveMechButtonHandler());
+                .append(moveIconSVG);
+            let mechMoveButton = new MechViewWidgets.Button(mechMoveButtonJQ.get(0), this.createMoveMechButtonHandler());
         }
         isDragEnabled() {
             let moveMechButtonJQ = $(this.domElement).find(".moveMechButton");
@@ -15630,6 +15680,8 @@ var MechView;
         initSpeedControl();
         initStateControl();
         initMiscControl();
+        MechViewMechPanel.init();
+        MechViewAddMech.init();
     };
     var initControlPanel = function () {
         let controlPanelDiv = MechViewWidgets.cloneTemplate("controlPanel-template");

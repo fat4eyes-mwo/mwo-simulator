@@ -3,10 +3,26 @@
 
 namespace MechViewAddMech {
   import Team = MechModelCommon.Team;
+  import EventType = MechModelCommon.EventType;
   import LoadFromURLDialog = MechViewWidgets.LoadFromURLDialog;
 
   type SmurfyMechLoadout = SmurfyTypes.SmurfyMechLoadout;
   type ClickHandler = MechViewWidgets.ClickHandler;
+
+  export var init = function() {
+    MWOSimEvents.getEventQueue().addListener(simStateListener, 
+                                          EventType.START, EventType.PAUSE);
+  }
+
+  var simStateListener = function(event : MechSimulatorLogic.SimulatorStateUpdate) {
+    if (event.type === EventType.START) {
+      let addMechButtonsJQ = $(".addMechButton");
+      MechViewWidgets.setButtonListEnabled(addMechButtonsJQ, false);
+    } else if (event.type === EventType.PAUSE) {
+      let addMechButtonsJQ = $(".addMechButton");
+      MechViewWidgets.setButtonListEnabled(addMechButtonsJQ, true);
+    }
+  }
 
   export class AddMechButton extends MechViewWidgets.Button {
     static readonly AddMechButtonDomKey = "mwosim.AddMechButton.uiObject";

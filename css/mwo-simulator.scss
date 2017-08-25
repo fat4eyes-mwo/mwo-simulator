@@ -639,6 +639,11 @@ div {
   vertical-align: middle;
 }
 
+.titlePanel .titleButton.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .titlePanel .deleteMechButton {
   float: right;
   background-color: maroon;

@@ -59,6 +59,8 @@ namespace MechView {
     initSpeedControl();
     initStateControl();
     initMiscControl();
+    MechViewMechPanel.init();
+    MechViewAddMech.init();
   }
 
   var initControlPanel = function() : void {

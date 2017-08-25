@@ -160,6 +160,18 @@ namespace MechViewWidgets {
     }
   }
 
+  //helper function for enabling/disabling sets of buttons
+  export var setButtonListEnabled = function(buttonDivs : Iterable<HTMLElement>, enabled : boolean) {
+    for (let buttonDiv of buttonDivs) {
+      let button = Button.fromDom(buttonDiv, Button.ButtonDomKey) as Button;
+      if (enabled) {
+        button.enable();
+      } else {
+        button.disable();
+      }
+    }
+  }
+
   export class ExpandButton extends Button {
     private static readonly ExpandButtonDomKey = "mwosim.ExpandButton.uiObject";
     elementsToExpand : Element[];

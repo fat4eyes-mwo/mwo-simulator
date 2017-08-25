@@ -71,6 +71,8 @@ namespace MechModelCommon {
     SIMTIME_UPDATE : "SimTimeUpdate",
     TEAMSTATS_UPDATE : "TeamStatsUpdate",
     TEAMVICTORY_UPDATE : "TeamVictoryUpdate",
+    START : "Start",
+    PAUSE : "Pause"
   };
 
   export const BURST_DAMAGE_INTERVAL = 2000; //Interval considered for burst damage calculation
