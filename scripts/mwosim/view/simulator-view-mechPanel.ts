@@ -575,11 +575,12 @@ namespace MechViewMechPanel {
       }
       let deleteIconSVG = MechViewWidgets.cloneTemplate("delete-icon-template");
       let mechDeleteButtonDivId = MechPanel.mechDeleteButtonId(mechId);
-      mechPanelJQ.find("[class~='titlePanel'] [class~='deleteMechButton']")
+      let deleteButtonJQ = mechPanelJQ.find("[class~='titlePanel'] [class~='deleteMechButton']")
         .attr("id", mechDeleteButtonDivId)
         .attr("data-mech-id", mechId)
-        .append(deleteIconSVG)
-        .click(MechPanel.deleteMechButtonHandler);
+        .append(deleteIconSVG);
+      let deleteButton = new MechViewWidgets.Button(deleteButtonJQ.get(0), 
+                                                    MechPanel.deleteMechButtonHandler);
     }
 
     private createDeleteMechButtonHandler() {
@@ -610,12 +611,13 @@ namespace MechViewMechPanel {
       let mechPanelJQ = $(mechPanelDiv);
       let moveIconSVG = MechViewWidgets.cloneTemplate("move-icon-template");
       let mechMoveButtonDivId = MechPanel.moveMechButtonId(mechId);
-      mechPanelJQ.find("[class~='titlePanel'] [class~='moveMechButton']")
+      let mechMoveButtonJQ = mechPanelJQ.find("[class~='titlePanel'] [class~='moveMechButton']")
         .attr("id", mechMoveButtonDivId)
         .attr("data-mech-id", mechId)
         .attr("data-dragenabled", "false")
-        .append(moveIconSVG)
-        .click(this.createMoveMechButtonHandler());
+        .append(moveIconSVG);
+      let mechMoveButton = new MechViewWidgets.Button(mechMoveButtonJQ.get(0), 
+                                                this.createMoveMechButtonHandler());
     }
 
     isDragEnabled() : boolean {
