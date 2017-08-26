@@ -157,7 +157,7 @@ namespace MWOSimEvents {
       this.executeEvent(currEvent);
 
       this.stepScheduled = false;
-      if (this.queue.length > 0) {
+      if (this.queue.length > 0 && !this.executionDeferred) {
         this.stepScheduled = true;
         setTimeout(this.step.bind(this), 0);
       }
