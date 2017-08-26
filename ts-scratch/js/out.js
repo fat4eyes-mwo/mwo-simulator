@@ -264,9 +264,56 @@ System.register("test-weakmap", [], function (exports_7, context_7) {
         }
     };
 });
-System.register("main", ["moduleA", "moduleB", "libtest/moduleC", "storedElemTest", "test-touch"], function (exports_8, context_8) {
+System.register("test-classname", [], function (exports_8, context_8) {
     "use strict";
     var __moduleName = context_8 && context_8.id;
+    var TestClassname;
+    return {
+        setters: [],
+        execute: function () {
+            (function (TestClassname) {
+                class A {
+                    constructor() {
+                    }
+                }
+                class B extends A {
+                    constructor() {
+                        super();
+                    }
+                }
+                class C extends A {
+                    constructor() {
+                        super();
+                    }
+                }
+                class BB extends B {
+                    constructor() {
+                        super();
+                    }
+                }
+                class CC extends C {
+                    constructor() {
+                        super();
+                    }
+                }
+                TestClassname.testClassname = function () {
+                    let b = new B();
+                    let c = new C();
+                    let bb = new BB();
+                    let cc = new CC();
+                    console.log(`b: ${b.constructor.name}`);
+                    console.log(`c: ${c.constructor.name}`);
+                    console.log(`bb: ${bb.constructor.name}`);
+                    console.log(`cc: ${cc.constructor.name}`);
+                };
+            })(TestClassname || (TestClassname = {}));
+            exports_8("TestClassname", TestClassname);
+        }
+    };
+});
+System.register("main", ["moduleA", "moduleB", "libtest/moduleC", "storedElemTest", "test-touch", "test-classname"], function (exports_9, context_9) {
+    "use strict";
+    var __moduleName = context_9 && context_9.id;
     function main() {
         ModuleA.setA("a1");
         ModuleA2.setA("a2"); //Should set the same variable a in moduleA.js
@@ -276,9 +323,10 @@ System.register("main", ["moduleA", "moduleB", "libtest/moduleC", "storedElemTes
             ` ModuleB.getAFromB()=${ModuleB.getAfromB()}`);
         StoreElemTest.testStoredElem();
         test_touch_1.TouchTest.touchTest();
+        test_classname_1.TestClassname.testClassname();
     }
-    exports_8("main", main);
-    var ModuleA, ModuleA2, ModuleB, ModuleC, StoreElemTest, test_touch_1, foo;
+    exports_9("main", main);
+    var ModuleA, ModuleA2, ModuleB, ModuleC, StoreElemTest, test_touch_1, test_classname_1, foo;
     return {
         setters: [
             function (ModuleA_2) {
@@ -296,6 +344,9 @@ System.register("main", ["moduleA", "moduleB", "libtest/moduleC", "storedElemTes
             },
             function (test_touch_1_1) {
                 test_touch_1 = test_touch_1_1;
+            },
+            function (test_classname_1_1) {
+                test_classname_1 = test_classname_1_1;
             }
         ],
         execute: function () {

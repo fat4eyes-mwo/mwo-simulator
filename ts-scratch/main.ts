@@ -8,6 +8,7 @@ import * as ModuleC from "libtest/moduleC";
 import * as StoreElemTest from "storedElemTest";
 import {TouchTest} from "test-touch";
 import {WeakmapTest} from "test-weakmap";
+import {TestClassname} from "test-classname";
 
 let foo : ModuleA.TypeA;
 export function main() {
@@ -20,6 +21,8 @@ export function main() {
   StoreElemTest.testStoredElem();
   
   TouchTest.touchTest();
+
+  TestClassname.testClassname();
 }
 
 $(document).ready(main);
