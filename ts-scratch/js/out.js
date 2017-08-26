@@ -296,15 +296,34 @@ System.register("test-classname", [], function (exports_8, context_8) {
                         super();
                     }
                 }
+                var getClassname = function (c) {
+                    if (typeof c === 'function') {
+                        if (c.prototype && c.prototype.constructor) {
+                            return c.prototype.constructor.name;
+                        }
+                        else {
+                            return null;
+                        }
+                    }
+                    else if (typeof c === 'object') {
+                        if (c.constructor) {
+                            return c.constructor.name;
+                        }
+                        else {
+                            return null;
+                        }
+                    }
+                    return null;
+                };
                 TestClassname.testClassname = function () {
                     let b = new B();
                     let c = new C();
                     let bb = new BB();
                     let cc = new CC();
-                    console.log(`b: ${b.constructor.name}`);
-                    console.log(`c: ${c.constructor.name}`);
-                    console.log(`bb: ${bb.constructor.name}`);
-                    console.log(`cc: ${cc.constructor.name}`);
+                    console.log(`b: ${getClassname(b)} ${getClassname(B)}`);
+                    console.log(`c: ${getClassname(c)} ${getClassname(C)}`);
+                    console.log(`bb: ${getClassname(bb)} ${getClassname(BB)}`);
+                    console.log(`cc: ${getClassname(cc)} ${getClassname(CC)}`);
                 };
             })(TestClassname || (TestClassname = {}));
             exports_8("TestClassname", TestClassname);
