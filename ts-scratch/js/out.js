@@ -264,7 +264,7 @@ System.register("test-weakmap", [], function (exports_7, context_7) {
         }
     };
 });
-System.register("main", ["moduleA", "moduleB", "libtest/moduleC", "storedElemTest", "test-touch", "test-weakmap"], function (exports_8, context_8) {
+System.register("main", ["moduleA", "moduleB", "libtest/moduleC", "storedElemTest", "test-touch"], function (exports_8, context_8) {
     "use strict";
     var __moduleName = context_8 && context_8.id;
     function main() {
@@ -276,10 +276,9 @@ System.register("main", ["moduleA", "moduleB", "libtest/moduleC", "storedElemTes
             ` ModuleB.getAFromB()=${ModuleB.getAfromB()}`);
         StoreElemTest.testStoredElem();
         test_touch_1.TouchTest.touchTest();
-        test_weakmap_1.WeakmapTest.testWeakmap();
     }
     exports_8("main", main);
-    var ModuleA, ModuleA2, ModuleB, ModuleC, StoreElemTest, test_touch_1, test_weakmap_1, foo;
+    var ModuleA, ModuleA2, ModuleB, ModuleC, StoreElemTest, test_touch_1, foo;
     return {
         setters: [
             function (ModuleA_2) {
@@ -297,9 +296,6 @@ System.register("main", ["moduleA", "moduleB", "libtest/moduleC", "storedElemTes
             },
             function (test_touch_1_1) {
                 test_touch_1 = test_touch_1_1;
-            },
-            function (test_weakmap_1_1) {
-                test_weakmap_1 = test_weakmap_1_1;
             }
         ],
         execute: function () {

@@ -20,8 +20,6 @@ export function main() {
   StoreElemTest.testStoredElem();
   
   TouchTest.touchTest();
-
-  WeakmapTest.testWeakmap();
 }
 
 $(document).ready(main);
