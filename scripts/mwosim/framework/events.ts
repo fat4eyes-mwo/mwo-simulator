@@ -1,5 +1,5 @@
 
-namespace MWOSimEvents {
+namespace Events {
   export type EventType = string;
   export interface Event {
     type : EventType;
@@ -175,11 +175,4 @@ namespace MWOSimEvents {
     }
   }
 
-  let eventQueueInstance : EventQueue;
-  export var getEventQueue = function() {
-    if (!eventQueueInstance) {
-      eventQueueInstance = new EventQueue();
-    }
-    return eventQueueInstance;
-  }
 }

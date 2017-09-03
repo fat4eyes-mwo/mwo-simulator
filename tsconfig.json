@@ -18,7 +18,8 @@
     "include" : [
       "scripts/lib/*.ts",
       "scripts/mwosim/data/*.ts",
-      "scripts/msosim/common/*.ts",
+      "scripts/mwosim/common/*.ts",
+      "scripts/mwosim/framework/*.ts",
       "scripts/mwosim/**/*.ts",
       "scripts/mwosim-test/**/*.ts"
     ]

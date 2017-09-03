@@ -6,72 +6,7 @@
 //(e.g. class constructors, methods). Makes it possible to do cosmetic and layout
 //changes purely in HTML and CSS, and you keep out ugly unmaintainable HTML
 //text strings out of javascript.
-namespace MechViewWidgets {
-  // Paper doll UI functions
-  //Color gradient for damage percentages. Must be in sorted ascending order
-  type ColorGradient = ColorGradientEntry[];
-  export interface ColorGradientEntry {
-    value : number;
-    RGB : RGBEntry;
-  }
-  export interface RGBEntry {
-    r : number, g : number, b : number,
-  }
-  export const paperDollDamageGradient : ColorGradient = [
-    {value : 0.0, RGB : {r: 28, g:22, b:6}},
-    {value : 0.1, RGB : {r: 255, g:46, b:16}},
-    {value : 0.2, RGB : {r: 255, g:73, b:20}},
-    {value : 0.3, RGB : {r: 255, g:97, b:12}},
-    {value : 0.4, RGB : {r: 255, g:164, b:22}},
-    {value : 0.5, RGB : {r:255, g:176, b:18}},
-    {value : 0.6, RGB : {r:255, g:198, b:24}},
-    {value : 0.7, RGB : {r:255, g:211, b:23}},
-    {value : 0.8, RGB : {r:255, g:224, b:28}},
-    {value : 0.9, RGB : {r:255, g:235, b:24}},
-    {value : 1, RGB : {r:101, g:79, b:38}}
-  ];
-  //Colors for health numbers
-  export const healthDamageGradient : ColorGradient = [
-    {value : 0.0, RGB : {r: 230, g:20, b:20}},
-    {value : 0.7, RGB : {r: 230, g:230, b:20}},
-    // {value : 0.9, RGB : {r:20, g:230, b:20}},
-    {value : 0.9, RGB : {r:255, g:235, b:24}},
-    {value : 1, RGB : {r:170, g:170, b:170}}
-  ];
-  //Colors for individual component health numbers
-  export const componentHealthDamageGradient : ColorGradient = [
-    {value : 0.0, RGB : {r: 255, g:0, b:0}},
-    {value : 0.7, RGB : {r:255, g:255, b:0}},
-    // {value : 0.9, RGB : {r:0, g:255, b:0}},
-    {value : 0.9, RGB : {r:255, g:235, b:24}},
-    {value : 1, RGB : {r:170, g:170, b:170}}
-  ];
-
-  //gets the damage color for a given percentage of damage
-  export var damageColor = function (percent : number,
-                              damageGradient : ColorGradient)
-                              : string {
-    var damageIdx = Util.binarySearchClosest(
-            damageGradient, percent, (key, colorValue) => {
-      return key - colorValue.value;
-    });
-    if (damageIdx === -1) {
-      damageIdx = 0;
-    }
-    let nextIdx = damageIdx + 1;
-    nextIdx = (nextIdx < damageGradient.length) ? nextIdx : damageIdx;
-    let rgb = damageGradient[damageIdx].RGB;
-    let nextRgb = damageGradient[nextIdx].RGB;
-    let percentDiff = (damageIdx !== nextIdx) ?
-        (percent - damageGradient[damageIdx].value) /
-            (damageGradient[nextIdx].value - damageGradient[damageIdx].value)
-        : 1;
-    let red = Math.round(Number(rgb.r) + (Number(nextRgb.r) - Number(rgb.r)) * percentDiff);
-    let green = Math.round(Number(rgb.g) + (Number(nextRgb.g) - Number(rgb.g)) * percentDiff);
-    let blue = Math.round(Number(rgb.b) + (Number(nextRgb.b) - Number(rgb.b)) * percentDiff);
-    return "rgb(" + red + ","  + green + "," + blue + ")";
-  }
-
+namespace Widgets {
   export type ClickHandler = () => void;
 
   //Widgets that are stored in the dom using StoreValue.storeToElement
@@ -214,7 +149,7 @@ namespace MechViewWidgets {
     constructor(templateId : string,
                 tooltipId : string,
                 targetElement : Element) {
-      let domElement = MechViewWidgets.cloneTemplate(templateId);
+      let domElement = Widgets.cloneTemplate(templateId);
       super(domElement);
       this.storeToDom(Tooltip.TooltipDomKey);
       this.id = tooltipId;
@@ -322,14 +257,14 @@ namespace MechViewWidgets {
     }
   }
 
-  export abstract class LoadFromURLDialog extends MechViewWidgets.DomStoredWidget {
+  export abstract class LoadFromURLDialog extends Widgets.DomStoredWidget {
     static readonly DomKey = "mwosim.LoadFromURLDialog.uiObject";
     okButton: Button;
     cancelButton: Button;
     loadButton: Button;
     dialogId: string;
     constructor(loadDialogTemplate: string, dialogId: string) {
-      let loadDialogDiv = MechViewWidgets.cloneTemplate(loadDialogTemplate);
+      let loadDialogDiv = Widgets.cloneTemplate(loadDialogTemplate);
       super(loadDialogDiv);
       this.storeToDom(LoadFromURLDialog.DomKey);
 
@@ -352,15 +287,15 @@ namespace MechViewWidgets {
 
       let okButtonJQ = thisJQ.find(".okButton");
       this.okButton =
-        new MechViewWidgets.Button(okButtonJQ.get(0), okButtonHandler);
+        new Widgets.Button(okButtonJQ.get(0), okButtonHandler);
 
       let cancelButtonJQ = thisJQ.find(".cancelButton");
       this.cancelButton =
-        new MechViewWidgets.Button(cancelButtonJQ.get(0), cancelButtonHandler);
+        new Widgets.Button(cancelButtonJQ.get(0), cancelButtonHandler);
 
       let loadButtonJQ = thisJQ.find(".loadButton");
       this.loadButton =
-        new MechViewWidgets.Button(loadButtonJQ.get(0), loadButtonHandler);
+        new Widgets.Button(loadButtonJQ.get(0), loadButtonHandler);
 
       this.okButton.disable();
     }
@@ -413,8 +348,8 @@ namespace MechViewWidgets {
     return templateElement.firstElementChild;
   }
 
-  const MODAL_SCREEN_ID = "mechModalScreen";
-  const MODAL_DIALOG_ID = "mechModalDialog";
+  const MODAL_SCREEN_ID = "modalScreen";
+  const MODAL_DIALOG_ID = "modalDialog";
 
   //sets the content of the modal dialog to element, while optionally adding
   //a class to the dialog container

@@ -8,7 +8,7 @@ namespace MechView {
 
   type Mech = MechModel.Mech;
   type Team = MechModelCommon.Team;
-  type Tooltip = MechViewWidgets.Tooltip;
+  type Tooltip = Widgets.Tooltip;
 
   var teamListPanel = function(team : Team) {
     return  team + "Team";
@@ -64,7 +64,7 @@ namespace MechView {
   }
 
   var initControlPanel = function() : void {
-    let controlPanelDiv = MechViewWidgets.cloneTemplate("controlPanel-template");
+    let controlPanelDiv = Widgets.cloneTemplate("controlPanel-template");
     $(controlPanelDiv)
       .appendTo("#controlPanelContainer");
   }
@@ -148,15 +148,15 @@ namespace MechView {
       });
     //NOTE: We don't actually use the tooltip variable, it's just there to make tslint 
     //shut up about unused expressions. The tooltips themselves are stored in the DOM
-    let tooltip : MechViewWidgets.Tooltip;
-    tooltip = new MechViewWidgets.Tooltip("modifiedTooltip-template",
+    let tooltip : Widgets.Tooltip;
+    tooltip = new Widgets.Tooltip("modifiedTooltip-template",
                                 "modifiedTooltip",
                                 permalinkButtonJQ.get(0));
-    tooltip = new MechViewWidgets.Tooltip("permalinkGeneratedTooltip-template",
+    tooltip = new Widgets.Tooltip("permalinkGeneratedTooltip-template",
                                 "permalinkGeneratedTooltip",
                                 permalinkButtonJQ.get(0));
     let miscControlJQ = $("#" + "miscControl");
-    tooltip = new MechViewWidgets.Tooltip("loadErrorTooltip-template",
+    tooltip = new Widgets.Tooltip("loadErrorTooltip-template",
                                 "loadErrorTooltip",
                                 miscControlJQ.get(0));
     $("#settingsButton").click(() => {
@@ -167,7 +167,7 @@ namespace MechView {
 
   var getStatusTooltip = function(tooltipId : string) : Tooltip {
     let element = document.getElementById(tooltipId);
-    return MechViewWidgets.Tooltip.fromDom(element, MechViewWidgets.Tooltip.TooltipDomKey);
+    return Widgets.Tooltip.fromDom(element, Widgets.Tooltip.TooltipDomKey);
   }
 
   var showStatusTooltip = function(tooltipId : string) : void {
@@ -242,10 +242,10 @@ namespace MechView {
   const LOADING_SCREEN_ANIMATE_INTERVAL = 200; //ms
   export var showLoadingScreen = function() : void {
     let loadingScreenDiv =
-        MechViewWidgets.cloneTemplate("loadingScreen-template");
+        Widgets.cloneTemplate("loadingScreen-template");
     $(loadingScreenDiv)
       .attr("id", "loadingScreenContainer");
-    MechViewWidgets.setModal(loadingScreenDiv);
+    Widgets.setModal(loadingScreenDiv);
 
     let loadingScreenPaperDollJQ = $("#loadingScreenPaperDollContainer");
     let paperDoll = new MechViewMechPanel.PaperDoll(LOADING_SCREEN_MECH_ID);
@@ -273,11 +273,11 @@ namespace MechView {
       , LOADING_SCREEN_ANIMATE_INTERVAL);
 
     updateLoadingScreenProgress(0);
-    MechViewWidgets.showModal();
+    Widgets.showModal();
   }
 
   export var hideLoadingScreen = function() : void {
-    MechViewWidgets.hideModal();
+    Widgets.hideModal();
     window.clearInterval(loadingScreenAnimateInterval);
   }
 

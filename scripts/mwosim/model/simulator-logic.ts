@@ -14,21 +14,21 @@ namespace MechSimulatorLogic {
   type DamageMap = MechModel.DamageMap;
   type GhostHeatMap = MechModel.GhostHeatMap;
 
-  export interface MechUpdate extends MWOSimEvents.Event {
+  export interface MechUpdate extends Events.Event {
     mech : MechModel.Mech;
   }
 
-  export interface TeamStatsUpdate extends MWOSimEvents.Event {
+  export interface TeamStatsUpdate extends Events.Event {
     team : MechModelCommon.Team;
     simTime : number;
   }
 
-  export interface SimTimeUpdate extends MWOSimEvents.Event {
+  export interface SimTimeUpdate extends Events.Event {
     simTime : number;
   }
 
-  export type TeamVictoryUpdate = MWOSimEvents.Event;
-  export type SimulatorStateUpdate = MWOSimEvents.Event;
+  export type TeamVictoryUpdate = Events.Event;
+  export type SimulatorStateUpdate = Events.Event;
 
   var simulationInterval : number = null;
   var simRunning = false;
@@ -74,12 +74,12 @@ namespace MechSimulatorLogic {
       createSimulationInterval();
     }
     simRunning = true;
-    MWOSimEvents.getEventQueue().queueEvent({type : EventType.START});
+    MechModelView.getEventQueue().queueEvent({type : EventType.START});
   }
 
   export var pauseSimulation = function() : void {
     simRunning = false;
-    MWOSimEvents.getEventQueue().queueEvent({type: EventType.PAUSE});
+    MechModelView.getEventQueue().queueEvent({type: EventType.PAUSE});
   }
 
   export var stepSimulation = function() : void {
@@ -101,7 +101,7 @@ namespace MechSimulatorLogic {
       type : MechModelCommon.EventType.SIMTIME_UPDATE,
       simTime
     }
-    MWOSimEvents.getEventQueue().queueEvent(update);
+    MechModelView.getEventQueue().queueEvent(update);
     MechAccuracyPattern.reset();
     MechTargetComponent.reset();
     MechFirePattern.reset();
@@ -111,7 +111,7 @@ namespace MechSimulatorLogic {
   //Simulation step function. Called every tick
   export var step = function() : void {
     let teams : Team[] = [Team.BLUE, Team.RED];
-    let eventQueue = MWOSimEvents.getEventQueue();
+    let eventQueue = MechModelView.getEventQueue();
     eventQueue.deferExecution();
     willUpdateTeamStats = {};
     processWeaponFires();

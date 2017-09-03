@@ -25,8 +25,16 @@ namespace MechModelView {
     MECHLISTS : "mechlists",
   };
 
+  let simEventQueue : Events.EventQueue;
+  export var getEventQueue = function() {
+    if (!simEventQueue) {
+      simEventQueue = new Events.EventQueue();
+    }
+    return simEventQueue;
+  }
+
   export var init = function() {
-    let eventQueue = MWOSimEvents.getEventQueue();
+    let eventQueue = getEventQueue();
     eventQueue.addListener(mechUpdateListener, EventType.MECH_UPDATE);
     eventQueue.addListener(teamStatsListener, EventType.TEAMSTATS_UPDATE);
     eventQueue.addListener(simTimeListener, EventType.SIMTIME_UPDATE);

@@ -545,9 +545,9 @@ namespace MechTest {
   }
 
   export var testEventQueue = function() {
-    let eventQueue = new MWOSimEvents.EventQueue();
+    let eventQueue = new Events.EventQueue();
 
-    interface TestEvent extends MWOSimEvents.Event {
+    interface TestEvent extends Events.Event {
       data : string;
     }
 

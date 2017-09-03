@@ -10,7 +10,7 @@ namespace MechViewSimSettings {
     let rangeJQ = $("#rangeInput");
     let rangeButtonElem = document.getElementById("setRangeButton");
     let rangeButton =
-      new MechViewWidgets.Button(rangeButtonElem,
+      new Widgets.Button(rangeButtonElem,
                                       function(this : Element) {
       let buttonMode = $(this).attr("data-button-mode");
       if (buttonMode === "not-editing") {
@@ -71,7 +71,7 @@ namespace MechViewSimSettings {
     constructor(simSettings : SimulatorParameters) {
       this.simSettings = simSettings;
 
-      let settingsDiv = MechViewWidgets.cloneTemplate("simSettings-template");
+      let settingsDiv = Widgets.cloneTemplate("simSettings-template");
       this.domElement = settingsDiv;
       this.propertyMap = new Map();
 
@@ -102,7 +102,7 @@ namespace MechViewSimSettings {
       let settingsList = SimulatorParameters.getUserSettings();
       let entryListJQ = $(this.domElement).find(".simSettingsList");
       for (let entry of settingsList) {
-        let entryDiv = MechViewWidgets.cloneTemplate("simSettingsEntry-template");
+        let entryDiv = Widgets.cloneTemplate("simSettingsEntry-template");
         let entryJQ = $(entryDiv)
                           .attr("id", this.settingEntryId(entry.property))
                           .attr("data-property", entry.property);
@@ -140,11 +140,11 @@ namespace MechViewSimSettings {
     let simulatorParameters = SimulatorSettings.getSimulatorParameters();
 
     let dialog = new SettingsDialog(simulatorParameters);
-    MechViewWidgets.setModal(dialog.domElement, "simSettingsDialog");
-    MechViewWidgets.showModal();
+    Widgets.setModal(dialog.domElement, "simSettingsDialog");
+    Widgets.showModal();
   }
 
   export var hideSettingsDialog = function() {
-    MechViewWidgets.hideModal("simSettingsDialog");
+    Widgets.hideModal("simSettingsDialog");
   }
 }

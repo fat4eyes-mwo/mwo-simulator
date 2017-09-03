@@ -6,6 +6,8 @@ namespace MechViewTeamStats {
   type PatternFunction = ModelPatterns.PatternFunction;
   type MechHealthToView = MechModelView.MechHealthToView;
 
+  import damageColor = MechViewDamageColor.damageColor;
+
   var teamStatsContainerId = function(team : Team) : string {
     return team + "-teamStatsContainer";
   }
@@ -45,7 +47,7 @@ namespace MechViewTeamStats {
   }
   export var addTeamStatsPanel = function(team : Team, mechIds : string[]) {
     let teamStatsContainerPanelId = teamStatsContainerId(team);
-    let teamStatsDiv = MechViewWidgets.cloneTemplate("teamStats-template");
+    let teamStatsDiv = Widgets.cloneTemplate("teamStats-template");
     $(teamStatsDiv)
       .attr("id", teamStatsId(team))
       .attr("data-team", team)
@@ -67,7 +69,7 @@ namespace MechViewTeamStats {
     for (let mechId of mechIds) {
       let mechName = MechModelView.getMechName(mechId);
       mechName = mechName ? mechName : "";
-      let mechPipSpan = MechViewWidgets.cloneTemplate("mechPip-template");
+      let mechPipSpan = Widgets.cloneTemplate("mechPip-template");
       $(mechPipSpan)
         .attr("id", teamMechPipId(mechId))
         .attr("data-team", team)
@@ -101,7 +103,7 @@ namespace MechViewTeamStats {
     let teamSettingsArrowJQ =
       teamStatsContainerJQ.find("[class~=teamSettingsButtonArrow]");
     let settingsExpandButton =
-      new MechViewWidgets.ExpandButton(
+      new Widgets.ExpandButton(
           teamSettingsButtonJQ.get(0),
           undefined, //No click handler, we only use the expand/contract functionality of the button
           teamSettingsArrowJQ.get(0),
@@ -268,7 +270,7 @@ namespace MechViewTeamStats {
       let mechPipDiv = document.getElementById(teamMechPipId(mechId));
       let percentHealth = Number(currHealth) / Number(maxHealth);
 
-      let pipColor = MechViewWidgets.damageColor(percentHealth, MechViewWidgets.healthDamageGradient);
+      let pipColor = damageColor(percentHealth, MechViewDamageColor.HealthDamageGradient);
       mechPipDiv.style.color = pipColor;
       if (isAlive) {
         mechPipDiv.textContent = "\u25A0"; //solid box
@@ -284,7 +286,7 @@ namespace MechViewTeamStats {
     let liveMechsDiv = document.getElementById(teamLiveMechsId(team));
     let totalMechs = update.mechHealthList.length;
     let percentAlive = totalMechs > 0 ? liveMechs / totalMechs : 0;
-    let color = MechViewWidgets.damageColor(percentAlive, MechViewWidgets.healthDamageGradient);
+    let color = damageColor(percentAlive, MechViewDamageColor.HealthDamageGradient);
     liveMechsDiv.style.color = color;
     liveMechsDiv.textContent = liveMechs + "/" + totalMechs;
 
@@ -292,7 +294,7 @@ namespace MechViewTeamStats {
     let healthValueDiv = document.getElementById(teamHealthValueId(team));
     let teamHealthPercent = totalTeamMaxHealth > 0 ?
             totalTeamCurrHealth / totalTeamMaxHealth : 0;
-    color = MechViewWidgets.damageColor(teamHealthPercent, MechViewWidgets.healthDamageGradient);
+    color = damageColor(teamHealthPercent, MechViewDamageColor.HealthDamageGradient);
     healthValueDiv.style.color = color;
     healthValueDiv.textContent =
         `(${Number(teamHealthPercent * 100).toFixed(1)}%)`;

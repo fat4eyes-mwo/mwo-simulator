@@ -1,16 +1,16 @@
-/// <reference path="simulator-view-widgets.ts" />
+/// <reference path="../framework/widgets.ts" />
 
 namespace MechViewMechDetails {
-  type LoadFromURLDialog = MechViewWidgets.LoadFromURLDialog;
-  type ClickHandler = MechViewWidgets.ClickHandler;
+  type LoadFromURLDialog = Widgets.LoadFromURLDialog;
+  type ClickHandler = Widgets.ClickHandler;
   type MechViewQuirk = MechModelView.MechViewQuirk;
 
-  export class MechDetails extends MechViewWidgets.DomStoredWidget
-                          implements MechViewWidgets.RenderedWidget {
+  export class MechDetails extends Widgets.DomStoredWidget
+                          implements Widgets.RenderedWidget {
     private static readonly MechDetailsDomKey = "mwosim.MechDetails.uiObject";
     mechId : string;
     constructor(mechId : string) {
-      let mechDetailsDiv = MechViewWidgets.cloneTemplate("mechDetails-template");
+      let mechDetailsDiv = Widgets.cloneTemplate("mechDetails-template");
       super(mechDetailsDiv);
       this.storeToDom(MechDetails.MechDetailsDomKey);
       this.mechId = mechId;
@@ -28,14 +28,14 @@ namespace MechViewMechDetails {
         tabTitle : new MechDetailsTabTitle("Skills"),
         tabContent : new MechDetailsSkills(this.mechId),
       };
-      let mechDetailsTab = new MechViewWidgets.TabPanel(
+      let mechDetailsTab = new Widgets.TabPanel(
                                 [MechDetailsQuirksTab, MechDetailsSkillsTab]);
       mechDetailsJQ.find(".tabPanelContainer").append(mechDetailsTab.domElement);
       mechDetailsTab.render();
     }
   }
 
-  class MechDetailsTabTitle extends MechViewWidgets.SimpleWidget {
+  class MechDetailsTabTitle extends Widgets.SimpleWidget {
     private title : string;
     constructor(title : string) {
       super("mechDetailsTabTitle-template");
@@ -47,13 +47,13 @@ namespace MechViewMechDetails {
     }
   }
 
-  class MechDetailsQuirks extends MechViewWidgets.DomStoredWidget
-                          implements MechViewWidgets.RenderedWidget {
+  class MechDetailsQuirks extends Widgets.DomStoredWidget
+                          implements Widgets.RenderedWidget {
     private static readonly MechDetailsQuirksDomKey = "mwosim.MechDetailsQuirks.uiObject";
     private mechId : string;
 
     constructor(mechId : string) {
-      let mechDetailsQuirksDiv = MechViewWidgets.cloneTemplate("mechDetailsQuirks-template");
+      let mechDetailsQuirksDiv = Widgets.cloneTemplate("mechDetailsQuirks-template");
       super(mechDetailsQuirksDiv);
       this.storeToDom(MechDetailsQuirks.MechDetailsQuirksDomKey);
       this.mechId = mechId;
@@ -71,32 +71,32 @@ namespace MechViewMechDetails {
     }
   }
 
-  class MechDetailsSkills extends MechViewWidgets.DomStoredWidget
-                          implements MechViewWidgets.RenderedWidget {
+  class MechDetailsSkills extends Widgets.DomStoredWidget
+                          implements Widgets.RenderedWidget {
     private static readonly MechDetailsSkillsDomKey = "mwosim.MechDetailsSkills.uiObject";
     mechId : string;
-    loadButton : MechViewWidgets.Button;
+    loadButton : Widgets.Button;
     quirkListPanel : MechQuirkListPanel;
     constructor(mechId : string) {
-      let domElement = MechViewWidgets.cloneTemplate("mechDetailsSkills-template");
+      let domElement = Widgets.cloneTemplate("mechDetailsSkills-template");
       super(domElement);
       this.storeToDom(MechDetailsSkills.MechDetailsSkillsDomKey);
       this.mechId = mechId;
 
       let loadButtonJQ = $(this.domElement).find(".loadButton");
-      this.loadButton = new MechViewWidgets.Button(loadButtonJQ.get(0), this.createLoadButtonHandler(this));
+      this.loadButton = new Widgets.Button(loadButtonJQ.get(0), this.createLoadButtonHandler(this));
 
       let skillListJQ = $(this.domElement).find(".skillList");
       this.quirkListPanel = new MechQuirkListPanel(skillListJQ.get(0), this.mechId);
     }
 
-    private createLoadButtonHandler(skillsPanel : MechDetailsSkills) : MechViewWidgets.ClickHandler {
+    private createLoadButtonHandler(skillsPanel : MechDetailsSkills) : Widgets.ClickHandler {
       return function() : void {
         let loadSkillsDialog = new LoadMechSkillsDialog(skillsPanel);
-        MechViewWidgets.setModal(loadSkillsDialog.domElement);
+        Widgets.setModal(loadSkillsDialog.domElement);
 
         MechSimulatorLogic.pauseSimulation();
-        MechViewWidgets.showModal();
+        Widgets.showModal();
         $(loadSkillsDialog.getTextInput()).focus();
       }
     }
@@ -111,7 +111,7 @@ namespace MechViewMechDetails {
         let skillLoader = MechModelSkills.getSkillLoader(skillState.type);
         skillLoader.setSkillState(skillState);
         skillLinkJQ.text("View skills").attr("href", skillLoader.getSkillURL());
-        skillLinkJQ.append(MechViewWidgets.cloneTemplate("external-link-template"));
+        skillLinkJQ.append(Widgets.cloneTemplate("external-link-template"));
       } else {
         skillLinkJQ.text("").attr("href", "");
       }
@@ -120,7 +120,7 @@ namespace MechViewMechDetails {
     }
   }
 
-  class LoadMechSkillsDialog extends MechViewWidgets.LoadFromURLDialog {
+  class LoadMechSkillsDialog extends Widgets.LoadFromURLDialog {
     private static readonly DialogId = "loadMechSkillsDialog";
     mechId : string;
     mechSkillsPanel : MechDetailsSkills;
@@ -150,12 +150,12 @@ namespace MechViewMechDetails {
         } else {
           console.warn("No loaded skill quirks");
         }
-        MechViewWidgets.hideModal();
+        Widgets.hideModal();
       };
     }
     createCancelButtonHandler(dialog: LoadFromURLDialog): ClickHandler {
       return function() {
-        MechViewWidgets.hideModal();
+        Widgets.hideModal();
       }
     }
     createLoadButtonHandler(dialog: LoadFromURLDialog): ClickHandler {
@@ -200,8 +200,8 @@ namespace MechViewMechDetails {
     }
   }
 
-  class MechQuirkListPanel extends MechViewWidgets.DomStoredWidget 
-                        implements MechViewWidgets.RenderedWidget {
+  class MechQuirkListPanel extends Widgets.DomStoredWidget 
+                        implements Widgets.RenderedWidget {
     static readonly MechQuirkListDomKey = "mwosim.MechQuirkListPanel.uiObject";
     private quirkList : MechViewQuirk[] = [];
     mechId : string;
@@ -228,14 +228,14 @@ namespace MechViewMechDetails {
       let mechQuirksJQ = $(this.domElement);
       mechQuirksJQ.empty();
       if (this.quirkList.length === 0) {
-        let mechQuirkDiv = MechViewWidgets.cloneTemplate("mechDetailsQuirkRow-template");
+        let mechQuirkDiv = Widgets.cloneTemplate("mechDetailsQuirkRow-template");
         let mechQuirkJQ = $(mechQuirkDiv);
         mechQuirkJQ.find(".name").text("None");
         mechQuirksJQ.append(mechQuirkJQ);
       }
 
       for (let mechQuirk of this.quirkList) {
-        let mechQuirkDiv = MechViewWidgets.cloneTemplate("mechDetailsQuirkRow-template");
+        let mechQuirkDiv = Widgets.cloneTemplate("mechDetailsQuirkRow-template");
         let mechQuirkJQ = $(mechQuirkDiv);
         mechQuirkJQ.find(".name").text(mechQuirk.translated_name);
         mechQuirkJQ.find(".value").text(mechQuirk.translated_value);

@@ -1,30 +1,30 @@
-/// <reference path="simulator-view-widgets.ts" />
+/// <reference path="../framework/widgets.ts" />
 "use strict";
 
 namespace MechViewAddMech {
   import Team = MechModelCommon.Team;
   import EventType = MechModelCommon.EventType;
-  import LoadFromURLDialog = MechViewWidgets.LoadFromURLDialog;
+  import LoadFromURLDialog = Widgets.LoadFromURLDialog;
 
   type SmurfyMechLoadout = SmurfyTypes.SmurfyMechLoadout;
-  type ClickHandler = MechViewWidgets.ClickHandler;
+  type ClickHandler = Widgets.ClickHandler;
 
   export var init = function() {
-    MWOSimEvents.getEventQueue().addListener(simStateListener, 
+    MechModelView.getEventQueue().addListener(simStateListener, 
                                           EventType.START, EventType.PAUSE);
   }
 
   var simStateListener = function(event : MechSimulatorLogic.SimulatorStateUpdate) {
     if (event.type === EventType.START) {
       let addMechButtonsJQ = $(".addMechButton");
-      MechViewWidgets.setButtonListEnabled(addMechButtonsJQ, false);
+      Widgets.setButtonListEnabled(addMechButtonsJQ, false);
     } else if (event.type === EventType.PAUSE) {
       let addMechButtonsJQ = $(".addMechButton");
-      MechViewWidgets.setButtonListEnabled(addMechButtonsJQ, true);
+      Widgets.setButtonListEnabled(addMechButtonsJQ, true);
     }
   }
 
-  export class AddMechButton extends MechViewWidgets.Button {
+  export class AddMechButton extends Widgets.Button {
     static readonly AddMechButtonDomKey = "mwosim.AddMechButton.uiObject";
     private static addMechButtonHandler : ClickHandler;
     constructor(team: Team, container: Element) {
@@ -140,7 +140,7 @@ namespace MechViewAddMech {
     private static readonly SMURFY_BASE_URL = "http://mwo.smurfy-net.de/mechlab#";
     constructor(containerElem: Element,
               smurfyMechLoadout: SmurfyMechLoadout) {
-      let loadedMechDiv = MechViewWidgets.cloneTemplate("loadedMech-template");
+      let loadedMechDiv = Widgets.cloneTemplate("loadedMech-template");
       let loadedMechJQ = $(loadedMechDiv)
         .removeAttr("id")
         .appendTo(containerElem);
@@ -179,7 +179,7 @@ namespace MechViewAddMech {
     }
 
     private loadedMechSpan(text: string, spanClass: string): JQuery {
-      let span = MechViewWidgets.cloneTemplate("loadedMechInfo-template");
+      let span = Widgets.cloneTemplate("loadedMechInfo-template");
       return $(span)
         .addClass(spanClass)
         .text(text);
@@ -187,7 +187,7 @@ namespace MechViewAddMech {
 
     private loadedMechWeaponSpan(name: string, count: number, type: string): JQuery {
       let numberClass = this.loadedMechWeaponClass(type);
-      let weaponSpan = MechViewWidgets.cloneTemplate("loadedMechWeapon-template");
+      let weaponSpan = Widgets.cloneTemplate("loadedMechWeapon-template");
       let ret = $(weaponSpan);
       ret.find(".weaponName")
         .text(name);
@@ -215,15 +215,15 @@ namespace MechViewAddMech {
 
   export var showAddMechDialog = function (team: Team): void {
     let addMechDialog = new AddMechDialog(team);
-    MechViewWidgets.setModal(addMechDialog.domElement, "addMech");
+    Widgets.setModal(addMechDialog.domElement, "addMech");
 
-    MechViewWidgets.showModal();
+    Widgets.showModal();
 
     $(addMechDialog.getTextInput()).focus();
   }
 
   export var hideAddMechDialog = function (team: Team): void {
-    MechViewWidgets.hideModal("addMech");
+    Widgets.hideModal("addMech");
   }
 
 }
