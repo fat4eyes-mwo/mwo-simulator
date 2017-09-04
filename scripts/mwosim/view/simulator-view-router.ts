@@ -297,7 +297,7 @@ namespace MechViewRouter {
       function(param : string, value : string, replaceHistory = false) : void {
     let paramValues = new Map<string, string>();
     for (let currParam of HASH_FIELDS) {
-      let currValue = getParamFromLocationHash(currParam);
+      let currValue = Util.getParamFromLocationHash(currParam);
       if (!currValue && param !== currParam) {
         continue;
       }
@@ -324,31 +324,16 @@ namespace MechViewRouter {
     }
   }
 
-  var getParamFromLocationHash = function(param : string) : string {
-    let fragmentHash = location.hash;
-    if (fragmentHash.startsWith("#")) {
-      fragmentHash = fragmentHash.substring(1);
-    }
-    fragmentHash = "&" + fragmentHash;
-    let regex = new RegExp(".*&" + param + "=([^&]*).*");
-    let results = regex.exec(fragmentHash);
-    if (results) {
-      return results[1];
-    } else {
-      return null;
-    }
-  }
-
   export var getRunFromLocation = function() : string {
-    return getParamFromLocationHash(HASH_RUN_FIELD);
+    return Util.getParamFromLocationHash(HASH_RUN_FIELD);
   }
 
   export var getSpeedFromLocation = function() : string {
-    return getParamFromLocationHash(HASH_SPEED_FIELD);
+    return Util.getParamFromLocationHash(HASH_SPEED_FIELD);
   }
 
   var getStateHashFromLocation = function() :string {
-    return getParamFromLocationHash(HASH_STATE_FIELD);
+    return Util.getParamFromLocationHash(HASH_STATE_FIELD);
   }
 
   export var loadStateFromLocationHash = function() : Promise<any> {

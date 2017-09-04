@@ -1,10 +1,10 @@
 "use strict";
 
-//returns index of matching entry, otherwise returns the closest lower entry in
-//the array
 namespace Util {
   export type AnyFunction = (...params : any[]) => any;
 
+  //returns index of matching entry, otherwise returns the closest lower entry in
+  //the array
   //TODO: See if this method is still worth it
   export function binarySearchClosest(array : any[],
                                   key : any,
@@ -58,15 +58,46 @@ namespace Util {
     }
   }
 
+  export var getParamFromLocationHash = function(param : string) : string {
+    let fragmentHash = location.hash;
+    if (fragmentHash.startsWith("#")) {
+      fragmentHash = fragmentHash.substring(1);
+    }
+    fragmentHash = "&" + fragmentHash;
+    let regex = new RegExp(".*&" + param + "=([^&]*).*");
+    let results = regex.exec(fragmentHash);
+    if (results) {
+      return results[1];
+    } else {
+      return null;
+    }
+  }
+
+  let DEFAULT_DEBUG = true;
+  var isDebug = function() {
+    let debug = getParamFromLocationHash("debug");
+    if (debug) {
+      return debug === 'true';
+    } else {
+      return DEFAULT_DEBUG;
+    }
+  }
+
   export var log = function(msg? : any, ...optionalParams : any[]) {
-    //console.log(msg, ...optionalParams);
+    if (isDebug()) {
+      console.log(msg, ...optionalParams);
+    }
   }
 
   export var warn = function(msg? : any, ...optionalParams : any[]){
-    //console.warn(msg, ...optionalParams);
+    if (isDebug()) {
+      console.warn(msg, ...optionalParams);
+    }
   }
 
   export var error = function(msg? : any, ...optionalParams : any[]) {
-    //console.error(msg, ...optionalParams);
+    if (isDebug()) {
+      console.error(msg, ...optionalParams);
+    }
   }
 }

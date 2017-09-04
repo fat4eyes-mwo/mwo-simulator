@@ -8366,12 +8366,10 @@ var Events;
     }
     Events.EventQueue = EventQueue;
 })(Events || (Events = {}));
-//returns index of matching entry, otherwise returns the closest lower entry in
-//the array
 var Util;
-//returns index of matching entry, otherwise returns the closest lower entry in
-//the array
 (function (Util) {
+    //returns index of matching entry, otherwise returns the closest lower entry in
+    //the array
     //TODO: See if this method is still worth it
     function binarySearchClosest(array, key, keyCompare) {
         var low = 0;
@@ -8422,14 +8420,45 @@ var Util;
         }
     }
     Util.StringLogger = StringLogger;
+    Util.getParamFromLocationHash = function (param) {
+        let fragmentHash = location.hash;
+        if (fragmentHash.startsWith("#")) {
+            fragmentHash = fragmentHash.substring(1);
+        }
+        fragmentHash = "&" + fragmentHash;
+        let regex = new RegExp(".*&" + param + "=([^&]*).*");
+        let results = regex.exec(fragmentHash);
+        if (results) {
+            return results[1];
+        }
+        else {
+            return null;
+        }
+    };
+    let DEFAULT_DEBUG = true;
+    var isDebug = function () {
+        let debug = Util.getParamFromLocationHash("debug");
+        if (debug) {
+            return debug === 'true';
+        }
+        else {
+            return DEFAULT_DEBUG;
+        }
+    };
     Util.log = function (msg, ...optionalParams) {
-        //console.log(msg, ...optionalParams);
+        if (isDebug()) {
+            console.log(msg, ...optionalParams);
+        }
     };
     Util.warn = function (msg, ...optionalParams) {
-        //console.warn(msg, ...optionalParams);
+        if (isDebug()) {
+            console.warn(msg, ...optionalParams);
+        }
     };
     Util.error = function (msg, ...optionalParams) {
-        //console.error(msg, ...optionalParams);
+        if (isDebug()) {
+            console.error(msg, ...optionalParams);
+        }
     };
 })(Util || (Util = {}));
 //Widget design policy: No logic in HTML, no layout in Javascript.
@@ -15153,7 +15182,7 @@ var MechViewRouter;
     var setParamToLocationHash = function (param, value, replaceHistory = false) {
         let paramValues = new Map();
         for (let currParam of HASH_FIELDS) {
-            let currValue = getParamFromLocationHash(currParam);
+            let currValue = Util.getParamFromLocationHash(currParam);
             if (!currValue && param !== currParam) {
                 continue;
             }
@@ -15182,29 +15211,14 @@ var MechViewRouter;
             window.history.replaceState(null, "", "#" + newHashString);
         }
     };
-    var getParamFromLocationHash = function (param) {
-        let fragmentHash = location.hash;
-        if (fragmentHash.startsWith("#")) {
-            fragmentHash = fragmentHash.substring(1);
-        }
-        fragmentHash = "&" + fragmentHash;
-        let regex = new RegExp(".*&" + param + "=([^&]*).*");
-        let results = regex.exec(fragmentHash);
-        if (results) {
-            return results[1];
-        }
-        else {
-            return null;
-        }
-    };
     MechViewRouter.getRunFromLocation = function () {
-        return getParamFromLocationHash(HASH_RUN_FIELD);
+        return Util.getParamFromLocationHash(HASH_RUN_FIELD);
     };
     MechViewRouter.getSpeedFromLocation = function () {
-        return getParamFromLocationHash(HASH_SPEED_FIELD);
+        return Util.getParamFromLocationHash(HASH_SPEED_FIELD);
     };
     var getStateHashFromLocation = function () {
-        return getParamFromLocationHash(HASH_STATE_FIELD);
+        return Util.getParamFromLocationHash(HASH_STATE_FIELD);
     };
     MechViewRouter.loadStateFromLocationHash = function () {
         let hashState = getStateHashFromLocation();
