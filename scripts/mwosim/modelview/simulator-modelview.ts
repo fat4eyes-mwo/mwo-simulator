@@ -202,7 +202,7 @@ namespace MechModelView {
         armor: mechComponentHealth.armor,
         structure: mechComponentHealth.structure,
         maxArmor: mechComponentHealth.maxArmor,
-        maxStructure: mechComponentHealth.maxStructure
+        maxStructure: mechComponentHealth.maxStructure,
       };
       mechHealthNumbers.updateMechHealthNumbers(update);
     }
@@ -229,7 +229,7 @@ namespace MechModelView {
       targetMechName : targetMechName,
       dps : dps,
       burst : burst,
-      totalDmg : totalDmg
+      totalDmg : totalDmg,
     }
     let mechPanel = MechView.getMechPanel(mech.getMechId());
     mechPanel.updateMechStatusPanel(mech.getMechId(), update);
@@ -334,7 +334,7 @@ namespace MechModelView {
       mechHealthList,
       damage : Number(totalTeamDamage),
       dps,
-      burstDamage : Number(totalTeamBurstDamage)
+      burstDamage : Number(totalTeamBurstDamage),
     }
     MechViewTeamStats.updateTeamStats(update);
   }

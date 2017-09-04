@@ -203,7 +203,7 @@ namespace MechTest {
     let testDamage: DamageMap = {
         "centre_torso": 10,
         "right_torso": 2.5,
-        "left_torso": 2.5
+        "left_torso": 2.5,
       };
     printTestDamageTransform(testDamage, accuracyPattern);
     printTestDamageTransform(testDamage, accuracyPatternNext);
@@ -282,7 +282,7 @@ namespace MechTest {
         let quirkEntry = {
           name : skillEffect.quirkName,
           translated_name : skillEffect.quirkTranslatedName,
-          value : 0 //filler value, we just need the names
+          value : 0, //filler value, we just need the names
         };
         if (!quirkMap[quirkEntry.name]) {
           quirkMap[quirkEntry.name] = quirkEntry;
@@ -497,7 +497,7 @@ namespace MechTest {
 
     let simulatorParameters = new SimulatorParameters(
       DEFAULT_RANGE, //range
-      1 //speed factor
+      1, //speed factor
     );
     MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
     MechModel.initMechTeamPatterns(MechModel.getMechTeam(Team.BLUE));

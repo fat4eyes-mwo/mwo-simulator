@@ -99,7 +99,7 @@ namespace MechSimulatorLogic {
     willUpdateTeamStats = {};
     let update : SimTimeUpdate = {
       type : MechModelCommon.EventType.SIMTIME_UPDATE,
-      simTime
+      simTime,
     }
     MechModelView.getEventQueue().queueEvent(update);
     MechAccuracyPattern.reset();
@@ -147,7 +147,7 @@ namespace MechSimulatorLogic {
         }
         let mechUpdate : MechUpdate = {
           type: MechModelCommon.EventType.MECH_UPDATE,
-          mech
+          mech,
         }
         eventQueue.queueEvent(mechUpdate)
       }
@@ -156,7 +156,7 @@ namespace MechSimulatorLogic {
         let update : TeamStatsUpdate = {
           type : MechModelCommon.EventType.TEAMSTATS_UPDATE,
           team,
-          simTime : getSimTime()
+          simTime : getSimTime(),
         }
         eventQueue.queueEvent(update);
       }
@@ -179,7 +179,7 @@ namespace MechSimulatorLogic {
         let update : TeamStatsUpdate = {
           type : MechModelCommon.EventType.TEAMSTATS_UPDATE,
           team,
-          simTime : getSimTime()
+          simTime : getSimTime(),
         }
         eventQueue.queueEvent(update);
       }

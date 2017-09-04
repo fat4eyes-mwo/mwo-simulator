@@ -21,7 +21,7 @@ namespace MechViewDamageColor {
     {value : 0.7, RGB : {r:255, g:211, b:23}},
     {value : 0.8, RGB : {r:255, g:224, b:28}},
     {value : 0.9, RGB : {r:255, g:235, b:24}},
-    {value : 1, RGB : {r:101, g:79, b:38}}
+    {value : 1, RGB : {r:101, g:79, b:38}},
   ];
   //Colors for health numbers
   export const HealthDamageGradient : ColorGradient = [
@@ -29,7 +29,7 @@ namespace MechViewDamageColor {
     {value : 0.7, RGB : {r: 230, g:230, b:20}},
     // {value : 0.9, RGB : {r:20, g:230, b:20}},
     {value : 0.9, RGB : {r:255, g:235, b:24}},
-    {value : 1, RGB : {r:170, g:170, b:170}}
+    {value : 1, RGB : {r:170, g:170, b:170}},
   ];
   //Colors for individual component health numbers
   export const ComponentHealthDamageGradient : ColorGradient = [
@@ -37,7 +37,7 @@ namespace MechViewDamageColor {
     {value : 0.7, RGB : {r:255, g:255, b:0}},
     // {value : 0.9, RGB : {r:0, g:255, b:0}},
     {value : 0.9, RGB : {r:255, g:235, b:24}},
-    {value : 1, RGB : {r:170, g:170, b:170}}
+    {value : 1, RGB : {r:170, g:170, b:170}},
   ];
 
   //gets the damage color for a given percentage of damage

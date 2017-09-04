@@ -262,7 +262,7 @@ namespace MechViewMechPanel {
       "right_torso" : "RT",
       "right_arm" : "RA",
       "left_leg" : "LL",
-      "right_leg" : "RL"
+      "right_leg" : "RL",
     }
     private mechId : string;
     //TODO: Do not directly access WeaponState and AmmoState here
