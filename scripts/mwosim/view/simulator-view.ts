@@ -135,15 +135,15 @@ namespace MechView {
         saveAppStatePromise
           .then(function(data : any) {
             showPermalinkTooltip(location.href);
-            console.log("Success on save app state. Data: " + data);
+            Util.log("Success on save app state. Data: " + data);
             return data;
           })
           .catch(function(data : any) {
-            console.error("Fail on save app state." + Error(data));
+            Util.error("Fail on save app state." + Error(data));
             return Error(data);
           })
           .then(function(data : any) {
-            console.log("Done save app state. Data: " + data);
+            Util.log("Done save app state. Data: " + data);
           });
       });
     //NOTE: We don't actually use the tooltip variable, it's just there to make tslint 

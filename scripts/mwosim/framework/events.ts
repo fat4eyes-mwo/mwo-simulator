@@ -150,7 +150,7 @@ namespace Events {
 
     private step(this : EventQueue) {
       if (this.queue.length === 0) {
-        console.warn("Step executed on empty queue");
+        Util.warn("Step executed on empty queue");
         return;
       }
       let currEvent = this.queue.shift();
@@ -166,7 +166,7 @@ namespace Events {
     private executeEvent<T extends Event>(event : T) {
       let listeners = this.listeners.get(event.type);
       if (!listeners) {
-        console.warn(`No listener for event ${event.type}`);
+        Util.warn(`No listener for event ${event.type}`);
         return;
       }
       for (let listener of listeners) {

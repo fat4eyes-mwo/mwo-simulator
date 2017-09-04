@@ -8342,7 +8342,7 @@ var Events;
         }
         step() {
             if (this.queue.length === 0) {
-                console.warn("Step executed on empty queue");
+                Util.warn("Step executed on empty queue");
                 return;
             }
             let currEvent = this.queue.shift();
@@ -8356,7 +8356,7 @@ var Events;
         executeEvent(event) {
             let listeners = this.listeners.get(event.type);
             if (!listeners) {
-                console.warn(`No listener for event ${event.type}`);
+                Util.warn(`No listener for event ${event.type}`);
                 return;
             }
             for (let listener of listeners) {
@@ -8366,6 +8366,72 @@ var Events;
     }
     Events.EventQueue = EventQueue;
 })(Events || (Events = {}));
+//returns index of matching entry, otherwise returns the closest lower entry in
+//the array
+var Util;
+//returns index of matching entry, otherwise returns the closest lower entry in
+//the array
+(function (Util) {
+    //TODO: See if this method is still worth it
+    function binarySearchClosest(array, key, keyCompare) {
+        var low = 0;
+        var high = array.length - 1;
+        var mid = Math.floor(low + ((high - low) / 2));
+        var midVal = array[mid];
+        while (low <= high) {
+            mid = Math.floor(low + ((high - low) / 2));
+            midVal = array[mid];
+            if (keyCompare(key, midVal) < 0) {
+                high = mid - 1;
+            }
+            else if (keyCompare(key, midVal) > 0) {
+                low = mid + 1;
+            }
+            else {
+                return mid;
+            }
+        }
+        if (keyCompare(key, midVal) < 0) {
+            return Math.max(0, mid - 1);
+        }
+        else {
+            return mid;
+        }
+    }
+    Util.binarySearchClosest = binarySearchClosest;
+    class StringLogger {
+        constructor() {
+            this.logStr = "";
+        }
+        log(msg) {
+            this.logStr += `${msg}\n`;
+        }
+        warn(msg) {
+            let err = Error(msg);
+            this.logStr += `${msg}: ${err.stack}\n`;
+        }
+        error(msg) {
+            let err = Error(msg);
+            this.logStr += `${msg}: ${err.stack}\n`;
+        }
+        clear() {
+            this.logStr = "";
+        }
+        getLog() {
+            return this.logStr;
+        }
+    }
+    Util.StringLogger = StringLogger;
+    Util.log = function (msg, ...optionalParams) {
+        //console.log(msg, ...optionalParams);
+    };
+    Util.warn = function (msg, ...optionalParams) {
+        //console.warn(msg, ...optionalParams);
+    };
+    Util.error = function (msg, ...optionalParams) {
+        //console.error(msg, ...optionalParams);
+    };
+})(Util || (Util = {}));
 //Widget design policy: No logic in HTML, no layout in Javascript.
 //Javascript only provides behavior, it does NOT generate HTML unless it's from a template.
 //On the converse side, HTML should not contain direct references to javascript entities
@@ -8697,7 +8763,7 @@ var MechSimulator;
         MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
         MechModel.initModelData()
             .then(function () {
-            console.log("Successfully loaded model init data");
+            Util.log("Successfully loaded model init data");
             //router should not be initialized before the smurfy data is
             //loaded since the hash change listener can start pulling in smurfy
             //loadout data
@@ -8705,7 +8771,7 @@ var MechSimulator;
             initMechs();
         })
             .catch(function () {
-            console.error("Failed to load model init data");
+            Util.error("Failed to load model init data");
             MechView.hideLoadingScreen();
             MechView.updateOnLoadAppError();
         });
@@ -8717,7 +8783,7 @@ var MechSimulator;
             return data;
         })
             .catch(function (err) {
-            console.error("Error loading mech data: " + err);
+            Util.error("Error loading mech data: " + err);
             MechModelView.refreshView();
             MechView.updateOnLoadAppError();
             location.hash = "";
@@ -8751,7 +8817,7 @@ var MechAccuracyPattern;
     //Any left over is considered a miss
     MechAccuracyPattern.accuracySpreadToAdjacent = function (percentOnTarget, percentOnAdjacent, percentOnNextToAdjacent) {
         if (percentOnTarget + percentOnAdjacent + percentOnNextToAdjacent > 1) {
-            console.warn("Total damage percentage exceeds 1");
+            Util.warn("Total damage percentage exceeds 1");
         }
         return function (weaponDamage, range) {
             let transformedDamage = new MechModel.WeaponDamage({});
@@ -8979,7 +9045,7 @@ var MechAccuracyPattern;
                 totalPercent += computedSeekerSpread.spread[component];
             }
             if (totalPercent > 1) {
-                console.warn("Seeker percentages over 100%:" + computedSeekerSpread.toString());
+                Util.warn("Seeker percentages over 100%:" + computedSeekerSpread.toString());
             }
             let totalDamage = weaponDamage.getTotalDamage();
             //transform totalDamage
@@ -9038,7 +9104,7 @@ var MechAccuracyPattern;
                 totalPercent += Number(computedSpread[field]);
             }
             if (totalPercent > 1) {
-                console.warn("Direct fire percentages greater than 1: " + totalPercent);
+                Util.warn("Direct fire percentages greater than 1: " + totalPercent);
             }
             return MechAccuracyPattern.accuracySpreadToAdjacent(computedSpread.target, computedSpread.adjacent, computedSpread.nextAdjacent)(weaponDamage, range);
         };
@@ -9513,7 +9579,7 @@ var MechSimulatorLogic;
         willUpdateTeamStats = {};
         let update = {
             type: MechModelCommon.EventType.SIMTIME_UPDATE,
-            simTime
+            simTime,
         };
         MechModelView.getEventQueue().queueEvent(update);
         MechAccuracyPattern.reset();
@@ -9546,7 +9612,7 @@ var MechSimulatorLogic;
                             fireWeapons(mech, weaponsToFire, targetMech);
                         }
                         else {
-                            console.log("No target mech for " + mech.getMechId());
+                            Util.log("No target mech for " + mech.getMechId());
                         }
                     }
                 }
@@ -9560,7 +9626,7 @@ var MechSimulatorLogic;
                 }
                 let mechUpdate = {
                     type: MechModelCommon.EventType.MECH_UPDATE,
-                    mech
+                    mech,
                 };
                 eventQueue.queueEvent(mechUpdate);
             }
@@ -9568,7 +9634,7 @@ var MechSimulatorLogic;
                 let update = {
                     type: MechModelCommon.EventType.TEAMSTATS_UPDATE,
                     team,
-                    simTime: MechSimulatorLogic.getSimTime()
+                    simTime: MechSimulatorLogic.getSimTime(),
                 };
                 eventQueue.queueEvent(update);
             }
@@ -9589,7 +9655,7 @@ var MechSimulatorLogic;
                 let update = {
                     type: MechModelCommon.EventType.TEAMSTATS_UPDATE,
                     team,
-                    simTime: MechSimulatorLogic.getSimTime()
+                    simTime: MechSimulatorLogic.getSimTime(),
                 };
                 eventQueue.queueEvent(update);
             }
@@ -9717,7 +9783,7 @@ var MechSimulatorLogic;
         mechState.setUpdate(UpdateType.STATS);
         willUpdateTeamStats[weaponFire.sourceMech.getMechTeam()] = true;
         willUpdateTeamStats[weaponFire.targetMech.getMechTeam()] = true;
-        console.log(weaponInfo.name + " completed. Total damage: "
+        Util.log(weaponInfo.name + " completed. Total damage: "
             + weaponFire.damageDone.totalDamage() +
             "(" + weaponFire.damageDone.toString() + ")" +
             " src: " + weaponFire.sourceMech.getName() +
@@ -9866,7 +9932,7 @@ var MechModelQuirks;
                 return prefix + String(this.value);
             }
             else {
-                console.warn(Error("Unexpected quirk type: " + this.name));
+                Util.warn(Error("Unexpected quirk type: " + this.name));
                 return String(this.value);
             }
         }
@@ -9953,7 +10019,7 @@ var MechModelQuirks;
             }
         }
         else {
-            console.warn("Unable to find CT omnipod for " + smurfyMechInfo.name);
+            Util.warn("Unable to find CT omnipod for " + smurfyMechInfo.name);
         }
         return ret;
     };
@@ -10120,7 +10186,7 @@ var MechModelQuirks;
             }
         }
         if (ret.length === 0) {
-            console.warn(Error("Unable to match skill: " + skillName));
+            Util.warn(Error("Unable to match skill: " + skillName));
         }
         return ret;
     };
@@ -10287,7 +10353,7 @@ var MechModelSkills;
                         skillQuirks.addQuirkList(mechQuirks);
                     }
                     else {
-                        console.warn(Error("No quirks found for " + kitlaanName));
+                        Util.warn(Error("No quirks found for " + kitlaanName));
                     }
                 }
             }
@@ -10748,14 +10814,14 @@ var MechModelWeapons;
             }
         }
         weaponJam() {
-            console.log("Jam: " + this.weaponInfo.name);
+            Util.log("Jam: " + this.weaponInfo.name);
             let newState = WeaponCycle.JAMMED;
             this.gotoState(newState);
             let weaponFired = false;
             return { newState, weaponFired };
         }
         doubleTap() {
-            console.log("Double tap: " + this.weaponInfo.name);
+            Util.log("Double tap: " + this.weaponInfo.name);
             let newState = WeaponCycle.COOLDOWN_FIRING;
             this.gotoState(newState);
             this.currShotsDuringCooldown -= 1;
@@ -10919,7 +10985,7 @@ var MechModelWeapons;
                         //check for jam
                         let rand = Math.random();
                         if (rand <= this.computeJamChance()) {
-                            console.log("Jam: " + this.weaponInfo.name);
+                            Util.log("Jam: " + this.weaponInfo.name);
                             newState = WeaponCycle.JAMMED;
                             this.gotoState(newState);
                             weaponFired = false;
@@ -11510,7 +11576,7 @@ var MechModel;
             this.currHeat = 0;
             this.engineHeatEfficiency = 1;
             let heatStats = calculateHeatStats(mechInfo.heatsinkInfoList, mechInfo.engineInfo, this.engineHeatEfficiency, mechInfo.generalQuirkBonus);
-            console.log("Heatcalc: " + mechInfo.mechName
+            Util.log("Heatcalc: " + mechInfo.mechName
                 + " dissipation: " + heatStats.heatDissipation
                 + " capacity: " + heatStats.heatCapacity);
             this.currHeatDissipation = heatStats.heatDissipation;
@@ -12014,11 +12080,11 @@ var MechModel;
                 dataType: 'JSON'
             })
                 .done(function (data) {
-                console.log("Successfully loaded " + path);
+                Util.log("Successfully loaded " + path);
                 resolve(data);
             })
                 .fail(function (data) {
-                console.log("Smurfy " + path + " request failed: " + Error(data));
+                Util.log("Smurfy " + path + " request failed: " + Error(data));
                 reject(Error(data));
             });
         });
@@ -12502,7 +12568,7 @@ var MechModel;
     MechModel.addMech = function (mechId, team, smurfyMechLoadout) {
         var newMech = new Mech(mechId, team, smurfyMechLoadout);
         mechTeams[team].push(newMech);
-        console.log("Added mech mech_id: " + mechId +
+        Util.log("Added mech mech_id: " + mechId +
             " translated_mech_name: " + newMech.getTranslatedName());
         MechModel.initMechPatterns(newMech);
         return newMech;
@@ -12510,7 +12576,7 @@ var MechModel;
     MechModel.addMechAtIndex = function (mechId, team, smurfyMechLoadout, index) {
         var newMech = new Mech(mechId, team, smurfyMechLoadout);
         mechTeams[team][index] = newMech;
-        console.log("Added mech mech_id: " + mechId
+        Util.log("Added mech mech_id: " + mechId
             + " translated_mech_name: " + newMech.getTranslatedName()
             + " at index " + index);
         MechModel.initMechPatterns(newMech);
@@ -12952,7 +13018,7 @@ var MechModelView;
                 armor: mechComponentHealth.armor,
                 structure: mechComponentHealth.structure,
                 maxArmor: mechComponentHealth.maxArmor,
-                maxStructure: mechComponentHealth.maxStructure
+                maxStructure: mechComponentHealth.maxStructure,
             };
             mechHealthNumbers.updateMechHealthNumbers(update);
         }
@@ -12977,7 +13043,7 @@ var MechModelView;
             targetMechName: targetMechName,
             dps: dps,
             burst: burst,
-            totalDmg: totalDmg
+            totalDmg: totalDmg,
         };
         let mechPanel = MechView.getMechPanel(mech.getMechId());
         mechPanel.updateMechStatusPanel(mech.getMechId(), update);
@@ -13061,7 +13127,7 @@ var MechModelView;
             mechHealthList,
             damage: Number(totalTeamDamage),
             dps,
-            burstDamage: Number(totalTeamBurstDamage)
+            burstDamage: Number(totalTeamBurstDamage),
         };
         MechViewTeamStats.updateTeamStats(update);
     };
@@ -13325,63 +13391,6 @@ var MechModelView;
         return MechModelQuirks.isQuirkApplicable(quirk, mech.getMechInfo());
     };
 })(MechModelView || (MechModelView = {}));
-//returns index of matching entry, otherwise returns the closest lower entry in
-//the array
-var Util;
-//returns index of matching entry, otherwise returns the closest lower entry in
-//the array
-(function (Util) {
-    //TODO: See if this method is still worth it
-    function binarySearchClosest(array, key, keyCompare) {
-        var low = 0;
-        var high = array.length - 1;
-        var mid = Math.floor(low + ((high - low) / 2));
-        var midVal = array[mid];
-        while (low <= high) {
-            mid = Math.floor(low + ((high - low) / 2));
-            midVal = array[mid];
-            if (keyCompare(key, midVal) < 0) {
-                high = mid - 1;
-            }
-            else if (keyCompare(key, midVal) > 0) {
-                low = mid + 1;
-            }
-            else {
-                return mid;
-            }
-        }
-        if (keyCompare(key, midVal) < 0) {
-            return Math.max(0, mid - 1);
-        }
-        else {
-            return mid;
-        }
-    }
-    Util.binarySearchClosest = binarySearchClosest;
-    class StringLogger {
-        constructor() {
-            this.logStr = "";
-        }
-        log(msg) {
-            this.logStr += `${msg}\n`;
-        }
-        warn(msg) {
-            let error = Error(msg);
-            this.logStr += `${msg}: ${error.stack}\n`;
-        }
-        error(msg) {
-            let error = Error(msg);
-            this.logStr += `${msg}: ${error.stack}\n`;
-        }
-        clear() {
-            this.logStr = "";
-        }
-        getLog() {
-            return this.logStr;
-        }
-    }
-    Util.StringLogger = StringLogger;
-})(Util || (Util = {}));
 var MechViewAddMech;
 (function (MechViewAddMech) {
     var EventType = MechModelCommon.EventType;
@@ -13439,7 +13448,7 @@ var MechViewAddMech;
                 let thisJQ = $(this);
                 let team = thisJQ.attr('data-team');
                 let url = dialog.getTextInputValue();
-                console.log("Mech loaded. team: " + team + " URL: " + url);
+                Util.log("Mech loaded. team: " + team + " URL: " + url);
                 let smurfyMechLoadout = dialog.loadedSmurfyLoadout;
                 let newMech = MechModelView.addMech(team, smurfyMechLoadout);
                 //set patterns of added mech to selected team patterns
@@ -13464,7 +13473,7 @@ var MechViewAddMech;
                 let team = thisJQ.attr('data-team');
                 let addMechDialogJQ = $(dialog.domElement);
                 let url = dialog.getTextInputValue();
-                console.log("Load. team: " + team + " URL: " + url);
+                Util.log("Load. team: " + team + " URL: " + url);
                 let doneHandler = function (data) {
                     dialog.loadedSmurfyLoadout = data;
                     dialog.clearError();
@@ -13493,7 +13502,7 @@ var MechViewAddMech;
                     dialog
                         .setError("Invalid smurfy URL. Expected format is 'http://mwo.smurfy-net.de/mechlab#i=mechid&l=loadoutid'");
                     dialog.setLoading(false);
-                    console.error("Invalid smurfy url");
+                    Util.error("Invalid smurfy url");
                 }
             };
         }
@@ -13569,7 +13578,7 @@ var MechViewAddMech;
                 return "ams";
             }
             else {
-                console.warn("Unexpected weapon type: " + smurfyType);
+                Util.warn("Unexpected weapon type: " + smurfyType);
                 return "";
             }
         }
@@ -13598,7 +13607,7 @@ var MechViewDamageColor;
         { value: 0.7, RGB: { r: 255, g: 211, b: 23 } },
         { value: 0.8, RGB: { r: 255, g: 224, b: 28 } },
         { value: 0.9, RGB: { r: 255, g: 235, b: 24 } },
-        { value: 1, RGB: { r: 101, g: 79, b: 38 } }
+        { value: 1, RGB: { r: 101, g: 79, b: 38 } },
     ];
     //Colors for health numbers
     MechViewDamageColor.HealthDamageGradient = [
@@ -13606,7 +13615,7 @@ var MechViewDamageColor;
         { value: 0.7, RGB: { r: 230, g: 230, b: 20 } },
         // {value : 0.9, RGB : {r:20, g:230, b:20}},
         { value: 0.9, RGB: { r: 255, g: 235, b: 24 } },
-        { value: 1, RGB: { r: 170, g: 170, b: 170 } }
+        { value: 1, RGB: { r: 170, g: 170, b: 170 } },
     ];
     //Colors for individual component health numbers
     MechViewDamageColor.ComponentHealthDamageGradient = [
@@ -13614,7 +13623,7 @@ var MechViewDamageColor;
         { value: 0.7, RGB: { r: 255, g: 255, b: 0 } },
         // {value : 0.9, RGB : {r:0, g:255, b:0}},
         { value: 0.9, RGB: { r: 255, g: 235, b: 24 } },
-        { value: 1, RGB: { r: 170, g: 170, b: 170 } }
+        { value: 1, RGB: { r: 170, g: 170, b: 170 } },
     ];
     //gets the damage color for a given percentage of damage
     MechViewDamageColor.damageColor = function (percent, damageGradient) {
@@ -13754,7 +13763,7 @@ var MechViewMechDetails;
                     MechViewRouter.modifyAppState();
                 }
                 else {
-                    console.warn("No loaded skill quirks");
+                    Util.warn("No loaded skill quirks");
                 }
                 Widgets.hideModal();
             };
@@ -13790,16 +13799,16 @@ var MechViewMechDetails;
                     loadMechDialog.skillListPanel.setQuirks(skillQuirks);
                     loadMechDialog.skillListPanel.render();
                     loadMechDialog.okButton.enable();
-                    console.log("Loaded data from kitlaan: " + data);
+                    Util.log("Loaded data from kitlaan: " + data);
                 })
                     .catch(function (err) {
-                    console.error("Error loading kitlaan data: " + Error(err));
+                    Util.error("Error loading kitlaan data: " + Error(err));
                     dialog.setError("Error loading kitlaan data: " + Error(err));
                     dialog.okButton.disable();
                 })
                     .then(function (data) {
                     dialog.setLoading(false);
-                    console.log("Kitlaan load done.");
+                    Util.log("Kitlaan load done.");
                 });
             };
         }
@@ -14155,7 +14164,7 @@ var MechViewMechPanel;
         "right_torso": "RT",
         "right_arm": "RA",
         "left_leg": "LL",
-        "right_leg": "RL"
+        "right_leg": "RL",
     };
     MechViewMechPanel.WeaponPanel = WeaponPanel;
     class MechPanel extends DomStoredWidget {
@@ -14369,7 +14378,7 @@ var MechViewMechPanel;
         createDeleteMechButtonHandler() {
             return function () {
                 let mechId = $(this).attr("data-mech-id");
-                console.log("Deleting " + mechId);
+                Util.log("Deleting " + mechId);
                 let result = MechModel.deleteMech(mechId);
                 if (!result) {
                     throw Error("Error deleting " + mechId);
@@ -14504,13 +14513,13 @@ var MechViewMechPanel;
             else {
                 let team = EndMechPanel.getEndMechIdTeam(targetMechId);
                 status = MechModel.moveMechToEndOfList(this.mechId, team);
-                console.log("Insert at end: team=" + team);
+                Util.log("Insert at end: team=" + team);
             }
             if (!status) {
-                console.error(`Error moving mech. src=${this.mechId} dest=${targetMechId}`);
+                Util.error(`Error moving mech. src=${this.mechId} dest=${targetMechId}`);
             }
             else {
-                console.log(`Drop: src=${this.mechId} dest=${targetMechId}`);
+                Util.log(`Drop: src=${this.mechId} dest=${targetMechId}`);
                 let srcMechJQ = $(this.domElement);
                 srcMechJQ
                     .detach()
@@ -14591,7 +14600,7 @@ var MechViewMechPanel;
                 let origEvent = jqEvent.originalEvent;
                 origEvent.dataTransfer.setData("text/plain", mechId);
                 origEvent.dataTransfer.effectAllowed = "move";
-                console.log("Drag start: " + mechId);
+                Util.log("Drag start: " + mechId);
             };
         }
         static createMechOnDragOverHandler() {
@@ -14653,7 +14662,7 @@ var MechViewMechPanel;
             let thisJQ = $(this);
             if (thisJQ.attr("draggable") === "true") {
                 let startMechId = TouchHelper.findMechId(this);
-                console.log(`Touch start mechId: ${startMechId}`);
+                Util.log(`Touch start mechId: ${startMechId}`);
                 let mechName = MechModelView.getMechName(startMechId);
                 TouchHelper.showTouchIcon(event.originalEvent, mechName);
                 TouchHelper.isTouchDragging = true;
@@ -14669,13 +14678,13 @@ var MechViewMechPanel;
             let touchEvent = event.originalEvent;
             let srcMechId = TouchHelper.findMechId(touchEvent.target);
             let dropMechId = TouchHelper.findMechId(TouchHelper.currDropTarget);
-            console.log(`Touch end srcMechId: ${srcMechId} dropMechId: ${dropMechId}`);
+            Util.log(`Touch end srcMechId: ${srcMechId} dropMechId: ${dropMechId}`);
             if (srcMechId && dropMechId) {
                 let mechPanel = MechPanel.getMechPanel(srcMechId);
                 mechPanel.moveToTargetMechId(dropMechId);
             }
             else {
-                console.warn(Error(`Touch end null mechId: src: ${srcMechId} dest: ${dropMechId}`));
+                Util.warn(Error(`Touch end null mechId: src: ${srcMechId} dest: ${dropMechId}`));
             }
             TouchHelper.hideTouchIcon(event.originalEvent);
             TouchHelper.isTouchDragging = false;
@@ -15211,7 +15220,7 @@ var MechViewRouter;
         window.addEventListener("hashchange", hashChangeListener, false);
     };
     var hashChangeListener = function () {
-        console.log("Hash change: " + location.hash);
+        Util.log("Hash change: " + location.hash);
         if (isLoading) {
             //ignore hash change, change back to previous hash
             let hash = `#${HASH_STATE_FIELD}=${prevStateHash}`;
@@ -15222,23 +15231,23 @@ var MechViewRouter;
         if (newHash !== prevStateHash) {
             //if hash is different from previous hash, load new state
             MechView.showLoadingScreen();
-            console.log("Hash change loading new state from hash : " + newHash);
+            Util.log("Hash change loading new state from hash : " + newHash);
             MechViewRouter.loadAppState(newHash)
                 .then(function () {
                 //success
                 MechModelView.refreshView();
-                console.log("Hash change state load success: " + newHash);
+                Util.log("Hash change state load success: " + newHash);
             })
                 .catch(function () {
                 //fail
                 MechModelView.refreshView();
                 MechView.updateOnLoadAppError();
-                console.log("Hash change state load failed: " + newHash);
+                Util.log("Hash change state load failed: " + newHash);
             })
                 .then(function () {
                 //always
                 MechView.hideLoadingScreen();
-                console.log("Hash state change load done: " + newHash);
+                Util.log("Hash state change load done: " + newHash);
             });
         }
         else {
@@ -15750,15 +15759,15 @@ var MechView;
             saveAppStatePromise
                 .then(function (data) {
                 showPermalinkTooltip(location.href);
-                console.log("Success on save app state. Data: " + data);
+                Util.log("Success on save app state. Data: " + data);
                 return data;
             })
                 .catch(function (data) {
-                console.error("Fail on save app state." + Error(data));
+                Util.error("Fail on save app state." + Error(data));
                 return Error(data);
             })
                 .then(function (data) {
-                console.log("Done save app state. Data: " + data);
+                Util.log("Done save app state. Data: " + data);
             });
         });
         //NOTE: We don't actually use the tooltip variable, it's just there to make tslint 
@@ -15942,10 +15951,10 @@ var MechTest;
     MechTest.testModelInit = function () {
         MechModel.initModelData()
             .then(function () {
-            console.log("Successfully loaded model init data");
+            Util.log("Successfully loaded model init data");
         })
             .catch(function (err) {
-            console.log("Failed to load model init data");
+            Util.log("Failed to load model init data");
         });
     };
     MechTest.testModelOps = function () {
@@ -15962,7 +15971,7 @@ var MechTest;
                 if (Component.hasOwnProperty(property)) {
                     var structure = MechModel.baseMechStructure(Component[property], tonnage);
                     var armor = MechModel.baseMechArmor(Component[property], tonnage);
-                    console.log("Tonnage: " + tonnage + " " + Component[property] +
+                    Util.log("Tonnage: " + tonnage + " " + Component[property] +
                         " structure:" + structure + " armor:" + armor);
                 }
             }
@@ -16031,7 +16040,7 @@ var MechTest;
         var mechInfo = new MechModel.MechInfo("testId", DummyStormcrow);
         for (let weaponId of testIds) {
             var weaponInfoTest = new MechModelWeapons.WeaponInfo(String(weaponId), "centre_torso", MechModel.getSmurfyWeaponData(String(weaponId)), mechInfo);
-            console.log("Weapon " + weaponInfoTest.translatedName +
+            Util.log("Weapon " + weaponInfoTest.translatedName +
                 " minRange: " + weaponInfoTest.minRange +
                 " optRange: " + weaponInfoTest.optRange +
                 " maxRange: " + weaponInfoTest.maxRange +
@@ -16040,7 +16049,7 @@ var MechTest;
             const stepDuration = 50;
             for (let range of testRanges) {
                 let damage = weaponInfoTest.damageAtRange(range);
-                console.log("range: " + range + " damage: " + damage);
+                Util.log("range: " + range + " damage: " + damage);
             }
         }
     };
@@ -16048,15 +16057,15 @@ var MechTest;
         var printTestDamageTransform = function (damage, pattern) {
             let weaponDamage = new MechModel.WeaponDamage(damage);
             let transformedDamage = accuracyPattern(weaponDamage, 200);
-            console.log("original damage: " + weaponDamage.toString());
-            console.log("transformedDamage: " + transformedDamage.toString());
+            Util.log("original damage: " + weaponDamage.toString());
+            Util.log("transformedDamage: " + transformedDamage.toString());
         };
         let accuracyPattern = MechAccuracyPattern.accuracySpreadToAdjacent(0.5, 0.5, 0);
         let accuracyPatternNext = MechAccuracyPattern.accuracySpreadToAdjacent(0.5, 0.3, 0.2);
         let testDamage = {
             "centre_torso": 10,
             "right_torso": 2.5,
-            "left_torso": 2.5
+            "left_torso": 2.5,
         };
         printTestDamageTransform(testDamage, accuracyPattern);
         printTestDamageTransform(testDamage, accuracyPatternNext);
@@ -16130,7 +16139,7 @@ var MechTest;
                 let quirkEntry = {
                     name: skillEffect.quirkName,
                     translated_name: skillEffect.quirkTranslatedName,
-                    value: 0 //filler value, we just need the names
+                    value: 0,
                 };
                 if (!quirkMap[quirkEntry.name]) {
                     quirkMap[quirkEntry.name] = quirkEntry;
@@ -16149,10 +16158,10 @@ var MechTest;
         sortedQuirkNames.sort();
         for (let quirkName of sortedQuirkNames) {
             let quirkEntry = quirkMap[quirkName];
-            console.log(`${quirkEntry.name}\t${quirkEntry.translated_name}`);
+            Util.log(`${quirkEntry.name}\t${quirkEntry.translated_name}`);
             numQuirks++;
         }
-        console.log("numQuirks : " + numQuirks);
+        Util.log("numQuirks : " + numQuirks);
     };
     MechTest.testSimulation = function () {
         //Use DummyData
@@ -16163,11 +16172,11 @@ var MechTest;
         MechView.showLoadingScreen();
         MechModel.initModelData()
             .then(function () {
-            console.log("Successfully loaded model init data");
+            Util.log("Successfully loaded model init data");
             MechTest.generateTestUI();
         })
             .catch(function () {
-            console.log("Failed to load model init data");
+            Util.log("Failed to load model init data");
         });
     };
     MechTest.generateTestUI = function () {
@@ -16196,14 +16205,14 @@ var MechTest;
         $("#saveStateButton").removeClass("debugButton").click(() => {
             Promise.resolve(MechViewRouter.saveAppState()
                 .then(function (data) {
-                console.log("Success on save app state. Data: " + data);
-                console.log("statehash: " + data.statehash);
+                Util.log("Success on save app state. Data: " + data);
+                Util.log("statehash: " + data.statehash);
                 return data;
             })
                 .catch(function (data) {
-                console.log("Fail on save app state. Data: " + data);
+                Util.log("Fail on save app state. Data: " + data);
             })).then(function (data) {
-                console.log("Done save app state. Data: " + data);
+                Util.log("Done save app state. Data: " + data);
             });
         });
         $("#loadStateButton").removeClass("debugButton").click(() => {
@@ -16211,21 +16220,21 @@ var MechTest;
             let regex = /#s=([^&]*)/;
             let results = regex.exec(hashState);
             if (!results) {
-                console.log("Invalid state in hash: " + hashState);
+                Util.log("Invalid state in hash: " + hashState);
                 return;
             }
             hashState = results[1];
             MechView.showLoadingScreen();
             Promise.resolve(MechViewRouter.loadAppState(hashState)
                 .then(function (data) {
-                console.log("Success on load app state. Data: " + data);
+                Util.log("Success on load app state. Data: " + data);
                 MechModelView.refreshView();
                 return data;
             })
                 .catch(function (data) {
-                console.log("Fail on load app state. Data: " + data);
+                Util.log("Fail on load app state. Data: " + data);
             })).then(function (data) {
-                console.log("Done on load app state. Data: " + data);
+                Util.log("Done on load app state. Data: " + data);
                 MechView.hideLoadingScreen();
             });
         });
@@ -16238,42 +16247,42 @@ var MechTest;
         MechView.showLoadingScreen();
         Promise.resolve(MechViewRouter.saveAppState()
             .then(function (data) {
-            console.log("Success on save app state. Data: " + data);
-            console.log("statehash: " + data.statehash);
+            Util.log("Success on save app state. Data: " + data);
+            Util.log("statehash: " + data.statehash);
             statehash = data.statehash;
             testGetAppState(statehash);
             return data;
         })
             .catch(function (data) {
-            console.log("Fail on save app state. Data: " + data);
+            Util.log("Fail on save app state. Data: " + data);
         })).then(function (data) {
-            console.log("Done save app state. Data: " + data);
+            Util.log("Done save app state. Data: " + data);
         });
         var testGetAppState = function (hash) {
             Promise.resolve(MechViewRouter.loadAppState(statehash)
                 .then(function (data) {
-                console.log("Success on load app state. Data: " + data);
+                Util.log("Success on load app state. Data: " + data);
                 MechModelView.refreshView();
                 return data;
             })
                 .catch(function (data) {
-                console.log("Fail on load app state. Data: " + data);
+                Util.log("Fail on load app state. Data: " + data);
             })).then(function (data) {
                 MechView.hideLoadingScreen();
-                console.log("Done on load app state. Data: " + data);
+                Util.log("Done on load app state. Data: " + data);
             });
         };
         $("#saveStateButton").removeClass("debugButton").click(() => {
             Promise.resolve(MechViewRouter.saveAppState()
                 .then(function (data) {
-                console.log("Success on save app state. Data: " + data);
-                console.log("statehash: " + data.statehash);
+                Util.log("Success on save app state. Data: " + data);
+                Util.log("statehash: " + data.statehash);
                 return data;
             })
                 .catch(function (data) {
-                console.log("Fail on save app state. Data: " + data);
+                Util.log("Fail on save app state. Data: " + data);
             })).then(function (data) {
-                console.log("Done save app state. Data: " + data);
+                Util.log("Done save app state. Data: " + data);
             });
         });
         $("#loadStateButton").removeClass("debugButton").click(() => {
@@ -16281,21 +16290,21 @@ var MechTest;
             let regex = /#s=([^&]*)/;
             let results = regex.exec(hashState);
             if (!results) {
-                console.log("Invalid state in hash: " + hashState);
+                Util.log("Invalid state in hash: " + hashState);
                 return;
             }
             hashState = results[1];
             MechView.showLoadingScreen();
             Promise.resolve(MechViewRouter.loadAppState(hashState)
                 .then(function (data) {
-                console.log("Success on load app state. Data: " + data);
+                Util.log("Success on load app state. Data: " + data);
                 MechModelView.refreshView();
                 return data;
             })
                 .catch(function (data) {
-                console.log("Fail on load app state. Data: " + data);
+                Util.log("Fail on load app state. Data: " + data);
             })).then(function (data) {
-                console.log("Done on load app state. Data: " + data);
+                Util.log("Done on load app state. Data: " + data);
                 MechView.hideLoadingScreen();
             });
         });
@@ -16316,8 +16325,7 @@ var MechTest;
         MechModel.addMech("testCatapultId", Team.RED, DummyCatapult);
         MechModel.addMech("testUrbanmechId1", Team.RED, DummyUrbanmech);
         let simulatorParameters = new SimulatorParameters(DEFAULT_RANGE, //range
-        1 //speed factor
-        );
+        1);
         MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
         MechModel.initMechTeamPatterns(MechModel.getMechTeam(Team.BLUE));
         MechModel.initMechTeamPatterns(MechModel.getMechTeam(Team.RED));
@@ -16346,34 +16354,34 @@ var MechTest;
             { name: "cALRM20", spread: GlobalGameInfo._cALRM20Spread },
         ];
         for (let lrm of lrmSpreadList) {
-            console.log("----------------------------------------------");
-            console.log(lrm.name + " spread");
+            Util.log("----------------------------------------------");
+            Util.log(lrm.name + " spread");
             let lrmPattern = MechAccuracyPattern.seekerPattern(lrm.spread);
             let range = 180;
             let transformedDamage = lrmPattern(newTestDamage(), range);
-            console.log("Range: " + range + " " + transformedDamage.toString());
+            Util.log("Range: " + range + " " + transformedDamage.toString());
             for (range = 200; range <= 1000; range += 100) {
                 transformedDamage = lrmPattern(newTestDamage(), range);
-                console.log("Range: " + range + " " + transformedDamage.toString());
+                Util.log("Range: " + range + " " + transformedDamage.toString());
             }
         }
     };
     MechTest.testEventQueue = function () {
         let eventQueue = new Events.EventQueue();
         let listener1 = function (event) {
-            console.log(`listener1 ${event.type} ${event.data}`);
+            Util.log(`listener1 ${event.type} ${event.data}`);
         };
         let listener2 = function (event) {
-            console.log(`listener2 ${event.type} ${event.data}`);
+            Util.log(`listener2 ${event.type} ${event.data}`);
         };
         let listener3 = function (event) {
-            console.log(`listener3 ${event.type} ${event.data}`);
+            Util.log(`listener3 ${event.type} ${event.data}`);
         };
         eventQueue.addListener(listener1, "foo", "bar");
         eventQueue.addListener(listener2, "foo", "baz");
         eventQueue.addListener(listener3, "baz");
         eventQueue.addListener(listener3, "foo");
-        console.log(eventQueue.debugString());
+        Util.log(eventQueue.debugString());
         eventQueue.queueEvent({ type: "foo", data: "foo1" });
         eventQueue.queueEvent({ type: "bar", data: "bar1" });
         eventQueue.queueEvent({ type: "baz", data: "baz1" });
@@ -16383,7 +16391,7 @@ var MechTest;
         setTimeout(() => {
             eventQueue.removeListener(listener1);
             eventQueue.removeListener(listener3, "foo");
-            console.log(eventQueue.debugString());
+            Util.log(eventQueue.debugString());
             eventQueue.queueEvent({ type: "foo", data: "foo1" });
             eventQueue.queueEvent({ type: "foo", data: "foo2" });
             eventQueue.queueEvent({ type: "bar", data: "bar1" });
@@ -16393,14 +16401,14 @@ var MechTest;
             setTimeout(() => {
                 eventQueue.removeListener(listener2);
                 eventQueue.removeListener(listener3);
-                console.log(eventQueue.debugString());
+                Util.log(eventQueue.debugString());
                 eventQueue.queueEvent({ type: "foo", data: "foo1" });
                 eventQueue.queueEvent({ type: "foo", data: "foo2" });
                 eventQueue.queueEvent({ type: "bar", data: "bar1" });
                 eventQueue.queueEvent({ type: "bar", data: "bar2" });
                 eventQueue.queueEvent({ type: "baz", data: "baz1" });
                 eventQueue.queueEvent({ type: "baz", data: "baz2" });
-                console.log("Done");
+                Util.log("Done");
             }, 1000);
         }, 1000);
     };
@@ -16425,11 +16433,11 @@ var MechTest;
                 dataType: 'text'
             })
                 .done(function (data) {
-                console.log("Successfully loaded " + INDEX_HTML_URL);
+                Util.log("Successfully loaded " + INDEX_HTML_URL);
                 resolve(data);
             })
                 .fail(function (data) {
-                console.log("Request for  " + INDEX_HTML_URL + " request failed: " + Error(data));
+                Util.log("Request for  " + INDEX_HTML_URL + " request failed: " + Error(data));
                 reject(Error(data));
             });
         });
@@ -16445,11 +16453,11 @@ var MechTest;
             let bodyStr = data.substr(bodyStart, bodyEnd - bodyStart);
             let appBody = $.parseHTML(bodyStr);
             $("body").append(appBody);
-            console.log("Loaded all HTML");
+            Util.log("Loaded all HTML");
             return data;
         })
             .catch(function (data) {
-            console.error(Error("Error loading app HTML"));
+            Util.error(Error("Error loading app HTML"));
         });
     }
     function runTest() {
@@ -16462,16 +16470,16 @@ var MechTest;
             }
         }
         else {
-            console.error(Error("No test specified"));
+            Util.error(Error("No test specified"));
         }
     }
     function testMain() {
-        console.log("testMain started");
+        Util.log("testMain started");
         replaceBody().then(function (data) {
             runTest();
         })
             .catch(function (data) {
-            console.error(Error("Error running test: " + data));
+            Util.error(Error("Error running test: " + data));
         });
     }
     MechTest.testMain = testMain;

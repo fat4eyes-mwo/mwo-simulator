@@ -367,7 +367,7 @@ namespace MechViewRouter {
   }
 
   var hashChangeListener = function() : void {
-    console.log("Hash change: " + location.hash);
+    Util.log("Hash change: " + location.hash);
     if (isLoading) {
       //ignore hash change, change back to previous hash
       let hash = `#${HASH_STATE_FIELD}=${prevStateHash}`;
@@ -378,23 +378,23 @@ namespace MechViewRouter {
     if (newHash !== prevStateHash) {
       //if hash is different from previous hash, load new state
       MechView.showLoadingScreen();
-      console.log("Hash change loading new state from hash : " + newHash);
+      Util.log("Hash change loading new state from hash : " + newHash);
         loadAppState(newHash)
           .then(function() {
             //success
             MechModelView.refreshView();
-            console.log("Hash change state load success: " + newHash);
+            Util.log("Hash change state load success: " + newHash);
           })
           .catch(function() {
             //fail
             MechModelView.refreshView();
             MechView.updateOnLoadAppError();
-            console.log("Hash change state load failed: " + newHash);
+            Util.log("Hash change state load failed: " + newHash);
           })
           .then(function() {
             //always
             MechView.hideLoadingScreen();
-            console.log("Hash state change load done: " + newHash);
+            Util.log("Hash state change load done: " + newHash);
           });
     } else {
       //do nothing if hash did not change

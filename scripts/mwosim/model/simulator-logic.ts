@@ -134,7 +134,7 @@ namespace MechSimulatorLogic {
             if (targetMech) {
               fireWeapons(mech, weaponsToFire, targetMech);
             } else {
-              console.log("No target mech for " + mech.getMechId());
+              Util.log("No target mech for " + mech.getMechId());
             }
           }
         } else {
@@ -326,7 +326,7 @@ namespace MechSimulatorLogic {
     willUpdateTeamStats[weaponFire.sourceMech.getMechTeam()] = true;
     willUpdateTeamStats[weaponFire.targetMech.getMechTeam()] = true;
 
-    console.log(weaponInfo.name + " completed. Total damage: "
+    Util.log(weaponInfo.name + " completed. Total damage: "
               + weaponFire.damageDone.totalDamage() +
               "(" + weaponFire.damageDone.toString() + ")" +
               " src: " + weaponFire.sourceMech.getName() +

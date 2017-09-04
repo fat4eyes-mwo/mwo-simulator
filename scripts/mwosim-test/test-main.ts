@@ -13,11 +13,11 @@ namespace MechTest {
         dataType : 'text'
         })
         .done(function(data : any) {
-          console.log("Successfully loaded " + INDEX_HTML_URL);
+          Util.log("Successfully loaded " + INDEX_HTML_URL);
           resolve(data);
         })
         .fail(function(data : any) {
-          console.log("Request for  " + INDEX_HTML_URL + " request failed: " + Error(data));
+          Util.log("Request for  " + INDEX_HTML_URL + " request failed: " + Error(data));
           reject(Error(data));
         });
     });
@@ -34,11 +34,11 @@ namespace MechTest {
       let bodyStr = data.substr(bodyStart, bodyEnd - bodyStart);
       let appBody = $.parseHTML(bodyStr);
       $("body").append(appBody);
-      console.log("Loaded all HTML");
+      Util.log("Loaded all HTML");
       return data;
     })
     .catch(function(data : any) {
-      console.error(Error("Error loading app HTML"));
+      Util.error(Error("Error loading app HTML"));
     });
   }
 
@@ -51,17 +51,17 @@ namespace MechTest {
         testFunc();
       }
     } else {
-      console.error(Error("No test specified"));
+      Util.error(Error("No test specified"));
     }
   }
 
   export function testMain() : void {
-    console.log("testMain started");
+    Util.log("testMain started");
     replaceBody().then(function(data : any) {
       runTest();
     })
     .catch(function(data : any) {
-      console.error(Error("Error running test: " + data));
+      Util.error(Error("Error running test: " + data));
     });
   }
 }

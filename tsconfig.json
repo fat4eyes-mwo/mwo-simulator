@@ -17,6 +17,7 @@
     },
     "include" : [
       "scripts/lib/*.ts",
+      "scripts/mwosim/util/*.ts",
       "scripts/mwosim/data/*.ts",
       "scripts/mwosim/common/*.ts",
       "scripts/mwosim/framework/*.ts",

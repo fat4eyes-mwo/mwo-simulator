@@ -611,7 +611,7 @@ namespace MechViewMechPanel {
     private createDeleteMechButtonHandler() {
       return function(this : Element) {
         let mechId = $(this).attr("data-mech-id");
-        console.log("Deleting " + mechId);
+        Util.log("Deleting " + mechId);
         let result = MechModel.deleteMech(mechId);
         if (!result) {
           throw Error("Error deleting " + mechId);
@@ -769,13 +769,13 @@ namespace MechViewMechPanel {
       } else {
         let team = EndMechPanel.getEndMechIdTeam(targetMechId);
         status = MechModel.moveMechToEndOfList(this.mechId, team);
-        console.log("Insert at end: team=" + team);
+        Util.log("Insert at end: team=" + team);
       }
 
       if (!status) {
-        console.error(`Error moving mech. src=${this.mechId} dest=${targetMechId}`);
+        Util.error(`Error moving mech. src=${this.mechId} dest=${targetMechId}`);
       } else {
-        console.log(`Drop: src=${this.mechId} dest=${targetMechId}`);
+        Util.log(`Drop: src=${this.mechId} dest=${targetMechId}`);
         let srcMechJQ = $(this.domElement);
         srcMechJQ
           .detach()
@@ -862,7 +862,7 @@ namespace MechViewMechPanel {
         let origEvent = jqEvent.originalEvent as DragEvent;
         origEvent.dataTransfer.setData("text/plain", mechId);
         origEvent.dataTransfer.effectAllowed = "move";
-        console.log("Drag start: " + mechId);
+        Util.log("Drag start: " + mechId);
       }
     }
     public static mechOnDragHandler: JQEventHandler = null;
@@ -940,7 +940,7 @@ namespace MechViewMechPanel {
       let thisJQ = $(this);
       if (thisJQ.attr("draggable") === "true") {
         let startMechId = TouchHelper.findMechId(this as HTMLElement);
-        console.log(`Touch start mechId: ${startMechId}`);
+        Util.log(`Touch start mechId: ${startMechId}`);
 
         let mechName = MechModelView.getMechName(startMechId);
         TouchHelper.showTouchIcon(event.originalEvent as TouchEvent, mechName);
@@ -958,13 +958,13 @@ namespace MechViewMechPanel {
       let touchEvent = event.originalEvent as TouchEvent;
       let srcMechId = TouchHelper.findMechId(touchEvent.target as HTMLElement);
       let dropMechId = TouchHelper.findMechId(TouchHelper.currDropTarget as HTMLElement);
-      console.log(`Touch end srcMechId: ${srcMechId} dropMechId: ${dropMechId}`);
+      Util.log(`Touch end srcMechId: ${srcMechId} dropMechId: ${dropMechId}`);
 
       if (srcMechId && dropMechId) {
         let mechPanel = MechPanel.getMechPanel(srcMechId);
         mechPanel.moveToTargetMechId(dropMechId);
       } else {
-        console.warn(Error(`Touch end null mechId: src: ${srcMechId} dest: ${dropMechId}`))
+        Util.warn(Error(`Touch end null mechId: src: ${srcMechId} dest: ${dropMechId}`))
       }
 
       TouchHelper.hideTouchIcon(event.originalEvent as TouchEvent);

@@ -43,12 +43,12 @@ namespace Util {
       this.logStr += `${msg}\n`;
     }
     warn(msg : any) {
-      let error = Error(msg);
-      this.logStr += `${msg}: ${error.stack}\n`;
+      let err = Error(msg);
+      this.logStr += `${msg}: ${err.stack}\n`;
     }
     error(msg: any) {
-      let error = Error(msg);
-      this.logStr += `${msg}: ${error.stack}\n`;
+      let err = Error(msg);
+      this.logStr += `${msg}: ${err.stack}\n`;
     }
     clear() {
       this.logStr = "";
@@ -56,5 +56,17 @@ namespace Util {
     getLog() {
       return this.logStr;
     }
+  }
+
+  export var log = function(msg? : any, ...optionalParams : any[]) {
+    //console.log(msg, ...optionalParams);
+  }
+
+  export var warn = function(msg? : any, ...optionalParams : any[]){
+    //console.warn(msg, ...optionalParams);
+  }
+
+  export var error = function(msg? : any, ...optionalParams : any[]) {
+    //console.error(msg, ...optionalParams);
   }
 }

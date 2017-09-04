@@ -148,7 +148,7 @@ namespace MechViewMechDetails {
           loadDialog.mechSkillsPanel.render();
           MechViewRouter.modifyAppState();
         } else {
-          console.warn("No loaded skill quirks");
+          Util.warn("No loaded skill quirks");
         }
         Widgets.hideModal();
       };
@@ -185,16 +185,16 @@ namespace MechViewMechDetails {
           loadMechDialog.skillListPanel.setQuirks(skillQuirks);
           loadMechDialog.skillListPanel.render();
           loadMechDialog.okButton.enable();
-          console.log("Loaded data from kitlaan: " + data);
+          Util.log("Loaded data from kitlaan: " + data);
         })
         .catch(function(err: any) {
-          console.error("Error loading kitlaan data: " + Error(err));
+          Util.error("Error loading kitlaan data: " + Error(err));
           dialog.setError("Error loading kitlaan data: " + Error(err));
           dialog.okButton.disable();
         })
         .then(function(data : any) {
           dialog.setLoading(false);
-          console.log("Kitlaan load done.");
+          Util.log("Kitlaan load done.");
         });
       }
     }

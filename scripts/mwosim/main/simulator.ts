@@ -16,7 +16,7 @@ namespace MechSimulator {
 
     MechModel.initModelData()
       .then(function() {
-        console.log("Successfully loaded model init data");
+        Util.log("Successfully loaded model init data");
         //router should not be initialized before the smurfy data is
         //loaded since the hash change listener can start pulling in smurfy
         //loadout data
@@ -24,7 +24,7 @@ namespace MechSimulator {
         initMechs();
       })
       .catch(function() {
-        console.error("Failed to load model init data");
+        Util.error("Failed to load model init data");
         MechView.hideLoadingScreen();
         MechView.updateOnLoadAppError();
       });
@@ -37,7 +37,7 @@ namespace MechSimulator {
         return data;
       })
       .catch(function(err) {
-        console.error("Error loading mech data: " + err);
+        Util.error("Error loading mech data: " + err);
         MechModelView.refreshView();
         MechView.updateOnLoadAppError();
         location.hash = "";

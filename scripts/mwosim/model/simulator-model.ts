@@ -611,7 +611,7 @@ namespace MechModel  {
               mechInfo.engineInfo,
               this.engineHeatEfficiency,
               mechInfo.generalQuirkBonus);
-      console.log("Heatcalc: " + mechInfo.mechName
+      Util.log("Heatcalc: " + mechInfo.mechName
                 + " dissipation: " + heatStats.heatDissipation
                 + " capacity: " + heatStats.heatCapacity);
       this.currHeatDissipation = heatStats.heatDissipation;
@@ -1198,11 +1198,11 @@ namespace MechModel  {
         dataType : 'JSON'
         })
         .done(function(data : any) {
-          console.log("Successfully loaded " + path);
+          Util.log("Successfully loaded " + path);
           resolve(data);
         })
         .fail(function(data : any) {
-          console.log("Smurfy " + path + " request failed: " + Error(data));
+          Util.log("Smurfy " + path + " request failed: " + Error(data));
           reject(Error(data));
         });
     });
@@ -1800,7 +1800,7 @@ namespace MechModel  {
                                 : Mech {
     var newMech = new Mech(mechId, team, smurfyMechLoadout);
     mechTeams[team].push(newMech);
-    console.log("Added mech mech_id: " + mechId +
+    Util.log("Added mech mech_id: " + mechId +
       " translated_mech_name: " + newMech.getTranslatedName());
     initMechPatterns(newMech);
     return newMech;
@@ -1813,7 +1813,7 @@ namespace MechModel  {
                                   : Mech {
     var newMech = new Mech(mechId, team, smurfyMechLoadout);
     mechTeams[team][index] = newMech;
-    console.log("Added mech mech_id: " + mechId
+    Util.log("Added mech mech_id: " + mechId
       + " translated_mech_name: " + newMech.getTranslatedName()
       + " at index " + index);
     initMechPatterns(newMech);

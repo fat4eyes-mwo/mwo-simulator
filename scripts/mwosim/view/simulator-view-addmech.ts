@@ -72,7 +72,7 @@ namespace MechViewAddMech {
         let thisJQ = $(this);
         let team = thisJQ.attr('data-team');
         let url = dialog.getTextInputValue();
-        console.log("Mech loaded. team: " + team + " URL: " + url);
+        Util.log("Mech loaded. team: " + team + " URL: " + url);
         let smurfyMechLoadout = (dialog as AddMechDialog).loadedSmurfyLoadout;
         let newMech = MechModelView.addMech(team, smurfyMechLoadout);
         //set patterns of added mech to selected team patterns
@@ -99,7 +99,7 @@ namespace MechViewAddMech {
         let team = thisJQ.attr('data-team');
         let addMechDialogJQ = $(dialog.domElement);
         let url: string = dialog.getTextInputValue();
-        console.log("Load. team: " + team + " URL: " + url);
+        Util.log("Load. team: " + team + " URL: " + url);
 
         let doneHandler = function (data: any) {
           (dialog as AddMechDialog).loadedSmurfyLoadout = data;
@@ -130,7 +130,7 @@ namespace MechViewAddMech {
           dialog
             .setError("Invalid smurfy URL. Expected format is 'http://mwo.smurfy-net.de/mechlab#i=mechid&l=loadoutid'");
           dialog.setLoading(false);
-          console.error("Invalid smurfy url");
+          Util.error("Invalid smurfy url");
         }
       }
     }
@@ -207,7 +207,7 @@ namespace MechViewAddMech {
       } else if (smurfyType === "AMS") {
         return "ams";
       } else {
-        console.warn("Unexpected weapon type: " + smurfyType);
+        Util.warn("Unexpected weapon type: " + smurfyType);
         return "";
       }
     }

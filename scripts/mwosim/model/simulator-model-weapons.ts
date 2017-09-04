@@ -527,7 +527,7 @@ namespace MechModelWeapons {
     }
 
     private weaponJam() : WeaponStateChange {
-      console.log("Jam: " + this.weaponInfo.name);
+      Util.log("Jam: " + this.weaponInfo.name);
       let newState = WeaponCycle.JAMMED;
       this.gotoState(newState);
       let weaponFired = false;
@@ -536,7 +536,7 @@ namespace MechModelWeapons {
     }
 
     private doubleTap() : WeaponStateChange {
-      console.log("Double tap: " + this.weaponInfo.name);
+      Util.log("Double tap: " + this.weaponInfo.name);
       let newState = WeaponCycle.COOLDOWN_FIRING;
       this.gotoState(newState);
       this.currShotsDuringCooldown -= 1;
@@ -711,7 +711,7 @@ namespace MechModelWeapons {
             //check for jam
             let rand = Math.random();
             if (rand <= this.computeJamChance()) {
-              console.log("Jam: " + this.weaponInfo.name);
+              Util.log("Jam: " + this.weaponInfo.name);
               newState = WeaponCycle.JAMMED;
               this.gotoState(newState);
               weaponFired = false;
