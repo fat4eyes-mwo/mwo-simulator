@@ -296,6 +296,8 @@ System.register("test-classname", [], function (exports_8, context_8) {
                         super();
                     }
                 }
+                //TODO: see if you can tighten the type of c. It should be (Object | ClassDecl), 
+                //if there is any such thing in typescript
                 var getClassname = function (c) {
                     if (typeof c === 'function') {
                         if (c.prototype && c.prototype.constructor) {
@@ -330,9 +332,46 @@ System.register("test-classname", [], function (exports_8, context_8) {
         }
     };
 });
-System.register("main", ["moduleA", "moduleB", "libtest/moduleC", "storedElemTest", "test-touch", "test-classname"], function (exports_9, context_9) {
+System.register("test-enum", [], function (exports_9, context_9) {
     "use strict";
     var __moduleName = context_9 && context_9.id;
+    var TestEnum;
+    return {
+        setters: [],
+        execute: function () {
+            (function (TestEnum) {
+                let Names;
+                (function (Names) {
+                    Names["FIRST"] = "First";
+                    Names["LAST"] = "Last";
+                })(Names || (Names = {}));
+                //weird case, they transpile enums into namespace-like objects, so you can add more entries to the enum later
+                //in a completely different location like so. Not sure if a bug or feature, 
+                //it's too intentional to be an accident of implementation
+                (function (Names) {
+                    Names["MIDDLE"] = "Middle";
+                })(Names || (Names = {}));
+                let Flavors;
+                (function (Flavors) {
+                    Flavors["Up"] = "Up";
+                    Flavors["Down"] = "Down";
+                })(Flavors || (Flavors = {}));
+                TestEnum.testEnum = function () {
+                    let name;
+                    let flavor;
+                    name = Names.FIRST;
+                    console.log(`${name} ${name.toString()}`);
+                    name = Names.MIDDLE;
+                    console.log(`${name} ${name.toString()}`);
+                };
+            })(TestEnum || (TestEnum = {}));
+            exports_9("TestEnum", TestEnum);
+        }
+    };
+});
+System.register("main", ["moduleA", "moduleB", "libtest/moduleC", "storedElemTest", "test-touch", "test-classname", "test-enum"], function (exports_10, context_10) {
+    "use strict";
+    var __moduleName = context_10 && context_10.id;
     function main() {
         ModuleA.setA("a1");
         ModuleA2.setA("a2"); //Should set the same variable a in moduleA.js
@@ -343,9 +382,10 @@ System.register("main", ["moduleA", "moduleB", "libtest/moduleC", "storedElemTes
         StoreElemTest.testStoredElem();
         test_touch_1.TouchTest.touchTest();
         test_classname_1.TestClassname.testClassname();
+        test_enum_1.TestEnum.testEnum();
     }
-    exports_9("main", main);
-    var ModuleA, ModuleA2, ModuleB, ModuleC, StoreElemTest, test_touch_1, test_classname_1, foo;
+    exports_10("main", main);
+    var ModuleA, ModuleA2, ModuleB, ModuleC, StoreElemTest, test_touch_1, test_classname_1, test_enum_1, foo;
     return {
         setters: [
             function (ModuleA_2) {
@@ -366,6 +406,9 @@ System.register("main", ["moduleA", "moduleB", "libtest/moduleC", "storedElemTes
             },
             function (test_classname_1_1) {
                 test_classname_1 = test_classname_1_1;
+            },
+            function (test_enum_1_1) {
+                test_enum_1 = test_enum_1_1;
             }
         ],
         execute: function () {

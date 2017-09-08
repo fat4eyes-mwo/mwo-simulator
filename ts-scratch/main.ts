@@ -9,6 +9,7 @@ import * as StoreElemTest from "storedElemTest";
 import {TouchTest} from "test-touch";
 import {WeakmapTest} from "test-weakmap";
 import {TestClassname} from "test-classname";
+import {TestEnum} from "test-enum";
 
 let foo : ModuleA.TypeA;
 export function main() {
@@ -23,6 +24,8 @@ export function main() {
   TouchTest.touchTest();
 
   TestClassname.testClassname();
+
+  TestEnum.testEnum();
 }
 
 $(document).ready(main);
