@@ -213,7 +213,6 @@ namespace MechView {
     showModifiedToolip();
   }
 
-  //TODO: add these methods as listeners
   var updateOnAppSaveState = function(event : Events.Event) : void {
     //make the view consistent with the current state
   }
