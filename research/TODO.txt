@@ -1,8 +1,5 @@
 - AUTOMATED UNIT TESTS!!!!!!
 
-- event queue and listeners 
-    (NOTE: rxjs is good performance wise, but not so good wrt garbage collection (requires explicit unsubscribe))
-    Full rxjs is also huge (17kloc). Wrote a small EventQueue instead.
 - Mech details display (weapon damage summary)
 
 - See if it's worth moving all the added data to a single json file and fetching it at runtime.
