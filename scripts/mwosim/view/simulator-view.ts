@@ -227,11 +227,6 @@ namespace MechView {
     showStatusTooltip(LoadErrorTooltipId);
   }
 
-  //called when the app is completely loaded
-  export var updateOnAppLoaded = function() : void {
-    doAutoRun();
-  }
-
   var doAutoRun = function() : void {
     //set sim speed and run sim if run and speed url params are set
     let runParam : boolean = MechViewRouter.getRunFromLocation() === "true";

@@ -44,7 +44,6 @@ namespace MechSimulator {
       })
       .then(function(data) {
         MechView.hideLoadingScreen();
-        MechView.updateOnAppLoaded();
       });
   }
 

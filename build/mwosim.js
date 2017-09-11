@@ -8824,7 +8824,7 @@ var MechSimulator;
         })
             .then(function (data) {
             MechView.hideLoadingScreen();
-            MechView.updateOnAppLoaded();
+            // MechView.updateOnAppLoaded();
         });
     }
     function initUI() {
@@ -15856,10 +15856,6 @@ var MechView;
     };
     var updateOnLoadAppError = function (event) {
         showStatusTooltip(LoadErrorTooltipId);
-    };
-    //called when the app is completely loaded
-    MechView.updateOnAppLoaded = function () {
-        doAutoRun();
     };
     var doAutoRun = function () {
         //set sim speed and run sim if run and speed url params are set
