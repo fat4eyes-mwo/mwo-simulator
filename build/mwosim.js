@@ -8785,8 +8785,7 @@ var MechSimulator;
     const DEFAULT_RANGE = 200;
     const DEFAULT_SPEED = 1;
     function init() {
-        MechView.initView();
-        MechModelView.init();
+        MechView.init();
         MechView.showLoadingScreen();
         let simulatorParameters = new SimulatorParameters(DEFAULT_RANGE, DEFAULT_SPEED);
         MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
@@ -15234,6 +15233,7 @@ var MechViewRouter;
     MechViewRouter.initViewRouter = function () {
         //Listen to hash changes
         window.addEventListener("hashchange", hashChangeListener, false);
+        //Event queue listener
         MechModelView.getEventQueue().addListener(modifyAppState, EventType.APP_STATE_CHANGE);
     };
     var hashChangeListener = function () {
@@ -15705,7 +15705,7 @@ var MechView;
     MechView.setDebugText = function (debugText) {
         $("#debugText").html(debugText);
     };
-    MechView.initView = function () {
+    MechView.init = function () {
         $("#nojavascript").remove();
         initControlPanel();
         MechViewTeamStats.initPatternTypes();
@@ -15715,6 +15715,7 @@ var MechView;
         initMiscControl();
         MechViewMechPanel.init();
         MechViewAddMech.init();
+        MechModelView.init();
         //Event listeners
         MechModelView.getEventQueue().addListener(updateOnModifyAppState, EventType.APP_STATE_CHANGE);
     };
@@ -15925,7 +15926,7 @@ var MechTest;
         MechModel.setInitModelData(DummyWeaponData, DummyAmmoData, DummyMechData, DummyModuleData, _DummyOmnipods);
     };
     MechTest.testUIWidgets = function () {
-        MechView.initView();
+        MechView.init();
         initDummyModelData();
         initTestModelState();
         MechModelView.refreshView();
@@ -15998,7 +15999,7 @@ var MechTest;
         }
     };
     MechTest.testModelView = function () {
-        MechView.initView();
+        MechView.init();
         initDummyModelData();
         initTestModelState();
         MechModelView.refreshView();
@@ -16188,7 +16189,7 @@ var MechTest;
         // initDummyModelData();
         // this.generateTestUI( );
         //Load data from smurfy
-        MechView.initView();
+        MechView.init();
         MechView.showLoadingScreen();
         MechModel.initModelData()
             .then(function () {
@@ -16263,7 +16264,7 @@ var MechTest;
         var statehash;
         initDummyModelData();
         initTestModelState();
-        MechView.initView();
+        MechView.init();
         MechView.showLoadingScreen();
         Promise.resolve(MechViewRouter.saveAppState()
             .then(function (data) {

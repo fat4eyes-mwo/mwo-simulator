@@ -6,8 +6,7 @@ namespace MechSimulator {
   const DEFAULT_SPEED = 1;
 
   function init() : void {
-    MechView.initView();
-    MechModelView.init();
+    MechView.init();
     MechView.showLoadingScreen();
 
     let simulatorParameters =

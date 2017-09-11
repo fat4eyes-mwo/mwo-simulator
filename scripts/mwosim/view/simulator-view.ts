@@ -52,7 +52,7 @@ namespace MechView {
     $("#debugText").html(debugText);
   }
 
-  export var initView = function() : void {
+  export var init = function() : void {
     $("#nojavascript").remove();
     initControlPanel();
     MechViewTeamStats.initPatternTypes();
@@ -62,6 +62,8 @@ namespace MechView {
     initMiscControl();
     MechViewMechPanel.init();
     MechViewAddMech.init();
+
+    MechModelView.init();
 
     //Event listeners
     MechModelView.getEventQueue().addListener(updateOnModifyAppState, EventType.APP_STATE_CHANGE);

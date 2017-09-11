@@ -27,7 +27,7 @@ namespace MechTest {
   };
 
   export var testUIWidgets = function() {
-    MechView.initView();
+    MechView.init();
     initDummyModelData();
     initTestModelState();
     MechModelView.refreshView();
@@ -105,7 +105,7 @@ namespace MechTest {
   }
 
   export var testModelView = function() {
-    MechView.initView();
+    MechView.init();
     initDummyModelData();
     initTestModelState();
 
@@ -314,7 +314,8 @@ namespace MechTest {
     // this.generateTestUI( );
 
     //Load data from smurfy
-    MechView.initView();
+    MechView.init();
+    
     MechView.showLoadingScreen();
     MechModel.initModelData()
       .then(function() {
@@ -402,7 +403,7 @@ namespace MechTest {
     var statehash : string;
     initDummyModelData();
     initTestModelState();
-    MechView.initView();
+    MechView.init();
 
     MechView.showLoadingScreen();
     Promise.resolve(MechViewRouter.saveAppState()
