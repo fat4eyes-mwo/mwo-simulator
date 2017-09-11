@@ -2,6 +2,7 @@
 
 namespace MechSimulator {
   import SimulatorParameters = SimulatorSettings.SimulatorParameters;
+  import EventType = MechModelCommon.EventType;
   const DEFAULT_RANGE = 200;
   const DEFAULT_SPEED = 1;
 
@@ -25,7 +26,7 @@ namespace MechSimulator {
       .catch(function() {
         Util.error("Failed to load model init data");
         MechView.hideLoadingScreen();
-        MechView.updateOnLoadAppError();
+        MechModelView.getEventQueue().queueEvent({type : EventType.APP_STATE_LOAD_ERROR});
       });
   }
 
@@ -38,7 +39,7 @@ namespace MechSimulator {
       .catch(function(err) {
         Util.error("Error loading mech data: " + err);
         MechModelView.refreshView();
-        MechView.updateOnLoadAppError();
+        MechModelView.getEventQueue().queueEvent({type : EventType.APP_STATE_LOAD_ERROR});
         location.hash = "";
       })
       .then(function(data) {

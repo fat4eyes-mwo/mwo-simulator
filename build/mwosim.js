@@ -8165,6 +8165,8 @@ var MechModelCommon;
         CLAN_XL: "clan_xl",
         LIGHT: "light",
     };
+    //TODO: See if you can decentralize EventType so the definitions of events 
+    //can be put at their source without causing too many dependencies
     MechModelCommon.EventType = {
         MECH_UPDATE: "MechUpdate",
         SIMTIME_UPDATE: "SimTimeUpdate",
@@ -8172,7 +8174,10 @@ var MechModelCommon;
         TEAMVICTORY_UPDATE: "TeamVictoryUpdate",
         START: "Start",
         PAUSE: "Pause",
-        APP_STATE_CHANGE: "AppStateChange"
+        APP_STATE_CHANGE: "AppStateChange",
+        APP_STATE_SAVED: "AppStateSaved",
+        APP_STATE_LOADED: "AppStateLoaded",
+        APP_STATE_LOAD_ERROR: "AppStateLoadError",
     };
     MechModelCommon.BURST_DAMAGE_INTERVAL = 2000; //Interval considered for burst damage calculation
 })(MechModelCommon || (MechModelCommon = {}));
@@ -8782,6 +8787,7 @@ var Widgets;
 var MechSimulator;
 (function (MechSimulator) {
     var SimulatorParameters = SimulatorSettings.SimulatorParameters;
+    var EventType = MechModelCommon.EventType;
     const DEFAULT_RANGE = 200;
     const DEFAULT_SPEED = 1;
     function init() {
@@ -8801,7 +8807,7 @@ var MechSimulator;
             .catch(function () {
             Util.error("Failed to load model init data");
             MechView.hideLoadingScreen();
-            MechView.updateOnLoadAppError();
+            MechModelView.getEventQueue().queueEvent({ type: EventType.APP_STATE_LOAD_ERROR });
         });
     }
     function initMechs() {
@@ -8813,7 +8819,7 @@ var MechSimulator;
             .catch(function (err) {
             Util.error("Error loading mech data: " + err);
             MechModelView.refreshView();
-            MechView.updateOnLoadAppError();
+            MechModelView.getEventQueue().queueEvent({ type: EventType.APP_STATE_LOAD_ERROR });
             location.hash = "";
         })
             .then(function (data) {
@@ -15039,7 +15045,7 @@ var MechViewRouter;
                 isAppStateModified = false;
                 prevStateHash = data.statehash;
                 setParamToLocationHash(HASH_STATE_FIELD, data.statehash, true);
-                MechView.updateOnAppSaveState();
+                MechModelView.getEventQueue().queueEvent({ type: EventType.APP_STATE_SAVED });
                 resolve(data);
             })
                 .fail(function (data) {
@@ -15082,7 +15088,7 @@ var MechViewRouter;
             let loadMechPromise = loadMechsFromSmurfy(newAppState);
             return loadMechPromise.then(function (mechLoadoutData) {
                 isAppStateModified = false;
-                MechView.updateOnLoadAppState();
+                MechModelView.getEventQueue().queueEvent({ type: EventType.APP_STATE_LOADED });
                 return mechLoadoutData;
             });
         });
@@ -15258,7 +15264,7 @@ var MechViewRouter;
                 .catch(function () {
                 //fail
                 MechModelView.refreshView();
-                MechView.updateOnLoadAppError();
+                MechModelView.getEventQueue().queueEvent({ type: EventType.APP_STATE_LOAD_ERROR });
                 Util.log("Hash change state load failed: " + newHash);
             })
                 .then(function () {
@@ -15717,7 +15723,11 @@ var MechView;
         MechViewAddMech.init();
         MechModelView.init();
         //Event listeners
-        MechModelView.getEventQueue().addListener(updateOnModifyAppState, EventType.APP_STATE_CHANGE);
+        let eventQueue = MechModelView.getEventQueue();
+        eventQueue.addListener(updateOnModifyAppState, EventType.APP_STATE_CHANGE);
+        eventQueue.addListener(updateOnAppSaveState, EventType.APP_STATE_SAVED);
+        eventQueue.addListener(updateOnLoadAppState, EventType.APP_STATE_LOADED);
+        eventQueue.addListener(updateOnLoadAppError, EventType.APP_STATE_LOAD_ERROR);
     };
     var initControlPanel = function () {
         let controlPanelDiv = Widgets.cloneTemplate("controlPanel-template");
@@ -15837,14 +15847,14 @@ var MechView;
         showModifiedToolip();
     };
     //TODO: add these methods as listeners
-    MechView.updateOnAppSaveState = function () {
+    var updateOnAppSaveState = function (event) {
         //make the view consistent with the current state
     };
-    MechView.updateOnLoadAppState = function () {
+    var updateOnLoadAppState = function (event) {
         hideStatusTooltips();
         doAutoRun();
     };
-    MechView.updateOnLoadAppError = function () {
+    var updateOnLoadAppError = function (event) {
         showStatusTooltip(LoadErrorTooltipId);
     };
     //called when the app is completely loaded

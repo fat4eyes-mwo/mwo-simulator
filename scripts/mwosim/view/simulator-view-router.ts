@@ -126,7 +126,7 @@ namespace MechViewRouter {
         isAppStateModified = false;
         prevStateHash = data.statehash;
         setParamToLocationHash(HASH_STATE_FIELD, data.statehash, true);
-        MechView.updateOnAppSaveState();
+        MechModelView.getEventQueue().queueEvent({type: EventType.APP_STATE_SAVED});
         resolve(data);
       })
       .fail(function(data) {
@@ -171,7 +171,7 @@ namespace MechViewRouter {
           let loadMechPromise = loadMechsFromSmurfy(newAppState);
           return loadMechPromise.then(function(mechLoadoutData) {
             isAppStateModified = false;
-            MechView.updateOnLoadAppState();
+            MechModelView.getEventQueue().queueEvent({type: EventType.APP_STATE_LOADED});
             return mechLoadoutData;
           });
       });
@@ -376,7 +376,7 @@ namespace MechViewRouter {
           .catch(function() {
             //fail
             MechModelView.refreshView();
-            MechView.updateOnLoadAppError();
+            MechModelView.getEventQueue().queueEvent({type: EventType.APP_STATE_LOAD_ERROR});
             Util.log("Hash change state load failed: " + newHash);
           })
           .then(function() {

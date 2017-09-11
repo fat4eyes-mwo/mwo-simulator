@@ -66,7 +66,11 @@ namespace MechView {
     MechModelView.init();
 
     //Event listeners
-    MechModelView.getEventQueue().addListener(updateOnModifyAppState, EventType.APP_STATE_CHANGE);
+    let eventQueue = MechModelView.getEventQueue();
+    eventQueue.addListener(updateOnModifyAppState, EventType.APP_STATE_CHANGE);
+    eventQueue.addListener(updateOnAppSaveState, EventType.APP_STATE_SAVED);
+    eventQueue.addListener(updateOnLoadAppState, EventType.APP_STATE_LOADED);
+    eventQueue.addListener(updateOnLoadAppError, EventType.APP_STATE_LOAD_ERROR);
   }
 
   var initControlPanel = function() : void {
@@ -210,16 +214,16 @@ namespace MechView {
   }
 
   //TODO: add these methods as listeners
-  export var updateOnAppSaveState = function() : void {
+  var updateOnAppSaveState = function(event : Events.Event) : void {
     //make the view consistent with the current state
   }
 
-  export var updateOnLoadAppState = function() : void {
+  var updateOnLoadAppState = function(event : Events.Event) : void {
     hideStatusTooltips();
     doAutoRun();
   }
 
-  export var updateOnLoadAppError = function() : void {
+  var updateOnLoadAppError = function(event : Events.Event) : void {
     showStatusTooltip(LoadErrorTooltipId);
   }
 
