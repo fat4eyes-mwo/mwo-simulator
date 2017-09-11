@@ -5,6 +5,7 @@
 namespace MechViewRouter {
   import Team = MechModelCommon.Team;
   import SimulatorParameters = SimulatorSettings.SimulatorParameters;
+  import EventType = MechModelCommon.EventType;
 
   const PERSISTENCE_URL = "./php/simulator-persistence.php";
   const PERSISTENCE_STATE_FIELD = "state";
@@ -285,12 +286,11 @@ namespace MechViewRouter {
     return retPromise;
   }
 
-  //Called to let the router know that the app state has changed
-  export var modifyAppState = function() {
+  //listener to APP_STATE_CHANGE event
+  var modifyAppState = function(event : Events.Event) {
     isAppStateModified = true;
     prevStateHash = HASH_MODIFIED_STATE;
     setParamToLocationHash(HASH_STATE_FIELD, HASH_MODIFIED_STATE);
-    MechView.updateOnModifyAppState();
   }
 
   var setParamToLocationHash =
@@ -349,6 +349,9 @@ namespace MechViewRouter {
   export var initViewRouter = function() : void {
     //Listen to hash changes
     window.addEventListener("hashchange", hashChangeListener, false);
+
+    //Event queue listener
+    MechModelView.getEventQueue().addListener(modifyAppState, EventType.APP_STATE_CHANGE);
   }
 
   var hashChangeListener = function() : void {

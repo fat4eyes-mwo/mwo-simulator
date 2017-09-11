@@ -616,12 +616,13 @@ namespace MechViewMechPanel {
         if (!result) {
           throw Error("Error deleting " + mechId);
         }
-        MechViewRouter.modifyAppState();
         let mechPanelDivId = MechPanel.mechPanelId(mechId);
         $("#" + mechPanelDivId).remove();
 
         MechView.resetSimulation();
         MechModelView.refreshView([MechModelView.ViewUpdate.TEAMSTATS]);
+
+        MechModelView.getEventQueue().queueEvent({type : EventType.APP_STATE_CHANGE});
       };
     }
     private static deleteMechButtonHandler : () => void; //singleton
@@ -782,7 +783,7 @@ namespace MechViewMechPanel {
           .insertBefore(targetMechPanel.domElement);
 
         this.toggleMoveMech(this.mechId);
-        MechViewRouter.modifyAppState();
+        MechModelView.getEventQueue().queueEvent({type: EventType.APP_STATE_CHANGE});
         MechModelView.refreshView([MechModelView.ViewUpdate.TEAMSTATS]);
       }
     }

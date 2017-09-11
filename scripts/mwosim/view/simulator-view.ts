@@ -5,6 +5,7 @@ namespace MechView {
   import Component = MechModelCommon.Component;
   import MechPanel = MechViewMechPanel.MechPanel;
   import EndMechPanel = MechViewMechPanel.EndMechPanel;
+  import EventType = MechModelCommon.EventType;
 
   type Mech = MechModel.Mech;
   type Team = MechModelCommon.Team;
@@ -61,6 +62,9 @@ namespace MechView {
     initMiscControl();
     MechViewMechPanel.init();
     MechViewAddMech.init();
+
+    //Event listeners
+    MechModelView.getEventQueue().addListener(updateOnModifyAppState, EventType.APP_STATE_CHANGE);
   }
 
   var initControlPanel = function() : void {
@@ -199,12 +203,11 @@ namespace MechView {
     showStatusTooltip(LoadErrorTooltipId);
   }
 
-  //TODO: You now have multiple entities acting on the same event. Think about
-  //setting up an event scheduler/listeners
-  export var updateOnModifyAppState = function() : void {
+  var updateOnModifyAppState = function(event : Events.Event) : void {
     showModifiedToolip();
   }
 
+  //TODO: add these methods as listeners
   export var updateOnAppSaveState = function() : void {
     //make the view consistent with the current state
   }

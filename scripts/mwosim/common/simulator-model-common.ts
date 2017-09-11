@@ -72,7 +72,8 @@ namespace MechModelCommon {
     TEAMSTATS_UPDATE : "TeamStatsUpdate",
     TEAMVICTORY_UPDATE : "TeamVictoryUpdate",
     START : "Start",
-    PAUSE : "Pause"
+    PAUSE : "Pause",
+    APP_STATE_CHANGE : "AppStateChange"
   };
 
   export const BURST_DAMAGE_INTERVAL = 2000; //Interval considered for burst damage calculation

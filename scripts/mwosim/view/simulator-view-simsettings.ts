@@ -3,6 +3,8 @@
 
 namespace MechViewSimSettings {
   import SimulatorParameters = SimulatorSettings.SimulatorParameters;
+  import EventType = MechModelCommon.EventType;
+
   type SimParamUserSettings = SimulatorSettings.SimParamUserSettings;
   type SimUserSettingValue = SimulatorSettings.SimUserSettingValue;
 
@@ -45,11 +47,11 @@ namespace MechViewSimSettings {
     //not strictly necessary, but it makes it explicit that we're changing
     //the simulator parameters. Handy when searching for code that changes
     //app state
-    MechViewRouter.modifyAppState();
     MechModelView.setSimulatorParameters(simulatorParameters);
     $("#setRangeButton")
       .attr("data-button-mode", "not-editing")
       .html("Change");
+    MechModelView.getEventQueue().queueEvent({type : EventType.APP_STATE_CHANGE});
   };
 
   export var updateSimSettingsView =

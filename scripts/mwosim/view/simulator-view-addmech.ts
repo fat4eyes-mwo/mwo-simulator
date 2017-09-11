@@ -77,10 +77,11 @@ namespace MechViewAddMech {
         let newMech = MechModelView.addMech(team, smurfyMechLoadout);
         //set patterns of added mech to selected team patterns
         MechViewTeamStats.setSelectedTeamPatterns(team);
-        MechViewRouter.modifyAppState();
         MechView.addMechPanel(newMech, team);
         MechModelView.refreshView([MechModelView.ViewUpdate.TEAMSTATS]);
         MechViewAddMech.hideAddMechDialog(team);
+
+        MechModelView.getEventQueue().queueEvent({type : EventType.APP_STATE_CHANGE});
       }
     };
 

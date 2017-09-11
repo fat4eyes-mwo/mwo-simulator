@@ -5520,10 +5520,9 @@ var GlobalGameInfo;
 (function (GlobalGameInfo) {
     GlobalGameInfo._MechGlobalGameInfo = {
         //reference: https://mwomercs.com/news/2017/01/1698-patch-notes-14101-24jan2017
-        clan_reduced_xl_heat_efficiency: 0.6
+        reduced_xl_heat_efficiency: 0.6,
+        ghost_heat_interval: 500,
     };
-    //Interval when ghost heat applies for weapons. 500ms
-    GlobalGameInfo.GHOST_HEAT_INTERVAL = 500;
 })(GlobalGameInfo || (GlobalGameInfo = {}));
 //Constants used by simulator-model-quirks.js to compute quirk bonuses
 var MechModelQuirksData;
@@ -8172,7 +8171,8 @@ var MechModelCommon;
         TEAMSTATS_UPDATE: "TeamStatsUpdate",
         TEAMVICTORY_UPDATE: "TeamVictoryUpdate",
         START: "Start",
-        PAUSE: "Pause"
+        PAUSE: "Pause",
+        APP_STATE_CHANGE: "AppStateChange"
     };
     MechModelCommon.BURST_DAMAGE_INTERVAL = 2000; //Interval considered for burst damage calculation
 })(MechModelCommon || (MechModelCommon = {}));
@@ -9382,6 +9382,7 @@ var MechFirePattern;
                 let weaponInfo = weaponState.weaponInfo;
                 if (!canFire(weaponState) //not ready to fire
                     || !willDoDamage(weaponState, range) //will not do damage
+                    //No ammo
                     || (weaponInfo.requiresAmmo() && weaponState.getAvailableAmmo() <= 0)) {
                     continue; //skip weapon
                 }
@@ -11370,7 +11371,7 @@ var MechModel;
                 //Go through the list of ghost heat weapons and remove those that have been
                 //fired outside the ghost heat interval
                 while (ghostHeatWeapons.length > 0
-                    && (simTime - ghostHeatWeapons[0].timeFired > GlobalGameInfo.GHOST_HEAT_INTERVAL)) {
+                    && (simTime - ghostHeatWeapons[0].timeFired > GlobalGameInfo._MechGlobalGameInfo.ghost_heat_interval)) {
                     ghostHeatWeapons.shift();
                 }
                 //see if any of the remaining entries are from the same weapon. In that case
@@ -11529,7 +11530,7 @@ var MechModel;
                 if (location === Component.LEFT_TORSO ||
                     location === Component.RIGHT_TORSO) {
                     heatState.engineHeatEfficiency =
-                        Number(GlobalGameInfo._MechGlobalGameInfo.clan_reduced_xl_heat_efficiency);
+                        Number(GlobalGameInfo._MechGlobalGameInfo.reduced_xl_heat_efficiency);
                 }
             }
             //recompute heat stats
@@ -13482,10 +13483,10 @@ var MechViewAddMech;
                 let newMech = MechModelView.addMech(team, smurfyMechLoadout);
                 //set patterns of added mech to selected team patterns
                 MechViewTeamStats.setSelectedTeamPatterns(team);
-                MechViewRouter.modifyAppState();
                 MechView.addMechPanel(newMech, team);
                 MechModelView.refreshView([MechModelView.ViewUpdate.TEAMSTATS]);
                 MechViewAddMech.hideAddMechDialog(team);
+                MechModelView.getEventQueue().queueEvent({ type: EventType.APP_STATE_CHANGE });
             };
         }
         ;
@@ -13680,6 +13681,7 @@ var MechViewDamageColor;
 var MechViewMechDetails;
 /// <reference path="../framework/widgets.ts" />
 (function (MechViewMechDetails) {
+    var EventType = MechModelCommon.EventType;
     class MechDetails extends Widgets.DomStoredWidget {
         constructor(mechId) {
             let mechDetailsDiv = Widgets.cloneTemplate("mechDetails-template");
@@ -13789,7 +13791,7 @@ var MechViewMechDetails;
                     MechModelView.applySkillQuirks(loadDialog.mechId, loadDialog.loadedSkillQuirks);
                     MechModelView.setSkillState(loadDialog.mechId, loadDialog.loadedSkillState);
                     loadDialog.mechSkillsPanel.render();
-                    MechViewRouter.modifyAppState();
+                    MechModelView.getEventQueue().queueEvent({ type: EventType.APP_STATE_CHANGE });
                 }
                 else {
                     Util.warn("No loaded skill quirks");
@@ -14412,11 +14414,11 @@ var MechViewMechPanel;
                 if (!result) {
                     throw Error("Error deleting " + mechId);
                 }
-                MechViewRouter.modifyAppState();
                 let mechPanelDivId = MechPanel.mechPanelId(mechId);
                 $("#" + mechPanelDivId).remove();
                 MechView.resetSimulation();
                 MechModelView.refreshView([MechModelView.ViewUpdate.TEAMSTATS]);
+                MechModelView.getEventQueue().queueEvent({ type: EventType.APP_STATE_CHANGE });
             };
         }
         static moveMechButtonId(mechId) {
@@ -14554,7 +14556,7 @@ var MechViewMechPanel;
                     .detach()
                     .insertBefore(targetMechPanel.domElement);
                 this.toggleMoveMech(this.mechId);
-                MechViewRouter.modifyAppState();
+                MechModelView.getEventQueue().queueEvent({ type: EventType.APP_STATE_CHANGE });
                 MechModelView.refreshView([MechModelView.ViewUpdate.TEAMSTATS]);
             }
         }
@@ -14947,6 +14949,7 @@ var MechViewRouter;
 (function (MechViewRouter) {
     var Team = MechModelCommon.Team;
     var SimulatorParameters = SimulatorSettings.SimulatorParameters;
+    var EventType = MechModelCommon.EventType;
     const PERSISTENCE_URL = "./php/simulator-persistence.php";
     const PERSISTENCE_STATE_FIELD = "state";
     const HASH_STATE_FIELD = "s";
@@ -15172,12 +15175,11 @@ var MechViewRouter;
         }, Promise.resolve([]));
         return retPromise;
     };
-    //Called to let the router know that the app state has changed
-    MechViewRouter.modifyAppState = function () {
+    //listener to APP_STATE_CHANGE event
+    var modifyAppState = function (event) {
         isAppStateModified = true;
         prevStateHash = HASH_MODIFIED_STATE;
         setParamToLocationHash(HASH_STATE_FIELD, HASH_MODIFIED_STATE);
-        MechView.updateOnModifyAppState();
     };
     var setParamToLocationHash = function (param, value, replaceHistory = false) {
         let paramValues = new Map();
@@ -15232,6 +15234,7 @@ var MechViewRouter;
     MechViewRouter.initViewRouter = function () {
         //Listen to hash changes
         window.addEventListener("hashchange", hashChangeListener, false);
+        MechModelView.getEventQueue().addListener(modifyAppState, EventType.APP_STATE_CHANGE);
     };
     var hashChangeListener = function () {
         Util.log("Hash change: " + location.hash);
@@ -15274,6 +15277,7 @@ var MechViewRouter;
 var MechViewSimSettings;
 (function (MechViewSimSettings) {
     var SimulatorParameters = SimulatorSettings.SimulatorParameters;
+    var EventType = MechModelCommon.EventType;
     MechViewSimSettings.initRangeInput = function () {
         let rangeJQ = $("#rangeInput");
         let rangeButtonElem = document.getElementById("setRangeButton");
@@ -15312,11 +15316,11 @@ var MechViewSimSettings;
         //not strictly necessary, but it makes it explicit that we're changing
         //the simulator parameters. Handy when searching for code that changes
         //app state
-        MechViewRouter.modifyAppState();
         MechModelView.setSimulatorParameters(simulatorParameters);
         $("#setRangeButton")
             .attr("data-button-mode", "not-editing")
             .html("Change");
+        MechModelView.getEventQueue().queueEvent({ type: EventType.APP_STATE_CHANGE });
     };
     MechViewSimSettings.updateSimSettingsView = function (simulatorParameters) {
         if (simulatorParameters) {
@@ -15666,6 +15670,7 @@ var MechView;
 (function (MechView) {
     var Component = MechModelCommon.Component;
     var MechPanel = MechViewMechPanel.MechPanel;
+    var EventType = MechModelCommon.EventType;
     var teamListPanel = function (team) {
         return team + "Team";
     };
@@ -15710,6 +15715,8 @@ var MechView;
         initMiscControl();
         MechViewMechPanel.init();
         MechViewAddMech.init();
+        //Event listeners
+        MechModelView.getEventQueue().addListener(updateOnModifyAppState, EventType.APP_STATE_CHANGE);
     };
     var initControlPanel = function () {
         let controlPanelDiv = Widgets.cloneTemplate("controlPanel-template");
@@ -15825,11 +15832,10 @@ var MechView;
     var showLoadErrorTooltip = function () {
         showStatusTooltip(LoadErrorTooltipId);
     };
-    //TODO: You now have multiple entities acting on the same event. Think about
-    //setting up an event scheduler/listeners
-    MechView.updateOnModifyAppState = function () {
+    var updateOnModifyAppState = function (event) {
         showModifiedToolip();
     };
+    //TODO: add these methods as listeners
     MechView.updateOnAppSaveState = function () {
         //make the view consistent with the current state
     };

@@ -1,6 +1,8 @@
 /// <reference path="../framework/widgets.ts" />
 
 namespace MechViewMechDetails {
+  import EventType = MechModelCommon.EventType;
+
   type LoadFromURLDialog = Widgets.LoadFromURLDialog;
   type ClickHandler = Widgets.ClickHandler;
   type MechViewQuirk = MechModelView.MechViewQuirk;
@@ -146,7 +148,8 @@ namespace MechViewMechDetails {
           MechModelView.applySkillQuirks(loadDialog.mechId, loadDialog.loadedSkillQuirks);
           MechModelView.setSkillState(loadDialog.mechId, loadDialog.loadedSkillState);
           loadDialog.mechSkillsPanel.render();
-          MechViewRouter.modifyAppState();
+
+          MechModelView.getEventQueue().queueEvent({type : EventType.APP_STATE_CHANGE});
         } else {
           Util.warn("No loaded skill quirks");
         }
