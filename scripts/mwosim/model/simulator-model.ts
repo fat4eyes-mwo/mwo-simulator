@@ -447,7 +447,7 @@ namespace MechModel  {
         if (location === Component.LEFT_TORSO ||
             location === Component.RIGHT_TORSO) {
           heatState.engineHeatEfficiency =
-            Number(GlobalGameInfo._MechGlobalGameInfo.clan_reduced_xl_heat_efficiency);
+            Number(GlobalGameInfo._MechGlobalGameInfo.reduced_xl_heat_efficiency);
         }
       }
       //recompute heat stats
@@ -522,7 +522,7 @@ namespace MechModel  {
       //Go through the list of ghost heat weapons and remove those that have been
       //fired outside the ghost heat interval
       while (ghostHeatWeapons.length > 0
-        && (simTime - ghostHeatWeapons[0].timeFired > GlobalGameInfo.GHOST_HEAT_INTERVAL)) {
+        && (simTime - ghostHeatWeapons[0].timeFired > GlobalGameInfo._MechGlobalGameInfo.ghost_heat_interval)) {
         ghostHeatWeapons.shift();
       }
       //see if any of the remaining entries are from the same weapon. In that case
