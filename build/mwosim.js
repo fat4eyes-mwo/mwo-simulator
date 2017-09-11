@@ -8824,7 +8824,6 @@ var MechSimulator;
         })
             .then(function (data) {
             MechView.hideLoadingScreen();
-            // MechView.updateOnAppLoaded();
         });
     }
     function initUI() {
@@ -15846,7 +15845,6 @@ var MechView;
     var updateOnModifyAppState = function (event) {
         showModifiedToolip();
     };
-    //TODO: add these methods as listeners
     var updateOnAppSaveState = function (event) {
         //make the view consistent with the current state
     };
