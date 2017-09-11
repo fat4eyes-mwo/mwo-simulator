@@ -66,6 +66,8 @@ namespace MechModelCommon {
     LIGHT : "light",
   };
 
+  //TODO: See if you can decentralize EventType so the definitions of events 
+  //can be put at their source without causing too many dependencies
   export const EventType = {
     MECH_UPDATE : "MechUpdate",
     SIMTIME_UPDATE : "SimTimeUpdate",
