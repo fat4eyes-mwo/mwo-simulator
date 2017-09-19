@@ -5520,10 +5520,9 @@ var GlobalGameInfo;
 (function (GlobalGameInfo) {
     GlobalGameInfo._MechGlobalGameInfo = {
         //reference: https://mwomercs.com/news/2017/01/1698-patch-notes-14101-24jan2017
-        clan_reduced_xl_heat_efficiency: 0.6
+        reduced_xl_heat_efficiency: 0.6,
+        ghost_heat_interval: 500,
     };
-    //Interval when ghost heat applies for weapons. 500ms
-    GlobalGameInfo.GHOST_HEAT_INTERVAL = 500;
 })(GlobalGameInfo || (GlobalGameInfo = {}));
 //Constants used by simulator-model-quirks.js to compute quirk bonuses
 var MechModelQuirksData;
@@ -8166,6 +8165,20 @@ var MechModelCommon;
         CLAN_XL: "clan_xl",
         LIGHT: "light",
     };
+    //TODO: See if you can decentralize EventType so the definitions of events 
+    //can be put at their source without causing too many dependencies
+    MechModelCommon.EventType = {
+        MECH_UPDATE: "MechUpdate",
+        SIMTIME_UPDATE: "SimTimeUpdate",
+        TEAMSTATS_UPDATE: "TeamStatsUpdate",
+        TEAMVICTORY_UPDATE: "TeamVictoryUpdate",
+        START: "Start",
+        PAUSE: "Pause",
+        APP_STATE_CHANGE: "AppStateChange",
+        APP_STATE_SAVED: "AppStateSaved",
+        APP_STATE_LOADED: "AppStateLoaded",
+        APP_STATE_LOAD_ERROR: "AppStateLoadError",
+    };
     MechModelCommon.BURST_DAMAGE_INTERVAL = 2000; //Interval considered for burst damage calculation
 })(MechModelCommon || (MechModelCommon = {}));
 var SimulatorSettings;
@@ -8209,19 +8222,582 @@ var SimulatorSettings;
         return simulatorParameters.clone();
     };
 })(SimulatorSettings || (SimulatorSettings = {}));
+var Events;
+(function (Events) {
+    class ListenerEntry {
+        constructor(listener, types) {
+            this.listener = listener;
+            this.eventTypes = new Set(types);
+        }
+        isListening(type) {
+            return this.eventTypes.has(type);
+        }
+        getListener() {
+            return this.listener;
+        }
+        getEventTypes() {
+            return this.eventTypes;
+        }
+        addEventTypes(types) {
+            for (let type of types) {
+                this.eventTypes.add(type);
+            }
+        }
+    }
+    class EventQueue {
+        constructor() {
+            this.queue = [];
+            this.stepScheduled = false;
+            this.executionDeferred = false;
+            this.listeners = new Map();
+            this.listenerMap = new Map();
+        }
+        getListeners(event) {
+            let ret = this.listeners.get(event);
+            if (!ret) {
+                ret = new Set();
+                this.listeners.set(event, ret);
+            }
+            return ret;
+        }
+        addListener(listener, ...eventTypes) {
+            let listenerEntry = this.listenerMap.get(listener);
+            if (!listenerEntry) {
+                listenerEntry = new ListenerEntry(listener, eventTypes);
+                this.listenerMap.set(listener, listenerEntry);
+            }
+            listenerEntry.addEventTypes(eventTypes);
+            for (let type of listenerEntry.getEventTypes()) {
+                let listenerSet = this.getListeners(type);
+                listenerSet.add(listenerEntry.getListener());
+            }
+        }
+        //if no event types given, will unregister listener to all events
+        removeListener(listener, ...eventTypes) {
+            let listenerEntry = this.listenerMap.get(listener);
+            if (!listenerEntry) {
+                throw Error("Listener not registered");
+            }
+            let eventTypesToRemove;
+            if (!eventTypes || eventTypes.length === 0) {
+                eventTypesToRemove = listenerEntry.getEventTypes();
+            }
+            else {
+                eventTypesToRemove = eventTypes;
+            }
+            for (let eventType of eventTypesToRemove) {
+                let listenerSet = this.listeners.get(eventType);
+                listenerSet.delete(listener);
+                //NOTE: delete semantics on javascript iterators allow 'concurrent' modification 
+                //(it actually just puts an empty element in the deleted position)
+                listenerEntry.getEventTypes().delete(eventType);
+            }
+            //all entries removed
+            if (listenerEntry.getEventTypes().size === 0) {
+                this.listenerMap.delete(listener);
+            }
+        }
+        debugString() {
+            let logger = new Util.StringLogger();
+            logger.log("Listeners");
+            for (let listener of this.listenerMap.keys()) {
+                let logStr = listener.name;
+                logStr += " [";
+                let listenerEntry = this.listenerMap.get(listener);
+                listenerEntry.getEventTypes().forEach((type) => {
+                    logStr += type + " ";
+                });
+                logStr += "]";
+                logger.log(logStr);
+            }
+            logger.log("Event->Listener map");
+            for (let eventType of this.listeners.keys()) {
+                let logStr = eventType;
+                logStr += " [";
+                for (let listener of this.listeners.get(eventType)) {
+                    logStr += listener.name + " ";
+                }
+                logStr += "]";
+                logger.log(logStr);
+            }
+            return logger.getLog();
+        }
+        queueEvent(event) {
+            this.queue.push(event);
+            if (this.executionDeferred) {
+                return;
+            }
+            if (!this.stepScheduled) {
+                this.stepScheduled = true;
+                setTimeout(this.step.bind(this), 0);
+            }
+        }
+        //When called, all events queued are not executed until executeAllQueued is called.
+        //Used when you want to execute a set of events all at once (e.g. a large set of dom updates)
+        deferExecution() {
+            this.executionDeferred = true;
+        }
+        executeAllQueued() {
+            while (this.queue.length > 0) {
+                let currEvent = this.queue.shift();
+                this.executeEvent(currEvent);
+            }
+            this.executionDeferred = false;
+            this.stepScheduled = false;
+        }
+        step() {
+            if (this.queue.length === 0) {
+                Util.warn("Step executed on empty queue");
+                return;
+            }
+            let currEvent = this.queue.shift();
+            this.executeEvent(currEvent);
+            this.stepScheduled = false;
+            if (this.queue.length > 0 && !this.executionDeferred) {
+                this.stepScheduled = true;
+                setTimeout(this.step.bind(this), 0);
+            }
+        }
+        executeEvent(event) {
+            let listeners = this.listeners.get(event.type);
+            if (!listeners) {
+                Util.warn(`No listener for event ${event.type}`);
+                return;
+            }
+            for (let listener of listeners) {
+                listener(event);
+            }
+        }
+    }
+    Events.EventQueue = EventQueue;
+})(Events || (Events = {}));
+var Util;
+(function (Util) {
+    //returns index of matching entry, otherwise returns the closest lower entry in
+    //the array
+    //TODO: See if this method is still worth it
+    function binarySearchClosest(array, key, keyCompare) {
+        var low = 0;
+        var high = array.length - 1;
+        var mid = Math.floor(low + ((high - low) / 2));
+        var midVal = array[mid];
+        while (low <= high) {
+            mid = Math.floor(low + ((high - low) / 2));
+            midVal = array[mid];
+            if (keyCompare(key, midVal) < 0) {
+                high = mid - 1;
+            }
+            else if (keyCompare(key, midVal) > 0) {
+                low = mid + 1;
+            }
+            else {
+                return mid;
+            }
+        }
+        if (keyCompare(key, midVal) < 0) {
+            return Math.max(0, mid - 1);
+        }
+        else {
+            return mid;
+        }
+    }
+    Util.binarySearchClosest = binarySearchClosest;
+    class StringLogger {
+        constructor() {
+            this.logStr = "";
+        }
+        log(msg) {
+            this.logStr += `${msg}\n`;
+        }
+        warn(msg) {
+            let err = Error(msg);
+            this.logStr += `${msg}: ${err.stack}\n`;
+        }
+        error(msg) {
+            let err = Error(msg);
+            this.logStr += `${msg}: ${err.stack}\n`;
+        }
+        clear() {
+            this.logStr = "";
+        }
+        getLog() {
+            return this.logStr;
+        }
+    }
+    Util.StringLogger = StringLogger;
+    Util.getParamFromLocationHash = function (param) {
+        let fragmentHash = location.hash;
+        if (fragmentHash.startsWith("#")) {
+            fragmentHash = fragmentHash.substring(1);
+        }
+        fragmentHash = "&" + fragmentHash;
+        let regex = new RegExp(".*&" + param + "=([^&]*).*");
+        let results = regex.exec(fragmentHash);
+        if (results) {
+            return results[1];
+        }
+        else {
+            return null;
+        }
+    };
+    let DEFAULT_DEBUG = true;
+    var isDebug = function () {
+        let debug = Util.getParamFromLocationHash("debug");
+        if (debug) {
+            return debug === 'true';
+        }
+        else {
+            return DEFAULT_DEBUG;
+        }
+    };
+    Util.log = function (msg, ...optionalParams) {
+        if (isDebug()) {
+            console.log(msg, ...optionalParams);
+        }
+    };
+    Util.warn = function (msg, ...optionalParams) {
+        if (isDebug()) {
+            console.warn(msg, ...optionalParams);
+        }
+    };
+    Util.error = function (msg, ...optionalParams) {
+        if (isDebug()) {
+            console.error(msg, ...optionalParams);
+        }
+    };
+})(Util || (Util = {}));
+//Widget design policy: No logic in HTML, no layout in Javascript.
+//Javascript only provides behavior, it does NOT generate HTML unless it's from a template.
+//On the converse side, HTML should not contain direct references to javascript entities
+//(e.g. class constructors, methods). Makes it possible to do cosmetic and layout
+//changes purely in HTML and CSS, and you keep out ugly unmaintainable HTML
+//text strings out of javascript.
+var Widgets;
+//Widget design policy: No logic in HTML, no layout in Javascript.
+//Javascript only provides behavior, it does NOT generate HTML unless it's from a template.
+//On the converse side, HTML should not contain direct references to javascript entities
+//(e.g. class constructors, methods). Makes it possible to do cosmetic and layout
+//changes purely in HTML and CSS, and you keep out ugly unmaintainable HTML
+//text strings out of javascript.
+(function (Widgets) {
+    //Widgets that are stored in the dom using StoreValue.storeToElement
+    //Would be better as a mixin, but initializing mixin classes is still syntactically messy,
+    //so keep it a superclass
+    class DomStoredWidget {
+        constructor(domElement) {
+            this.domElement = domElement;
+            //NOTE: forcing storage in the constructor means that the DomKey must be passed 
+            //through the entire chain of constructors in descendant classes. I've changed
+            //the contract so that the descendant classes explicitly call storeToElement if
+            //they want to be stored in the DOM. DomStoredWidget then just becomes a marker
+            //'interface' to classes that may have at least one of their parents stored to dom.
+            //This will also allow multiple Symbol property assignments to the element, one for each
+            //class that wants to be stored in the DOM
+        }
+        //This method should be called by child constructors after the super call if they want to store
+        //a reference to themselves in the domElement.
+        storeToDom(DomKey) {
+            DomStorage.storeToElement(this.domElement, DomKey, this);
+            //marker attribute to make it visible in the element tree that there's an
+            //object stored in the Element
+            //NOTE: browsers automatically lowercase attribute names (at least chrome does)
+            //We explicitly lowercase DomKey here to make that obvious so we don't try to
+            //unset the attribute with a non-lowercase name
+            this.domElement.setAttribute("data-symbol-" + DomKey.toLowerCase(), this.toString());
+        }
+        static fromDom(domElement, DomKey) {
+            let ret = DomStorage.getFromElement(domElement, DomKey);
+            return ret; //NOTE: Would be better with an instanceof check, but since T isn't really a value can't do that here
+        }
+    }
+    Widgets.DomStoredWidget = DomStoredWidget;
+    class Button extends DomStoredWidget {
+        constructor(domElement, clickHandler) {
+            super(domElement);
+            this.storeToDom(Button.ButtonDomKey);
+            this.clickHandler = (function (context) {
+                var clickContext = context;
+                return function (event) {
+                    if (clickContext.enabled) {
+                        if (clickHandler) {
+                            clickHandler.call(event.currentTarget);
+                        }
+                    }
+                };
+            })(this);
+            this.enabled = true;
+            $(this.domElement).click(this.clickHandler);
+        }
+        setHtml(html) {
+            $(this.domElement).html(html);
+        }
+        addClass(className) {
+            $(this.domElement).addClass(className);
+        }
+        removeClass(className) {
+            $(this.domElement).removeClass(className);
+        }
+        disable() {
+            if (this.enabled) {
+                $(this.domElement).addClass("disabled");
+                this.enabled = false;
+            }
+        }
+        enable() {
+            if (!this.enabled) {
+                $(this.domElement).removeClass("disabled");
+                this.enabled = true;
+            }
+        }
+    }
+    //NOTE: Can't use the same variable name for static objects in descendants because the child
+    //fields will clobber the parent's field. 
+    Button.ButtonDomKey = "mwosim.Button.uiObject";
+    Widgets.Button = Button;
+    //helper function for enabling/disabling sets of buttons
+    Widgets.setButtonListEnabled = function (buttonDivs, enabled) {
+        for (let buttonDiv of buttonDivs) {
+            let button = Button.fromDom(buttonDiv, Button.ButtonDomKey);
+            if (enabled) {
+                button.enable();
+            }
+            else {
+                button.disable();
+            }
+        }
+    };
+    class ExpandButton extends Button {
+        constructor(domElement, clickHandler, ...elementsToExpand) {
+            super(domElement, clickHandler);
+            this.storeToDom(ExpandButton.ExpandButtonDomKey);
+            if (elementsToExpand) {
+                this.elementsToExpand = elementsToExpand;
+            }
+            else {
+                this.elementsToExpand = [];
+            }
+            $(domElement).click(() => {
+                if (!this.enabled) {
+                    return;
+                }
+                if (!this.expanded) {
+                    this.domElement.classList.add("expanded");
+                    for (let elementToExpand of this.elementsToExpand) {
+                        elementToExpand.classList.add("expanded");
+                    }
+                }
+                else {
+                    this.domElement.classList.remove("expanded");
+                    for (let elementToExpand of this.elementsToExpand) {
+                        elementToExpand.classList.remove("expanded");
+                    }
+                }
+            });
+        }
+        get expanded() {
+            return this.domElement.classList.contains("expanded");
+        }
+    }
+    ExpandButton.ExpandButtonDomKey = "mwosim.ExpandButton.uiObject";
+    Widgets.ExpandButton = ExpandButton;
+    class Tooltip extends DomStoredWidget {
+        constructor(templateId, tooltipId, targetElement) {
+            let domElement = Widgets.cloneTemplate(templateId);
+            super(domElement);
+            this.storeToDom(Tooltip.TooltipDomKey);
+            this.id = tooltipId;
+            $(this.domElement)
+                .addClass("tooltip")
+                .addClass("hidden")
+                .attr("id", tooltipId)
+                .insertBefore(targetElement);
+        }
+        showTooltip() {
+            $("#" + this.id).removeClass("hidden");
+        }
+        hideTooltip() {
+            $("#" + this.id).addClass("hidden");
+        }
+    }
+    Tooltip.TooltipDomKey = "mwosim.Tooltip.uiObject";
+    Widgets.Tooltip = Tooltip;
+    class TabPanel extends DomStoredWidget {
+        //TODO: Try to see if it is possible to specify the layout of tab panels
+        //completely in HTML without code generation
+        constructor(tabList) {
+            let domElement = Widgets.cloneTemplate("tabpanel-template");
+            super(domElement);
+            this.storeToDom(TabPanel.TabPanelDomKey);
+            this.tabList = tabList;
+            if (tabList.length > 0) {
+                this.selectedTab = this.tabList[0];
+            }
+        }
+        render() {
+            for (let tab of this.tabList) {
+                this.renderTab(tab);
+            }
+        }
+        renderTab(tab) {
+            let tabTitlesJQ = $(this.domElement).find(".tabTitleContainer");
+            let tabContentsJQ = $(this.domElement).find(".tabContentContainer");
+            tab.tabTitle.render();
+            tab.tabTitle.domElement.classList.add("tabTitle");
+            tabTitlesJQ.append(tab.tabTitle.domElement);
+            tab.tabContent.render();
+            tab.tabContent.domElement.classList.add("tabContent");
+            if (this.selectedTab === tab) {
+                this.setSelected(tab, false);
+            }
+            else {
+                this.unsetSelected(tab);
+            }
+            $(tab.tabTitle.domElement).click(() => {
+                this.setSelected(tab);
+            });
+            tabContentsJQ.append(tab.tabContent.domElement);
+        }
+        setSelected(tab, deselectOthers = true) {
+            this.selectedTab = tab;
+            tab.tabTitle.domElement.classList.add("selected");
+            tab.tabContent.domElement.classList.remove("hidden");
+            if (deselectOthers) {
+                for (let currTab of this.tabList) {
+                    if (currTab !== tab) {
+                        this.unsetSelected(currTab);
+                    }
+                }
+            }
+        }
+        unsetSelected(tab) {
+            tab.tabTitle.domElement.classList.remove("selected");
+            tab.tabContent.domElement.classList.add("hidden");
+        }
+    }
+    TabPanel.TabPanelDomKey = "mwosim.TabPanel.uiObject";
+    Widgets.TabPanel = TabPanel;
+    class SimpleWidget extends DomStoredWidget {
+        constructor(templateId) {
+            let domElement = Widgets.cloneTemplate(templateId);
+            super(domElement);
+            this.storeToDom(SimpleWidget.SimpleWidgetDomKey);
+        }
+        render() {
+            //do nothing
+        }
+    }
+    SimpleWidget.SimpleWidgetDomKey = "mwosim.SimpleWidget.uiObject";
+    Widgets.SimpleWidget = SimpleWidget;
+    class LoadFromURLDialog extends Widgets.DomStoredWidget {
+        constructor(loadDialogTemplate, dialogId) {
+            let loadDialogDiv = Widgets.cloneTemplate(loadDialogTemplate);
+            super(loadDialogDiv);
+            this.storeToDom(LoadFromURLDialog.DomKey);
+            this.dialogId = dialogId;
+            let thisJQ = $(loadDialogDiv)
+                .attr("id", dialogId);
+            let resultPanelJQ = thisJQ.find(".resultPanel");
+            resultPanelJQ
+                .removeClass("error")
+                .empty()
+                .on("animationend", function (data) {
+                resultPanelJQ.removeClass("error");
+                resultPanelJQ.off("animationend");
+            });
+            let okButtonHandler = this.createOkButtonHandler(this);
+            let cancelButtonHandler = this.createCancelButtonHandler(this);
+            let loadButtonHandler = this.createLoadButtonHandler(this);
+            let okButtonJQ = thisJQ.find(".okButton");
+            this.okButton =
+                new Widgets.Button(okButtonJQ.get(0), okButtonHandler);
+            let cancelButtonJQ = thisJQ.find(".cancelButton");
+            this.cancelButton =
+                new Widgets.Button(cancelButtonJQ.get(0), cancelButtonHandler);
+            let loadButtonJQ = thisJQ.find(".loadButton");
+            this.loadButton =
+                new Widgets.Button(loadButtonJQ.get(0), loadButtonHandler);
+            this.okButton.disable();
+        }
+        getTextInput() {
+            return $(this.domElement).find(".textInput").get(0);
+        }
+        getTextInputValue() {
+            return $(this.domElement).find(".textInput").val();
+        }
+        getResultPanel() {
+            return $(this.domElement).find(".resultPanel").get(0);
+        }
+        setLoading(loading) {
+            if (loading) {
+                this.loadButton.disable();
+                this.loadButton.addClass("loading");
+                this.loadButton.setHtml("Loading...");
+            }
+            else {
+                this.loadButton.enable();
+                this.loadButton.removeClass("loading");
+                this.loadButton.setHtml("Load");
+            }
+        }
+        setError(error) {
+            $(this.getResultPanel())
+                .addClass("error")
+                .text(error);
+            this.okButton.disable();
+        }
+        clearError() {
+            $(this.getResultPanel())
+                .removeClass("error");
+        }
+    }
+    LoadFromURLDialog.DomKey = "mwosim.LoadFromURLDialog.uiObject";
+    Widgets.LoadFromURLDialog = LoadFromURLDialog;
+    //Clones a template and returns the first element of the template
+    Widgets.cloneTemplate = function (templateName) {
+        let template = document.querySelector("#" + templateName);
+        let templateElement = document.importNode(template.content, true);
+        return templateElement.firstElementChild;
+    };
+    const MODAL_SCREEN_ID = "modalScreen";
+    const MODAL_DIALOG_ID = "modalDialog";
+    //sets the content of the modal dialog to element, while optionally adding
+    //a class to the dialog container
+    Widgets.setModal = function (element, dialogClass = null) {
+        let dialogJQ = $("#" + MODAL_DIALOG_ID);
+        dialogJQ.empty();
+        if (dialogClass) {
+            dialogJQ.addClass(dialogClass);
+        }
+        dialogJQ.append(element);
+    };
+    Widgets.showModal = function () {
+        $("#" + MODAL_SCREEN_ID).css("display", "block");
+    };
+    //hides the modal dialog, while optionally removing a class from the dialog
+    //container
+    Widgets.hideModal = function (dialogClass = null) {
+        $("#" + MODAL_SCREEN_ID).css("display", "none");
+        let dialogJQ = $("#" + MODAL_DIALOG_ID);
+        dialogJQ.empty();
+        if (dialogClass) {
+            dialogJQ.removeClass(dialogClass);
+        }
+    };
+})(Widgets || (Widgets = {}));
 var MechSimulator;
 (function (MechSimulator) {
     var SimulatorParameters = SimulatorSettings.SimulatorParameters;
+    var EventType = MechModelCommon.EventType;
     const DEFAULT_RANGE = 200;
     const DEFAULT_SPEED = 1;
     function init() {
-        MechView.initView();
+        MechView.init();
         MechView.showLoadingScreen();
         let simulatorParameters = new SimulatorParameters(DEFAULT_RANGE, DEFAULT_SPEED);
         MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
         MechModel.initModelData()
             .then(function () {
-            console.log("Successfully loaded model init data");
+            Util.log("Successfully loaded model init data");
             //router should not be initialized before the smurfy data is
             //loaded since the hash change listener can start pulling in smurfy
             //loadout data
@@ -8229,9 +8805,9 @@ var MechSimulator;
             initMechs();
         })
             .catch(function () {
-            console.error("Failed to load model init data");
+            Util.error("Failed to load model init data");
             MechView.hideLoadingScreen();
-            MechView.updateOnLoadAppError();
+            MechModelView.getEventQueue().queueEvent({ type: EventType.APP_STATE_LOAD_ERROR });
         });
     }
     function initMechs() {
@@ -8241,14 +8817,13 @@ var MechSimulator;
             return data;
         })
             .catch(function (err) {
-            console.error("Error loading mech data: " + err);
+            Util.error("Error loading mech data: " + err);
             MechModelView.refreshView();
-            MechView.updateOnLoadAppError();
+            MechModelView.getEventQueue().queueEvent({ type: EventType.APP_STATE_LOAD_ERROR });
             location.hash = "";
         })
             .then(function (data) {
             MechView.hideLoadingScreen();
-            MechView.updateOnAppLoaded();
         });
     }
     function initUI() {
@@ -8275,7 +8850,7 @@ var MechAccuracyPattern;
     //Any left over is considered a miss
     MechAccuracyPattern.accuracySpreadToAdjacent = function (percentOnTarget, percentOnAdjacent, percentOnNextToAdjacent) {
         if (percentOnTarget + percentOnAdjacent + percentOnNextToAdjacent > 1) {
-            console.warn("Total damage percentage exceeds 1");
+            Util.warn("Total damage percentage exceeds 1");
         }
         return function (weaponDamage, range) {
             let transformedDamage = new MechModel.WeaponDamage({});
@@ -8503,7 +9078,7 @@ var MechAccuracyPattern;
                 totalPercent += computedSeekerSpread.spread[component];
             }
             if (totalPercent > 1) {
-                console.warn("Seeker percentages over 100%:" + computedSeekerSpread.toString());
+                Util.warn("Seeker percentages over 100%:" + computedSeekerSpread.toString());
             }
             let totalDamage = weaponDamage.getTotalDamage();
             //transform totalDamage
@@ -8562,7 +9137,7 @@ var MechAccuracyPattern;
                 totalPercent += Number(computedSpread[field]);
             }
             if (totalPercent > 1) {
-                console.warn("Direct fire percentages greater than 1: " + totalPercent);
+                Util.warn("Direct fire percentages greater than 1: " + totalPercent);
             }
             return MechAccuracyPattern.accuracySpreadToAdjacent(computedSpread.target, computedSpread.adjacent, computedSpread.nextAdjacent)(weaponDamage, range);
         };
@@ -8811,6 +9386,7 @@ var MechFirePattern;
                 let weaponInfo = weaponState.weaponInfo;
                 if (!canFire(weaponState) //not ready to fire
                     || !willDoDamage(weaponState, range) //will not do damage
+                    //No ammo
                     || (weaponInfo.requiresAmmo() && weaponState.getAvailableAmmo() <= 0)) {
                     continue; //skip weapon
                 }
@@ -8977,6 +9553,7 @@ var MechSimulatorLogic;
 (function (MechSimulatorLogic) {
     var UpdateType = MechModelCommon.UpdateType;
     var Team = MechModelCommon.Team;
+    var EventType = MechModelCommon.EventType;
     var simulationInterval = null;
     var simRunning = false;
     var simTime = 0;
@@ -9014,16 +9591,18 @@ var MechSimulatorLogic;
             createSimulationInterval();
         }
         simRunning = true;
+        MechModelView.getEventQueue().queueEvent({ type: EventType.START });
     };
     MechSimulatorLogic.pauseSimulation = function () {
         simRunning = false;
+        MechModelView.getEventQueue().queueEvent({ type: EventType.PAUSE });
     };
     MechSimulatorLogic.stepSimulation = function () {
         MechSimulatorLogic.pauseSimulation();
         MechSimulatorLogic.step();
     };
     MechSimulatorLogic.resetSimulation = function () {
-        simRunning = false;
+        MechSimulatorLogic.pauseSimulation();
         if (simulationInterval) {
             window.clearInterval(simulationInterval);
             simulationInterval = null;
@@ -9032,7 +9611,11 @@ var MechSimulatorLogic;
         simTime = 0;
         clearMechStats();
         willUpdateTeamStats = {};
-        MechModelView.updateSimTime(simTime);
+        let update = {
+            type: MechModelCommon.EventType.SIMTIME_UPDATE,
+            simTime,
+        };
+        MechModelView.getEventQueue().queueEvent(update);
         MechAccuracyPattern.reset();
         MechTargetComponent.reset();
         MechFirePattern.reset();
@@ -9041,6 +9624,8 @@ var MechSimulatorLogic;
     //Simulation step function. Called every tick
     MechSimulatorLogic.step = function () {
         let teams = [Team.BLUE, Team.RED];
+        let eventQueue = MechModelView.getEventQueue();
+        eventQueue.deferExecution();
         willUpdateTeamStats = {};
         processWeaponFires();
         for (let team of teams) {
@@ -9061,7 +9646,7 @@ var MechSimulatorLogic;
                             fireWeapons(mech, weaponsToFire, targetMech);
                         }
                         else {
-                            console.log("No target mech for " + mech.getMechId());
+                            Util.log("No target mech for " + mech.getMechId());
                         }
                     }
                 }
@@ -9073,15 +9658,27 @@ var MechSimulatorLogic;
                         mechState.setUpdate(UpdateType.STATS);
                     }
                 }
-                MechModelView.updateMech(mech);
+                let mechUpdate = {
+                    type: MechModelCommon.EventType.MECH_UPDATE,
+                    mech,
+                };
+                eventQueue.queueEvent(mechUpdate);
             }
             if (willUpdateTeamStats[team]) {
-                MechModelView.updateTeamStats(team);
-                MechModel.updateModelTeamStats(team, MechSimulatorLogic.getSimTime());
+                let update = {
+                    type: MechModelCommon.EventType.TEAMSTATS_UPDATE,
+                    team,
+                    simTime: MechSimulatorLogic.getSimTime(),
+                };
+                eventQueue.queueEvent(update);
             }
         }
         simTime += MechSimulatorLogic.getStepDuration();
-        MechModelView.updateSimTime(simTime);
+        let simTimeUpdate = {
+            type: MechModelCommon.EventType.SIMTIME_UPDATE,
+            simTime: MechSimulatorLogic.getSimTime(),
+        };
+        eventQueue.queueEvent(simTimeUpdate);
         //if one team is dead, stop simulation, compute stats for the current step
         //and inform ModelView of victory
         if (!MechModel.isTeamAlive(Team.BLUE) ||
@@ -9089,11 +9686,19 @@ var MechSimulatorLogic;
             MechSimulatorLogic.pauseSimulation();
             flushWeaponFireQueue();
             for (let team of teams) {
-                MechModelView.updateTeamStats(team);
-                MechModel.updateModelTeamStats(team, MechSimulatorLogic.getSimTime());
+                let update = {
+                    type: MechModelCommon.EventType.TEAMSTATS_UPDATE,
+                    team,
+                    simTime: MechSimulatorLogic.getSimTime(),
+                };
+                eventQueue.queueEvent(update);
             }
-            MechModelView.updateVictory(MechModelView.getVictorTeam());
+            let victoryUpdate = {
+                type: MechModelCommon.EventType.TEAMVICTORY_UPDATE,
+            };
+            eventQueue.queueEvent(victoryUpdate);
         }
+        eventQueue.executeAllQueued();
     };
     var enemyTeam = function (myTeam) {
         if (myTeam === Team.BLUE) {
@@ -9212,7 +9817,7 @@ var MechSimulatorLogic;
         mechState.setUpdate(UpdateType.STATS);
         willUpdateTeamStats[weaponFire.sourceMech.getMechTeam()] = true;
         willUpdateTeamStats[weaponFire.targetMech.getMechTeam()] = true;
-        console.log(weaponInfo.name + " completed. Total damage: "
+        Util.log(weaponInfo.name + " completed. Total damage: "
             + weaponFire.damageDone.totalDamage() +
             "(" + weaponFire.damageDone.toString() + ")" +
             " src: " + weaponFire.sourceMech.getName() +
@@ -9361,7 +9966,7 @@ var MechModelQuirks;
                 return prefix + String(this.value);
             }
             else {
-                console.warn(Error("Unexpected quirk type: " + this.name));
+                Util.warn(Error("Unexpected quirk type: " + this.name));
                 return String(this.value);
             }
         }
@@ -9448,7 +10053,7 @@ var MechModelQuirks;
             }
         }
         else {
-            console.warn("Unable to find CT omnipod for " + smurfyMechInfo.name);
+            Util.warn("Unable to find CT omnipod for " + smurfyMechInfo.name);
         }
         return ret;
     };
@@ -9615,7 +10220,7 @@ var MechModelQuirks;
             }
         }
         if (ret.length === 0) {
-            console.warn(Error("Unable to match skill: " + skillName));
+            Util.warn(Error("Unable to match skill: " + skillName));
         }
         return ret;
     };
@@ -9782,7 +10387,7 @@ var MechModelSkills;
                         skillQuirks.addQuirkList(mechQuirks);
                     }
                     else {
-                        console.warn(Error("No quirks found for " + kitlaanName));
+                        Util.warn(Error("No quirks found for " + kitlaanName));
                     }
                 }
             }
@@ -10243,14 +10848,14 @@ var MechModelWeapons;
             }
         }
         weaponJam() {
-            console.log("Jam: " + this.weaponInfo.name);
+            Util.log("Jam: " + this.weaponInfo.name);
             let newState = WeaponCycle.JAMMED;
             this.gotoState(newState);
             let weaponFired = false;
             return { newState, weaponFired };
         }
         doubleTap() {
-            console.log("Double tap: " + this.weaponInfo.name);
+            Util.log("Double tap: " + this.weaponInfo.name);
             let newState = WeaponCycle.COOLDOWN_FIRING;
             this.gotoState(newState);
             this.currShotsDuringCooldown -= 1;
@@ -10414,7 +11019,7 @@ var MechModelWeapons;
                         //check for jam
                         let rand = Math.random();
                         if (rand <= this.computeJamChance()) {
-                            console.log("Jam: " + this.weaponInfo.name);
+                            Util.log("Jam: " + this.weaponInfo.name);
                             newState = WeaponCycle.JAMMED;
                             this.gotoState(newState);
                             weaponFired = false;
@@ -10770,7 +11375,7 @@ var MechModel;
                 //Go through the list of ghost heat weapons and remove those that have been
                 //fired outside the ghost heat interval
                 while (ghostHeatWeapons.length > 0
-                    && (simTime - ghostHeatWeapons[0].timeFired > GlobalGameInfo.GHOST_HEAT_INTERVAL)) {
+                    && (simTime - ghostHeatWeapons[0].timeFired > GlobalGameInfo._MechGlobalGameInfo.ghost_heat_interval)) {
                     ghostHeatWeapons.shift();
                 }
                 //see if any of the remaining entries are from the same weapon. In that case
@@ -10929,7 +11534,7 @@ var MechModel;
                 if (location === Component.LEFT_TORSO ||
                     location === Component.RIGHT_TORSO) {
                     heatState.engineHeatEfficiency =
-                        Number(GlobalGameInfo._MechGlobalGameInfo.clan_reduced_xl_heat_efficiency);
+                        Number(GlobalGameInfo._MechGlobalGameInfo.reduced_xl_heat_efficiency);
                 }
             }
             //recompute heat stats
@@ -11005,7 +11610,7 @@ var MechModel;
             this.currHeat = 0;
             this.engineHeatEfficiency = 1;
             let heatStats = calculateHeatStats(mechInfo.heatsinkInfoList, mechInfo.engineInfo, this.engineHeatEfficiency, mechInfo.generalQuirkBonus);
-            console.log("Heatcalc: " + mechInfo.mechName
+            Util.log("Heatcalc: " + mechInfo.mechName
                 + " dissipation: " + heatStats.heatDissipation
                 + " capacity: " + heatStats.heatCapacity);
             this.currHeatDissipation = heatStats.heatDissipation;
@@ -11509,11 +12114,11 @@ var MechModel;
                 dataType: 'JSON'
             })
                 .done(function (data) {
-                console.log("Successfully loaded " + path);
+                Util.log("Successfully loaded " + path);
                 resolve(data);
             })
                 .fail(function (data) {
-                console.log("Smurfy " + path + " request failed: " + Error(data));
+                Util.log("Smurfy " + path + " request failed: " + Error(data));
                 reject(Error(data));
             });
         });
@@ -11997,7 +12602,7 @@ var MechModel;
     MechModel.addMech = function (mechId, team, smurfyMechLoadout) {
         var newMech = new Mech(mechId, team, smurfyMechLoadout);
         mechTeams[team].push(newMech);
-        console.log("Added mech mech_id: " + mechId +
+        Util.log("Added mech mech_id: " + mechId +
             " translated_mech_name: " + newMech.getTranslatedName());
         MechModel.initMechPatterns(newMech);
         return newMech;
@@ -12005,7 +12610,7 @@ var MechModel;
     MechModel.addMechAtIndex = function (mechId, team, smurfyMechLoadout, index) {
         var newMech = new Mech(mechId, team, smurfyMechLoadout);
         mechTeams[team][index] = newMech;
-        console.log("Added mech mech_id: " + mechId
+        Util.log("Added mech mech_id: " + mechId
             + " translated_mech_name: " + newMech.getTranslatedName()
             + " at index " + index);
         MechModel.initMechPatterns(newMech);
@@ -12274,9 +12879,42 @@ var MechModelView;
     var Team = MechModelCommon.Team;
     var WeaponCycle = MechModelCommon.WeaponCycle;
     var UpdateType = MechModelCommon.UpdateType;
+    var EventType = MechModelCommon.EventType;
     MechModelView.ViewUpdate = {
         TEAMSTATS: "teamstats",
         MECHLISTS: "mechlists",
+    };
+    let simEventQueue;
+    MechModelView.getEventQueue = function () {
+        if (!simEventQueue) {
+            simEventQueue = new Events.EventQueue();
+        }
+        return simEventQueue;
+    };
+    MechModelView.init = function () {
+        let eventQueue = MechModelView.getEventQueue();
+        eventQueue.addListener(mechUpdateListener, EventType.MECH_UPDATE);
+        eventQueue.addListener(teamStatsListener, EventType.TEAMSTATS_UPDATE);
+        eventQueue.addListener(simTimeListener, EventType.SIMTIME_UPDATE);
+        eventQueue.addListener(teamVictoryUpdate, EventType.TEAMVICTORY_UPDATE);
+    };
+    var mechUpdateListener = function (event) {
+        //NOTE: When EventQueue uses setTimeout(0) to execute the next event, the browser
+        //seems to defer UI updates so the animations become VERY CHOPPY when there are a lot of dom 
+        //elements being updated. 
+        //Solved using EventQueue.deferExecution(), executeAllQueued() to combine all mech dom updates
+        //to a single stack frame.
+        MechModelView.updateMech(event.mech);
+    };
+    var teamStatsListener = function (event) {
+        MechModel.updateModelTeamStats(event.team, event.simTime);
+        MechModelView.updateTeamStats(event.team);
+    };
+    var simTimeListener = function (event) {
+        MechModelView.updateSimTime(event.simTime);
+    };
+    var teamVictoryUpdate = function (event) {
+        MechModelView.updateVictory(MechModelView.getVictorTeam());
     };
     MechModelView.refreshView = function (updates = [MechModelView.ViewUpdate.TEAMSTATS, MechModelView.ViewUpdate.MECHLISTS]) {
         document.title = getPageTitle();
@@ -12414,7 +13052,7 @@ var MechModelView;
                 armor: mechComponentHealth.armor,
                 structure: mechComponentHealth.structure,
                 maxArmor: mechComponentHealth.maxArmor,
-                maxStructure: mechComponentHealth.maxStructure
+                maxStructure: mechComponentHealth.maxStructure,
             };
             mechHealthNumbers.updateMechHealthNumbers(update);
         }
@@ -12439,7 +13077,7 @@ var MechModelView;
             targetMechName: targetMechName,
             dps: dps,
             burst: burst,
-            totalDmg: totalDmg
+            totalDmg: totalDmg,
         };
         let mechPanel = MechView.getMechPanel(mech.getMechId());
         mechPanel.updateMechStatusPanel(mech.getMechId(), update);
@@ -12523,7 +13161,7 @@ var MechModelView;
             mechHealthList,
             damage: Number(totalTeamDamage),
             dps,
-            burstDamage: Number(totalTeamBurstDamage)
+            burstDamage: Number(totalTeamBurstDamage),
         };
         MechViewTeamStats.updateTeamStats(update);
     };
@@ -12787,400 +13425,24 @@ var MechModelView;
         return MechModelQuirks.isQuirkApplicable(quirk, mech.getMechInfo());
     };
 })(MechModelView || (MechModelView = {}));
-//returns index of matching entry, otherwise returns the closest lower entry in
-//the array
-var Util;
-//returns index of matching entry, otherwise returns the closest lower entry in
-//the array
-(function (Util) {
-    //TODO: See if this method is still worth it
-    function binarySearchClosest(array, key, keyCompare) {
-        var low = 0;
-        var high = array.length - 1;
-        var mid = Math.floor(low + ((high - low) / 2));
-        var midVal = array[mid];
-        while (low <= high) {
-            mid = Math.floor(low + ((high - low) / 2));
-            midVal = array[mid];
-            if (keyCompare(key, midVal) < 0) {
-                high = mid - 1;
-            }
-            else if (keyCompare(key, midVal) > 0) {
-                low = mid + 1;
-            }
-            else {
-                return mid;
-            }
-        }
-        if (keyCompare(key, midVal) < 0) {
-            return Math.max(0, mid - 1);
-        }
-        else {
-            return mid;
-        }
-    }
-    Util.binarySearchClosest = binarySearchClosest;
-})(Util || (Util = {}));
-//Widget design policy: No logic in HTML, no layout in Javascript.
-//Javascript only provides behavior, it does NOT generate HTML unless it's from a template.
-//On the converse side, HTML should not contain direct references to javascript entities
-//(e.g. class constructors, methods). Makes it possible to do cosmetic and layout
-//changes purely in HTML and CSS, and you keep out ugly unmaintainable HTML
-//text strings out of javascript.
-var MechViewWidgets;
-//Widget design policy: No logic in HTML, no layout in Javascript.
-//Javascript only provides behavior, it does NOT generate HTML unless it's from a template.
-//On the converse side, HTML should not contain direct references to javascript entities
-//(e.g. class constructors, methods). Makes it possible to do cosmetic and layout
-//changes purely in HTML and CSS, and you keep out ugly unmaintainable HTML
-//text strings out of javascript.
-(function (MechViewWidgets) {
-    MechViewWidgets.paperDollDamageGradient = [
-        { value: 0.0, RGB: { r: 28, g: 22, b: 6 } },
-        { value: 0.1, RGB: { r: 255, g: 46, b: 16 } },
-        { value: 0.2, RGB: { r: 255, g: 73, b: 20 } },
-        { value: 0.3, RGB: { r: 255, g: 97, b: 12 } },
-        { value: 0.4, RGB: { r: 255, g: 164, b: 22 } },
-        { value: 0.5, RGB: { r: 255, g: 176, b: 18 } },
-        { value: 0.6, RGB: { r: 255, g: 198, b: 24 } },
-        { value: 0.7, RGB: { r: 255, g: 211, b: 23 } },
-        { value: 0.8, RGB: { r: 255, g: 224, b: 28 } },
-        { value: 0.9, RGB: { r: 255, g: 235, b: 24 } },
-        { value: 1, RGB: { r: 101, g: 79, b: 38 } }
-    ];
-    //Colors for health numbers
-    MechViewWidgets.healthDamageGradient = [
-        { value: 0.0, RGB: { r: 230, g: 20, b: 20 } },
-        { value: 0.7, RGB: { r: 230, g: 230, b: 20 } },
-        // {value : 0.9, RGB : {r:20, g:230, b:20}},
-        { value: 0.9, RGB: { r: 255, g: 235, b: 24 } },
-        { value: 1, RGB: { r: 170, g: 170, b: 170 } }
-    ];
-    //Colors for individual component health numbers
-    MechViewWidgets.componentHealthDamageGradient = [
-        { value: 0.0, RGB: { r: 255, g: 0, b: 0 } },
-        { value: 0.7, RGB: { r: 255, g: 255, b: 0 } },
-        // {value : 0.9, RGB : {r:0, g:255, b:0}},
-        { value: 0.9, RGB: { r: 255, g: 235, b: 24 } },
-        { value: 1, RGB: { r: 170, g: 170, b: 170 } }
-    ];
-    //gets the damage color for a given percentage of damage
-    MechViewWidgets.damageColor = function (percent, damageGradient) {
-        var damageIdx = Util.binarySearchClosest(damageGradient, percent, (key, colorValue) => {
-            return key - colorValue.value;
-        });
-        if (damageIdx === -1) {
-            damageIdx = 0;
-        }
-        let nextIdx = damageIdx + 1;
-        nextIdx = (nextIdx < damageGradient.length) ? nextIdx : damageIdx;
-        let rgb = damageGradient[damageIdx].RGB;
-        let nextRgb = damageGradient[nextIdx].RGB;
-        let percentDiff = (damageIdx !== nextIdx) ?
-            (percent - damageGradient[damageIdx].value) /
-                (damageGradient[nextIdx].value - damageGradient[damageIdx].value)
-            : 1;
-        let red = Math.round(Number(rgb.r) + (Number(nextRgb.r) - Number(rgb.r)) * percentDiff);
-        let green = Math.round(Number(rgb.g) + (Number(nextRgb.g) - Number(rgb.g)) * percentDiff);
-        let blue = Math.round(Number(rgb.b) + (Number(nextRgb.b) - Number(rgb.b)) * percentDiff);
-        return "rgb(" + red + "," + green + "," + blue + ")";
-    };
-    //Widgets that are stored in the dom using StoreValue.storeToElement
-    //Would be better as a mixin, but initializing mixin classes is still syntactically messy,
-    //so keep it a superclass
-    class DomStoredWidget {
-        constructor(domElement) {
-            this.domElement = domElement;
-            //NOTE: forcing storage in the constructor means that the DomKey must be passed 
-            //through the entire chain of constructors in descendant classes. I've changed
-            //the contract so that the descendant classes explicitly call storeToElement if
-            //they want to be stored in the DOM. DomStoredWidget then just becomes a marker
-            //'interface' to classes that may have at least one of their parents stored to dom.
-            //This will also allow multiple Symbol property assignments to the element, one for each
-            //class that wants to be stored in the DOM
-        }
-        //This method should be called by child constructors after the super call if they want to store
-        //a reference to themselves in the domElement.
-        storeToDom(DomKey) {
-            DomStorage.storeToElement(this.domElement, DomKey, this);
-            //marker attribute to make it visible in the element tree that there's an
-            //object stored in the Element
-            //NOTE: browsers automatically lowercase attribute names (at least chrome does)
-            //We explicitly lowercase DomKey here to make that obvious so we don't try to
-            //unset the attribute with a non-lowercase name
-            this.domElement.setAttribute("data-symbol-" + DomKey.toLowerCase(), this.toString());
-        }
-        static fromDom(domElement, DomKey) {
-            let ret = DomStorage.getFromElement(domElement, DomKey);
-            return ret; //NOTE: Would be better with an instanceof check, but since T isn't really a value can't do that here
-        }
-    }
-    MechViewWidgets.DomStoredWidget = DomStoredWidget;
-    class Button extends DomStoredWidget {
-        constructor(domElement, clickHandler) {
-            super(domElement);
-            this.storeToDom(Button.ButtonDomKey);
-            this.clickHandler = (function (context) {
-                var clickContext = context;
-                return function (event) {
-                    if (clickContext.enabled) {
-                        if (clickHandler) {
-                            clickHandler.call(event.currentTarget);
-                        }
-                    }
-                };
-            })(this);
-            this.enabled = true;
-            $(this.domElement).click(this.clickHandler);
-        }
-        setHtml(html) {
-            $(this.domElement).html(html);
-        }
-        addClass(className) {
-            $(this.domElement).addClass(className);
-        }
-        removeClass(className) {
-            $(this.domElement).removeClass(className);
-        }
-        disable() {
-            if (this.enabled) {
-                $(this.domElement).addClass("disabled");
-                this.enabled = false;
-            }
-        }
-        enable() {
-            if (!this.enabled) {
-                $(this.domElement).removeClass("disabled");
-                this.enabled = true;
-            }
-        }
-    }
-    //NOTE: Can't use the same variable name for static objects in descendants because the child
-    //fields will clobber the parent's field. 
-    Button.ButtonDomKey = "mwosim.Button.uiObject";
-    MechViewWidgets.Button = Button;
-    class ExpandButton extends Button {
-        constructor(domElement, clickHandler, ...elementsToExpand) {
-            super(domElement, clickHandler);
-            this.storeToDom(ExpandButton.ExpandButtonDomKey);
-            if (elementsToExpand) {
-                this.elementsToExpand = elementsToExpand;
-            }
-            else {
-                this.elementsToExpand = [];
-            }
-            $(domElement).click(() => {
-                if (!this.enabled) {
-                    return;
-                }
-                if (!this.expanded) {
-                    this.domElement.classList.add("expanded");
-                    for (let elementToExpand of this.elementsToExpand) {
-                        elementToExpand.classList.add("expanded");
-                    }
-                }
-                else {
-                    this.domElement.classList.remove("expanded");
-                    for (let elementToExpand of this.elementsToExpand) {
-                        elementToExpand.classList.remove("expanded");
-                    }
-                }
-            });
-        }
-        get expanded() {
-            return this.domElement.classList.contains("expanded");
-        }
-    }
-    ExpandButton.ExpandButtonDomKey = "mwosim.ExpandButton.uiObject";
-    MechViewWidgets.ExpandButton = ExpandButton;
-    class Tooltip extends DomStoredWidget {
-        constructor(templateId, tooltipId, targetElement) {
-            let domElement = MechViewWidgets.cloneTemplate(templateId);
-            super(domElement);
-            this.storeToDom(Tooltip.TooltipDomKey);
-            this.id = tooltipId;
-            $(this.domElement)
-                .addClass("tooltip")
-                .addClass("hidden")
-                .attr("id", tooltipId)
-                .insertBefore(targetElement);
-        }
-        showTooltip() {
-            $("#" + this.id).removeClass("hidden");
-        }
-        hideTooltip() {
-            $("#" + this.id).addClass("hidden");
-        }
-    }
-    Tooltip.TooltipDomKey = "mwosim.Tooltip.uiObject";
-    MechViewWidgets.Tooltip = Tooltip;
-    class TabPanel extends DomStoredWidget {
-        //TODO: Try to see if it is possible to specify the layout of tab panels
-        //completely in HTML without code generation
-        constructor(tabList) {
-            let domElement = MechViewWidgets.cloneTemplate("tabpanel-template");
-            super(domElement);
-            this.storeToDom(TabPanel.TabPanelDomKey);
-            this.tabList = tabList;
-            if (tabList.length > 0) {
-                this.selectedTab = this.tabList[0];
-            }
-        }
-        render() {
-            for (let tab of this.tabList) {
-                this.renderTab(tab);
-            }
-        }
-        renderTab(tab) {
-            let tabTitlesJQ = $(this.domElement).find(".tabTitleContainer");
-            let tabContentsJQ = $(this.domElement).find(".tabContentContainer");
-            tab.tabTitle.render();
-            tab.tabTitle.domElement.classList.add("tabTitle");
-            tabTitlesJQ.append(tab.tabTitle.domElement);
-            tab.tabContent.render();
-            tab.tabContent.domElement.classList.add("tabContent");
-            if (this.selectedTab === tab) {
-                this.setSelected(tab, false);
-            }
-            else {
-                this.unsetSelected(tab);
-            }
-            $(tab.tabTitle.domElement).click(() => {
-                this.setSelected(tab);
-            });
-            tabContentsJQ.append(tab.tabContent.domElement);
-        }
-        setSelected(tab, deselectOthers = true) {
-            this.selectedTab = tab;
-            tab.tabTitle.domElement.classList.add("selected");
-            tab.tabContent.domElement.classList.remove("hidden");
-            if (deselectOthers) {
-                for (let currTab of this.tabList) {
-                    if (currTab !== tab) {
-                        this.unsetSelected(currTab);
-                    }
-                }
-            }
-        }
-        unsetSelected(tab) {
-            tab.tabTitle.domElement.classList.remove("selected");
-            tab.tabContent.domElement.classList.add("hidden");
-        }
-    }
-    TabPanel.TabPanelDomKey = "mwosim.TabPanel.uiObject";
-    MechViewWidgets.TabPanel = TabPanel;
-    class SimpleWidget extends DomStoredWidget {
-        constructor(templateId) {
-            let domElement = MechViewWidgets.cloneTemplate(templateId);
-            super(domElement);
-            this.storeToDom(SimpleWidget.SimpleWidgetDomKey);
-        }
-        render() {
-            //do nothing
-        }
-    }
-    SimpleWidget.SimpleWidgetDomKey = "mwosim.SimpleWidget.uiObject";
-    MechViewWidgets.SimpleWidget = SimpleWidget;
-    class LoadFromURLDialog extends MechViewWidgets.DomStoredWidget {
-        constructor(loadDialogTemplate, dialogId) {
-            let loadDialogDiv = MechViewWidgets.cloneTemplate(loadDialogTemplate);
-            super(loadDialogDiv);
-            this.storeToDom(LoadFromURLDialog.DomKey);
-            this.dialogId = dialogId;
-            let thisJQ = $(loadDialogDiv)
-                .attr("id", dialogId);
-            let resultPanelJQ = thisJQ.find(".resultPanel");
-            resultPanelJQ
-                .removeClass("error")
-                .empty()
-                .on("animationend", function (data) {
-                resultPanelJQ.removeClass("error");
-                resultPanelJQ.off("animationend");
-            });
-            let okButtonHandler = this.createOkButtonHandler(this);
-            let cancelButtonHandler = this.createCancelButtonHandler(this);
-            let loadButtonHandler = this.createLoadButtonHandler(this);
-            let okButtonJQ = thisJQ.find(".okButton");
-            this.okButton =
-                new MechViewWidgets.Button(okButtonJQ.get(0), okButtonHandler);
-            let cancelButtonJQ = thisJQ.find(".cancelButton");
-            this.cancelButton =
-                new MechViewWidgets.Button(cancelButtonJQ.get(0), cancelButtonHandler);
-            let loadButtonJQ = thisJQ.find(".loadButton");
-            this.loadButton =
-                new MechViewWidgets.Button(loadButtonJQ.get(0), loadButtonHandler);
-            this.okButton.disable();
-        }
-        getTextInput() {
-            return $(this.domElement).find(".textInput").get(0);
-        }
-        getTextInputValue() {
-            return $(this.domElement).find(".textInput").val();
-        }
-        getResultPanel() {
-            return $(this.domElement).find(".resultPanel").get(0);
-        }
-        setLoading(loading) {
-            if (loading) {
-                this.loadButton.disable();
-                this.loadButton.addClass("loading");
-                this.loadButton.setHtml("Loading...");
-            }
-            else {
-                this.loadButton.enable();
-                this.loadButton.removeClass("loading");
-                this.loadButton.setHtml("Load");
-            }
-        }
-        setError(error) {
-            $(this.getResultPanel())
-                .addClass("error")
-                .text(error);
-            this.okButton.disable();
-        }
-        clearError() {
-            $(this.getResultPanel())
-                .removeClass("error");
-        }
-    }
-    LoadFromURLDialog.DomKey = "mwosim.LoadFromURLDialog.uiObject";
-    MechViewWidgets.LoadFromURLDialog = LoadFromURLDialog;
-    //Clones a template and returns the first element of the template
-    MechViewWidgets.cloneTemplate = function (templateName) {
-        let template = document.querySelector("#" + templateName);
-        let templateElement = document.importNode(template.content, true);
-        return templateElement.firstElementChild;
-    };
-    const MODAL_SCREEN_ID = "mechModalScreen";
-    const MODAL_DIALOG_ID = "mechModalDialog";
-    //sets the content of the modal dialog to element, while optionally adding
-    //a class to the dialog container
-    MechViewWidgets.setModal = function (element, dialogClass = null) {
-        let dialogJQ = $("#" + MODAL_DIALOG_ID);
-        dialogJQ.empty();
-        if (dialogClass) {
-            dialogJQ.addClass(dialogClass);
-        }
-        dialogJQ.append(element);
-    };
-    MechViewWidgets.showModal = function () {
-        $("#" + MODAL_SCREEN_ID).css("display", "block");
-    };
-    //hides the modal dialog, while optionally removing a class from the dialog
-    //container
-    MechViewWidgets.hideModal = function (dialogClass = null) {
-        $("#" + MODAL_SCREEN_ID).css("display", "none");
-        let dialogJQ = $("#" + MODAL_DIALOG_ID);
-        dialogJQ.empty();
-        if (dialogClass) {
-            dialogJQ.removeClass(dialogClass);
-        }
-    };
-})(MechViewWidgets || (MechViewWidgets = {}));
 var MechViewAddMech;
 (function (MechViewAddMech) {
-    var LoadFromURLDialog = MechViewWidgets.LoadFromURLDialog;
-    class AddMechButton extends MechViewWidgets.Button {
+    var EventType = MechModelCommon.EventType;
+    var LoadFromURLDialog = Widgets.LoadFromURLDialog;
+    MechViewAddMech.init = function () {
+        MechModelView.getEventQueue().addListener(simStateListener, EventType.START, EventType.PAUSE);
+    };
+    var simStateListener = function (event) {
+        if (event.type === EventType.START) {
+            let addMechButtonsJQ = $(".addMechButton");
+            Widgets.setButtonListEnabled(addMechButtonsJQ, false);
+        }
+        else if (event.type === EventType.PAUSE) {
+            let addMechButtonsJQ = $(".addMechButton");
+            Widgets.setButtonListEnabled(addMechButtonsJQ, true);
+        }
+    };
+    class AddMechButton extends Widgets.Button {
         constructor(team, container) {
             let addMechButtonPanelId = AddMechButton.addMechButtonId(team);
             if (!AddMechButton.addMechButtonHandler) {
@@ -13220,15 +13482,15 @@ var MechViewAddMech;
                 let thisJQ = $(this);
                 let team = thisJQ.attr('data-team');
                 let url = dialog.getTextInputValue();
-                console.log("Mech loaded. team: " + team + " URL: " + url);
+                Util.log("Mech loaded. team: " + team + " URL: " + url);
                 let smurfyMechLoadout = dialog.loadedSmurfyLoadout;
                 let newMech = MechModelView.addMech(team, smurfyMechLoadout);
                 //set patterns of added mech to selected team patterns
                 MechViewTeamStats.setSelectedTeamPatterns(team);
-                MechViewRouter.modifyAppState();
                 MechView.addMechPanel(newMech, team);
                 MechModelView.refreshView([MechModelView.ViewUpdate.TEAMSTATS]);
                 MechViewAddMech.hideAddMechDialog(team);
+                MechModelView.getEventQueue().queueEvent({ type: EventType.APP_STATE_CHANGE });
             };
         }
         ;
@@ -13245,7 +13507,7 @@ var MechViewAddMech;
                 let team = thisJQ.attr('data-team');
                 let addMechDialogJQ = $(dialog.domElement);
                 let url = dialog.getTextInputValue();
-                console.log("Load. team: " + team + " URL: " + url);
+                Util.log("Load. team: " + team + " URL: " + url);
                 let doneHandler = function (data) {
                     dialog.loadedSmurfyLoadout = data;
                     dialog.clearError();
@@ -13274,7 +13536,7 @@ var MechViewAddMech;
                     dialog
                         .setError("Invalid smurfy URL. Expected format is 'http://mwo.smurfy-net.de/mechlab#i=mechid&l=loadoutid'");
                     dialog.setLoading(false);
-                    console.error("Invalid smurfy url");
+                    Util.error("Invalid smurfy url");
                 }
             };
         }
@@ -13285,7 +13547,7 @@ var MechViewAddMech;
     MechViewAddMech.AddMechDialog = AddMechDialog;
     class LoadedMechPanel {
         constructor(containerElem, smurfyMechLoadout) {
-            let loadedMechDiv = MechViewWidgets.cloneTemplate("loadedMech-template");
+            let loadedMechDiv = Widgets.cloneTemplate("loadedMech-template");
             let loadedMechJQ = $(loadedMechDiv)
                 .removeAttr("id")
                 .appendTo(containerElem);
@@ -13320,14 +13582,14 @@ var MechViewAddMech;
             }
         }
         loadedMechSpan(text, spanClass) {
-            let span = MechViewWidgets.cloneTemplate("loadedMechInfo-template");
+            let span = Widgets.cloneTemplate("loadedMechInfo-template");
             return $(span)
                 .addClass(spanClass)
                 .text(text);
         }
         loadedMechWeaponSpan(name, count, type) {
             let numberClass = this.loadedMechWeaponClass(type);
-            let weaponSpan = MechViewWidgets.cloneTemplate("loadedMechWeapon-template");
+            let weaponSpan = Widgets.cloneTemplate("loadedMechWeapon-template");
             let ret = $(weaponSpan);
             ret.find(".weaponName")
                 .text(name);
@@ -13350,7 +13612,7 @@ var MechViewAddMech;
                 return "ams";
             }
             else {
-                console.warn("Unexpected weapon type: " + smurfyType);
+                Util.warn("Unexpected weapon type: " + smurfyType);
                 return "";
             }
         }
@@ -13358,21 +13620,75 @@ var MechViewAddMech;
     LoadedMechPanel.SMURFY_BASE_URL = "http://mwo.smurfy-net.de/mechlab#";
     MechViewAddMech.showAddMechDialog = function (team) {
         let addMechDialog = new AddMechDialog(team);
-        MechViewWidgets.setModal(addMechDialog.domElement, "addMech");
-        MechViewWidgets.showModal();
+        Widgets.setModal(addMechDialog.domElement, "addMech");
+        Widgets.showModal();
         $(addMechDialog.getTextInput()).focus();
     };
     MechViewAddMech.hideAddMechDialog = function (team) {
-        MechViewWidgets.hideModal("addMech");
+        Widgets.hideModal("addMech");
     };
 })(MechViewAddMech || (MechViewAddMech = {}));
-/// <reference path="simulator-view-widgets.ts" />
+var MechViewDamageColor;
+(function (MechViewDamageColor) {
+    MechViewDamageColor.PaperDollDamageGradient = [
+        { value: 0.0, RGB: { r: 28, g: 22, b: 6 } },
+        { value: 0.1, RGB: { r: 255, g: 46, b: 16 } },
+        { value: 0.2, RGB: { r: 255, g: 73, b: 20 } },
+        { value: 0.3, RGB: { r: 255, g: 97, b: 12 } },
+        { value: 0.4, RGB: { r: 255, g: 164, b: 22 } },
+        { value: 0.5, RGB: { r: 255, g: 176, b: 18 } },
+        { value: 0.6, RGB: { r: 255, g: 198, b: 24 } },
+        { value: 0.7, RGB: { r: 255, g: 211, b: 23 } },
+        { value: 0.8, RGB: { r: 255, g: 224, b: 28 } },
+        { value: 0.9, RGB: { r: 255, g: 235, b: 24 } },
+        { value: 1, RGB: { r: 101, g: 79, b: 38 } },
+    ];
+    //Colors for health numbers
+    MechViewDamageColor.HealthDamageGradient = [
+        { value: 0.0, RGB: { r: 230, g: 20, b: 20 } },
+        { value: 0.7, RGB: { r: 230, g: 230, b: 20 } },
+        // {value : 0.9, RGB : {r:20, g:230, b:20}},
+        { value: 0.9, RGB: { r: 255, g: 235, b: 24 } },
+        { value: 1, RGB: { r: 170, g: 170, b: 170 } },
+    ];
+    //Colors for individual component health numbers
+    MechViewDamageColor.ComponentHealthDamageGradient = [
+        { value: 0.0, RGB: { r: 255, g: 0, b: 0 } },
+        { value: 0.7, RGB: { r: 255, g: 255, b: 0 } },
+        // {value : 0.9, RGB : {r:0, g:255, b:0}},
+        { value: 0.9, RGB: { r: 255, g: 235, b: 24 } },
+        { value: 1, RGB: { r: 170, g: 170, b: 170 } },
+    ];
+    //gets the damage color for a given percentage of damage
+    MechViewDamageColor.damageColor = function (percent, damageGradient) {
+        var damageIdx = Util.binarySearchClosest(damageGradient, percent, (key, colorValue) => {
+            return key - colorValue.value;
+        });
+        if (damageIdx === -1) {
+            damageIdx = 0;
+        }
+        let nextIdx = damageIdx + 1;
+        nextIdx = (nextIdx < damageGradient.length) ? nextIdx : damageIdx;
+        let rgb = damageGradient[damageIdx].RGB;
+        let nextRgb = damageGradient[nextIdx].RGB;
+        let percentDiff = (damageIdx !== nextIdx) ?
+            (percent - damageGradient[damageIdx].value) /
+                (damageGradient[nextIdx].value - damageGradient[damageIdx].value)
+            : 1;
+        let red = Math.round(Number(rgb.r) + (Number(nextRgb.r) - Number(rgb.r)) * percentDiff);
+        let green = Math.round(Number(rgb.g) + (Number(nextRgb.g) - Number(rgb.g)) * percentDiff);
+        let blue = Math.round(Number(rgb.b) + (Number(nextRgb.b) - Number(rgb.b)) * percentDiff);
+        return "rgb(" + red + "," + green + "," + blue + ")";
+    };
+})(MechViewDamageColor || (MechViewDamageColor = {}));
+/// <reference path="../framework/widgets.ts" />
 var MechViewMechDetails;
-/// <reference path="simulator-view-widgets.ts" />
+/// <reference path="../framework/widgets.ts" />
 (function (MechViewMechDetails) {
-    class MechDetails extends MechViewWidgets.DomStoredWidget {
+    var EventType = MechModelCommon.EventType;
+    class MechDetails extends Widgets.DomStoredWidget {
         constructor(mechId) {
-            let mechDetailsDiv = MechViewWidgets.cloneTemplate("mechDetails-template");
+            let mechDetailsDiv = Widgets.cloneTemplate("mechDetails-template");
             super(mechDetailsDiv);
             this.storeToDom(MechDetails.MechDetailsDomKey);
             this.mechId = mechId;
@@ -13389,14 +13705,14 @@ var MechViewMechDetails;
                 tabTitle: new MechDetailsTabTitle("Skills"),
                 tabContent: new MechDetailsSkills(this.mechId),
             };
-            let mechDetailsTab = new MechViewWidgets.TabPanel([MechDetailsQuirksTab, MechDetailsSkillsTab]);
+            let mechDetailsTab = new Widgets.TabPanel([MechDetailsQuirksTab, MechDetailsSkillsTab]);
             mechDetailsJQ.find(".tabPanelContainer").append(mechDetailsTab.domElement);
             mechDetailsTab.render();
         }
     }
     MechDetails.MechDetailsDomKey = "mwosim.MechDetails.uiObject";
     MechViewMechDetails.MechDetails = MechDetails;
-    class MechDetailsTabTitle extends MechViewWidgets.SimpleWidget {
+    class MechDetailsTabTitle extends Widgets.SimpleWidget {
         constructor(title) {
             super("mechDetailsTabTitle-template");
             this.title = title;
@@ -13405,9 +13721,9 @@ var MechViewMechDetails;
             $(this.domElement).text(this.title);
         }
     }
-    class MechDetailsQuirks extends MechViewWidgets.DomStoredWidget {
+    class MechDetailsQuirks extends Widgets.DomStoredWidget {
         constructor(mechId) {
-            let mechDetailsQuirksDiv = MechViewWidgets.cloneTemplate("mechDetailsQuirks-template");
+            let mechDetailsQuirksDiv = Widgets.cloneTemplate("mechDetailsQuirks-template");
             super(mechDetailsQuirksDiv);
             this.storeToDom(MechDetailsQuirks.MechDetailsQuirksDomKey);
             this.mechId = mechId;
@@ -13422,23 +13738,23 @@ var MechViewMechDetails;
         }
     }
     MechDetailsQuirks.MechDetailsQuirksDomKey = "mwosim.MechDetailsQuirks.uiObject";
-    class MechDetailsSkills extends MechViewWidgets.DomStoredWidget {
+    class MechDetailsSkills extends Widgets.DomStoredWidget {
         constructor(mechId) {
-            let domElement = MechViewWidgets.cloneTemplate("mechDetailsSkills-template");
+            let domElement = Widgets.cloneTemplate("mechDetailsSkills-template");
             super(domElement);
             this.storeToDom(MechDetailsSkills.MechDetailsSkillsDomKey);
             this.mechId = mechId;
             let loadButtonJQ = $(this.domElement).find(".loadButton");
-            this.loadButton = new MechViewWidgets.Button(loadButtonJQ.get(0), this.createLoadButtonHandler(this));
+            this.loadButton = new Widgets.Button(loadButtonJQ.get(0), this.createLoadButtonHandler(this));
             let skillListJQ = $(this.domElement).find(".skillList");
             this.quirkListPanel = new MechQuirkListPanel(skillListJQ.get(0), this.mechId);
         }
         createLoadButtonHandler(skillsPanel) {
             return function () {
                 let loadSkillsDialog = new LoadMechSkillsDialog(skillsPanel);
-                MechViewWidgets.setModal(loadSkillsDialog.domElement);
+                Widgets.setModal(loadSkillsDialog.domElement);
                 MechSimulatorLogic.pauseSimulation();
-                MechViewWidgets.showModal();
+                Widgets.showModal();
                 $(loadSkillsDialog.getTextInput()).focus();
             };
         }
@@ -13452,7 +13768,7 @@ var MechViewMechDetails;
                 let skillLoader = MechModelSkills.getSkillLoader(skillState.type);
                 skillLoader.setSkillState(skillState);
                 skillLinkJQ.text("View skills").attr("href", skillLoader.getSkillURL());
-                skillLinkJQ.append(MechViewWidgets.cloneTemplate("external-link-template"));
+                skillLinkJQ.append(Widgets.cloneTemplate("external-link-template"));
             }
             else {
                 skillLinkJQ.text("").attr("href", "");
@@ -13462,7 +13778,7 @@ var MechViewMechDetails;
         }
     }
     MechDetailsSkills.MechDetailsSkillsDomKey = "mwosim.MechDetailsSkills.uiObject";
-    class LoadMechSkillsDialog extends MechViewWidgets.LoadFromURLDialog {
+    class LoadMechSkillsDialog extends Widgets.LoadFromURLDialog {
         constructor(mechSkillsPanel) {
             super("loadFromURLDialog-loadSkills-template", LoadMechSkillsDialog.DialogId);
             this.mechId = mechSkillsPanel.mechId;
@@ -13479,17 +13795,17 @@ var MechViewMechDetails;
                     MechModelView.applySkillQuirks(loadDialog.mechId, loadDialog.loadedSkillQuirks);
                     MechModelView.setSkillState(loadDialog.mechId, loadDialog.loadedSkillState);
                     loadDialog.mechSkillsPanel.render();
-                    MechViewRouter.modifyAppState();
+                    MechModelView.getEventQueue().queueEvent({ type: EventType.APP_STATE_CHANGE });
                 }
                 else {
-                    console.warn("No loaded skill quirks");
+                    Util.warn("No loaded skill quirks");
                 }
-                MechViewWidgets.hideModal();
+                Widgets.hideModal();
             };
         }
         createCancelButtonHandler(dialog) {
             return function () {
-                MechViewWidgets.hideModal();
+                Widgets.hideModal();
             };
         }
         createLoadButtonHandler(dialog) {
@@ -13518,22 +13834,22 @@ var MechViewMechDetails;
                     loadMechDialog.skillListPanel.setQuirks(skillQuirks);
                     loadMechDialog.skillListPanel.render();
                     loadMechDialog.okButton.enable();
-                    console.log("Loaded data from kitlaan: " + data);
+                    Util.log("Loaded data from kitlaan: " + data);
                 })
                     .catch(function (err) {
-                    console.error("Error loading kitlaan data: " + Error(err));
+                    Util.error("Error loading kitlaan data: " + Error(err));
                     dialog.setError("Error loading kitlaan data: " + Error(err));
                     dialog.okButton.disable();
                 })
                     .then(function (data) {
                     dialog.setLoading(false);
-                    console.log("Kitlaan load done.");
+                    Util.log("Kitlaan load done.");
                 });
             };
         }
     }
     LoadMechSkillsDialog.DialogId = "loadMechSkillsDialog";
-    class MechQuirkListPanel extends MechViewWidgets.DomStoredWidget {
+    class MechQuirkListPanel extends Widgets.DomStoredWidget {
         constructor(domElement, mechId) {
             super(domElement);
             this.quirkList = [];
@@ -13556,13 +13872,13 @@ var MechViewMechDetails;
             let mechQuirksJQ = $(this.domElement);
             mechQuirksJQ.empty();
             if (this.quirkList.length === 0) {
-                let mechQuirkDiv = MechViewWidgets.cloneTemplate("mechDetailsQuirkRow-template");
+                let mechQuirkDiv = Widgets.cloneTemplate("mechDetailsQuirkRow-template");
                 let mechQuirkJQ = $(mechQuirkDiv);
                 mechQuirkJQ.find(".name").text("None");
                 mechQuirksJQ.append(mechQuirkJQ);
             }
             for (let mechQuirk of this.quirkList) {
-                let mechQuirkDiv = MechViewWidgets.cloneTemplate("mechDetailsQuirkRow-template");
+                let mechQuirkDiv = Widgets.cloneTemplate("mechDetailsQuirkRow-template");
                 let mechQuirkJQ = $(mechQuirkDiv);
                 mechQuirkJQ.find(".name").text(mechQuirk.translated_name);
                 mechQuirkJQ.find(".value").text(mechQuirk.translated_value);
@@ -13591,12 +13907,35 @@ var MechViewMechPanel;
 //individual components
 //TODO: Remove mechId from method parameters in MechPanel. Use stored mechId instead.
 (function (MechViewMechPanel) {
+    var EventType = MechModelCommon.EventType;
     var WeaponCycle = MechModelCommon.WeaponCycle;
     var Component = MechModelCommon.Component;
-    var DomStoredWidget = MechViewWidgets.DomStoredWidget;
+    var DomStoredWidget = Widgets.DomStoredWidget;
+    var damageColor = MechViewDamageColor.damageColor;
+    MechViewMechPanel.init = function () {
+        let eventQueue = MechModelView.getEventQueue();
+        eventQueue.addListener(simulationStateListener, EventType.START, EventType.PAUSE);
+    };
+    var simulationStateListener = function (event) {
+        let setButtonEnabled = Widgets.setButtonListEnabled;
+        if (event.type === EventType.START) {
+            //disable move and delete buttons
+            let deleteButtonsJQ = $(".deleteMechButton");
+            setButtonEnabled(deleteButtonsJQ, false);
+            let moveButtonsJQ = $(".moveMechButton");
+            setButtonEnabled(moveButtonsJQ, false);
+        }
+        else {
+            //enable move and delete buttons
+            let deleteButtonsJQ = $(".deleteMechButton");
+            setButtonEnabled(deleteButtonsJQ, true);
+            let moveButtonsJQ = $(".moveMechButton");
+            setButtonEnabled(moveButtonsJQ, true);
+        }
+    };
     class PaperDoll extends DomStoredWidget {
         constructor(mechId) {
-            let paperDollDiv = MechViewWidgets.cloneTemplate("paperDoll-template");
+            let paperDollDiv = Widgets.cloneTemplate("paperDoll-template");
             super(paperDollDiv);
             this.storeToDom(PaperDoll.PaperDollDomKey);
             this.mechId = mechId;
@@ -13630,14 +13969,14 @@ var MechViewMechPanel;
         }
         //Percent values from 0 to 1
         setPaperDollArmor(location, percent) {
-            var color = MechViewWidgets.damageColor(percent, MechViewWidgets.paperDollDamageGradient);
+            var color = damageColor(percent, MechViewDamageColor.PaperDollDamageGradient);
             let paperDollComponent = document.getElementById(PaperDoll.paperDollComponentId(this.mechId, location));
             if (paperDollComponent) {
                 paperDollComponent.style.borderColor = color;
             }
         }
         setPaperDollStructure(location, percent) {
-            var color = MechViewWidgets.damageColor(percent, MechViewWidgets.paperDollDamageGradient);
+            var color = damageColor(percent, MechViewDamageColor.PaperDollDamageGradient);
             let paperDollComponent = document.getElementById(PaperDoll.paperDollComponentId(this.mechId, location));
             if (paperDollComponent) {
                 paperDollComponent.style.backgroundColor = color;
@@ -13648,7 +13987,7 @@ var MechViewMechPanel;
     MechViewMechPanel.PaperDoll = PaperDoll;
     class MechHealthNumbers extends DomStoredWidget {
         constructor(mech) {
-            let mechHealthNumbersDiv = MechViewWidgets.cloneTemplate("mechHealthNumbers-template");
+            let mechHealthNumbersDiv = Widgets.cloneTemplate("mechHealthNumbers-template");
             super(mechHealthNumbersDiv);
             this.storeToDom(MechHealthNumbers.MechHealthNumbersDomKey);
             this.mechId = mech.getMechId();
@@ -13693,8 +14032,8 @@ var MechViewMechPanel;
             let mechHealthNumbersDivId = MechHealthNumbers.mechHealthNumbersId(this.mechId);
             let armorPercent = Number(armor) / Number(maxArmor);
             let structurePercent = Number(structure) / Number(maxStructure);
-            let armorColor = MechViewWidgets.damageColor(armorPercent, MechViewWidgets.componentHealthDamageGradient);
-            let structureColor = MechViewWidgets.damageColor(structurePercent, MechViewWidgets.componentHealthDamageGradient);
+            let armorColor = damageColor(armorPercent, MechViewDamageColor.ComponentHealthDamageGradient);
+            let structureColor = damageColor(structurePercent, MechViewDamageColor.ComponentHealthDamageGradient);
             let armorLocationDivId = MechHealthNumbers.mechHealthNumbersArmorId(this.mechId, location);
             let structureLocationDivId = MechHealthNumbers.mechHealthNumbersStructureId(this.mechId, location);
             let armorLocationDiv = document.getElementById(armorLocationDivId);
@@ -13717,7 +14056,7 @@ var MechViewMechPanel;
     MechViewMechPanel.MechHealthNumbers = MechHealthNumbers;
     class Heatbar extends DomStoredWidget {
         constructor(mechId, heatbarContainer) {
-            let heatbarDiv = MechViewWidgets.cloneTemplate("heatbar-template");
+            let heatbarDiv = Widgets.cloneTemplate("heatbar-template");
             super(heatbarDiv);
             this.storeToDom(Heatbar.HeatbarDomKey);
             this.mechId = mechId;
@@ -13773,7 +14112,7 @@ var MechViewMechPanel;
                     continue;
                 }
                 var weaponState = weaponStateList[idx];
-                let weaponRowDiv = MechViewWidgets.cloneTemplate("weaponRow-template");
+                let weaponRowDiv = Widgets.cloneTemplate("weaponRow-template");
                 $(weaponRowDiv)
                     .attr("id", WeaponPanel.weaponRowId(mechId, Number(idx)))
                     .attr("data-mech-id", mechId)
@@ -13860,12 +14199,12 @@ var MechViewMechPanel;
         "right_torso": "RT",
         "right_arm": "RA",
         "left_leg": "LL",
-        "right_leg": "RL"
+        "right_leg": "RL",
     };
     MechViewMechPanel.WeaponPanel = WeaponPanel;
     class MechPanel extends DomStoredWidget {
         constructor(mech, team) {
-            let mechPanelDiv = MechViewWidgets.cloneTemplate("mechPanel-template");
+            let mechPanelDiv = Widgets.cloneTemplate("mechPanel-template");
             super(mechPanelDiv);
             this.storeToDom(MechPanel.MechPanelDomKey);
             this.mechId = mech.getMechId();
@@ -13983,7 +14322,7 @@ var MechViewMechPanel;
             //Create smurfy link then set the mech name
             let smurfyLink = SMURFY_BASE_URL + "i=" + smurfyMechId + "&l=" + smurfyLayoutId;
             let mechNameDiv = document.getElementById(mechNameId);
-            let externalLinkSpan = MechViewWidgets.cloneTemplate("external-link-template");
+            let externalLinkSpan = Widgets.cloneTemplate("external-link-template");
             let mechLink = $("<a></a>").attr("href", smurfyLink)
                 .attr("target", "_blank")
                 .attr("rel", "noopener")
@@ -14016,7 +14355,7 @@ var MechViewMechPanel;
             }
             let mechSummaryHealthDiv = document.getElementById(mechSummaryHealthId);
             mechSummaryHealthDiv.style.color =
-                MechViewWidgets.damageColor(percentHealth, MechViewWidgets.healthDamageGradient);
+                damageColor(percentHealth, MechViewDamageColor.HealthDamageGradient);
             mechSummaryHealthDiv.textContent = mechSummaryHealthText;
             //update mech target
             let mechTargetId = MechPanel.mechTargetPanelId(mechId);
@@ -14063,27 +14402,27 @@ var MechViewMechPanel;
             if (!MechPanel.deleteMechButtonHandler) {
                 MechPanel.deleteMechButtonHandler = this.createDeleteMechButtonHandler();
             }
-            let deleteIconSVG = MechViewWidgets.cloneTemplate("delete-icon-template");
+            let deleteIconSVG = Widgets.cloneTemplate("delete-icon-template");
             let mechDeleteButtonDivId = MechPanel.mechDeleteButtonId(mechId);
-            mechPanelJQ.find("[class~='titlePanel'] [class~='deleteMechButton']")
+            let deleteButtonJQ = mechPanelJQ.find("[class~='titlePanel'] [class~='deleteMechButton']")
                 .attr("id", mechDeleteButtonDivId)
                 .attr("data-mech-id", mechId)
-                .append(deleteIconSVG)
-                .click(MechPanel.deleteMechButtonHandler);
+                .append(deleteIconSVG);
+            let deleteButton = new Widgets.Button(deleteButtonJQ.get(0), MechPanel.deleteMechButtonHandler);
         }
         createDeleteMechButtonHandler() {
             return function () {
                 let mechId = $(this).attr("data-mech-id");
-                console.log("Deleting " + mechId);
+                Util.log("Deleting " + mechId);
                 let result = MechModel.deleteMech(mechId);
                 if (!result) {
                     throw Error("Error deleting " + mechId);
                 }
-                MechViewRouter.modifyAppState();
                 let mechPanelDivId = MechPanel.mechPanelId(mechId);
                 $("#" + mechPanelDivId).remove();
                 MechView.resetSimulation();
                 MechModelView.refreshView([MechModelView.ViewUpdate.TEAMSTATS]);
+                MechModelView.getEventQueue().queueEvent({ type: EventType.APP_STATE_CHANGE });
             };
         }
         static moveMechButtonId(mechId) {
@@ -14091,14 +14430,14 @@ var MechViewMechPanel;
         }
         addMoveMechButton(mechId, team, mechPanelDiv) {
             let mechPanelJQ = $(mechPanelDiv);
-            let moveIconSVG = MechViewWidgets.cloneTemplate("move-icon-template");
+            let moveIconSVG = Widgets.cloneTemplate("move-icon-template");
             let mechMoveButtonDivId = MechPanel.moveMechButtonId(mechId);
-            mechPanelJQ.find("[class~='titlePanel'] [class~='moveMechButton']")
+            let mechMoveButtonJQ = mechPanelJQ.find("[class~='titlePanel'] [class~='moveMechButton']")
                 .attr("id", mechMoveButtonDivId)
                 .attr("data-mech-id", mechId)
                 .attr("data-dragenabled", "false")
-                .append(moveIconSVG)
-                .click(this.createMoveMechButtonHandler());
+                .append(moveIconSVG);
+            let mechMoveButton = new Widgets.Button(mechMoveButtonJQ.get(0), this.createMoveMechButtonHandler());
         }
         isDragEnabled() {
             let moveMechButtonJQ = $(this.domElement).find(".moveMechButton");
@@ -14168,7 +14507,7 @@ var MechViewMechPanel;
                     mechPanel.createMechDetails(mechId, mechDetailsJQ.get(0));
                 }
             };
-            let mechDetailsButton = new MechViewWidgets.ExpandButton(mechDetailsButtonJQ.get(0), mechDetailsClickHandler, mechDetailsJQ.get(0), mechDetailsButtonArrowJQ.get(0));
+            let mechDetailsButton = new Widgets.ExpandButton(mechDetailsButtonJQ.get(0), mechDetailsClickHandler, mechDetailsJQ.get(0), mechDetailsButtonArrowJQ.get(0));
         }
         createMechDetails(mechId, mechDetailsContainer) {
             let mechDetails = new MechViewMechDetails.MechDetails(mechId);
@@ -14209,19 +14548,19 @@ var MechViewMechPanel;
             else {
                 let team = EndMechPanel.getEndMechIdTeam(targetMechId);
                 status = MechModel.moveMechToEndOfList(this.mechId, team);
-                console.log("Insert at end: team=" + team);
+                Util.log("Insert at end: team=" + team);
             }
             if (!status) {
-                console.error(`Error moving mech. src=${this.mechId} dest=${targetMechId}`);
+                Util.error(`Error moving mech. src=${this.mechId} dest=${targetMechId}`);
             }
             else {
-                console.log(`Drop: src=${this.mechId} dest=${targetMechId}`);
+                Util.log(`Drop: src=${this.mechId} dest=${targetMechId}`);
                 let srcMechJQ = $(this.domElement);
                 srcMechJQ
                     .detach()
                     .insertBefore(targetMechPanel.domElement);
                 this.toggleMoveMech(this.mechId);
-                MechViewRouter.modifyAppState();
+                MechModelView.getEventQueue().queueEvent({ type: EventType.APP_STATE_CHANGE });
                 MechModelView.refreshView([MechModelView.ViewUpdate.TEAMSTATS]);
             }
         }
@@ -14230,7 +14569,7 @@ var MechViewMechPanel;
     MechViewMechPanel.MechPanel = MechPanel;
     class EndMechPanel extends DomStoredWidget {
         constructor(team) {
-            let mechPanelDiv = MechViewWidgets.cloneTemplate("endMechPanel-template");
+            let mechPanelDiv = Widgets.cloneTemplate("endMechPanel-template");
             super(mechPanelDiv);
             this.storeToDom(EndMechPanel.EndMechPanelDomKey);
             let mechPanelJQ = $(mechPanelDiv);
@@ -14296,7 +14635,7 @@ var MechViewMechPanel;
                 let origEvent = jqEvent.originalEvent;
                 origEvent.dataTransfer.setData("text/plain", mechId);
                 origEvent.dataTransfer.effectAllowed = "move";
-                console.log("Drag start: " + mechId);
+                Util.log("Drag start: " + mechId);
             };
         }
         static createMechOnDragOverHandler() {
@@ -14358,7 +14697,7 @@ var MechViewMechPanel;
             let thisJQ = $(this);
             if (thisJQ.attr("draggable") === "true") {
                 let startMechId = TouchHelper.findMechId(this);
-                console.log(`Touch start mechId: ${startMechId}`);
+                Util.log(`Touch start mechId: ${startMechId}`);
                 let mechName = MechModelView.getMechName(startMechId);
                 TouchHelper.showTouchIcon(event.originalEvent, mechName);
                 TouchHelper.isTouchDragging = true;
@@ -14374,13 +14713,13 @@ var MechViewMechPanel;
             let touchEvent = event.originalEvent;
             let srcMechId = TouchHelper.findMechId(touchEvent.target);
             let dropMechId = TouchHelper.findMechId(TouchHelper.currDropTarget);
-            console.log(`Touch end srcMechId: ${srcMechId} dropMechId: ${dropMechId}`);
+            Util.log(`Touch end srcMechId: ${srcMechId} dropMechId: ${dropMechId}`);
             if (srcMechId && dropMechId) {
                 let mechPanel = MechPanel.getMechPanel(srcMechId);
                 mechPanel.moveToTargetMechId(dropMechId);
             }
             else {
-                console.warn(Error(`Touch end null mechId: src: ${srcMechId} dest: ${dropMechId}`));
+                Util.warn(Error(`Touch end null mechId: src: ${srcMechId} dest: ${dropMechId}`));
             }
             TouchHelper.hideTouchIcon(event.originalEvent);
             TouchHelper.isTouchDragging = false;
@@ -14435,7 +14774,7 @@ var MechViewMechPanel;
             //NOTE: attach touchIcon to body. 'fixed' position doesn't work well when hovering over the 
             //source mechpanel element (it acts as relative in that case)
             let bodyJQ = $("body");
-            TouchHelper.touchIcon = MechViewWidgets.cloneTemplate("touchmove-icon-template");
+            TouchHelper.touchIcon = Widgets.cloneTemplate("touchmove-icon-template");
             let touchIconJQ = $(TouchHelper.touchIcon)
                 .appendTo(bodyJQ);
             touchIconJQ.find(".touchStartItem").text(mechName);
@@ -14461,7 +14800,7 @@ var MechViewReport;
     var Team = MechModelCommon.Team;
     class VictoryReport {
         constructor() {
-            let victoryReportDiv = MechViewWidgets.cloneTemplate("victoryReport-template");
+            let victoryReportDiv = Widgets.cloneTemplate("victoryReport-template");
             let reportJQ = $(victoryReportDiv).attr("id", "victoryReport");
             this.domElement = victoryReportDiv;
             reportJQ.find("[class~=closeReportButton]")
@@ -14496,7 +14835,7 @@ var MechViewReport;
     class TeamReport {
         constructor(team) {
             let teamReport = MechModelView.getTeamReport(team);
-            let teamReportDiv = MechViewWidgets.cloneTemplate("teamReport-template");
+            let teamReportDiv = Widgets.cloneTemplate("teamReport-template");
             let teamReportJQ = $(teamReportDiv)
                 .attr("id", this.teamReportId(team))
                 .addClass(team);
@@ -14548,15 +14887,15 @@ var MechViewReport;
     MechViewReport.TeamReport = TeamReport;
     class MechBreakdownTable {
         constructor(teamReport) {
-            let tableDiv = MechViewWidgets.cloneTemplate("mechBreakdownTable-template");
+            let tableDiv = Widgets.cloneTemplate("mechBreakdownTable-template");
             this.domElement = tableDiv;
             //header
-            let mechBreakdownHeaderDiv = MechViewWidgets.cloneTemplate("mechBreakdownHeader-template");
+            let mechBreakdownHeaderDiv = Widgets.cloneTemplate("mechBreakdownHeader-template");
             $(mechBreakdownHeaderDiv)
                 .removeAttr("id")
                 .appendTo(tableDiv);
             for (let mechReport of teamReport.mechReports) {
-                let mechBreakdownRowDiv = MechViewWidgets.cloneTemplate("mechBreakdownRow-template");
+                let mechBreakdownRowDiv = Widgets.cloneTemplate("mechBreakdownRow-template");
                 let rowJQ = $(mechBreakdownRowDiv)
                     .removeAttr("id")
                     .appendTo(tableDiv);
@@ -14577,15 +14916,15 @@ var MechViewReport;
     }
     class WeaponBreakdownTable {
         constructor(teamReport) {
-            let tableDiv = MechViewWidgets.cloneTemplate("weaponBreakdownTable-template");
+            let tableDiv = Widgets.cloneTemplate("weaponBreakdownTable-template");
             this.domElement = tableDiv;
-            let weaponBreakdownHeaderDiv = MechViewWidgets.cloneTemplate("weaponBreakdownHeader-template");
+            let weaponBreakdownHeaderDiv = Widgets.cloneTemplate("weaponBreakdownHeader-template");
             $(weaponBreakdownHeaderDiv)
                 .removeAttr("id")
                 .appendTo(tableDiv);
             let teamWeaponStats = teamReport.getWeaponStats();
             for (let weaponStatEntry of teamWeaponStats) {
-                let weaponBreakdownRowDiv = MechViewWidgets.cloneTemplate("weaponBreakdownRow-template");
+                let weaponBreakdownRowDiv = Widgets.cloneTemplate("weaponBreakdownRow-template");
                 let rowJQ = $(weaponBreakdownRowDiv)
                     .removeAttr("id")
                     .appendTo(tableDiv);
@@ -14599,11 +14938,11 @@ var MechViewReport;
     }
     MechViewReport.showVictoryReport = function () {
         let teamReport = new MechViewReport.VictoryReport();
-        MechViewWidgets.setModal(teamReport.domElement, "wide");
-        MechViewWidgets.showModal();
+        Widgets.setModal(teamReport.domElement, "wide");
+        Widgets.showModal();
     };
     MechViewReport.hideVictoryReport = function () {
-        MechViewWidgets.hideModal("wide");
+        Widgets.hideModal("wide");
     };
 })(MechViewReport || (MechViewReport = {}));
 //Router. Deals with interactions of the application state and the url hash fragment
@@ -14614,6 +14953,7 @@ var MechViewRouter;
 (function (MechViewRouter) {
     var Team = MechModelCommon.Team;
     var SimulatorParameters = SimulatorSettings.SimulatorParameters;
+    var EventType = MechModelCommon.EventType;
     const PERSISTENCE_URL = "./php/simulator-persistence.php";
     const PERSISTENCE_STATE_FIELD = "state";
     const HASH_STATE_FIELD = "s";
@@ -14704,7 +15044,7 @@ var MechViewRouter;
                 isAppStateModified = false;
                 prevStateHash = data.statehash;
                 setParamToLocationHash(HASH_STATE_FIELD, data.statehash, true);
-                MechView.updateOnAppSaveState();
+                MechModelView.getEventQueue().queueEvent({ type: EventType.APP_STATE_SAVED });
                 resolve(data);
             })
                 .fail(function (data) {
@@ -14747,7 +15087,7 @@ var MechViewRouter;
             let loadMechPromise = loadMechsFromSmurfy(newAppState);
             return loadMechPromise.then(function (mechLoadoutData) {
                 isAppStateModified = false;
-                MechView.updateOnLoadAppState();
+                MechModelView.getEventQueue().queueEvent({ type: EventType.APP_STATE_LOADED });
                 return mechLoadoutData;
             });
         });
@@ -14839,17 +15179,16 @@ var MechViewRouter;
         }, Promise.resolve([]));
         return retPromise;
     };
-    //Called to let the router know that the app state has changed
-    MechViewRouter.modifyAppState = function () {
+    //listener to APP_STATE_CHANGE event
+    var modifyAppState = function (event) {
         isAppStateModified = true;
         prevStateHash = HASH_MODIFIED_STATE;
         setParamToLocationHash(HASH_STATE_FIELD, HASH_MODIFIED_STATE);
-        MechView.updateOnModifyAppState();
     };
     var setParamToLocationHash = function (param, value, replaceHistory = false) {
         let paramValues = new Map();
         for (let currParam of HASH_FIELDS) {
-            let currValue = getParamFromLocationHash(currParam);
+            let currValue = Util.getParamFromLocationHash(currParam);
             if (!currValue && param !== currParam) {
                 continue;
             }
@@ -14878,29 +15217,14 @@ var MechViewRouter;
             window.history.replaceState(null, "", "#" + newHashString);
         }
     };
-    var getParamFromLocationHash = function (param) {
-        let fragmentHash = location.hash;
-        if (fragmentHash.startsWith("#")) {
-            fragmentHash = fragmentHash.substring(1);
-        }
-        fragmentHash = "&" + fragmentHash;
-        let regex = new RegExp(".*&" + param + "=([^&]*).*");
-        let results = regex.exec(fragmentHash);
-        if (results) {
-            return results[1];
-        }
-        else {
-            return null;
-        }
-    };
     MechViewRouter.getRunFromLocation = function () {
-        return getParamFromLocationHash(HASH_RUN_FIELD);
+        return Util.getParamFromLocationHash(HASH_RUN_FIELD);
     };
     MechViewRouter.getSpeedFromLocation = function () {
-        return getParamFromLocationHash(HASH_SPEED_FIELD);
+        return Util.getParamFromLocationHash(HASH_SPEED_FIELD);
     };
     var getStateHashFromLocation = function () {
-        return getParamFromLocationHash(HASH_STATE_FIELD);
+        return Util.getParamFromLocationHash(HASH_STATE_FIELD);
     };
     MechViewRouter.loadStateFromLocationHash = function () {
         let hashState = getStateHashFromLocation();
@@ -14914,9 +15238,11 @@ var MechViewRouter;
     MechViewRouter.initViewRouter = function () {
         //Listen to hash changes
         window.addEventListener("hashchange", hashChangeListener, false);
+        //Event queue listener
+        MechModelView.getEventQueue().addListener(modifyAppState, EventType.APP_STATE_CHANGE);
     };
     var hashChangeListener = function () {
-        console.log("Hash change: " + location.hash);
+        Util.log("Hash change: " + location.hash);
         if (isLoading) {
             //ignore hash change, change back to previous hash
             let hash = `#${HASH_STATE_FIELD}=${prevStateHash}`;
@@ -14927,23 +15253,23 @@ var MechViewRouter;
         if (newHash !== prevStateHash) {
             //if hash is different from previous hash, load new state
             MechView.showLoadingScreen();
-            console.log("Hash change loading new state from hash : " + newHash);
+            Util.log("Hash change loading new state from hash : " + newHash);
             MechViewRouter.loadAppState(newHash)
                 .then(function () {
                 //success
                 MechModelView.refreshView();
-                console.log("Hash change state load success: " + newHash);
+                Util.log("Hash change state load success: " + newHash);
             })
                 .catch(function () {
                 //fail
                 MechModelView.refreshView();
-                MechView.updateOnLoadAppError();
-                console.log("Hash change state load failed: " + newHash);
+                MechModelView.getEventQueue().queueEvent({ type: EventType.APP_STATE_LOAD_ERROR });
+                Util.log("Hash change state load failed: " + newHash);
             })
                 .then(function () {
                 //always
                 MechView.hideLoadingScreen();
-                console.log("Hash state change load done: " + newHash);
+                Util.log("Hash state change load done: " + newHash);
             });
         }
         else {
@@ -14956,10 +15282,11 @@ var MechViewRouter;
 var MechViewSimSettings;
 (function (MechViewSimSettings) {
     var SimulatorParameters = SimulatorSettings.SimulatorParameters;
+    var EventType = MechModelCommon.EventType;
     MechViewSimSettings.initRangeInput = function () {
         let rangeJQ = $("#rangeInput");
         let rangeButtonElem = document.getElementById("setRangeButton");
-        let rangeButton = new MechViewWidgets.Button(rangeButtonElem, function () {
+        let rangeButton = new Widgets.Button(rangeButtonElem, function () {
             let buttonMode = $(this).attr("data-button-mode");
             if (buttonMode === "not-editing") {
                 rangeJQ
@@ -14994,11 +15321,11 @@ var MechViewSimSettings;
         //not strictly necessary, but it makes it explicit that we're changing
         //the simulator parameters. Handy when searching for code that changes
         //app state
-        MechViewRouter.modifyAppState();
         MechModelView.setSimulatorParameters(simulatorParameters);
         $("#setRangeButton")
             .attr("data-button-mode", "not-editing")
             .html("Change");
+        MechModelView.getEventQueue().queueEvent({ type: EventType.APP_STATE_CHANGE });
     };
     MechViewSimSettings.updateSimSettingsView = function (simulatorParameters) {
         if (simulatorParameters) {
@@ -15009,7 +15336,7 @@ var MechViewSimSettings;
     class SettingsDialog {
         constructor(simSettings) {
             this.simSettings = simSettings;
-            let settingsDiv = MechViewWidgets.cloneTemplate("simSettings-template");
+            let settingsDiv = Widgets.cloneTemplate("simSettings-template");
             this.domElement = settingsDiv;
             this.propertyMap = new Map();
             this.populateSettings(simSettings);
@@ -15036,7 +15363,7 @@ var MechViewSimSettings;
             let settingsList = SimulatorParameters.getUserSettings();
             let entryListJQ = $(this.domElement).find(".simSettingsList");
             for (let entry of settingsList) {
-                let entryDiv = MechViewWidgets.cloneTemplate("simSettingsEntry-template");
+                let entryDiv = Widgets.cloneTemplate("simSettingsEntry-template");
                 let entryJQ = $(entryDiv)
                     .attr("id", this.settingEntryId(entry.property))
                     .attr("data-property", entry.property);
@@ -15072,15 +15399,16 @@ var MechViewSimSettings;
     MechViewSimSettings.showSettingsDialog = function () {
         let simulatorParameters = SimulatorSettings.getSimulatorParameters();
         let dialog = new SettingsDialog(simulatorParameters);
-        MechViewWidgets.setModal(dialog.domElement, "simSettingsDialog");
-        MechViewWidgets.showModal();
+        Widgets.setModal(dialog.domElement, "simSettingsDialog");
+        Widgets.showModal();
     };
     MechViewSimSettings.hideSettingsDialog = function () {
-        MechViewWidgets.hideModal("simSettingsDialog");
+        Widgets.hideModal("simSettingsDialog");
     };
 })(MechViewSimSettings || (MechViewSimSettings = {}));
 var MechViewTeamStats;
 (function (MechViewTeamStats) {
+    var damageColor = MechViewDamageColor.damageColor;
     var teamStatsContainerId = function (team) {
         return team + "-teamStatsContainer";
     };
@@ -15120,7 +15448,7 @@ var MechViewTeamStats;
     };
     MechViewTeamStats.addTeamStatsPanel = function (team, mechIds) {
         let teamStatsContainerPanelId = teamStatsContainerId(team);
-        let teamStatsDiv = MechViewWidgets.cloneTemplate("teamStats-template");
+        let teamStatsDiv = Widgets.cloneTemplate("teamStats-template");
         $(teamStatsDiv)
             .attr("id", teamStatsId(team))
             .attr("data-team", team)
@@ -15139,7 +15467,7 @@ var MechViewTeamStats;
         for (let mechId of mechIds) {
             let mechName = MechModelView.getMechName(mechId);
             mechName = mechName ? mechName : "";
-            let mechPipSpan = MechViewWidgets.cloneTemplate("mechPip-template");
+            let mechPipSpan = Widgets.cloneTemplate("mechPip-template");
             $(mechPipSpan)
                 .attr("id", teamMechPipId(mechId))
                 .attr("data-team", team)
@@ -15170,7 +15498,7 @@ var MechViewTeamStats;
             .attr("data-team", team)
             .attr("id", teamSettingsId(team));
         let teamSettingsArrowJQ = teamStatsContainerJQ.find("[class~=teamSettingsButtonArrow]");
-        let settingsExpandButton = new MechViewWidgets.ExpandButton(teamSettingsButtonJQ.get(0), undefined, //No click handler, we only use the expand/contract functionality of the button
+        let settingsExpandButton = new Widgets.ExpandButton(teamSettingsButtonJQ.get(0), undefined, //No click handler, we only use the expand/contract functionality of the button
         teamSettingsArrowJQ.get(0), teamSettingsJQ.get(0));
         //Populate the team settings panel
         for (let patternType of patternTypes) {
@@ -15299,7 +15627,7 @@ var MechViewTeamStats;
             let isAlive = mechHealth.isAlive;
             let mechPipDiv = document.getElementById(teamMechPipId(mechId));
             let percentHealth = Number(currHealth) / Number(maxHealth);
-            let pipColor = MechViewWidgets.damageColor(percentHealth, MechViewWidgets.healthDamageGradient);
+            let pipColor = damageColor(percentHealth, MechViewDamageColor.HealthDamageGradient);
             mechPipDiv.style.color = pipColor;
             if (isAlive) {
                 mechPipDiv.textContent = "\u25A0"; //solid box
@@ -15315,14 +15643,14 @@ var MechViewTeamStats;
         let liveMechsDiv = document.getElementById(teamLiveMechsId(team));
         let totalMechs = update.mechHealthList.length;
         let percentAlive = totalMechs > 0 ? liveMechs / totalMechs : 0;
-        let color = MechViewWidgets.damageColor(percentAlive, MechViewWidgets.healthDamageGradient);
+        let color = damageColor(percentAlive, MechViewDamageColor.HealthDamageGradient);
         liveMechsDiv.style.color = color;
         liveMechsDiv.textContent = liveMechs + "/" + totalMechs;
         //team health
         let healthValueDiv = document.getElementById(teamHealthValueId(team));
         let teamHealthPercent = totalTeamMaxHealth > 0 ?
             totalTeamCurrHealth / totalTeamMaxHealth : 0;
-        color = MechViewWidgets.damageColor(teamHealthPercent, MechViewWidgets.healthDamageGradient);
+        color = damageColor(teamHealthPercent, MechViewDamageColor.HealthDamageGradient);
         healthValueDiv.style.color = color;
         healthValueDiv.textContent =
             `(${Number(teamHealthPercent * 100).toFixed(1)}%)`;
@@ -15347,6 +15675,7 @@ var MechView;
 (function (MechView) {
     var Component = MechModelCommon.Component;
     var MechPanel = MechViewMechPanel.MechPanel;
+    var EventType = MechModelCommon.EventType;
     var teamListPanel = function (team) {
         return team + "Team";
     };
@@ -15381,7 +15710,7 @@ var MechView;
     MechView.setDebugText = function (debugText) {
         $("#debugText").html(debugText);
     };
-    MechView.initView = function () {
+    MechView.init = function () {
         $("#nojavascript").remove();
         initControlPanel();
         MechViewTeamStats.initPatternTypes();
@@ -15389,9 +15718,18 @@ var MechView;
         initSpeedControl();
         initStateControl();
         initMiscControl();
+        MechViewMechPanel.init();
+        MechViewAddMech.init();
+        MechModelView.init();
+        //Event listeners
+        let eventQueue = MechModelView.getEventQueue();
+        eventQueue.addListener(updateOnModifyAppState, EventType.APP_STATE_CHANGE);
+        eventQueue.addListener(updateOnAppSaveState, EventType.APP_STATE_SAVED);
+        eventQueue.addListener(updateOnLoadAppState, EventType.APP_STATE_LOADED);
+        eventQueue.addListener(updateOnLoadAppError, EventType.APP_STATE_LOAD_ERROR);
     };
     var initControlPanel = function () {
-        let controlPanelDiv = MechViewWidgets.cloneTemplate("controlPanel-template");
+        let controlPanelDiv = Widgets.cloneTemplate("controlPanel-template");
         $(controlPanelDiv)
             .appendTo("#controlPanelContainer");
     };
@@ -15452,24 +15790,24 @@ var MechView;
             saveAppStatePromise
                 .then(function (data) {
                 showPermalinkTooltip(location.href);
-                console.log("Success on save app state. Data: " + data);
+                Util.log("Success on save app state. Data: " + data);
                 return data;
             })
                 .catch(function (data) {
-                console.error("Fail on save app state." + Error(data));
+                Util.error("Fail on save app state." + Error(data));
                 return Error(data);
             })
                 .then(function (data) {
-                console.log("Done save app state. Data: " + data);
+                Util.log("Done save app state. Data: " + data);
             });
         });
         //NOTE: We don't actually use the tooltip variable, it's just there to make tslint 
         //shut up about unused expressions. The tooltips themselves are stored in the DOM
         let tooltip;
-        tooltip = new MechViewWidgets.Tooltip("modifiedTooltip-template", "modifiedTooltip", permalinkButtonJQ.get(0));
-        tooltip = new MechViewWidgets.Tooltip("permalinkGeneratedTooltip-template", "permalinkGeneratedTooltip", permalinkButtonJQ.get(0));
+        tooltip = new Widgets.Tooltip("modifiedTooltip-template", "modifiedTooltip", permalinkButtonJQ.get(0));
+        tooltip = new Widgets.Tooltip("permalinkGeneratedTooltip-template", "permalinkGeneratedTooltip", permalinkButtonJQ.get(0));
         let miscControlJQ = $("#" + "miscControl");
-        tooltip = new MechViewWidgets.Tooltip("loadErrorTooltip-template", "loadErrorTooltip", miscControlJQ.get(0));
+        tooltip = new Widgets.Tooltip("loadErrorTooltip-template", "loadErrorTooltip", miscControlJQ.get(0));
         $("#settingsButton").click(() => {
             MechSimulatorLogic.pauseSimulation();
             MechViewSimSettings.showSettingsDialog();
@@ -15477,7 +15815,7 @@ var MechView;
     };
     var getStatusTooltip = function (tooltipId) {
         let element = document.getElementById(tooltipId);
-        return MechViewWidgets.Tooltip.fromDom(element, MechViewWidgets.Tooltip.TooltipDomKey);
+        return Widgets.Tooltip.fromDom(element, Widgets.Tooltip.TooltipDomKey);
     };
     var showStatusTooltip = function (tooltipId) {
         for (let currId of StatusTooltipIdList) {
@@ -15504,24 +15842,18 @@ var MechView;
     var showLoadErrorTooltip = function () {
         showStatusTooltip(LoadErrorTooltipId);
     };
-    //TODO: You now have multiple entities acting on the same event. Think about
-    //setting up an event scheduler/listeners
-    MechView.updateOnModifyAppState = function () {
+    var updateOnModifyAppState = function (event) {
         showModifiedToolip();
     };
-    MechView.updateOnAppSaveState = function () {
+    var updateOnAppSaveState = function (event) {
         //make the view consistent with the current state
     };
-    MechView.updateOnLoadAppState = function () {
+    var updateOnLoadAppState = function (event) {
         hideStatusTooltips();
         doAutoRun();
     };
-    MechView.updateOnLoadAppError = function () {
+    var updateOnLoadAppError = function (event) {
         showStatusTooltip(LoadErrorTooltipId);
-    };
-    //called when the app is completely loaded
-    MechView.updateOnAppLoaded = function () {
-        doAutoRun();
     };
     var doAutoRun = function () {
         //set sim speed and run sim if run and speed url params are set
@@ -15540,10 +15872,10 @@ var MechView;
     var loadingScreenAnimateInterval;
     const LOADING_SCREEN_ANIMATE_INTERVAL = 200; //ms
     MechView.showLoadingScreen = function () {
-        let loadingScreenDiv = MechViewWidgets.cloneTemplate("loadingScreen-template");
+        let loadingScreenDiv = Widgets.cloneTemplate("loadingScreen-template");
         $(loadingScreenDiv)
             .attr("id", "loadingScreenContainer");
-        MechViewWidgets.setModal(loadingScreenDiv);
+        Widgets.setModal(loadingScreenDiv);
         let loadingScreenPaperDollJQ = $("#loadingScreenPaperDollContainer");
         let paperDoll = new MechViewMechPanel.PaperDoll(LOADING_SCREEN_MECH_ID);
         loadingScreenPaperDollJQ.append(paperDoll.domElement);
@@ -15567,10 +15899,10 @@ var MechView;
             }
         }, LOADING_SCREEN_ANIMATE_INTERVAL);
         MechView.updateLoadingScreenProgress(0);
-        MechViewWidgets.showModal();
+        Widgets.showModal();
     };
     MechView.hideLoadingScreen = function () {
-        MechViewWidgets.hideModal();
+        Widgets.hideModal();
         window.clearInterval(loadingScreenAnimateInterval);
     };
     MechView.updateLoadingScreenProgress = function (percent) {
@@ -15598,7 +15930,7 @@ var MechTest;
         MechModel.setInitModelData(DummyWeaponData, DummyAmmoData, DummyMechData, DummyModuleData, _DummyOmnipods);
     };
     MechTest.testUIWidgets = function () {
-        MechView.initView();
+        MechView.init();
         initDummyModelData();
         initTestModelState();
         MechModelView.refreshView();
@@ -15644,10 +15976,10 @@ var MechTest;
     MechTest.testModelInit = function () {
         MechModel.initModelData()
             .then(function () {
-            console.log("Successfully loaded model init data");
+            Util.log("Successfully loaded model init data");
         })
             .catch(function (err) {
-            console.log("Failed to load model init data");
+            Util.log("Failed to load model init data");
         });
     };
     MechTest.testModelOps = function () {
@@ -15664,14 +15996,14 @@ var MechTest;
                 if (Component.hasOwnProperty(property)) {
                     var structure = MechModel.baseMechStructure(Component[property], tonnage);
                     var armor = MechModel.baseMechArmor(Component[property], tonnage);
-                    console.log("Tonnage: " + tonnage + " " + Component[property] +
+                    Util.log("Tonnage: " + tonnage + " " + Component[property] +
                         " structure:" + structure + " armor:" + armor);
                 }
             }
         }
     };
     MechTest.testModelView = function () {
-        MechView.initView();
+        MechView.init();
         initDummyModelData();
         initTestModelState();
         MechModelView.refreshView();
@@ -15733,7 +16065,7 @@ var MechTest;
         var mechInfo = new MechModel.MechInfo("testId", DummyStormcrow);
         for (let weaponId of testIds) {
             var weaponInfoTest = new MechModelWeapons.WeaponInfo(String(weaponId), "centre_torso", MechModel.getSmurfyWeaponData(String(weaponId)), mechInfo);
-            console.log("Weapon " + weaponInfoTest.translatedName +
+            Util.log("Weapon " + weaponInfoTest.translatedName +
                 " minRange: " + weaponInfoTest.minRange +
                 " optRange: " + weaponInfoTest.optRange +
                 " maxRange: " + weaponInfoTest.maxRange +
@@ -15742,7 +16074,7 @@ var MechTest;
             const stepDuration = 50;
             for (let range of testRanges) {
                 let damage = weaponInfoTest.damageAtRange(range);
-                console.log("range: " + range + " damage: " + damage);
+                Util.log("range: " + range + " damage: " + damage);
             }
         }
     };
@@ -15750,15 +16082,15 @@ var MechTest;
         var printTestDamageTransform = function (damage, pattern) {
             let weaponDamage = new MechModel.WeaponDamage(damage);
             let transformedDamage = accuracyPattern(weaponDamage, 200);
-            console.log("original damage: " + weaponDamage.toString());
-            console.log("transformedDamage: " + transformedDamage.toString());
+            Util.log("original damage: " + weaponDamage.toString());
+            Util.log("transformedDamage: " + transformedDamage.toString());
         };
         let accuracyPattern = MechAccuracyPattern.accuracySpreadToAdjacent(0.5, 0.5, 0);
         let accuracyPatternNext = MechAccuracyPattern.accuracySpreadToAdjacent(0.5, 0.3, 0.2);
         let testDamage = {
             "centre_torso": 10,
             "right_torso": 2.5,
-            "left_torso": 2.5
+            "left_torso": 2.5,
         };
         printTestDamageTransform(testDamage, accuracyPattern);
         printTestDamageTransform(testDamage, accuracyPatternNext);
@@ -15832,7 +16164,7 @@ var MechTest;
                 let quirkEntry = {
                     name: skillEffect.quirkName,
                     translated_name: skillEffect.quirkTranslatedName,
-                    value: 0 //filler value, we just need the names
+                    value: 0,
                 };
                 if (!quirkMap[quirkEntry.name]) {
                     quirkMap[quirkEntry.name] = quirkEntry;
@@ -15851,25 +16183,25 @@ var MechTest;
         sortedQuirkNames.sort();
         for (let quirkName of sortedQuirkNames) {
             let quirkEntry = quirkMap[quirkName];
-            console.log(`${quirkEntry.name}\t${quirkEntry.translated_name}`);
+            Util.log(`${quirkEntry.name}\t${quirkEntry.translated_name}`);
             numQuirks++;
         }
-        console.log("numQuirks : " + numQuirks);
+        Util.log("numQuirks : " + numQuirks);
     };
     MechTest.testSimulation = function () {
         //Use DummyData
         // initDummyModelData();
         // this.generateTestUI( );
         //Load data from smurfy
-        MechView.initView();
+        MechView.init();
         MechView.showLoadingScreen();
         MechModel.initModelData()
             .then(function () {
-            console.log("Successfully loaded model init data");
+            Util.log("Successfully loaded model init data");
             MechTest.generateTestUI();
         })
             .catch(function () {
-            console.log("Failed to load model init data");
+            Util.log("Failed to load model init data");
         });
     };
     MechTest.generateTestUI = function () {
@@ -15898,14 +16230,14 @@ var MechTest;
         $("#saveStateButton").removeClass("debugButton").click(() => {
             Promise.resolve(MechViewRouter.saveAppState()
                 .then(function (data) {
-                console.log("Success on save app state. Data: " + data);
-                console.log("statehash: " + data.statehash);
+                Util.log("Success on save app state. Data: " + data);
+                Util.log("statehash: " + data.statehash);
                 return data;
             })
                 .catch(function (data) {
-                console.log("Fail on save app state. Data: " + data);
+                Util.log("Fail on save app state. Data: " + data);
             })).then(function (data) {
-                console.log("Done save app state. Data: " + data);
+                Util.log("Done save app state. Data: " + data);
             });
         });
         $("#loadStateButton").removeClass("debugButton").click(() => {
@@ -15913,21 +16245,21 @@ var MechTest;
             let regex = /#s=([^&]*)/;
             let results = regex.exec(hashState);
             if (!results) {
-                console.log("Invalid state in hash: " + hashState);
+                Util.log("Invalid state in hash: " + hashState);
                 return;
             }
             hashState = results[1];
             MechView.showLoadingScreen();
             Promise.resolve(MechViewRouter.loadAppState(hashState)
                 .then(function (data) {
-                console.log("Success on load app state. Data: " + data);
+                Util.log("Success on load app state. Data: " + data);
                 MechModelView.refreshView();
                 return data;
             })
                 .catch(function (data) {
-                console.log("Fail on load app state. Data: " + data);
+                Util.log("Fail on load app state. Data: " + data);
             })).then(function (data) {
-                console.log("Done on load app state. Data: " + data);
+                Util.log("Done on load app state. Data: " + data);
                 MechView.hideLoadingScreen();
             });
         });
@@ -15936,46 +16268,46 @@ var MechTest;
         var statehash;
         initDummyModelData();
         initTestModelState();
-        MechView.initView();
+        MechView.init();
         MechView.showLoadingScreen();
         Promise.resolve(MechViewRouter.saveAppState()
             .then(function (data) {
-            console.log("Success on save app state. Data: " + data);
-            console.log("statehash: " + data.statehash);
+            Util.log("Success on save app state. Data: " + data);
+            Util.log("statehash: " + data.statehash);
             statehash = data.statehash;
             testGetAppState(statehash);
             return data;
         })
             .catch(function (data) {
-            console.log("Fail on save app state. Data: " + data);
+            Util.log("Fail on save app state. Data: " + data);
         })).then(function (data) {
-            console.log("Done save app state. Data: " + data);
+            Util.log("Done save app state. Data: " + data);
         });
         var testGetAppState = function (hash) {
             Promise.resolve(MechViewRouter.loadAppState(statehash)
                 .then(function (data) {
-                console.log("Success on load app state. Data: " + data);
+                Util.log("Success on load app state. Data: " + data);
                 MechModelView.refreshView();
                 return data;
             })
                 .catch(function (data) {
-                console.log("Fail on load app state. Data: " + data);
+                Util.log("Fail on load app state. Data: " + data);
             })).then(function (data) {
                 MechView.hideLoadingScreen();
-                console.log("Done on load app state. Data: " + data);
+                Util.log("Done on load app state. Data: " + data);
             });
         };
         $("#saveStateButton").removeClass("debugButton").click(() => {
             Promise.resolve(MechViewRouter.saveAppState()
                 .then(function (data) {
-                console.log("Success on save app state. Data: " + data);
-                console.log("statehash: " + data.statehash);
+                Util.log("Success on save app state. Data: " + data);
+                Util.log("statehash: " + data.statehash);
                 return data;
             })
                 .catch(function (data) {
-                console.log("Fail on save app state. Data: " + data);
+                Util.log("Fail on save app state. Data: " + data);
             })).then(function (data) {
-                console.log("Done save app state. Data: " + data);
+                Util.log("Done save app state. Data: " + data);
             });
         });
         $("#loadStateButton").removeClass("debugButton").click(() => {
@@ -15983,21 +16315,21 @@ var MechTest;
             let regex = /#s=([^&]*)/;
             let results = regex.exec(hashState);
             if (!results) {
-                console.log("Invalid state in hash: " + hashState);
+                Util.log("Invalid state in hash: " + hashState);
                 return;
             }
             hashState = results[1];
             MechView.showLoadingScreen();
             Promise.resolve(MechViewRouter.loadAppState(hashState)
                 .then(function (data) {
-                console.log("Success on load app state. Data: " + data);
+                Util.log("Success on load app state. Data: " + data);
                 MechModelView.refreshView();
                 return data;
             })
                 .catch(function (data) {
-                console.log("Fail on load app state. Data: " + data);
+                Util.log("Fail on load app state. Data: " + data);
             })).then(function (data) {
-                console.log("Done on load app state. Data: " + data);
+                Util.log("Done on load app state. Data: " + data);
                 MechView.hideLoadingScreen();
             });
         });
@@ -16018,8 +16350,7 @@ var MechTest;
         MechModel.addMech("testCatapultId", Team.RED, DummyCatapult);
         MechModel.addMech("testUrbanmechId1", Team.RED, DummyUrbanmech);
         let simulatorParameters = new SimulatorParameters(DEFAULT_RANGE, //range
-        1 //speed factor
-        );
+        1);
         MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
         MechModel.initMechTeamPatterns(MechModel.getMechTeam(Team.BLUE));
         MechModel.initMechTeamPatterns(MechModel.getMechTeam(Team.RED));
@@ -16048,17 +16379,63 @@ var MechTest;
             { name: "cALRM20", spread: GlobalGameInfo._cALRM20Spread },
         ];
         for (let lrm of lrmSpreadList) {
-            console.log("----------------------------------------------");
-            console.log(lrm.name + " spread");
+            Util.log("----------------------------------------------");
+            Util.log(lrm.name + " spread");
             let lrmPattern = MechAccuracyPattern.seekerPattern(lrm.spread);
             let range = 180;
             let transformedDamage = lrmPattern(newTestDamage(), range);
-            console.log("Range: " + range + " " + transformedDamage.toString());
+            Util.log("Range: " + range + " " + transformedDamage.toString());
             for (range = 200; range <= 1000; range += 100) {
                 transformedDamage = lrmPattern(newTestDamage(), range);
-                console.log("Range: " + range + " " + transformedDamage.toString());
+                Util.log("Range: " + range + " " + transformedDamage.toString());
             }
         }
+    };
+    MechTest.testEventQueue = function () {
+        let eventQueue = new Events.EventQueue();
+        let listener1 = function (event) {
+            Util.log(`listener1 ${event.type} ${event.data}`);
+        };
+        let listener2 = function (event) {
+            Util.log(`listener2 ${event.type} ${event.data}`);
+        };
+        let listener3 = function (event) {
+            Util.log(`listener3 ${event.type} ${event.data}`);
+        };
+        eventQueue.addListener(listener1, "foo", "bar");
+        eventQueue.addListener(listener2, "foo", "baz");
+        eventQueue.addListener(listener3, "baz");
+        eventQueue.addListener(listener3, "foo");
+        Util.log(eventQueue.debugString());
+        eventQueue.queueEvent({ type: "foo", data: "foo1" });
+        eventQueue.queueEvent({ type: "bar", data: "bar1" });
+        eventQueue.queueEvent({ type: "baz", data: "baz1" });
+        eventQueue.queueEvent({ type: "foo", data: "foo2" });
+        eventQueue.queueEvent({ type: "bar", data: "bar2" });
+        eventQueue.queueEvent({ type: "baz", data: "baz2" });
+        setTimeout(() => {
+            eventQueue.removeListener(listener1);
+            eventQueue.removeListener(listener3, "foo");
+            Util.log(eventQueue.debugString());
+            eventQueue.queueEvent({ type: "foo", data: "foo1" });
+            eventQueue.queueEvent({ type: "foo", data: "foo2" });
+            eventQueue.queueEvent({ type: "bar", data: "bar1" });
+            eventQueue.queueEvent({ type: "bar", data: "bar2" });
+            eventQueue.queueEvent({ type: "baz", data: "baz1" });
+            eventQueue.queueEvent({ type: "baz", data: "baz2" });
+            setTimeout(() => {
+                eventQueue.removeListener(listener2);
+                eventQueue.removeListener(listener3);
+                Util.log(eventQueue.debugString());
+                eventQueue.queueEvent({ type: "foo", data: "foo1" });
+                eventQueue.queueEvent({ type: "foo", data: "foo2" });
+                eventQueue.queueEvent({ type: "bar", data: "bar1" });
+                eventQueue.queueEvent({ type: "bar", data: "bar2" });
+                eventQueue.queueEvent({ type: "baz", data: "baz1" });
+                eventQueue.queueEvent({ type: "baz", data: "baz2" });
+                Util.log("Done");
+            }, 1000);
+        }, 1000);
     };
     var testScratch = function () {
         //Scratch test
@@ -16081,18 +16458,18 @@ var MechTest;
                 dataType: 'text'
             })
                 .done(function (data) {
-                console.log("Successfully loaded " + INDEX_HTML_URL);
+                Util.log("Successfully loaded " + INDEX_HTML_URL);
                 resolve(data);
             })
                 .fail(function (data) {
-                console.log("Request for  " + INDEX_HTML_URL + " request failed: " + Error(data));
+                Util.log("Request for  " + INDEX_HTML_URL + " request failed: " + Error(data));
                 reject(Error(data));
             });
         });
     }
     //Loads the body of the main index.html into test-index.html.
     //NOTE: This relies on the body tags in the main index.html file to be in
-    //lower case and have no spaces due to the string.search calls
+    //lower case and have no spaces due to the string.search() calls
     function replaceBody() {
         return loadAppHTMLPromise().then(function (data) {
             let bodyStart = data.search("<body>");
@@ -16101,11 +16478,11 @@ var MechTest;
             let bodyStr = data.substr(bodyStart, bodyEnd - bodyStart);
             let appBody = $.parseHTML(bodyStr);
             $("body").append(appBody);
-            console.log("Loaded all HTML");
+            Util.log("Loaded all HTML");
             return data;
         })
             .catch(function (data) {
-            console.error(Error("Error loading app HTML"));
+            Util.error(Error("Error loading app HTML"));
         });
     }
     function runTest() {
@@ -16118,16 +16495,16 @@ var MechTest;
             }
         }
         else {
-            console.error(Error("No test specified"));
+            Util.error(Error("No test specified"));
         }
     }
     function testMain() {
-        console.log("Hello from test main");
+        Util.log("testMain started");
         replaceBody().then(function (data) {
             runTest();
         })
             .catch(function (data) {
-            console.error(Error("Error running test: " + data));
+            Util.error(Error("Error running test: " + data));
         });
     }
     MechTest.testMain = testMain;

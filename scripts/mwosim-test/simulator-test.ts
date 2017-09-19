@@ -27,7 +27,7 @@ namespace MechTest {
   };
 
   export var testUIWidgets = function() {
-    MechView.initView();
+    MechView.init();
     initDummyModelData();
     initTestModelState();
     MechModelView.refreshView();
@@ -75,10 +75,10 @@ namespace MechTest {
   export var testModelInit = function() {
     MechModel.initModelData()
       .then(function() {
-        console.log("Successfully loaded model init data");
+        Util.log("Successfully loaded model init data");
       })
       .catch(function(err) {
-        console.log("Failed to load model init data");
+        Util.log("Failed to load model init data");
       });
   }
 
@@ -97,7 +97,7 @@ namespace MechTest {
         if (Component.hasOwnProperty(property)) {
           var structure = MechModel.baseMechStructure(Component[property], tonnage);
           var armor = MechModel.baseMechArmor(Component[property], tonnage);
-          console.log("Tonnage: " + tonnage + " " + Component[property] +
+          Util.log("Tonnage: " + tonnage + " " + Component[property] +
                         " structure:" + structure + " armor:" + armor);
         }
       }
@@ -105,7 +105,7 @@ namespace MechTest {
   }
 
   export var testModelView = function() {
-    MechView.initView();
+    MechView.init();
     initDummyModelData();
     initTestModelState();
 
@@ -177,7 +177,7 @@ namespace MechTest {
     for (let weaponId of testIds) {
       var weaponInfoTest = new MechModelWeapons.WeaponInfo(String(weaponId), "centre_torso",
         MechModel.getSmurfyWeaponData(String(weaponId)), mechInfo);
-      console.log("Weapon " + weaponInfoTest.translatedName +
+      Util.log("Weapon " + weaponInfoTest.translatedName +
         " minRange: " + weaponInfoTest.minRange +
         " optRange: " + weaponInfoTest.optRange +
         " maxRange: " + weaponInfoTest.maxRange +
@@ -186,7 +186,7 @@ namespace MechTest {
       const stepDuration = 50;
       for (let range of testRanges) {
         let damage = weaponInfoTest.damageAtRange(range);
-        console.log("range: " + range + " damage: " + damage);
+        Util.log("range: " + range + " damage: " + damage);
       }
     }
   }
@@ -195,15 +195,15 @@ namespace MechTest {
     var printTestDamageTransform = function(damage: DamageMap, pattern: AccuracyPattern) {
       let weaponDamage = new MechModel.WeaponDamage(damage);
       let transformedDamage = accuracyPattern(weaponDamage, 200);
-      console.log("original damage: " + weaponDamage.toString());
-      console.log("transformedDamage: " + transformedDamage.toString());
+      Util.log("original damage: " + weaponDamage.toString());
+      Util.log("transformedDamage: " + transformedDamage.toString());
     }
     let accuracyPattern = MechAccuracyPattern.accuracySpreadToAdjacent(0.5, 0.5, 0);
     let accuracyPatternNext = MechAccuracyPattern.accuracySpreadToAdjacent(0.5, 0.3, 0.2);
     let testDamage: DamageMap = {
         "centre_torso": 10,
         "right_torso": 2.5,
-        "left_torso": 2.5
+        "left_torso": 2.5,
       };
     printTestDamageTransform(testDamage, accuracyPattern);
     printTestDamageTransform(testDamage, accuracyPatternNext);
@@ -282,7 +282,7 @@ namespace MechTest {
         let quirkEntry = {
           name : skillEffect.quirkName,
           translated_name : skillEffect.quirkTranslatedName,
-          value : 0 //filler value, we just need the names
+          value : 0, //filler value, we just need the names
         };
         if (!quirkMap[quirkEntry.name]) {
           quirkMap[quirkEntry.name] = quirkEntry;
@@ -302,10 +302,10 @@ namespace MechTest {
     sortedQuirkNames.sort();
     for (let quirkName of sortedQuirkNames) {
       let quirkEntry = quirkMap[quirkName];
-      console.log(`${quirkEntry.name}\t${quirkEntry.translated_name}`);
+      Util.log(`${quirkEntry.name}\t${quirkEntry.translated_name}`);
       numQuirks++;
     }
-    console.log("numQuirks : " + numQuirks);
+    Util.log("numQuirks : " + numQuirks);
   }
 
   export var testSimulation = function() {
@@ -314,15 +314,16 @@ namespace MechTest {
     // this.generateTestUI( );
 
     //Load data from smurfy
-    MechView.initView();
+    MechView.init();
+    
     MechView.showLoadingScreen();
     MechModel.initModelData()
       .then(function() {
-        console.log("Successfully loaded model init data");
+        Util.log("Successfully loaded model init data");
         MechTest.generateTestUI();
       })
       .catch(function() {
-        console.log("Failed to load model init data");
+        Util.log("Failed to load model init data");
       });
   }
 
@@ -360,15 +361,15 @@ namespace MechTest {
     $("#saveStateButton").removeClass("debugButton").click(() => {
       Promise.resolve(MechViewRouter.saveAppState()
         .then(function(data) {
-          console.log("Success on save app state. Data: " + data);
-          console.log("statehash: " + data.statehash);
+          Util.log("Success on save app state. Data: " + data);
+          Util.log("statehash: " + data.statehash);
           return data;
         })
         .catch(function(data) {
-          console.log("Fail on save app state. Data: " + data);
+          Util.log("Fail on save app state. Data: " + data);
         })
       ).then(function(data) {
-        console.log("Done save app state. Data: " + data);
+        Util.log("Done save app state. Data: " + data);
       });
     });
 
@@ -377,22 +378,22 @@ namespace MechTest {
       let regex = /#s=([^&]*)/;
       let results = regex.exec(hashState);
       if (!results) {
-        console.log("Invalid state in hash: " + hashState);
+        Util.log("Invalid state in hash: " + hashState);
         return;
       }
       hashState = results[1];
       MechView.showLoadingScreen();
       Promise.resolve(MechViewRouter.loadAppState(hashState)
         .then(function(data) {
-          console.log("Success on load app state. Data: " + data);
+          Util.log("Success on load app state. Data: " + data);
           MechModelView.refreshView();
           return data;
         })
         .catch(function(data) {
-          console.log("Fail on load app state. Data: " + data);
+          Util.log("Fail on load app state. Data: " + data);
         })
       ).then(function(data) {
-        console.log("Done on load app state. Data: " + data);
+        Util.log("Done on load app state. Data: " + data);
         MechView.hideLoadingScreen();
       });
     });
@@ -402,52 +403,52 @@ namespace MechTest {
     var statehash : string;
     initDummyModelData();
     initTestModelState();
-    MechView.initView();
+    MechView.init();
 
     MechView.showLoadingScreen();
     Promise.resolve(MechViewRouter.saveAppState()
       .then(function(data) {
-        console.log("Success on save app state. Data: " + data);
-        console.log("statehash: " + data.statehash);
+        Util.log("Success on save app state. Data: " + data);
+        Util.log("statehash: " + data.statehash);
         statehash = data.statehash;
         testGetAppState(statehash);
         return data;
       })
       .catch(function(data) {
-        console.log("Fail on save app state. Data: " + data);
+        Util.log("Fail on save app state. Data: " + data);
       })
     ).then(function(data) {
-      console.log("Done save app state. Data: " + data);
+      Util.log("Done save app state. Data: " + data);
     });
 
     var testGetAppState = function(hash : string) {
       Promise.resolve(MechViewRouter.loadAppState(statehash)
         .then(function(data) {
-          console.log("Success on load app state. Data: " + data);
+          Util.log("Success on load app state. Data: " + data);
           MechModelView.refreshView();
           return data;
         })
         .catch(function(data) {
-          console.log("Fail on load app state. Data: " + data);
+          Util.log("Fail on load app state. Data: " + data);
         })
       ).then(function(data) {
         MechView.hideLoadingScreen();
-        console.log("Done on load app state. Data: " + data);
+        Util.log("Done on load app state. Data: " + data);
       })
     };
 
     $("#saveStateButton").removeClass("debugButton").click(() => {
       Promise.resolve(MechViewRouter.saveAppState()
         .then(function(data) {
-          console.log("Success on save app state. Data: " + data);
-          console.log("statehash: " + data.statehash);
+          Util.log("Success on save app state. Data: " + data);
+          Util.log("statehash: " + data.statehash);
           return data;
         })
         .catch(function(data) {
-          console.log("Fail on save app state. Data: " + data);
+          Util.log("Fail on save app state. Data: " + data);
         })
       ).then(function(data) {
-        console.log("Done save app state. Data: " + data);
+        Util.log("Done save app state. Data: " + data);
       });
     });
 
@@ -456,22 +457,22 @@ namespace MechTest {
       let regex = /#s=([^&]*)/;
       let results = regex.exec(hashState);
       if (!results) {
-        console.log("Invalid state in hash: " + hashState);
+        Util.log("Invalid state in hash: " + hashState);
         return;
       }
       hashState = results[1];
       MechView.showLoadingScreen();
       Promise.resolve(MechViewRouter.loadAppState(hashState)
         .then(function(data) {
-          console.log("Success on load app state. Data: " + data);
+          Util.log("Success on load app state. Data: " + data);
           MechModelView.refreshView();
           return data;
         })
         .catch(function(data) {
-          console.log("Fail on load app state. Data: " + data);
+          Util.log("Fail on load app state. Data: " + data);
         })
       ).then(function(data) {
-        console.log("Done on load app state. Data: " + data);
+        Util.log("Done on load app state. Data: " + data);
         MechView.hideLoadingScreen();
       });
     });
@@ -497,7 +498,7 @@ namespace MechTest {
 
     let simulatorParameters = new SimulatorParameters(
       DEFAULT_RANGE, //range
-      1 //speed factor
+      1, //speed factor
     );
     MechSimulatorLogic.setSimulatorParameters(simulatorParameters);
     MechModel.initMechTeamPatterns(MechModel.getMechTeam(Team.BLUE));
@@ -530,18 +531,78 @@ namespace MechTest {
     ]
 
     for (let lrm of lrmSpreadList) {
-      console.log("----------------------------------------------");
-      console.log(lrm.name + " spread");
+      Util.log("----------------------------------------------");
+      Util.log(lrm.name + " spread");
       let lrmPattern = MechAccuracyPattern.seekerPattern(lrm.spread);
       let range = 180;
       let transformedDamage = lrmPattern(newTestDamage(), range);
-      console.log("Range: " + range + " " + transformedDamage.toString());
+      Util.log("Range: " + range + " " + transformedDamage.toString());
 
       for (range = 200; range <= 1000; range += 100) {
         transformedDamage = lrmPattern(newTestDamage(), range);
-        console.log("Range: " + range + " " + transformedDamage.toString());
+        Util.log("Range: " + range + " " + transformedDamage.toString());
       }
     }
+  }
+
+  export var testEventQueue = function() {
+    let eventQueue = new Events.EventQueue();
+
+    interface TestEvent extends Events.Event {
+      data : string;
+    }
+
+    let listener1 = function(event : TestEvent) : void {
+      Util.log(`listener1 ${event.type} ${event.data}`);
+    }
+    let listener2 = function(event : TestEvent) : void {
+      Util.log(`listener2 ${event.type} ${event.data}`);
+    }
+    let listener3 = function(event : TestEvent) : void {
+      Util.log(`listener3 ${event.type} ${event.data}`);
+    }
+    
+    eventQueue.addListener(listener1, "foo", "bar");
+    eventQueue.addListener(listener2, "foo", "baz");
+    eventQueue.addListener(listener3, "baz");
+    eventQueue.addListener(listener3, "foo");
+
+    Util.log(eventQueue.debugString());
+
+    eventQueue.queueEvent({type: "foo", data: "foo1"});
+    eventQueue.queueEvent({type: "bar", data: "bar1"});
+    eventQueue.queueEvent({type: "baz", data: "baz1"});
+    eventQueue.queueEvent({type: "foo", data: "foo2"});
+    eventQueue.queueEvent({type: "bar", data: "bar2"});
+    eventQueue.queueEvent({type: "baz", data: "baz2"});
+
+    setTimeout(() => {
+      eventQueue.removeListener(listener1);
+      eventQueue.removeListener(listener3, "foo");
+      Util.log(eventQueue.debugString());
+
+      eventQueue.queueEvent({type: "foo", data: "foo1"});
+      eventQueue.queueEvent({type: "foo", data: "foo2"});
+      eventQueue.queueEvent({type: "bar", data: "bar1"});
+      eventQueue.queueEvent({type: "bar", data: "bar2"});
+      eventQueue.queueEvent({type: "baz", data: "baz1"});
+      eventQueue.queueEvent({type: "baz", data: "baz2"});
+
+      setTimeout(()=> {
+        eventQueue.removeListener(listener2);
+        eventQueue.removeListener(listener3);
+        Util.log(eventQueue.debugString());
+
+        eventQueue.queueEvent({type: "foo", data: "foo1"});
+        eventQueue.queueEvent({type: "foo", data: "foo2"});
+        eventQueue.queueEvent({type: "bar", data: "bar1"});
+        eventQueue.queueEvent({type: "bar", data: "bar2"});
+        eventQueue.queueEvent({type: "baz", data: "baz1"});
+        eventQueue.queueEvent({type: "baz", data: "baz2"});
+
+        Util.log("Done");
+      }, 1000);
+      }, 1000);
   }
 
   var testScratch = function() {

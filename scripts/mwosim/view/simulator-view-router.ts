@@ -5,6 +5,7 @@
 namespace MechViewRouter {
   import Team = MechModelCommon.Team;
   import SimulatorParameters = SimulatorSettings.SimulatorParameters;
+  import EventType = MechModelCommon.EventType;
 
   const PERSISTENCE_URL = "./php/simulator-persistence.php";
   const PERSISTENCE_STATE_FIELD = "state";
@@ -125,7 +126,7 @@ namespace MechViewRouter {
         isAppStateModified = false;
         prevStateHash = data.statehash;
         setParamToLocationHash(HASH_STATE_FIELD, data.statehash, true);
-        MechView.updateOnAppSaveState();
+        MechModelView.getEventQueue().queueEvent({type: EventType.APP_STATE_SAVED});
         resolve(data);
       })
       .fail(function(data) {
@@ -170,7 +171,7 @@ namespace MechViewRouter {
           let loadMechPromise = loadMechsFromSmurfy(newAppState);
           return loadMechPromise.then(function(mechLoadoutData) {
             isAppStateModified = false;
-            MechView.updateOnLoadAppState();
+            MechModelView.getEventQueue().queueEvent({type: EventType.APP_STATE_LOADED});
             return mechLoadoutData;
           });
       });
@@ -285,19 +286,18 @@ namespace MechViewRouter {
     return retPromise;
   }
 
-  //Called to let the router know that the app state has changed
-  export var modifyAppState = function() {
+  //listener to APP_STATE_CHANGE event
+  var modifyAppState = function(event : Events.Event) {
     isAppStateModified = true;
     prevStateHash = HASH_MODIFIED_STATE;
     setParamToLocationHash(HASH_STATE_FIELD, HASH_MODIFIED_STATE);
-    MechView.updateOnModifyAppState();
   }
 
   var setParamToLocationHash =
       function(param : string, value : string, replaceHistory = false) : void {
     let paramValues = new Map<string, string>();
     for (let currParam of HASH_FIELDS) {
-      let currValue = getParamFromLocationHash(currParam);
+      let currValue = Util.getParamFromLocationHash(currParam);
       if (!currValue && param !== currParam) {
         continue;
       }
@@ -324,31 +324,16 @@ namespace MechViewRouter {
     }
   }
 
-  var getParamFromLocationHash = function(param : string) : string {
-    let fragmentHash = location.hash;
-    if (fragmentHash.startsWith("#")) {
-      fragmentHash = fragmentHash.substring(1);
-    }
-    fragmentHash = "&" + fragmentHash;
-    let regex = new RegExp(".*&" + param + "=([^&]*).*");
-    let results = regex.exec(fragmentHash);
-    if (results) {
-      return results[1];
-    } else {
-      return null;
-    }
-  }
-
   export var getRunFromLocation = function() : string {
-    return getParamFromLocationHash(HASH_RUN_FIELD);
+    return Util.getParamFromLocationHash(HASH_RUN_FIELD);
   }
 
   export var getSpeedFromLocation = function() : string {
-    return getParamFromLocationHash(HASH_SPEED_FIELD);
+    return Util.getParamFromLocationHash(HASH_SPEED_FIELD);
   }
 
   var getStateHashFromLocation = function() :string {
-    return getParamFromLocationHash(HASH_STATE_FIELD);
+    return Util.getParamFromLocationHash(HASH_STATE_FIELD);
   }
 
   export var loadStateFromLocationHash = function() : Promise<any> {
@@ -364,10 +349,13 @@ namespace MechViewRouter {
   export var initViewRouter = function() : void {
     //Listen to hash changes
     window.addEventListener("hashchange", hashChangeListener, false);
+
+    //Event queue listener
+    MechModelView.getEventQueue().addListener(modifyAppState, EventType.APP_STATE_CHANGE);
   }
 
   var hashChangeListener = function() : void {
-    console.log("Hash change: " + location.hash);
+    Util.log("Hash change: " + location.hash);
     if (isLoading) {
       //ignore hash change, change back to previous hash
       let hash = `#${HASH_STATE_FIELD}=${prevStateHash}`;
@@ -378,23 +366,23 @@ namespace MechViewRouter {
     if (newHash !== prevStateHash) {
       //if hash is different from previous hash, load new state
       MechView.showLoadingScreen();
-      console.log("Hash change loading new state from hash : " + newHash);
+      Util.log("Hash change loading new state from hash : " + newHash);
         loadAppState(newHash)
           .then(function() {
             //success
             MechModelView.refreshView();
-            console.log("Hash change state load success: " + newHash);
+            Util.log("Hash change state load success: " + newHash);
           })
           .catch(function() {
             //fail
             MechModelView.refreshView();
-            MechView.updateOnLoadAppError();
-            console.log("Hash change state load failed: " + newHash);
+            MechModelView.getEventQueue().queueEvent({type: EventType.APP_STATE_LOAD_ERROR});
+            Util.log("Hash change state load failed: " + newHash);
           })
           .then(function() {
             //always
             MechView.hideLoadingScreen();
-            console.log("Hash state change load done: " + newHash);
+            Util.log("Hash state change load done: " + newHash);
           });
     } else {
       //do nothing if hash did not change

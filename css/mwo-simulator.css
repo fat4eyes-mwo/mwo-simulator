@@ -128,8 +128,7 @@ a:hover {
 }
 
 .stylishText {
-  font-family: Orbitron;
-  /*font-family: sans-serif;;*/
+  font-family: Orbitron, sans-serif;
 }
 
 .fillHeight {
@@ -323,7 +322,7 @@ a:hover {
 }
 
 .endMechPanel {
-  min-height: 50px;
+  min-height: 100px;
   transition: transform 0.5s ease;
 }
 
@@ -563,6 +562,11 @@ a:hover {
   vertical-align: middle;
 }
 
+.titlePanel .titleButton.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .titlePanel .deleteMechButton {
   float: right;
   background-color: maroon;
@@ -790,7 +794,7 @@ a:hover {
 .teamStats .teamStatsDetails {
   font-size: 1em;
   font-weight: bold;
-  font-family: Orbitron;
+  font-family: Orbitron, sans-serif;
 }
 
 .teamStats .mechPipsContainer {

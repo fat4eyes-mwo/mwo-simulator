@@ -7,3 +7,4 @@ nodejs/**/*.bat
 nodejs/gamexmlparser/build
 tslint.out
 node_modules
+profiling

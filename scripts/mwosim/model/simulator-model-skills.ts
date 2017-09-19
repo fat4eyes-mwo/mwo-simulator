@@ -134,7 +134,7 @@ namespace MechModelSkills {
           if (mechQuirks) {
             skillQuirks.addQuirkList(mechQuirks);
           } else {
-            console.warn(Error("No quirks found for " + kitlaanName));
+            Util.warn(Error("No quirks found for " + kitlaanName));
           }
         }
       }

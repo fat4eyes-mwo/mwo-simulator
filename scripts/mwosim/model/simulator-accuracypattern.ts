@@ -30,7 +30,7 @@ namespace MechAccuracyPattern {
               percentOnAdjacent : number,
               percentOnNextToAdjacent : number) : AccuracyPattern {
     if (percentOnTarget + percentOnAdjacent + percentOnNextToAdjacent > 1) {
-      console.warn("Total damage percentage exceeds 1");
+      Util.warn("Total damage percentage exceeds 1");
     }
     return function(weaponDamage : WeaponDamage, range : number) : WeaponDamage {
       let transformedDamage = new MechModel.WeaponDamage({});
@@ -278,7 +278,7 @@ namespace MechAccuracyPattern {
         totalPercent += computedSeekerSpread.spread[component];
       }
       if (totalPercent > 1) {
-        console.warn("Seeker percentages over 100%:" + computedSeekerSpread.toString());
+        Util.warn("Seeker percentages over 100%:" + computedSeekerSpread.toString());
       }
       let totalDamage = weaponDamage.getTotalDamage();
       //transform totalDamage
@@ -344,7 +344,7 @@ namespace MechAccuracyPattern {
         totalPercent += Number(computedSpread[field]);
       }
       if (totalPercent > 1) {
-        console.warn("Direct fire percentages greater than 1: " + totalPercent);
+        Util.warn("Direct fire percentages greater than 1: " + totalPercent);
       }
 
       return accuracySpreadToAdjacent(computedSpread.target,

@@ -1,12 +1,10 @@
 - AUTOMATED UNIT TESTS!!!!!!
 
-- event queue and listeners 
-    (NOTE: rxjs is good performance wise, but not so good wrt garbage collection (requires explicit unsubscribe))
 - Mech details display (weapon damage summary)
 
 - See if it's worth moving all the added data to a single json file and fetching it at runtime.
   The total script size is now around 600k (96k compressed) and may affect initial load time.
-    One more reason to do this: Updates that affect addedData can be done without recompiling the app.
+    One more reason to do this: Updates that affect AddedData can be done without recompiling the app.
 - Set up a build process to automatically update generated game data.
 
 - LBX damage spread
@@ -22,8 +20,8 @@
 
 - touchhandler-caused slowdown on real mobile devices (chrome mobile).
     To replicate: load page in portrait orientation, and scroll down by touching 
-    one of the mech panels (triggering a touch handler). Animation slows down considerably
-    compared to a version with touch handlers disabled.
+    one of the mech panels (triggering a touch handler). Animation when running the simulation 
+    slows down considerably compared to a version with touch handlers disabled.
     Current workaround: Only put in touchhandlers when a mechpanel is being moved. Seems to solve
     the performance issue.
 - slow performance on dragover when there are many mechs (too much hit test and layouting, see what causes it)

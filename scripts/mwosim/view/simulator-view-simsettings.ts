@@ -3,6 +3,8 @@
 
 namespace MechViewSimSettings {
   import SimulatorParameters = SimulatorSettings.SimulatorParameters;
+  import EventType = MechModelCommon.EventType;
+
   type SimParamUserSettings = SimulatorSettings.SimParamUserSettings;
   type SimUserSettingValue = SimulatorSettings.SimUserSettingValue;
 
@@ -10,7 +12,7 @@ namespace MechViewSimSettings {
     let rangeJQ = $("#rangeInput");
     let rangeButtonElem = document.getElementById("setRangeButton");
     let rangeButton =
-      new MechViewWidgets.Button(rangeButtonElem,
+      new Widgets.Button(rangeButtonElem,
                                       function(this : Element) {
       let buttonMode = $(this).attr("data-button-mode");
       if (buttonMode === "not-editing") {
@@ -45,11 +47,11 @@ namespace MechViewSimSettings {
     //not strictly necessary, but it makes it explicit that we're changing
     //the simulator parameters. Handy when searching for code that changes
     //app state
-    MechViewRouter.modifyAppState();
     MechModelView.setSimulatorParameters(simulatorParameters);
     $("#setRangeButton")
       .attr("data-button-mode", "not-editing")
       .html("Change");
+    MechModelView.getEventQueue().queueEvent({type : EventType.APP_STATE_CHANGE});
   };
 
   export var updateSimSettingsView =
@@ -71,7 +73,7 @@ namespace MechViewSimSettings {
     constructor(simSettings : SimulatorParameters) {
       this.simSettings = simSettings;
 
-      let settingsDiv = MechViewWidgets.cloneTemplate("simSettings-template");
+      let settingsDiv = Widgets.cloneTemplate("simSettings-template");
       this.domElement = settingsDiv;
       this.propertyMap = new Map();
 
@@ -102,7 +104,7 @@ namespace MechViewSimSettings {
       let settingsList = SimulatorParameters.getUserSettings();
       let entryListJQ = $(this.domElement).find(".simSettingsList");
       for (let entry of settingsList) {
-        let entryDiv = MechViewWidgets.cloneTemplate("simSettingsEntry-template");
+        let entryDiv = Widgets.cloneTemplate("simSettingsEntry-template");
         let entryJQ = $(entryDiv)
                           .attr("id", this.settingEntryId(entry.property))
                           .attr("data-property", entry.property);
@@ -140,11 +142,11 @@ namespace MechViewSimSettings {
     let simulatorParameters = SimulatorSettings.getSimulatorParameters();
 
     let dialog = new SettingsDialog(simulatorParameters);
-    MechViewWidgets.setModal(dialog.domElement, "simSettingsDialog");
-    MechViewWidgets.showModal();
+    Widgets.setModal(dialog.domElement, "simSettingsDialog");
+    Widgets.showModal();
   }
 
   export var hideSettingsDialog = function() {
-    MechViewWidgets.hideModal("simSettingsDialog");
+    Widgets.hideModal("simSettingsDialog");
   }
 }

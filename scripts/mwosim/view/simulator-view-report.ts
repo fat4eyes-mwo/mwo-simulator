@@ -9,7 +9,7 @@ namespace MechViewReport {
 
     constructor() {
       let victoryReportDiv =
-          MechViewWidgets.cloneTemplate("victoryReport-template");
+          Widgets.cloneTemplate("victoryReport-template");
       let reportJQ =$(victoryReportDiv).attr("id", "victoryReport");
       this.domElement = victoryReportDiv;
 
@@ -50,7 +50,7 @@ namespace MechViewReport {
 
     constructor(team : Team) {
       let teamReport = MechModelView.getTeamReport(team);
-      let teamReportDiv = MechViewWidgets.cloneTemplate("teamReport-template");
+      let teamReportDiv = Widgets.cloneTemplate("teamReport-template");
       let teamReportJQ = $(teamReportDiv)
                             .attr("id", this.teamReportId(team))
                             .addClass(team);
@@ -110,17 +110,17 @@ namespace MechViewReport {
     domElement : Element;
 
     constructor(teamReport : MechModelView.TeamReport) {
-      let tableDiv = MechViewWidgets.cloneTemplate("mechBreakdownTable-template");
+      let tableDiv = Widgets.cloneTemplate("mechBreakdownTable-template");
       this.domElement = tableDiv;
       //header
       let mechBreakdownHeaderDiv =
-          MechViewWidgets.cloneTemplate("mechBreakdownHeader-template");
+          Widgets.cloneTemplate("mechBreakdownHeader-template");
       $(mechBreakdownHeaderDiv)
         .removeAttr("id")
         .appendTo(tableDiv);
       for (let mechReport of teamReport.mechReports) {
         let mechBreakdownRowDiv =
-            MechViewWidgets.cloneTemplate("mechBreakdownRow-template");
+            Widgets.cloneTemplate("mechBreakdownRow-template");
         let rowJQ = $(mechBreakdownRowDiv)
                       .removeAttr("id")
                       .appendTo(tableDiv);
@@ -144,17 +144,17 @@ namespace MechViewReport {
     domElement : Element;
 
     constructor(teamReport : MechModelView.TeamReport) {
-      let tableDiv = MechViewWidgets.cloneTemplate("weaponBreakdownTable-template");
+      let tableDiv = Widgets.cloneTemplate("weaponBreakdownTable-template");
       this.domElement = tableDiv;
       let weaponBreakdownHeaderDiv =
-          MechViewWidgets.cloneTemplate("weaponBreakdownHeader-template");
+          Widgets.cloneTemplate("weaponBreakdownHeader-template");
       $(weaponBreakdownHeaderDiv)
         .removeAttr("id")
         .appendTo(tableDiv);
       let teamWeaponStats = teamReport.getWeaponStats();
       for (let weaponStatEntry of teamWeaponStats) {
         let weaponBreakdownRowDiv =
-            MechViewWidgets.cloneTemplate("weaponBreakdownRow-template");
+            Widgets.cloneTemplate("weaponBreakdownRow-template");
         let rowJQ = $(weaponBreakdownRowDiv)
                       .removeAttr("id")
                       .appendTo(tableDiv);
@@ -169,11 +169,11 @@ namespace MechViewReport {
 
   export var showVictoryReport = function() {
     let teamReport = new MechViewReport.VictoryReport();
-    MechViewWidgets.setModal(teamReport.domElement, "wide");
-    MechViewWidgets.showModal();
+    Widgets.setModal(teamReport.domElement, "wide");
+    Widgets.showModal();
   }
 
   export var hideVictoryReport = function() {
-    MechViewWidgets.hideModal("wide");
+    Widgets.hideModal("wide");
   }
 }

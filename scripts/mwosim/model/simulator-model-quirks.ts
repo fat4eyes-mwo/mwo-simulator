@@ -42,7 +42,7 @@ namespace MechModelQuirks {
       } else if (lastNameComponent === "additive") {
         return prefix + String(this.value);
       } else {
-        console.warn(Error("Unexpected quirk type: " + this.name));
+        Util.warn(Error("Unexpected quirk type: " + this.name));
         return String(this.value);
       }
     }
@@ -132,7 +132,7 @@ namespace MechModelQuirks {
         }
       }
     } else {
-      console.warn("Unable to find CT omnipod for " + smurfyMechInfo.name);
+      Util.warn("Unable to find CT omnipod for " + smurfyMechInfo.name);
     }
     return ret;
   }
@@ -327,7 +327,7 @@ namespace MechModelQuirks {
       }
     }
     if (ret.length === 0) {
-      console.warn(Error("Unable to match skill: " + skillName));
+      Util.warn(Error("Unable to match skill: " + skillName));
     }
     return ret;
   }
