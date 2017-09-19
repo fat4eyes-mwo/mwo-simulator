@@ -47,9 +47,9 @@ var AddedData;
         }
     };
 })(AddedData || (AddedData = {}));
-//Generated from Game/mechs/*.pak on Tue, 22 Aug 2017 01:59:53 GMT
+//Generated from Game/mechs/*.pak on Tue, 19 Sep 2017 20:02:34 GMT
 var AddedData;
-//Generated from Game/mechs/*.pak on Tue, 22 Aug 2017 01:59:53 GMT
+//Generated from Game/mechs/*.pak on Tue, 19 Sep 2017 20:02:34 GMT
 (function (AddedData) {
     AddedData._AddedOmnipodData = {
         "adr-prime": {
@@ -1547,7 +1547,7 @@ var AddedData;
             "setBonusQuirks": [
                 {
                     "name": "missile_cooldown_multiplier",
-                    "value": -0.2,
+                    "value": -0.1,
                     "translated_name": "MISSILE COOLDOWN"
                 },
                 {
@@ -2771,14 +2771,14 @@ var AddedData;
                     "translated_name": "XP Bonus"
                 },
                 {
-                    "name": "energy_heat_multiplier",
-                    "value": -0.05,
-                    "translated_name": "Energy Heat"
-                },
-                {
                     "name": "clanerppc_velocity_multiplier",
                     "value": 0.05,
                     "translated_name": "CLAN ER PPC VELOCITY"
+                },
+                {
+                    "name": "pulselaser_duration_multiplier",
+                    "value": -0.05,
+                    "translated_name": "PULSE LASER DURATION"
                 }
             ]
         },
@@ -2804,9 +2804,9 @@ var AddedData;
         }
     };
 })(AddedData || (AddedData = {}));
-//Generated from GameData.pak Tue, 22 Aug 2017 01:59:50 GMT
+//Generated from GameData.pak Tue, 19 Sep 2017 20:01:45 GMT
 var AddedData;
-//Generated from GameData.pak Tue, 22 Aug 2017 01:59:50 GMT
+//Generated from GameData.pak Tue, 19 Sep 2017 20:01:45 GMT
 (function (AddedData) {
     AddedData._AddedWeaponData = {
         "AutoCannon20": {
@@ -3801,7 +3801,7 @@ var AddedData;
         },
         "HeavyGaussRifle": {
             "ammo_per_shot": 1,
-            "spinup": 1,
+            "spinup": 0.75,
             "volleyDelay": 0,
             "ranges": [
                 {
@@ -3965,7 +3965,7 @@ var AddedData;
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 450,
+                    "start": 550,
                     "damageModifier": 1,
                     "interpolationToNextRange": "linear"
                 }
@@ -3981,7 +3981,7 @@ var AddedData;
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 450,
+                    "start": 550,
                     "damageModifier": 1,
                     "interpolationToNextRange": "linear"
                 }
@@ -3997,7 +3997,7 @@ var AddedData;
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 450,
+                    "start": 550,
                     "damageModifier": 1,
                     "interpolationToNextRange": "linear"
                 }
@@ -4013,7 +4013,7 @@ var AddedData;
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 450,
+                    "start": 550,
                     "damageModifier": 1,
                     "interpolationToNextRange": "linear"
                 }
@@ -5914,9 +5914,9 @@ var ExternalSkillTrees;
         "Vent Calibration": "VentCalibration"
     };
 })(ExternalSkillTrees || (ExternalSkillTrees = {}));
-//Generated from GameData.pak on Tue, 22 Aug 2017 01:59:50 GMT
+//Generated from GameData.pak on Tue, 19 Sep 2017 20:01:45 GMT
 var AddedData;
-//Generated from GameData.pak on Tue, 22 Aug 2017 01:59:50 GMT
+//Generated from GameData.pak on Tue, 19 Sep 2017 20:01:45 GMT
 (function (AddedData) {
     AddedData._SkillTreeData = {
         "Range": {
@@ -7721,7 +7721,7 @@ var AddedData;
                     "quirkTranslatedName": "STRIKE SHELLS",
                     "quirkValues": [
                         {
-                            "quirkValue": 0.25
+                            "quirkValue": 0.15
                         }
                     ]
                 },
@@ -7730,7 +7730,7 @@ var AddedData;
                     "quirkTranslatedName": "STRIKE DURATION",
                     "quirkValues": [
                         {
-                            "quirkValue": 0.25
+                            "quirkValue": 0.15
                         }
                     ]
                 }

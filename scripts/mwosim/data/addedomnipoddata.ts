@@ -1,4 +1,4 @@
-//Generated from Game/mechs/*.pak on Tue, 22 Aug 2017 01:59:53 GMT
+//Generated from Game/mechs/*.pak on Tue, 19 Sep 2017 20:02:34 GMT
 namespace AddedData {
   export var _AddedOmnipodData : {[index:string] : any} = {
 	"adr-prime": {
@@ -1496,7 +1496,7 @@ namespace AddedData {
 		"setBonusQuirks": [
 			{
 				"name": "missile_cooldown_multiplier",
-				"value": -0.2,
+				"value": -0.1,
 				"translated_name": "MISSILE COOLDOWN"
 			},
 			{
@@ -2720,14 +2720,14 @@ namespace AddedData {
 				"translated_name": "XP Bonus"
 			},
 			{
-				"name": "energy_heat_multiplier",
-				"value": -0.05,
-				"translated_name": "Energy Heat"
-			},
-			{
 				"name": "clanerppc_velocity_multiplier",
 				"value": 0.05,
 				"translated_name": "CLAN ER PPC VELOCITY"
+			},
+			{
+				"name": "pulselaser_duration_multiplier",
+				"value": -0.05,
+				"translated_name": "PULSE LASER DURATION"
 			}
 		]
 	},

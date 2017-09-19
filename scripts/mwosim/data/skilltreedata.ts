@@ -1,4 +1,4 @@
-//Generated from GameData.pak on Tue, 22 Aug 2017 01:59:50 GMT
+//Generated from GameData.pak on Tue, 19 Sep 2017 20:01:45 GMT
 namespace AddedData {
   export var _SkillTreeData : {[index:string] : AddedData.SkillTreeNode} = {
 	"Range": {
@@ -1803,7 +1803,7 @@ namespace AddedData {
 				"quirkTranslatedName": "STRIKE SHELLS",
 				"quirkValues": [
 					{
-						"quirkValue": 0.25
+						"quirkValue": 0.15
 					}
 				]
 			},
@@ -1812,7 +1812,7 @@ namespace AddedData {
 				"quirkTranslatedName": "STRIKE DURATION",
 				"quirkValues": [
 					{
-						"quirkValue": 0.25
+						"quirkValue": 0.15
 					}
 				]
 			}

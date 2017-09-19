@@ -1,4 +1,4 @@
-//Generated from GameData.pak Tue, 22 Aug 2017 01:59:50 GMT
+//Generated from GameData.pak Tue, 19 Sep 2017 20:01:45 GMT
 namespace AddedData {
 
 export var _AddedWeaponData : {[index:string] : any} = {
@@ -994,7 +994,7 @@ export var _AddedWeaponData : {[index:string] : any} = {
 	},
 	"HeavyGaussRifle": {
 		"ammo_per_shot": 1,
-		"spinup": 1,
+		"spinup": 0.75,
 		"volleyDelay": 0,
 		"ranges": [
 			{
@@ -1158,7 +1158,7 @@ export var _AddedWeaponData : {[index:string] : any} = {
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 450,
+				"start": 550,
 				"damageModifier": 1,
 				"interpolationToNextRange": "linear"
 			}
@@ -1174,7 +1174,7 @@ export var _AddedWeaponData : {[index:string] : any} = {
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 450,
+				"start": 550,
 				"damageModifier": 1,
 				"interpolationToNextRange": "linear"
 			}
@@ -1190,7 +1190,7 @@ export var _AddedWeaponData : {[index:string] : any} = {
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 450,
+				"start": 550,
 				"damageModifier": 1,
 				"interpolationToNextRange": "linear"
 			}
@@ -1206,7 +1206,7 @@ export var _AddedWeaponData : {[index:string] : any} = {
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 450,
+				"start": 550,
 				"damageModifier": 1,
 				"interpolationToNextRange": "linear"
 			}
