@@ -1,5 +1,6 @@
 // Place your settings in this file to overwrite default and user settings.
 {
     "tslint.exclude": "**/data/*.ts",
-    "scss.lint.emptyRules": "ignore"
+    "scss.lint.emptyRules": "ignore",
+    "gitlens.codeLens.enabled" : false
 }
