@@ -77,6 +77,7 @@ The main entry point of the program is in `scripts/main/simulator.ts`.
 
 # Update Info
 
+* 2017-10-20: Update app with data from 2017 Oct 18 patch.
 * 2017-09-20: Updated app with data from 2017 Sep 19 patch. Various internal refactorings (event queue).
 * 2017-08-22: Updated app with data from 2017 Aug 17 patch (various omnipod set quirk data).
 * 2017-08-17: Added support for drag and drop on touch devices.

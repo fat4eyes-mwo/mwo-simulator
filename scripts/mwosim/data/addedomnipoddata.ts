@@ -1,4 +1,4 @@
-//Generated from Game/mechs/*.pak on Tue, 19 Sep 2017 20:02:34 GMT
+//Generated from Game/mechs/*.pak on Thu, 19 Oct 2017 18:05:14 GMT
 namespace AddedData {
   export var _AddedOmnipodData : {[index:string] : any} = {
 	"adr-prime": {
@@ -233,6 +233,66 @@ namespace AddedData {
 				"name": "clanmediumpulselaser_range_multiplier",
 				"value": 0.05,
 				"translated_name": "Clan Medium Pulse Laser Range"
+			}
+		]
+	},
+	"acw-prime": {
+		"name": "acw-prime",
+		"setBonusQuirks": [
+			{
+				"name": "xpbonus_multiplier",
+				"value": 0.025,
+				"translated_name": "XP Bonus"
+			},
+			{
+				"name": "clanstreaksrm_cooldown_multiplier",
+				"value": -0.1,
+				"translated_name": "Clan Streak Cooldown"
+			},
+			{
+				"name": "missile_cooldown_multiplier",
+				"value": -0.05,
+				"translated_name": "MISSILE COOLDOWN"
+			}
+		]
+	},
+	"acw-a": {
+		"name": "acw-a",
+		"setBonusQuirks": [
+			{
+				"name": "xpbonus_multiplier",
+				"value": 0.025,
+				"translated_name": "XP Bonus"
+			},
+			{
+				"name": "energy_cooldown_multiplier",
+				"value": -0.1,
+				"translated_name": "ENERGY COOLDOWN"
+			},
+			{
+				"name": "missile_velocity_multiplier",
+				"value": 0.05,
+				"translated_name": "MISSILE VELOCITY"
+			}
+		]
+	},
+	"acw-p": {
+		"name": "acw-p",
+		"setBonusQuirks": [
+			{
+				"name": "xpbonus_multiplier",
+				"value": 0.025,
+				"translated_name": "XP Bonus"
+			},
+			{
+				"name": "missile_cooldown_multiplier",
+				"value": -0.1,
+				"translated_name": "MISSILE COOLDOWN"
+			},
+			{
+				"name": "turnlerp_all_multiplier",
+				"value": 0.1,
+				"translated_name": "TURN RATE"
 			}
 		]
 	},
@@ -1923,6 +1983,131 @@ namespace AddedData {
 				"name": "clanmachinegun_rof_multiplier",
 				"value": 0.15,
 				"translated_name": "MACHINE GUN ROF"
+			}
+		]
+	},
+	"nct-prime": {
+		"name": "nct-prime",
+		"setBonusQuirks": [
+			{
+				"name": "xpbonus_multiplier",
+				"value": 0.025,
+				"translated_name": "XP Bonus"
+			},
+			{
+				"name": "clanppc_velocity_multiplier",
+				"value": 0.05,
+				"translated_name": "Clan PPC Velocity"
+			},
+			{
+				"name": "erlaser_duration_multiplier",
+				"value": -0.05,
+				"translated_name": "ER LASER DURATION"
+			}
+		]
+	},
+	"nct-a": {
+		"name": "nct-a",
+		"setBonusQuirks": [
+			{
+				"name": "xpbonus_multiplier",
+				"value": 0.025,
+				"translated_name": "XP Bonus"
+			},
+			{
+				"name": "erlaser_duration_multiplier",
+				"value": -0.05,
+				"translated_name": "ER LASER DURATION"
+			},
+			{
+				"name": "energy_range_multiplier",
+				"value": 0.1,
+				"translated_name": "ENERGY RANGE"
+			}
+		]
+	},
+	"nct-b": {
+		"name": "nct-b",
+		"setBonusQuirks": [
+			{
+				"name": "xpbonus_multiplier",
+				"value": 0.025,
+				"translated_name": "XP Bonus"
+			},
+			{
+				"name": "energy_cooldown_multiplier",
+				"value": -0.1,
+				"translated_name": "ENERGY COOLDOWN"
+			},
+			{
+				"name": "targetdecayduration_additive",
+				"value": 0.5,
+				"translated_name": "TARGET DECAY"
+			}
+		]
+	},
+	"nct-c": {
+		"name": "nct-c",
+		"setBonusQuirks": [
+			{
+				"name": "xpbonus_multiplier",
+				"value": 0.025,
+				"translated_name": "XP Bonus"
+			},
+			{
+				"name": "ultraautocannon_jamchance_multiplier",
+				"value": -0.05,
+				"translated_name": "UAC JAM CHANCE"
+			},
+			{
+				"name": "energy_cooldown_multiplier",
+				"value": -0.05,
+				"translated_name": "ENERGY COOLDOWN"
+			}
+		]
+	},
+	"nct-d": {
+		"name": "nct-d",
+		"setBonusQuirks": [
+			{
+				"name": "xpbonus_multiplier",
+				"value": 0.025,
+				"translated_name": "XP Bonus"
+			},
+			{
+				"name": "heavylaser_duration_multiplier",
+				"value": -0.05,
+				"translated_name": "Heavy Laser Duration"
+			},
+			{
+				"name": "ballistic_cooldown_multiplier",
+				"value": -0.1,
+				"translated_name": "BALLISTIC COOLDOWN"
+			}
+		]
+	},
+	"nct-cc": {
+		"name": "nct-cc",
+		"setBonusQuirks": [
+			{
+				"name": "xpbonus_multiplier",
+				"value": 0.025,
+				"translated_name": "XP Bonus"
+			},
+			{
+				"name": "accellerp_all_multiplier",
+				"value": 0.1,
+				"translated_name": "ACCELERATION RATE"
+			},
+			{
+				"name": "decellerp_all_multiplier",
+				"value": 0.1,
+				"translated_name": "DECELERATION RATE"
+			},
+			{
+				"name": "turnlerp_all_multiplier",
+				"value": 0.1,
+				"translated_name": "TURN RATE"
 			}
 		]
 	},
