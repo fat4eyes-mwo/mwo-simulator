@@ -47,9 +47,9 @@ var AddedData;
         }
     };
 })(AddedData || (AddedData = {}));
-//Generated from Game/mechs/*.pak on Thu, 19 Oct 2017 18:05:14 GMT
+//Generated from Game/mechs/*.pak on Tue, 14 Nov 2017 20:13:17 GMT
 var AddedData;
-//Generated from Game/mechs/*.pak on Thu, 19 Oct 2017 18:05:14 GMT
+//Generated from Game/mechs/*.pak on Tue, 14 Nov 2017 20:13:17 GMT
 (function (AddedData) {
     AddedData._AddedOmnipodData = {
         "adr-prime": {
@@ -442,7 +442,7 @@ var AddedData;
                 },
                 {
                     "name": "all_cooldown_multiplier",
-                    "value": 0.05,
+                    "value": -0.05,
                     "translated_name": "COOLDOWN"
                 },
                 {
@@ -1377,6 +1377,26 @@ var AddedData;
                 }
             ]
         },
+        "kfx-g": {
+            "name": "kfx-g",
+            "setBonusQuirks": [
+                {
+                    "name": "xpbonus_multiplier",
+                    "value": 0.025,
+                    "translated_name": "XP Bonus"
+                },
+                {
+                    "name": "missile_cooldown_multiplier",
+                    "value": -0.1,
+                    "translated_name": "MISSILE COOLDOWN"
+                },
+                {
+                    "name": "energy_cooldown_multiplier",
+                    "value": -0.1,
+                    "translated_name": "ENERGY COOLDOWN"
+                }
+            ]
+        },
         "lbk-prime": {
             "name": "lbk-prime",
             "setBonusQuirks": [
@@ -1499,6 +1519,26 @@ var AddedData;
                     "name": "ballistic_cooldown_multiplier",
                     "value": -0.1,
                     "translated_name": "BALLISTIC COOLDOWN"
+                }
+            ]
+        },
+        "lbk-h": {
+            "name": "lbk-h",
+            "setBonusQuirks": [
+                {
+                    "name": "xpbonus_multiplier",
+                    "value": 0.025,
+                    "translated_name": "XP Bonus"
+                },
+                {
+                    "name": "energy_range_multiplier",
+                    "value": 0.05,
+                    "translated_name": "ENERGY RANGE"
+                },
+                {
+                    "name": "heavylaser_duration_multiplier",
+                    "value": -0.05,
+                    "translated_name": "Heavy Laser Duration"
                 }
             ]
         },
@@ -2989,9 +3029,9 @@ var AddedData;
         }
     };
 })(AddedData || (AddedData = {}));
-//Generated from GameData.pak Thu, 19 Oct 2017 18:04:23 GMT
+//Generated from GameData.pak Tue, 14 Nov 2017 20:12:30 GMT
 var AddedData;
-//Generated from GameData.pak Thu, 19 Oct 2017 18:04:23 GMT
+//Generated from GameData.pak Tue, 14 Nov 2017 20:12:30 GMT
 (function (AddedData) {
     AddedData._AddedWeaponData = {
         "AutoCannon20": {
@@ -6099,9 +6139,9 @@ var ExternalSkillTrees;
         "Vent Calibration": "VentCalibration"
     };
 })(ExternalSkillTrees || (ExternalSkillTrees = {}));
-//Generated from GameData.pak on Thu, 19 Oct 2017 18:04:23 GMT
+//Generated from GameData.pak on Tue, 14 Nov 2017 20:12:30 GMT
 var AddedData;
-//Generated from GameData.pak on Thu, 19 Oct 2017 18:04:23 GMT
+//Generated from GameData.pak on Tue, 14 Nov 2017 20:12:30 GMT
 (function (AddedData) {
     AddedData._SkillTreeData = {
         "Range": {
