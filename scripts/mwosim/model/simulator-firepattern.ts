@@ -91,7 +91,7 @@ namespace MechFirePattern {
   export var alphaNoOverheat =
       function (mech : Mech, range : number) : WeaponState[] {
     let mechState = mech.getMechState();
-    let weaponsToFire = [];
+    let weaponsToFire : WeaponState[] = [];
     //check if all weapons are ready
     for (let weaponState of mechState.weaponStateList) {
       if (!canFire(weaponState) && !weaponState.isJammed()) {
