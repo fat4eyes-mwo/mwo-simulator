@@ -1,6 +1,7 @@
 - AUTOMATED UNIT TESTS!!!!!!
 
 - Mech details display (weapon damage summary)
+- Simtime to real time ratio display (for performance checks)
 
 - See if it's worth moving all the added data to a single json file and fetching it at runtime.
   The total script size is now around 600k (96k compressed) and may affect initial load time.
