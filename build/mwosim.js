@@ -47,9 +47,9 @@ var AddedData;
         }
     };
 })(AddedData || (AddedData = {}));
-//Generated from Game/mechs/*.pak on Tue, 14 Nov 2017 20:13:17 GMT
+//Generated from Game/mechs/*.pak on Wed, 13 Dec 2017 18:21:52 GMT
 var AddedData;
-//Generated from Game/mechs/*.pak on Tue, 14 Nov 2017 20:13:17 GMT
+//Generated from Game/mechs/*.pak on Wed, 13 Dec 2017 18:21:52 GMT
 (function (AddedData) {
     AddedData._AddedOmnipodData = {
         "adr-prime": {
@@ -3029,9 +3029,9 @@ var AddedData;
         }
     };
 })(AddedData || (AddedData = {}));
-//Generated from GameData.pak Tue, 14 Nov 2017 20:12:30 GMT
+//Generated from GameData.pak Wed, 13 Dec 2017 18:21:23 GMT
 var AddedData;
-//Generated from GameData.pak Tue, 14 Nov 2017 20:12:30 GMT
+//Generated from GameData.pak Wed, 13 Dec 2017 18:21:23 GMT
 (function (AddedData) {
     AddedData._AddedWeaponData = {
         "AutoCannon20": {
@@ -4137,12 +4137,12 @@ var AddedData;
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 80,
+                    "start": 100,
                     "damageModifier": 1,
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 180,
+                    "start": 200,
                     "damageModifier": 0,
                     "interpolationToNextRange": "linear"
                 }
@@ -4182,7 +4182,7 @@ var AddedData;
         },
         "MRM10": {
             "ammo_per_shot": 10,
-            "volleyDelay": 0.05,
+            "volleyDelay": 0.0556,
             "ranges": [
                 {
                     "start": 0,
@@ -4198,7 +4198,7 @@ var AddedData;
         },
         "MRM20": {
             "ammo_per_shot": 20,
-            "volleyDelay": 0.025,
+            "volleyDelay": 0.0263,
             "ranges": [
                 {
                     "start": 0,
@@ -4214,7 +4214,7 @@ var AddedData;
         },
         "MRM30": {
             "ammo_per_shot": 30,
-            "volleyDelay": 0.0166,
+            "volleyDelay": 0.0172,
             "ranges": [
                 {
                     "start": 0,
@@ -4230,7 +4230,7 @@ var AddedData;
         },
         "MRM40": {
             "ammo_per_shot": 40,
-            "volleyDelay": 0.0125,
+            "volleyDelay": 0.0128,
             "ranges": [
                 {
                     "start": 0,
@@ -5205,12 +5205,12 @@ var AddedData;
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 80,
+                    "start": 100,
                     "damageModifier": 1,
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 160,
+                    "start": 200,
                     "damageModifier": 0,
                     "interpolationToNextRange": "linear"
                 }
@@ -6139,9 +6139,9 @@ var ExternalSkillTrees;
         "Vent Calibration": "VentCalibration"
     };
 })(ExternalSkillTrees || (ExternalSkillTrees = {}));
-//Generated from GameData.pak on Tue, 14 Nov 2017 20:12:30 GMT
+//Generated from GameData.pak on Wed, 13 Dec 2017 18:21:23 GMT
 var AddedData;
-//Generated from GameData.pak on Tue, 14 Nov 2017 20:12:30 GMT
+//Generated from GameData.pak on Wed, 13 Dec 2017 18:21:23 GMT
 (function (AddedData) {
     AddedData._SkillTreeData = {
         "Range": {
