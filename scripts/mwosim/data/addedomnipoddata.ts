@@ -1,4 +1,4 @@
-//Generated from Game/mechs/*.pak on Tue, 14 Nov 2017 20:13:17 GMT
+//Generated from Game/mechs/*.pak on Wed, 13 Dec 2017 18:21:52 GMT
 namespace AddedData {
   export var _AddedOmnipodData : {[index:string] : any} = {
 	"adr-prime": {
