@@ -9661,10 +9661,12 @@ var MechFirePattern;
         let weaponsToFire = [];
         //check if all weapons are ready
         for (let weaponState of mechState.weaponStateList) {
-            if (!canFire(weaponState) && !weaponState.isJammed()) {
+            if (!canFire(weaponState) && !weaponState.isJammed() && weaponState.active) {
+                //if any non-jammed, non-disabled weapon is not ready, do not fire
                 return [];
             }
         }
+        //fire all weapons if heat allows
         weaponsToFire = Array.from(mechState.weaponStateList);
         if (!willOverheat(mech, weaponsToFire)) {
             return weaponsToFire;
