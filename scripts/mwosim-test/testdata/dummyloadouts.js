@@ -144,6 +144,9 @@
 //EBJ Vomit test
 //http://www.4eye-labs.net/mwo-simulator/#s=a9534757324d54cba6f91449e2049dd1944c067428a020a6d45d9f2260b70826
 
+//clan single heat sink test
+//http://mwo.smurfy-net.de/mechlab#i=493&l=2e06bfb18195ee621ad93a520c957268b7e2d9d3
+
 //weaponless atlas
 //http://mwo.smurfy-net.de/mechlab#i=16&l=cb72e3e1264e3b8051193ab4e52686a71dba239c
 //Punching bag atlas
