@@ -17,7 +17,7 @@
 4. Click OK once mech is loaded from smurfy.
 5. Add more mechs if you want. Click the 'Range' Button if you want to change the engagement range.
 6. Click 'Run'.
-7. Click 'Permalink' to save changes and share your simulation.
+7. Click 'Save' to save changes and share your simulation.
 8. Click 'Reset Simulation' to bring dead mechs back to life and start again.
 
 # Slightly Less Quick Start Guide
@@ -29,7 +29,7 @@
 8. Click 'Details' to see the mech's quirks and skills.
 9. Click 'Skills'->'Load Skills' to load skills from [kitlaan](https://kitlaan.gitlab.io/mwoskill/).
 10. Click 'Run'.
-11. Click 'Permalink' to save changes and share your simulation.
+11. Click 'Save' to save changes and share your simulation.
 12. Click 'Reset Simulation' to bring dead mechs back to life and start again.
 
 # Guide for Reporting Bugs

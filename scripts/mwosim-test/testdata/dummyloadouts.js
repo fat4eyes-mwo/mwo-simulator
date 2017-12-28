@@ -146,6 +146,8 @@
 
 //clan single heat sink test
 //http://mwo.smurfy-net.de/mechlab#i=493&l=2e06bfb18195ee621ad93a520c957268b7e2d9d3
+//ams test
+//http://mwo.smurfy-net.de/mechlab#i=267&l=5fca49b264d4e979c4ae2267dff33be32635a85d
 
 //weaponless atlas
 //http://mwo.smurfy-net.de/mechlab#i=16&l=cb72e3e1264e3b8051193ab4e52686a71dba239c
