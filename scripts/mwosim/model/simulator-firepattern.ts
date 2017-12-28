@@ -165,10 +165,16 @@ namespace MechFirePattern {
   //Uses the useDoubleTap field of SimulatorParameters
   var canFire = function(weaponState : WeaponState) : boolean {
     let simParams = SimulatorSettings.getSimulatorParameters();
-    if (simParams.useDoubleTap) {
-      return weaponState.canFire();
+    if (weaponState.canDoubleTap()) {
+      //For double tap weapons, fire when possible if double tap is enabled, else wait for 
+      //weapon to completely cool down (i.e. get to ready state) before firing again.
+      if (simParams.useDoubleTap) {
+        return weaponState.canFire();
+      } else {
+        return weaponState.isReady();
+      }
     } else {
-      return weaponState.isReady();
+      return weaponState.canFire();
     }
   }
 

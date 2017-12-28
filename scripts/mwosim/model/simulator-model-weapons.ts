@@ -347,6 +347,7 @@ namespace MechModelWeapons {
     }
 
     abstract canFire() : boolean;
+    abstract canDoubleTap() : boolean;
 
     isReady() {
       return this.weaponCycle === WeaponCycle.READY;
@@ -409,6 +410,10 @@ namespace MechModelWeapons {
       this.durationLeft = 0;
     }
 
+    canDoubleTap() {
+      return false;
+    }
+
     fireWeapon() : WeaponStateChange {
       let newState = null;
       //if not ready to fire, proceed to next weapon
@@ -465,6 +470,10 @@ namespace MechModelWeapons {
       this.spoolupLeft = 0;
       this.jamLeft = 0;
       this.currShotsDuringCooldown = weaponInfo.shotsDuringCooldown;
+    }
+
+    canDoubleTap() {
+      return this.weaponInfo.shotsDuringCooldown > 0;
     }
 
     fireWeapon() : WeaponStateChange {
@@ -632,6 +641,10 @@ namespace MechModelWeapons {
       this.jamLeft = 0;
       this.jamBarProgress = 0; //0 to MAXJAM
       this.resetRampup();
+    }
+
+    canDoubleTap() {
+      return false;
     }
 
     hasJamBar() : boolean {

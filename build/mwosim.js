@@ -9722,11 +9722,18 @@ var MechFirePattern;
     //Uses the useDoubleTap field of SimulatorParameters
     var canFire = function (weaponState) {
         let simParams = SimulatorSettings.getSimulatorParameters();
-        if (simParams.useDoubleTap) {
-            return weaponState.canFire();
+        if (weaponState.canDoubleTap()) {
+            //For double tap weapons, fire when possible if double tap is enabled, else wait for 
+            //weapon to completely cool down (i.e. get to ready state) before firing again.
+            if (simParams.useDoubleTap) {
+                return weaponState.canFire();
+            }
+            else {
+                return weaponState.isReady();
+            }
         }
         else {
-            return weaponState.isReady();
+            return weaponState.canFire();
         }
     };
     var getNonAMSWeapons = function (mechState) {
@@ -10961,6 +10968,9 @@ var MechModelWeapons;
             super(weaponInfo, mechState);
             this.durationLeft = 0;
         }
+        canDoubleTap() {
+            return false;
+        }
         fireWeapon() {
             let newState = null;
             //if not ready to fire, proceed to next weapon
@@ -11015,6 +11025,9 @@ var MechModelWeapons;
             this.spoolupLeft = 0;
             this.jamLeft = 0;
             this.currShotsDuringCooldown = weaponInfo.shotsDuringCooldown;
+        }
+        canDoubleTap() {
+            return this.weaponInfo.shotsDuringCooldown > 0;
         }
         fireWeapon() {
             let newState = null;
@@ -11178,6 +11191,9 @@ var MechModelWeapons;
             this.jamLeft = 0;
             this.jamBarProgress = 0; //0 to MAXJAM
             this.resetRampup();
+        }
+        canDoubleTap() {
+            return false;
         }
         hasJamBar() {
             return this.weaponInfo.jamRampUpTime > 0;
