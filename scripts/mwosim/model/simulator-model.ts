@@ -1285,9 +1285,11 @@ namespace MechModel  {
 
   const ISHeatsinkName = "HeatSink_MkI";
   const ISDoubleHeatsinkName = "DoubleHeatSink_MkI";
+  const ClanSingleHeatsinkName = "HeatSink_MkI"; //TODO: Workaround for Clan Single Heatsinks. Ask smurfy about missing single heat sink data in modules.
   const ClanDoubleHeatsinkName = "ClanDoubleHeatSink";
   var ISSingleHeatsinkId : string;
   var ISDoubleHeatsinkId : string;
+  var ClanSingleHeatsinkId : string;
   var ClanDoubleHeatsinkId : string;
   const heatsinkType = "CHeatSinkStats";
   var initHeatsinkIds = function() : void {
@@ -1299,9 +1301,14 @@ namespace MechModel  {
       if (moduleData.type === heatsinkType) {
         if (moduleData.name === ISHeatsinkName) {
           ISSingleHeatsinkId = moduleId;
-        } else if (moduleData.name === ISDoubleHeatsinkName) {
+        } 
+        if (moduleData.name === ISDoubleHeatsinkName) {
           ISDoubleHeatsinkId = moduleId;
-        } else if (moduleData.name === ClanDoubleHeatsinkName) {
+        } 
+        if (moduleData.name === ClanSingleHeatsinkName) {
+          ClanSingleHeatsinkId = moduleId; 
+        } 
+        if (moduleData.name === ClanDoubleHeatsinkName) {
           ClanDoubleHeatsinkId = moduleId;
         }
       }
@@ -1575,6 +1582,7 @@ namespace MechModel  {
     var upgradeToIdMap : {[index:string] : string} = {
       "STANDARD HEAT SINK" : ISSingleHeatsinkId,
       "DOUBLE HEAT SINK" : ISDoubleHeatsinkId,
+      "CLAN STANDARD HEAT SINK" : ClanSingleHeatsinkId, 
       "CLAN DOUBLE HEAT SINK" : ClanDoubleHeatsinkId
     };
     for (let mechUpgrade of smurfyMechLoadout.upgrades) {
