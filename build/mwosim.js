@@ -9593,7 +9593,8 @@ var MechFirePattern;
     MechFirePattern.alphaAtZeroHeat = function (mech, range) {
         let mechState = mech.getMechState();
         if (mechState.heatState.currHeat <= 0) {
-            return getNonAMSWeapons(mechState);
+            return getNonAMSWeapons(mechState.weaponStateList)
+                .filter((weaponState) => willDoDamage(weaponState, range));
         }
         else {
             return null;
@@ -9602,7 +9603,7 @@ var MechFirePattern;
     MechFirePattern.maximizeWeapon = function (sortAtRangeFunction) {
         return function (mech, range) {
             let mechState = mech.getMechState();
-            let sortedWeapons = Array.from(getNonAMSWeapons(mechState));
+            let sortedWeapons = Array.from(getNonAMSWeapons(mechState.weaponStateList));
             //sort weaponsToFire by damage/heat at the given range in decreasing order
             let sortFunction = sortAtRangeFunction(range);
             sortedWeapons.sort(sortFunction);
@@ -9660,14 +9661,15 @@ var MechFirePattern;
         let mechState = mech.getMechState();
         let weaponsToFire = [];
         //check if all weapons are ready
-        for (let weaponState of getNonAMSWeapons(mechState)) {
+        for (let weaponState of getNonAMSWeapons(mechState.weaponStateList)) {
             if (!canFire(weaponState) && !weaponState.isJammed() && weaponState.active) {
                 //if any non-jammed, non-disabled weapon is not ready, do not fire
                 return [];
             }
         }
         //fire all weapons if heat allows
-        weaponsToFire = Array.from(getNonAMSWeapons(mechState));
+        weaponsToFire = Array.from(getNonAMSWeapons(mechState.weaponStateList))
+            .filter((weaponState) => willDoDamage(weaponState, range));
         if (!willOverheat(mech, weaponsToFire)) {
             return weaponsToFire;
         }
@@ -9678,7 +9680,7 @@ var MechFirePattern;
     MechFirePattern.maxFireNoGhostHeat = function (mech, range) {
         let mechState = mech.getMechState();
         let weaponsToFire = [];
-        for (let weaponState of getNonAMSWeapons(mechState)) {
+        for (let weaponState of getNonAMSWeapons(mechState.weaponStateList)) {
             if (!canFire(weaponState) || !willDoDamage(weaponState, range)) {
                 continue;
             }
@@ -9693,7 +9695,7 @@ var MechFirePattern;
     MechFirePattern.fireWhenReady = function (mech, range) {
         let mechState = mech.getMechState();
         let weaponsToFire = [];
-        for (let weaponState of getNonAMSWeapons(mechState)) {
+        for (let weaponState of getNonAMSWeapons(mechState.weaponStateList)) {
             if (weaponState.weaponCycle === WeaponCycle.READY) {
                 weaponsToFire.push(weaponState);
             }
@@ -9736,8 +9738,8 @@ var MechFirePattern;
             return weaponState.canFire();
         }
     };
-    var getNonAMSWeapons = function (mechState) {
-        return mechState.weaponStateList.filter((weaponState) => {
+    var getNonAMSWeapons = function (weaponStateList) {
+        return weaponStateList.filter((weaponState) => {
             return weaponState.weaponInfo.type !== "AMS";
         });
     };
