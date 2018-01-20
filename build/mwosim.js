@@ -10638,7 +10638,7 @@ var MechModelSkills;
             return skillQuirks;
         }
     }
-    KitlaanSkillLoader.KITLAAN_PREFIX = "https://kitlaan.gitlab.io/mwoskill/archive/json/";
+    KitlaanSkillLoader.KITLAAN_PREFIX = "https://kitlaan.gitlab.io/mwoskill_json/json/";
     KitlaanSkillLoader.JSON_BIN_PREFIX = "https://jsonbin.io/b/";
     KitlaanSkillLoader.type = "kitlaan";
 })(MechModelSkills || (MechModelSkills = {}));
