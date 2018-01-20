@@ -24,10 +24,11 @@ namespace MechModelSkills {
     urlPrefix: string,
     hash: string,
     state: string,
+    isJsonbin : boolean,
   }
   class KitlaanSkillLoader implements SkillLoader {
     private static readonly KITLAAN_PREFIX = "https://kitlaan.gitlab.io/mwoskill_json/json/";
-    private static readonly JSON_BIN_PREFIX = "https://jsonbin.io/b/";
+    private static readonly JSON_BIN_PREFIX = "http://api.jsonbin.io/b/";
     public static readonly type = "kitlaan";
     private state: string;
 
@@ -49,15 +50,18 @@ namespace MechModelSkills {
       let urlPrefix = null;
       const JsonBinMarkerPrefix = "jsonbin1.";
       let hash;
+      let isJsonbin = false;
       if (state.startsWith(JsonBinMarkerPrefix)) {
         hash = state.substring(JsonBinMarkerPrefix.length);
         urlPrefix = KitlaanSkillLoader.JSON_BIN_PREFIX;
+        isJsonbin = true;
       } else {
         hash = state;
         urlPrefix = KitlaanSkillLoader.KITLAAN_PREFIX;
+        isJsonbin = false;
       }
       return {
-        urlPrefix, hash, state
+        urlPrefix, hash, state, isJsonbin
       };
     }
 
@@ -106,8 +110,10 @@ namespace MechModelSkills {
           type: 'GET',
           dataType: 'JSON'
         })
-          .done(function (ajaxData: any) {
-            resolve(ajaxData);
+          .done(function (ajaxResponse: any) {
+            let resolveData : ExternalSkillTrees.KitlaanSkillTree = ajaxResponse;
+            //TODO: See what kitlaan's solution to the snippet wrapper on jsonbin is
+            resolve(resolveData);
           })
           .catch(function (err: any) {
             reject(Error(err));

@@ -10551,16 +10551,19 @@ var MechModelSkills;
             let urlPrefix = null;
             const JsonBinMarkerPrefix = "jsonbin1.";
             let hash;
+            let isJsonbin = false;
             if (state.startsWith(JsonBinMarkerPrefix)) {
                 hash = state.substring(JsonBinMarkerPrefix.length);
                 urlPrefix = KitlaanSkillLoader.JSON_BIN_PREFIX;
+                isJsonbin = true;
             }
             else {
                 hash = state;
                 urlPrefix = KitlaanSkillLoader.KITLAAN_PREFIX;
+                isJsonbin = false;
             }
             return {
-                urlPrefix, hash, state
+                urlPrefix, hash, state, isJsonbin
             };
         }
         loadSkillsFromState(state) {
@@ -10604,8 +10607,10 @@ var MechModelSkills;
                     type: 'GET',
                     dataType: 'JSON'
                 })
-                    .done(function (ajaxData) {
-                    resolve(ajaxData);
+                    .done(function (ajaxResponse) {
+                    let resolveData = ajaxResponse;
+                    //TODO: See what kitlaan's solution to the snippet wrapper on jsonbin is
+                    resolve(resolveData);
                 })
                     .catch(function (err) {
                     reject(Error(err));
@@ -10639,7 +10644,7 @@ var MechModelSkills;
         }
     }
     KitlaanSkillLoader.KITLAAN_PREFIX = "https://kitlaan.gitlab.io/mwoskill_json/json/";
-    KitlaanSkillLoader.JSON_BIN_PREFIX = "https://jsonbin.io/b/";
+    KitlaanSkillLoader.JSON_BIN_PREFIX = "http://api.jsonbin.io/b/";
     KitlaanSkillLoader.type = "kitlaan";
 })(MechModelSkills || (MechModelSkills = {}));
 //Weapon state classes

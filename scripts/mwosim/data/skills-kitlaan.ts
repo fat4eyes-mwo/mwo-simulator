@@ -3,6 +3,9 @@ namespace ExternalSkillTrees {
   export interface SkillNameMap {
     [index:string] : string;
   }
+  export interface JSONBinKitlaanData {
+    snipped: KitlaanSkillTree
+  }
   export interface KitlaanSkillTree {
     mwoskill: string;
     ver: string;
