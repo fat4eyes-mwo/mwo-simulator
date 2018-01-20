@@ -27,6 +27,7 @@ $button-hover-bgcolor: rgb(255, 255, 30);
 $bonus-color : rgb(50, 150, 50);
 $malus-color : rgb(150, 50, 50);
 $noeffect-color : rgb(120, 120, 120);
+$notice-color: red;
 
 /*Main panel styles*/
 body {
@@ -192,6 +193,10 @@ div {
 .byline {
   font-size: 0.8em;
   color: $primary-font-color;
+}
+
+.notice {
+  color: $notice-color;
 }
 
 #controlPanelContainer {
