@@ -10551,19 +10551,16 @@ var MechModelSkills;
             let urlPrefix = null;
             const JsonBinMarkerPrefix = "jsonbin1.";
             let hash;
-            let isJsonbin = false;
             if (state.startsWith(JsonBinMarkerPrefix)) {
                 hash = state.substring(JsonBinMarkerPrefix.length);
                 urlPrefix = KitlaanSkillLoader.JSON_BIN_PREFIX;
-                isJsonbin = true;
             }
             else {
                 hash = state;
                 urlPrefix = KitlaanSkillLoader.KITLAAN_PREFIX;
-                isJsonbin = false;
             }
             return {
-                urlPrefix, hash, state, isJsonbin
+                urlPrefix, hash, state
             };
         }
         loadSkillsFromState(state) {
@@ -10609,7 +10606,6 @@ var MechModelSkills;
                 })
                     .done(function (ajaxResponse) {
                     let resolveData = ajaxResponse;
-                    //TODO: See what kitlaan's solution to the snippet wrapper on jsonbin is
                     resolve(resolveData);
                 })
                     .catch(function (err) {
