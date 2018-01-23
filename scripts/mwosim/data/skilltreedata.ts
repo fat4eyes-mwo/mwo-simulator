@@ -1,4 +1,4 @@
-//Generated from GameData.pak on Wed, 13 Dec 2017 18:21:23 GMT
+//Generated from GameData.pak on Tue, 23 Jan 2018 19:31:26 GMT
 namespace AddedData {
   export var _SkillTreeData : {[index:string] : AddedData.SkillTreeNode} = {
 	"Range": {
@@ -71,7 +71,7 @@ namespace AddedData {
 					},
 					{
 						"faction": "Clan",
-						"quirkValue": -0.0075
+						"quirkValue": -0.006
 					}
 				]
 			}

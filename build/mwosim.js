@@ -47,9 +47,9 @@ var AddedData;
         }
     };
 })(AddedData || (AddedData = {}));
-//Generated from Game/mechs/*.pak on Wed, 13 Dec 2017 18:21:52 GMT
+//Generated from Game/mechs/*.pak on Tue, 23 Jan 2018 19:31:54 GMT
 var AddedData;
-//Generated from Game/mechs/*.pak on Wed, 13 Dec 2017 18:21:52 GMT
+//Generated from Game/mechs/*.pak on Tue, 23 Jan 2018 19:31:54 GMT
 (function (AddedData) {
     AddedData._AddedOmnipodData = {
         "adr-prime": {
@@ -3029,9 +3029,9 @@ var AddedData;
         }
     };
 })(AddedData || (AddedData = {}));
-//Generated from GameData.pak Wed, 13 Dec 2017 18:21:23 GMT
+//Generated from GameData.pak Tue, 23 Jan 2018 19:31:26 GMT
 var AddedData;
-//Generated from GameData.pak Wed, 13 Dec 2017 18:21:23 GMT
+//Generated from GameData.pak Tue, 23 Jan 2018 19:31:26 GMT
 (function (AddedData) {
     AddedData._AddedWeaponData = {
         "AutoCannon20": {
@@ -4035,7 +4035,7 @@ var AddedData;
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 180,
+                    "start": 220,
                     "damageModifier": 1,
                     "interpolationToNextRange": "linear"
                 },
@@ -4672,7 +4672,7 @@ var AddedData;
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 561,
+                    "start": 480,
                     "damageModifier": 0,
                     "interpolationToNextRange": "linear"
                 }
@@ -6139,9 +6139,9 @@ var ExternalSkillTrees;
         "Vent Calibration": "VentCalibration"
     };
 })(ExternalSkillTrees || (ExternalSkillTrees = {}));
-//Generated from GameData.pak on Wed, 13 Dec 2017 18:21:23 GMT
+//Generated from GameData.pak on Tue, 23 Jan 2018 19:31:26 GMT
 var AddedData;
-//Generated from GameData.pak on Wed, 13 Dec 2017 18:21:23 GMT
+//Generated from GameData.pak on Tue, 23 Jan 2018 19:31:26 GMT
 (function (AddedData) {
     AddedData._SkillTreeData = {
         "Range": {
@@ -6214,7 +6214,7 @@ var AddedData;
                         },
                         {
                             "faction": "Clan",
-                            "quirkValue": -0.0075
+                            "quirkValue": -0.006
                         }
                     ]
                 }
