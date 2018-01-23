@@ -4,8 +4,8 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "taskName": "tsc vs build",
-            "command": "tsc -p tsconfig.json --diagnostics",
+            "label": "mwosim tsc build",
+            "command": "./compile.bat",
             "type": "shell",
             "problemMatcher": [
                 "$tsc"
