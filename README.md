@@ -77,6 +77,7 @@ The main entry point of the program is in `scripts/main/simulator.ts`.
 
 # Update Info
 
+* 2017-01-31: Update for quirk name changes (ppc->ppcfamily) and added MRM quirk data. Internal testing changes (testListQuirks).
 * 2017-01-24: Fixes for kitlaan jsonbin api changes, update app with data from 2018 Jan 23 patch.
 * 2017-12-28: Fixes for some breaking reported bugs (finally). Thanks for all the bug reports.
 * 2017-12-14: Update app with data from 2017 Dec 13 patch.
