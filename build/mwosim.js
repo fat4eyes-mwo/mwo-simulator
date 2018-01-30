@@ -5877,7 +5877,7 @@ var MechModelQuirksData;
         "mediumpulselaser": ["MediumPulseLaser", "ClanMediumPulseLaser"],
         "nonpulselaser": ["SmallLaser", "MediumLaser", "ERLargeLaser", "LargeLaser",
             "ClanERSmallLaser", "ClanERMediumLaser", "ClanERLargeLaser"],
-        "ppc": ["ERPPC", "PPC", "ClanERPPC", "LightPPC", "HeavyPPC", "SnubNosePPC"],
+        "ppcfamily": ["ERPPC", "PPC", "ClanERPPC", "LightPPC", "HeavyPPC", "SnubNosePPC"],
         "pulselaser": ["LargePulseLaser", "MediumPulseLaser", "SmallPulseLaser",
             "ClanSmallPulseLaser", "ClanMediumPulseLaser", "ClanLargePulseLaser"],
         "ultraautocannon": ["UltraAutoCannon5", "UltraAutoCannon2", "UltraAutoCannon10", "UltraAutoCannon20",
@@ -5929,7 +5929,8 @@ var MechModelQuirksData;
         "rotaryautocannon": ["RotaryAutoCannon2", "RotaryAutoCannon5"],
         "srm": ["SRM2", "SRM2_Artemis", "SRM4", "SRM4_Artemis", "SRM6", "SRM6_Artemis",
             "ClanSRM2", "ClanSRM2_Artemis", "ClanSRM4", "ClanSRM4_Artemis", "ClanSRM6", "ClanSRM6_Artemis"],
-        "streaksrm": ["StreakSRM2", "StreakSRM4", "StreakSRM6", "ClanStreakSRM2", "ClanStreakSRM4", "ClanStreakSRM6"]
+        "streaksrm": ["StreakSRM2", "StreakSRM4", "StreakSRM6", "ClanStreakSRM2", "ClanStreakSRM4", "ClanStreakSRM6"],
+        "mrm": ["MRM10", "MRM20", "MRM30", "MRM40"],
     };
     //ammo skill quirk name -> ammo type
     MechModelQuirksData._ammoCapacityMap = {
@@ -12504,6 +12505,22 @@ var MechModel;
         SmurfyCTOmnipods = flatData.ctOmnipodMap;
         MechModel.initAddedData();
     };
+    MechModel.getRawModelData = function () {
+        let weaponData = SmurfyWeaponData;
+        let ammoData = SmurfyAmmoData;
+        let mechData = SmurfyMechData;
+        let moduleData = SmurfyModuleData;
+        let omnipodData = SmurfyOmnipodData;
+        let ctOmnipodData = SmurfyCTOmnipods;
+        return {
+            weaponData,
+            ammoData,
+            mechData,
+            moduleData,
+            omnipodData,
+            ctOmnipodData,
+        };
+    };
     MechModel.getSmurfyMechData = function (smurfyMechId) {
         return SmurfyMechData[smurfyMechId];
     };
@@ -16362,33 +16379,34 @@ var MechTest;
         printTestDamageTransform(testDamage, accuracyPatternNext);
     };
     MechTest.testListQuirks = function () {
-        let quirkMap = {};
-        //mech quirks
-        for (let mechIdx in DummyMechData) {
-            if (!DummyMechData.hasOwnProperty(mechIdx)) {
-                continue;
-            }
-            let smurfyMech = DummyMechData[mechIdx];
-            let quirks = smurfyMech.details.quirks;
-            if (quirks) {
-                for (let quirkEntry of quirks) {
-                    if (!quirkMap[quirkEntry.name]) {
-                        quirkMap[quirkEntry.name] = quirkEntry;
+        MechModel.initModelData()
+            .then(function () {
+            Util.log("Loaded model data");
+            var rawModelData = MechModel.getRawModelData();
+            let quirkMap = {};
+            //mech quirks
+            let rawMechData = rawModelData.mechData;
+            for (let mechIdx in rawMechData) {
+                if (!rawMechData.hasOwnProperty(mechIdx)) {
+                    continue;
+                }
+                let smurfyMech = rawMechData[mechIdx];
+                let quirks = smurfyMech.details.quirks;
+                if (quirks) {
+                    for (let quirkEntry of quirks) {
+                        if (!quirkMap[quirkEntry.name]) {
+                            quirkMap[quirkEntry.name] = quirkEntry;
+                        }
                     }
                 }
             }
-        }
-        //omnipod quirks
-        for (let chassis in _DummyOmnipods) {
-            if (!_DummyOmnipods.hasOwnProperty(chassis)) {
-                continue;
-            }
-            let chassisOmnipods = _DummyOmnipods[chassis];
-            for (let omnipodId in chassisOmnipods) {
-                if (!chassisOmnipods.hasOwnProperty(omnipodId)) {
+            //omnipod quirks
+            let rawOmnipodData = rawModelData.omnipodData;
+            for (let omnipodId in rawOmnipodData) {
+                if (!rawOmnipodData.hasOwnProperty(omnipodId)) {
                     continue;
                 }
-                let omnipodData = _DummyOmnipods[chassis][omnipodId];
+                let omnipodData = rawOmnipodData[omnipodId];
                 let quirks = omnipodData.configuration.quirks;
                 if (quirks) {
                     for (let quirkEntry of quirks) {
@@ -16398,52 +16416,55 @@ var MechTest;
                     }
                 }
             }
-        }
-        //omnipod set quirks
-        for (let omnipodSetName in AddedData._AddedOmnipodData) {
-            if (!AddedData._AddedOmnipodData.hasOwnProperty(omnipodSetName)) {
-                continue;
-            }
-            let omnipodSet = AddedData._AddedOmnipodData[omnipodSetName];
-            for (let quirkEntry of omnipodSet.setBonusQuirks) {
-                if (!quirkMap[quirkEntry.name]) {
-                    quirkMap[quirkEntry.name] = quirkEntry;
+            //omnipod set quirks
+            for (let omnipodSetName in AddedData._AddedOmnipodData) {
+                if (!AddedData._AddedOmnipodData.hasOwnProperty(omnipodSetName)) {
+                    continue;
+                }
+                let omnipodSet = AddedData._AddedOmnipodData[omnipodSetName];
+                for (let quirkEntry of omnipodSet.setBonusQuirks) {
+                    if (!quirkMap[quirkEntry.name]) {
+                        quirkMap[quirkEntry.name] = quirkEntry;
+                    }
                 }
             }
-        }
-        //skill quirks
-        for (let skillName in AddedData._SkillTreeData) {
-            if (!AddedData._SkillTreeData.hasOwnProperty(skillName)) {
-                continue;
-            }
-            let skillNode = AddedData._SkillTreeData[skillName];
-            for (let skillEffect of skillNode.effects) {
-                let quirkEntry = {
-                    name: skillEffect.quirkName,
-                    translated_name: skillEffect.quirkTranslatedName,
-                    value: 0,
-                };
-                if (!quirkMap[quirkEntry.name]) {
-                    quirkMap[quirkEntry.name] = quirkEntry;
+            //skill quirks
+            for (let skillName in AddedData._SkillTreeData) {
+                if (!AddedData._SkillTreeData.hasOwnProperty(skillName)) {
+                    continue;
+                }
+                let skillNode = AddedData._SkillTreeData[skillName];
+                for (let skillEffect of skillNode.effects) {
+                    let quirkEntry = {
+                        name: skillEffect.quirkName,
+                        translated_name: skillEffect.quirkTranslatedName,
+                        value: 0,
+                    };
+                    if (!quirkMap[quirkEntry.name]) {
+                        quirkMap[quirkEntry.name] = quirkEntry;
+                    }
                 }
             }
-        }
-        //print out quirk list
-        let numQuirks = 0;
-        let sortedQuirkNames = [];
-        for (let quirkName in quirkMap) {
-            if (!quirkMap.hasOwnProperty(quirkName)) {
-                continue;
+            //print out quirk list
+            let numQuirks = 0;
+            let sortedQuirkNames = [];
+            for (let quirkName in quirkMap) {
+                if (!quirkMap.hasOwnProperty(quirkName)) {
+                    continue;
+                }
+                sortedQuirkNames.push(quirkName);
             }
-            sortedQuirkNames.push(quirkName);
-        }
-        sortedQuirkNames.sort();
-        for (let quirkName of sortedQuirkNames) {
-            let quirkEntry = quirkMap[quirkName];
-            Util.log(`${quirkEntry.name}\t${quirkEntry.translated_name}`);
-            numQuirks++;
-        }
-        Util.log("numQuirks : " + numQuirks);
+            sortedQuirkNames.sort();
+            for (let quirkName of sortedQuirkNames) {
+                let quirkEntry = quirkMap[quirkName];
+                Util.log(`${quirkEntry.name}\t${quirkEntry.translated_name}`);
+                numQuirks++;
+            }
+            Util.log("numQuirks : " + numQuirks);
+        })
+            .catch(function () {
+            Util.error("Unable to load model data");
+        });
     };
     MechTest.testSimulation = function () {
         //Use DummyData

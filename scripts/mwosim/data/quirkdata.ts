@@ -129,7 +129,7 @@ namespace MechModelQuirksData {
     "mediumpulselaser" : ["MediumPulseLaser", "ClanMediumPulseLaser"],
     "nonpulselaser" : ["SmallLaser", "MediumLaser", "ERLargeLaser", "LargeLaser",
               "ClanERSmallLaser", "ClanERMediumLaser", "ClanERLargeLaser"],
-    "ppc" : ["ERPPC", "PPC", "ClanERPPC", "LightPPC", "HeavyPPC", "SnubNosePPC"],
+    "ppcfamily" : ["ERPPC", "PPC", "ClanERPPC", "LightPPC", "HeavyPPC", "SnubNosePPC"],
     "pulselaser" : ["LargePulseLaser", "MediumPulseLaser", "SmallPulseLaser",
                         "ClanSmallPulseLaser", "ClanMediumPulseLaser", "ClanLargePulseLaser"],
     "ultraautocannon" : ["UltraAutoCannon5", "UltraAutoCannon2", "UltraAutoCannon10", "UltraAutoCannon20",
@@ -181,7 +181,8 @@ namespace MechModelQuirksData {
     "rotaryautocannon" : ["RotaryAutoCannon2", "RotaryAutoCannon5"],
     "srm" : ["SRM2", "SRM2_Artemis", "SRM4", "SRM4_Artemis", "SRM6", "SRM6_Artemis",
               "ClanSRM2", "ClanSRM2_Artemis", "ClanSRM4", "ClanSRM4_Artemis", "ClanSRM6", "ClanSRM6_Artemis"],
-    "streaksrm" : ["StreakSRM2", "StreakSRM4", "StreakSRM6", "ClanStreakSRM2", "ClanStreakSRM4", "ClanStreakSRM6"]
+    "streaksrm" : ["StreakSRM2", "StreakSRM4", "StreakSRM6", "ClanStreakSRM2", "ClanStreakSRM4", "ClanStreakSRM6"],
+    "mrm" : ["MRM10", "MRM20", "MRM30", "MRM40"],
   };
 
   //ammo skill quirk name -> ammo type

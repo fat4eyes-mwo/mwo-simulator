@@ -1,255 +1,254 @@
 ac_velocity_multiplier	AC VELOCITY
- accellerp_all_multiplier	ACCELERATION RATE
- advancedzoom_additive	ADVANCED ZOOM
- all_cooldown_multiplier	COOLDOWN
- all_heat_multiplier	HEAT GEN
- all_range_multiplier	RANGE
- all_velocity_multiplier	VELOCITY
- ammocapacity_ac10_additive	AC10 AMMO
- ammocapacity_ac20_additive	AC20 AMMO
- ammocapacity_ac2_additive	AC2 AMMO
- ammocapacity_ac5_additive	AC5 AMMO
- ammocapacity_cac10_additive	CLAN AC10 AMMO
- ammocapacity_cac20_additive	CLAN AC20 AMMO
- ammocapacity_cac2_additive	CLAN AC2 AMMO
- ammocapacity_cac5_additive	CLAN AC5 AMMO
- ammocapacity_catm_additive	CLAN ATM AMMO
- ammocapacity_cgauss_additive	CLAN GAUSS AMMO
- ammocapacity_cheavymachinegun_additive	CLAN HMG AMMO
- ammocapacity_clb10x_additive	CLAN LB-X10 AMMO
- ammocapacity_clb20x_additive	CLAN LB-X20 AMMO
- ammocapacity_clb2x_additive	CLAN LB-X2 AMMO
- ammocapacity_clb5x_additive	CLAN LB-X5 AMMO
- ammocapacity_clightmachinegun_additive	CLAN LMG AMMO
- ammocapacity_clrm_additive	CLAN LRM AMMO
- ammocapacity_clrm_artemis_additive	CLAN ALRM AMMO
- ammocapacity_cmachinegun_additive	CLAN MG AMMO
- ammocapacity_cnarc_additive	CLAN NARC AMMO
- ammocapacity_csrm_additive	CLAN SRM AMO
- ammocapacity_csrm_artemis_additive	CLAN ASRM AMMO
- ammocapacity_cstreak_srm_additive	CLAN STREAK AMMO
- ammocapacity_cultraac10_additive	CLAN UAC/10 AMMO
- ammocapacity_cultraac20_additive	CLAN UAC/20 AMMO
- ammocapacity_cultraac2_additive	CLAN UAC/2 AMMO
- ammocapacity_cultraac5_additive	CLAN UAC/5 AMMO
- ammocapacity_gauss_additive	GAUSS AMMO
- ammocapacity_heavygauss_additive	HEAVY GAUSS AMMO
- ammocapacity_heavymachinegun_additive	HMG AMMO
- ammocapacity_lb10x_additive	LB-X10 AMMO
- ammocapacity_lb20x_additive	LB-X20 AMMO
- ammocapacity_lb2x_additive	LB-X2 AMMO
- ammocapacity_lb5x_additive	LB-X5 AMMO
- ammocapacity_lightgauss_additive	LIGHT GAUSS AMMO
- ammocapacity_lightmachinegun_additive	LMG AMMO
- ammocapacity_lrm_additive	LRM AMMO
- ammocapacity_lrm_artemis_additive	ALRM AMMO
- ammocapacity_machinegun_additive	MG AMMO
- ammocapacity_mrm_additive	MRM AMMO
- ammocapacity_narc_additive	NARC AMMO
- ammocapacity_rotary_ac2_additive	RAC 2 AMMO
- ammocapacity_rotary_ac5_additive	RAC 5 AMMO
- ammocapacity_srm_additive	SRM AMMO
- ammocapacity_srm_artemis_additive	ASRM AMMO
- ammocapacity_streak_srm_additive	STREAK AMMO
- ammocapacity_ultraac10_additive	UAC/10 AMMO
- ammocapacity_ultraac20_additive	UAC/20 AMMO
- ammocapacity_ultraac2_additive	UAC/2 AMMO
- ammocapacity_ultraac5_additive	UAC/5 AMMO
- antimissilesystem_damage_additive	AMS DAMAGE
- arm_pitchspeed_multiplier	Arm Pitch Speed
- arm_yawspeed_multiplier	Arm Yaw Speed
- armorresist_ct_additive	BASE ARMOR (CT)
- armorresist_hd_additive	BASE ARMOR (HD)
- armorresist_la_additive	BASE ARMOR (LA)
- armorresist_ll_additive	BASE ARMOR (LL)
- armorresist_lt_additive	BASE ARMOR (LT)
- armorresist_ra_additive	BASE ARMOR (RA)
- armorresist_rl_additive	BASE ARMOR (RL)
- armorresist_rt_additive	BASE ARMOR (RT)
- atm_heat_multiplier	ATM HEAT
- atm_spread_multiplier	ATM SPREAD
- backfacetargetretentionrange_additive	TARGET RETENTION
- ballistic_cooldown_multiplier	BALLISTIC COOLDOWN
- ballistic_heat_multiplier	Ballistics Heat
- ballistic_range_multiplier	BALLISTIC RANGE
- ballistic_velocity_multiplier	BALLISTIC VELOCITY
- captureaccelerator_multiplier	CAPTURE ACCELERATION
- clanantimissilesystem_range_multiplier	AMS RANGE
- clanantimissilesystem_rof_multiplier	AMS RATE OF FIRE
- clanerlaser_cooldown_multiplier	Clan ER Laser Cooldown
- clanerlaser_duration_multiplier	Clan ER Laser Duration
- clanerlaser_heat_multiplier	CLAN ER LASER HEAT GENERATION
- clanerlaser_range_multiplier	Clan ER Laser Range
- clanermediumlaser_heat_multiplier	Clan ER Mediun Laser Heat
- clanerppc_cooldown_multiplier	ER PPC COOLDOWN
- clanerppc_heat_multiplier	ER PPC HEAT GENERATION
- clanerppc_velocity_multiplier	CLAN ER PPC VELOCITY
- clangaussrifle_cooldown_multiplier	Clan Gauss Cooldown
- clanlaser_duration_multiplier	Clan Laser Cooldown
- clanlbxautocannon10_cooldown_multiplier	Clan LB-X10 Cooldown
- clanlrm20_cooldown_multiplier	Clan LRM20 Cooldown
- clanlrm20_spread_multiplier	Clan LRM20 Spread
- clanlrm_cooldown_multiplier	Clan LRM Cooldown
- clanmachinegun_range_multiplier	MACHINE GUN RANGE
- clanmachinegun_rof_multiplier	MACHINE GUN ROF
- clanmediumpulselaser_heat_multiplier	Clan Medium Pulse Laser Heat
- clanmediumpulselaser_range_multiplier	Clan Medium Pulse Laser Range
- clannarcbeacon_range_additive	NARC BEACON RANGE
- clanppc_velocity_multiplier	Clan PPC Velocity
- clanpulselaser_heat_multiplier	Clan Pulse Laser Heat
- clansrm2_heat_multiplier	Clan SRM2 Heat
- clanstreaksrm_cooldown_multiplier	Clan Streak Cooldown
- clanultraautocannon2_heat_multiplier	Clan UAC2 Heat
- coolshotcapacity_additive	COOLSHOT CAPACITY
- coolshotcooldown_multiplier	COOLSHOT COOLDOWN
- coolshotcooling_multiplier	COOLSHOT COOLING
- critchance_receiving_multiplier	CRIT HIT CHANCE (RECEIVING)
- decellerp_all_multiplier	DECELERATION RATE
- ecmtargetrangereduction_multiplier	ENHANCED ECM
- energy_cooldown_multiplier	ENERGY COOLDOWN
- energy_heat_multiplier	Energy Heat
- energy_range_multiplier	ENERGY RANGE
- erlaser_cooldown_multiplier	ER LASER COOLDOWN
- erlaser_duration_multiplier	ER LASER DURATION
- erlaser_heat_multiplier	ER LASER HEAT GENERATION
- erlaser_range_multiplier	ER LASER RANGE
- externalheat_multiplier	EXTERNAL HEAT TRANSFER
- extraconsumableslot_additive	CONSUMABLE SLOT
- falldamage_multiplier	FALL DAMAGE
- flamer_rampdownduration_multiplier	FLAMER RAMPDOWN
- gaussextendedcharge_additive	GAUSS CHARGE
- heatdissipation_multiplier	Heat Dissipation
- heatloss_multiplier	RATE OF HEAT LOSS
- heavylaser_duration_multiplier	Heavy Laser Duration
- heavylaser_heat_multiplier	Heavy Laser Heat
- heavylaser_range_multiplier	Heavy Laser Range
- hillclimb_multiplier	HILL CLIMB
- increasedarmor_multiplier	ARMOR
- increasedstructure_multiplier	STRUCTURE
- internalresist_ct_additive	BASE STRUCTURE (CT)
- internalresist_la_additive	BASE STRUCTURE (LA)
- internalresist_ll_additive	BASE STRUCTURE (LL)
- internalresist_lt_additive	BASE STRUCTURE (LT)
- internalresist_ra_additive	BASE STRUCTURE (RA)
- internalresist_rl_additive	BASE STRUCTURE (RL)
- internalresist_rt_additive	BASE STRUCTURE (RT)
- isantimissilesystem_range_multiplier	AMS RANGE
- isantimissilesystem_rof_multiplier	AMS RATE OF FIRE
- isautocannon10_cooldown_multiplier	AC/10 COOLDOWN
- isautocannon10_range_multiplier	AC/10 RANGE
- isautocannon20_cooldown_multiplier	AC/20 COOLDOWN
- isautocannon20_velocity_multiplier	AC/20 VELOCITY
- isautocannon2_cooldown_multiplier	AC/2 COOLDOWN
- isautocannon5_cooldown_multiplier	AC/5 COOLDOWN
- iserlargelaser_cooldown_multiplier	ER LARGE LASER COOLDOWN
- iserlargelaser_heat_multiplier	ER LARGE LASER HEAT GENERATION
- iserppc_cooldown_multiplier	ER PPC COOLDOWN
- iserppc_heat_multiplier	ER PPC HEAT GENERATION
- iserppc_velocity_multiplier	IS ER PPC VELOCITY
- isflamer_range_multiplier	FLAMER RANGE
- isgaussrifle_cooldown_multiplier	GAUSS RIFLE COOLDOWN
- islargelaser_cooldown_multiplier	LARGE LASER COOLDOWN
- islargelaser_range_multiplier	LARGE LASER RANGE
- islargepulselaser_cooldown_multiplier	LARGE PULSE LASER COOLDOWN
- islargepulselaser_heat_multiplier	LARGE PULSE LASER HEAT GEN.
- islargepulselaser_range_multiplier	LARGE PULSE LASER RANGE
- islbxautocannon10_cooldown_multiplier	LB 10-X COOLDOWN
- islbxautocannon_spread_multiplier	LB-X SPREAD
- islrm10_cooldown_multiplier	LRM 10 COOLDOWN
- islrm15_cooldown_multiplier	LRM 15 COOLDOWN
- islrm20_cooldown_multiplier	LRM 20 COOLDOWN
- islrm20_heat_multiplier	LRM 20 HEAT GENERATION
- islrm_cooldown_multiplier	IS LRM Cooldown
- islrm_spread_multiplier	IS LRM Spread
- islrm_velocity_multiplier	IS LRM Velocity
- ismachinegun_rof_multiplier	MACHINE GUN ROF
- ismediumlaser_cooldown_multiplier	MEDIUM LASER COOLDOWN
- ismediumlaser_duration_multiplier	MEDIUM LASER DURATION
- ismediumlaser_heat_multiplier	MEDIUM LASER HEAT GENERATION
- ismediumlaser_range_multiplier	MEDIUM LASER RANGE
- ismediumpulselaser_range_multiplier	MEDIUM PULSE LASER RANGE
- isnarcbeacon_range_additive	NARC BEACON RANGE
- isppc_cooldown_multiplier	IS PPC Cooldown
- isppc_heat_multiplier	PPC HEAT GENERATION
- isppc_velocity_multiplier	IS PPC VELOCITY
- issrm4_cooldown_multiplier	SRM 4 COOLDOWN
- issrm_spread_multiplier	IS SRM Spread
- isstdlaser_duration_multiplier	STD LASER DURATION
- isstdlaser_heat_multiplier	STD LASER HEAT GENERATION
- isstdlaser_range_multiplier	STD LASER RANGE
- isstreaksrm_cooldown_multiplier	S-SRM 2 COOLDOWN
- isultraautocannon5_cooldown_multiplier	UAC/5 COOLDOWN
- isultraautocannon5_jamchance_multiplier	UAC/5 JAM CHANCE
- jumpjets_burntime_multiplier	JUMP JETS BURN TIME
- jumpjets_forwardthrust_multiplier	JUMP JETS FORWARD THRUST
- jumpjets_heat_multiplier	JUMP JETS HEAT
- jumpjets_initialthrust_multiplier	JUMP JETS INITIAL THRUST
- jumpjetslots_additive	JUMP JET CAPACITY
- laser_duration_multiplier	LASER DURATION
- laser_heat_multiplier	LASER HEAT GENERATION
- laser_range_multiplier	LASER RANGE
- lbxautocannon_cooldown_multiplier	LB-X Autocannon Cooldown
- lbxautocannon_spread_multiplier	LB-X SPREAD
- lbxautocannon_velocity_multiplier	LB-X VELOCITY
- lrm_cooldown_multiplier	LRM 5/10/15/20 COOLDOWN
- lrm_heat_multiplier	LRM 5/10/15/20 HEAT GENERATION
- lrm_spread_multiplier	LRM 5/10/15/20 SPREAD
- lrm_velocity_multiplier	LRM 5/10/15/20 VELOCITY
- maxheat_multiplier	HEAT CAPACITY
- mechtopspeed_multiplier	TOP SPEED
- mediumpulselaser_cooldown_multiplier	Medium Pulse Laser Cooldown
- missile_cooldown_multiplier	MISSILE COOLDOWN
- missile_critdamage_multiplier	MISSILE CRIT DAMAGE
- missile_heat_multiplier	MISSILE HEAT GENERATION
- missile_range_multiplier	MISSILE RANGE
- missile_spread_multiplier	MISSILE SPREAD
- missile_velocity_multiplier	MISSILE VELOCITY
- narcbeacon_narcduration_additive	Narc Beacon Tag Duration
- narcbeacon_narcduration_multiplier	NARC DURATION
- narcbeacon_velocity_multiplier	NARC VELOCITY
- nonpulselaser_duration_multiplier	STD and ER Laser Duration
- overheatdamage_multiplier	OVERHEAT DAMAGE
- ppc_heat_multiplier	PPC HEAT GENERATION
- ppc_velocity_multiplier	PPC VELOCITY
- pulselaser_cooldown_multiplier	PULSE LASER COOLDOWN
- pulselaser_duration_multiplier	PULSE LASER DURATION
- pulselaser_heat_multiplier	PULSE LASER HEAT GEN.
- pulselaser_range_multiplier	PULSE LASER RANGE
- radardeprivation_multiplier	RADAR DEPRIVATION
- reversespeed_multiplier	REVERSE SPEED
- rotaryautocannon_jamrampdownduration_multiplier	RAC JAM DURATION
- screenshake_multiplier	IMPROVED GYROS
- seismicsensorrange_additive	SEISMIC SENSOR RANGE
- sensorrange_additive	SENSOR RANGE
- sensorrange_multiplier	SENSOR RANGE
- speedretention_multiplier	SPEED RETENTION
- srm_spread_multiplier	SRM 2/4/6 SPREAD
- startupduration_multiplier	QUICK IGNITION
- stealtharmorcooldown_multiplier	STEALTH ARMOR ACTIVATION
- strategicstrikecapacity_additive	STRIKE CAPACITY
- strategicstrikeduration_multiplier	STRIKE DURATION
- strategicstrikenumshells_multiplier	STRIKE SHELLS
- strategicstrikespread_multiplier	STRIKE SPREAD
- streaksrm_cooldown_multiplier	Streak 2/4/6 Cooldown
- targetdecayduration_additive	TARGET DECAY
- targetinfogathering_multiplier	TARGET INFO GATHERING
- torso_pitchangle_additive	Torso Pitch Angle
- torso_pitchangle_multiplier	Torso Pitch Angle
- torso_pitchspeed_multiplier	Torso Pitch Speed
- torso_yawangle_additive	Torso Yaw Angle
- torso_yawangle_multiplier	Torso Yaw Angle
- torso_yawspeed_multiplier	Torso Yaw Speed
- turnlerp_all_multiplier	TURN RATE
- turnrate_multiplier	TURN RATE
- uavcapacity_additive	UAV CAPACITY
- uavduration_additive	UAV DURATION
- uavrange_multiplier	UAV RANGE
- ultraautocannon20_cooldown_multiplier	@UI_QUIRK_ULTRAAUTOCANNON20_COOLDOWN_MULTIPLIER
- ultraautocannon20_jamchance_multiplier	UAC/20 JAM CHANCE
- ultraautocannon_cooldown_multiplier	UAC Cooldown
- ultraautocannon_jamchance_multiplier	UAC JAM CHANCE
- ultraautocannon_jamduration_multiplier	UAC JAM DURATION
- ultraautocannon_range_multiplier	UAC RANGE
- ultraautocannon_velocity_multiplier	UAC VELOCITY
- xpbonus_multiplier	XP Bonus
- numQuirks : 254
+accellerp_all_multiplier	ACCELERATION RATE
+advancedzoom_additive	ADVANCED ZOOM
+all_cooldown_multiplier	COOLDOWN
+all_heat_multiplier	HEAT
+all_range_multiplier	RANGE
+all_velocity_multiplier	VELOCITY
+ammocapacity_ac10_additive	AC10 AMMO
+ammocapacity_ac20_additive	AC20 AMMO
+ammocapacity_ac2_additive	AC2 AMMO
+ammocapacity_ac5_additive	AC5 AMMO
+ammocapacity_cac10_additive	CLAN AC10 AMMO
+ammocapacity_cac20_additive	CLAN AC20 AMMO
+ammocapacity_cac2_additive	CLAN AC2 AMMO
+ammocapacity_cac5_additive	CLAN AC5 AMMO
+ammocapacity_catm_additive	CLAN ATM AMMO
+ammocapacity_cgauss_additive	CLAN GAUSS AMMO
+ammocapacity_cheavymachinegun_additive	CLAN HMG AMMO
+ammocapacity_clb10x_additive	CLAN LB-X10 AMMO
+ammocapacity_clb20x_additive	CLAN LB-X20 AMMO
+ammocapacity_clb2x_additive	CLAN LB-X2 AMMO
+ammocapacity_clb5x_additive	CLAN LB-X5 AMMO
+ammocapacity_clightmachinegun_additive	CLAN LMG AMMO
+ammocapacity_clrm_additive	CLAN LRM AMMO
+ammocapacity_clrm_artemis_additive	CLAN ALRM AMMO
+ammocapacity_cmachinegun_additive	CLAN MG AMMO
+ammocapacity_cnarc_additive	CLAN NARC AMMO
+ammocapacity_csrm_additive	CLAN SRM AMO
+ammocapacity_csrm_artemis_additive	CLAN ASRM AMMO
+ammocapacity_cstreak_srm_additive	CLAN STREAK AMMO
+ammocapacity_cultraac10_additive	CLAN UAC/10 AMMO
+ammocapacity_cultraac20_additive	CLAN UAC/20 AMMO
+ammocapacity_cultraac2_additive	CLAN UAC/2 AMMO
+ammocapacity_cultraac5_additive	CLAN UAC/5 AMMO
+ammocapacity_gauss_additive	GAUSS AMMO
+ammocapacity_heavygauss_additive	HEAVY GAUSS AMMO
+ammocapacity_heavymachinegun_additive	HMG AMMO
+ammocapacity_lb10x_additive	LB-X10 AMMO
+ammocapacity_lb20x_additive	LB-X20 AMMO
+ammocapacity_lb2x_additive	LB-X2 AMMO
+ammocapacity_lb5x_additive	LB-X5 AMMO
+ammocapacity_lightgauss_additive	LIGHT GAUSS AMMO
+ammocapacity_lightmachinegun_additive	LMG AMMO
+ammocapacity_lrm_additive	LRM AMMO
+ammocapacity_lrm_artemis_additive	ALRM AMMO
+ammocapacity_machinegun_additive	MG AMMO
+ammocapacity_mrm_additive	MRM AMMO
+ammocapacity_narc_additive	NARC AMMO
+ammocapacity_rotary_ac2_additive	RAC 2 AMMO
+ammocapacity_rotary_ac5_additive	RAC 5 AMMO
+ammocapacity_srm_additive	SRM AMMO
+ammocapacity_srm_artemis_additive	ASRM AMMO
+ammocapacity_streak_srm_additive	STREAK AMMO
+ammocapacity_ultraac10_additive	UAC/10 AMMO
+ammocapacity_ultraac20_additive	UAC/20 AMMO
+ammocapacity_ultraac2_additive	UAC/2 AMMO
+ammocapacity_ultraac5_additive	UAC/5 AMMO
+antimissilesystem_damage_additive	AMS DAMAGE
+armorresist_ct_additive	BASE ARMOR (CT)
+armorresist_hd_additive	BASE ARMOR (HD)
+armorresist_la_additive	BASE ARMOR (LA)
+armorresist_ll_additive	BASE ARMOR (LL)
+armorresist_lt_additive	BASE ARMOR (LT)
+armorresist_ra_additive	BASE ARMOR (RA)
+armorresist_rl_additive	BASE ARMOR (RL)
+armorresist_rt_additive	BASE ARMOR (RT)
+atm_cooldown_multiplier	ATM Cooldown
+atm_heat_multiplier	ATM HEAT
+atm_spread_multiplier	ATM SPREAD
+backfacetargetretentionrange_additive	TARGET RETENTION
+ballistic_cooldown_multiplier	BALLISTIC COOLDOWN
+ballistic_heat_multiplier	Ballistics Heat
+ballistic_range_multiplier	BALLISTIC RANGE
+ballistic_velocity_multiplier	BALLISTIC VELOCITY
+captureaccelerator_multiplier	CAPTURE ACCELERATION
+clanantimissilesystem_range_multiplier	AMS RANGE
+clanantimissilesystem_rof_multiplier	AMS RATE OF FIRE
+clanerlaser_cooldown_multiplier	Clan ER Laser Cooldown
+clanerlaser_duration_multiplier	Clan ER Laser Duration
+clanerlaser_heat_multiplier	CLAN ER LASER HEAT GENERATION
+clanerlaser_range_multiplier	Clan ER Laser Range
+clanermediumlaser_heat_multiplier	Clan ER Mediun Laser Heat
+clanerppc_cooldown_multiplier	ER PPC COOLDOWN
+clanerppc_heat_multiplier	ER PPC HEAT GENERATION
+clanerppc_velocity_multiplier	CLAN ER PPC VELOCITY
+clangaussrifle_cooldown_multiplier	Clan Gauss Cooldown
+clanlaser_duration_multiplier	CLAN LASER DURATION
+clanlbxautocannon10_cooldown_multiplier	Clan LB-X10 Cooldown
+clanlbxautocannon_spread_multiplier	@UI_QUIRK_CLANLBXAUTOCANNON_SPREAD_MULTIPLIER
+clanlrm20_cooldown_multiplier	Clan LRM20 Cooldown
+clanlrm20_spread_multiplier	Clan LRM20 Spread
+clanlrm_cooldown_multiplier	Clan LRM Cooldown
+clanmachinegun_range_multiplier	MACHINE GUN RANGE
+clanmachinegun_rof_multiplier	MACHINE GUN ROF
+clanmediumpulselaser_heat_multiplier	Clan Medium Pulse Laser Heat
+clanmediumpulselaser_range_multiplier	Clan Medium Pulse Laser Range
+clannarcbeacon_range_additive	NARC BEACON RANGE
+clanppc_velocity_multiplier	Clan PPC Velocity
+clanpulselaser_heat_multiplier	Clan Pulse Laser Heat
+clansrm2_heat_multiplier	Clan SRM2 Heat
+clanstreaksrm_cooldown_multiplier	Clan Streak Cooldown
+clanultraautocannon2_heat_multiplier	Clan UAC2 Heat
+coolshotcapacity_additive	COOLSHOT CAPACITY
+coolshotcooldown_multiplier	COOLSHOT COOLDOWN
+coolshotcooling_multiplier	COOLSHOT COOLING
+critchance_receiving_multiplier	CRIT HIT CHANCE (RECEIVING)
+decellerp_all_multiplier	DECELERATION RATE
+ecmtargetrangereduction_multiplier	ENHANCED ECM
+energy_cooldown_multiplier	ENERGY COOLDOWN
+energy_heat_multiplier	Energy Heat
+energy_range_multiplier	ENERGY RANGE
+erlaser_cooldown_multiplier	ER LASER COOLDOWN
+erlaser_duration_multiplier	ER LASER DURATION
+erlaser_heat_multiplier	ER LASER HEAT GENERATION
+erlaser_range_multiplier	ER LASER RANGE
+externalheat_multiplier	EXTERNAL HEAT TRANSFER
+extraconsumableslot_additive	CONSUMABLE SLOT
+falldamage_multiplier	FALL DAMAGE
+flamer_rampdownduration_multiplier	FLAMER RAMPDOWN
+gaussextendedcharge_additive	GAUSS CHARGE
+heatdissipation_multiplier	Heat Dissipation
+heatloss_multiplier	RATE OF HEAT LOSS
+heavylaser_duration_multiplier	Heavy Laser Duration
+heavylaser_heat_multiplier	HEAVY LASER HEAT GENERATION
+heavylaser_range_multiplier	Heavy Laser Range
+hillclimb_multiplier	HILL CLIMB
+increasedarmor_multiplier	ARMOR
+increasedstructure_multiplier	STRUCTURE
+internalresist_ct_additive	BASE STRUCTURE (CT)
+internalresist_la_additive	BASE STRUCTURE (LA)
+internalresist_ll_additive	BASE STRUCTURE (LL)
+internalresist_lt_additive	BASE STRUCTURE (LT)
+internalresist_ra_additive	BASE STRUCTURE (RA)
+internalresist_rl_additive	BASE STRUCTURE (RL)
+internalresist_rt_additive	BASE STRUCTURE (RT)
+isantimissilesystem_range_multiplier	AMS RANGE
+isantimissilesystem_rof_multiplier	AMS RATE OF FIRE
+isautocannon10_cooldown_multiplier	AC/10 COOLDOWN
+isautocannon10_range_multiplier	AC/10 RANGE
+isautocannon20_cooldown_multiplier	AC/20 COOLDOWN
+isautocannon20_velocity_multiplier	AC/20 VELOCITY
+isautocannon2_cooldown_multiplier	AC/2 COOLDOWN
+isautocannon5_cooldown_multiplier	AC/5 COOLDOWN
+iserlargelaser_cooldown_multiplier	ER LARGE LASER COOLDOWN
+iserlargelaser_heat_multiplier	ER LARGE LASER HEAT GENERATION
+iserppc_cooldown_multiplier	ER PPC COOLDOWN
+iserppc_heat_multiplier	ER PPC HEAT GENERATION
+iserppc_velocity_multiplier	IS ER PPC VELOCITY
+isflamer_range_multiplier	FLAMER RANGE
+isgaussrifle_cooldown_multiplier	GAUSS RIFLE COOLDOWN
+islargelaser_cooldown_multiplier	LARGE LASER COOLDOWN
+islargelaser_range_multiplier	LARGE LASER RANGE
+islargepulselaser_cooldown_multiplier	LARGE PULSE LASER COOLDOWN
+islargepulselaser_heat_multiplier	LARGE PULSE LASER HEAT GEN.
+islargepulselaser_range_multiplier	LARGE PULSE LASER RANGE
+islbxautocannon10_cooldown_multiplier	LB 10-X COOLDOWN
+islbxautocannon_spread_multiplier	LB-X SPREAD
+islrm10_cooldown_multiplier	LRM 10 COOLDOWN
+islrm15_cooldown_multiplier	LRM 15 COOLDOWN
+islrm20_cooldown_multiplier	LRM 20 COOLDOWN
+islrm20_heat_multiplier	LRM 20 HEAT GENERATION
+islrm_cooldown_multiplier	IS LRM Cooldown
+islrm_spread_multiplier	IS LRM Spread
+islrm_velocity_multiplier	IS LRM Velocity
+ismachinegun_rof_multiplier	MACHINE GUN ROF
+ismediumlaser_cooldown_multiplier	MEDIUM LASER COOLDOWN
+ismediumlaser_duration_multiplier	MEDIUM LASER DURATION
+ismediumlaser_heat_multiplier	MEDIUM LASER HEAT GENERATION
+ismediumlaser_range_multiplier	MEDIUM LASER RANGE
+ismediumpulselaser_range_multiplier	MEDIUM PULSE LASER RANGE
+isnarcbeacon_range_additive	NARC BEACON RANGE
+issrm4_cooldown_multiplier	SRM 4 COOLDOWN
+issrm_spread_multiplier	IS SRM Spread
+isstdlaser_duration_multiplier	STD LASER DURATION
+isstdlaser_heat_multiplier	STD LASER HEAT GENERATION
+isstdlaser_range_multiplier	STD LASER RANGE
+isstreaksrm_cooldown_multiplier	S-SRM 2 COOLDOWN
+isultraautocannon5_cooldown_multiplier	UAC/5 COOLDOWN
+isultraautocannon5_jamchance_multiplier	UAC/5 JAM CHANCE
+jumpjets_burntime_multiplier	JUMP JETS BURN TIME
+jumpjets_forwardthrust_multiplier	JUMP JETS FORWARD THRUST
+jumpjets_heat_multiplier	JUMP JETS HEAT
+jumpjets_initialthrust_multiplier	JUMP JETS INITIAL THRUST
+jumpjetslots_additive	JUMP JET CAPACITY
+laser_duration_multiplier	LASER DURATION
+laser_heat_multiplier	LASER HEAT GENERATION
+laser_range_multiplier	LASER RANGE
+lbxautocannon_cooldown_multiplier	LB-X Autocannon Cooldown
+lbxautocannon_spread_multiplier	LB-X SPREAD
+lbxautocannon_velocity_multiplier	LB-X VELOCITY
+lrm_cooldown_multiplier	LRM 5/10/15/20 COOLDOWN
+lrm_heat_multiplier	LRM 5/10/15/20 HEAT GENERATION
+lrm_spread_multiplier	LRM 5/10/15/20 SPREAD
+lrm_velocity_multiplier	LRM 5/10/15/20 VELOCITY
+maxheat_multiplier	HEAT CAPACITY
+mechtopspeed_multiplier	TOP SPEED
+mediumpulselaser_cooldown_multiplier	Medium Pulse Laser Cooldown
+missile_cooldown_multiplier	MISSILE COOLDOWN
+missile_critdamage_multiplier	MISSILE CRIT DAMAGE
+missile_heat_multiplier	MISSILE HEAT GENERATION
+missile_range_multiplier	MISSILE RANGE
+missile_spread_multiplier	MISSILE SPREAD
+missile_velocity_multiplier	MISSILE VELOCITY
+mrm_velocity_multiplier	MRM Velocity
+narcbeacon_narcduration_additive	Narc Beacon Tag Duration
+narcbeacon_narcduration_multiplier	NARC DURATION
+narcbeacon_velocity_multiplier	NARC VELOCITY
+nonpulselaser_duration_multiplier	STD and ER Laser Duration
+overheatdamage_multiplier	OVERHEAT DAMAGE
+ppcfamily_cooldown_multiplier	PPC Cooldown
+ppcfamily_heat_multiplier	PPC Heat Generation
+ppcfamily_velocity_multiplier	PPC Velocity
+pulselaser_cooldown_multiplier	PULSE LASER COOLDOWN
+pulselaser_duration_multiplier	PULSE LASER DURATION
+pulselaser_heat_multiplier	PULSE LASER HEAT GEN.
+pulselaser_range_multiplier	PULSE LASER RANGE
+radardeprivation_multiplier	RADAR DEPRIVATION
+reversespeed_multiplier	REVERSE SPEED
+rotaryautocannon_jamrampdownduration_multiplier	RAC JAM DURATION
+screenshake_multiplier	IMPROVED GYROS
+seismicsensorrange_additive	SEISMIC SENSOR RANGE
+sensorrange_additive	SENSOR RANGE
+sensorrange_multiplier	SENSOR RANGE
+speedretention_multiplier	SPEED RETENTION
+srm_spread_multiplier	SRM 2/4/6 SPREAD
+startupduration_multiplier	QUICK IGNITION
+stealtharmorcooldown_multiplier	STEALTH ARMOR ACTIVATION
+strategicstrikecapacity_additive	STRIKE CAPACITY
+strategicstrikeduration_multiplier	STRIKE DURATION
+strategicstrikenumshells_multiplier	STRIKE SHELLS
+strategicstrikespread_multiplier	STRIKE SPREAD
+streaksrm_cooldown_multiplier	Streak 2/4/6 Cooldown
+targetdecayduration_additive	Target Decay Duration
+targetinfogathering_multiplier	TARGET INFO GATHERING
+torso_pitchangle_additive	Torso Pitch Angle
+torso_pitchangle_multiplier	Torso Pitch Angle
+torso_pitchspeed_multiplier	Torso Pitch Speed
+torso_yawangle_additive	Torso Yaw Angle
+torso_yawangle_multiplier	Torso Yaw Angle
+torso_yawspeed_multiplier	Torso Yaw Speed
+turnlerp_all_multiplier	TURN RATE
+turnrate_multiplier	Turn Rate
+uavcapacity_additive	UAV CAPACITY
+uavduration_additive	UAV DURATION
+uavrange_multiplier	UAV RANGE
+ultraautocannon20_cooldown_multiplier	@UI_QUIRK_ULTRAAUTOCANNON20_COOLDOWN_MULTIPLIER
+ultraautocannon20_jamchance_multiplier	UAC/20 JAM CHANCE
+ultraautocannon_cooldown_multiplier	UAC Cooldown
+ultraautocannon_jamchance_multiplier	UAC JAM CHANCE
+ultraautocannon_jamduration_multiplier	UAC JAM DURATION
+ultraautocannon_range_multiplier	UAC RANGE
+ultraautocannon_velocity_multiplier	UAC VELOCITY
+xpbonus_multiplier	XP Bonus
+numQuirks : 253

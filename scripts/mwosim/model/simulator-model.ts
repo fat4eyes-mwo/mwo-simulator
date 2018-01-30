@@ -1361,6 +1361,33 @@ namespace MechModel  {
       initAddedData();
   }
 
+  //NOTE: Only use the following data/function in tests. DO NOT ACCESS THE MODEL DIRECTLY IN CODE. 
+  //Use the other access methods instead
+  export interface RawModelData {
+    weaponData : SmurfyWeaponDataList,
+    ammoData : SmurfyAmmoDataList,
+    mechData : SmurfyMechDataList,
+    moduleData : SmurfyModuleDataList,
+    omnipodData : FlatOmnipodData,
+    ctOmnipodData : CTOmnipodMap,
+  }
+  export var getRawModelData = function () : RawModelData {
+    let weaponData = SmurfyWeaponData;
+    let ammoData = SmurfyAmmoData;
+    let mechData = SmurfyMechData;
+    let moduleData = SmurfyModuleData;
+    let omnipodData = SmurfyOmnipodData;
+    let ctOmnipodData = SmurfyCTOmnipods;
+    return {
+      weaponData,
+      ammoData,
+      mechData,
+      moduleData,
+      omnipodData,
+      ctOmnipodData,
+    }
+  }
+
   export var getSmurfyMechData =
       function(smurfyMechId : string) : SmurfyMechData {
     return SmurfyMechData[smurfyMechId];
