@@ -1,4 +1,4 @@
-//Generated from Game/mechs/*.pak on Tue, 23 Jan 2018 19:31:54 GMT
+//Generated from Game/mechs/*.pak on Wed, 21 Feb 2018 00:04:36 GMT
 namespace AddedData {
   export var _AddedOmnipodData : {[index:string] : any} = {
 	"adr-prime": {
@@ -293,6 +293,131 @@ namespace AddedData {
 				"name": "turnlerp_all_multiplier",
 				"value": 0.1,
 				"translated_name": "TURN RATE"
+			}
+		]
+	},
+	"bkl-prime": {
+		"name": "bkl-prime",
+		"setBonusQuirks": [
+			{
+				"name": "missile_cooldown_multiplier",
+				"value": -0.1,
+				"translated_name": "MISSILE COOLDOWN"
+			},
+			{
+				"name": "missile_velocity_multiplier",
+				"value": 0.1,
+				"translated_name": "MISSILE VELOCITY"
+			},
+			{
+				"name": "xpbonus_multiplier",
+				"value": 0.025,
+				"translated_name": "XP Bonus"
+			}
+		]
+	},
+	"bkl-a": {
+		"name": "bkl-a",
+		"setBonusQuirks": [
+			{
+				"name": "ppcfamily_velocity_multiplier",
+				"value": 0.2,
+				"translated_name": "ppcfamily_velocity_multiplier"
+			},
+			{
+				"name": "targetdecayduration_additive",
+				"value": 1,
+				"translated_name": "TARGET DECAY"
+			},
+			{
+				"name": "xpbonus_multiplier",
+				"value": 0.025,
+				"translated_name": "XP Bonus"
+			}
+		]
+	},
+	"bkl-c": {
+		"name": "bkl-c",
+		"setBonusQuirks": [
+			{
+				"name": "missile_cooldown_multiplier",
+				"value": -0.15,
+				"translated_name": "MISSILE COOLDOWN"
+			},
+			{
+				"name": "erlaser_heat_multiplier",
+				"value": -0.1,
+				"translated_name": "ER LASER HEAT GENERATION"
+			},
+			{
+				"name": "xpbonus_multiplier",
+				"value": 0.025,
+				"translated_name": "XP Bonus"
+			}
+		]
+	},
+	"bkl-d": {
+		"name": "bkl-d",
+		"setBonusQuirks": [
+			{
+				"name": "turnrate_multiplier",
+				"value": 0.15,
+				"translated_name": "TURN RATE"
+			},
+			{
+				"name": "missile_cooldown_multiplier",
+				"value": -0.1,
+				"translated_name": "MISSILE COOLDOWN"
+			},
+			{
+				"name": "xpbonus_multiplier",
+				"value": 0.025,
+				"translated_name": "XP Bonus"
+			}
+		]
+	},
+	"bkl-e": {
+		"name": "bkl-e",
+		"setBonusQuirks": [
+			{
+				"name": "missile_cooldown_multiplier",
+				"value": -0.1,
+				"translated_name": "MISSILE COOLDOWN"
+			},
+			{
+				"name": "all_heat_multiplier",
+				"value": -0.05,
+				"translated_name": "HEAT GEN"
+			},
+			{
+				"name": "xpbonus_multiplier",
+				"value": 0.025,
+				"translated_name": "XP Bonus"
+			}
+		]
+	},
+	"bkl-bl": {
+		"name": "bkl-bl",
+		"setBonusQuirks": [
+			{
+				"name": "missile_cooldown_multiplier",
+				"value": -0.1,
+				"translated_name": "MISSILE COOLDOWN"
+			},
+			{
+				"name": "energy_cooldown_multiplier",
+				"value": -0.1,
+				"translated_name": "ENERGY COOLDOWN"
+			},
+			{
+				"name": "turnrate_multiplier",
+				"value": 0.15,
+				"translated_name": "TURN RATE"
+			},
+			{
+				"name": "xpbonus_multiplier",
+				"value": 0.025,
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
