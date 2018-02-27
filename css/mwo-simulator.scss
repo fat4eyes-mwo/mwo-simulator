@@ -1482,8 +1482,34 @@ $loaded-mech-highlight-border-radius: 4px;
 .linkPanel {
   margin-top: 10px;
   width: 100%;
-  text-align: center;
   font-size: 0.9em;
+}
+
+.linkPanel .usefulSetups {
+  margin-top: 10px;
+  text-align: left;
+}
+
+.linkPanel .usefulSetups .setupHeader {
+  font-weight: bold;
+  font-size: 1.0em;
+}
+
+.linkPanel .usefulSetups ul {
+  margin-top: 5px;
+  padding-left: 10px;
+  list-style-type: none;
+}
+
+.linkPanel .externalLinks .externalLinkHeader {
+  text-align: left;
+  font-weight: bold;
+  font-size: 1.0em;
+  margin-bottom: 5px;
+}
+
+.linkPanel .externalLinks {
+  text-align: center;
 }
 
 .tabPanel {
