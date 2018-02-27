@@ -27,7 +27,7 @@ namespace MechModelSkills {
   }
   class KitlaanSkillLoader implements SkillLoader {
     private static readonly KITLAAN_PREFIX = "https://kitlaan.gitlab.io/mwoskill_json/json/";
-    private static readonly JSON_BIN_PREFIX = "http://api.jsonbin.io/b/";
+    private static readonly JSON_BIN_PREFIX = "https://api.jsonbin.io/b/";
     public static readonly type = "kitlaan";
     private state: string;
 

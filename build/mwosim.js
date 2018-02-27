@@ -10766,7 +10766,7 @@ var MechModelSkills;
         }
     }
     KitlaanSkillLoader.KITLAAN_PREFIX = "https://kitlaan.gitlab.io/mwoskill_json/json/";
-    KitlaanSkillLoader.JSON_BIN_PREFIX = "http://api.jsonbin.io/b/";
+    KitlaanSkillLoader.JSON_BIN_PREFIX = "https://api.jsonbin.io/b/";
     KitlaanSkillLoader.type = "kitlaan";
 })(MechModelSkills || (MechModelSkills = {}));
 //Weapon state classes
