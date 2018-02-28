@@ -1,4 +1,10 @@
-php/data
+php/data/*
+!php/data/default
+!php/data/smoketest
+!php/data/dpstest
+!php/data/dpstest-empty
+!php/data/empty
+!php/data/errortest
 php/log
 php/cache
 backups
