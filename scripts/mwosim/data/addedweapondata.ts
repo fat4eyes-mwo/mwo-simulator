@@ -1,4 +1,4 @@
-//Generated from GameData.pak Wed, 21 Feb 2018 00:04:04 GMT
+//Generated from GameData.pak Thu, 22 Mar 2018 02:18:07 GMT
 namespace AddedData {
 
 export var _AddedWeaponData : {[index:string] : any} = {
@@ -981,7 +981,7 @@ export var _AddedWeaponData : {[index:string] : any} = {
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 750,
+				"start": 810,
 				"damageModifier": 1,
 				"interpolationToNextRange": "linear"
 			},

@@ -1,4 +1,4 @@
-//Generated from Game/mechs/*.pak on Wed, 21 Feb 2018 00:04:36 GMT
+//Generated from Game/mechs/*.pak on Thu, 22 Mar 2018 02:18:30 GMT
 namespace AddedData {
   export var _AddedOmnipodData : {[index:string] : any} = {
 	"adr-prime": {
@@ -2713,6 +2713,151 @@ namespace AddedData {
 				"name": "ballistic_cooldown_multiplier",
 				"value": -0.05,
 				"translated_name": "BALLISTIC COOLDOWN"
+			}
+		]
+	},
+	"sns-prime": {
+		"name": "sns-prime",
+		"setBonusQuirks": [
+			{
+				"name": "ultraautocannon_jamchance_multiplier",
+				"value": -0.2,
+				"translated_name": "UAC JAM CHANCE"
+			},
+			{
+				"name": "energy_cooldown_multiplier",
+				"value": -0.15,
+				"translated_name": "ENERGY COOLDOWN"
+			},
+			{
+				"name": "xpbonus_multiplier",
+				"value": 0.025,
+				"translated_name": "XP Bonus"
+			}
+		]
+	},
+	"sns-a": {
+		"name": "sns-a",
+		"setBonusQuirks": [
+			{
+				"name": "all_range_multiplier",
+				"value": 0.05,
+				"translated_name": "RANGE"
+			},
+			{
+				"name": "energy_range_multiplier",
+				"value": 0.05,
+				"translated_name": "ENERGY RANGE"
+			},
+			{
+				"name": "xpbonus_multiplier",
+				"value": 0.025,
+				"translated_name": "XP Bonus"
+			}
+		]
+	},
+	"sns-b": {
+		"name": "sns-b",
+		"setBonusQuirks": [
+			{
+				"name": "all_cooldown_multiplier",
+				"value": -0.1,
+				"translated_name": "COOLDOWN"
+			},
+			{
+				"name": "ballistic_cooldown_multiplier",
+				"value": -0.05,
+				"translated_name": "BALLISTIC COOLDOWN"
+			},
+			{
+				"name": "xpbonus_multiplier",
+				"value": 0.025,
+				"translated_name": "XP Bonus"
+			}
+		]
+	},
+	"sns-c": {
+		"name": "sns-c",
+		"setBonusQuirks": [
+			{
+				"name": "missile_velocity_multiplier",
+				"value": 0.1,
+				"translated_name": "MISSILE VELOCITY"
+			},
+			{
+				"name": "targetdecayduration_additive",
+				"value": 0.5,
+				"translated_name": "TARGET DECAY"
+			},
+			{
+				"name": "xpbonus_multiplier",
+				"value": 0.025,
+				"translated_name": "XP Bonus"
+			}
+		]
+	},
+	"sns-d": {
+		"name": "sns-d",
+		"setBonusQuirks": [
+			{
+				"name": "clanmachinegun_rof_multiplier",
+				"value": 0.2,
+				"translated_name": "MACHINE GUN ROF"
+			},
+			{
+				"name": "torso_yawangle_additive",
+				"value": 10,
+				"translated_name": "Torso Yaw Angle"
+			},
+			{
+				"name": "xpbonus_multiplier",
+				"value": 0.025,
+				"translated_name": "XP Bonus"
+			}
+		]
+	},
+	"sns-ml": {
+		"name": "sns-ml",
+		"setBonusQuirks": [
+			{
+				"name": "ppcfamily_velocity_multiplier",
+				"value": 0.1,
+				"translated_name": "ppcfamily_velocity_multiplier"
+			},
+			{
+				"name": "xpbonus_multiplier",
+				"value": 0.025,
+				"translated_name": "XP Bonus"
+			},
+			{
+				"name": "accellerp_all_multiplier",
+				"value": 0.1,
+				"translated_name": "ACCELERATION RATE"
+			},
+			{
+				"name": "decellerp_all_multiplier",
+				"value": 0.1,
+				"translated_name": "DECELERATION RATE"
+			}
+		]
+	},
+	"sns-vg": {
+		"name": "sns-vg",
+		"setBonusQuirks": [
+			{
+				"name": "ballistic_cooldown_multiplier",
+				"value": -0.1,
+				"translated_name": "BALLISTIC COOLDOWN"
+			},
+			{
+				"name": "energy_cooldown_multiplier",
+				"value": -0.15,
+				"translated_name": "ENERGY COOLDOWN"
+			},
+			{
+				"name": "xpbonus_multiplier",
+				"value": 0.025,
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
