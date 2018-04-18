@@ -77,11 +77,12 @@ The main entry point of the program is in `scripts/main/simulator.ts`.
 
 # Update Info
 
-* 2017-03-22: Update app with data from 2018 Mar 22 patch.
-* 2017-02-28: Fix to https mixed mode error on loading skills. Added useful setup links.
-* 2017-02-22: Update app with data from 2018 Feb 21 patch.
-* 2017-01-31: Update for quirk name changes (ppc->ppcfamily) and added MRM quirk data. Internal testing changes (testListQuirks).
-* 2017-01-24: Fixes for kitlaan jsonbin api changes, update app with data from 2018 Jan 23 patch.
+* 2018-04-19: Update app with data from 2018 Apr 18 patch.
+* 2018-03-22: Update app with data from 2018 Mar 22 patch.
+* 2018-02-28: Fix to https mixed mode error on loading skills. Added useful setup links.
+* 2018-02-22: Update app with data from 2018 Feb 21 patch.
+* 2018-01-31: Update for quirk name changes (ppc->ppcfamily) and added MRM quirk data. Internal testing changes (testListQuirks).
+* 2018-01-24: Fixes for kitlaan jsonbin api changes, update app with data from 2018 Jan 23 patch.
 * 2017-12-28: Fixes for some breaking reported bugs (finally). Thanks for all the bug reports.
 * 2017-12-14: Update app with data from 2017 Dec 13 patch.
 * 2017-11-15: Update app with data from 2017 Nov 14 patch.

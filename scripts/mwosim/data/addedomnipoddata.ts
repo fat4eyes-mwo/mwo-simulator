@@ -1,4 +1,4 @@
-//Generated from Game/mechs/*.pak on Thu, 22 Mar 2018 02:18:30 GMT
+//Generated from Game/mechs/*.pak on Wed, 18 Apr 2018 23:34:07 GMT
 namespace AddedData {
   export var _AddedOmnipodData : {[index:string] : any} = {
 	"adr-prime": {
@@ -1733,6 +1733,31 @@ namespace AddedData {
 				"name": "heavylaser_duration_multiplier",
 				"value": -0.1,
 				"translated_name": "Heavy Laser Duration"
+			}
+		]
+	},
+	"mdd-rv": {
+		"name": "mdd-rv",
+		"setBonusQuirks": [
+			{
+				"name": "turnrate_multiplier",
+				"value": 0.15,
+				"translated_name": "TURN RATE"
+			},
+			{
+				"name": "mechacceleration_multiplier",
+				"value": 0.1,
+				"translated_name": "mechacceleration_multiplier"
+			},
+			{
+				"name": "mechdeceleration_multiplier",
+				"value": 0.1,
+				"translated_name": "mechdeceleration_multiplier"
+			},
+			{
+				"name": "xpbonus_multiplier",
+				"value": 0.025,
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
