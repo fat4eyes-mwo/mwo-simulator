@@ -47,9 +47,9 @@ var AddedData;
         }
     };
 })(AddedData || (AddedData = {}));
-//Generated from Game/mechs/*.pak on Wed, 18 Apr 2018 23:34:07 GMT
+//Generated from Game/mechs/*.pak on Tue, 19 Jun 2018 21:34:27 GMT
 var AddedData;
-//Generated from Game/mechs/*.pak on Wed, 18 Apr 2018 23:34:07 GMT
+//Generated from Game/mechs/*.pak on Tue, 19 Jun 2018 21:34:27 GMT
 (function (AddedData) {
     AddedData._AddedOmnipodData = {
         "adr-prime": {
@@ -464,6 +464,131 @@ var AddedData;
                     "name": "turnrate_multiplier",
                     "value": 0.15,
                     "translated_name": "TURN RATE"
+                },
+                {
+                    "name": "xpbonus_multiplier",
+                    "value": 0.025,
+                    "translated_name": "XP Bonus"
+                }
+            ]
+        },
+        "bas-prime": {
+            "name": "bas-prime",
+            "setBonusQuirks": [
+                {
+                    "name": "missile_cooldown_multiplier",
+                    "value": -0.15,
+                    "translated_name": "MISSILE COOLDOWN"
+                },
+                {
+                    "name": "heavylaser_heat_multiplier",
+                    "value": -0.05,
+                    "translated_name": "Heavy Laser Heat"
+                },
+                {
+                    "name": "xpbonus_multiplier",
+                    "value": 0.025,
+                    "translated_name": "XP Bonus"
+                }
+            ]
+        },
+        "bas-a": {
+            "name": "bas-a",
+            "setBonusQuirks": [
+                {
+                    "name": "all_range_multiplier",
+                    "value": 0.1,
+                    "translated_name": "RANGE"
+                },
+                {
+                    "name": "ppcfamily_velocity_multiplier",
+                    "value": 0.2,
+                    "translated_name": "ppcfamily_velocity_multiplier"
+                },
+                {
+                    "name": "xpbonus_multiplier",
+                    "value": 0.025,
+                    "translated_name": "XP Bonus"
+                }
+            ]
+        },
+        "bas-b": {
+            "name": "bas-b",
+            "setBonusQuirks": [
+                {
+                    "name": "missile_velocity_multiplier",
+                    "value": 0.1,
+                    "translated_name": "MISSILE VELOCITY"
+                },
+                {
+                    "name": "ballistic_cooldown_multiplier",
+                    "value": -0.15,
+                    "translated_name": "BALLISTIC COOLDOWN"
+                },
+                {
+                    "name": "xpbonus_multiplier",
+                    "value": 0.025,
+                    "translated_name": "XP Bonus"
+                }
+            ]
+        },
+        "bas-c": {
+            "name": "bas-c",
+            "setBonusQuirks": [
+                {
+                    "name": "energy_cooldown_multiplier",
+                    "value": -0.15,
+                    "translated_name": "ENERGY COOLDOWN"
+                },
+                {
+                    "name": "torso_yawangle_additive",
+                    "value": 5,
+                    "translated_name": "Torso Yaw Angle"
+                },
+                {
+                    "name": "xpbonus_multiplier",
+                    "value": 0.025,
+                    "translated_name": "XP Bonus"
+                }
+            ]
+        },
+        "bas-d": {
+            "name": "bas-d",
+            "setBonusQuirks": [
+                {
+                    "name": "all_range_multiplier",
+                    "value": 0.05,
+                    "translated_name": "RANGE"
+                },
+                {
+                    "name": "accellerp_all_multiplier",
+                    "value": 0.1,
+                    "translated_name": "ACCELERATION RATE"
+                },
+                {
+                    "name": "decellerp_all_multiplier",
+                    "value": 0.1,
+                    "translated_name": "DECELERATION RATE"
+                },
+                {
+                    "name": "xpbonus_multiplier",
+                    "value": 0.025,
+                    "translated_name": "XP Bonus"
+                }
+            ]
+        },
+        "bas-ra": {
+            "name": "bas-ra",
+            "setBonusQuirks": [
+                {
+                    "name": "missile_cooldown_multiplier",
+                    "value": -0.1,
+                    "translated_name": "MISSILE COOLDOWN"
+                },
+                {
+                    "name": "erlaser_range_multiplier",
+                    "value": 0.05,
+                    "translated_name": "ER LASER RANGE"
                 },
                 {
                     "name": "xpbonus_multiplier",
@@ -2941,11 +3066,6 @@ var AddedData;
             "name": "tbr-prime",
             "setBonusQuirks": [
                 {
-                    "name": "xpbonus_multiplier",
-                    "value": 0.025,
-                    "translated_name": "XP Bonus"
-                },
-                {
                     "name": "missile_cooldown_multiplier",
                     "value": -0.1,
                     "translated_name": "MISSILE COOLDOWN"
@@ -2964,6 +3084,11 @@ var AddedData;
                     "name": "decellerp_all_multiplier",
                     "value": 0.1,
                     "translated_name": "DECELERATION RATE"
+                },
+                {
+                    "name": "xpbonus_multiplier",
+                    "value": 0.025,
+                    "translated_name": "XP Bonus"
                 }
             ]
         },
@@ -2981,9 +3106,9 @@ var AddedData;
                     "translated_name": "UAC JAM CHANCE"
                 },
                 {
-                    "name": "missile_velocity_multiplier",
-                    "value": 0.1,
-                    "translated_name": "MISSILE VELOCITY"
+                    "name": "missile_cooldown_multiplier",
+                    "value": -0.1,
+                    "translated_name": "MISSILE COOLDOWN"
                 }
             ]
         },
@@ -2997,7 +3122,7 @@ var AddedData;
                 },
                 {
                     "name": "torso_yawspeed_multiplier",
-                    "value": 0.3,
+                    "value": 0.25,
                     "translated_name": "Torso Yaw Speed"
                 },
                 {
@@ -3039,11 +3164,6 @@ var AddedData;
                     "name": "torso_yawspeed_multiplier",
                     "value": 0.2,
                     "translated_name": "Torso Yaw Speed"
-                },
-                {
-                    "name": "torso_yawangle_additive",
-                    "value": 5,
-                    "translated_name": "Torso Yaw Angle"
                 },
                 {
                     "name": "missile_cooldown_multiplier",
@@ -3324,9 +3444,9 @@ var AddedData;
         }
     };
 })(AddedData || (AddedData = {}));
-//Generated from GameData.pak Wed, 18 Apr 2018 23:33:29 GMT
+//Generated from GameData.pak Tue, 19 Jun 2018 21:33:53 GMT
 var AddedData;
-//Generated from GameData.pak Wed, 18 Apr 2018 23:33:29 GMT
+//Generated from GameData.pak Tue, 19 Jun 2018 21:33:53 GMT
 (function (AddedData) {
     AddedData._AddedWeaponData = {
         "AutoCannon20": {
@@ -4348,8 +4468,8 @@ var AddedData;
             "rof": 7.275,
             "rampUpTime": 0.75,
             "rampDownTime": 2,
-            "jamRampUpTime": 6,
-            "jamRampDownTime": 9.5,
+            "jamRampUpTime": 8,
+            "jamRampDownTime": 10,
             "volleyDelay": 0,
             "ranges": [
                 {
@@ -6435,9 +6555,9 @@ var ExternalSkillTrees;
         "Vent Calibration": "VentCalibration"
     };
 })(ExternalSkillTrees || (ExternalSkillTrees = {}));
-//Generated from GameData.pak on Wed, 18 Apr 2018 23:33:29 GMT
+//Generated from GameData.pak on Tue, 19 Jun 2018 21:33:53 GMT
 var AddedData;
-//Generated from GameData.pak on Wed, 18 Apr 2018 23:33:29 GMT
+//Generated from GameData.pak on Tue, 19 Jun 2018 21:33:53 GMT
 (function (AddedData) {
     AddedData._SkillTreeData = {
         "Range": {
@@ -6649,11 +6769,11 @@ var AddedData;
                     "quirkValues": [
                         {
                             "faction": "IS",
-                            "quirkValue": -0.01
+                            "quirkValue": -0.015
                         },
                         {
                             "faction": "Clan",
-                            "quirkValue": -0.01
+                            "quirkValue": -0.015
                         }
                     ]
                 }
@@ -7143,17 +7263,17 @@ var AddedData;
                         {
                             "faction": "IS",
                             "weightClass": "Medium",
-                            "quirkValue": 0.04
+                            "quirkValue": 0.05
                         },
                         {
                             "faction": "IS",
                             "weightClass": "Heavy",
-                            "quirkValue": 0.04
+                            "quirkValue": 0.05
                         },
                         {
                             "faction": "IS",
                             "weightClass": "Assault",
-                            "quirkValue": 0.04
+                            "quirkValue": 0.05
                         },
                         {
                             "faction": "Clan",
@@ -7163,17 +7283,17 @@ var AddedData;
                         {
                             "faction": "Clan",
                             "weightClass": "Medium",
-                            "quirkValue": 0.04
+                            "quirkValue": 0.05
                         },
                         {
                             "faction": "Clan",
                             "weightClass": "Heavy",
-                            "quirkValue": 0.04
+                            "quirkValue": 0.05
                         },
                         {
                             "faction": "Clan",
                             "weightClass": "Assault",
-                            "quirkValue": 0.04
+                            "quirkValue": 0.05
                         }
                     ]
                 }
@@ -7280,7 +7400,7 @@ var AddedData;
                     "quirkTranslatedName": "TURN RATE",
                     "quirkValues": [
                         {
-                            "quirkValue": 0.05
+                            "quirkValue": 0.06
                         }
                     ]
                 }

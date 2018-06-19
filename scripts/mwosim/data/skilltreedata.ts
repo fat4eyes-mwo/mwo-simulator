@@ -1,4 +1,4 @@
-//Generated from GameData.pak on Wed, 18 Apr 2018 23:33:29 GMT
+//Generated from GameData.pak on Tue, 19 Jun 2018 21:33:53 GMT
 namespace AddedData {
   export var _SkillTreeData : {[index:string] : AddedData.SkillTreeNode} = {
 	"Range": {
@@ -210,11 +210,11 @@ namespace AddedData {
 				"quirkValues": [
 					{
 						"faction": "IS",
-						"quirkValue": -0.01
+						"quirkValue": -0.015
 					},
 					{
 						"faction": "Clan",
-						"quirkValue": -0.01
+						"quirkValue": -0.015
 					}
 				]
 			}
@@ -704,17 +704,17 @@ namespace AddedData {
 					{
 						"faction": "IS",
 						"weightClass": "Medium",
-						"quirkValue": 0.04
+						"quirkValue": 0.05
 					},
 					{
 						"faction": "IS",
 						"weightClass": "Heavy",
-						"quirkValue": 0.04
+						"quirkValue": 0.05
 					},
 					{
 						"faction": "IS",
 						"weightClass": "Assault",
-						"quirkValue": 0.04
+						"quirkValue": 0.05
 					},
 					{
 						"faction": "Clan",
@@ -724,17 +724,17 @@ namespace AddedData {
 					{
 						"faction": "Clan",
 						"weightClass": "Medium",
-						"quirkValue": 0.04
+						"quirkValue": 0.05
 					},
 					{
 						"faction": "Clan",
 						"weightClass": "Heavy",
-						"quirkValue": 0.04
+						"quirkValue": 0.05
 					},
 					{
 						"faction": "Clan",
 						"weightClass": "Assault",
-						"quirkValue": 0.04
+						"quirkValue": 0.05
 					}
 				]
 			}
@@ -841,7 +841,7 @@ namespace AddedData {
 				"quirkTranslatedName": "TURN RATE",
 				"quirkValues": [
 					{
-						"quirkValue": 0.05
+						"quirkValue": 0.06
 					}
 				]
 			}

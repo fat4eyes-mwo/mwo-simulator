@@ -1,4 +1,4 @@
-//Generated from Game/mechs/*.pak on Wed, 18 Apr 2018 23:34:07 GMT
+//Generated from Game/mechs/*.pak on Tue, 19 Jun 2018 21:34:27 GMT
 namespace AddedData {
   export var _AddedOmnipodData : {[index:string] : any} = {
 	"adr-prime": {
@@ -413,6 +413,131 @@ namespace AddedData {
 				"name": "turnrate_multiplier",
 				"value": 0.15,
 				"translated_name": "TURN RATE"
+			},
+			{
+				"name": "xpbonus_multiplier",
+				"value": 0.025,
+				"translated_name": "XP Bonus"
+			}
+		]
+	},
+	"bas-prime": {
+		"name": "bas-prime",
+		"setBonusQuirks": [
+			{
+				"name": "missile_cooldown_multiplier",
+				"value": -0.15,
+				"translated_name": "MISSILE COOLDOWN"
+			},
+			{
+				"name": "heavylaser_heat_multiplier",
+				"value": -0.05,
+				"translated_name": "Heavy Laser Heat"
+			},
+			{
+				"name": "xpbonus_multiplier",
+				"value": 0.025,
+				"translated_name": "XP Bonus"
+			}
+		]
+	},
+	"bas-a": {
+		"name": "bas-a",
+		"setBonusQuirks": [
+			{
+				"name": "all_range_multiplier",
+				"value": 0.1,
+				"translated_name": "RANGE"
+			},
+			{
+				"name": "ppcfamily_velocity_multiplier",
+				"value": 0.2,
+				"translated_name": "ppcfamily_velocity_multiplier"
+			},
+			{
+				"name": "xpbonus_multiplier",
+				"value": 0.025,
+				"translated_name": "XP Bonus"
+			}
+		]
+	},
+	"bas-b": {
+		"name": "bas-b",
+		"setBonusQuirks": [
+			{
+				"name": "missile_velocity_multiplier",
+				"value": 0.1,
+				"translated_name": "MISSILE VELOCITY"
+			},
+			{
+				"name": "ballistic_cooldown_multiplier",
+				"value": -0.15,
+				"translated_name": "BALLISTIC COOLDOWN"
+			},
+			{
+				"name": "xpbonus_multiplier",
+				"value": 0.025,
+				"translated_name": "XP Bonus"
+			}
+		]
+	},
+	"bas-c": {
+		"name": "bas-c",
+		"setBonusQuirks": [
+			{
+				"name": "energy_cooldown_multiplier",
+				"value": -0.15,
+				"translated_name": "ENERGY COOLDOWN"
+			},
+			{
+				"name": "torso_yawangle_additive",
+				"value": 5,
+				"translated_name": "Torso Yaw Angle"
+			},
+			{
+				"name": "xpbonus_multiplier",
+				"value": 0.025,
+				"translated_name": "XP Bonus"
+			}
+		]
+	},
+	"bas-d": {
+		"name": "bas-d",
+		"setBonusQuirks": [
+			{
+				"name": "all_range_multiplier",
+				"value": 0.05,
+				"translated_name": "RANGE"
+			},
+			{
+				"name": "accellerp_all_multiplier",
+				"value": 0.1,
+				"translated_name": "ACCELERATION RATE"
+			},
+			{
+				"name": "decellerp_all_multiplier",
+				"value": 0.1,
+				"translated_name": "DECELERATION RATE"
+			},
+			{
+				"name": "xpbonus_multiplier",
+				"value": 0.025,
+				"translated_name": "XP Bonus"
+			}
+		]
+	},
+	"bas-ra": {
+		"name": "bas-ra",
+		"setBonusQuirks": [
+			{
+				"name": "missile_cooldown_multiplier",
+				"value": -0.1,
+				"translated_name": "MISSILE COOLDOWN"
+			},
+			{
+				"name": "erlaser_range_multiplier",
+				"value": 0.05,
+				"translated_name": "ER LASER RANGE"
 			},
 			{
 				"name": "xpbonus_multiplier",
@@ -2890,11 +3015,6 @@ namespace AddedData {
 		"name": "tbr-prime",
 		"setBonusQuirks": [
 			{
-				"name": "xpbonus_multiplier",
-				"value": 0.025,
-				"translated_name": "XP Bonus"
-			},
-			{
 				"name": "missile_cooldown_multiplier",
 				"value": -0.1,
 				"translated_name": "MISSILE COOLDOWN"
@@ -2913,6 +3033,11 @@ namespace AddedData {
 				"name": "decellerp_all_multiplier",
 				"value": 0.1,
 				"translated_name": "DECELERATION RATE"
+			},
+			{
+				"name": "xpbonus_multiplier",
+				"value": 0.025,
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -2930,9 +3055,9 @@ namespace AddedData {
 				"translated_name": "UAC JAM CHANCE"
 			},
 			{
-				"name": "missile_velocity_multiplier",
-				"value": 0.1,
-				"translated_name": "MISSILE VELOCITY"
+				"name": "missile_cooldown_multiplier",
+				"value": -0.1,
+				"translated_name": "MISSILE COOLDOWN"
 			}
 		]
 	},
@@ -2946,7 +3071,7 @@ namespace AddedData {
 			},
 			{
 				"name": "torso_yawspeed_multiplier",
-				"value": 0.3,
+				"value": 0.25,
 				"translated_name": "Torso Yaw Speed"
 			},
 			{
@@ -2988,11 +3113,6 @@ namespace AddedData {
 				"name": "torso_yawspeed_multiplier",
 				"value": 0.2,
 				"translated_name": "Torso Yaw Speed"
-			},
-			{
-				"name": "torso_yawangle_additive",
-				"value": 5,
-				"translated_name": "Torso Yaw Angle"
 			},
 			{
 				"name": "missile_cooldown_multiplier",

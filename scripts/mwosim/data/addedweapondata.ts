@@ -1,4 +1,4 @@
-//Generated from GameData.pak Wed, 18 Apr 2018 23:33:29 GMT
+//Generated from GameData.pak Tue, 19 Jun 2018 21:33:53 GMT
 namespace AddedData {
 
 export var _AddedWeaponData : {[index:string] : any} = {
@@ -1021,8 +1021,8 @@ export var _AddedWeaponData : {[index:string] : any} = {
 		"rof": 7.275,
 		"rampUpTime": 0.75,
 		"rampDownTime": 2,
-		"jamRampUpTime": 6,
-		"jamRampDownTime": 9.5,
+		"jamRampUpTime": 8,
+		"jamRampDownTime": 10,
 		"volleyDelay": 0,
 		"ranges": [
 			{
