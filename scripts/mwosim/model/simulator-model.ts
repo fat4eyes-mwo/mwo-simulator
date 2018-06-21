@@ -1607,8 +1607,8 @@ namespace MechModel  {
   //from the heatsink upgrade items to the associated heatsink
   var getEngineHeatsinkId = function(smurfyMechLoadout: SmurfyMechLoadout) : string {
     var upgradeToIdMap : {[index:string] : string} = {
-      "STANDARD HEAT SINK" : ISSingleHeatsinkId,
-      "DOUBLE HEAT SINK" : ISDoubleHeatsinkId,
+      "STANDARD HEAT SINK TYPE" : ISSingleHeatsinkId,
+      "DOUBLE HEAT SINK TYPE" : ISDoubleHeatsinkId,
       "CLAN STANDARD HEAT SINK" : ClanSingleHeatsinkId, 
       "CLAN DOUBLE HEAT SINK" : ClanDoubleHeatsinkId
     };
