@@ -1,4 +1,4 @@
-//Generated from GameData.pak Tue, 19 Jun 2018 21:33:53 GMT
+//Generated from GameData.pak Wed, 18 Jul 2018 07:00:14 GMT
 namespace AddedData {
 
 export var _AddedWeaponData : {[index:string] : any} = {
@@ -2291,7 +2291,7 @@ export var _AddedWeaponData : {[index:string] : any} = {
 	},
 	"ClanATM3": {
 		"ammo_per_shot": 3,
-		"volleyDelay": 0.05,
+		"volleyDelay": 0.025,
 		"ranges": [
 			{
 				"start": 0,

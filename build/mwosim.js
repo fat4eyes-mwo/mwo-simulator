@@ -47,9 +47,9 @@ var AddedData;
         }
     };
 })(AddedData || (AddedData = {}));
-//Generated from Game/mechs/*.pak on Tue, 19 Jun 2018 21:34:27 GMT
+//Generated from Game/mechs/*.pak on Wed, 18 Jul 2018 07:00:51 GMT
 var AddedData;
-//Generated from Game/mechs/*.pak on Tue, 19 Jun 2018 21:34:27 GMT
+//Generated from Game/mechs/*.pak on Wed, 18 Jul 2018 07:00:51 GMT
 (function (AddedData) {
     AddedData._AddedOmnipodData = {
         "adr-prime": {
@@ -3444,9 +3444,9 @@ var AddedData;
         }
     };
 })(AddedData || (AddedData = {}));
-//Generated from GameData.pak Tue, 19 Jun 2018 21:33:53 GMT
+//Generated from GameData.pak Wed, 18 Jul 2018 07:00:14 GMT
 var AddedData;
-//Generated from GameData.pak Tue, 19 Jun 2018 21:33:53 GMT
+//Generated from GameData.pak Wed, 18 Jul 2018 07:00:14 GMT
 (function (AddedData) {
     AddedData._AddedWeaponData = {
         "AutoCannon20": {
@@ -5738,7 +5738,7 @@ var AddedData;
         },
         "ClanATM3": {
             "ammo_per_shot": 3,
-            "volleyDelay": 0.05,
+            "volleyDelay": 0.025,
             "ranges": [
                 {
                     "start": 0,
@@ -6555,9 +6555,9 @@ var ExternalSkillTrees;
         "Vent Calibration": "VentCalibration"
     };
 })(ExternalSkillTrees || (ExternalSkillTrees = {}));
-//Generated from GameData.pak on Tue, 19 Jun 2018 21:33:53 GMT
+//Generated from GameData.pak on Wed, 18 Jul 2018 07:00:14 GMT
 var AddedData;
-//Generated from GameData.pak on Tue, 19 Jun 2018 21:33:53 GMT
+//Generated from GameData.pak on Wed, 18 Jul 2018 07:00:14 GMT
 (function (AddedData) {
     AddedData._SkillTreeData = {
         "Range": {
