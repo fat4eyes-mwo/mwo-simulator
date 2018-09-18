@@ -77,6 +77,7 @@ The main entry point of the program is in `scripts/main/simulator.ts`.
 
 # Update Info
 
+* 2018-09-19: Update app with data from 2018 Sep 18 patch.
 * 2018-07-18: Update app with data from 2018 Jul 18 patch.
 * 2018-06-22: Fix for issue #25 (was caused by some changes in smurfy loadout data).
 * 2018-06-20: Update app with data from 2018 Jun 20 patch. (also includes data from May patch)

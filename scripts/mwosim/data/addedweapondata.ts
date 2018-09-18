@@ -1,4 +1,4 @@
-//Generated from GameData.pak Wed, 18 Jul 2018 07:00:14 GMT
+//Generated from GameData.pak Tue, 18 Sep 2018 21:37:05 GMT
 namespace AddedData {
 
 export var _AddedWeaponData : {[index:string] : any} = {
@@ -948,7 +948,7 @@ export var _AddedWeaponData : {[index:string] : any} = {
 	},
 	"UltraAutoCannon20": {
 		"ammo_per_shot": 3,
-		"jamming_chance": 0.15,
+		"jamming_chance": 0.14,
 		"jammed_time": 7.5,
 		"shots_during_cooldown": 1,
 		"volleyDelay": 0.11,
@@ -1458,7 +1458,7 @@ export var _AddedWeaponData : {[index:string] : any} = {
 	},
 	"ClanUltraAutoCannon20": {
 		"ammo_per_shot": 4,
-		"jamming_chance": 0.17,
+		"jamming_chance": 0.16,
 		"jammed_time": 8,
 		"shots_during_cooldown": 1,
 		"volleyDelay": 0.11,
