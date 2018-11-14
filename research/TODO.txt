@@ -1,5 +1,7 @@
 - AUTOMATED UNIT TESTS!!!!!!
 
+- Implement minheatpenalty level quirks (should not affect sustained DPS, but better to be accurate)
+
 - Mech details display (weapon damage summary)
 - Simtime to real time ratio display (for performance checks)
 

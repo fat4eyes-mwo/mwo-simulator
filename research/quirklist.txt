@@ -65,16 +65,17 @@ armorresist_ra_additive	BASE ARMOR (RA)
 armorresist_rl_additive	BASE ARMOR (RL)
 armorresist_rt_additive	BASE ARMOR (RT)
 atm_cooldown_multiplier	ATM Cooldown
-atm_heat_multiplier	ATM HEAT
+atm_heat_multiplier	ATM HEAT GENERATION
 atm_spread_multiplier	ATM SPREAD
 backfacetargetretentionrange_additive	TARGET RETENTION
 ballistic_cooldown_multiplier	BALLISTIC COOLDOWN
 ballistic_heat_multiplier	Ballistics Heat
 ballistic_range_multiplier	BALLISTIC RANGE
 ballistic_velocity_multiplier	BALLISTIC VELOCITY
-captureaccelerator_multiplier	CAPTURE ACCELERATION
+captureaccelerator_multiplier	Capture Accelerator
 clanantimissilesystem_range_multiplier	AMS RANGE
 clanantimissilesystem_rof_multiplier	AMS RATE OF FIRE
+clanerlargelaser_minheatpenaltylevel_additive	clanerlargelaser_minheatpenaltylevel_additive
 clanerlaser_cooldown_multiplier	Clan ER Laser Cooldown
 clanerlaser_duration_multiplier	Clan ER Laser Duration
 clanerlaser_heat_multiplier	CLAN ER LASER HEAT GENERATION
@@ -84,6 +85,8 @@ clanerppc_cooldown_multiplier	ER PPC COOLDOWN
 clanerppc_heat_multiplier	ER PPC HEAT GENERATION
 clanerppc_velocity_multiplier	CLAN ER PPC VELOCITY
 clangaussrifle_cooldown_multiplier	Clan Gauss Cooldown
+clanheavylargelsr_minheatpenaltylevel_additive	clanheavylargelsr_minheatpenaltylevel_additive
+clanlargepulselsr_minheatpenaltylevel_additive	clanlargepulselsr_minheatpenaltylevel_additive
 clanlaser_duration_multiplier	CLAN LASER DURATION
 clanlbxautocannon10_cooldown_multiplier	Clan LB-X10 Cooldown
 clanlbxautocannon_spread_multiplier	@UI_QUIRK_CLANLBXAUTOCANNON_SPREAD_MULTIPLIER
@@ -119,10 +122,9 @@ falldamage_multiplier	FALL DAMAGE
 flamer_rampdownduration_multiplier	FLAMER RAMPDOWN
 gaussextendedcharge_additive	GAUSS CHARGE
 heatdissipation_multiplier	Heat Dissipation
-heatloss_multiplier	RATE OF HEAT LOSS
 heavylaser_duration_multiplier	Heavy Laser Duration
 heavylaser_heat_multiplier	HEAVY LASER HEAT GENERATION
-heavylaser_range_multiplier	Heavy Laser Range
+heavylaser_range_multiplier	HEAVY LASER RANGE
 hillclimb_multiplier	HILL CLIMB
 increasedarmor_multiplier	ARMOR
 increasedstructure_multiplier	STRUCTURE
@@ -145,6 +147,7 @@ iserlargelaser_cooldown_multiplier	ER LARGE LASER COOLDOWN
 iserlargelaser_heat_multiplier	ER LARGE LASER HEAT GENERATION
 iserppc_cooldown_multiplier	ER PPC COOLDOWN
 iserppc_heat_multiplier	ER PPC HEAT GENERATION
+iserppc_minheatpenaltylevel_additive	IS ER PPC HSL
 iserppc_velocity_multiplier	IS ER PPC VELOCITY
 isflamer_range_multiplier	FLAMER RANGE
 isgaussrifle_cooldown_multiplier	GAUSS RIFLE COOLDOWN
@@ -169,6 +172,7 @@ ismediumlaser_heat_multiplier	MEDIUM LASER HEAT GENERATION
 ismediumlaser_range_multiplier	MEDIUM LASER RANGE
 ismediumpulselaser_range_multiplier	MEDIUM PULSE LASER RANGE
 isnarcbeacon_range_additive	NARC BEACON RANGE
+isppc_minheatpenaltylevel_additive	IS PPC HSL
 issrm4_cooldown_multiplier	SRM 4 COOLDOWN
 issrm_spread_multiplier	IS SRM Spread
 isstdlaser_duration_multiplier	STD LASER DURATION
@@ -193,6 +197,8 @@ lrm_heat_multiplier	LRM 5/10/15/20 HEAT GENERATION
 lrm_spread_multiplier	LRM 5/10/15/20 SPREAD
 lrm_velocity_multiplier	LRM 5/10/15/20 VELOCITY
 maxheat_multiplier	HEAT CAPACITY
+mechacceleration_multiplier	mechacceleration_multiplier
+mechdeceleration_multiplier	mechdeceleration_multiplier
 mechtopspeed_multiplier	TOP SPEED
 mediumpulselaser_cooldown_multiplier	Medium Pulse Laser Cooldown
 missile_cooldown_multiplier	MISSILE COOLDOWN
@@ -245,10 +251,11 @@ uavduration_additive	UAV DURATION
 uavrange_multiplier	UAV RANGE
 ultraautocannon20_cooldown_multiplier	@UI_QUIRK_ULTRAAUTOCANNON20_COOLDOWN_MULTIPLIER
 ultraautocannon20_jamchance_multiplier	UAC/20 JAM CHANCE
+ultraautocannon20_minheatpenaltylevel_additive	@UI_QUIRK_ULTRAAUTOCANNON20_MINHEATPENALTYLEVEL_ADDITIVE
 ultraautocannon_cooldown_multiplier	UAC Cooldown
 ultraautocannon_jamchance_multiplier	UAC JAM CHANCE
 ultraautocannon_jamduration_multiplier	UAC JAM DURATION
 ultraautocannon_range_multiplier	UAC RANGE
 ultraautocannon_velocity_multiplier	UAC VELOCITY
 xpbonus_multiplier	XP Bonus
-numQuirks : 253
+numQuirks : 260

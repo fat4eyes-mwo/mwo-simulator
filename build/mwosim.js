@@ -47,9 +47,9 @@ var AddedData;
         }
     };
 })(AddedData || (AddedData = {}));
-//Generated from Game/mechs/*.pak on Tue, 18 Sep 2018 21:37:42 GMT
+//Generated from Game/mechs/*.pak on Wed, 14 Nov 2018 01:39:33 GMT
 var AddedData;
-//Generated from Game/mechs/*.pak on Tue, 18 Sep 2018 21:37:42 GMT
+//Generated from Game/mechs/*.pak on Wed, 14 Nov 2018 01:39:33 GMT
 (function (AddedData) {
     AddedData._AddedOmnipodData = {
         "adr-prime": {
@@ -746,19 +746,24 @@ var AddedData;
             "name": "dwf-a",
             "setBonusQuirks": [
                 {
-                    "name": "xpbonus_multiplier",
-                    "value": 0.025,
-                    "translated_name": "XP Bonus"
-                },
-                {
                     "name": "ballistic_cooldown_multiplier",
-                    "value": -0.05,
+                    "value": -0.1,
                     "translated_name": "BALLISTIC COOLDOWN"
                 },
                 {
                     "name": "missile_cooldown_multiplier",
                     "value": -0.05,
                     "translated_name": "MISSILE COOLDOWN"
+                },
+                {
+                    "name": "xpbonus_multiplier",
+                    "value": 0.025,
+                    "translated_name": "XP Bonus"
+                },
+                {
+                    "name": "clanlargepulselsr_minheatpenaltylevel_additive",
+                    "value": 1,
+                    "translated_name": "clanlargepulselsr_minheatpenaltylevel_additive"
                 }
             ]
         },
@@ -2207,6 +2212,26 @@ var AddedData;
                 }
             ]
         },
+        "ntg-hl": {
+            "name": "ntg-hl",
+            "setBonusQuirks": [
+                {
+                    "name": "heavylaser_duration_multiplier",
+                    "value": -0.1,
+                    "translated_name": "Heavy Laser Duration"
+                },
+                {
+                    "name": "ballistic_cooldown_multiplier",
+                    "value": -0.1,
+                    "translated_name": "BALLISTIC COOLDOWN"
+                },
+                {
+                    "name": "xpbonus_multiplier",
+                    "value": 0.025,
+                    "translated_name": "XP Bonus"
+                }
+            ]
+        },
         "nva-prime": {
             "name": "nva-prime",
             "setBonusQuirks": [
@@ -2356,19 +2381,19 @@ var AddedData;
             "name": "nct-prime",
             "setBonusQuirks": [
                 {
-                    "name": "xpbonus_multiplier",
-                    "value": 0.025,
-                    "translated_name": "XP Bonus"
-                },
-                {
                     "name": "clanppc_velocity_multiplier",
                     "value": 0.05,
                     "translated_name": "Clan PPC Velocity"
                 },
                 {
-                    "name": "erlaser_duration_multiplier",
-                    "value": -0.05,
-                    "translated_name": "ER LASER DURATION"
+                    "name": "clanerlargelaser_minheatpenaltylevel_additive",
+                    "value": 1,
+                    "translated_name": "clanerlargelaser_minheatpenaltylevel_additive"
+                },
+                {
+                    "name": "xpbonus_multiplier",
+                    "value": 0.025,
+                    "translated_name": "XP Bonus"
                 }
             ]
         },
@@ -2422,7 +2447,7 @@ var AddedData;
                 },
                 {
                     "name": "ultraautocannon_jamchance_multiplier",
-                    "value": -0.05,
+                    "value": -0.1,
                     "translated_name": "UAC JAM CHANCE"
                 },
                 {
@@ -2441,14 +2466,14 @@ var AddedData;
                     "translated_name": "XP Bonus"
                 },
                 {
-                    "name": "heavylaser_duration_multiplier",
-                    "value": -0.05,
-                    "translated_name": "Heavy Laser Duration"
+                    "name": "ballistic_cooldown_multiplier",
+                    "value": -0.15,
+                    "translated_name": "BALLISTIC COOLDOWN"
                 },
                 {
-                    "name": "ballistic_cooldown_multiplier",
-                    "value": -0.1,
-                    "translated_name": "BALLISTIC COOLDOWN"
+                    "name": "clanheavylargelsr_minheatpenaltylevel_additive",
+                    "value": 1,
+                    "translated_name": "clanheavylargelsr_minheatpenaltylevel_additive"
                 }
             ]
         },
@@ -3444,9 +3469,9 @@ var AddedData;
         }
     };
 })(AddedData || (AddedData = {}));
-//Generated from GameData.pak Tue, 18 Sep 2018 21:37:05 GMT
+//Generated from GameData.pak Wed, 14 Nov 2018 01:38:52 GMT
 var AddedData;
-//Generated from GameData.pak Tue, 18 Sep 2018 21:37:05 GMT
+//Generated from GameData.pak Wed, 14 Nov 2018 01:38:52 GMT
 (function (AddedData) {
     AddedData._AddedWeaponData = {
         "AutoCannon20": {
@@ -4433,7 +4458,7 @@ var AddedData;
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 1500,
+                    "start": 1600,
                     "damageModifier": 0,
                     "interpolationToNextRange": "linear"
                 }
@@ -5093,7 +5118,7 @@ var AddedData;
                 }
             ]
         },
-        "ClanLargePulseLaser": {
+        "ClanLargePulseLsr": {
             "ammo_per_shot": 0,
             "volleyDelay": 0,
             "ranges": [
@@ -5715,7 +5740,7 @@ var AddedData;
                 }
             ]
         },
-        "ClanHeavyLargeLaser": {
+        "ClanHeavyLargeLsr": {
             "ammo_per_shot": 0,
             "volleyDelay": 0,
             "ranges": [
@@ -6323,6 +6348,9 @@ var MechModelQuirksData;
         "clanmediumpulselaser": ["ClanMediumPulseLaser"],
         "clanppc": ["ClanERPPC"],
         "clanpulselaser": ["ClanSmallPulseLaser", "ClanMediumPulseLaser", "ClanLargePulseLaser", "ClanMicroPulseLaser",],
+        "clanlargepulselsr": ["ClanLargePulseLaser",],
+        "clanheavylargelsr": ["ClanHeavyLargeLaser",],
+        "clanerlargelaser": ["ClanERLargeLaser",],
         "clansrm2": ["ClanSRM2", "ClanSRM2_Artemis"],
         "clansrm4": ["ClanSRM4", "ClanSRM4_Artemis"],
         "clansrm6": ["ClanSRM6", "ClanSRM6_Artemis"],
@@ -6555,9 +6583,9 @@ var ExternalSkillTrees;
         "Vent Calibration": "VentCalibration"
     };
 })(ExternalSkillTrees || (ExternalSkillTrees = {}));
-//Generated from GameData.pak on Tue, 18 Sep 2018 21:37:05 GMT
+//Generated from GameData.pak on Wed, 14 Nov 2018 01:38:52 GMT
 var AddedData;
-//Generated from GameData.pak on Tue, 18 Sep 2018 21:37:05 GMT
+//Generated from GameData.pak on Wed, 14 Nov 2018 01:38:52 GMT
 (function (AddedData) {
     AddedData._SkillTreeData = {
         "Range": {
