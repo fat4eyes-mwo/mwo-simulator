@@ -1,4 +1,4 @@
-//Generated from GameData.pak Tue, 18 Sep 2018 21:37:05 GMT
+//Generated from GameData.pak Wed, 14 Nov 2018 01:38:52 GMT
 namespace AddedData {
 
 export var _AddedWeaponData : {[index:string] : any} = {
@@ -986,7 +986,7 @@ export var _AddedWeaponData : {[index:string] : any} = {
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 1500,
+				"start": 1600,
 				"damageModifier": 0,
 				"interpolationToNextRange": "linear"
 			}
@@ -1646,7 +1646,7 @@ export var _AddedWeaponData : {[index:string] : any} = {
 			}
 		]
 	},
-	"ClanLargePulseLaser": {
+	"ClanLargePulseLsr": {
 		"ammo_per_shot": 0,
 		"volleyDelay": 0,
 		"ranges": [
@@ -2268,7 +2268,7 @@ export var _AddedWeaponData : {[index:string] : any} = {
 			}
 		]
 	},
-	"ClanHeavyLargeLaser": {
+	"ClanHeavyLargeLsr": {
 		"ammo_per_shot": 0,
 		"volleyDelay": 0,
 		"ranges": [

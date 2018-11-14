@@ -1,4 +1,4 @@
-//Generated from Game/mechs/*.pak on Tue, 18 Sep 2018 21:37:42 GMT
+//Generated from Game/mechs/*.pak on Wed, 14 Nov 2018 01:39:33 GMT
 namespace AddedData {
   export var _AddedOmnipodData : {[index:string] : any} = {
 	"adr-prime": {
@@ -695,19 +695,24 @@ namespace AddedData {
 		"name": "dwf-a",
 		"setBonusQuirks": [
 			{
-				"name": "xpbonus_multiplier",
-				"value": 0.025,
-				"translated_name": "XP Bonus"
-			},
-			{
 				"name": "ballistic_cooldown_multiplier",
-				"value": -0.05,
+				"value": -0.1,
 				"translated_name": "BALLISTIC COOLDOWN"
 			},
 			{
 				"name": "missile_cooldown_multiplier",
 				"value": -0.05,
 				"translated_name": "MISSILE COOLDOWN"
+			},
+			{
+				"name": "xpbonus_multiplier",
+				"value": 0.025,
+				"translated_name": "XP Bonus"
+			},
+			{
+				"name": "clanlargepulselsr_minheatpenaltylevel_additive",
+				"value": 1,
+				"translated_name": "clanlargepulselsr_minheatpenaltylevel_additive"
 			}
 		]
 	},
@@ -2156,6 +2161,26 @@ namespace AddedData {
 			}
 		]
 	},
+	"ntg-hl": {
+		"name": "ntg-hl",
+		"setBonusQuirks": [
+			{
+				"name": "heavylaser_duration_multiplier",
+				"value": -0.1,
+				"translated_name": "Heavy Laser Duration"
+			},
+			{
+				"name": "ballistic_cooldown_multiplier",
+				"value": -0.1,
+				"translated_name": "BALLISTIC COOLDOWN"
+			},
+			{
+				"name": "xpbonus_multiplier",
+				"value": 0.025,
+				"translated_name": "XP Bonus"
+			}
+		]
+	},
 	"nva-prime": {
 		"name": "nva-prime",
 		"setBonusQuirks": [
@@ -2305,19 +2330,19 @@ namespace AddedData {
 		"name": "nct-prime",
 		"setBonusQuirks": [
 			{
-				"name": "xpbonus_multiplier",
-				"value": 0.025,
-				"translated_name": "XP Bonus"
-			},
-			{
 				"name": "clanppc_velocity_multiplier",
 				"value": 0.05,
 				"translated_name": "Clan PPC Velocity"
 			},
 			{
-				"name": "erlaser_duration_multiplier",
-				"value": -0.05,
-				"translated_name": "ER LASER DURATION"
+				"name": "clanerlargelaser_minheatpenaltylevel_additive",
+				"value": 1,
+				"translated_name": "clanerlargelaser_minheatpenaltylevel_additive"
+			},
+			{
+				"name": "xpbonus_multiplier",
+				"value": 0.025,
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -2371,7 +2396,7 @@ namespace AddedData {
 			},
 			{
 				"name": "ultraautocannon_jamchance_multiplier",
-				"value": -0.05,
+				"value": -0.1,
 				"translated_name": "UAC JAM CHANCE"
 			},
 			{
@@ -2390,14 +2415,14 @@ namespace AddedData {
 				"translated_name": "XP Bonus"
 			},
 			{
-				"name": "heavylaser_duration_multiplier",
-				"value": -0.05,
-				"translated_name": "Heavy Laser Duration"
+				"name": "ballistic_cooldown_multiplier",
+				"value": -0.15,
+				"translated_name": "BALLISTIC COOLDOWN"
 			},
 			{
-				"name": "ballistic_cooldown_multiplier",
-				"value": -0.1,
-				"translated_name": "BALLISTIC COOLDOWN"
+				"name": "clanheavylargelsr_minheatpenaltylevel_additive",
+				"value": 1,
+				"translated_name": "clanheavylargelsr_minheatpenaltylevel_additive"
 			}
 		]
 	},
