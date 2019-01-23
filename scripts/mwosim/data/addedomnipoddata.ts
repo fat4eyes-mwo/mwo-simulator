@@ -1,4 +1,4 @@
-//Generated from Game/mechs/*.pak on Wed, 14 Nov 2018 01:39:33 GMT
+//Generated from Game/mechs/*.pak on Wed, 23 Jan 2019 05:14:49 GMT
 namespace AddedData {
   export var _AddedOmnipodData : {[index:string] : any} = {
 	"adr-prime": {
@@ -970,9 +970,9 @@ namespace AddedData {
 				"translated_name": "Energy Heat"
 			},
 			{
-				"name": "energy_range_multiplier",
-				"value": 0.1,
-				"translated_name": "ENERGY RANGE"
+				"name": "clanlargepulselsr_minheatpenaltylevel_additive",
+				"value": 1,
+				"translated_name": "clanlargepulselsr_minheatpenaltylevel_additive"
 			}
 		]
 	},

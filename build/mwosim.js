@@ -47,9 +47,9 @@ var AddedData;
         }
     };
 })(AddedData || (AddedData = {}));
-//Generated from Game/mechs/*.pak on Wed, 14 Nov 2018 01:39:33 GMT
+//Generated from Game/mechs/*.pak on Wed, 23 Jan 2019 05:14:49 GMT
 var AddedData;
-//Generated from Game/mechs/*.pak on Wed, 14 Nov 2018 01:39:33 GMT
+//Generated from Game/mechs/*.pak on Wed, 23 Jan 2019 05:14:49 GMT
 (function (AddedData) {
     AddedData._AddedOmnipodData = {
         "adr-prime": {
@@ -1021,9 +1021,9 @@ var AddedData;
                     "translated_name": "Energy Heat"
                 },
                 {
-                    "name": "energy_range_multiplier",
-                    "value": 0.1,
-                    "translated_name": "ENERGY RANGE"
+                    "name": "clanlargepulselsr_minheatpenaltylevel_additive",
+                    "value": 1,
+                    "translated_name": "clanlargepulselsr_minheatpenaltylevel_additive"
                 }
             ]
         },
@@ -3469,9 +3469,9 @@ var AddedData;
         }
     };
 })(AddedData || (AddedData = {}));
-//Generated from GameData.pak Wed, 14 Nov 2018 01:38:52 GMT
+//Generated from GameData.pak Wed, 23 Jan 2019 05:14:19 GMT
 var AddedData;
-//Generated from GameData.pak Wed, 14 Nov 2018 01:38:52 GMT
+//Generated from GameData.pak Wed, 23 Jan 2019 05:14:19 GMT
 (function (AddedData) {
     AddedData._AddedWeaponData = {
         "AutoCannon20": {
@@ -6583,9 +6583,9 @@ var ExternalSkillTrees;
         "Vent Calibration": "VentCalibration"
     };
 })(ExternalSkillTrees || (ExternalSkillTrees = {}));
-//Generated from GameData.pak on Wed, 14 Nov 2018 01:38:52 GMT
+//Generated from GameData.pak on Wed, 23 Jan 2019 05:14:19 GMT
 var AddedData;
-//Generated from GameData.pak on Wed, 14 Nov 2018 01:38:52 GMT
+//Generated from GameData.pak on Wed, 23 Jan 2019 05:14:19 GMT
 (function (AddedData) {
     AddedData._SkillTreeData = {
         "Range": {
