@@ -77,7 +77,8 @@ The main entry point of the program is in `scripts/main/simulator.ts`.
 
 # Update Info
 
-* 2018-01-23: Update app with data from 2018 Jan 23 patch.
+* 2019-05-22: Update app with data from 2019 May 22 patch.
+* 2019-01-23: Update app with data from 2019 Jan 23 patch.
 * 2018-11-14: Update app with data from 2018 Nov 11 patch. Note: minheatpenalty quirks not yet implemented in code.
 * 2018-09-19: Update app with data from 2018 Sep 18 patch.
 * 2018-07-18: Update app with data from 2018 Jul 18 patch.

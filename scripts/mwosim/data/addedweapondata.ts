@@ -1,4 +1,4 @@
-//Generated from GameData.pak Wed, 23 Jan 2019 05:14:19 GMT
+//Generated from GameData.pak Tue, 21 May 2019 22:10:46 GMT
 namespace AddedData {
 
 export var _AddedWeaponData : {[index:string] : any} = {
@@ -281,12 +281,12 @@ export var _AddedWeaponData : {[index:string] : any} = {
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 165,
+				"start": 190,
 				"damageModifier": 1,
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 250,
+				"start": 275,
 				"damageModifier": 0,
 				"interpolationToNextRange": "linear"
 			}
@@ -1289,12 +1289,12 @@ export var _AddedWeaponData : {[index:string] : any} = {
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 165,
+				"start": 190,
 				"damageModifier": 1,
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 250,
+				"start": 275,
 				"damageModifier": 0,
 				"interpolationToNextRange": "linear"
 			}
@@ -2043,12 +2043,12 @@ export var _AddedWeaponData : {[index:string] : any} = {
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 165,
+				"start": 190,
 				"damageModifier": 1,
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 250,
+				"start": 275,
 				"damageModifier": 0,
 				"interpolationToNextRange": "linear"
 			}
@@ -2480,12 +2480,12 @@ export var _AddedWeaponData : {[index:string] : any} = {
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 165,
+				"start": 190,
 				"damageModifier": 1,
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 250,
+				"start": 275,
 				"damageModifier": 0,
 				"interpolationToNextRange": "linear"
 			}

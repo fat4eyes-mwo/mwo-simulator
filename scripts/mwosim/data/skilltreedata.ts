@@ -1,4 +1,4 @@
-//Generated from GameData.pak on Wed, 23 Jan 2019 05:14:19 GMT
+//Generated from GameData.pak on Tue, 21 May 2019 22:10:46 GMT
 namespace AddedData {
   export var _SkillTreeData : {[index:string] : AddedData.SkillTreeNode} = {
 	"Range": {

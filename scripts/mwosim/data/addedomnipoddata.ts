@@ -1,4 +1,4 @@
-//Generated from Game/mechs/*.pak on Wed, 23 Jan 2019 05:14:49 GMT
+//Generated from Game/mechs/*.pak on Tue, 21 May 2019 22:11:25 GMT
 namespace AddedData {
   export var _AddedOmnipodData : {[index:string] : any} = {
 	"adr-prime": {
@@ -740,19 +740,24 @@ namespace AddedData {
 		"name": "dwf-s",
 		"setBonusQuirks": [
 			{
-				"name": "xpbonus_multiplier",
-				"value": 0.025,
-				"translated_name": "XP Bonus"
-			},
-			{
 				"name": "turnlerp_all_multiplier",
 				"value": 0.1,
 				"translated_name": "TURN RATE"
 			},
 			{
+				"name": "torso_yawspeed_multiplier",
+				"value": 0.1,
+				"translated_name": "Torso Yaw Speed"
+			},
+			{
 				"name": "missile_cooldown_multiplier",
-				"value": -0.05,
+				"value": -0.1,
 				"translated_name": "MISSILE COOLDOWN"
+			},
+			{
+				"name": "xpbonus_multiplier",
+				"value": 0.025,
+				"translated_name": "XP Bonus"
 			}
 		]
 	},
@@ -766,13 +771,13 @@ namespace AddedData {
 			},
 			{
 				"name": "missile_cooldown_multiplier",
-				"value": -0.1,
+				"value": -0.15,
 				"translated_name": "MISSILE COOLDOWN"
 			},
 			{
-				"name": "torso_yawspeed_multiplier",
-				"value": 0.1,
-				"translated_name": "Torso Yaw Speed"
+				"name": "ballistic_cooldown_multiplier",
+				"value": -0.1,
+				"translated_name": "BALLISTIC COOLDOWN"
 			}
 		]
 	},
@@ -1558,6 +1563,16 @@ namespace AddedData {
 				"name": "energy_cooldown_multiplier",
 				"value": -0.1,
 				"translated_name": "ENERGY COOLDOWN"
+			},
+			{
+				"name": "clanantimissilesystem_range_multiplier",
+				"value": 0.1,
+				"translated_name": "AMS RANGE"
+			},
+			{
+				"name": "clanantimissilesystem_rof_multiplier",
+				"value": 0.05,
+				"translated_name": "AMS RATE OF FIRE"
 			}
 		]
 	},
@@ -1973,6 +1988,11 @@ namespace AddedData {
 				"name": "clanmachinegun_rof_multiplier",
 				"value": 0.1,
 				"translated_name": "MACHINE GUN ROF"
+			},
+			{
+				"name": "clanantimissilesystem_rof_multiplier",
+				"value": 0.1,
+				"translated_name": "AMS RATE OF FIRE"
 			}
 		]
 	},
@@ -2238,6 +2258,11 @@ namespace AddedData {
 				"name": "clanmachinegun_rof_multiplier",
 				"value": 0.1,
 				"translated_name": "MACHINE GUN ROF"
+			},
+			{
+				"name": "clanantimissilesystem_rof_multiplier",
+				"value": 0.15,
+				"translated_name": "AMS RATE OF FIRE"
 			}
 		]
 	},
@@ -2258,6 +2283,11 @@ namespace AddedData {
 				"name": "energy_heat_multiplier",
 				"value": -0.05,
 				"translated_name": "Energy Heat"
+			},
+			{
+				"name": "clanantimissilesystem_rof_multiplier",
+				"value": 0.1,
+				"translated_name": "AMS RATE OF FIRE"
 			}
 		]
 	},
@@ -2783,6 +2813,16 @@ namespace AddedData {
 				"name": "laser_duration_multiplier",
 				"value": -0.05,
 				"translated_name": "LASER DURATION"
+			},
+			{
+				"name": "clanantimissilesystem_rof_multiplier",
+				"value": 0.1,
+				"translated_name": "AMS RATE OF FIRE"
+			},
+			{
+				"name": "clanantimissilesystem_range_multiplier",
+				"value": 0.1,
+				"translated_name": "AMS RANGE"
 			}
 		]
 	},
@@ -3123,6 +3163,11 @@ namespace AddedData {
 				"name": "clanerppc_heat_multiplier",
 				"value": -0.1,
 				"translated_name": "ER PPC HEAT GENERATION"
+			},
+			{
+				"name": "streaksrm_minheatpenaltylevel_additive",
+				"value": 1,
+				"translated_name": "streaksrm_minheatpenaltylevel_additive"
 			}
 		]
 	},
@@ -3191,8 +3236,13 @@ namespace AddedData {
 			},
 			{
 				"name": "missile_cooldown_multiplier",
-				"value": -0.1,
+				"value": -0.15,
 				"translated_name": "MISSILE COOLDOWN"
+			},
+			{
+				"name": "clanmachinegun_rof_multiplier",
+				"value": 0.2,
+				"translated_name": "MACHINE GUN ROF"
 			},
 			{
 				"name": "xpbonus_multiplier",
@@ -3210,9 +3260,9 @@ namespace AddedData {
 				"translated_name": "LASER HEAT GENERATION"
 			},
 			{
-				"name": "accellerp_all_multiplier",
-				"value": 0.1,
-				"translated_name": "ACCELERATION RATE"
+				"name": "missile_spread_multiplier",
+				"value": -0.05,
+				"translated_name": "MISSILE SPREAD"
 			},
 			{
 				"name": "xpbonus_multiplier",
@@ -3225,14 +3275,14 @@ namespace AddedData {
 		"name": "vpr-b",
 		"setBonusQuirks": [
 			{
+				"name": "all_range_multiplier",
+				"value": 0.1,
+				"translated_name": "RANGE"
+			},
+			{
 				"name": "clanerppc_velocity_multiplier",
 				"value": 0.3,
 				"translated_name": "CLAN ER PPC VELOCITY"
-			},
-			{
-				"name": "laser_range_multiplier",
-				"value": 0.1,
-				"translated_name": "LASER RANGE"
 			},
 			{
 				"name": "xpbonus_multiplier",
