@@ -47,9 +47,9 @@ var AddedData;
         }
     };
 })(AddedData || (AddedData = {}));
-//Generated from Game/mechs/*.pak on Tue, 21 May 2019 22:11:25 GMT
+//Generated from Game/mechs/*.pak on Tue, 25 Jun 2019 22:21:31 GMT
 var AddedData;
-//Generated from Game/mechs/*.pak on Tue, 21 May 2019 22:11:25 GMT
+//Generated from Game/mechs/*.pak on Tue, 25 Jun 2019 22:21:31 GMT
 (function (AddedData) {
     AddedData._AddedOmnipodData = {
         "adr-prime": {
@@ -3519,9 +3519,9 @@ var AddedData;
         }
     };
 })(AddedData || (AddedData = {}));
-//Generated from GameData.pak Tue, 21 May 2019 22:10:46 GMT
+//Generated from GameData.pak Tue, 25 Jun 2019 22:20:24 GMT
 var AddedData;
-//Generated from GameData.pak Tue, 21 May 2019 22:10:46 GMT
+//Generated from GameData.pak Tue, 25 Jun 2019 22:20:24 GMT
 (function (AddedData) {
     AddedData._AddedWeaponData = {
         "AutoCannon20": {
@@ -5826,12 +5826,12 @@ var AddedData;
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 270,
+                    "start": 245,
                     "damageModifier": 1.5,
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 320,
+                    "start": 295,
                     "damageModifier": 1,
                     "interpolationToNextRange": "linear"
                 },
@@ -5842,12 +5842,12 @@ var AddedData;
                 },
                 {
                     "start": 550,
-                    "damageModifier": 0.5,
+                    "damageModifier": 0.6,
                     "interpolationToNextRange": "linear"
                 },
                 {
                     "start": 1100,
-                    "damageModifier": 0.5,
+                    "damageModifier": 0.6,
                     "interpolationToNextRange": "linear"
                 }
             ]
@@ -5867,12 +5867,12 @@ var AddedData;
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 270,
+                    "start": 245,
                     "damageModifier": 1.5,
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 320,
+                    "start": 295,
                     "damageModifier": 1,
                     "interpolationToNextRange": "linear"
                 },
@@ -5883,12 +5883,12 @@ var AddedData;
                 },
                 {
                     "start": 550,
-                    "damageModifier": 0.5,
+                    "damageModifier": 0.6,
                     "interpolationToNextRange": "linear"
                 },
                 {
                     "start": 1100,
-                    "damageModifier": 0.5,
+                    "damageModifier": 0.6,
                     "interpolationToNextRange": "linear"
                 }
             ]
@@ -5908,12 +5908,12 @@ var AddedData;
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 270,
+                    "start": 245,
                     "damageModifier": 1.5,
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 320,
+                    "start": 295,
                     "damageModifier": 1,
                     "interpolationToNextRange": "linear"
                 },
@@ -5924,12 +5924,12 @@ var AddedData;
                 },
                 {
                     "start": 550,
-                    "damageModifier": 0.5,
+                    "damageModifier": 0.6,
                     "interpolationToNextRange": "linear"
                 },
                 {
                     "start": 1100,
-                    "damageModifier": 0.5,
+                    "damageModifier": 0.6,
                     "interpolationToNextRange": "linear"
                 }
             ]
@@ -5949,12 +5949,12 @@ var AddedData;
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 270,
+                    "start": 245,
                     "damageModifier": 1.5,
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 320,
+                    "start": 295,
                     "damageModifier": 1,
                     "interpolationToNextRange": "linear"
                 },
@@ -5965,12 +5965,12 @@ var AddedData;
                 },
                 {
                     "start": 550,
-                    "damageModifier": 0.5,
+                    "damageModifier": 0.6,
                     "interpolationToNextRange": "linear"
                 },
                 {
                     "start": 1100,
-                    "damageModifier": 0.5,
+                    "damageModifier": 0.6,
                     "interpolationToNextRange": "linear"
                 }
             ]
@@ -6633,9 +6633,9 @@ var ExternalSkillTrees;
         "Vent Calibration": "VentCalibration"
     };
 })(ExternalSkillTrees || (ExternalSkillTrees = {}));
-//Generated from GameData.pak on Tue, 21 May 2019 22:10:46 GMT
+//Generated from GameData.pak on Tue, 25 Jun 2019 22:20:24 GMT
 var AddedData;
-//Generated from GameData.pak on Tue, 21 May 2019 22:10:46 GMT
+//Generated from GameData.pak on Tue, 25 Jun 2019 22:20:24 GMT
 (function (AddedData) {
     AddedData._SkillTreeData = {
         "Range": {

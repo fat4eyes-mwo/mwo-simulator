@@ -1,4 +1,4 @@
-//Generated from GameData.pak Tue, 21 May 2019 22:10:46 GMT
+//Generated from GameData.pak Tue, 25 Jun 2019 22:20:24 GMT
 namespace AddedData {
 
 export var _AddedWeaponData : {[index:string] : any} = {
@@ -2304,12 +2304,12 @@ export var _AddedWeaponData : {[index:string] : any} = {
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 270,
+				"start": 245,
 				"damageModifier": 1.5,
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 320,
+				"start": 295,
 				"damageModifier": 1,
 				"interpolationToNextRange": "linear"
 			},
@@ -2320,12 +2320,12 @@ export var _AddedWeaponData : {[index:string] : any} = {
 			},
 			{
 				"start": 550,
-				"damageModifier": 0.5,
+				"damageModifier": 0.6,
 				"interpolationToNextRange": "linear"
 			},
 			{
 				"start": 1100,
-				"damageModifier": 0.5,
+				"damageModifier": 0.6,
 				"interpolationToNextRange": "linear"
 			}
 		]
@@ -2345,12 +2345,12 @@ export var _AddedWeaponData : {[index:string] : any} = {
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 270,
+				"start": 245,
 				"damageModifier": 1.5,
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 320,
+				"start": 295,
 				"damageModifier": 1,
 				"interpolationToNextRange": "linear"
 			},
@@ -2361,12 +2361,12 @@ export var _AddedWeaponData : {[index:string] : any} = {
 			},
 			{
 				"start": 550,
-				"damageModifier": 0.5,
+				"damageModifier": 0.6,
 				"interpolationToNextRange": "linear"
 			},
 			{
 				"start": 1100,
-				"damageModifier": 0.5,
+				"damageModifier": 0.6,
 				"interpolationToNextRange": "linear"
 			}
 		]
@@ -2386,12 +2386,12 @@ export var _AddedWeaponData : {[index:string] : any} = {
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 270,
+				"start": 245,
 				"damageModifier": 1.5,
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 320,
+				"start": 295,
 				"damageModifier": 1,
 				"interpolationToNextRange": "linear"
 			},
@@ -2402,12 +2402,12 @@ export var _AddedWeaponData : {[index:string] : any} = {
 			},
 			{
 				"start": 550,
-				"damageModifier": 0.5,
+				"damageModifier": 0.6,
 				"interpolationToNextRange": "linear"
 			},
 			{
 				"start": 1100,
-				"damageModifier": 0.5,
+				"damageModifier": 0.6,
 				"interpolationToNextRange": "linear"
 			}
 		]
@@ -2427,12 +2427,12 @@ export var _AddedWeaponData : {[index:string] : any} = {
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 270,
+				"start": 245,
 				"damageModifier": 1.5,
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 320,
+				"start": 295,
 				"damageModifier": 1,
 				"interpolationToNextRange": "linear"
 			},
@@ -2443,12 +2443,12 @@ export var _AddedWeaponData : {[index:string] : any} = {
 			},
 			{
 				"start": 550,
-				"damageModifier": 0.5,
+				"damageModifier": 0.6,
 				"interpolationToNextRange": "linear"
 			},
 			{
 				"start": 1100,
-				"damageModifier": 0.5,
+				"damageModifier": 0.6,
 				"interpolationToNextRange": "linear"
 			}
 		]
