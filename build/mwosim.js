@@ -11029,6 +11029,9 @@ var MechModelSkills;
         throw Error("Unexpected skill type : " + type);
     };
     class KitlaanSkillLoader {
+        //NOTE: Kitlaan apparently moved away from jsonbin sometime in late 2019. 
+        //Modified the URL used for json skill data, but there is still no support for the current 
+        //kitlaan style of url (which seems to encode the skill tree in the URL itself)
         constructor() {
             //nothing yet
         }
@@ -11046,7 +11049,7 @@ var MechModelSkills;
             const JsonBinMarkerPrefix = "jsonbin1.";
             let hash;
             if (state.startsWith(JsonBinMarkerPrefix)) {
-                hash = state.substring(JsonBinMarkerPrefix.length);
+                hash = state; //change to kitlaan, former jsonbin entries now apparently stored locally in kitlaan.
                 urlPrefix = KitlaanSkillLoader.JSON_BIN_PREFIX;
             }
             else {
@@ -11134,7 +11137,7 @@ var MechModelSkills;
         }
     }
     KitlaanSkillLoader.KITLAAN_PREFIX = "https://kitlaan.gitlab.io/mwoskill_json/json/";
-    KitlaanSkillLoader.JSON_BIN_PREFIX = "https://api.jsonbin.io/b/";
+    KitlaanSkillLoader.JSON_BIN_PREFIX = "https://kitlaan.gitlab.io/mwoskill_json/json/";
     KitlaanSkillLoader.type = "kitlaan";
 })(MechModelSkills || (MechModelSkills = {}));
 //Weapon state classes

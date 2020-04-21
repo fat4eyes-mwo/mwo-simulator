@@ -23,6 +23,8 @@
 //                 Thomas Schulz <https://github.com/King2500>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 // TypeScript Version: 2.3
+//NOTE: Removed msCaching, toElement which causes errors in typescript 3+. Were just IE
+//specific attributes anyway, so they should have no effect.
 
 declare module 'jquery' {
     export = jQuery;
@@ -6098,7 +6100,7 @@ declare namespace JQuery {
         };
 
         // Writable properties on XMLHttpRequest
-        interface XHRFields extends Partial<Pick<XMLHttpRequest, 'onreadystatechange' | 'responseType' | 'timeout' | 'withCredentials' | 'msCaching'>> { }
+        interface XHRFields extends Partial<Pick<XMLHttpRequest, 'onreadystatechange' | 'responseType' | 'timeout' | 'withCredentials'>> { }
     }
 
     interface Transport {
@@ -7303,7 +7305,7 @@ declare namespace JQuery {
         TData = null> extends Partial<Pick<PointerEvent & KeyboardEvent & TouchEvent, 'altKey' | 'bubbles' | 'cancelable' |
         'changedTouches' | 'ctrlKey' | 'detail' | 'eventPhase' | 'metaKey' | 'pageX' | 'pageY' | 'shiftKey' | 'view' |
         'char' | 'charCode' | 'key' | 'keyCode' | 'button' | 'buttons' | 'clientX' | 'clientY' | 'offsetX' | 'offsetY' |
-        'pointerId' | 'pointerType' | 'screenX' | 'screenY' | 'targetTouches' | 'toElement' | 'touches'>> {
+        'pointerId' | 'pointerType' | 'screenX' | 'screenY' | 'targetTouches' | 'touches'>> {
         /**
          * The current DOM element within the event bubbling phase.
          *
