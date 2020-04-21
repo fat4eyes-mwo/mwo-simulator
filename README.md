@@ -77,6 +77,7 @@ The main entry point of the program is in `scripts/main/simulator.ts`.
 
 # Update Info
 
+* 2020-04-21: Fixed kitlaan json skill loading. However, still no support for kitlaan hash-bashed URL.
 * 2019-06-26: Update app with data from 2019 Jun 25 patch.
 * 2019-05-22: Update app with data from 2019 May 22 patch.
 * 2019-01-23: Update app with data from 2019 Jan 23 patch.
