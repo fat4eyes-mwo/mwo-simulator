@@ -1,4 +1,4 @@
-//Generated from GameData.pak Tue, 25 Jun 2019 22:20:24 GMT
+//Generated from GameData.pak Sun, 06 Jun 2021 00:26:15 GMT
 namespace AddedData {
 
 export var _AddedWeaponData : {[index:string] : any} = {
@@ -75,12 +75,12 @@ export var _AddedWeaponData : {[index:string] : any} = {
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 150,
+				"start": 160,
 				"damageModifier": 1,
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 300,
+				"start": 320,
 				"damageModifier": 0,
 				"interpolationToNextRange": "linear"
 			}
@@ -112,12 +112,12 @@ export var _AddedWeaponData : {[index:string] : any} = {
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 675,
+				"start": 700,
 				"damageModifier": 1,
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 1350,
+				"start": 1400,
 				"damageModifier": 0,
 				"interpolationToNextRange": "linear"
 			}
@@ -217,12 +217,12 @@ export var _AddedWeaponData : {[index:string] : any} = {
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 365,
+				"start": 400,
 				"damageModifier": 1,
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 730,
+				"start": 800,
 				"damageModifier": 0,
 				"interpolationToNextRange": "linear"
 			}
@@ -259,12 +259,12 @@ export var _AddedWeaponData : {[index:string] : any} = {
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 110,
+				"start": 135,
 				"damageModifier": 1,
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 220,
+				"start": 270,
 				"damageModifier": 0,
 				"interpolationToNextRange": "linear"
 			}
@@ -366,12 +366,12 @@ export var _AddedWeaponData : {[index:string] : any} = {
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 660,
+				"start": 810,
 				"damageModifier": 1,
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 1320,
+				"start": 2050,
 				"damageModifier": 0,
 				"interpolationToNextRange": "linear"
 			}
@@ -518,7 +518,7 @@ export var _AddedWeaponData : {[index:string] : any} = {
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 450,
+				"start": 600,
 				"damageModifier": 1,
 				"interpolationToNextRange": "linear"
 			}
@@ -768,11 +768,6 @@ export var _AddedWeaponData : {[index:string] : any} = {
 		"ranges": [
 			{
 				"start": 0,
-				"damageModifier": 0,
-				"interpolationToNextRange": "step"
-			},
-			{
-				"start": 90,
 				"damageModifier": 1,
 				"interpolationToNextRange": "linear"
 			},
@@ -900,8 +895,8 @@ export var _AddedWeaponData : {[index:string] : any} = {
 	},
 	"UltraAutoCannon2": {
 		"ammo_per_shot": 1,
-		"jamming_chance": 0.15,
-		"jammed_time": 3.5,
+		"jamming_chance": 0.14,
+		"jammed_time": 2.5,
 		"shots_during_cooldown": 1,
 		"volleyDelay": 0.11,
 		"ranges": [
@@ -949,7 +944,7 @@ export var _AddedWeaponData : {[index:string] : any} = {
 	"UltraAutoCannon20": {
 		"ammo_per_shot": 3,
 		"jamming_chance": 0.14,
-		"jammed_time": 7.5,
+		"jammed_time": 6,
 		"shots_during_cooldown": 1,
 		"volleyDelay": 0.11,
 		"ranges": [
@@ -986,7 +981,7 @@ export var _AddedWeaponData : {[index:string] : any} = {
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 1600,
+				"start": 2050,
 				"damageModifier": 0,
 				"interpolationToNextRange": "linear"
 			}
@@ -1049,7 +1044,7 @@ export var _AddedWeaponData : {[index:string] : any} = {
 		"rof": 7.275,
 		"rampUpTime": 1,
 		"rampDownTime": 2,
-		"jamRampUpTime": 6,
+		"jamRampUpTime": 8,
 		"jamRampDownTime": 9.5,
 		"volleyDelay": 0,
 		"ranges": [
@@ -1105,12 +1100,12 @@ export var _AddedWeaponData : {[index:string] : any} = {
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 100,
+				"start": 130,
 				"damageModifier": 1,
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 200,
+				"start": 260,
 				"damageModifier": 0,
 				"interpolationToNextRange": "linear"
 			}
@@ -1150,7 +1145,7 @@ export var _AddedWeaponData : {[index:string] : any} = {
 	},
 	"MRM10": {
 		"ammo_per_shot": 10,
-		"volleyDelay": 0.0556,
+		"volleyDelay": 0.0128,
 		"ranges": [
 			{
 				"start": 0,
@@ -1166,7 +1161,7 @@ export var _AddedWeaponData : {[index:string] : any} = {
 	},
 	"MRM20": {
 		"ammo_per_shot": 20,
-		"volleyDelay": 0.0263,
+		"volleyDelay": 0.0128,
 		"ranges": [
 			{
 				"start": 0,
@@ -1182,7 +1177,7 @@ export var _AddedWeaponData : {[index:string] : any} = {
 	},
 	"MRM30": {
 		"ammo_per_shot": 30,
-		"volleyDelay": 0.0172,
+		"volleyDelay": 0.0128,
 		"ranges": [
 			{
 				"start": 0,
@@ -1386,8 +1381,8 @@ export var _AddedWeaponData : {[index:string] : any} = {
 	},
 	"ClanUltraAutoCannon2": {
 		"ammo_per_shot": 1,
-		"jamming_chance": 0.17,
-		"jammed_time": 3.75,
+		"jamming_chance": 0.16,
+		"jammed_time": 2.75,
 		"shots_during_cooldown": 1,
 		"volleyDelay": 0.11,
 		"ranges": [
@@ -1459,7 +1454,7 @@ export var _AddedWeaponData : {[index:string] : any} = {
 	"ClanUltraAutoCannon20": {
 		"ammo_per_shot": 4,
 		"jamming_chance": 0.16,
-		"jammed_time": 8,
+		"jammed_time": 6.5,
 		"shots_during_cooldown": 1,
 		"volleyDelay": 0.11,
 		"ranges": [
@@ -1491,12 +1486,12 @@ export var _AddedWeaponData : {[index:string] : any} = {
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 660,
+				"start": 810,
 				"damageModifier": 1,
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 1320,
+				"start": 2050,
 				"damageModifier": 0,
 				"interpolationToNextRange": "linear"
 			}
@@ -1593,12 +1588,12 @@ export var _AddedWeaponData : {[index:string] : any} = {
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 740,
+				"start": 770,
 				"damageModifier": 1,
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 1480,
+				"start": 1540,
 				"damageModifier": 0,
 				"interpolationToNextRange": "linear"
 			}
@@ -1614,12 +1609,12 @@ export var _AddedWeaponData : {[index:string] : any} = {
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 165,
+				"start": 160,
 				"damageModifier": 1,
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 297,
+				"start": 320,
 				"damageModifier": 0,
 				"interpolationToNextRange": "linear"
 			}
@@ -1635,12 +1630,12 @@ export var _AddedWeaponData : {[index:string] : any} = {
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 330,
+				"start": 270,
 				"damageModifier": 1,
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 480,
+				"start": 540,
 				"damageModifier": 0,
 				"interpolationToNextRange": "linear"
 			}
@@ -1656,12 +1651,12 @@ export var _AddedWeaponData : {[index:string] : any} = {
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 600,
+				"start": 550,
 				"damageModifier": 1,
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 840,
+				"start": 1100,
 				"damageModifier": 0,
 				"interpolationToNextRange": "linear"
 			}
@@ -2076,7 +2071,7 @@ export var _AddedWeaponData : {[index:string] : any} = {
 		]
 	},
 	"ClanAutoCannon5": {
-		"ammo_per_shot": 2,
+		"ammo_per_shot": 1,
 		"volleyDelay": 0.11,
 		"ranges": [
 			{
@@ -2097,7 +2092,7 @@ export var _AddedWeaponData : {[index:string] : any} = {
 		]
 	},
 	"ClanAutoCannon10": {
-		"ammo_per_shot": 3,
+		"ammo_per_shot": 2,
 		"volleyDelay": 0.11,
 		"ranges": [
 			{
@@ -2118,7 +2113,7 @@ export var _AddedWeaponData : {[index:string] : any} = {
 		]
 	},
 	"ClanAutoCannon20": {
-		"ammo_per_shot": 4,
+		"ammo_per_shot": 3,
 		"volleyDelay": 0.11,
 		"ranges": [
 			{
@@ -2215,12 +2210,12 @@ export var _AddedWeaponData : {[index:string] : any} = {
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 90,
+				"start": 130,
 				"damageModifier": 1,
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 180,
+				"start": 260,
 				"damageModifier": 0,
 				"interpolationToNextRange": "linear"
 			}
@@ -2236,12 +2231,12 @@ export var _AddedWeaponData : {[index:string] : any} = {
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 115,
+				"start": 130,
 				"damageModifier": 1,
 				"interpolationToNextRange": "linear"
 			},
 			{
-				"start": 230,
+				"start": 260,
 				"damageModifier": 0,
 				"interpolationToNextRange": "linear"
 			}
@@ -2300,12 +2295,12 @@ export var _AddedWeaponData : {[index:string] : any} = {
 			},
 			{
 				"start": 120,
-				"damageModifier": 1.5,
+				"damageModifier": 1.25,
 				"interpolationToNextRange": "linear"
 			},
 			{
 				"start": 245,
-				"damageModifier": 1.5,
+				"damageModifier": 1.25,
 				"interpolationToNextRange": "linear"
 			},
 			{
@@ -2320,12 +2315,12 @@ export var _AddedWeaponData : {[index:string] : any} = {
 			},
 			{
 				"start": 550,
-				"damageModifier": 0.6,
+				"damageModifier": 0.8,
 				"interpolationToNextRange": "linear"
 			},
 			{
 				"start": 1100,
-				"damageModifier": 0.6,
+				"damageModifier": 0.8,
 				"interpolationToNextRange": "linear"
 			}
 		]
@@ -2341,12 +2336,12 @@ export var _AddedWeaponData : {[index:string] : any} = {
 			},
 			{
 				"start": 120,
-				"damageModifier": 1.5,
+				"damageModifier": 1.25,
 				"interpolationToNextRange": "linear"
 			},
 			{
 				"start": 245,
-				"damageModifier": 1.5,
+				"damageModifier": 1.25,
 				"interpolationToNextRange": "linear"
 			},
 			{
@@ -2361,12 +2356,12 @@ export var _AddedWeaponData : {[index:string] : any} = {
 			},
 			{
 				"start": 550,
-				"damageModifier": 0.6,
+				"damageModifier": 0.8,
 				"interpolationToNextRange": "linear"
 			},
 			{
 				"start": 1100,
-				"damageModifier": 0.6,
+				"damageModifier": 0.8,
 				"interpolationToNextRange": "linear"
 			}
 		]
@@ -2382,12 +2377,12 @@ export var _AddedWeaponData : {[index:string] : any} = {
 			},
 			{
 				"start": 120,
-				"damageModifier": 1.5,
+				"damageModifier": 1.25,
 				"interpolationToNextRange": "linear"
 			},
 			{
 				"start": 245,
-				"damageModifier": 1.5,
+				"damageModifier": 1.25,
 				"interpolationToNextRange": "linear"
 			},
 			{
@@ -2402,12 +2397,12 @@ export var _AddedWeaponData : {[index:string] : any} = {
 			},
 			{
 				"start": 550,
-				"damageModifier": 0.6,
+				"damageModifier": 0.8,
 				"interpolationToNextRange": "linear"
 			},
 			{
 				"start": 1100,
-				"damageModifier": 0.6,
+				"damageModifier": 0.8,
 				"interpolationToNextRange": "linear"
 			}
 		]
@@ -2423,12 +2418,12 @@ export var _AddedWeaponData : {[index:string] : any} = {
 			},
 			{
 				"start": 120,
-				"damageModifier": 1.5,
+				"damageModifier": 1.25,
 				"interpolationToNextRange": "linear"
 			},
 			{
 				"start": 245,
-				"damageModifier": 1.5,
+				"damageModifier": 1.25,
 				"interpolationToNextRange": "linear"
 			},
 			{
@@ -2443,12 +2438,12 @@ export var _AddedWeaponData : {[index:string] : any} = {
 			},
 			{
 				"start": 550,
-				"damageModifier": 0.6,
+				"damageModifier": 0.8,
 				"interpolationToNextRange": "linear"
 			},
 			{
 				"start": 1100,
-				"damageModifier": 0.6,
+				"damageModifier": 0.8,
 				"interpolationToNextRange": "linear"
 			}
 		]

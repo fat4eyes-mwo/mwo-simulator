@@ -47,9 +47,9 @@ var AddedData;
         }
     };
 })(AddedData || (AddedData = {}));
-//Generated from Game/mechs/*.pak on Tue, 25 Jun 2019 22:21:31 GMT
+//Generated from Game/mechs/*.pak on Sun, 06 Jun 2021 00:26:53 GMT
 var AddedData;
-//Generated from Game/mechs/*.pak on Tue, 25 Jun 2019 22:21:31 GMT
+//Generated from Game/mechs/*.pak on Sun, 06 Jun 2021 00:26:53 GMT
 (function (AddedData) {
     AddedData._AddedOmnipodData = {
         "adr-prime": {
@@ -3519,9 +3519,9 @@ var AddedData;
         }
     };
 })(AddedData || (AddedData = {}));
-//Generated from GameData.pak Tue, 25 Jun 2019 22:20:24 GMT
+//Generated from GameData.pak Sun, 06 Jun 2021 00:26:15 GMT
 var AddedData;
-//Generated from GameData.pak Tue, 25 Jun 2019 22:20:24 GMT
+//Generated from GameData.pak Sun, 06 Jun 2021 00:26:15 GMT
 (function (AddedData) {
     AddedData._AddedWeaponData = {
         "AutoCannon20": {
@@ -3597,12 +3597,12 @@ var AddedData;
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 150,
+                    "start": 160,
                     "damageModifier": 1,
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 300,
+                    "start": 320,
                     "damageModifier": 0,
                     "interpolationToNextRange": "linear"
                 }
@@ -3634,12 +3634,12 @@ var AddedData;
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 675,
+                    "start": 700,
                     "damageModifier": 1,
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 1350,
+                    "start": 1400,
                     "damageModifier": 0,
                     "interpolationToNextRange": "linear"
                 }
@@ -3739,12 +3739,12 @@ var AddedData;
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 365,
+                    "start": 400,
                     "damageModifier": 1,
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 730,
+                    "start": 800,
                     "damageModifier": 0,
                     "interpolationToNextRange": "linear"
                 }
@@ -3781,12 +3781,12 @@ var AddedData;
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 110,
+                    "start": 135,
                     "damageModifier": 1,
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 220,
+                    "start": 270,
                     "damageModifier": 0,
                     "interpolationToNextRange": "linear"
                 }
@@ -3888,12 +3888,12 @@ var AddedData;
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 660,
+                    "start": 810,
                     "damageModifier": 1,
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 1320,
+                    "start": 2050,
                     "damageModifier": 0,
                     "interpolationToNextRange": "linear"
                 }
@@ -4040,7 +4040,7 @@ var AddedData;
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 450,
+                    "start": 600,
                     "damageModifier": 1,
                     "interpolationToNextRange": "linear"
                 }
@@ -4290,11 +4290,6 @@ var AddedData;
             "ranges": [
                 {
                     "start": 0,
-                    "damageModifier": 0,
-                    "interpolationToNextRange": "step"
-                },
-                {
-                    "start": 90,
                     "damageModifier": 1,
                     "interpolationToNextRange": "linear"
                 },
@@ -4422,8 +4417,8 @@ var AddedData;
         },
         "UltraAutoCannon2": {
             "ammo_per_shot": 1,
-            "jamming_chance": 0.15,
-            "jammed_time": 3.5,
+            "jamming_chance": 0.14,
+            "jammed_time": 2.5,
             "shots_during_cooldown": 1,
             "volleyDelay": 0.11,
             "ranges": [
@@ -4471,7 +4466,7 @@ var AddedData;
         "UltraAutoCannon20": {
             "ammo_per_shot": 3,
             "jamming_chance": 0.14,
-            "jammed_time": 7.5,
+            "jammed_time": 6,
             "shots_during_cooldown": 1,
             "volleyDelay": 0.11,
             "ranges": [
@@ -4508,7 +4503,7 @@ var AddedData;
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 1600,
+                    "start": 2050,
                     "damageModifier": 0,
                     "interpolationToNextRange": "linear"
                 }
@@ -4571,7 +4566,7 @@ var AddedData;
             "rof": 7.275,
             "rampUpTime": 1,
             "rampDownTime": 2,
-            "jamRampUpTime": 6,
+            "jamRampUpTime": 8,
             "jamRampDownTime": 9.5,
             "volleyDelay": 0,
             "ranges": [
@@ -4627,12 +4622,12 @@ var AddedData;
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 100,
+                    "start": 130,
                     "damageModifier": 1,
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 200,
+                    "start": 260,
                     "damageModifier": 0,
                     "interpolationToNextRange": "linear"
                 }
@@ -4672,7 +4667,7 @@ var AddedData;
         },
         "MRM10": {
             "ammo_per_shot": 10,
-            "volleyDelay": 0.0556,
+            "volleyDelay": 0.0128,
             "ranges": [
                 {
                     "start": 0,
@@ -4688,7 +4683,7 @@ var AddedData;
         },
         "MRM20": {
             "ammo_per_shot": 20,
-            "volleyDelay": 0.0263,
+            "volleyDelay": 0.0128,
             "ranges": [
                 {
                     "start": 0,
@@ -4704,7 +4699,7 @@ var AddedData;
         },
         "MRM30": {
             "ammo_per_shot": 30,
-            "volleyDelay": 0.0172,
+            "volleyDelay": 0.0128,
             "ranges": [
                 {
                     "start": 0,
@@ -4908,8 +4903,8 @@ var AddedData;
         },
         "ClanUltraAutoCannon2": {
             "ammo_per_shot": 1,
-            "jamming_chance": 0.17,
-            "jammed_time": 3.75,
+            "jamming_chance": 0.16,
+            "jammed_time": 2.75,
             "shots_during_cooldown": 1,
             "volleyDelay": 0.11,
             "ranges": [
@@ -4981,7 +4976,7 @@ var AddedData;
         "ClanUltraAutoCannon20": {
             "ammo_per_shot": 4,
             "jamming_chance": 0.16,
-            "jammed_time": 8,
+            "jammed_time": 6.5,
             "shots_during_cooldown": 1,
             "volleyDelay": 0.11,
             "ranges": [
@@ -5013,12 +5008,12 @@ var AddedData;
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 660,
+                    "start": 810,
                     "damageModifier": 1,
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 1320,
+                    "start": 2050,
                     "damageModifier": 0,
                     "interpolationToNextRange": "linear"
                 }
@@ -5115,12 +5110,12 @@ var AddedData;
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 740,
+                    "start": 770,
                     "damageModifier": 1,
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 1480,
+                    "start": 1540,
                     "damageModifier": 0,
                     "interpolationToNextRange": "linear"
                 }
@@ -5136,12 +5131,12 @@ var AddedData;
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 165,
+                    "start": 160,
                     "damageModifier": 1,
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 297,
+                    "start": 320,
                     "damageModifier": 0,
                     "interpolationToNextRange": "linear"
                 }
@@ -5157,12 +5152,12 @@ var AddedData;
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 330,
+                    "start": 270,
                     "damageModifier": 1,
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 480,
+                    "start": 540,
                     "damageModifier": 0,
                     "interpolationToNextRange": "linear"
                 }
@@ -5178,12 +5173,12 @@ var AddedData;
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 600,
+                    "start": 550,
                     "damageModifier": 1,
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 840,
+                    "start": 1100,
                     "damageModifier": 0,
                     "interpolationToNextRange": "linear"
                 }
@@ -5598,7 +5593,7 @@ var AddedData;
             ]
         },
         "ClanAutoCannon5": {
-            "ammo_per_shot": 2,
+            "ammo_per_shot": 1,
             "volleyDelay": 0.11,
             "ranges": [
                 {
@@ -5619,7 +5614,7 @@ var AddedData;
             ]
         },
         "ClanAutoCannon10": {
-            "ammo_per_shot": 3,
+            "ammo_per_shot": 2,
             "volleyDelay": 0.11,
             "ranges": [
                 {
@@ -5640,7 +5635,7 @@ var AddedData;
             ]
         },
         "ClanAutoCannon20": {
-            "ammo_per_shot": 4,
+            "ammo_per_shot": 3,
             "volleyDelay": 0.11,
             "ranges": [
                 {
@@ -5737,12 +5732,12 @@ var AddedData;
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 90,
+                    "start": 130,
                     "damageModifier": 1,
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 180,
+                    "start": 260,
                     "damageModifier": 0,
                     "interpolationToNextRange": "linear"
                 }
@@ -5758,12 +5753,12 @@ var AddedData;
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 115,
+                    "start": 130,
                     "damageModifier": 1,
                     "interpolationToNextRange": "linear"
                 },
                 {
-                    "start": 230,
+                    "start": 260,
                     "damageModifier": 0,
                     "interpolationToNextRange": "linear"
                 }
@@ -5822,12 +5817,12 @@ var AddedData;
                 },
                 {
                     "start": 120,
-                    "damageModifier": 1.5,
+                    "damageModifier": 1.25,
                     "interpolationToNextRange": "linear"
                 },
                 {
                     "start": 245,
-                    "damageModifier": 1.5,
+                    "damageModifier": 1.25,
                     "interpolationToNextRange": "linear"
                 },
                 {
@@ -5842,12 +5837,12 @@ var AddedData;
                 },
                 {
                     "start": 550,
-                    "damageModifier": 0.6,
+                    "damageModifier": 0.8,
                     "interpolationToNextRange": "linear"
                 },
                 {
                     "start": 1100,
-                    "damageModifier": 0.6,
+                    "damageModifier": 0.8,
                     "interpolationToNextRange": "linear"
                 }
             ]
@@ -5863,12 +5858,12 @@ var AddedData;
                 },
                 {
                     "start": 120,
-                    "damageModifier": 1.5,
+                    "damageModifier": 1.25,
                     "interpolationToNextRange": "linear"
                 },
                 {
                     "start": 245,
-                    "damageModifier": 1.5,
+                    "damageModifier": 1.25,
                     "interpolationToNextRange": "linear"
                 },
                 {
@@ -5883,12 +5878,12 @@ var AddedData;
                 },
                 {
                     "start": 550,
-                    "damageModifier": 0.6,
+                    "damageModifier": 0.8,
                     "interpolationToNextRange": "linear"
                 },
                 {
                     "start": 1100,
-                    "damageModifier": 0.6,
+                    "damageModifier": 0.8,
                     "interpolationToNextRange": "linear"
                 }
             ]
@@ -5904,12 +5899,12 @@ var AddedData;
                 },
                 {
                     "start": 120,
-                    "damageModifier": 1.5,
+                    "damageModifier": 1.25,
                     "interpolationToNextRange": "linear"
                 },
                 {
                     "start": 245,
-                    "damageModifier": 1.5,
+                    "damageModifier": 1.25,
                     "interpolationToNextRange": "linear"
                 },
                 {
@@ -5924,12 +5919,12 @@ var AddedData;
                 },
                 {
                     "start": 550,
-                    "damageModifier": 0.6,
+                    "damageModifier": 0.8,
                     "interpolationToNextRange": "linear"
                 },
                 {
                     "start": 1100,
-                    "damageModifier": 0.6,
+                    "damageModifier": 0.8,
                     "interpolationToNextRange": "linear"
                 }
             ]
@@ -5945,12 +5940,12 @@ var AddedData;
                 },
                 {
                     "start": 120,
-                    "damageModifier": 1.5,
+                    "damageModifier": 1.25,
                     "interpolationToNextRange": "linear"
                 },
                 {
                     "start": 245,
-                    "damageModifier": 1.5,
+                    "damageModifier": 1.25,
                     "interpolationToNextRange": "linear"
                 },
                 {
@@ -5965,12 +5960,12 @@ var AddedData;
                 },
                 {
                     "start": 550,
-                    "damageModifier": 0.6,
+                    "damageModifier": 0.8,
                     "interpolationToNextRange": "linear"
                 },
                 {
                     "start": 1100,
-                    "damageModifier": 0.6,
+                    "damageModifier": 0.8,
                     "interpolationToNextRange": "linear"
                 }
             ]
@@ -6633,9 +6628,9 @@ var ExternalSkillTrees;
         "Vent Calibration": "VentCalibration"
     };
 })(ExternalSkillTrees || (ExternalSkillTrees = {}));
-//Generated from GameData.pak on Tue, 25 Jun 2019 22:20:24 GMT
+//Generated from GameData.pak on Sun, 06 Jun 2021 00:26:15 GMT
 var AddedData;
-//Generated from GameData.pak on Tue, 25 Jun 2019 22:20:24 GMT
+//Generated from GameData.pak on Sun, 06 Jun 2021 00:26:15 GMT
 (function (AddedData) {
     AddedData._SkillTreeData = {
         "Range": {
